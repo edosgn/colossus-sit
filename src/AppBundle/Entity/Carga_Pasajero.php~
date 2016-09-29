@@ -220,28 +220,5 @@ class Carga_Pasajero
     {
         return $this->fthChasis;
     }
-
-    /**
-     * Set vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Carga_Pasajero
-     */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \AppBundle\Entity\Vehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
-    }
 }
+

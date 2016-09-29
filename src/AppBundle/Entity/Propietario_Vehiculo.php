@@ -42,10 +42,10 @@ class Propietario_Vehiculo
      */
     private $estadoPropiedad;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Propietario", inversedBy="propietarios_Vehiculo") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Propietario", inversedBy="propietariosVehiculo") */
     private $propietario; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietarios_Vehiculo") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
     private $vehiculo; 
 
 

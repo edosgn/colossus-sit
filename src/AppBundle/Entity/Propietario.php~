@@ -67,10 +67,10 @@ class Propietario
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario_Vehiculo", mappedBy="propietario")
      */
-    protected $propietarios_Vehiculo;  
+    protected $propietariosVehiculo;  
 
     public function __construct() {
-        $this->propietarios_Vehiculo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
         
     } 
 
@@ -85,148 +85,5 @@ class Propietario
         return $this->id;
     }
 
-    /**
-     * Set numeroId
-     *
-     * @param integer $numeroId
-     *
-     * @return Propietario
-     */
-    public function setNumeroId($numeroId)
-    {
-        $this->numeroId = $numeroId;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroId
-     *
-     * @return int
-     */
-    public function getNumeroId()
-    {
-        return $this->numeroId;
-    }
-
-    /**
-     * Set nombresPropietario
-     *
-     * @param string $nombresPropietario
-     *
-     * @return Propietario
-     */
-    public function setNombresPropietario($nombresPropietario)
-    {
-        $this->nombresPropietario = $nombresPropietario;
-
-        return $this;
-    }
-
-    /**
-     * Get nombresPropietario
-     *
-     * @return string
-     */
-    public function getNombresPropietario()
-    {
-        return $this->nombresPropietario;
-    }
-
-    /**
-     * Set apellidosPropietario
-     *
-     * @param string $apellidosPropietario
-     *
-     * @return Propietario
-     */
-    public function setApellidosPropietario($apellidosPropietario)
-    {
-        $this->apellidosPropietario = $apellidosPropietario;
-
-        return $this;
-    }
-
-    /**
-     * Get apellidosPropietario
-     *
-     * @return string
-     */
-    public function getApellidosPropietario()
-    {
-        return $this->apellidosPropietario;
-    }
-
-    /**
-     * Set direccionPropietario
-     *
-     * @param string $direccionPropietario
-     *
-     * @return Propietario
-     */
-    public function setDireccionPropietario($direccionPropietario)
-    {
-        $this->direccionPropietario = $direccionPropietario;
-
-        return $this;
-    }
-
-    /**
-     * Get direccionPropietario
-     *
-     * @return string
-     */
-    public function getDireccionPropietario()
-    {
-        return $this->direccionPropietario;
-    }
-
-    /**
-     * Set telefonoPropietario
-     *
-     * @param string $telefonoPropietario
-     *
-     * @return Propietario
-     */
-    public function setTelefonoPropietario($telefonoPropietario)
-    {
-        $this->telefonoPropietario = $telefonoPropietario;
-
-        return $this;
-    }
-
-    /**
-     * Get telefonoPropietario
-     *
-     * @return string
-     */
-    public function getTelefonoPropietario()
-    {
-        return $this->telefonoPropietario;
-    }
-
-    /**
-     * Set correoPropietario
-     *
-     * @param string $correoPropietario
-     *
-     * @return Propietario
-     */
-    public function setCorreoPropietario($correoPropietario)
-    {
-        $this->correoPropietario = $correoPropietario;
-
-        return $this;
-    }
-
-    /**
-     * Get correoPropietario
-     *
-     * @return string
-     */
-    public function getCorreoPropietario()
-    {
-        return $this->correoPropietario;
-    }
+   
 }
-

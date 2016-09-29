@@ -144,13 +144,21 @@ class Vehiculo
      /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase; 
 
+
+
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario_Vehiculo", mappedBy="vehiculo")
      */
-    protected $propietarios_Vehiculo;  
+    protected $propietariosVehiculo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Carga_Pasajero", mappedBy="vehiculo")
+     */
+    protected $cargasPasajero;  
 
     public function __construct() {
-        $this->propietarios_Vehiculo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cargaPasajero = new \Doctrine\Common\Collections\ArrayCollection();
         
     } 
 
@@ -164,6 +172,8 @@ class Vehiculo
     {
         return $this->id;
     }
+
+    
 
     /**
      * Set placa
@@ -206,7 +216,7 @@ class Vehiculo
     /**
      * Get numeroFactura
      *
-     * @return int
+     * @return integer
      */
     public function getNumeroFactura()
     {
@@ -446,7 +456,7 @@ class Vehiculo
     /**
      * Get vin
      *
-     * @return int
+     * @return integer
      */
     public function getVin()
     {
@@ -470,7 +480,7 @@ class Vehiculo
     /**
      * Get pasajeros
      *
-     * @return int
+     * @return integer
      */
     public function getPasajeros()
     {
@@ -600,15 +610,6 @@ class Vehiculo
     /**
      * Set organismo
      *
-     * @param \AppBundle\Entity\Combustible $organismo
-     *
-     * @return Vehiculo
-     */
-   
-
-    /**
-     * Set organismo
-     *
      * @param \AppBundle\Entity\Organismo $organismo
      *
      * @return Vehiculo
@@ -711,7 +712,7 @@ class Vehiculo
      */
     public function addPropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
     {
-        $this->propietarios_Vehiculo[] = $propietariosVehiculo;
+        $this->propietariosVehiculo[] = $propietariosVehiculo;
 
         return $this;
     }
@@ -723,7 +724,7 @@ class Vehiculo
      */
     public function removePropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
     {
-        $this->propietarios_Vehiculo->removeElement($propietariosVehiculo);
+        $this->propietariosVehiculo->removeElement($propietariosVehiculo);
     }
 
     /**
@@ -733,6 +734,40 @@ class Vehiculo
      */
     public function getPropietariosVehiculo()
     {
-        return $this->propietarios_Vehiculo;
+        return $this->propietariosVehiculo;
+    }
+
+    /**
+     * Add cargasPasajero
+     *
+     * @param \AppBundle\Entity\Carga_Pasajero $cargasPasajero
+     *
+     * @return Vehiculo
+     */
+    public function addCargasPasajero(\AppBundle\Entity\Carga_Pasajero $cargasPasajero)
+    {
+        $this->cargasPasajero[] = $cargasPasajero;
+
+        return $this;
+    }
+
+    /**
+     * Remove cargasPasajero
+     *
+     * @param \AppBundle\Entity\Carga_Pasajero $cargasPasajero
+     */
+    public function removeCargasPasajero(\AppBundle\Entity\Carga_Pasajero $cargasPasajero)
+    {
+        $this->cargasPasajero->removeElement($cargasPasajero);
+    }
+
+    /**
+     * Get cargasPasajero
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCargasPasajero()
+    {
+        return $this->cargasPasajero;
     }
 }

@@ -67,10 +67,10 @@ class Propietario
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario_Vehiculo", mappedBy="propietario")
      */
-    protected $propietarios_Vehiculo;  
+    protected $propietariosVehiculo;  
 
     public function __construct() {
-        $this->propietarios_Vehiculo = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
         
     } 
 
@@ -84,6 +84,8 @@ class Propietario
     {
         return $this->id;
     }
+
+   
 
     /**
      * Set numeroId
@@ -102,7 +104,7 @@ class Propietario
     /**
      * Get numeroId
      *
-     * @return int
+     * @return integer
      */
     public function getNumeroId()
     {
@@ -238,7 +240,7 @@ class Propietario
      */
     public function addPropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
     {
-        $this->propietarios_Vehiculo[] = $propietariosVehiculo;
+        $this->propietariosVehiculo[] = $propietariosVehiculo;
 
         return $this;
     }
@@ -250,7 +252,7 @@ class Propietario
      */
     public function removePropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
     {
-        $this->propietarios_Vehiculo->removeElement($propietariosVehiculo);
+        $this->propietariosVehiculo->removeElement($propietariosVehiculo);
     }
 
     /**
@@ -260,6 +262,6 @@ class Propietario
      */
     public function getPropietariosVehiculo()
     {
-        return $this->propietarios_Vehiculo;
+        return $this->propietariosVehiculo;
     }
 }
