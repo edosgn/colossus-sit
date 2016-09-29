@@ -23,6 +23,15 @@ class Tipos_Id
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=255)
+     */
+    private $descripcion;
+
+    
+
+    /**
      * Get id
      *
      * @return int
@@ -31,5 +40,29 @@ class Tipos_Id
     {
         return $this->id;
     }
-}
 
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Tipos_Id
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+   
+}

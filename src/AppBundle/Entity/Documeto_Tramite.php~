@@ -23,15 +23,15 @@ class Documeto_Tramite
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Documento", inversedBy="documentosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Documento", inversedBy="documentos_Tramite")
      **/
     protected $documento;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante_tramite", inversedBy="documentosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante_tramite", inversedBy="documentos_Tramite")
      **/
-    protected $varianteTramite;
+    protected $variante_Tramite;
 
   
    
@@ -68,29 +68,5 @@ class Documeto_Tramite
     public function getDocumento()
     {
         return $this->documento;
-    }
-
-    /**
-     * Set varianteTramite
-     *
-     * @param \AppBundle\Entity\Variante_tramite $varianteTramite
-     *
-     * @return Documeto_Tramite
-     */
-    public function setVarianteTramite(\AppBundle\Entity\Variante_tramite $varianteTramite = null)
-    {
-        $this->variante_Tramite = $varianteTramite;
-
-        return $this;
-    }
-
-    /**
-     * Get varianteTramite
-     *
-     * @return \AppBundle\Entity\Variante_tramite
-     */
-    public function getVarianteTramite()
-    {
-        return $this->varianteTramite;
     }
 }

@@ -23,14 +23,14 @@ class Campo_Tramite
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipo_Tramite", inversedBy="camposTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipo_Id", inversedBy="campos_Tramite")
      **/
     protected $tipo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Caso_Tramite", inversedBy="camposTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Caso_Tramite", inversedBy="campos_Tramite")
      **/
-    protected $casoTramite;
+    protected $caso_Tramite;
 
 
     /**
@@ -89,29 +89,5 @@ class Campo_Tramite
     public function getTipo()
     {
         return $this->tipo;
-    }
-
-    /**
-     * Set casoTramite
-     *
-     * @param \AppBundle\Entity\Caso_Tramite $casoTramite
-     *
-     * @return Campo_Tramite
-     */
-    public function setCasoTramite(\AppBundle\Entity\Caso_Tramite $casoTramite = null)
-    {
-        $this->caso_Tramite = $casoTramite;
-
-        return $this;
-    }
-
-    /**
-     * Get casoTramite
-     *
-     * @return \AppBundle\Entity\Caso_Tramite
-     */
-    public function getCasoTramite()
-    {
-        return $this->caso_Tramite;
     }
 }

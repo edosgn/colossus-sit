@@ -71,12 +71,12 @@ class Historia_Tramite
     private $numeroSustrato;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante_Tramite", inversedBy="historialesTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante_Tramite", inversedBy="historiales_Tramite")
      **/
     protected $varianteTramite;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuerpo_Tramite", inversedBy="historialesTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuerpo_Tramite", inversedBy="historiales_Tramite")
      **/
     protected $cuerpoTramite;
 
@@ -281,29 +281,5 @@ class Historia_Tramite
     public function getVarianteTramite()
     {
         return $this->varianteTramite;
-    }
-
-    /**
-     * Set cuerpoTramite
-     *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite
-     *
-     * @return Historia_Tramite
-     */
-    public function setCuerpoTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite = null)
-    {
-        $this->cuerpoTramite = $cuerpoTramite;
-
-        return $this;
-    }
-
-    /**
-     * Get cuerpoTramite
-     *
-     * @return \AppBundle\Entity\Cuerpo_Tramite
-     */
-    public function getCuerpoTramite()
-    {
-        return $this->cuerpoTramite;
     }
 }

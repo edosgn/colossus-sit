@@ -1,0 +1,66 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+ 
+/**
+ * Campo_Tabla
+ *
+ * @ORM\Table(name="campo__tabla")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Campo_TablaRepository")
+ */
+class Campo_Tabla
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombreCampo", type="string", length=255)
+     */
+    private $nombreCampo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="arrayCampo", type="string", length=255)
+     */
+    private $arrayCampo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Caso_Tramite", inversedBy="camposTramite")
+     **/
+    protected $casoTramite;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cuerpo_Tramite", mappedBy="campoTabla")
+     **/
+    protected $cuerposTramite;
+
+    public function __construct() {
+        $this->cuerposTramite = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    
+
+}

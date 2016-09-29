@@ -28,16 +28,45 @@ class Variante_Tramite
      */
     private $descripcionVariante;
 
+    
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Tramite", inversedBy="variantesTramite")
+     **/
+    protected $tipo;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Documento_Tramite", mappedBy="varianteTramite")
+     **/
+    protected $documentosTramite;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Historia_Tramite", mappedBy="varianteTramite")
+     **/
+    protected $historialesTramite;
+
+
+    public function __construct() {
+        $this->documentosTramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->historialesTramite = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    
+    
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
+
+   
 
     /**
      * Set descripcionVariante
@@ -62,5 +91,96 @@ class Variante_Tramite
     {
         return $this->descripcionVariante;
     }
-}
 
+    /**
+     * Set tipo
+     *
+     * @param \AppBundle\Entity\Tipos_Tramite $tipo
+     *
+     * @return Variante_Tramite
+     */
+    public function setTipo(\AppBundle\Entity\Tipos_Tramite $tipo = null)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return \AppBundle\Entity\Tipos_Tramite
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Add documentosTramite
+     *
+     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
+     *
+     * @return Variante_Tramite
+     */
+    public function addDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
+    {
+        $this->documentosTramite[] = $documentosTramite;
+
+        return $this;
+    }
+
+    /**
+     * Remove documentosTramite
+     *
+     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
+     */
+    public function removeDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
+    {
+        $this->documentosTramite->removeElement($documentosTramite);
+    }
+
+    /**
+     * Get documentosTramite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDocumentosTramite()
+    {
+        return $this->documentosTramite;
+    }
+
+    /**
+     * Add historialesTramite
+     *
+     * @param \AppBundle\Entity\Historia_Tramite $historialesTramite
+     *
+     * @return Variante_Tramite
+     */
+    public function addHistorialesTramite(\AppBundle\Entity\Historia_Tramite $historialesTramite)
+    {
+        $this->historialesTramite[] = $historialesTramite;
+
+        return $this;
+    }
+
+    /**
+     * Remove historialesTramite
+     *
+     * @param \AppBundle\Entity\Historia_Tramite $historialesTramite
+     */
+    public function removeHistorialesTramite(\AppBundle\Entity\Historia_Tramite $historialesTramite)
+    {
+        $this->historialesTramite->removeElement($historialesTramite);
+    }
+
+    /**
+     * Get historialesTramite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistorialesTramite()
+    {
+        return $this->historialesTramite;
+    }
+}

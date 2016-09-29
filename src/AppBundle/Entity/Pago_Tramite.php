@@ -26,7 +26,7 @@ class Pago_Tramite
      *
      * @ORM\Column(name="valorPago", type="integer")
      */
-    private $valorPago;
+    private $valorPago; 
 
     /**
      * @var \DateTime
@@ -47,7 +47,18 @@ class Pago_Tramite
      *
      * @ORM\Column(name="estadoPago", type="string", length=255)
      */
-    private $estadoPago;
+    private $estadoPago; 
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuenta", inversedBy="pagosTramite")
+     **/
+    protected $cuenta;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuerpo_Tramite", inversedBy="pagosTramite")
+     **/
+    protected $cuerpoTramite;
 
 
     /**
@@ -59,6 +70,8 @@ class Pago_Tramite
     {
         return $this->id;
     }
+
+   
 
     /**
      * Set valorPago
@@ -77,7 +90,7 @@ class Pago_Tramite
     /**
      * Get valorPago
      *
-     * @return int
+     * @return integer
      */
     public function getValorPago()
     {
@@ -155,5 +168,52 @@ class Pago_Tramite
     {
         return $this->estadoPago;
     }
-}
 
+    /**
+     * Set cuenta
+     *
+     * @param \AppBundle\Entity\Cuenta $cuenta
+     *
+     * @return Pago_Tramite
+     */
+    public function setCuenta(\AppBundle\Entity\Cuenta $cuenta = null)
+    {
+        $this->cuenta = $cuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get cuenta
+     *
+     * @return \AppBundle\Entity\Cuenta
+     */
+    public function getCuenta()
+    {
+        return $this->cuenta;
+    }
+
+    /**
+     * Set cuerpoTramite
+     *
+     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite
+     *
+     * @return Pago_Tramite
+     */
+    public function setCuerpoTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite = null)
+    {
+        $this->cuerpoTramite = $cuerpoTramite;
+
+        return $this;
+    }
+
+    /**
+     * Get cuerpoTramite
+     *
+     * @return \AppBundle\Entity\Cuerpo_Tramite
+     */
+    public function getCuerpoTramite()
+    {
+        return $this->cuerpoTramite;
+    }
+}

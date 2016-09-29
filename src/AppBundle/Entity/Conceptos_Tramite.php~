@@ -36,12 +36,12 @@ class Conceptos_Tramite
     private $valor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Tramite", inversedBy="conceptosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Tramite", inversedBy="conceptos_Tramite")
      **/
     protected $tipo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuenta", inversedBy="conceptosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuenta", inversedBy="conceptos_Tramite")
      **/
     protected $cuenta;
 
@@ -126,29 +126,5 @@ class Conceptos_Tramite
     public function getTipo()
     {
         return $this->tipo;
-    }
-
-    /**
-     * Set cuenta
-     *
-     * @param \AppBundle\Entity\Cuenta $cuenta
-     *
-     * @return Conceptos_Tramite
-     */
-    public function setCuenta(\AppBundle\Entity\Cuenta $cuenta = null)
-    {
-        $this->cuenta = $cuenta;
-
-        return $this;
-    }
-
-    /**
-     * Get cuenta
-     *
-     * @return \AppBundle\Entity\Cuenta
-     */
-    public function getCuenta()
-    {
-        return $this->cuenta;
     }
 }

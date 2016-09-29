@@ -1,0 +1,163 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tipos_Id
+ *
+ * @ORM\Table(name="tipos__id")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\Tipos_IdRepository")
+ */
+class Tipos_Id
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=255)
+     */
+    private $descripcion;
+
+    
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Caso_Tramite", mappedBy="tipo")
+     **/
+    protected $casos_Tramite;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Variante_Tramite", mappedBy="tipo")
+     **/
+    protected $variantes_Tramite;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Campo_Tramite", mappedBy="tipo")
+     **/
+    protected $campos_Tramite;
+
+
+    public function __construct() {
+        $this->casos_Tramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->variantes_Tramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->campos_Tramite = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Tipos_Id
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+   
+
+    /**
+     * Add casosTramite
+     *
+     * @param \AppBundle\Entity\Caso_Tramite $casosTramite
+     *
+     * @return Tipos_Id
+     */
+    public function addCasosTramite(\AppBundle\Entity\Caso_Tramite $casosTramite)
+    {
+        $this->casos_Tramite[] = $casosTramite;
+
+        return $this;
+    }
+
+    /**
+     * Remove casosTramite
+     *
+     * @param \AppBundle\Entity\Caso_Tramite $casosTramite
+     */
+    public function removeCasosTramite(\AppBundle\Entity\Caso_Tramite $casosTramite)
+    {
+        $this->casos_Tramite->removeElement($casosTramite);
+    }
+
+    /**
+     * Get casosTramite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCasosTramite()
+    {
+        return $this->casos_Tramite;
+    }
+
+    /**
+     * Add variantesTramite
+     *
+     * @param \AppBundle\Entity\Variante_Tramite $variantesTramite
+     *
+     * @return Tipos_Id
+     */
+    public function addVariantesTramite(\AppBundle\Entity\Variante_Tramite $variantesTramite)
+    {
+        $this->variantes_Tramite[] = $variantesTramite;
+
+        return $this;
+    }
+
+    /**
+     * Remove variantesTramite
+     *
+     * @param \AppBundle\Entity\Variante_Tramite $variantesTramite
+     */
+    public function removeVariantesTramite(\AppBundle\Entity\Variante_Tramite $variantesTramite)
+    {
+        $this->variantes_Tramite->removeElement($variantesTramite);
+    }
+
+    /**
+     * Get variantesTramite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVariantesTramite()
+    {
+        return $this->variantes_Tramite;
+    }
+}

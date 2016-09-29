@@ -3,7 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+ 
 /**
  * Campo_Tabla
  *
@@ -35,6 +35,21 @@ class Campo_Tabla
      */
     private $arrayCampo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Caso_Tramite", inversedBy="camposTramite")
+     **/
+    protected $casoTramite;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cuerpo_Tramite", mappedBy="campoTabla")
+     **/
+    protected $cuerposTramite;
+
+    public function __construct() {
+        $this->cuerposTramite = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
 
     /**
      * Get id
@@ -45,6 +60,9 @@ class Campo_Tabla
     {
         return $this->id;
     }
+
+    
+
 
     /**
      * Set nombreCampo
@@ -93,5 +111,62 @@ class Campo_Tabla
     {
         return $this->arrayCampo;
     }
-}
 
+    /**
+     * Set casoTramite
+     *
+     * @param \AppBundle\Entity\Caso_Tramite $casoTramite
+     *
+     * @return Campo_Tabla
+     */
+    public function setCasoTramite(\AppBundle\Entity\Caso_Tramite $casoTramite = null)
+    {
+        $this->casoTramite = $casoTramite;
+
+        return $this;
+    }
+
+    /**
+     * Get casoTramite
+     *
+     * @return \AppBundle\Entity\Caso_Tramite
+     */
+    public function getCasoTramite()
+    {
+        return $this->casoTramite;
+    }
+
+    /**
+     * Add cuerposTramite
+     *
+     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerposTramite
+     *
+     * @return Campo_Tabla
+     */
+    public function addCuerposTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerposTramite)
+    {
+        $this->cuerposTramite[] = $cuerposTramite;
+
+        return $this;
+    }
+
+    /**
+     * Remove cuerposTramite
+     *
+     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerposTramite
+     */
+    public function removeCuerposTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerposTramite)
+    {
+        $this->cuerposTramite->removeElement($cuerposTramite);
+    }
+
+    /**
+     * Get cuerposTramite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCuerposTramite()
+    {
+        return $this->cuerposTramite;
+    }
+}

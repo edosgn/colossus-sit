@@ -73,38 +73,5 @@ class Banco
     {
         return $this->nombreBanco;
     }
-
-    /**
-     * Add cuenta
-     *
-     * @param \AppBundle\Entity\Cuenta $cuenta
-     *
-     * @return Banco
-     */
-    public function addCuenta(\AppBundle\Entity\Cuenta $cuenta)
-    {
-        $this->cuentas[] = $cuenta;
-
-        return $this;
-    }
-
-    /**
-     * Remove cuenta
-     *
-     * @param \AppBundle\Entity\Cuenta $cuenta
-     */
-    public function removeCuenta(\AppBundle\Entity\Cuenta $cuenta)
-    {
-        $this->cuentas->removeElement($cuenta);
-    }
-
-    /**
-     * Get cuentas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCuentas()
-    {
-        return $this->cuentas;
-    }
 }
+

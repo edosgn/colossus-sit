@@ -1,0 +1,65 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Cuenta
+ *
+ * @ORM\Table(name="cuenta")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CuentaRepository")
+ */
+class Cuenta
+{
+    /** 
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="datosCuenta", type="string", length=255)
+     */
+    private $datosCuenta;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Banco", inversedBy="cuentas")
+     **/
+    protected $banco;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Conceptos_Tramite", mappedBy="cuenta")
+     **/
+    protected $conceptosTramite;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pago_Tramite", mappedBy="cuenta")
+     **/
+    protected $pagosTramite;
+
+
+    public function __construct() {
+        $this->conceptosTramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagosTramite = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+   
+}

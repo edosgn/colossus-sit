@@ -32,11 +32,11 @@ class Documento
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Documento_Tramite", mappedBy="documento")
      **/
-    protected $documentosTramite;
+    protected $documentos_Tramite;
 
 
     public function __construct() {
-        $this->documentosTramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->documentos_Tramite = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -73,38 +73,5 @@ class Documento
     {
         return $this->nombreDocuemento;
     }
-
-    /**
-     * Add documentosTramite
-     *
-     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
-     *
-     * @return Documento
-     */
-    public function addDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
-    {
-        $this->documentosTramite[] = $documentosTramite;
-
-        return $this;
-    }
-
-    /**
-     * Remove documentosTramite
-     *
-     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
-     */
-    public function removeDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
-    {
-        $this->documentosTramite->removeElement($documentosTramite);
-    }
-
-    /**
-     * Get documentosTramite
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getDocumentosTramite()
-    {
-        return $this->documentosTramite;
-    }
 }
+
