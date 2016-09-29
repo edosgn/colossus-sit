@@ -701,38 +701,4 @@ class Vehiculo
     {
         return $this->clase;
     }
-
-    /**
-     * Add propietariosVehiculo
-     *
-     * @param \AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo
-     *
-     * @return Vehiculo
-     */
-    public function addPropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
-    {
-        $this->propietarios_Vehiculo[] = $propietariosVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove propietariosVehiculo
-     *
-     * @param \AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo
-     */
-    public function removePropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
-    {
-        $this->propietarios_Vehiculo->removeElement($propietariosVehiculo);
-    }
-
-    /**
-     * Get propietariosVehiculo
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPropietariosVehiculo()
-    {
-        return $this->propietarios_Vehiculo;
-    }
 }

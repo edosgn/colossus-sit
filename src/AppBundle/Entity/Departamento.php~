@@ -104,38 +104,5 @@ class Departamento
     {
         return $this->codigoDepartamento;
     }
-
-    /**
-     * Add ciudade
-     *
-     * @param \AppBundle\Entity\Ciudad $ciudade
-     *
-     * @return Departamento
-     */
-    public function addCiudade(\AppBundle\Entity\Ciudad $ciudade)
-    {
-        $this->ciudades[] = $ciudade;
-
-        return $this;
-    }
-
-    /**
-     * Remove ciudade
-     *
-     * @param \AppBundle\Entity\Ciudad $ciudade
-     */
-    public function removeCiudade(\AppBundle\Entity\Ciudad $ciudade)
-    {
-        $this->ciudades->removeElement($ciudade);
-    }
-
-    /**
-     * Get ciudades
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCiudades()
-    {
-        return $this->ciudades;
-    }
 }
+

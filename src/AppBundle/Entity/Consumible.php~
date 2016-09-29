@@ -72,38 +72,5 @@ class Consumible
     {
         return $this->nombreConsumible;
     }
-
-    /**
-     * Add almacene
-     *
-     * @param \AppBundle\Entity\Almacen $almacene
-     *
-     * @return Consumible
-     */
-    public function addAlmacene(\AppBundle\Entity\Almacen $almacene)
-    {
-        $this->almacenes[] = $almacene;
-
-        return $this;
-    }
-
-    /**
-     * Remove almacene
-     *
-     * @param \AppBundle\Entity\Almacen $almacene
-     */
-    public function removeAlmacene(\AppBundle\Entity\Almacen $almacene)
-    {
-        $this->almacenes->removeElement($almacene);
-    }
-
-    /**
-     * Get almacenes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAlmacenes()
-    {
-        return $this->almacenes;
-    }
 }
+

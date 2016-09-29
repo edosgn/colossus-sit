@@ -130,38 +130,4 @@ class Carroceria
     {
         return $this->clase;
     }
-
-    /**
-     * Add vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Carroceria
-     */
-    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos[] = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     */
-    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos->removeElement($vehiculo);
-    }
-
-    /**
-     * Get vehiculos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehiculos()
-    {
-        return $this->vehiculos;
-    }
 }

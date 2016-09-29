@@ -72,38 +72,5 @@ class Marca
     {
         return $this->nombreMarca;
     }
-
-    /**
-     * Add linea
-     *
-     * @param \AppBundle\Entity\Linea $linea
-     *
-     * @return Marca
-     */
-    public function addLinea(\AppBundle\Entity\Linea $linea)
-    {
-        $this->lineas[] = $linea;
-
-        return $this;
-    }
-
-    /**
-     * Remove linea
-     *
-     * @param \AppBundle\Entity\Linea $linea
-     */
-    public function removeLinea(\AppBundle\Entity\Linea $linea)
-    {
-        $this->lineas->removeElement($linea);
-    }
-
-    /**
-     * Get lineas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLineas()
-    {
-        return $this->lineas;
-    }
 }
+

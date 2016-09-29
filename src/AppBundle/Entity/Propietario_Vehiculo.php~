@@ -154,28 +154,4 @@ class Propietario_Vehiculo
     {
         return $this->propietario;
     }
-
-    /**
-     * Set vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Propietario_Vehiculo
-     */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \AppBundle\Entity\Vehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
-    }
 }
