@@ -29,6 +29,18 @@ class Tipos_Id
      */
     private $descripcion;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario", mappedBy="Tipo")
+     */
+    protected $Propietarios;  
+
+
+    public function __construct() {
+        $this->Propietarios = new \Doctrine\Common\Collections\ArrayCollection();
+       
+        
+    }
+
     
 
     /**
@@ -65,4 +77,38 @@ class Tipos_Id
         return $this->descripcion;
     }
    
+
+    /**
+     * Add propietario
+     *
+     * @param \AppBundle\Entity\Propietario $propietario
+     *
+     * @return Tipos_Id
+     */
+    public function addPropietario(\AppBundle\Entity\Propietario $propietario)
+    {
+        $this->Propietarios[] = $propietario;
+
+        return $this;
+    }
+
+    /**
+     * Remove propietario
+     *
+     * @param \AppBundle\Entity\Propietario $propietario
+     */
+    public function removePropietario(\AppBundle\Entity\Propietario $propietario)
+    {
+        $this->Propietarios->removeElement($propietario);
+    }
+
+    /**
+     * Get propietarios
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPropietarios()
+    {
+        return $this->Propietarios;
+    }
 }

@@ -31,13 +31,13 @@ class Variante_Tramite
     
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Tramite", inversedBy="variantesTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipo_Tramite", inversedBy="variantesTramite")
      **/
     protected $tipo;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Documento_Tramite", mappedBy="varianteTramite")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Documento_Tramite", mappedBy="variante")
      **/
     protected $documentosTramite;
 

@@ -80,6 +80,11 @@ class Historia_Tramite
      **/
     protected $cuerpoTramite;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="historialesTramite")
+     **/
+    protected $vehiculo;
+
 
     /**
      * Get id
@@ -305,5 +310,29 @@ class Historia_Tramite
     public function getCuerpoTramite()
     {
         return $this->cuerpoTramite;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return Historia_Tramite
+     */
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \AppBundle\Entity\Vehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

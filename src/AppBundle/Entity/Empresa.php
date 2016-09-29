@@ -56,6 +56,9 @@ class Empresa
      */
     private $correoEmpresa;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad", inversedBy="empresas") */
+    private $ciudad;
+
 
     /**
      * Get id
@@ -186,5 +189,28 @@ class Empresa
     {
         return $this->correoEmpresa;
     }
-}
 
+    /**
+     * Set ciudad
+     *
+     * @param \AppBundle\Entity\Ciudad $ciudad
+     *
+     * @return Empresa
+     */
+    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad = null)
+    {
+        $this->ciudad = $ciudad;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudad
+     *
+     * @return \AppBundle\Entity\Ciudad
+     */
+    public function getCiudad()
+    {
+        return $this->ciudad;
+    }
+}

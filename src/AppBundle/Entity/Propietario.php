@@ -63,6 +63,9 @@ class Propietario
      */
     private $correoPropietario;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Id", inversedBy="Propietarios") */
+    private $Tipo;
+
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario_Vehiculo", mappedBy="propietario")
@@ -263,5 +266,29 @@ class Propietario
     public function getPropietariosVehiculo()
     {
         return $this->propietariosVehiculo;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param \AppBundle\Entity\Tipos_Id $tipo
+     *
+     * @return Propietario
+     */
+    public function setTipo(\AppBundle\Entity\Tipos_Id $tipo = null)
+    {
+        $this->Tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return \AppBundle\Entity\Tipos_Id
+     */
+    public function getTipo()
+    {
+        return $this->Tipo;
     }
 }

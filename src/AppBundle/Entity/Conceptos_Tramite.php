@@ -36,7 +36,7 @@ class Conceptos_Tramite
     private $valor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Tramite", inversedBy="conceptosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipo_Tramite", inversedBy="conceptosTramite")
      **/
     protected $tipo;
 

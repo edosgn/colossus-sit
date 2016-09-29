@@ -40,8 +40,14 @@ class Ciudad
      */
     protected $vehiculos; 
 
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Empresa", mappedBy="ciudad")
+     */
+    protected $empresas;
+
     public function __construct() {
         $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->empresas = new \Doctrine\Common\Collections\ArrayCollection();
         
     }
     
@@ -164,5 +170,39 @@ class Ciudad
     public function getVehiculos()
     {
         return $this->vehiculos;
+    }
+
+    /**
+     * Add empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Ciudad
+     */
+    public function addEmpresa(\AppBundle\Entity\Empresa $empresa)
+    {
+        $this->empresas[] = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Remove empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     */
+    public function removeEmpresa(\AppBundle\Entity\Empresa $empresa)
+    {
+        $this->empresas->removeElement($empresa);
+    }
+
+    /**
+     * Get empresas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpresas()
+    {
+        return $this->empresas;
     }
 }

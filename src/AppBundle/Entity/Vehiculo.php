@@ -154,11 +154,17 @@ class Vehiculo
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Carga_Pasajero", mappedBy="vehiculo")
      */
-    protected $cargasPasajero;  
+    protected $cargasPasajero; 
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Historia_Tramite", mappedBy="vehiculo")
+     */
+    protected $historialesTramite;  
 
     public function __construct() {
         $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cargaPasajero = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->historialesTramite = new \Doctrine\Common\Collections\ArrayCollection();
         
     } 
 
@@ -769,5 +775,39 @@ class Vehiculo
     public function getCargasPasajero()
     {
         return $this->cargasPasajero;
+    }
+
+    /**
+     * Add historialesTramite
+     *
+     * @param \AppBundle\Entity\Historial_Tramite $historialesTramite
+     *
+     * @return Vehiculo
+     */
+    public function addHistorialesTramite(\AppBundle\Entity\Historial_Tramite $historialesTramite)
+    {
+        $this->historialesTramite[] = $historialesTramite;
+
+        return $this;
+    }
+
+    /**
+     * Remove historialesTramite
+     *
+     * @param \AppBundle\Entity\Historial_Tramite $historialesTramite
+     */
+    public function removeHistorialesTramite(\AppBundle\Entity\Historial_Tramite $historialesTramite)
+    {
+        $this->historialesTramite->removeElement($historialesTramite);
+    }
+
+    /**
+     * Get historialesTramite
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getHistorialesTramite()
+    {
+        return $this->historialesTramite;
     }
 }
