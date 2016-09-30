@@ -169,10 +169,7 @@ class Vehiculo
     }
 
 
-    public function __toString()
-    {
-        return $this->getPlaca();
-    }
+    
 
     /**
      * Get id
