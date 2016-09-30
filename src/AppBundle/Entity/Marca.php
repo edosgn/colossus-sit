@@ -46,6 +46,11 @@ class Marca
         
     }
 
+    public function __toString()
+    {
+        return $this->getNombre();
+    }
+
 
     /**
      * Get id

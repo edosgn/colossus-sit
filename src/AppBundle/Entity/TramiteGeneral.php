@@ -85,6 +85,12 @@ class TramiteGeneral
     }
 
 
+
+    public function __toString()
+    {
+        return $this->getEstado();
+    }
+
     /**
      * Get id
      *

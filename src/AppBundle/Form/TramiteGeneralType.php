@@ -16,8 +16,8 @@ class TramiteGeneralType extends AbstractType
     {
         $builder
             ->add('numeroQpl')
-            ->add('fechaInicial', 'date')
-            ->add('fechaFinal', 'date')
+            ->add('fechaInicial')
+            ->add('fechaFinal')
             ->add('estado')
             ->add('valor')
             ->add('numeroLicencia')

@@ -16,8 +16,8 @@ class PagoType extends AbstractType
     {
         $builder
             ->add('valor')
-            ->add('fechaPago', 'datetime')
-            ->add('horaPago', 'time')
+            ->add('fechaPago')
+            ->add('horaPago')
             ->add('estado')
             ->add('fuente')
             ->add('tramite')
