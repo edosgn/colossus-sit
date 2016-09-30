@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pago_Tramite
+ * PagoTramite
  *
- * @ORM\Table(name="pago__tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Pago_TramiteRepository")
+ * @ORM\Table(name="pago_tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PagoTramiteRepository")
  */
-class Pago_Tramite
+class PagoTramite
 {
     /**
      * @var int
@@ -21,7 +21,7 @@ class Pago_Tramite
      */
     private $id;
 
-    /**
+     /**
      * @var int
      *
      * @ORM\Column(name="valorPago", type="integer")
@@ -56,7 +56,7 @@ class Pago_Tramite
     protected $cuenta;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuerpo_Tramite", inversedBy="pagosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CuerpoTramite", inversedBy="pagosTramite")
      **/
     protected $cuerpoTramite;
 
@@ -71,14 +71,12 @@ class Pago_Tramite
         return $this->id;
     }
 
-   
-
     /**
      * Set valorPago
      *
      * @param integer $valorPago
      *
-     * @return Pago_Tramite
+     * @return PagoTramite
      */
     public function setValorPago($valorPago)
     {
@@ -102,7 +100,7 @@ class Pago_Tramite
      *
      * @param \DateTime $fechaPago
      *
-     * @return Pago_Tramite
+     * @return PagoTramite
      */
     public function setFechaPago($fechaPago)
     {
@@ -126,7 +124,7 @@ class Pago_Tramite
      *
      * @param \DateTime $horaPago
      *
-     * @return Pago_Tramite
+     * @return PagoTramite
      */
     public function setHoraPago($horaPago)
     {
@@ -150,7 +148,7 @@ class Pago_Tramite
      *
      * @param string $estadoPago
      *
-     * @return Pago_Tramite
+     * @return PagoTramite
      */
     public function setEstadoPago($estadoPago)
     {
@@ -174,7 +172,7 @@ class Pago_Tramite
      *
      * @param \AppBundle\Entity\Cuenta $cuenta
      *
-     * @return Pago_Tramite
+     * @return PagoTramite
      */
     public function setCuenta(\AppBundle\Entity\Cuenta $cuenta = null)
     {
@@ -196,11 +194,11 @@ class Pago_Tramite
     /**
      * Set cuerpoTramite
      *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite
+     * @param \AppBundle\Entity\CuerpoTramite $cuerpoTramite
      *
-     * @return Pago_Tramite
+     * @return PagoTramite
      */
-    public function setCuerpoTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite = null)
+    public function setCuerpoTramite(\AppBundle\Entity\CuerpoTramite $cuerpoTramite = null)
     {
         $this->cuerpoTramite = $cuerpoTramite;
 
@@ -210,7 +208,7 @@ class Pago_Tramite
     /**
      * Get cuerpoTramite
      *
-     * @return \AppBundle\Entity\Cuerpo_Tramite
+     * @return \AppBundle\Entity\CuerpoTramite
      */
     public function getCuerpoTramite()
     {

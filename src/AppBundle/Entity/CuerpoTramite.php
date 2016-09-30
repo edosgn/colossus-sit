@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Cuerpo_Tramite
+ * CuerpoTramite
  *
- * @ORM\Table(name="cuerpo__tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Cuerpo_TramiteRepository")
+ * @ORM\Table(name="cuerpo_tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CuerpoTramiteRepository")
  */
-class Cuerpo_Tramite
+class CuerpoTramite
 {
     /**
      * @var int
@@ -30,25 +30,25 @@ class Cuerpo_Tramite
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipo_Tramite", inversedBy="cuerposTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoTramite", inversedBy="cuerposTramite")
      **/
-    protected $tipo;
+    protected $tipoTramite;
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Campo_Tabla", inversedBy="cuerposTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CampoTabla", inversedBy="cuerposTramite")
      **/
     protected $campoTabla;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pago_Tramite", mappedBy="cuerpoTramite")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PagoTramite", mappedBy="cuerpoTramite")
      **/
 
     protected $pagosTramite;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Historia_Tramite", mappedBy="cuerpoTramite")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\HistoriaTramite", mappedBy="cuerpoTramite")
      **/
     
     protected $historialesTramite;
@@ -69,14 +69,12 @@ class Cuerpo_Tramite
         return $this->id;
     }
 
-   
-
     /**
      * Set valorCampo
      *
      * @param integer $valorCampo
      *
-     * @return Cuerpo_Tramite
+     * @return CuerpoTramite
      */
     public function setValorCampo($valorCampo)
     {
@@ -96,37 +94,37 @@ class Cuerpo_Tramite
     }
 
     /**
-     * Set tipo
+     * Set tipoTramite
      *
-     * @param \AppBundle\Entity\Tipo_Tramite $tipo
+     * @param \AppBundle\Entity\TipoTramite $tipoTramite
      *
-     * @return Cuerpo_Tramite
+     * @return CuerpoTramite
      */
-    public function setTipo(\AppBundle\Entity\Tipo_Tramite $tipo = null)
+    public function setTipoTramite(\AppBundle\Entity\TipoTramite $tipoTramite = null)
     {
-        $this->tipo = $tipo;
+        $this->tipoTramite = $tipoTramite;
 
         return $this;
     }
 
     /**
-     * Get tipo
+     * Get tipoTramite
      *
      * @return \AppBundle\Entity\Tipo_Tramite
      */
-    public function getTipo()
+    public function getTipoTramite()
     {
-        return $this->tipo;
+        return $this->tipoTramite;
     }
 
     /**
      * Set campoTabla
      *
-     * @param \AppBundle\Entity\Campo_Tabla $campoTabla
+     * @param \AppBundle\Entity\CampoTabla $campoTabla
      *
-     * @return Cuerpo_Tramite
+     * @return CuerpoTramite
      */
-    public function setCampoTabla(\AppBundle\Entity\Campo_Tabla $campoTabla = null)
+    public function setCampoTabla(\AppBundle\Entity\CampoTabla $campoTabla = null)
     {
         $this->campoTabla = $campoTabla;
 
@@ -136,7 +134,7 @@ class Cuerpo_Tramite
     /**
      * Get campoTabla
      *
-     * @return \AppBundle\Entity\Campo_Tabla
+     * @return \AppBundle\Entity\CampoTabla
      */
     public function getCampoTabla()
     {
@@ -146,11 +144,11 @@ class Cuerpo_Tramite
     /**
      * Add pagosTramite
      *
-     * @param \AppBundle\Entity\Pago_Tramite $pagosTramite
+     * @param \AppBundle\Entity\PagoTramite $pagosTramite
      *
-     * @return Cuerpo_Tramite
+     * @return CuerpoTramite
      */
-    public function addPagosTramite(\AppBundle\Entity\Pago_Tramite $pagosTramite)
+    public function addPagosTramite(\AppBundle\Entity\PagoTramite $pagosTramite)
     {
         $this->pagosTramite[] = $pagosTramite;
 
@@ -160,9 +158,9 @@ class Cuerpo_Tramite
     /**
      * Remove pagosTramite
      *
-     * @param \AppBundle\Entity\Pago_Tramite $pagosTramite
+     * @param \AppBundle\Entity\PagoTramite $pagosTramite
      */
-    public function removePagosTramite(\AppBundle\Entity\Pago_Tramite $pagosTramite)
+    public function removePagosTramite(\AppBundle\Entity\PagoTramite $pagosTramite)
     {
         $this->pagosTramite->removeElement($pagosTramite);
     }
@@ -180,11 +178,11 @@ class Cuerpo_Tramite
     /**
      * Add historialesTramite
      *
-     * @param \AppBundle\Entity\Historia_Tramite $historialesTramite
+     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
      *
-     * @return Cuerpo_Tramite
+     * @return CuerpoTramite
      */
-    public function addHistorialesTramite(\AppBundle\Entity\Historia_Tramite $historialesTramite)
+    public function addHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
     {
         $this->historialesTramite[] = $historialesTramite;
 
@@ -194,9 +192,9 @@ class Cuerpo_Tramite
     /**
      * Remove historialesTramite
      *
-     * @param \AppBundle\Entity\Historia_Tramite $historialesTramite
+     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
      */
-    public function removeHistorialesTramite(\AppBundle\Entity\Historia_Tramite $historialesTramite)
+    public function removeHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
     {
         $this->historialesTramite->removeElement($historialesTramite);
     }

@@ -63,18 +63,17 @@ class Propietario
      */
     private $correoPropietario;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipos_Id", inversedBy="Propietarios") */
-    private $Tipo;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="propietarios") */
+    private $tipoIdentificacion;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario_Vehiculo", mappedBy="propietario")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PropietarioVehiculo", mappedBy="propietario")
      */
     protected $propietariosVehiculo;  
 
     public function __construct() {
         $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
-        
     } 
 
 
@@ -235,13 +234,37 @@ class Propietario
     }
 
     /**
-     * Add propietariosVehiculo
+     * Set tipoIdentificacion
      *
-     * @param \AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo
+     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
      *
      * @return Propietario
      */
-    public function addPropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
+    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
+    }
+
+    /**
+     * Add propietariosVehiculo
+     *
+     * @param \AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo
+     *
+     * @return Propietario
+     */
+    public function addPropietariosVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo)
     {
         $this->propietariosVehiculo[] = $propietariosVehiculo;
 
@@ -251,9 +274,9 @@ class Propietario
     /**
      * Remove propietariosVehiculo
      *
-     * @param \AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo
+     * @param \AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo
      */
-    public function removePropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
+    public function removePropietariosVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo)
     {
         $this->propietariosVehiculo->removeElement($propietariosVehiculo);
     }
@@ -266,29 +289,5 @@ class Propietario
     public function getPropietariosVehiculo()
     {
         return $this->propietariosVehiculo;
-    }
-
-    /**
-     * Set tipo
-     *
-     * @param \AppBundle\Entity\Tipos_Id $tipo
-     *
-     * @return Propietario
-     */
-    public function setTipo(\AppBundle\Entity\Tipos_Id $tipo = null)
-    {
-        $this->Tipo = $tipo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipo
-     *
-     * @return \AppBundle\Entity\Tipos_Id
-     */
-    public function getTipo()
-    {
-        return $this->Tipo;
     }
 }

@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Historia_Tramite
+ * HistoriaTramite
  *
- * @ORM\Table(name="historia__tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Historia_TramiteRepository")
+ * @ORM\Table(name="historia_tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\HistoriaTramiteRepository")
  */
-class Historia_Tramite
+class HistoriaTramite
 {
     /**
      * @var int
@@ -71,12 +71,12 @@ class Historia_Tramite
     private $numeroSustrato;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante_Tramite", inversedBy="historialesTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\VarianteTramite", inversedBy="historialesTramite")
      **/
     protected $varianteTramite;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuerpo_Tramite", inversedBy="historialesTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CuerpoTramite", inversedBy="historialesTramite")
      **/
     protected $cuerpoTramite;
 
@@ -101,7 +101,7 @@ class Historia_Tramite
      *
      * @param string $cupl
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setCupl($cupl)
     {
@@ -125,7 +125,7 @@ class Historia_Tramite
      *
      * @param \DateTime $fechaInicio
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setFechaInicio($fechaInicio)
     {
@@ -149,7 +149,7 @@ class Historia_Tramite
      *
      * @param \DateTime $fechaFin
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setFechaFin($fechaFin)
     {
@@ -173,7 +173,7 @@ class Historia_Tramite
      *
      * @param string $estadoTramite
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setEstadoTramite($estadoTramite)
     {
@@ -197,7 +197,7 @@ class Historia_Tramite
      *
      * @param integer $valorTramite
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setValorTramite($valorTramite)
     {
@@ -209,7 +209,7 @@ class Historia_Tramite
     /**
      * Get valorTramite
      *
-     * @return int
+     * @return integer
      */
     public function getValorTramite()
     {
@@ -221,7 +221,7 @@ class Historia_Tramite
      *
      * @param string $licenciaTransito
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setLicenciaTransito($licenciaTransito)
     {
@@ -245,7 +245,7 @@ class Historia_Tramite
      *
      * @param integer $numeroSustrato
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setNumeroSustrato($numeroSustrato)
     {
@@ -257,7 +257,7 @@ class Historia_Tramite
     /**
      * Get numeroSustrato
      *
-     * @return int
+     * @return integer
      */
     public function getNumeroSustrato()
     {
@@ -267,11 +267,11 @@ class Historia_Tramite
     /**
      * Set varianteTramite
      *
-     * @param \AppBundle\Entity\Variante_Tramite $varianteTramite
+     * @param \AppBundle\Entity\VarianteTramite $varianteTramite
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
-    public function setVarianteTramite(\AppBundle\Entity\Variante_Tramite $varianteTramite = null)
+    public function setVarianteTramite(\AppBundle\Entity\VarianteTramite $varianteTramite = null)
     {
         $this->varianteTramite = $varianteTramite;
 
@@ -281,7 +281,7 @@ class Historia_Tramite
     /**
      * Get varianteTramite
      *
-     * @return \AppBundle\Entity\Variante_Tramite
+     * @return \AppBundle\Entity\VarianteTramite
      */
     public function getVarianteTramite()
     {
@@ -291,11 +291,11 @@ class Historia_Tramite
     /**
      * Set cuerpoTramite
      *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite
+     * @param \AppBundle\Entity\CuerpoTramite $cuerpoTramite
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
-    public function setCuerpoTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerpoTramite = null)
+    public function setCuerpoTramite(\AppBundle\Entity\CuerpoTramite $cuerpoTramite = null)
     {
         $this->cuerpoTramite = $cuerpoTramite;
 
@@ -305,7 +305,7 @@ class Historia_Tramite
     /**
      * Get cuerpoTramite
      *
-     * @return \AppBundle\Entity\Cuerpo_Tramite
+     * @return \AppBundle\Entity\CuerpoTramite
      */
     public function getCuerpoTramite()
     {
@@ -317,7 +317,7 @@ class Historia_Tramite
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return Historia_Tramite
+     * @return HistoriaTramite
      */
     public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {

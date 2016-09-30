@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tipos_Id
+ * TipoEmpresa
  *
- * @ORM\Table(name="tipos__id")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Tipos_IdRepository")
+ * @ORM\Table(name="tipo_empresa")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoEmpresaRepository")
  */
-class Tipos_Id
+class TipoEmpresa
 {
     /**
      * @var int
@@ -21,7 +21,6 @@ class Tipos_Id
      */
     private $id;
 
-
     /**
      * @var string
      *
@@ -30,18 +29,16 @@ class Tipos_Id
     private $descripcion;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario", mappedBy="Tipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Empresa", mappedBy="tipoEmpresa")
      */
-    protected $Propietarios;  
-
+    protected $empresas;  
 
     public function __construct() {
-        $this->Propietarios = new \Doctrine\Common\Collections\ArrayCollection();
-       
+        $this->empresas = new \Doctrine\Common\Collections\ArrayCollection();
         
-    }
+        
+    } 
 
-    
 
     /**
      * Get id
@@ -58,7 +55,7 @@ class Tipos_Id
      *
      * @param string $descripcion
      *
-     * @return Tipos_Id
+     * @return TipoEmpresa
      */
     public function setDescripcion($descripcion)
     {
@@ -76,39 +73,38 @@ class Tipos_Id
     {
         return $this->descripcion;
     }
-   
 
     /**
-     * Add propietario
+     * Add empresa
      *
-     * @param \AppBundle\Entity\Propietario $propietario
+     * @param \AppBundle\Entity\Empresa $empresa
      *
-     * @return Tipos_Id
+     * @return TipoEmpresa
      */
-    public function addPropietario(\AppBundle\Entity\Propietario $propietario)
+    public function addEmpresa(\AppBundle\Entity\Empresa $empresa)
     {
-        $this->Propietarios[] = $propietario;
+        $this->empresas[] = $empresa;
 
         return $this;
     }
 
     /**
-     * Remove propietario
+     * Remove empresa
      *
-     * @param \AppBundle\Entity\Propietario $propietario
+     * @param \AppBundle\Entity\Empresa $empresa
      */
-    public function removePropietario(\AppBundle\Entity\Propietario $propietario)
+    public function removeEmpresa(\AppBundle\Entity\Empresa $empresa)
     {
-        $this->Propietarios->removeElement($propietario);
+        $this->empresas->removeElement($empresa);
     }
 
     /**
-     * Get propietarios
+     * Get empresas
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPropietarios()
+    public function getEmpresas()
     {
-        return $this->Propietarios;
+        return $this->empresas;
     }
 }

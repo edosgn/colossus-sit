@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Variante_Tramite
+ * VarianteTramite
  *
- * @ORM\Table(name="variante__tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Variante_TramiteRepository")
+ * @ORM\Table(name="variante_tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\VarianteTramiteRepository")
  */
-class Variante_Tramite
+class VarianteTramite
 {
     /**
      * @var int
@@ -20,6 +20,7 @@ class Variante_Tramite
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
 
     /**
      * @var string
@@ -31,18 +32,18 @@ class Variante_Tramite
     
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tipo_Tramite", inversedBy="variantesTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoTramite", inversedBy="variantesTramite")
      **/
-    protected $tipo;
+    protected $tipoTramite;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Documento_Tramite", mappedBy="variante")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DocumentoTramite", mappedBy="varianteTramite")
      **/
     protected $documentosTramite;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Historia_Tramite", mappedBy="varianteTramite")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\HistoriaTramite", mappedBy="varianteTramite")
      **/
     protected $historialesTramite;
 
@@ -53,27 +54,22 @@ class Variante_Tramite
     }
 
 
-    
-    
-
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
 
-   
-
     /**
      * Set descripcionVariante
      *
      * @param string $descripcionVariante
      *
-     * @return Variante_Tramite
+     * @return VarianteTramite
      */
     public function setDescripcionVariante($descripcionVariante)
     {
@@ -93,37 +89,37 @@ class Variante_Tramite
     }
 
     /**
-     * Set tipo
+     * Set tipoTramite
      *
-     * @param \AppBundle\Entity\Tipos_Tramite $tipo
+     * @param \AppBundle\Entity\TipoTramite $tipoTramite
      *
-     * @return Variante_Tramite
+     * @return VarianteTramite
      */
-    public function setTipo(\AppBundle\Entity\Tipos_Tramite $tipo = null)
+    public function setTipoTramite(\AppBundle\Entity\TipoTramite $tipoTramite = null)
     {
-        $this->tipo = $tipo;
+        $this->tipoTramite = $tipoTramite;
 
         return $this;
     }
 
     /**
-     * Get tipo
+     * Get tipoTramite
      *
-     * @return \AppBundle\Entity\Tipos_Tramite
+     * @return \AppBundle\Entity\TipoTramite
      */
-    public function getTipo()
+    public function getTipoTramite()
     {
-        return $this->tipo;
+        return $this->tipoTramite;
     }
 
     /**
      * Add documentosTramite
      *
-     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
+     * @param \AppBundle\Entity\DocumentoTramite $documentosTramite
      *
-     * @return Variante_Tramite
+     * @return VarianteTramite
      */
-    public function addDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
+    public function addDocumentosTramite(\AppBundle\Entity\DocumentoTramite $documentosTramite)
     {
         $this->documentosTramite[] = $documentosTramite;
 
@@ -133,9 +129,9 @@ class Variante_Tramite
     /**
      * Remove documentosTramite
      *
-     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
+     * @param \AppBundle\Entity\DocumentoTramite $documentosTramite
      */
-    public function removeDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
+    public function removeDocumentosTramite(\AppBundle\Entity\DocumentoTramite $documentosTramite)
     {
         $this->documentosTramite->removeElement($documentosTramite);
     }
@@ -153,11 +149,11 @@ class Variante_Tramite
     /**
      * Add historialesTramite
      *
-     * @param \AppBundle\Entity\Historia_Tramite $historialesTramite
+     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
      *
-     * @return Variante_Tramite
+     * @return VarianteTramite
      */
-    public function addHistorialesTramite(\AppBundle\Entity\Historia_Tramite $historialesTramite)
+    public function addHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
     {
         $this->historialesTramite[] = $historialesTramite;
 
@@ -167,9 +163,9 @@ class Variante_Tramite
     /**
      * Remove historialesTramite
      *
-     * @param \AppBundle\Entity\Historia_Tramite $historialesTramite
+     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
      */
-    public function removeHistorialesTramite(\AppBundle\Entity\Historia_Tramite $historialesTramite)
+    public function removeHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
     {
         $this->historialesTramite->removeElement($historialesTramite);
     }

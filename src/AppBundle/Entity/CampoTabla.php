@@ -3,14 +3,14 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
- 
+
 /**
- * Campo_Tabla
+ * CampoTabla
  *
- * @ORM\Table(name="campo__tabla")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Campo_TablaRepository")
+ * @ORM\Table(name="campo_tabla")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CampoTablaRepository")
  */
-class Campo_Tabla
+class CampoTabla
 {
     /**
      * @var int
@@ -21,7 +21,7 @@ class Campo_Tabla
      */
     private $id;
 
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="nombreCampo", type="string", length=255)
@@ -36,19 +36,18 @@ class Campo_Tabla
     private $arrayCampo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Caso_Tramite", inversedBy="camposTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CasoTramite", inversedBy="camposTramite")
      **/
     protected $casoTramite;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cuerpo_Tramite", mappedBy="campoTabla")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CuerpoTramite", mappedBy="campoTabla")
      **/
     protected $cuerposTramite;
 
     public function __construct() {
         $this->cuerposTramite = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
 
 
     /**
@@ -61,15 +60,12 @@ class Campo_Tabla
         return $this->id;
     }
 
-    
-
-
     /**
      * Set nombreCampo
      *
      * @param string $nombreCampo
      *
-     * @return Campo_Tabla
+     * @return CampoTabla
      */
     public function setNombreCampo($nombreCampo)
     {
@@ -93,7 +89,7 @@ class Campo_Tabla
      *
      * @param string $arrayCampo
      *
-     * @return Campo_Tabla
+     * @return CampoTabla
      */
     public function setArrayCampo($arrayCampo)
     {
@@ -115,11 +111,11 @@ class Campo_Tabla
     /**
      * Set casoTramite
      *
-     * @param \AppBundle\Entity\Caso_Tramite $casoTramite
+     * @param \AppBundle\Entity\CasoTramite $casoTramite
      *
-     * @return Campo_Tabla
+     * @return CampoTabla
      */
-    public function setCasoTramite(\AppBundle\Entity\Caso_Tramite $casoTramite = null)
+    public function setCasoTramite(\AppBundle\Entity\CasoTramite $casoTramite = null)
     {
         $this->casoTramite = $casoTramite;
 
@@ -129,7 +125,7 @@ class Campo_Tabla
     /**
      * Get casoTramite
      *
-     * @return \AppBundle\Entity\Caso_Tramite
+     * @return \AppBundle\Entity\CasoTramite
      */
     public function getCasoTramite()
     {
@@ -139,11 +135,11 @@ class Campo_Tabla
     /**
      * Add cuerposTramite
      *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerposTramite
+     * @param \AppBundle\Entity\CuerpoTramite $cuerposTramite
      *
-     * @return Campo_Tabla
+     * @return CampoTabla
      */
-    public function addCuerposTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerposTramite)
+    public function addCuerposTramite(\AppBundle\Entity\CuerpoTramite $cuerposTramite)
     {
         $this->cuerposTramite[] = $cuerposTramite;
 
@@ -153,9 +149,9 @@ class Campo_Tabla
     /**
      * Remove cuerposTramite
      *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerposTramite
+     * @param \AppBundle\Entity\CuerpoTramite $cuerposTramite
      */
-    public function removeCuerposTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerposTramite)
+    public function removeCuerposTramite(\AppBundle\Entity\CuerpoTramite $cuerposTramite)
     {
         $this->cuerposTramite->removeElement($cuerposTramite);
     }

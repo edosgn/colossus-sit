@@ -30,7 +30,7 @@ class Documento
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Documento_Tramite", mappedBy="documento")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\DocumentoTramite", mappedBy="documento")
      **/
     protected $documentosTramite;
 
@@ -77,11 +77,11 @@ class Documento
     /**
      * Add documentosTramite
      *
-     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
+     * @param \AppBundle\Entity\DocumentoTramite $documentosTramite
      *
      * @return Documento
      */
-    public function addDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
+    public function addDocumentosTramite(\AppBundle\Entity\DocumentoTramite $documentosTramite)
     {
         $this->documentosTramite[] = $documentosTramite;
 
@@ -91,9 +91,9 @@ class Documento
     /**
      * Remove documentosTramite
      *
-     * @param \AppBundle\Entity\Documento_Tramite $documentosTramite
+     * @param \AppBundle\Entity\DocumentoTramite $documentosTramite
      */
-    public function removeDocumentosTramite(\AppBundle\Entity\Documento_Tramite $documentosTramite)
+    public function removeDocumentosTramite(\AppBundle\Entity\DocumentoTramite $documentosTramite)
     {
         $this->documentosTramite->removeElement($documentosTramite);
     }

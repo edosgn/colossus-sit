@@ -59,6 +59,9 @@ class Empresa
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad", inversedBy="empresas") */
     private $ciudad;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoEmpresa", inversedBy="empresas") */
+    private $tipoEmpresa;
+
 
     /**
      * Get id
@@ -212,5 +215,29 @@ class Empresa
     public function getCiudad()
     {
         return $this->ciudad;
+    }
+
+    /**
+     * Set tipoEmpresa
+     *
+     * @param \AppBundle\Entity\TipoEmpresa $tipoEmpresa
+     *
+     * @return Empresa
+     */
+    public function setTipoEmpresa(\AppBundle\Entity\TipoEmpresa $tipoEmpresa = null)
+    {
+        $this->tipoEmpresa = $tipoEmpresa;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoEmpresa
+     *
+     * @return \AppBundle\Entity\TipoEmpresa
+     */
+    public function getTipoEmpresa()
+    {
+        return $this->tipoEmpresa;
     }
 }

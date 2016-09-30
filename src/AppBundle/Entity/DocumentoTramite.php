@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Documento_Tramite
+ * DocumentoTramite
  *
- * @ORM\Table(name="documento__tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Documento_TramiteRepository")
+ * @ORM\Table(name="documento_tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\DocumentoTramiteRepository")
  */
-class Documento_Tramite
+class DocumentoTramite
 {
     /**
      * @var int
@@ -24,8 +24,8 @@ class Documento_Tramite
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Documento", inversedBy="documentosTramite") */
     protected $documento;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante_Tramite", inversedBy="documentosTramite") */
-    protected $variante;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\VarianteTramite", inversedBy="documentosTramite") */
+    protected $varianteTramite;
 
 
     /**
@@ -38,14 +38,12 @@ class Documento_Tramite
         return $this->id;
     }
 
-
-
     /**
      * Set documento
      *
      * @param \AppBundle\Entity\Documento $documento
      *
-     * @return Documento_Tramite
+     * @return DocumentoTramite
      */
     public function setDocumento(\AppBundle\Entity\Documento $documento = null)
     {
@@ -65,26 +63,26 @@ class Documento_Tramite
     }
 
     /**
-     * Set variante
+     * Set varianteTramite
      *
-     * @param \AppBundle\Entity\Variante $variante
+     * @param \AppBundle\Entity\VarianteTramite $varianteTramite
      *
-     * @return Documento_Tramite
+     * @return DocumentoTramite
      */
-    public function setVariante(\AppBundle\Entity\Variante $variante = null)
+    public function setVarianteTramite(\AppBundle\Entity\VarianteTramite $varianteTramite = null)
     {
-        $this->variante = $variante;
+        $this->varianteTramite = $varianteTramite;
 
         return $this;
     }
 
     /**
-     * Get variante
+     * Get varianteTramite
      *
-     * @return \AppBundle\Entity\Variante
+     * @return \AppBundle\Entity\VarianteTramite
      */
-    public function getVariante()
+    public function getVarianteTramite()
     {
-        return $this->variante;
+        return $this->varianteTramite;
     }
 }

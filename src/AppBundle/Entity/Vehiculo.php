@@ -147,17 +147,17 @@ class Vehiculo
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario_Vehiculo", mappedBy="vehiculo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PropietarioVehiculo", mappedBy="vehiculo")
      */
     protected $propietariosVehiculo;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Carga_Pasajero", mappedBy="vehiculo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CargaPasajero", mappedBy="vehiculo")
      */
     protected $cargasPasajero; 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Historia_Tramite", mappedBy="vehiculo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\HistoriaTramite", mappedBy="vehiculo")
      */
     protected $historialesTramite;  
 
@@ -712,11 +712,11 @@ class Vehiculo
     /**
      * Add propietariosVehiculo
      *
-     * @param \AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo
+     * @param \AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo
      *
      * @return Vehiculo
      */
-    public function addPropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
+    public function addPropietariosVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo)
     {
         $this->propietariosVehiculo[] = $propietariosVehiculo;
 
@@ -726,9 +726,9 @@ class Vehiculo
     /**
      * Remove propietariosVehiculo
      *
-     * @param \AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo
+     * @param \AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo
      */
-    public function removePropietariosVehiculo(\AppBundle\Entity\Propietario_Vehiculo $propietariosVehiculo)
+    public function removePropietariosVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo)
     {
         $this->propietariosVehiculo->removeElement($propietariosVehiculo);
     }
@@ -746,11 +746,11 @@ class Vehiculo
     /**
      * Add cargasPasajero
      *
-     * @param \AppBundle\Entity\Carga_Pasajero $cargasPasajero
+     * @param \AppBundle\Entity\CargaPasajero $cargasPasajero
      *
      * @return Vehiculo
      */
-    public function addCargasPasajero(\AppBundle\Entity\Carga_Pasajero $cargasPasajero)
+    public function addCargasPasajero(\AppBundle\Entity\CargaPasajero $cargasPasajero)
     {
         $this->cargasPasajero[] = $cargasPasajero;
 
@@ -760,9 +760,9 @@ class Vehiculo
     /**
      * Remove cargasPasajero
      *
-     * @param \AppBundle\Entity\Carga_Pasajero $cargasPasajero
+     * @param \AppBundle\Entity\CargaPasajero $cargasPasajero
      */
-    public function removeCargasPasajero(\AppBundle\Entity\Carga_Pasajero $cargasPasajero)
+    public function removeCargasPasajero(\AppBundle\Entity\CargaPasajero $cargasPasajero)
     {
         $this->cargasPasajero->removeElement($cargasPasajero);
     }
@@ -780,11 +780,11 @@ class Vehiculo
     /**
      * Add historialesTramite
      *
-     * @param \AppBundle\Entity\Historial_Tramite $historialesTramite
+     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
      *
      * @return Vehiculo
      */
-    public function addHistorialesTramite(\AppBundle\Entity\Historial_Tramite $historialesTramite)
+    public function addHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
     {
         $this->historialesTramite[] = $historialesTramite;
 
@@ -794,9 +794,9 @@ class Vehiculo
     /**
      * Remove historialesTramite
      *
-     * @param \AppBundle\Entity\Historial_Tramite $historialesTramite
+     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
      */
-    public function removeHistorialesTramite(\AppBundle\Entity\Historial_Tramite $historialesTramite)
+    public function removeHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
     {
         $this->historialesTramite->removeElement($historialesTramite);
     }

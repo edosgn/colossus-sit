@@ -2,15 +2,15 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM; 
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Propietario_Vehiculo
+ * PropietarioVehiculo
  *
- * @ORM\Table(name="propietario__vehiculo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Propietario_VehiculoRepository")
+ * @ORM\Table(name="propietario_vehiculo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PropietarioVehiculoRepository")
  */
-class Propietario_Vehiculo
+class PropietarioVehiculo
 {
     /**
      * @var int
@@ -46,7 +46,7 @@ class Propietario_Vehiculo
     private $propietario; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
-    private $vehiculo; 
+    private $vehiculo;
 
 
     /**
@@ -64,7 +64,7 @@ class Propietario_Vehiculo
      *
      * @param string $licenciaTransito
      *
-     * @return Propietario_Vehiculo
+     * @return PropietarioVehiculo
      */
     public function setLicenciaTransito($licenciaTransito)
     {
@@ -88,7 +88,7 @@ class Propietario_Vehiculo
      *
      * @param \DateTime $fechaPropiedad
      *
-     * @return Propietario_Vehiculo
+     * @return PropietarioVehiculo
      */
     public function setFechaPropiedad($fechaPropiedad)
     {
@@ -112,7 +112,7 @@ class Propietario_Vehiculo
      *
      * @param string $estadoPropiedad
      *
-     * @return Propietario_Vehiculo
+     * @return PropietarioVehiculo
      */
     public function setEstadoPropiedad($estadoPropiedad)
     {
@@ -136,7 +136,7 @@ class Propietario_Vehiculo
      *
      * @param \AppBundle\Entity\Propietario $propietario
      *
-     * @return Propietario_Vehiculo
+     * @return PropietarioVehiculo
      */
     public function setPropietario(\AppBundle\Entity\Propietario $propietario = null)
     {
@@ -160,7 +160,7 @@ class Propietario_Vehiculo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return Propietario_Vehiculo
+     * @return PropietarioVehiculo
      */
     public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {

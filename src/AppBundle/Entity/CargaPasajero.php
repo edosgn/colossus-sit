@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="carga_pasajero")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CargaPasajeroRepository")
  */
-class Carga_Pasajero
+class CargaPasajero
 {
     /**
      * @var int
@@ -118,7 +118,7 @@ class Carga_Pasajero
     /**
      * Get numeroEjes
      *
-     * @return int
+     * @return integer
      */
     public function getNumeroEjes()
     {
@@ -142,7 +142,7 @@ class Carga_Pasajero
     /**
      * Get numeroPasajeros
      *
-     * @return int
+     * @return integer
      */
     public function getNumeroPasajeros()
     {
@@ -166,7 +166,7 @@ class Carga_Pasajero
     /**
      * Get numeroMotor
      *
-     * @return int
+     * @return integer
      */
     public function getNumeroMotor()
     {
@@ -226,7 +226,7 @@ class Carga_Pasajero
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return Carga_Pasajero
+     * @return CargaPasajero
      */
     public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {

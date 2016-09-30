@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Tipo_Tramite
+ * TipoTramite
  *
- * @ORM\Table(name="tipo__tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\Tipo_TramiteRepository")
+ * @ORM\Table(name="tipo_tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoTramiteRepository")
  */
-class Tipo_Tramite
+class TipoTramite
 {
     /**
      * @var int
@@ -58,28 +58,28 @@ class Tipo_Tramite
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Caso_Tramite", mappedBy="tipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CasoTramite", mappedBy="tipoTramite")
      **/
     protected $casosTramite;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Variante_Tramite", mappedBy="tipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VarianteTramite", mappedBy="tipo")
      **/
     protected $variantesTramite;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Campo_Tramite", mappedBy="tipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CampoTramite", mappedBy="tipoTramite")
      **/
     protected $camposTramite;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Cuerpo_Tramite", mappedBy="tipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CuerpoTramite", mappedBy="tipoTramite")
      **/
     protected $cuerposTramite;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Conceptos_Tramite", mappedBy="tipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ConceptoTramite", mappedBy="tipoTramite")
      **/
     protected $conceptosTramite;
 
@@ -91,7 +91,6 @@ class Tipo_Tramite
         $this->cuerposTramite = new \Doctrine\Common\Collections\ArrayCollection();
         $this->conceptosTramite = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
 
 
     /**
@@ -104,13 +103,12 @@ class Tipo_Tramite
         return $this->id;
     }
 
-
     /**
      * Set nombreTramite
      *
      * @param string $nombreTramite
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
     public function setNombreTramite($nombreTramite)
     {
@@ -134,7 +132,7 @@ class Tipo_Tramite
      *
      * @param string $smldv
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
     public function setSmldv($smldv)
     {
@@ -158,7 +156,7 @@ class Tipo_Tramite
      *
      * @param integer $redondeo
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
     public function setRedondeo($redondeo)
     {
@@ -182,7 +180,7 @@ class Tipo_Tramite
      *
      * @param string $unidad
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
     public function setUnidad($unidad)
     {
@@ -206,7 +204,7 @@ class Tipo_Tramite
      *
      * @param string $afectacion
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
     public function setAfectacion($afectacion)
     {
@@ -228,11 +226,11 @@ class Tipo_Tramite
     /**
      * Add casosTramite
      *
-     * @param \AppBundle\Entity\Caso_Tramite $casosTramite
+     * @param \AppBundle\Entity\CasoTramite $casosTramite
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
-    public function addCasosTramite(\AppBundle\Entity\Caso_Tramite $casosTramite)
+    public function addCasosTramite(\AppBundle\Entity\CasoTramite $casosTramite)
     {
         $this->casosTramite[] = $casosTramite;
 
@@ -242,9 +240,9 @@ class Tipo_Tramite
     /**
      * Remove casosTramite
      *
-     * @param \AppBundle\Entity\Caso_Tramite $casosTramite
+     * @param \AppBundle\Entity\CasoTramite $casosTramite
      */
-    public function removeCasosTramite(\AppBundle\Entity\Caso_Tramite $casosTramite)
+    public function removeCasosTramite(\AppBundle\Entity\CasoTramite $casosTramite)
     {
         $this->casosTramite->removeElement($casosTramite);
     }
@@ -262,11 +260,11 @@ class Tipo_Tramite
     /**
      * Add variantesTramite
      *
-     * @param \AppBundle\Entity\Variante_Tramite $variantesTramite
+     * @param \AppBundle\Entity\VarianteTramite $variantesTramite
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
-    public function addVariantesTramite(\AppBundle\Entity\Variante_Tramite $variantesTramite)
+    public function addVariantesTramite(\AppBundle\Entity\VarianteTramite $variantesTramite)
     {
         $this->variantesTramite[] = $variantesTramite;
 
@@ -276,9 +274,9 @@ class Tipo_Tramite
     /**
      * Remove variantesTramite
      *
-     * @param \AppBundle\Entity\Variante_Tramite $variantesTramite
+     * @param \AppBundle\Entity\VarianteTramite $variantesTramite
      */
-    public function removeVariantesTramite(\AppBundle\Entity\Variante_Tramite $variantesTramite)
+    public function removeVariantesTramite(\AppBundle\Entity\VarianteTramite $variantesTramite)
     {
         $this->variantesTramite->removeElement($variantesTramite);
     }
@@ -296,11 +294,11 @@ class Tipo_Tramite
     /**
      * Add camposTramite
      *
-     * @param \AppBundle\Entity\Campo_Tramite $camposTramite
+     * @param \AppBundle\Entity\CampoTramite $camposTramite
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
-    public function addCamposTramite(\AppBundle\Entity\Campo_Tramite $camposTramite)
+    public function addCamposTramite(\AppBundle\Entity\CampoTramite $camposTramite)
     {
         $this->camposTramite[] = $camposTramite;
 
@@ -310,9 +308,9 @@ class Tipo_Tramite
     /**
      * Remove camposTramite
      *
-     * @param \AppBundle\Entity\Campo_Tramite $camposTramite
+     * @param \AppBundle\Entity\CampoTramite $camposTramite
      */
-    public function removeCamposTramite(\AppBundle\Entity\Campo_Tramite $camposTramite)
+    public function removeCamposTramite(\AppBundle\Entity\CampoTramite $camposTramite)
     {
         $this->camposTramite->removeElement($camposTramite);
     }
@@ -330,11 +328,11 @@ class Tipo_Tramite
     /**
      * Add cuerposTramite
      *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerposTramite
+     * @param \AppBundle\Entity\CuerpoTramite $cuerposTramite
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
-    public function addCuerposTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerposTramite)
+    public function addCuerposTramite(\AppBundle\Entity\CuerpoTramite $cuerposTramite)
     {
         $this->cuerposTramite[] = $cuerposTramite;
 
@@ -344,9 +342,9 @@ class Tipo_Tramite
     /**
      * Remove cuerposTramite
      *
-     * @param \AppBundle\Entity\Cuerpo_Tramite $cuerposTramite
+     * @param \AppBundle\Entity\CuerpoTramite $cuerposTramite
      */
-    public function removeCuerposTramite(\AppBundle\Entity\Cuerpo_Tramite $cuerposTramite)
+    public function removeCuerposTramite(\AppBundle\Entity\CuerpoTramite $cuerposTramite)
     {
         $this->cuerposTramite->removeElement($cuerposTramite);
     }
@@ -364,11 +362,11 @@ class Tipo_Tramite
     /**
      * Add conceptosTramite
      *
-     * @param \AppBundle\Entity\Conceptos_Tramite $conceptosTramite
+     * @param \AppBundle\Entity\ConceptoTramite $conceptosTramite
      *
-     * @return Tipo_Tramite
+     * @return TipoTramite
      */
-    public function addConceptosTramite(\AppBundle\Entity\Conceptos_Tramite $conceptosTramite)
+    public function addConceptosTramite(\AppBundle\Entity\ConceptoTramite $conceptosTramite)
     {
         $this->conceptosTramite[] = $conceptosTramite;
 
@@ -378,9 +376,9 @@ class Tipo_Tramite
     /**
      * Remove conceptosTramite
      *
-     * @param \AppBundle\Entity\Conceptos_Tramite $conceptosTramite
+     * @param \AppBundle\Entity\ConceptoTramite $conceptosTramite
      */
-    public function removeConceptosTramite(\AppBundle\Entity\Conceptos_Tramite $conceptosTramite)
+    public function removeConceptosTramite(\AppBundle\Entity\ConceptoTramite $conceptosTramite)
     {
         $this->conceptosTramite->removeElement($conceptosTramite);
     }

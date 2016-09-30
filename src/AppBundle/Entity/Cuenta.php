@@ -34,13 +34,13 @@ class Cuenta
     protected $banco;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Conceptos_Tramite", mappedBy="cuenta")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ConceptoTramite", mappedBy="cuenta")
      **/
     protected $conceptosTramite;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pago_Tramite", mappedBy="cuenta")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PagoTramite", mappedBy="cuenta")
      **/
     protected $pagosTramite;
 
@@ -114,11 +114,11 @@ class Cuenta
     /**
      * Add conceptosTramite
      *
-     * @param \AppBundle\Entity\Conceptos_Tramite $conceptosTramite
+     * @param \AppBundle\Entity\ConceptoTramite $conceptosTramite
      *
      * @return Cuenta
      */
-    public function addConceptosTramite(\AppBundle\Entity\Conceptos_Tramite $conceptosTramite)
+    public function addConceptosTramite(\AppBundle\Entity\ConceptoTramite $conceptosTramite)
     {
         $this->conceptosTramite[] = $conceptosTramite;
 
@@ -128,9 +128,9 @@ class Cuenta
     /**
      * Remove conceptosTramite
      *
-     * @param \AppBundle\Entity\Conceptos_Tramite $conceptosTramite
+     * @param \AppBundle\Entity\ConceptoTramite $conceptosTramite
      */
-    public function removeConceptosTramite(\AppBundle\Entity\Conceptos_Tramite $conceptosTramite)
+    public function removeConceptosTramite(\AppBundle\Entity\ConceptoTramite $conceptosTramite)
     {
         $this->conceptosTramite->removeElement($conceptosTramite);
     }
@@ -148,11 +148,11 @@ class Cuenta
     /**
      * Add pagosTramite
      *
-     * @param \AppBundle\Entity\Pago_Tramite $pagosTramite
+     * @param \AppBundle\Entity\PagoTramite $pagosTramite
      *
      * @return Cuenta
      */
-    public function addPagosTramite(\AppBundle\Entity\Pago_Tramite $pagosTramite)
+    public function addPagosTramite(\AppBundle\Entity\PagoTramite $pagosTramite)
     {
         $this->pagosTramite[] = $pagosTramite;
 
@@ -162,9 +162,9 @@ class Cuenta
     /**
      * Remove pagosTramite
      *
-     * @param \AppBundle\Entity\Pago_Tramite $pagosTramite
+     * @param \AppBundle\Entity\PagoTramite $pagosTramite
      */
-    public function removePagosTramite(\AppBundle\Entity\Pago_Tramite $pagosTramite)
+    public function removePagosTramite(\AppBundle\Entity\PagoTramite $pagosTramite)
     {
         $this->pagosTramite->removeElement($pagosTramite);
     }
