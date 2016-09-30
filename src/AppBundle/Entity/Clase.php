@@ -58,6 +58,11 @@ class Clase
         
     }
 
+     public function __toString()
+    {
+        return $this->getNombre();
+    }
+
 
     /**
      * Get id

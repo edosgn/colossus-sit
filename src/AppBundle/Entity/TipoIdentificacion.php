@@ -38,6 +38,11 @@ class TipoIdentificacion
         $this->ciudadanos = new \Doctrine\Common\Collections\ArrayCollection();       
     }
 
+    public function __toString()
+    {
+        return $this->getNombre();
+    }
+
 
     /**
      * Get id

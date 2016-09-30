@@ -18,7 +18,7 @@ class AlmacenType extends AbstractType
             ->add('rangoInicio')
             ->add('rangoFin')
             ->add('lote')
-            ->add('disponibles')
+           // ->add('disponibles')
             ->add('servicio')
             ->add('organismoTransito')
             ->add('consumible')
@@ -35,4 +35,5 @@ class AlmacenType extends AbstractType
             'data_class' => 'AppBundle\Entity\Almacen'
         ));
     }
+    
 }

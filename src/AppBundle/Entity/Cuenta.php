@@ -49,6 +49,11 @@ class Cuenta
         $this->conceptos = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getNumero();
+    }
+
 
     /**
      * Get id

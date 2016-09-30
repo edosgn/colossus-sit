@@ -79,6 +79,11 @@ class Ciudadano
     public function __construct() {
         $this->ciudadanosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
         $this->empresas = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->getNombres();
     } 
 
 

@@ -28,7 +28,7 @@ class CiudadanoController extends Controller
 
         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findAll();
 
-        return $this->render('AppBudnle:ciudadano:index.html.twig', array(
+        return $this->render('AppBundle:ciudadano:index.html.twig', array(
             'ciudadanos' => $ciudadanos,
         ));
     }
@@ -53,7 +53,7 @@ class CiudadanoController extends Controller
             return $this->redirectToRoute('ciudadano_show', array('id' => $ciudadano->getId()));
         }
 
-        return $this->render('AppBudnle:ciudadano:new.html.twig', array(
+        return $this->render('AppBundle:ciudadano:new.html.twig', array(
             'ciudadano' => $ciudadano,
             'form' => $form->createView(),
         ));
@@ -69,7 +69,7 @@ class CiudadanoController extends Controller
     {
         $deleteForm = $this->createDeleteForm($ciudadano);
 
-        return $this->render('AppBudnle:ciudadano:show.html.twig', array(
+        return $this->render('AppBundle:ciudadano:show.html.twig', array(
             'ciudadano' => $ciudadano,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -95,7 +95,7 @@ class CiudadanoController extends Controller
             return $this->redirectToRoute('ciudadano_edit', array('id' => $ciudadano->getId()));
         }
 
-        return $this->render('AppBudnle:ciudadano:edit.html.twig', array(
+        return $this->render('AppBundle:ciudadano:edit.html.twig', array(
             'ciudadano' => $ciudadano,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),

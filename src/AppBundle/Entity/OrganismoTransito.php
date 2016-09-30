@@ -43,6 +43,11 @@ class OrganismoTransito
         $this->almacenes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
+     public function __toString()
+    {
+        return $this->getNombre();
+    }
         
       
 

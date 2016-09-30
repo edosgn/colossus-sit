@@ -8,7 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BancoType extends AbstractType
 {
-
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('nombre')
+        ;
+    }
+    
     /**
      * @param OptionsResolver $resolver
      */

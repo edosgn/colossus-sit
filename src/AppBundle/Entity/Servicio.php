@@ -50,6 +50,11 @@ class Servicio
         
     }
 
+    public function __toString()
+    {
+        return $this->getNombreServicio();
+    }
+
 
     /**
      * Get id

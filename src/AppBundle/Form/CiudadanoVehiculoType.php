@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
 class CiudadanoVehiculoType extends AbstractType
 {
@@ -16,8 +17,8 @@ class CiudadanoVehiculoType extends AbstractType
     {
         $builder
             ->add('licenciaTransito')
-            ->add('fechaPropiedadInicial', 'datetime')
-            ->add('fechaPropiedadFinal', 'datetime')
+            ->add('fechaPropiedadInicial', DateTimeType::class)
+            ->add('fechaPropiedadFinal', DateTimeType::class)
             ->add('estadoPropiedad')
             ->add('ciudadano')
             ->add('vehiculo')
