@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Carroceria list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigomt</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for carrocerium in carrocerias %}
+            <tr>
+                <td><a href="{{ path('carroceria_show', { 'id': carrocerium.id }) }}">{{ carrocerium.id }}</a></td>
+                <td>{{ carrocerium.nombre }}</td>
+                <td>{{ carrocerium.codigoMt }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('carroceria_show', { 'id': carrocerium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('carroceria_edit', { 'id': carrocerium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('carroceria_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
