@@ -46,6 +46,12 @@ class Modalidad
     } 
 
 
+    public function __toString()
+    {
+        return $this->getNombre();
+    }
+
+
     /**
      * Get id
      *

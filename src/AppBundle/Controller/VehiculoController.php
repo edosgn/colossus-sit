@@ -26,7 +26,7 @@ class VehiculoController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $vehiculos = $em->getRepository('AppBundle:Vehiculo:')->findAll();
+        $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findAll();
 
         return $this->render('AppBundle:Vehiculo:index.html.twig', array(
             'vehiculos' => $vehiculos,

@@ -16,7 +16,7 @@ class TramiteEspecificoType extends AbstractType
     {
         $builder
             ->add('valor')
-            ->add('datos')
+            //->add('datos')
             ->add('tramite')
             ->add('tramiteGeneral')
             ->add('variante')
