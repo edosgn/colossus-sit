@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Consumible list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for consumible in consumibles %}
+            <tr>
+                <td><a href="{{ path('consumible_show', { 'id': consumible.id }) }}">{{ consumible.id }}</a></td>
+                <td>{{ consumible.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('consumible_show', { 'id': consumible.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('consumible_edit', { 'id': consumible.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('consumible_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

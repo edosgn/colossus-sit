@@ -682,39 +682,7 @@ class Vehiculo
         return $this->organismoTransito;
     }
 
-    /**
-     * Add propietariosVehiculo
-     *
-     * @param \AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo
-     *
-     * @return Vehiculo
-     */
-    public function addPropietariosVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo)
-    {
-        $this->propietariosVehiculo[] = $propietariosVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove propietariosVehiculo
-     *
-     * @param \AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo
-     */
-    public function removePropietariosVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietariosVehiculo)
-    {
-        $this->propietariosVehiculo->removeElement($propietariosVehiculo);
-    }
-
-    /**
-     * Get propietariosVehiculo
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPropietariosVehiculo()
-    {
-        return $this->propietariosVehiculo;
-    }
+   
 
     /**
      * Add vehiculosPesado
