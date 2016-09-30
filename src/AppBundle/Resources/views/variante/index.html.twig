@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Variante list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for variante in variantes %}
+            <tr>
+                <td><a href="{{ path('variante_show', { 'id': variante.id }) }}">{{ variante.id }}</a></td>
+                <td>{{ variante.nombre }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('variante_show', { 'id': variante.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('variante_edit', { 'id': variante.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('variante_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}
