@@ -108,63 +108,58 @@ class Vehiculo
     /**
      * @var int
      *
-     * @ORM\Column(name="pasajeros", type="integer")
+     * @ORM\Column(name="numeroPasajeros", type="integer")
      */
-    private $pasajeros;
+    private $numeroPasajeros;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="estadoVehiculo", type="string", length=255)
+     * @ORM\Column(name="estado", type="boolean")
      */
-    private $estadoVehiculo;
+    private $estado;
     
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad", inversedBy="vehiculos") */
-    private $ciudad; 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
+    private $munucipio; 
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="vehiculos") */
+    private $linea;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="vehiculos") */
     private $servicio; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="vehiculos") */
-    private $linea; 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Color", inversedBy="vehiculos") */
+    private $color;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Combustible", inversedBy="vehiculos") */
     private $combustible; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organismo", inversedBy="vehiculos") */
-    private $organismo;
-
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="vehiculos") */
     private $carroceria;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Color", inversedBy="vehiculos") */
-    private $color;
-
-     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
-    private $clase; 
-
-
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="vehiculos") */
+    private $organismoTransito;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PropietarioVehiculo", mappedBy="vehiculo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CiudadanoVehiculo", mappedBy="vehiculo")
      */
-    protected $propietariosVehiculo;
+    protected $ciudadanosVehiculo;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CargaPasajero", mappedBy="vehiculo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehiculoPesado", mappedBy="vehiculo")
      */
-    protected $cargasPasajero; 
+    protected $vehiculosPesado; 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\HistoriaTramite", mappedBy="vehiculo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteGeneral", mappedBy="vehiculo")
      */
-    protected $historialesTramite;  
+    protected $tramitesGeneral;  
 
     public function __construct() {
         $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->cargaPasajero = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->historialesTramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vehiculosPesado = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tramitesGeneral = new \Doctrine\Common\Collections\ArrayCollection();
         
     } 
 
@@ -180,6 +175,8 @@ class Vehiculo
     }
 
     
+
+   
 
     /**
      * Set placa
@@ -470,99 +467,75 @@ class Vehiculo
     }
 
     /**
-     * Set pasajeros
+     * Set numeroPasajeros
      *
-     * @param integer $pasajeros
+     * @param integer $numeroPasajeros
      *
      * @return Vehiculo
      */
-    public function setPasajeros($pasajeros)
+    public function setNumeroPasajeros($numeroPasajeros)
     {
-        $this->pasajeros = $pasajeros;
+        $this->numeroPasajeros = $numeroPasajeros;
 
         return $this;
     }
 
     /**
-     * Get pasajeros
+     * Get numeroPasajeros
      *
      * @return integer
      */
-    public function getPasajeros()
+    public function getNumeroPasajeros()
     {
-        return $this->pasajeros;
+        return $this->numeroPasajeros;
     }
 
     /**
-     * Set estadoVehiculo
+     * Set estado
      *
-     * @param string $estadoVehiculo
+     * @param boolean $estado
      *
      * @return Vehiculo
      */
-    public function setEstadoVehiculo($estadoVehiculo)
+    public function setEstado($estado)
     {
-        $this->estadoVehiculo = $estadoVehiculo;
+        $this->estado = $estado;
 
         return $this;
     }
 
     /**
-     * Get estadoVehiculo
+     * Get estado
      *
-     * @return string
+     * @return boolean
      */
-    public function getEstadoVehiculo()
+    public function getEstado()
     {
-        return $this->estadoVehiculo;
+        return $this->estado;
     }
 
     /**
-     * Set ciudad
+     * Set munucipio
      *
-     * @param \AppBundle\Entity\Ciudad $ciudad
+     * @param \AppBundle\Entity\Municipio $munucipio
      *
      * @return Vehiculo
      */
-    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad = null)
+    public function setMunucipio(\AppBundle\Entity\Municipio $munucipio = null)
     {
-        $this->ciudad = $ciudad;
+        $this->munucipio = $munucipio;
 
         return $this;
     }
 
     /**
-     * Get ciudad
+     * Get munucipio
      *
-     * @return \AppBundle\Entity\Ciudad
+     * @return \AppBundle\Entity\Municipio
      */
-    public function getCiudad()
+    public function getMunucipio()
     {
-        return $this->ciudad;
-    }
-
-    /**
-     * Set servicio
-     *
-     * @param \AppBundle\Entity\Servicio $servicio
-     *
-     * @return Vehiculo
-     */
-    public function setServicio(\AppBundle\Entity\Servicio $servicio = null)
-    {
-        $this->servicio = $servicio;
-
-        return $this;
-    }
-
-    /**
-     * Get servicio
-     *
-     * @return \AppBundle\Entity\Servicio
-     */
-    public function getServicio()
-    {
-        return $this->servicio;
+        return $this->munucipio;
     }
 
     /**
@@ -590,75 +563,27 @@ class Vehiculo
     }
 
     /**
-     * Set combustible
+     * Set servicio
      *
-     * @param \AppBundle\Entity\Combustible $combustible
+     * @param \AppBundle\Entity\Servicio $servicio
      *
      * @return Vehiculo
      */
-    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
+    public function setServicio(\AppBundle\Entity\Servicio $servicio = null)
     {
-        $this->combustible = $combustible;
+        $this->servicio = $servicio;
 
         return $this;
     }
 
     /**
-     * Get combustible
+     * Get servicio
      *
-     * @return \AppBundle\Entity\Combustible
+     * @return \AppBundle\Entity\Servicio
      */
-    public function getCombustible()
+    public function getServicio()
     {
-        return $this->combustible;
-    }
-
-    /**
-     * Set organismo
-     *
-     * @param \AppBundle\Entity\Organismo $organismo
-     *
-     * @return Vehiculo
-     */
-    public function setOrganismo(\AppBundle\Entity\Organismo $organismo = null)
-    {
-        $this->organismo = $organismo;
-
-        return $this;
-    }
-
-    /**
-     * Get organismo
-     *
-     * @return \AppBundle\Entity\Organismo
-     */
-    public function getOrganismo()
-    {
-        return $this->organismo;
-    }
-
-    /**
-     * Set carroceria
-     *
-     * @param \AppBundle\Entity\Carroceria $carroceria
-     *
-     * @return Vehiculo
-     */
-    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
-    {
-        $this->carroceria = $carroceria;
-
-        return $this;
-    }
-
-    /**
-     * Get carroceria
-     *
-     * @return \AppBundle\Entity\Carroceria
-     */
-    public function getCarroceria()
-    {
-        return $this->carroceria;
+        return $this->servicio;
     }
 
     /**
@@ -686,27 +611,75 @@ class Vehiculo
     }
 
     /**
-     * Set clase
+     * Set combustible
      *
-     * @param \AppBundle\Entity\Clase $clase
+     * @param \AppBundle\Entity\Combustible $combustible
      *
      * @return Vehiculo
      */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
     {
-        $this->clase = $clase;
+        $this->combustible = $combustible;
 
         return $this;
     }
 
     /**
-     * Get clase
+     * Get combustible
      *
-     * @return \AppBundle\Entity\Clase
+     * @return \AppBundle\Entity\Combustible
      */
-    public function getClase()
+    public function getCombustible()
     {
-        return $this->clase;
+        return $this->combustible;
+    }
+
+    /**
+     * Set carroceria
+     *
+     * @param \AppBundle\Entity\Carroceria $carroceria
+     *
+     * @return Vehiculo
+     */
+    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
+    {
+        $this->carroceria = $carroceria;
+
+        return $this;
+    }
+
+    /**
+     * Get carroceria
+     *
+     * @return \AppBundle\Entity\Carroceria
+     */
+    public function getCarroceria()
+    {
+        return $this->carroceria;
+    }
+
+    /**
+     * Set organismoTransito
+     *
+     * @param \AppBundle\Entity\OrganismoTransito $organismoTransito
+     *
+     * @return Vehiculo
+     */
+    public function setOrganismoTransito(\AppBundle\Entity\OrganismoTransito $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \AppBundle\Entity\OrganismoTransito
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
     }
 
     /**
@@ -744,70 +717,70 @@ class Vehiculo
     }
 
     /**
-     * Add cargasPasajero
+     * Add vehiculosPesado
      *
-     * @param \AppBundle\Entity\CargaPasajero $cargasPasajero
+     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
      *
      * @return Vehiculo
      */
-    public function addCargasPasajero(\AppBundle\Entity\CargaPasajero $cargasPasajero)
+    public function addVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
     {
-        $this->cargasPasajero[] = $cargasPasajero;
+        $this->vehiculosPesado[] = $vehiculosPesado;
 
         return $this;
     }
 
     /**
-     * Remove cargasPasajero
+     * Remove vehiculosPesado
      *
-     * @param \AppBundle\Entity\CargaPasajero $cargasPasajero
+     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
      */
-    public function removeCargasPasajero(\AppBundle\Entity\CargaPasajero $cargasPasajero)
+    public function removeVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
     {
-        $this->cargasPasajero->removeElement($cargasPasajero);
+        $this->vehiculosPesado->removeElement($vehiculosPesado);
     }
 
     /**
-     * Get cargasPasajero
+     * Get vehiculosPesado
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCargasPasajero()
+    public function getVehiculosPesado()
     {
-        return $this->cargasPasajero;
+        return $this->vehiculosPesado;
     }
 
     /**
-     * Add historialesTramite
+     * Add tramitesGeneral
      *
-     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
+     * @param \AppBundle\Entity\TramiteGeneral $tramitesGeneral
      *
      * @return Vehiculo
      */
-    public function addHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
+    public function addTramitesGeneral(\AppBundle\Entity\TramiteGeneral $tramitesGeneral)
     {
-        $this->historialesTramite[] = $historialesTramite;
+        $this->tramitesGeneral[] = $tramitesGeneral;
 
         return $this;
     }
 
     /**
-     * Remove historialesTramite
+     * Remove tramitesGeneral
      *
-     * @param \AppBundle\Entity\HistoriaTramite $historialesTramite
+     * @param \AppBundle\Entity\TramiteGeneral $tramitesGeneral
      */
-    public function removeHistorialesTramite(\AppBundle\Entity\HistoriaTramite $historialesTramite)
+    public function removeTramitesGeneral(\AppBundle\Entity\TramiteGeneral $tramitesGeneral)
     {
-        $this->historialesTramite->removeElement($historialesTramite);
+        $this->tramitesGeneral->removeElement($tramitesGeneral);
     }
 
     /**
-     * Get historialesTramite
+     * Get tramitesGeneral
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getHistorialesTramite()
+    public function getTramitesGeneral()
     {
-        return $this->historialesTramite;
+        return $this->tramitesGeneral;
     }
 }

@@ -1,0 +1,59 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Modulo
+ *
+ * @ORM\Table(name="modulo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ModuloRepository")
+ */
+class Modulo
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="abreviatura", type="string", length=255)
+     */
+    private $abreviatura;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Tramite", mappedBy="modulo")
+     */
+    protected $tramites;  
+
+    public function __construct() {
+        $this->tramites = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+  
+}

@@ -1,0 +1,99 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TramiteGeneral
+ *
+ * @ORM\Table(name="tramite_general")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TramiteGeneralRepository")
+ */
+class TramiteGeneral
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numeroQpl", type="integer")
+     */
+    private $numeroQpl;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaInicial", type="date")
+     */
+    private $fechaInicial;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaFinal", type="date")
+     */
+    private $fechaFinal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=255)
+     */
+    private $estado;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor", type="integer")
+     */
+    private $valor;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numeroLicencia", type="integer")
+     */
+    private $numeroLicencia;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numeroSustrato", type="integer")
+     */
+    private $numeroSustrato;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tramitesGeneral")
+     **/
+    protected $vehiculo;
+
+     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteEspecifico", mappedBy="tramiteGeneral")
+     */
+    protected $tramitesEspecifico;
+
+    public function __construct() {
+        $this->tramitesEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    
+}

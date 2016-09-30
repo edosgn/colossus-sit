@@ -1,0 +1,53 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TipoIdentificacion
+ *
+ * @ORM\Table(name="tipo_identificacion")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoIdentificacionRepository")
+ */
+class TipoIdentificacion
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ciudadano", mappedBy="tipoIdentificacion")
+     */
+    protected $ciudadanos;  
+
+
+    public function __construct() {
+        $this->ciudadanos = new \Doctrine\Common\Collections\ArrayCollection();       
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+   
+}

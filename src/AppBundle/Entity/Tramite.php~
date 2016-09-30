@@ -1,0 +1,108 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tramite
+ *
+ * @ORM\Table(name="tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TramiteRepository")
+ */
+class Tramite
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor", type="integer")
+     */
+    private $valor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="redondeo", type="string", length=255)
+     */
+    private $redondeo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unidad", type="string", length=255)
+     */
+    private $unidad;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="afectacion", type="boolean")
+     */
+    private $afectacion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="Tramites")
+     **/
+    protected $modulo;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Concepto", mappedBy="tramite")
+     */
+    protected $conceptos;
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Variante", mappedBy="tramite")
+     */
+    protected $variantes; 
+
+     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Pago", mappedBy="tramite")
+     */
+    protected $pagos;  
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Caso", mappedBy="tramite")
+     */
+    protected $casos;  
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteEspecifico", mappedBy="tramite")
+     */
+    protected $tramitesEspecifico;
+
+    public function __construct() {
+        $this->conceptos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->variantes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pagos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->casos = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tramitesEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    
+}

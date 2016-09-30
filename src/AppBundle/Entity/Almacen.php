@@ -38,15 +38,22 @@ class Almacen
     /**
      * @var int
      *
-     * @ORM\Column(name="idLote", type="integer")
+     * @ORM\Column(name="lote", type="integer")
      */
-    private $idLote;
+    private $lote;
+
+     /**
+     * @var array
+     *
+     * @ORM\Column(name="disponibles", type="array")
+     */
+    private $disponibles;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="almacenes") */
     private $servicio; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organismo", inversedBy="almacenes") */
-    private $organismo; 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="almacenes") */
+    private $organismoTransito; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Consumible", inversedBy="almacenes") */
     private $consumible;
@@ -65,6 +72,10 @@ class Almacen
         return $this->id;
     }
 
+    
+
+   
+
     /**
      * Set rangoInicio
      *
@@ -82,7 +93,7 @@ class Almacen
     /**
      * Get rangoInicio
      *
-     * @return int
+     * @return integer
      */
     public function getRangoInicio()
     {
@@ -106,7 +117,7 @@ class Almacen
     /**
      * Get rangoFin
      *
-     * @return int
+     * @return integer
      */
     public function getRangoFin()
     {
@@ -114,27 +125,51 @@ class Almacen
     }
 
     /**
-     * Set idLote
+     * Set lote
      *
-     * @param integer $idLote
+     * @param integer $lote
      *
      * @return Almacen
      */
-    public function setIdLote($idLote)
+    public function setLote($lote)
     {
-        $this->idLote = $idLote;
+        $this->lote = $lote;
 
         return $this;
     }
 
     /**
-     * Get idLote
+     * Get lote
      *
      * @return integer
      */
-    public function getIdLote()
+    public function getLote()
     {
-        return $this->idLote;
+        return $this->lote;
+    }
+
+    /**
+     * Set disponibles
+     *
+     * @param array $disponibles
+     *
+     * @return Almacen
+     */
+    public function setDisponibles($disponibles)
+    {
+        $this->disponibles = $disponibles;
+
+        return $this;
+    }
+
+    /**
+     * Get disponibles
+     *
+     * @return array
+     */
+    public function getDisponibles()
+    {
+        return $this->disponibles;
     }
 
     /**
@@ -162,27 +197,27 @@ class Almacen
     }
 
     /**
-     * Set organismo
+     * Set organismoTransito
      *
-     * @param \AppBundle\Entity\Organismo $organismo
+     * @param \AppBundle\Entity\OrganismoTransito $organismoTransito
      *
      * @return Almacen
      */
-    public function setOrganismo(\AppBundle\Entity\Organismo $organismo = null)
+    public function setOrganismoTransito(\AppBundle\Entity\OrganismoTransito $organismoTransito = null)
     {
-        $this->organismo = $organismo;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get organismo
+     * Get organismoTransito
      *
-     * @return \AppBundle\Entity\Organismo
+     * @return \AppBundle\Entity\OrganismoTransito
      */
-    public function getOrganismo()
+    public function getOrganismoTransito()
     {
-        return $this->organismo;
+        return $this->organismoTransito;
     }
 
     /**

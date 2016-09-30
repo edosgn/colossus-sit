@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ConceptoTramite
+ * Concepto
  *
- * @ORM\Table(name="concepto_tramite")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ConceptoTramiteRepository")
+ * @ORM\Table(name="concepto")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ConceptoRepository")
  */
-class ConceptoTramite
+class Concepto
 {
     /**
      * @var int
@@ -36,12 +36,12 @@ class ConceptoTramite
     private $valor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoTramite", inversedBy="conceptosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="conceptos")
      **/
-    protected $tipoTramite;
+    protected $tramite;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuenta", inversedBy="conceptosTramite")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuenta", inversedBy="conceptos")
      **/
     protected $cuenta;
 
@@ -56,12 +56,16 @@ class ConceptoTramite
         return $this->id;
     }
 
+    
+
+  
+
     /**
      * Set descripcion
      *
      * @param string $descripcion
      *
-     * @return ConceptoTramite
+     * @return Concepto
      */
     public function setDescripcion($descripcion)
     {
@@ -85,7 +89,7 @@ class ConceptoTramite
      *
      * @param integer $valor
      *
-     * @return ConceptoTramite
+     * @return Concepto
      */
     public function setValor($valor)
     {
@@ -105,27 +109,27 @@ class ConceptoTramite
     }
 
     /**
-     * Set tipoTramite
+     * Set tramite
      *
-     * @param \AppBundle\Entity\TipoTramite $tipoTramite
+     * @param \AppBundle\Entity\Tramite $tramite
      *
-     * @return ConceptoTramite
+     * @return Concepto
      */
-    public function setTipoTramite(\AppBundle\Entity\TipoTramite $tipoTramite = null)
+    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
     {
-        $this->tipoTramite = $tipoTramite;
+        $this->tramite = $tramite;
 
         return $this;
     }
 
     /**
-     * Get tipoTramite
+     * Get tramite
      *
-     * @return \AppBundle\Entity\TipoTramite
+     * @return \AppBundle\Entity\Tramite
      */
-    public function getTipoTramite()
+    public function getTramite()
     {
-        return $this->tipoTramite;
+        return $this->tramite;
     }
 
     /**
@@ -133,7 +137,7 @@ class ConceptoTramite
      *
      * @param \AppBundle\Entity\Cuenta $cuenta
      *
-     * @return ConceptoTramite
+     * @return Concepto
      */
     public function setCuenta(\AppBundle\Entity\Cuenta $cuenta = null)
     {

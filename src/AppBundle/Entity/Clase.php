@@ -24,16 +24,16 @@ class Clase
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreClase", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreClase;
+    private $nombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="codigoClase", type="integer", unique=true)
+     * @ORM\Column(name="codigoMt", type="integer", unique=true)
      */
-    private $codigoClase;
+    private $codigoMt;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Carroceria", mappedBy="clase")
@@ -69,52 +69,54 @@ class Clase
         return $this->id;
     }
 
+  
+
     /**
-     * Set nombreClase
+     * Set nombre
      *
-     * @param string $nombreClase
+     * @param string $nombre
      *
      * @return Clase
      */
-    public function setNombreClase($nombreClase)
+    public function setNombre($nombre)
     {
-        $this->nombreClase = $nombreClase;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreClase
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreClase()
+    public function getNombre()
     {
-        return $this->nombreClase;
+        return $this->nombre;
     }
 
     /**
-     * Set codigoClase
+     * Set codigoMt
      *
-     * @param integer $codigoClase
+     * @param integer $codigoMt
      *
      * @return Clase
      */
-    public function setCodigoClase($codigoClase)
+    public function setCodigoMt($codigoMt)
     {
-        $this->codigoClase = $codigoClase;
+        $this->codigoMt = $codigoMt;
 
         return $this;
     }
 
     /**
-     * Get codigoClase
+     * Get codigoMt
      *
-     * @return int
+     * @return integer
      */
-    public function getCodigoClase()
+    public function getCodigoMt()
     {
-        return $this->codigoClase;
+        return $this->codigoMt;
     }
 
     /**

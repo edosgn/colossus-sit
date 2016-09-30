@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PropietarioVehiculo
+ * CiudadanoVehiculo
  *
- * @ORM\Table(name="propietario_vehiculo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PropietarioVehiculoRepository")
+ * @ORM\Table(name="ciudadano_vehiculo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CiudadanoVehiculoRepository")
  */
-class PropietarioVehiculo
+class CiudadanoVehiculo
 {
     /**
      * @var int
@@ -21,7 +21,7 @@ class PropietarioVehiculo
      */
     private $id;
 
-    /**
+      /**
      * @var string
      *
      * @ORM\Column(name="licenciaTransito", type="string", length=255)
@@ -31,9 +31,16 @@ class PropietarioVehiculo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaPropiedad", type="datetime")
+     * @ORM\Column(name="fechaPropiedadInicial", type="datetime")
      */
-    private $fechaPropiedad;
+    private $fechaPropiedadInicial;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaPropiedadFinal", type="datetime")
+     */
+    private $fechaPropiedadFinal;
 
     /**
      * @var string
@@ -42,11 +49,12 @@ class PropietarioVehiculo
      */
     private $estadoPropiedad;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Propietario", inversedBy="propietariosVehiculo") */
-    private $propietario; 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="ciudadanosVehiculo") */
+    private $ciudadano; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
     private $vehiculo;
+
 
 
     /**
@@ -64,7 +72,7 @@ class PropietarioVehiculo
      *
      * @param string $licenciaTransito
      *
-     * @return PropietarioVehiculo
+     * @return CiudadanoVehiculo
      */
     public function setLicenciaTransito($licenciaTransito)
     {
@@ -84,27 +92,51 @@ class PropietarioVehiculo
     }
 
     /**
-     * Set fechaPropiedad
+     * Set fechaPropiedadInicial
      *
-     * @param \DateTime $fechaPropiedad
+     * @param \DateTime $fechaPropiedadInicial
      *
-     * @return PropietarioVehiculo
+     * @return CiudadanoVehiculo
      */
-    public function setFechaPropiedad($fechaPropiedad)
+    public function setFechaPropiedadInicial($fechaPropiedadInicial)
     {
-        $this->fechaPropiedad = $fechaPropiedad;
+        $this->fechaPropiedadInicial = $fechaPropiedadInicial;
 
         return $this;
     }
 
     /**
-     * Get fechaPropiedad
+     * Get fechaPropiedadInicial
      *
      * @return \DateTime
      */
-    public function getFechaPropiedad()
+    public function getFechaPropiedadInicial()
     {
-        return $this->fechaPropiedad;
+        return $this->fechaPropiedadInicial;
+    }
+
+    /**
+     * Set fechaPropiedadFinal
+     *
+     * @param \DateTime $fechaPropiedadFinal
+     *
+     * @return CiudadanoVehiculo
+     */
+    public function setFechaPropiedadFinal($fechaPropiedadFinal)
+    {
+        $this->fechaPropiedadFinal = $fechaPropiedadFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPropiedadFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaPropiedadFinal()
+    {
+        return $this->fechaPropiedadFinal;
     }
 
     /**
@@ -112,7 +144,7 @@ class PropietarioVehiculo
      *
      * @param string $estadoPropiedad
      *
-     * @return PropietarioVehiculo
+     * @return CiudadanoVehiculo
      */
     public function setEstadoPropiedad($estadoPropiedad)
     {
@@ -132,27 +164,27 @@ class PropietarioVehiculo
     }
 
     /**
-     * Set propietario
+     * Set ciudadano
      *
-     * @param \AppBundle\Entity\Propietario $propietario
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
      *
-     * @return PropietarioVehiculo
+     * @return CiudadanoVehiculo
      */
-    public function setPropietario(\AppBundle\Entity\Propietario $propietario = null)
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
     {
-        $this->propietario = $propietario;
+        $this->ciudadano = $ciudadano;
 
         return $this;
     }
 
     /**
-     * Get propietario
+     * Get ciudadano
      *
-     * @return \AppBundle\Entity\Propietario
+     * @return \AppBundle\Entity\Ciudadano
      */
-    public function getPropietario()
+    public function getCiudadano()
     {
-        return $this->propietario;
+        return $this->ciudadano;
     }
 
     /**
@@ -160,7 +192,7 @@ class PropietarioVehiculo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return PropietarioVehiculo
+     * @return CiudadanoVehiculo
      */
     public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {

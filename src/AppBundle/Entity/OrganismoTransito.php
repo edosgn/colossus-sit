@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Organismo
+ * OrganismoTransito
  *
- * @ORM\Table(name="organismo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\OrganismoRepository")
+ * @ORM\Table(name="organismo_transito")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\OrganismoTransitoRepository")
  */
-class Organismo
+class OrganismoTransito
 {
     /**
      * @var int
@@ -21,31 +21,30 @@ class Organismo
      */
     private $id;
 
+
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreOrganismo", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreOrganismo;
-
-    
+    private $nombre;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Almacen", mappedBy="organismo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Almacen", mappedBy="organismoTransito")
      */
     protected $almacenes; 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="organismo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="organismoTransito")
      */
     protected $vehiculos;  
 
     public function __construct() {
         $this->almacenes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
-        
-        
     }
+        
+      
 
 
     /**
@@ -59,27 +58,27 @@ class Organismo
     }
 
     /**
-     * Set nombreOrganismo
+     * Set nombre
      *
-     * @param string $nombreOrganismo
+     * @param string $nombre
      *
-     * @return Organismo
+     * @return OrganismoTransito
      */
-    public function setNombreOrganismo($nombreOrganismo)
+    public function setNombre($nombre)
     {
-        $this->nombreOrganismo = $nombreOrganismo;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreOrganismo
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreOrganismo()
+    public function getNombre()
     {
-        return $this->nombreOrganismo;
+        return $this->nombre;
     }
 
     /**
@@ -87,7 +86,7 @@ class Organismo
      *
      * @param \AppBundle\Entity\Almacen $almacene
      *
-     * @return Organismo
+     * @return OrganismoTransito
      */
     public function addAlmacene(\AppBundle\Entity\Almacen $almacene)
     {
@@ -121,7 +120,7 @@ class Organismo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return Organismo
+     * @return OrganismoTransito
      */
     public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
     {

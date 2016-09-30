@@ -24,9 +24,9 @@ class TipoEmpresa
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $descripcion;
+    private $nombre;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Empresa", mappedBy="tipoEmpresa")
@@ -50,28 +50,31 @@ class TipoEmpresa
         return $this->id;
     }
 
+   
+
+
     /**
-     * Set descripcion
+     * Set nombre
      *
-     * @param string $descripcion
+     * @param string $nombre
      *
      * @return TipoEmpresa
      */
-    public function setDescripcion($descripcion)
+    public function setNombre($nombre)
     {
-        $this->descripcion = $descripcion;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get descripcion
+     * Get nombre
      *
      * @return string
      */
-    public function getDescripcion()
+    public function getNombre()
     {
-        return $this->descripcion;
+        return $this->nombre;
     }
 
     /**

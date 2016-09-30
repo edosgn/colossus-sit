@@ -24,18 +24,18 @@ class TipoIdentificacion
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $descripcion;
+    private $nombre;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Propietario", mappedBy="tipoIdentificacion")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ciudadano", mappedBy="tipoIdentificacion")
      */
-    protected $propietarios;  
+    protected $ciudadanos;  
 
 
     public function __construct() {
-        $this->propietarios = new \Doctrine\Common\Collections\ArrayCollection();       
+        $this->ciudadanos = new \Doctrine\Common\Collections\ArrayCollection();       
     }
 
 
@@ -49,61 +49,63 @@ class TipoIdentificacion
         return $this->id;
     }
 
+   
+
     /**
-     * Set descripcion
+     * Set nombre
      *
-     * @param string $descripcion
+     * @param string $nombre
      *
      * @return TipoIdentificacion
      */
-    public function setDescripcion($descripcion)
+    public function setNombre($nombre)
     {
-        $this->descripcion = $descripcion;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get descripcion
+     * Get nombre
      *
      * @return string
      */
-    public function getDescripcion()
+    public function getNombre()
     {
-        return $this->descripcion;
+        return $this->nombre;
     }
 
     /**
-     * Add propietario
+     * Add ciudadano
      *
-     * @param \AppBundle\Entity\Propietario $propietario
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
      *
      * @return TipoIdentificacion
      */
-    public function addPropietario(\AppBundle\Entity\Propietario $propietario)
+    public function addCiudadano(\AppBundle\Entity\Ciudadano $ciudadano)
     {
-        $this->propietarios[] = $propietario;
+        $this->ciudadanos[] = $ciudadano;
 
         return $this;
     }
 
     /**
-     * Remove propietario
+     * Remove ciudadano
      *
-     * @param \AppBundle\Entity\Propietario $propietario
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
      */
-    public function removePropietario(\AppBundle\Entity\Propietario $propietario)
+    public function removeCiudadano(\AppBundle\Entity\Ciudadano $ciudadano)
     {
-        $this->propietarios->removeElement($propietario);
+        $this->ciudadanos->removeElement($ciudadano);
     }
 
     /**
-     * Get propietarios
+     * Get ciudadanos
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPropietarios()
+    public function getCiudadanos()
     {
-        return $this->propietarios;
+        return $this->ciudadanos;
     }
 }

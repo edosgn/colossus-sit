@@ -24,17 +24,23 @@ class Consumible
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreConsumible", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreConsumible;
+    private $nombre;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Almacen", mappedBy="consumible")
      */
-    protected $almacenes; 
+    protected $almacenes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="combustible")
+     */
+    protected $vehiculos; 
 
     public function __construct() {
         $this->almacenes = new \Doctrine\Common\Collections\ArrayCollection();
+         $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
         
     }
 
@@ -49,28 +55,30 @@ class Consumible
         return $this->id;
     }
 
+  
+
     /**
-     * Set nombreConsumible
+     * Set nombre
      *
-     * @param string $nombreConsumible
+     * @param string $nombre
      *
-     * @return Consumibles
+     * @return Consumible
      */
-    public function setNombreConsumible($nombreConsumible)
+    public function setNombre($nombre)
     {
-        $this->nombreConsumible = $nombreConsumible;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreConsumible
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreConsumible()
+    public function getNombre()
     {
-        return $this->nombreConsumible;
+        return $this->nombre;
     }
 
     /**
@@ -105,5 +113,39 @@ class Consumible
     public function getAlmacenes()
     {
         return $this->almacenes;
+    }
+
+    /**
+     * Add vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return Consumible
+     */
+    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
+    {
+        $this->vehiculos[] = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Remove vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     */
+    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
+    {
+        $this->vehiculos->removeElement($vehiculo);
+    }
+
+    /**
+     * Get vehiculos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVehiculos()
+    {
+        return $this->vehiculos;
     }
 }

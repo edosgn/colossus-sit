@@ -1,0 +1,61 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Modalidad
+ *
+ * @ORM\Table(name="modalidad")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ModalidadRepository")
+ */
+class Modalidad
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigoMt", type="integer")
+     */
+    private $codigoMt;
+
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehiculoPesado", mappedBy="modalidad")
+     */
+    protected $vehiculosPesado;  
+
+    public function __construct() {
+        $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
+    } 
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+ 
+}
+

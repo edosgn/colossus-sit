@@ -24,43 +24,56 @@ class Empresa
     /**
      * @var int
      *
-     * @ORM\Column(name="nitEmpresa", type="integer")
+     * @ORM\Column(name="nit", type="integer")
      */
-    private $nitEmpresa;
+    private $nit;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreEmpresa", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreEmpresa;
+    private $nombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="telefonoEmpresa", type="integer")
+     * @ORM\Column(name="telefono", type="integer")
      */
-    private $telefonoEmpresa;
+    private $telefono;
 
     /**
      * @var string
      *
      * @ORM\Column(name="direccionEmpresa", type="string", length=255)
      */
-    private $direccionEmpresa;
+    private $direccion;
 
     /**
      * @var string
      *
      * @ORM\Column(name="correoEmpresa", type="string", length=255)
      */
-    private $correoEmpresa;
+    private $correo;
+    
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudad", inversedBy="empresas") */
-    private $ciudad;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="empresas") */
+    private $municipio;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoEmpresa", inversedBy="empresas") */
     private $tipoEmpresa;
+
+      /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
+    private $ciudadano;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehiculoPesado", mappedBy="empresa")
+     */
+    protected $vehiculosPesado;  
+
+    public function __construct() {
+        $this->vehiculosPesado = new \Doctrine\Common\Collections\ArrayCollection();
+    } 
 
 
     /**
@@ -73,148 +86,150 @@ class Empresa
         return $this->id;
     }
 
+  
+
     /**
-     * Set nitEmpresa
+     * Set nit
      *
-     * @param integer $nitEmpresa
+     * @param integer $nit
      *
      * @return Empresa
      */
-    public function setNitEmpresa($nitEmpresa)
+    public function setNit($nit)
     {
-        $this->nitEmpresa = $nitEmpresa;
+        $this->nit = $nit;
 
         return $this;
     }
 
     /**
-     * Get nitEmpresa
+     * Get nit
      *
-     * @return int
+     * @return integer
      */
-    public function getNitEmpresa()
+    public function getNit()
     {
-        return $this->nitEmpresa;
+        return $this->nit;
     }
 
     /**
-     * Set nombreEmpresa
+     * Set nombre
      *
-     * @param string $nombreEmpresa
+     * @param string $nombre
      *
      * @return Empresa
      */
-    public function setNombreEmpresa($nombreEmpresa)
+    public function setNombre($nombre)
     {
-        $this->nombreEmpresa = $nombreEmpresa;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreEmpresa
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreEmpresa()
+    public function getNombre()
     {
-        return $this->nombreEmpresa;
+        return $this->nombre;
     }
 
     /**
-     * Set telefonoEmpresa
+     * Set telefono
      *
-     * @param integer $telefonoEmpresa
+     * @param integer $telefono
      *
      * @return Empresa
      */
-    public function setTelefonoEmpresa($telefonoEmpresa)
+    public function setTelefono($telefono)
     {
-        $this->telefonoEmpresa = $telefonoEmpresa;
+        $this->telefono = $telefono;
 
         return $this;
     }
 
     /**
-     * Get telefonoEmpresa
+     * Get telefono
      *
-     * @return int
+     * @return integer
      */
-    public function getTelefonoEmpresa()
+    public function getTelefono()
     {
-        return $this->telefonoEmpresa;
+        return $this->telefono;
     }
 
     /**
-     * Set direccionEmpresa
+     * Set direccion
      *
-     * @param string $direccionEmpresa
+     * @param string $direccion
      *
      * @return Empresa
      */
-    public function setDireccionEmpresa($direccionEmpresa)
+    public function setDireccion($direccion)
     {
-        $this->direccionEmpresa = $direccionEmpresa;
+        $this->direccion = $direccion;
 
         return $this;
     }
 
     /**
-     * Get direccionEmpresa
+     * Get direccion
      *
      * @return string
      */
-    public function getDireccionEmpresa()
+    public function getDireccion()
     {
-        return $this->direccionEmpresa;
+        return $this->direccion;
     }
 
     /**
-     * Set correoEmpresa
+     * Set correo
      *
-     * @param string $correoEmpresa
+     * @param string $correo
      *
      * @return Empresa
      */
-    public function setCorreoEmpresa($correoEmpresa)
+    public function setCorreo($correo)
     {
-        $this->correoEmpresa = $correoEmpresa;
+        $this->correo = $correo;
 
         return $this;
     }
 
     /**
-     * Get correoEmpresa
+     * Get correo
      *
      * @return string
      */
-    public function getCorreoEmpresa()
+    public function getCorreo()
     {
-        return $this->correoEmpresa;
+        return $this->correo;
     }
 
     /**
-     * Set ciudad
+     * Set municipio
      *
-     * @param \AppBundle\Entity\Ciudad $ciudad
+     * @param \AppBundle\Entity\Municipio $municipio
      *
      * @return Empresa
      */
-    public function setCiudad(\AppBundle\Entity\Ciudad $ciudad = null)
+    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
     {
-        $this->ciudad = $ciudad;
+        $this->municipio = $municipio;
 
         return $this;
     }
 
     /**
-     * Get ciudad
+     * Get municipio
      *
-     * @return \AppBundle\Entity\Ciudad
+     * @return \AppBundle\Entity\Municipio
      */
-    public function getCiudad()
+    public function getMunicipio()
     {
-        return $this->ciudad;
+        return $this->municipio;
     }
 
     /**
@@ -239,5 +254,63 @@ class Empresa
     public function getTipoEmpresa()
     {
         return $this->tipoEmpresa;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     *
+     * @return Empresa
+     */
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
+    }
+
+    /**
+     * Add vehiculosPesado
+     *
+     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
+     *
+     * @return Empresa
+     */
+    public function addVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
+    {
+        $this->vehiculosPesado[] = $vehiculosPesado;
+
+        return $this;
+    }
+
+    /**
+     * Remove vehiculosPesado
+     *
+     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
+     */
+    public function removeVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
+    {
+        $this->vehiculosPesado->removeElement($vehiculosPesado);
+    }
+
+    /**
+     * Get vehiculosPesado
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVehiculosPesado()
+    {
+        return $this->vehiculosPesado;
     }
 }

@@ -24,16 +24,16 @@ class Combustible
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreCombustible", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreCombustible;
+    private $nombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="codigoCombustible", type="integer", unique=true)
+     * @ORM\Column(name="codigoMt", type="integer", unique=true)
      */
-    private $codigoCombustible;
+    private $codigoMt;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="combustible")
@@ -56,52 +56,54 @@ class Combustible
         return $this->id;
     }
 
+  
+
     /**
-     * Set nombreCombustible
+     * Set nombre
      *
-     * @param string $nombreCombustible
+     * @param string $nombre
      *
      * @return Combustible
      */
-    public function setNombreCombustible($nombreCombustible)
+    public function setNombre($nombre)
     {
-        $this->nombreCombustible = $nombreCombustible;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreCombustible
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreCombustible()
+    public function getNombre()
     {
-        return $this->nombreCombustible;
+        return $this->nombre;
     }
 
     /**
-     * Set codigoCombustible
+     * Set codigoMt
      *
-     * @param integer $codigoCombustible
+     * @param integer $codigoMt
      *
      * @return Combustible
      */
-    public function setCodigoCombustible($codigoCombustible)
+    public function setCodigoMt($codigoMt)
     {
-        $this->codigoCombustible = $codigoCombustible;
+        $this->codigoMt = $codigoMt;
 
         return $this;
     }
 
     /**
-     * Get codigoCombustible
+     * Get codigoMt
      *
-     * @return int
+     * @return integer
      */
-    public function getCodigoCombustible()
+    public function getCodigoMt()
     {
-        return $this->codigoCombustible;
+        return $this->codigoMt;
     }
 
     /**

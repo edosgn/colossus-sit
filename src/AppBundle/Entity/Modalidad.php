@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Carroceria
+ * Modalidad
  *
- * @ORM\Table(name="carroceria")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CarroceriaRepository")
+ * @ORM\Table(name="modalidad")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ModalidadRepository")
  */
-class Carroceria
+class Modalidad
 {
     /**
      * @var int
@@ -31,21 +31,18 @@ class Carroceria
     /**
      * @var int
      *
-     * @ORM\Column(name="codigoMt", type="integer", unique=true)
+     * @ORM\Column(name="codigoMt", type="integer")
      */
     private $codigoMt;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="carrocerias") */
-    private $clase; 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="carroceria")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehiculoPesado", mappedBy="modalidad")
      */
-    protected $vehiculos;  
+    protected $vehiculosPesado;  
 
     public function __construct() {
-        $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
-        
+        $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
     } 
 
 
@@ -59,14 +56,14 @@ class Carroceria
         return $this->id;
     }
 
-    
+ 
 
     /**
      * Set nombre
      *
      * @param string $nombre
      *
-     * @return Carroceria
+     * @return Modalidad
      */
     public function setNombre($nombre)
     {
@@ -90,7 +87,7 @@ class Carroceria
      *
      * @param integer $codigoMt
      *
-     * @return Carroceria
+     * @return Modalidad
      */
     public function setCodigoMt($codigoMt)
     {
@@ -110,60 +107,36 @@ class Carroceria
     }
 
     /**
-     * Set clase
+     * Add vehiculosPesado
      *
-     * @param \AppBundle\Entity\Clase $clase
+     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
      *
-     * @return Carroceria
+     * @return Modalidad
      */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    public function addVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
     {
-        $this->clase = $clase;
+        $this->vehiculosPesado[] = $vehiculosPesado;
 
         return $this;
     }
 
     /**
-     * Get clase
+     * Remove vehiculosPesado
      *
-     * @return \AppBundle\Entity\Clase
+     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
      */
-    public function getClase()
+    public function removeVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
     {
-        return $this->clase;
+        $this->vehiculosPesado->removeElement($vehiculosPesado);
     }
 
     /**
-     * Add vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Carroceria
-     */
-    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos[] = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     */
-    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos->removeElement($vehiculo);
-    }
-
-    /**
-     * Get vehiculos
+     * Get vehiculosPesado
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVehiculos()
+    public function getVehiculosPesado()
     {
-        return $this->vehiculos;
+        return $this->vehiculosPesado;
     }
 }

@@ -11,8 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="AppBundle\Repository\CuentaRepository")
  */
 class Cuenta
-{
-    /** 
+{ 
+    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -22,32 +22,31 @@ class Cuenta
     private $id;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="datosCuenta", type="string", length=255)
+     * @ORM\Column(name="numero", type="integer")
      */
-    private $datosCuenta;
+    private $numero;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="string", length=255)
+     */
+    private $observacion;
+
+     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Banco", inversedBy="cuentas")
      **/
     protected $banco;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ConceptoTramite", mappedBy="cuenta")
-     **/
-    protected $conceptosTramite;
-
-
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\PagoTramite", mappedBy="cuenta")
-     **/
-    protected $pagosTramite;
-
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Concepto", mappedBy="cuenta")
+     */
+    protected $conceptos;  
 
     public function __construct() {
-        $this->conceptosTramite = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pagosTramite = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->conceptos = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -61,30 +60,54 @@ class Cuenta
         return $this->id;
     }
 
-   
+  
 
     /**
-     * Set datosCuenta
+     * Set numero
      *
-     * @param string $datosCuenta
+     * @param integer $numero
      *
      * @return Cuenta
      */
-    public function setDatosCuenta($datosCuenta)
+    public function setNumero($numero)
     {
-        $this->datosCuenta = $datosCuenta;
+        $this->numero = $numero;
 
         return $this;
     }
 
     /**
-     * Get datosCuenta
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set observacion
+     *
+     * @param string $observacion
+     *
+     * @return Cuenta
+     */
+    public function setObservacion($observacion)
+    {
+        $this->observacion = $observacion;
+
+        return $this;
+    }
+
+    /**
+     * Get observacion
      *
      * @return string
      */
-    public function getDatosCuenta()
+    public function getObservacion()
     {
-        return $this->datosCuenta;
+        return $this->observacion;
     }
 
     /**
@@ -112,70 +135,36 @@ class Cuenta
     }
 
     /**
-     * Add conceptosTramite
+     * Add concepto
      *
-     * @param \AppBundle\Entity\ConceptoTramite $conceptosTramite
+     * @param \AppBundle\Entity\Concepto $concepto
      *
      * @return Cuenta
      */
-    public function addConceptosTramite(\AppBundle\Entity\ConceptoTramite $conceptosTramite)
+    public function addConcepto(\AppBundle\Entity\Concepto $concepto)
     {
-        $this->conceptosTramite[] = $conceptosTramite;
+        $this->conceptos[] = $concepto;
 
         return $this;
     }
 
     /**
-     * Remove conceptosTramite
+     * Remove concepto
      *
-     * @param \AppBundle\Entity\ConceptoTramite $conceptosTramite
+     * @param \AppBundle\Entity\Concepto $concepto
      */
-    public function removeConceptosTramite(\AppBundle\Entity\ConceptoTramite $conceptosTramite)
+    public function removeConcepto(\AppBundle\Entity\Concepto $concepto)
     {
-        $this->conceptosTramite->removeElement($conceptosTramite);
+        $this->conceptos->removeElement($concepto);
     }
 
     /**
-     * Get conceptosTramite
+     * Get conceptos
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getConceptosTramite()
+    public function getConceptos()
     {
-        return $this->conceptosTramite;
-    }
-
-    /**
-     * Add pagosTramite
-     *
-     * @param \AppBundle\Entity\PagoTramite $pagosTramite
-     *
-     * @return Cuenta
-     */
-    public function addPagosTramite(\AppBundle\Entity\PagoTramite $pagosTramite)
-    {
-        $this->pagosTramite[] = $pagosTramite;
-
-        return $this;
-    }
-
-    /**
-     * Remove pagosTramite
-     *
-     * @param \AppBundle\Entity\PagoTramite $pagosTramite
-     */
-    public function removePagosTramite(\AppBundle\Entity\PagoTramite $pagosTramite)
-    {
-        $this->pagosTramite->removeElement($pagosTramite);
-    }
-
-    /**
-     * Get pagosTramite
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPagosTramite()
-    {
-        return $this->pagosTramite;
+        return $this->conceptos;
     }
 }

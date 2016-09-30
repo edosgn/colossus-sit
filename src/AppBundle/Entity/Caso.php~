@@ -1,0 +1,59 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Caso
+ *
+ * @ORM\Table(name="caso")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CasoRepository")
+ */
+class Caso
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="casos")
+     **/
+    protected $tramite;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteEspecifico", mappedBy="caso")
+     */
+    protected $tramitesEspecifico;
+
+    public function __construct() {
+        $this->tramitesEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+  
+}

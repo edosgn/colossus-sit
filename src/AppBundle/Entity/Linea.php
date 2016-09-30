@@ -24,9 +24,17 @@ class Linea
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreLinea", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreLinea;
+    private $nombre;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigoMt", type="integer")
+     */
+    private $codigoMt;
+    
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="lineas") */
     private $marca;
@@ -52,28 +60,54 @@ class Linea
         return $this->id;
     }
 
+   
+
     /**
-     * Set nombreLinea
+     * Set nombre
      *
-     * @param string $nombreLinea
+     * @param string $nombre
      *
      * @return Linea
      */
-    public function setNombreLinea($nombreLinea)
+    public function setNombre($nombre)
     {
-        $this->nombreLinea = $nombreLinea;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreLinea
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreLinea()
+    public function getNombre()
     {
-        return $this->nombreLinea;
+        return $this->nombre;
+    }
+
+    /**
+     * Set codigoMt
+     *
+     * @param integer $codigoMt
+     *
+     * @return Linea
+     */
+    public function setCodigoMt($codigoMt)
+    {
+        $this->codigoMt = $codigoMt;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMt
+     *
+     * @return integer
+     */
+    public function getCodigoMt()
+    {
+        return $this->codigoMt;
     }
 
     /**

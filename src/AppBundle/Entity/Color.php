@@ -24,16 +24,9 @@ class Color
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreColor", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreColor;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="codigoColor", type="integer", unique=true)
-     */
-    private $codigoColor;
+    private $nombre;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="color")
@@ -56,52 +49,30 @@ class Color
         return $this->id;
     }
 
+   
+
     /**
-     * Set nombreColor
+     * Set nombre
      *
-     * @param string $nombreColor
+     * @param string $nombre
      *
      * @return Color
      */
-    public function setNombreColor($nombreColor)
+    public function setNombre($nombre)
     {
-        $this->nombreColor = $nombreColor;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreColor
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreColor()
+    public function getNombre()
     {
-        return $this->nombreColor;
-    }
-
-    /**
-     * Set codigoColor
-     *
-     * @param integer $codigoColor
-     *
-     * @return Color
-     */
-    public function setCodigoColor($codigoColor)
-    {
-        $this->codigoColor = $codigoColor;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoColor
-     *
-     * @return int
-     */
-    public function getCodigoColor()
-    {
-        return $this->codigoColor;
+        return $this->nombre;
     }
 
     /**

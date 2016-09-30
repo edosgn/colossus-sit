@@ -24,25 +24,25 @@ class Departamento
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreDepartamento", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreDepartamento;
+    private $nombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoDepartamento", type="string", length=255)
+     * @ORM\Column(name="codigoDian", type="string", length=255)
      */
-    private $codigoDepartamento;
+    private $codigoDian;
 
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ciudad", mappedBy="departamento")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Municipio", mappedBy="departamento")
      */
-    protected $ciudades; 
+    protected $municipios; 
 
     public function __construct() {
-        $this->ciudades = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->municipios = new \Doctrine\Common\Collections\ArrayCollection();
         
     }
 
@@ -57,85 +57,87 @@ class Departamento
         return $this->id;
     }
 
+    
+
     /**
-     * Set nombreDepartamento
+     * Set nombre
      *
-     * @param string $nombreDepartamento
+     * @param string $nombre
      *
      * @return Departamento
      */
-    public function setNombreDepartamento($nombreDepartamento)
+    public function setNombre($nombre)
     {
-        $this->nombreDepartamento = $nombreDepartamento;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreDepartamento
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreDepartamento()
+    public function getNombre()
     {
-        return $this->nombreDepartamento;
+        return $this->nombre;
     }
 
     /**
-     * Set codigoDepartamento
+     * Set codigoDian
      *
-     * @param string $codigoDepartamento
+     * @param string $codigoDian
      *
      * @return Departamento
      */
-    public function setCodigoDepartamento($codigoDepartamento)
+    public function setCodigoDian($codigoDian)
     {
-        $this->codigoDepartamento = $codigoDepartamento;
+        $this->codigoDian = $codigoDian;
 
         return $this;
     }
 
     /**
-     * Get codigoDepartamento
+     * Get codigoDian
      *
      * @return string
      */
-    public function getCodigoDepartamento()
+    public function getCodigoDian()
     {
-        return $this->codigoDepartamento;
+        return $this->codigoDian;
     }
 
     /**
-     * Add ciudade
+     * Add municipio
      *
-     * @param \AppBundle\Entity\Ciudad $ciudade
+     * @param \AppBundle\Entity\Municipio $municipio
      *
      * @return Departamento
      */
-    public function addCiudade(\AppBundle\Entity\Ciudad $ciudade)
+    public function addMunicipio(\AppBundle\Entity\Municipio $municipio)
     {
-        $this->ciudades[] = $ciudade;
+        $this->municipios[] = $municipio;
 
         return $this;
     }
 
     /**
-     * Remove ciudade
+     * Remove municipio
      *
-     * @param \AppBundle\Entity\Ciudad $ciudade
+     * @param \AppBundle\Entity\Municipio $municipio
      */
-    public function removeCiudade(\AppBundle\Entity\Ciudad $ciudade)
+    public function removeMunicipio(\AppBundle\Entity\Municipio $municipio)
     {
-        $this->ciudades->removeElement($ciudade);
+        $this->municipios->removeElement($municipio);
     }
 
     /**
-     * Get ciudades
+     * Get municipios
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCiudades()
+    public function getMunicipios()
     {
-        return $this->ciudades;
+        return $this->municipios;
     }
 }

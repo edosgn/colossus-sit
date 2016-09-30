@@ -24,9 +24,17 @@ class Marca
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreMarca", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreMarca;
+    private $nombre;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigoMt", type="integer")
+     */
+    private $codigoMt;
+    
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Linea", mappedBy="marca")
@@ -49,28 +57,54 @@ class Marca
         return $this->id;
     }
 
+  
+
     /**
-     * Set nombreMarca
+     * Set nombre
      *
-     * @param string $nombreMarca
+     * @param string $nombre
      *
      * @return Marca
      */
-    public function setNombreMarca($nombreMarca)
+    public function setNombre($nombre)
     {
-        $this->nombreMarca = $nombreMarca;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreMarca
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreMarca()
+    public function getNombre()
     {
-        return $this->nombreMarca;
+        return $this->nombre;
+    }
+
+    /**
+     * Set codigoMt
+     *
+     * @param integer $codigoMt
+     *
+     * @return Marca
+     */
+    public function setCodigoMt($codigoMt)
+    {
+        $this->codigoMt = $codigoMt;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoMt
+     *
+     * @return integer
+     */
+    public function getCodigoMt()
+    {
+        return $this->codigoMt;
     }
 
     /**

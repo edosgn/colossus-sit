@@ -61,6 +61,8 @@ class Servicio
         return $this->id;
     }
 
+   
+
     /**
      * Set nombreServicio
      *
@@ -102,7 +104,7 @@ class Servicio
     /**
      * Get codigoServicio
      *
-     * @return int
+     * @return integer
      */
     public function getCodigoServicio()
     {
