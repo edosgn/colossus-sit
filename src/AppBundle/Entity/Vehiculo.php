@@ -121,7 +121,7 @@ class Vehiculo
     
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
-    private $munucipio; 
+    private $municipio; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="vehiculos") */
     private $linea;
@@ -140,6 +140,9 @@ class Vehiculo
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="vehiculos") */
     private $organismoTransito;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
+    private $clase;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\CiudadanoVehiculo", mappedBy="vehiculo")
@@ -522,27 +525,27 @@ class Vehiculo
     }
 
     /**
-     * Set munucipio
+     * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $munucipio
+     * @param \AppBundle\Entity\Municipio $municipio
      *
      * @return Vehiculo
      */
-    public function setMunucipio(\AppBundle\Entity\Municipio $munucipio = null)
+    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
     {
-        $this->munucipio = $munucipio;
+        $this->municipio = $municipio;
 
         return $this;
     }
 
     /**
-     * Get munucipio
+     * Get municipio
      *
      * @return \AppBundle\Entity\Municipio
      */
-    public function getMunucipio()
+    public function getMunicipio()
     {
-        return $this->munucipio;
+        return $this->municipio;
     }
 
     /**

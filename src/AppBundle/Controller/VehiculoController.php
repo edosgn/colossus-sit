@@ -24,13 +24,16 @@ class VehiculoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
         $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findAll();
+        $respuesta = array(
+                'status' => 'sucsses',
+                'vehiculos' => $vehiculos,
+                'msj'=> 'conecxion correcta'
+            );
+        return $helpers->json($respuesta);
 
-        return $this->render('AppBundle:Vehiculo:index.html.twig', array(
-            'vehiculos' => $vehiculos,
-        ));
     }
 
     /**
