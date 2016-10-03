@@ -59,10 +59,10 @@ class UsuarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $data = array(
+         $data = array(
                         "status" => "error",
                         "code" => 400,
-                        "msg" => "Usuario no creado rellene todos los campos"
+                        "msg" => "Usuario no creado!"
                     );
 
         $helpers = $this->get('app.helpers');
@@ -76,9 +76,9 @@ class UsuarioController extends Controller
         $correo = (isset($params->correo)) ? $params->correo : null;
         $foto = (isset($params->foto)) ? $params->foto : null;
         $telefono = (isset($params->telefono)) ? $params->telefono : null;
-        $fecha_nacimiento = (isset($params->fecha_nacimiento)) ? $params->fecha_nacimiento : null;
+        $fecha_nacimiento1 = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
         $estado = (isset($params->estado)) ? $params->estado : "activo";
-        $role = (isset($params->rol)) ? $params->role : "ROL_USER";
+        $rol = (isset($params->rol)) ? $params->rol : "ROLE_USER";
         $password = (isset($params->password)) ? $params->password : null;
 
         $emailContraint = new Assert\Email();
@@ -93,9 +93,9 @@ class UsuarioController extends Controller
             $usuario->setCorreo($correo);
             $usuario->setFoto($foto);
             $usuario->setTelefono($telefono);
-            $usuario->setFechaNacimiento($fecha_nacimiento);
+            $usuario->setFechaNacimiento($fecha_nacimiento1);
             $usuario->setEstado($estado);
-            $usuario->setRole($role);
+            $usuario->setRole($rol);
             $usuario->setCreatedAt();
             $usuario->setUpdatedAt();
 

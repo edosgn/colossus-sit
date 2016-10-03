@@ -1,0 +1,45 @@
+<br>
+<hr>
+<h3>Usuarios:</h3>
+<hr>
+	<div class="table-responsive">
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Identificacion</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Estado</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#Usuario of Usuarios">
+                    <td >{{Usuario.id}}</td>
+                    <td >{{Usuario.nombres}}</td>
+                    <td >{{Usuario.apellidos}}</td>
+                    <td >{{Usuario.identificacion}}</td>
+                    <td >{{Usuario.correo}}</td>
+                    <td >{{Usuario.telefono}}</td>
+                    <td >{{Usuario.estado}}</td>
+                    <td >{{Usuario.role}}</td>
+
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteUsuario(Usuario.id)">
+						eliminar
+					</button>
+                        
+        	        <a [routerLink]="['/usuario-edit',Usuario.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

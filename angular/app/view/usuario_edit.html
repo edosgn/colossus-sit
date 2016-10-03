@@ -1,0 +1,105 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msg}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msg}}
+		</div>
+
+		
+	</div>
+	<br>
+
+	<form #newVideoForm="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3" >
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrate </div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+
+				<p class="col-md-6">
+					<label >Nombres:</label>
+					<input #nombres="ngForm"  type="text" class="form-control" [(ngModel)]="usuario.nombres" ngControl="nombres"  required />
+					<span *ngIf="!nombres.valid && nombres.touched" style="color:red;">nombres obligatorios</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Apellidos:</label>
+					<input #apellidos="ngForm"  type="text" class="form-control" [(ngModel)]="usuario.apellidos" ngControl="apellidos"  required />
+					<span *ngIf="!apellidos.valid && apellidos.touched" style="color:red;">apellidos obligatorios</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label>Identificacion:</label>
+					<input #identificacion="ngForm"  type="text" class="form-control" [(ngModel)]="usuario.identificacion" ngControl="identificacion"   required />
+					<span *ngIf="!identificacion.valid && identificacion.touched" style="color:red;">Identificacion obligatoria</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label>Correo electrónico:</label>
+					<input #correo="ngForm"  type="email" class="form-control" [(ngModel)]="usuario.correo" ngControl="correo"   required />
+					<span *ngIf="!correo.valid && correo.touched" style="color:red;">El correo es obligatorio</span>
+					<br>
+				</p>
+
+			
+				<p class="col-md-6">
+					
+					<label>Estado:</label>
+				    <select name="estado" [(ngModel)]="usuario.estado" class="form-control" required> 
+				        <option *ngFor="let estado of estados" [value]="estado.value">  
+				        {{estado.display}}
+				        </option>
+				    </select>
+				    <br>
+				</p>
+
+
+				<p class="col-md-6">
+				    <label>Role:</label>
+				    <select name="role" [(ngModel)]="usuario.role" class="form-control" ngControl="role" required> 
+				        <option *ngFor="let role of roles" [value]="role.value">  
+				        {{role.display}}
+				        </option>
+				    </select>
+
+				    <br>
+				</p>
+
+				<p class="col-md-6"> 
+					<label >Telefono:</label>
+					<input type="telefono" class="form-control" #telefono="ngForm" ngControl="telefono" [(ngModel)]="usuario.telefono" required />
+					<span *ngIf="!telefono.valid && telefono.touched" style="color:red;">telefono obligatorios</span>
+					<br>
+
+				</p>
+
+				<p class="col-md-6">
+				    <label >Nacimiento:</label>
+					<input type="date" class="form-control" #fechaNacimiento="ngForm" ngControl="fechaNacimiento" [(ngModel)]="usuario.fechaNacimiento"  required />
+					<span *ngIf="!fechaNacimiento.valid && fechaNacimiento.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+				</p>
+
+
+				<br>
+
+		        <p class="col-md-12"> 
+			    <input *ngIf="!telefono.valid  || !correo.valid || !identificacion.valid || !apellidos.valid || !nombres.valid || !fechaNacimiento.valid" type="submit" value="LLena los Campos" class="btn btn-danger col-md-12" disabled/>
+
+			    <input *ngIf=" telefono.valid && correo.valid && identificacion.valid && apellidos.valid && nombres.valid && fechaNacimiento.valid" type="submit" value="Reguistrate" class="btn btn-success col-md-12" />
+			    
+			    </p>
+		  </div>
+		</div>
+		
+		
+
+	</form>
+</div>

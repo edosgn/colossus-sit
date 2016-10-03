@@ -276,7 +276,7 @@ class Usuario
      */
     public function setFechaNacimiento($fechaNacimiento)
     {
-        $this->fechaNacimiento = $fechaNacimiento;
+        $this->fechaNacimiento = new \DateTime($fechaNacimiento);
 
         return $this;
     }
@@ -288,7 +288,7 @@ class Usuario
      */
     public function getFechaNacimiento()
     {
-        return $this->fechaNacimiento;
+        return $this->fechaNacimiento->format("Y-m-d"); 
     }
 
     /**
@@ -370,9 +370,11 @@ class Usuario
      *
      * @return Usuario
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt()
     {
-        $this->createdAt = $createdAt;
+        
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
 
         return $this;
     }
@@ -394,9 +396,9 @@ class Usuario
      *
      * @return Usuario
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt()
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTime('now');
 
         return $this;
     }
