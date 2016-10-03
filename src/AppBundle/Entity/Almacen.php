@@ -49,6 +49,13 @@ class Almacen
      */
     private $disponibles;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="almacenes") */
     private $servicio; 
 
@@ -266,5 +273,29 @@ class Almacen
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Almacen
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

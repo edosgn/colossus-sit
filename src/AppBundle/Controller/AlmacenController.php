@@ -24,13 +24,12 @@ class AlmacenController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $almacens = $em->getRepository('AppBundle:Almacen')->findAll();
-
-        return $this->render('AppBundle:almacen:index.html.twig', array(
-            'almacens' => $almacens,
-        ));
+        $almacenes = $em->getRepository('AppBundle:Almacen')->findBy(
+            array('estado' => 1)
+        );
+        return $helpers->json($almacenes);
     }
 
     /**

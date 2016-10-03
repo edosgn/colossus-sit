@@ -32,7 +32,15 @@ class DepartamentoController extends Controller
         $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
             array('estado' => 1)
         );
-        return $helpers->json($departamentos);
+
+         $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Departamento con nombre"." ".$departamento->getNombre(), 
+                    'data'=> $departamentos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
