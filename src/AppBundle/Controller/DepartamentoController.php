@@ -3,19 +3,21 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Departamento;
 use AppBundle\Form\DepartamentoType;
 
-/**
+/** 
  * Departamento controller.
  *
  * @Route("/departamento")
  */
 class DepartamentoController extends Controller
 {
+    
     /**
      * Lists all Departamento entities.
      *
@@ -24,13 +26,13 @@ class DepartamentoController extends Controller
      */
     public function indexAction()
     {
+        
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $departamentos = $em->getRepository('AppBundle:Departamento')->findAll();
-
-        return $this->render('AppBundle:departamento:index.html.twig', array(
-            'departamentos' => $departamentos,
-        ));
+        $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
+            array('estado' => 1)
+        );
+        return $helpers->json($departamentos);
     }
 
     /**
@@ -41,38 +43,81 @@ class DepartamentoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $departamento = new Departamento();
-        $form = $this->createForm('AppBundle\Form\DepartamentoType', $departamento);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($departamento);
-            $em->flush();
+        if ($authCheck== true) {
+            
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('departamento_show', array('id' => $departamento->getId()));
-        }
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoDian = $params->codigoDian;
 
-        return $this->render('AppBundle:departamento:new.html.twig', array(
-            'departamento' => $departamento,
-            'form' => $form->createView(),
-        ));
+                $departamento = new Departamento();
+
+                $departamento->setNombre($nombre);
+                $departamento->setCodigoDian($codigoDian);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($departamento);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Departamento creado con exito", 
+                );
+            }
+
+         }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Departamento entity.
      *
      * @Route("/{id}", name="departamento_show")
-     * @Method("GET")
+     * @Method("POST")
      */
-    public function showAction(Departamento $departamento)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($departamento);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:departamento:show.html.twig', array(
-            'departamento' => $departamento,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $departamento = $em->getRepository('AppBundle:Departamento')->find($id);
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Departamento con nombre"." ".$departamento->getNombre(), 
+                    'data'=> $departamento,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
@@ -81,45 +126,125 @@ class DepartamentoController extends Controller
      * @Route("/{id}/edit", name="departamento_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Departamento $departamento)
+    public function editAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($departamento);
-        $editForm = $this->createForm('AppBundle\Form\DepartamentoType', $departamento);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoDian = $params->codigoDian;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($departamento);
-            $em->flush();
+            $departamento = $em->getRepository('AppBundle:Departamento')->find($id);
 
-            return $this->redirectToRoute('departamento_edit', array('id' => $departamento->getId()));
+            if ($departamento!=null) {
+                $departamento->setNombre($nombre);
+                $departamento->setCodigoDian($codigoDian);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($departamento);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Departamento actualizado con exito", 
+                        'data'=> $departamento,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El departamento no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->render('AppBundle:departamento:edit.html.twig', array(
-            'departamento' => $departamento,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
+
+        
     }
 
     /**
      * Deletes a Departamento entity.
      *
-     * @Route("/{id}", name="departamento_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="departamento_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Departamento $departamento)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($departamento);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($departamento);
-            $em->flush();
+            $departamento = $em->getRepository('AppBundle:Departamento')->find($id);
+
+            if ($departamento->getMunicipios()!=null) {
+               if ($departamento!=null) {
+
+                $departamento->setEstado(0);
+                $em->persist($departamento);
+                $em->flush();
+
+                $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Departamento eliminado con exito",
+                        'warning'=>"el departamento contiene municipios", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El departamento no se encuentra en la base de datos", 
+                );
+            }
+            }else{
+                if ($departamento!=null) {
+
+                $departamento->setEstado(0);
+                $em->persist($departamento);
+                $em->flush();
+
+                $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Departamento eliminado con exito",
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El departamento no se encuentra en la base de datos", 
+                );
+            }
+            }
+
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->redirectToRoute('departamento_index');
+        return $helpers->json($responce);
+        
     }
 
     /**

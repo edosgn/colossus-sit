@@ -151,28 +151,4 @@ class Departamento
     {
         return $this->municipios;
     }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Departamento
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
 }

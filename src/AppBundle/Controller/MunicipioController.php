@@ -24,13 +24,12 @@ class MunicipioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $municipios = $em->getRepository('AppBundle:Municipio')->findAll();
-
-        return $this->render('AppBundle:Municipio:index.html.twig', array(
-            'municipios' => $municipios,
-        ));
+        $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
+            array('estado' => 1)
+        );
+        return $helpers->json($municipios);
     }
 
     /**
@@ -41,38 +40,85 @@ class MunicipioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $municipio = new Municipio();
-        $form = $this->createForm('AppBundle\Form\MunicipioType', $municipio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($municipio);
-            $em->flush();
+        if ($authCheck== true) {
+            
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('municipio_show', array('id' => $municipio->getId()));
-        }
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoDian = $params->codigoDian;
+                $departamentoId = $params->departamentoId;
 
-        return $this->render('AppBundle:Municipio:new.html.twig', array(
-            'municipio' => $municipio,
-            'form' => $form->createView(),
-        ));
+                $em = $this->getDoctrine()->getManager();
+                $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
+               
+                $municipio = new Municipio();
+
+                $municipio->setNombre($nombre);
+                $municipio->setCodigoDian($codigoDian);
+                $municipio->setDepartamento($departamento);
+
+                $em->persist($municipio);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Municipio creado con exito", 
+                );
+            }
+
+         }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Municipio entity.
      *
      * @Route("/{id}", name="municipio_show")
-     * @Method("GET")
+     * @Method("POST")
      */
-    public function showAction(Municipio $municipio)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($municipio);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:Municipio:show.html.twig', array(
-            'municipio' => $municipio,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($id);
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Municipio con nombre"." ".$municipio->getNombre(), 
+                    'data'=> $municipio,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
@@ -81,46 +127,107 @@ class MunicipioController extends Controller
      * @Route("/{id}/edit", name="municipio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Municipio $municipio)
+    public function editAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($municipio);
-        $editForm = $this->createForm('AppBundle\Form\MunicipioType', $municipio);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoDian = $params->codigoDian;
+            $departamentoId = $params->departamentoId;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($municipio);
-            $em->flush();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($id);
+            $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
 
-            return $this->redirectToRoute('municipio_edit', array('id' => $municipio->getId()));
+
+            if ($municipio!=null && $departamento!=null) {
+
+
+                $municipio->setNombre($nombre);
+                $municipio->setCodigoDian($codigoDian);
+                $municipio->setDepartamento($departamento);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($municipio);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Municipio actualizado con exito", 
+                        'data'=> $municipio,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El municipio no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->render('AppBundle:Municipio:edit.html.twig', array(
-            'municipio' => $municipio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Municipio entity.
      *
-     * @Route("/{id}", name="municipio_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="municipio_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Municipio $municipio)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($municipio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($municipio);
-            $em->flush();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($id);
+
+            if ($municipio!=null) {
+
+                $municipio->setEstado(0);
+                $em->persist($municipio);
+                $em->flush();
+
+                $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Municipio eliminado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El Municipio no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->redirectToRoute('municipio_index');
+        return $helpers->json($responce);
+        
     }
+    
 
     /**
      * Creates a form to delete a Municipio entity.
