@@ -23,6 +23,13 @@ var DefaulComponent = (function () {
     }
     DefaulComponent.prototype.ngOnInit = function () {
         var _this = this;
+        var token = this._loginService.getToken();
+        if (token) {
+            console.log('logueado');
+        }
+        else {
+            window.location.href = "/login";
+        }
         this._UsuarioService.getUsuarios().subscribe(function (response) {
             _this.Usuarios = response.usuarios;
         }, function (error) {

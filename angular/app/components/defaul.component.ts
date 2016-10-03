@@ -27,6 +27,14 @@ export class DefaulComponent implements OnInit{
 		){}
 
 	ngOnInit(){	
+		let token = this._loginService.getToken();
+		
+		if(token) {
+	     	console.log('logueado');
+	     }else{
+	     	window.location.href = "/login";
+	     }
+
 		this._UsuarioService.getUsuarios().subscribe(
 				response => {
 					this.Usuarios = response.usuarios;

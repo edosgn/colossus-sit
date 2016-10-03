@@ -19,12 +19,15 @@ export class AppComponent {
 	public token;
  
 	constructor(
-		private _loginService: LoginService
+		private _loginService: LoginService,
+		private _router: Router
 		){}
 
 	ngOnInit(){
 
 		 this.token = this._loginService.getToken();
 	     this.identity = this._loginService.getIdentity();
+
+	     
 	} 
  }
