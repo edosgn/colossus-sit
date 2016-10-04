@@ -35,7 +35,14 @@ var DepartamentoService = (function () {
     DepartamentoService.prototype.showDepartamento = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        return this._http.post(this.url + "/" + id, params, { headers: headers })
+        return this._http.post(this.url + "/show/" + id, params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
+    DepartamentoService.prototype.editDepartamento = function (departamento, token) {
+        var json = JSON.stringify(departamento);
+        var params = "json=" + json + "&authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     DepartamentoService = __decorate([

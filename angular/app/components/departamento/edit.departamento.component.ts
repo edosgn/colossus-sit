@@ -30,7 +30,6 @@ export class DepartamentoEditComponent implements OnInit{
 		){}
 
 	ngOnInit(){	
-
 		
 		this.departamento = new Departamento(null, "",null);
 
@@ -45,7 +44,6 @@ export class DepartamentoEditComponent implements OnInit{
 
 						response => {
 							this.departamento = response.data;
-							console.log(this.departamento);
 						},
 						error => {
 								this.errorMessage = <any>error;
@@ -65,13 +63,11 @@ export class DepartamentoEditComponent implements OnInit{
 		let token = this._loginService.getToken();
 		console.log(token);
 
-		this._UsuarioService.editUsuario(this.usuario,token).subscribe(
+		this._DepartamentoService.editDepartamento(this.departamento,token).subscribe(
 			response => {
 				this.respuesta = response;
-
 			error => {
 					this.errorMessage = <any>error;
-
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");

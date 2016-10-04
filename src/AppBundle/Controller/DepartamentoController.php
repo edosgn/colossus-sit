@@ -113,7 +113,7 @@ class DepartamentoController extends Controller
     /**
      * Finds and displays a Departamento entity.
      *
-     * @Route("/{id}", name="departamento_show")
+     * @Route("/show/{id}", name="departamento_show")
      * @Method("POST")
      */
     public function showAction(Request $request, $id)
@@ -145,10 +145,10 @@ class DepartamentoController extends Controller
     /**
      * Displays a form to edit an existing Departamento entity.
      *
-     * @Route("/{id}/edit", name="departamento_edit")
+     * @Route("/edit", name="departamento_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -162,7 +162,9 @@ class DepartamentoController extends Controller
             $codigoDian = $params->codigoDian;
 
             $em = $this->getDoctrine()->getManager();
-            $departamento = $em->getRepository('AppBundle:Departamento')->find($id);
+            $departamento = $em->getRepository("AppBundle:Departamento")->findOneBy(array(
+                    "id" => $params->id
+            ));
 
             if ($departamento!=null) {
                 $departamento->setNombre($nombre);
@@ -189,7 +191,7 @@ class DepartamentoController extends Controller
             $responce = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'msj' => "Autorizacion no valida para editar departamento", 
                 );
         }
 

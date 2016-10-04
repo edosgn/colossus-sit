@@ -31,7 +31,6 @@ var DepartamentoEditComponent = (function () {
         });
         this._DepartamentoService.showDepartamento(token, this.id).subscribe(function (response) {
             _this.departamento = response.data;
-            console.log(_this.departamento);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -44,7 +43,7 @@ var DepartamentoEditComponent = (function () {
         var _this = this;
         var token = this._loginService.getToken();
         console.log(token);
-        this._UsuarioService.editUsuario(this.usuario, token).subscribe(function (response) {
+        this._DepartamentoService.editDepartamento(this.departamento, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
                 _this.errorMessage = error;
