@@ -74,6 +74,7 @@ class DepartamentoController extends Controller
 
                 $departamento->setNombre($nombre);
                 $departamento->setCodigoDian($codigoDian);
+                $departamento->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($departamento);
