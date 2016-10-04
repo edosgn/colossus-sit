@@ -2,8 +2,10 @@ import { provideRouter, RouterConfig } from '@angular/router';
 import { LoginComponent } from "./components/login.component";
 import { DefaulComponent } from "./components/defaul.component";
 import { UsuarioEditComponent } from "./components/usuario.edit.component";
-import { IndexDepartamentoComponent } from "./components/index.departamento.component";
 import { RegisterComponent } from "./components/register.component";
+import { IndexDepartamentoComponent } from "./components/departamento/index.departamento.component";
+import { NewDepartamentoComponent } from "./components/departamento/new.departamento.component";
+
 
 
 
@@ -18,8 +20,10 @@ export const routes: RouterConfig = [
 	{ path: 'login', component: LoginComponent},
 	{ path: 'login/:id', component: LoginComponent},
 	{ path: 'registrar', component: RegisterComponent},
-    { path: 'index/departamento', component: IndexDepartamentoComponent},
-    { path: 'usuario-edit/:id', component: UsuarioEditComponent}
+    { path: 'usuario-edit/:id', component: UsuarioEditComponent},
+    { path: 'departamento/index', component: IndexDepartamentoComponent},
+    { path: 'departamento/new', component: NewDepartamentoComponent}
+
 
 ];
 

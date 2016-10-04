@@ -36,7 +36,7 @@ class DepartamentoController extends Controller
          $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Departamento con nombre"." ".$departamento->getNombre(), 
+                    'msj' => "listado departamentos", 
                     'data'=> $departamentos,
             );
          

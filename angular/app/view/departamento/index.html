@@ -3,7 +3,7 @@
 <h3>Departamentos:</h3>
 <hr>
 	<div class="table-responsive">
-    <a [routerLink]="['/registrar']" class="btn btn-success">
+    <a [routerLink]="['/departamento/new']" class="btn btn-success">
          Nuevo
     </a>
     <br>
@@ -12,33 +12,23 @@
             <thead>
                 <tr>
                     <th>Id</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Identificacion</th>
-                    <th>Correo</th>
-                    <th>Telefono</th>
-                    <th>Estado</th>
-                    <th>Role</th>
-                    <th>Actions</th>
+                    <th>Nombre</th>
+                    <th>Codigo Dian</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="#Usuario of Usuarios">
-                    <td >{{Usuario.id}}</td>
-                    <td >{{Usuario.nombres}}</td>
-                    <td >{{Usuario.apellidos}}</td>
-                    <td >{{Usuario.identificacion}}</td>
-                    <td >{{Usuario.correo}}</td>
-                    <td >{{Usuario.telefono}}</td>
-                    <td >{{Usuario.estado}}</td>
-                    <td >{{Usuario.role}}</td>
+               <tr *ngFor="#departamento of departamentos">
+                    <td >{{departamento.id}}</td>
+                    <td >{{departamento.nombre}}</td>
+                    <td >{{departamento.codigoDian}}</td>
 
                     <td>
-                    <button class="btn btn-danger" value="Editar" (click)="deleteUsuario(Usuario.id)">
-						eliminar
-					</button>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteUsuario(departamento.id)">
+                        eliminar
+                    </button>
                         
-        	        <a [routerLink]="['/usuario-edit',Usuario.id]" class="btn btn-info">
+                    <a [routerLink]="['/usuario-edit',departamento.id]" class="btn btn-info">
                          Editar
                     </a>
 

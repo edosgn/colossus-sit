@@ -1,0 +1,50 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msg}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msg}}
+		</div>
+
+		
+	</div>
+	<br>
+
+	<form #newDepartamento="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Departamento</div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+
+				<p class="col-md-6">
+					<label >Nombre:</label>
+					<input #nombres="ngForm"  type="text" class="form-control" [(ngModel)]="departamento.nombres" ngControl="nombres"  required />
+					<span *ngIf="!nombres.valid && nombres.touched" style="color:red;">nombres obligatorios</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Codigo Dian:</label>
+					<input #codigo="ngForm"  type="text" class="form-control" [(ngModel)]="departamento.codigoDian" ngControl="codigo"  required />
+					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorio</span>
+					<br>
+				</p>
+
+
+				<input *ngIf="!nombres.valid || !codigo.valid" type="submit" value="LLena los Campos" class="btn btn-danger col-md-12" disabled/>
+
+			    <input *ngIf="nombres.valid && codigo.valid" type="submit" value="Reguistrate" class="btn btn-success col-md-12" />
+
+		  </div>
+		</div>
+
+
+
+	</form>
+
+</div>
