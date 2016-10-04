@@ -113,16 +113,32 @@ class AlmacenController extends Controller
      * Finds and displays a Almacen entity.
      *
      * @Route("/{id}", name="almacen_show")
-     * @Method("GET")
+     * @Method("POST")
      */
-    public function showAction(Almacen $almacen)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($almacen);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:almacen:show.html.twig', array(
-            'almacen' => $almacen,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $almacen = $em->getRepository('AppBundle:Almacen')->find($id);
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Almacen con id"." ".$almacen->getId(), 
+                    'data'=> $almacen,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
@@ -131,45 +147,110 @@ class AlmacenController extends Controller
      * @Route("/{id}/edit", name="almacen_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Almacen $almacen)
+    public function editAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($almacen);
-        $editForm = $this->createForm('AppBundle\Form\AlmacenType', $almacen);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($almacen);
-            $em->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('almacen_edit', array('id' => $almacen->getId()));
+                $rangoInicio = $params->rangoInicio;
+                $rangoFin = $params->rangoFin;
+                $lote = $params->lote;
+                $disponibles = $params->disponibles;
+                $estado = true;
+                $em = $this->getDoctrine()->getManager();
+                $servicio = $em->getRepository('AppBundle:Servicio')->find($params->servicioId);
+                $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($params->organismoTransitoId);
+                $consumible = $em->getRepository('AppBundle:Consumible')->find($params->consumibleId);
+                $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
+                $almacen = $em->getRepository('AppBundle:Almacen')->find($id);
+
+
+                if ($almacen!=null) {
+                    $almacen->setRangoInicio($rangoInicio);
+                    $almacen->setRangoFin($rangoFin);
+                    $almacen->setLote($lote);
+                    $almacen->setDisponibles($disponibles);
+                    $almacen->setEstado($estado);
+                    $almacen->setServicio($servicio);
+                    $almacen->setOrganismoTransito($organismoTransito);
+                    $almacen->setConsumible($consumible);
+                    $almacen->setClase($clase);
+
+                    $em->persist($almacen);
+                    $em->flush();
+
+                    $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Almacen editado con exito", 
+                    );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El Almacen no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->render('AppBundle:almacen:edit.html.twig', array(
-            'almacen' => $almacen,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Almacen entity.
      *
-     * @Route("/{id}", name="almacen_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="almacen_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Almacen $almacen)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($almacen);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($almacen);
-            $em->flush();
+            $almacen = $em->getRepository('AppBundle:Almacen')->find($id);
+
+            if ($almacen!=null) {
+
+                $almacen->setEstado(0);
+                $em->persist($almacen);
+                $em->flush();
+
+                $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Almacen eliminado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El Almacen no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->redirectToRoute('almacen_index');
+        return $helpers->json($responce);
     }
 
     /**
