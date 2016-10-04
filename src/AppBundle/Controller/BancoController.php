@@ -15,7 +15,7 @@ use AppBundle\Form\BancoType;
  * @Route("/banco")
  */
 class BancoController extends Controller
-{
+{ 
     /**
      * Lists all Banco entities.
      *
@@ -24,13 +24,20 @@ class BancoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $bancos = $em->getRepository('AppBundle:Banco')->findBy(
+            array('estado' => 1)
+        );
 
-        $bancos = $em->getRepository('AppBundle:Banco')->findAll();
-
-        return $this->render('AppBundle:banco:index.html.twig', array(
-            'bancos' => $bancos,
-        ));
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado bancos", 
+                    'data'=> $bancos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +48,167 @@ class BancoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $banco = new Banco();
-        $form = $this->createForm('AppBundle\Form\BancoType', $banco);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($banco);
-            $em->flush();
+        if ($authCheck== true) {
+            
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('banco_show', array('id' => $banco->getId()));
-        }
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $banco = new Banco();
 
-        return $this->render('AppBundle:banco:new.html.twig', array(
-            'banco' => $banco,
-            'form' => $form->createView(),
-        ));
+                        $banco->setNombre($nombre);
+                        $banco->setEstado(true);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($banco);
+                        $em->flush();
+
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Banco creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Banco entity.
      *
-     * @Route("/{id}", name="banco_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="banco_show")
+     * @Method("POST")
      */
-    public function showAction(Banco $banco)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($banco);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:banco:show.html.twig', array(
-            'banco' => $banco,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $banco = $em->getRepository('AppBundle:Banco')->find($id);
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Banco con nombre"." ".$banco->getNombre(), 
+                    'data'=> $banco,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Banco entity.
      *
-     * @Route("/{id}/edit", name="banco_edit")
+     * @Route("/edit", name="banco_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Banco $banco)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($banco);
-        $editForm = $this->createForm('AppBundle\Form\BancoType', $banco);
-        $editForm->handleRequest($request);
+        
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $bancoId = $params->id;
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($banco);
-            $em->flush();
+            $banco = $em->getRepository("AppBundle:Banco")->find($bancoId);
 
-            return $this->redirectToRoute('banco_edit', array('id' => $banco->getId()));
+            if ($banco!=null) {
+                $banco->setNombre($nombre);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($banco);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Banco actualizado con exito", 
+                        'data'=> $banco,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El banco no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:banco:edit.html.twig', array(
-            'banco' => $banco,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Banco entity.
      *
-     * @Route("/{id}", name="banco_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="banco_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Banco $banco)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($banco);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($banco);
-            $em->flush();
-        }
+            $banco = $em->getRepository('AppBundle:Banco')->find($id);
 
-        return $this->redirectToRoute('banco_index');
+            $banco->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($banco);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Banco eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
