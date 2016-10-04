@@ -162,7 +162,7 @@ class Almacen
      *
      * @return Almacen
      */
-    public function setDisponibles($disponibles)
+    public function setDisponibles($disponibles = null)
     {
         $this->disponibles = $disponibles;
 

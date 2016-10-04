@@ -15,7 +15,7 @@ use AppBundle\Form\BancoType;
  * @Route("/banco")
  */
 class BancoController extends Controller
-{
+{ 
     /**
      * Lists all Banco entities.
      *
@@ -24,13 +24,20 @@ class BancoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $bancos = $em->getRepository('AppBundle:Departamento')->findBy(
+            array('estado' => 1)
+        );
 
-        $bancos = $em->getRepository('AppBundle:Banco')->findAll();
-
-        return $this->render('AppBundle:banco:index.html.twig', array(
-            'bancos' => $bancos,
-        ));
+         $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado departamentos", 
+                    'data'=> $departamentos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**

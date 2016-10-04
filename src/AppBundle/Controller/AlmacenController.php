@@ -34,7 +34,7 @@ class AlmacenController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "lista de almacenes",
-                    'almacenes' => $almacenes, 
+                    'data' => $almacenes, 
         );
         return $helpers->json($responce);
         
@@ -69,7 +69,6 @@ class AlmacenController extends Controller
                 $rangoInicio = $params->rangoInicio;
                 $rangoFin = $params->rangoFin;
                 $lote = $params->lote;
-                $disponibles = $params->disponibles;
                 $estado = true;
                 $em = $this->getDoctrine()->getManager();
                 $servicio = $em->getRepository('AppBundle:Servicio')->find($params->servicioId);
@@ -81,7 +80,6 @@ class AlmacenController extends Controller
                 $almacen->setRangoInicio($rangoInicio);
                 $almacen->setRangoFin($rangoFin);
                 $almacen->setLote($lote);
-                $almacen->setDisponibles($disponibles);
                 $almacen->setEstado($estado);
                 $almacen->setServicio($servicio);
                 $almacen->setOrganismoTransito($organismoTransito);
@@ -112,7 +110,7 @@ class AlmacenController extends Controller
     /**
      * Finds and displays a Almacen entity.
      *
-     * @Route("/{id}", name="almacen_show")
+     * @Route("/show/{id}", name="almacen_show")
      * @Method("POST")
      */
     public function showAction(Request $request, $id)
@@ -144,10 +142,10 @@ class AlmacenController extends Controller
     /**
      * Displays a form to edit an existing Almacen entity.
      *
-     * @Route("/{id}/edit", name="almacen_edit")
+     * @Route("/edit", name="almacen_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -167,7 +165,7 @@ class AlmacenController extends Controller
                 $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($params->organismoTransitoId);
                 $consumible = $em->getRepository('AppBundle:Consumible')->find($params->consumibleId);
                 $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
-                $almacen = $em->getRepository('AppBundle:Almacen')->find($id);
+                $almacen = $em->getRepository('AppBundle:Almacen')->find($params->id);
 
 
                 if ($almacen!=null) {
