@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Municipio;
+use AppBundle\Entity\Departamento;
 use AppBundle\Form\MunicipioType;
 
 /**
@@ -29,12 +30,14 @@ class MunicipioController extends Controller
         $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
             array('estado' => 1)
         );
+        
 
        $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "lista de municipios",
-                    'data' => $municipios, 
+                    'data' => $municipios,
+                    
         );
         return $helpers->json($responce);       
     }
