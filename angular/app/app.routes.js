@@ -10,6 +10,7 @@ var edit_departamento_component_1 = require("./components/departamento/edit.depa
 var index_municipio_component_1 = require("./components/municipio/index.municipio.component");
 var new_municipio_component_1 = require("./components/municipio/new.municipio.component");
 var edit_municipio_component_1 = require("./components/municipio/edit.municipio.component");
+var index_banco_component_1 = require("./components/banco/index.banco.component");
 exports.routes = [
     {
         path: '',
@@ -27,6 +28,7 @@ exports.routes = [
     { path: 'municipio/index', component: index_municipio_component_1.IndexMunicipioComponent },
     { path: 'municipio/new', component: new_municipio_component_1.NewMunicipioComponent },
     { path: 'municipio/show/:id', component: edit_municipio_component_1.MunicipioEditComponent },
+    { path: 'banco/index', component: index_banco_component_1.IndexBancoComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

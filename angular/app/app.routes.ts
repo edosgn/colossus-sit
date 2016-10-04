@@ -9,6 +9,7 @@ import { DepartamentoEditComponent } from "./components/departamento/edit.depart
 import { IndexMunicipioComponent } from "./components/municipio/index.municipio.component";
 import { NewMunicipioComponent } from "./components/municipio/new.municipio.component";
 import { MunicipioEditComponent } from "./components/municipio/edit.municipio.component";
+import { IndexBancoComponent } from "./components/banco/index.banco.component";
 
 
 
@@ -31,6 +32,7 @@ export const routes: RouterConfig = [
     { path: 'municipio/index', component: IndexMunicipioComponent},
     { path: 'municipio/new', component: NewMunicipioComponent},
     { path: 'municipio/show/:id', component: MunicipioEditComponent},
+    { path: 'banco/index', component: IndexBancoComponent},
 
 
 ];
