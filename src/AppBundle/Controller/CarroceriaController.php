@@ -24,13 +24,19 @@ class CarroceriaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $carrocerias = $em->getRepository('AppBundle:Carroceria')->findAll();
-
-        return $this->render('AppBundle:carroceria:index.html.twig', array(
-            'carrocerias' => $carrocerias,
-        ));
+        $carrocerias = $em->getRepository('AppBundle:Carroceria')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado carrocerias", 
+                    'data'=> $carrocerias,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,38 +47,99 @@ class CarroceriaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $carrocerium = new Carroceria();
-        $form = $this->createForm('AppBundle\Form\CarroceriaType', $carrocerium);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers"); 
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoMt = $params->codigoMt;
+                $claseId = $params->claseId;
+                $em = $this->getDoctrine()->getManager();
+                $carrocerias = $em->getRepository('AppBundle:Carroceria')->findBy(
+                    array('codigoMt' => $codigoMt)
+                );
+                if ($carrocerias==null) {
+                    $em = $this->getDoctrine()->getManager();
+                    $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($carrocerium);
-            $em->flush();
+                    if ($clase!=null) {
+                        $carroceria = new Carroceria();
+                        $carroceria->setNombre($nombre);
+                        $carroceria->setCodigoMt($codigoMt);
+                        $carroceria->setClase($clase);
+                        $carroceria->setEstado(true);
+                        $em->persist($carroceria);
+                        $em->flush();
 
-            return $this->redirectToRoute('carroceria_show', array('id' => $carrocerium->getId()));
-        }
-
-        return $this->render('AppBundle:carroceria:new.html.twig', array(
-            'carrocerium' => $carrocerium,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Carroceria creado con exito", 
+                        );
+                    }else{
+                        $responce = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "no se encuentra la clase", 
+                        ); 
+                    }
+                        
+                }else{
+                        $responce = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "Codigo de ministerio de transporte debe ser unico", 
+                        );
+                    }
+                }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Carroceria entity.
      *
-     * @Route("/{id}", name="carroceria_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="carroceria_show")
+     * @Method("POST")
      */
-    public function showAction(Carroceria $carrocerium)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($carrocerium);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:carroceria:show.html.twig', array(
-            'carrocerium' => $carrocerium,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Carroceria con nombre"." ".$carroceria->getNombre(), 
+                    'data'=> $carroceria,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

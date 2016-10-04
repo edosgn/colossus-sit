@@ -29,7 +29,6 @@ class BancoController extends Controller
         $bancos = $em->getRepository('AppBundle:Banco')->findBy(
             array('estado' => 1)
         );
-
         $responce = array(
                     'status' => 'success',
                     'code' => 200,
@@ -51,12 +50,9 @@ class BancoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck== true) {
-            
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             if (count($params)==0) {
                 $responce = array(
                     'status' => 'error',
@@ -106,7 +102,6 @@ class BancoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $banco = $em->getRepository('AppBundle:Banco')->find($id);
-
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
@@ -131,7 +126,6 @@ class BancoController extends Controller
      */
     public function editAction(Request $request)
     {
-        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -187,7 +181,6 @@ class BancoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
             $banco = $em->getRepository('AppBundle:Banco')->find($id);

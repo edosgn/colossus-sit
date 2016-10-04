@@ -110,7 +110,7 @@ class MunicipioController extends Controller
     /**
      * Finds and displays a Municipio entity.
      *
-     * @Route("/{id}", name="municipio_show")
+     * @Route("show/{id}", name="municipio_show")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)
@@ -142,7 +142,7 @@ class MunicipioController extends Controller
     /**
      * Displays a form to edit an existing Municipio entity.
      *
-     * @Route("/{id}/edit", name="municipio_edit")
+     * @Route("/edit", name="municipio_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, $id)
@@ -160,7 +160,7 @@ class MunicipioController extends Controller
             $departamentoId = $params->departamentoId;
 
             $em = $this->getDoctrine()->getManager();
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($id);
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->id);
             $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
 
 

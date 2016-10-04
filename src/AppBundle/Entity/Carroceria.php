@@ -35,9 +35,15 @@ class Carroceria
      */
     private $codigoMt;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="carrocerias") */
     private $clase; 
-
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="carroceria")
      */
@@ -165,5 +171,29 @@ class Carroceria
     public function getVehiculos()
     {
         return $this->vehiculos;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Carroceria
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
