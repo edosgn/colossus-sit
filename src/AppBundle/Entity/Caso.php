@@ -1,7 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
-
+ 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,6 +28,13 @@ class Caso
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
 
 
     /**
@@ -141,5 +148,29 @@ class Caso
     public function getTramitesEspecifico()
     {
         return $this->tramitesEspecifico;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Caso
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

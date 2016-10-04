@@ -24,13 +24,19 @@ class CasoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $casos = $em->getRepository('AppBundle:Caso')->findAll();
-
-        return $this->render('AppBundle:caso:index.html.twig', array(
-            'casos' => $casos,
-        ));
+        $casos = $em->getRepository('AppBundle:Caso')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado casos", 
+                    'data'=> $casos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,65 +47,141 @@ class CasoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $caso = new Caso();
-        $form = $this->createForm('AppBundle\Form\CasoType', $caso);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($caso);
-            $em->flush();
 
-            return $this->redirectToRoute('caso_show', array('id' => $caso->getId()));
-        }
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $tramiteId = $params->tramiteId;
+                        $em = $this->getDoctrine()->getManager();
+                        $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
 
-        return $this->render('AppBundle:caso:new.html.twig', array(
-            'caso' => $caso,
-            'form' => $form->createView(),
-        ));
+                        if ($tramite!=null) {
+                            $responce = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'msj' => "no existe el tramite", 
+                            );
+                        }else{
+                            $caso = new Caso();
+
+                            $caso->setNombre($nombre);
+                            $caso->setEstado(true);
+                            $caso->setTramite($tramite);
+
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($caso);
+                            $em->flush();
+
+                            $responce = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'msj' => "Caso creado con exito", 
+                            );
+                        }
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Caso entity.
      *
-     * @Route("/{id}", name="caso_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="caso_show")
+     * @Method("POST")
      */
-    public function showAction(Caso $caso)
+    public function showAction(Request  $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($caso);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:caso:show.html.twig', array(
-            'caso' => $caso,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $caso = $em->getRepository('AppBundle:Caso')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "caso encontrado", 
+                    'data'=> $caso,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Caso entity.
      *
-     * @Route("/{id}/edit", name="caso_edit")
+     * @Route("/edit", name="caso_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Caso $caso)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($caso);
-        $editForm = $this->createForm('AppBundle\Form\CasoType', $caso);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $bancoId = $params->id;
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($caso);
-            $em->flush();
+            $banco = $em->getRepository("AppBundle:Banco")->find($bancoId);
 
-            return $this->redirectToRoute('caso_edit', array('id' => $caso->getId()));
+            if ($banco!=null) {
+                $banco->setNombre($nombre);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($banco);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Banco actualizado con exito", 
+                        'data'=> $banco,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El banco no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:caso:edit.html.twig', array(
-            'caso' => $caso,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
