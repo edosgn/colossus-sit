@@ -69,6 +69,7 @@ class DefaultController extends Controller
         }else{
             return $helpers->json(array("status" => "error", "data" => "enviar json"));
         }
+        
 
     }
 }

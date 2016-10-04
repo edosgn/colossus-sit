@@ -110,7 +110,7 @@ class MunicipioController extends Controller
     /**
      * Finds and displays a Municipio entity.
      *
-     * @Route("show/{id}", name="municipio_show")
+     * @Route("/show/{id}", name="municipio_show")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)
@@ -145,7 +145,7 @@ class MunicipioController extends Controller
      * @Route("/edit", name="municipio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, $id)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);

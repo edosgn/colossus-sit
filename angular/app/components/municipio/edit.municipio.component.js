@@ -14,7 +14,7 @@ var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
 var departamento_service_1 = require('../../services/departamento/departamento.service');
 var municipio_service_1 = require("../../services/municipio/municipio.service");
-var Departamento_1 = require('../../model/departamento/Departamento');
+var Municipio_1 = require('../../model/municipio/Municipio');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var MunicipioEditComponent = (function () {
     function MunicipioEditComponent(_loginService, _DepartamentoService, _MunicipioService, _route, _router) {
@@ -26,13 +26,23 @@ var MunicipioEditComponent = (function () {
     }
     MunicipioEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.departamento = new Departamento_1.Departamento(null, "", null);
+        this.municipio = new Municipio_1.Municipio(null, null, "", null);
         var token = this._loginService.getToken();
+        this._DepartamentoService.getDepartamento().subscribe(function (response) {
+            _this.departamentos = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
         });
         this._MunicipioService.showMunicipio(token, this.id).subscribe(function (response) {
-            _this.departamento = response.data;
+            var data = response.data;
+            _this.municipio = new Municipio_1.Municipio(data.id, data.departamento.id, data.nombre, data.codigoDian);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -45,7 +55,7 @@ var MunicipioEditComponent = (function () {
         var _this = this;
         var token = this._loginService.getToken();
         console.log(token);
-        this._DepartamentoService.editDepartamento(this.departamento, token).subscribe(function (response) {
+        this._MunicipioService.editMunicipio(this.municipio, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
                 _this.errorMessage = error;

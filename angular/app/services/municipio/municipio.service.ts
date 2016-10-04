@@ -16,9 +16,9 @@ export class MunicipioService {
 		return this._http.get(this.url+"/").map(res => res.json());
 	}
 
-	register(departamento,token){
+	register(municipio,token){
 		
-		let json = JSON.stringify(departamento);
+		let json = JSON.stringify(municipio);
 		let params = "json="+json+"&authorization="+token;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
 		return this._http.post(this.url+"/new", params, {headers: headers})
@@ -42,10 +42,11 @@ export class MunicipioService {
 
 	}
 
-	editDepartamento(departamento,token){
+	editMunicipio(municipio,token){
 
-		let json = JSON.stringify(departamento);
+		let json = JSON.stringify(municipio);
 		let params = "json="+json+"&authorization="+token;
+		console.log(params);
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
  			return this._http.post(this.url+"/edit", params, {headers: headers})
 							  .map(res => res.json());

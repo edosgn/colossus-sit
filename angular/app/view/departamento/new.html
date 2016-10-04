@@ -35,9 +35,9 @@
 					<br>
 				</p>
 
-				<input *ngIf="!newDepartamento.valid" type="submit" value="LLena los Campos" class="btn btn-danger col-md-12" disabled/>
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				[disabled]="!newDepartamento.valid"/>
 
-			    <input *ngIf="newDepartamento.valid" type="submit" value="Reguistrate" class="btn btn-success col-md-12" />
 
 		  </div>
 		</div>

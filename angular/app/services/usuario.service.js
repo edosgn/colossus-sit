@@ -28,7 +28,7 @@ var UsuarioService = (function () {
     UsuarioService.prototype.showUsuario = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        return this._http.post(this.url + "/" + id, params, { headers: headers })
+        return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
     UsuarioService.prototype.editUsuario = function (usuario, token) {

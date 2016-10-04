@@ -20,7 +20,6 @@ export class NewMunicipioComponent {
 	public municipio: Municipio;
 	public errorMessage;
 	public respuesta;
-	public arraydepartamentos;
 	public departamentos;
 
 	constructor(
