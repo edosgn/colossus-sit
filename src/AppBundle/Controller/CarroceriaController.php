@@ -145,48 +145,93 @@ class CarroceriaController extends Controller
     /**
      * Displays a form to edit an existing Carroceria entity.
      *
-     * @Route("/{id}/edit", name="carroceria_edit")
+     * @Route("/edit", name="carroceria_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Carroceria $carrocerium)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($carrocerium);
-        $editForm = $this->createForm('AppBundle\Form\CarroceriaType', $carrocerium);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
+
+            $claseId = $params->claseId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($carrocerium);
-            $em->flush();
+            $carroceria = $em->getRepository("AppBundle:Carroceria")->find($params->id);
+            $clase = $em->getRepository("AppBundle:Clase")->find($claseId);
 
-            return $this->redirectToRoute('carroceria_edit', array('id' => $carrocerium->getId()));
+            if ($carroceria!=null) {
+                        
+                $carroceria->setNombre($nombre);
+                $carroceria->setCodigoMt($codigoMt);
+                $carroceria->setClase($clase);
+                $carroceria->setEstado(true);
+                $em->persist($carroceria);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Carroceria editada con exito", 
+                );
+                        
+                        
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "carroceria no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
-        return $this->render('AppBundle:carroceria:edit.html.twig', array(
-            'carrocerium' => $carrocerium,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);;
     }
 
     /**
      * Deletes a Carroceria entity.
      *
-     * @Route("/{id}", name="carroceria_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="carroceria_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Carroceria $carrocerium)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($carrocerium);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($carrocerium);
-            $em->flush();
-        }
+            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($id);
 
-        return $this->redirectToRoute('carroceria_index');
+            $carroceria->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($carroceria);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Carroceria eliminada con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
