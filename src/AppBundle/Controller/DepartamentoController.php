@@ -33,13 +33,14 @@ class DepartamentoController extends Controller
             array('estado' => 1)
         );
 
-         $responce = array(
+        $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Departamento con nombre"." ".$departamento->getNombre(), 
-                    'data'=> $departamentos,
+                    'msj' => "lista de departamentos",
+                    'departamentos' => $departamentos, 
+
             );
-         
+
         return $helpers->json($responce);
     }
 
@@ -74,6 +75,7 @@ class DepartamentoController extends Controller
 
                 $departamento->setNombre($nombre);
                 $departamento->setCodigoDian($codigoDian);
+                $departamento->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($departamento);

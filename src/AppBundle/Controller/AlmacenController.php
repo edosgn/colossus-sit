@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\Almacen;
+use AppBundle\Entity\Almacen; 
 use AppBundle\Form\AlmacenType;
 
 /**
@@ -29,7 +29,15 @@ class AlmacenController extends Controller
         $almacenes = $em->getRepository('AppBundle:Almacen')->findBy(
             array('estado' => 1)
         );
-        return $helpers->json($almacenes);
+
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "lista de almacenes",
+                    'almacenes' => $almacenes, 
+        );
+        return $helpers->json($responce);
+        
     }
 
     /**
@@ -40,23 +48,65 @@ class AlmacenController extends Controller
      */
     public function newAction(Request $request)
     {
-        $almacen = new Almacen();
-        $form = $this->createForm('AppBundle\Form\AlmacenType', $almacen);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($almacen);
-            $em->flush();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-            return $this->redirectToRoute('almacen_show', array('id' => $almacen->getId()));
-        }
+        if ($authCheck== true) {
+            
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        return $this->render('AppBundle:almacen:new.html.twig', array(
-            'almacen' => $almacen,
-            'form' => $form->createView(),
-        ));
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $rangoInicio = $params->rangoInicio;
+                $rangoFin = $params->rangoFin;
+                $lote = $params->lote;
+                $disponibles = $params->disponibles;
+                $estado = true;
+                $em = $this->getDoctrine()->getManager();
+                $servicio = $em->getRepository('AppBundle:Servicio')->find($params->servicioId);
+                $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($params->organismoTransitoId);
+                $consumible = $em->getRepository('AppBundle:Consumible')->find($params->consumibleId);
+                $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
+               
+                $almacen = new Almacen();
+                $almacen->setRangoInicio($rangoInicio);
+                $almacen->setRangoFin($rangoFin);
+                $almacen->setLote($lote);
+                $almacen->setDisponibles($disponibles);
+                $almacen->setEstado($estado);
+                $almacen->setServicio($servicio);
+                $almacen->setOrganismoTransito($organismoTransito);
+                $almacen->setConsumible($consumible);
+                $almacen->setClase($clase);
+
+                $em->persist($almacen);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Almacen creado con exito", 
+                );
+            }
+
+         }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+            } 
+        return $helpers->json($responce);
     }
+    
 
     /**
      * Finds and displays a Almacen entity.

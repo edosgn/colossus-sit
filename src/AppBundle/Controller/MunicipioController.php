@@ -29,7 +29,14 @@ class MunicipioController extends Controller
         $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
             array('estado' => 1)
         );
-        return $helpers->json($municipios);
+
+       $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "lista de municipios",
+                    'municipios' => $municipios, 
+        );
+        return $helpers->json($responce);       
     }
 
     /**
@@ -68,6 +75,7 @@ class MunicipioController extends Controller
                 $municipio->setNombre($nombre);
                 $municipio->setCodigoDian($codigoDian);
                 $municipio->setDepartamento($departamento);
+                $municipio->setEstado(true);
 
                 $em->persist($municipio);
                 $em->flush();
