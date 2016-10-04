@@ -148,29 +148,31 @@ class CasoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $bancoId = $params->id;
             $nombre = $params->nombre;
-
+            $tramiteId = $params->tramiteId;
             $em = $this->getDoctrine()->getManager();
-            $banco = $em->getRepository("AppBundle:Banco")->find($bancoId);
+            $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+            $caso = $em->getRepository("AppBundle:Caso")->find($params->id);
 
-            if ($banco!=null) {
-                $banco->setNombre($nombre);
+            if ($caso!=null) {
+                $caso->setNombre($nombre);
+                $caso->setEstado(true);
+                $caso->setTramite($tramite);
+
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($banco);
+                $em->persist($caso);
                 $em->flush();
 
-                 $responce = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Banco actualizado con exito", 
-                        'data'=> $banco,
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Caso editado con exito", 
                 );
             }else{
                 $responce = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El banco no se encuentra en la base de datos", 
+                    'msj' => "El caso no se encuentra en la base de datos", 
                 );
             }
         }else{
@@ -187,21 +189,35 @@ class CasoController extends Controller
     /**
      * Deletes a Caso entity.
      *
-     * @Route("/{id}", name="caso_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="caso_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Caso $caso)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($caso);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($caso);
-            $em->flush();
-        }
+            $caso = $em->getRepository('AppBundle:Caso')->find($id);
 
-        return $this->redirectToRoute('caso_index');
+            $caso->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($caso);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "caso eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

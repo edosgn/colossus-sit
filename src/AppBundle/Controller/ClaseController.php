@@ -24,13 +24,19 @@ class ClaseController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $clases = $em->getRepository('AppBundle:Clase')->findAll();
-
-        return $this->render('AppBundle:clase:index.html.twig', array(
-            'clases' => $clases,
-        ));
+        $clase = $em->getRepository('AppBundle:Clase')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado clase", 
+                    'data'=> $clase,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,38 +47,88 @@ class ClaseController extends Controller
      */
     public function newAction(Request $request)
     {
-        $clase = new Clase();
-        $form = $this->createForm('AppBundle\Form\ClaseType', $clase);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($clase);
-            $em->flush();
 
-            return $this->redirectToRoute('clase_show', array('id' => $clase->getId()));
-        }
-
-        return $this->render('AppBundle:clase:new.html.twig', array(
-            'clase' => $clase,
-            'form' => $form->createView(),
-        ));
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoMt = $params->codigoMt;
+                $em = $this->getDoctrine()->getManager();
+                $clase = $em->getRepository('AppBundle:Clase')->findBy(
+                    array('codigoMt' => $codigoMt)
+                );
+                    if ($clase==null) {
+                        $clase = new Clase();
+                        $clase->setNombre($nombre);
+                        $clase->setEstado(true);
+                        $clase->setCodigoMt($codigoMt);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($clase);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Clase creada con exito", 
+                        );
+                    }else{
+                         $responce = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "Codigo de ministerio de transporte debe ser unico",
+                        ); 
+                    }
+                }
+                
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Clase entity.
      *
-     * @Route("/{id}", name="clase_show")
+     * @Route("show/{id}", name="clase_show")
      * @Method("GET")
      */
-    public function showAction(Clase $clase)
+    public function showAction(Request  $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($clase);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:clase:show.html.twig', array(
-            'clase' => $clase,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $clase = $em->getRepository('AppBundle:Clase')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "clase encontrado", 
+                    'data'=> $clase,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
