@@ -1,6 +1,6 @@
 // Importar el núcleo de Angular
-import {DepartamentoService} from "../../services/departamento/departamento.service";
 import {LoginService} from "../../services/login.service";
+import {MunicipioService} from "../../services/municipio/municipio.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
  
@@ -8,41 +8,33 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/departamento/index.html',
+    templateUrl: 'app/view/municipio/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,DepartamentoService]
+    providers: [LoginService,MunicipioService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class IndexDepartamentoComponent implements OnInit{ 
+export class IndexMunicipioComponent implements OnInit{ 
 	public errorMessage;
 	public id;
 	public respuesta;
-	public departamentos;
+	public municipios;
 	
 
 	constructor(
-		private _DepartamentoService: DepartamentoService,
+		private _MunicipioService: MunicipioService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
 		){}
 
-
 	ngOnInit(){	
 		let token = this._loginService.getToken();
 		
-		if(token) {
-	     	console.log('logueado');
-	     }else{
-	     	this._router.navigate(["/login"]);
-	     }
-
-		this._DepartamentoService.getDepartamento().subscribe(
+		this._MunicipioService.getMunicipio().subscribe(
 				response => {
-					this.departamentos = response.data;
-					console.log(this.departamentos[0].nombre);
+					this.municipios = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -56,9 +48,9 @@ export class IndexDepartamentoComponent implements OnInit{
 	  
 	}
 
-	deleteDepartamento(id:string){
+	deleteMunicipio(id:string){
 		let token = this._loginService.getToken();
-		this._DepartamentoService.deleteDepartamento(token,id).subscribe(
+		this._MunicipioService.deleteMunicipio(token,id).subscribe(
 				response => {
 					    this.respuesta= response;
 					    console.log(this.respuesta); 

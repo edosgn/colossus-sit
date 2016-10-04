@@ -1,44 +1,42 @@
 // Importar el núcleo de Angular
-import {DepartamentoService} from "../../services/departamento/departamento.service";
-import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
+import {LoginService} from '../../services/login.service';
+import {MunicipioService} from '../../services/municipio/municipio.service';
+import {Municipio} from '../../model/municipio/Municipio';
+import {DepartamentoService} from '../../services/departamento/departamento.service';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'default',
-    templateUrl: 'app/view/departamento/index.html',
+    selector: 'register',
+    templateUrl: 'app/view/municipio/new.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,DepartamentoService]
+    providers: [LoginService,MunicipioService,DepartamentoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class IndexDepartamentoComponent implements OnInit{ 
+export class NewMunicipioComponent {
+	public municipio: Municipio;
 	public errorMessage;
-	public id;
 	public respuesta;
+	public arraydepartamentos;
 	public departamentos;
-	
 
 	constructor(
-		private _DepartamentoService: DepartamentoService,
+		private _DepartamentoService:DepartamentoService,
+		private _MunicipioService:MunicipioService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-		){}
+	){}
 
-
-	ngOnInit(){	
-		let token = this._loginService.getToken();
+	ngOnInit(){
 		
-		if(token) {
-	     	console.log('logueado');
-	     }else{
-	     	this._router.navigate(["/login"]);
-	     }
 
+		this.municipio = new Municipio(null,null, "", null);
+		let token = this._loginService.getToken();
 		this._DepartamentoService.getDepartamento().subscribe(
 				response => {
 					this.departamentos = response.data;
@@ -53,18 +51,18 @@ export class IndexDepartamentoComponent implements OnInit{
 					}
 				}
 			);
-	  
+
 	}
 
-	deleteDepartamento(id:string){
+	onSubmit(){
 		let token = this._loginService.getToken();
-		this._DepartamentoService.deleteDepartamento(token,id).subscribe(
-				response => {
-					    this.respuesta= response;
-					    console.log(this.respuesta); 
-					    this.ngOnInit();
-					}, 
-				error => {
+
+		this._MunicipioService.register(this.municipio,token).subscribe(
+			response => {
+				this.respuesta = response;
+				console.log(this.respuesta);
+
+			error => {
 					this.errorMessage = <any>error;
 
 					if(this.errorMessage != null){
@@ -72,8 +70,9 @@ export class IndexDepartamentoComponent implements OnInit{
 						alert("Error en la petición");
 					}
 				}
-			);
+
+		});
 	}
 
-
-}
+	
+ }

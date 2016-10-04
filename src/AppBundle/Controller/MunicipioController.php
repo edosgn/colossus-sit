@@ -34,7 +34,7 @@ class MunicipioController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "lista de municipios",
-                    'municipios' => $municipios, 
+                    'data' => $municipios, 
         );
         return $helpers->json($responce);       
     }

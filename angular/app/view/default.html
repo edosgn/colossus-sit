@@ -9,6 +9,14 @@
     <br>
     <br>
         <table class="table  table-condensed table-responsive table-bordered ">
+        <div class="identity-data" *ngIf="respuesta">
+            <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+                {{respuesta.msj}}
+            </div>
+            <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+                {{respuesta.msj}}
+            </div>
+        </div>
             <thead>
                 <tr>
                     <th>Id</th>

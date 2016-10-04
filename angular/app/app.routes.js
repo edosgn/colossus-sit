@@ -7,6 +7,9 @@ var register_component_1 = require("./components/register.component");
 var index_departamento_component_1 = require("./components/departamento/index.departamento.component");
 var new_departamento_component_1 = require("./components/departamento/new.departamento.component");
 var edit_departamento_component_1 = require("./components/departamento/edit.departamento.component");
+var index_municipio_component_1 = require("./components/municipio/index.municipio.component");
+var new_municipio_component_1 = require("./components/municipio/new.municipio.component");
+var edit_municipio_component_1 = require("./components/municipio/edit.municipio.component");
 exports.routes = [
     {
         path: '',
@@ -20,7 +23,10 @@ exports.routes = [
     { path: 'usuario-edit/:id', component: usuario_edit_component_1.UsuarioEditComponent },
     { path: 'departamento/index', component: index_departamento_component_1.IndexDepartamentoComponent },
     { path: 'departamento/new', component: new_departamento_component_1.NewDepartamentoComponent },
-    { path: 'departamento/show/:id', component: edit_departamento_component_1.DepartamentoEditComponent }
+    { path: 'departamento/show/:id', component: edit_departamento_component_1.DepartamentoEditComponent },
+    { path: 'municipio/index', component: index_municipio_component_1.IndexMunicipioComponent },
+    { path: 'municipio/new', component: new_municipio_component_1.NewMunicipioComponent },
+    { path: 'municipio/show/:id', component: edit_municipio_component_1.MunicipioEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
