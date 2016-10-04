@@ -68,23 +68,33 @@ class MunicipioController extends Controller
                 $departamentoId = $params->departamentoId;
 
                 $em = $this->getDoctrine()->getManager();
-                $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
-               
-                $municipio = new Municipio();
-
-                $municipio->setNombre($nombre);
-                $municipio->setCodigoDian($codigoDian);
-                $municipio->setDepartamento($departamento);
-                $municipio->setEstado(true);
-
-                $em->persist($municipio);
-                $em->flush();
-
-                $responce = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Municipio creado con exito", 
+                $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
+                    array('codigoDian' => $codigoDian)
                 );
+                if ($municipios==null) {
+                    $em = $this->getDoctrine()->getManager();
+                    $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
+                    $municipio = new Municipio();
+                    $municipio->setNombre($nombre);
+                    $municipio->setCodigoDian($codigoDian);
+                    $municipio->setDepartamento($departamento);
+                    $municipio->setEstado(true);
+
+                    $em->persist($municipio);
+                    $em->flush();
+
+                    $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Municipio creado con exito", 
+                    );
+                }else{
+                    $responce = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "El codigo Dian ya esta registrado", 
+                    ); 
+                }
             }
 
          }else{

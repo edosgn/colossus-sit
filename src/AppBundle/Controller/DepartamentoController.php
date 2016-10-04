@@ -69,30 +69,43 @@ class DepartamentoController extends Controller
             }else{
                 $nombre = $params->nombre;
                 $codigoDian = $params->codigoDian;
-
-                $departamento = new Departamento();
-
-                $departamento->setNombre($nombre);
-                $departamento->setCodigoDian($codigoDian);
-                $departamento->setEstado(true);
-
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($departamento);
-                $em->flush();
-
-                $responce = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Departamento creado con exito", 
+                $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
+                    array('codigoDian' => $codigoDian)
                 );
-            }
 
-         }else{
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                    if ($departamentos==null) {
+                        $departamento = new Departamento();
+
+                        $departamento->setNombre($nombre);
+                        $departamento->setCodigoDian($codigoDian);
+                        $departamento->setEstado(true);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($departamento);
+                        $em->flush();
+
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Departamento creado con exito", 
+                        );
+                        }else{
+
+                            $responce = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "El codigo Dian ya esta registrado", 
+                        );
+                    }
+                }
+
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
             } 
         return $helpers->json($responce);
     }

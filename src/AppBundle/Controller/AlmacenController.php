@@ -46,6 +46,7 @@ class AlmacenController extends Controller
      * @Route("/new", name="almacen_new")
      * @Method({"GET", "POST"})
      */
+    //{"rangoInicio":"1","rangoFin":"20","lote":"5","disponibles":"1,2,3","servicioId":"1","organismoTransitoId":"1","consumibleId":"1","claseId":"1"}
     public function newAction(Request $request)
     {
 
