@@ -24,11 +24,11 @@
                     <td >{{departamento.codigoDian}}</td>
 
                     <td>
-                    <button class="btn btn-danger" value="Editar" (click)="deleteUsuario(departamento.id)">
+                    <button class="btn btn-danger" value="Editar" (click)="deleteDepartamento(departamento.id)">
                         eliminar
                     </button>
                         
-                    <a [routerLink]="['/usuario-edit',departamento.id]" class="btn btn-info">
+                    <a [routerLink]="['/departamento/show',departamento.id]" class="btn btn-info">
                          Editar
                     </a>
 

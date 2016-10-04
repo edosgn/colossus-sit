@@ -41,6 +41,21 @@ var IndexDepartamentoComponent = (function () {
             }
         });
     };
+    IndexDepartamentoComponent.prototype.deleteDepartamento = function (id) {
+        var _this = this;
+        var token = this._loginService.getToken();
+        this._DepartamentoService.deleteDepartamento(token, id).subscribe(function (response) {
+            var respuesta = response;
+            console.log(respuesta);
+            _this.ngOnInit();
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+    };
     IndexDepartamentoComponent = __decorate([
         core_1.Component({
             selector: 'default',

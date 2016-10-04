@@ -56,5 +56,24 @@ export class IndexDepartamentoComponent implements OnInit{
 	  
 	}
 
+	deleteDepartamento(id:string){
+		let token = this._loginService.getToken();
+		this._DepartamentoService.deleteDepartamento(token,id).subscribe(
+				response => {
+					    let respuesta= response;
+					    console.log(respuesta); 
+					    this.ngOnInit();
+					}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+	}
+
 
 }

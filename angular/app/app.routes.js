@@ -6,6 +6,7 @@ var usuario_edit_component_1 = require("./components/usuario.edit.component");
 var register_component_1 = require("./components/register.component");
 var index_departamento_component_1 = require("./components/departamento/index.departamento.component");
 var new_departamento_component_1 = require("./components/departamento/new.departamento.component");
+var edit_departamento_component_1 = require("./components/departamento/edit.departamento.component");
 exports.routes = [
     {
         path: '',
@@ -18,7 +19,8 @@ exports.routes = [
     { path: 'registrar', component: register_component_1.RegisterComponent },
     { path: 'usuario-edit/:id', component: usuario_edit_component_1.UsuarioEditComponent },
     { path: 'departamento/index', component: index_departamento_component_1.IndexDepartamentoComponent },
-    { path: 'departamento/new', component: new_departamento_component_1.NewDepartamentoComponent }
+    { path: 'departamento/new', component: new_departamento_component_1.NewDepartamentoComponent },
+    { path: 'departamento/show/:id', component: edit_departamento_component_1.DepartamentoEditComponent }
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

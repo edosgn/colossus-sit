@@ -8,4 +8,4 @@ var Departamento = (function () {
     return Departamento;
 }());
 exports.Departamento = Departamento;
-//# sourceMappingURL=departamento.js.map
+//# sourceMappingURL=Departamento.js.map
