@@ -179,8 +179,8 @@ class BancoController extends Controller
     /**
      * Deletes a Banco entity.
      *
-     * @Route("/{id}", name="banco_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="banco_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request,$id)
     {
@@ -193,6 +193,9 @@ class BancoController extends Controller
             $banco = $em->getRepository('AppBundle:Banco')->find($id);
 
             $banco->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($banco);
+                $em->flush();
             $responce = array(
                     'status' => 'success',
                         'code' => 200,
@@ -205,10 +208,7 @@ class BancoController extends Controller
                     'msj' => "Autorizacion no valida", 
                 );
         }
-            
-
         return $helpers->json($responce);
-        }
     }
 
     /**
