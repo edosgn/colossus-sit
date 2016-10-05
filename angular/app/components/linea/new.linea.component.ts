@@ -1,30 +1,30 @@
 // Importar el núcleo de Angular
+import {LineaService} from "../../services/linea/linea.service";
+import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {LoginService} from '../../services/login.service';
-import {MunicipioService} from '../../services/municipio/municipio.service';
-import {Municipio} from '../../model/municipio/Municipio';
-import {DepartamentoService} from '../../services/departamento/departamento.service';
+import {MarcaService} from '../../services/marca/marca.service';
+import {Linea} from '../../model/linea/linea';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'register',
-    templateUrl: 'app/view/municipio/new.html',
+    templateUrl: 'app/view/linea/new.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,MunicipioService,DepartamentoService]
+    providers: [LoginService,LineaService,MarcaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class NewMunicipioComponent {
-	public municipio: Municipio;
+export class NewLineaComponent {
+	public linea: Linea;
 	public errorMessage;
 	public respuesta;
-	public departamentos;
+	public marcas;
 
 	constructor(
-		private _DepartamentoService:DepartamentoService,
-		private _MunicipioService:MunicipioService,
+		private _MarcaService:MarcaService,
+		private _LineaService:LineaService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
@@ -32,13 +32,11 @@ export class NewMunicipioComponent {
 	){}
 
 	ngOnInit(){
-		
+		this.linea = new Linea(null,null,"",null);
 
-		this.municipio = new Municipio(null,null, "", null);
-		this._DepartamentoService.getDepartamento().subscribe(
+		this._MarcaService.getMarca().subscribe(
 				response => {
-					this.departamentos = response.data;
-					console.log(this.departamentos[0].nombre);
+					this.marcas = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -53,9 +51,9 @@ export class NewMunicipioComponent {
 	}
 
 	onSubmit(){
+		console.log(this.linea);
 		let token = this._loginService.getToken();
-
-		this._MunicipioService.register(this.municipio,token).subscribe(
+		this._LineaService.register(this.linea,token).subscribe(
 			response => {
 				this.respuesta = response;
 				console.log(this.respuesta);

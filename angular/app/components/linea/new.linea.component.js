@@ -9,27 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
+var linea_service_1 = require("../../services/linea/linea.service");
+var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
-var login_service_1 = require('../../services/login.service');
-var municipio_service_1 = require('../../services/municipio/municipio.service');
-var Municipio_1 = require('../../model/municipio/Municipio');
-var departamento_service_1 = require('../../services/departamento/departamento.service');
+var marca_service_1 = require('../../services/marca/marca.service');
+var linea_1 = require('../../model/linea/linea');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var NewMunicipioComponent = (function () {
-    function NewMunicipioComponent(_DepartamentoService, _MunicipioService, _loginService, _route, _router) {
-        this._DepartamentoService = _DepartamentoService;
-        this._MunicipioService = _MunicipioService;
+var NewLineaComponent = (function () {
+    function NewLineaComponent(_MarcaService, _LineaService, _loginService, _route, _router) {
+        this._MarcaService = _MarcaService;
+        this._LineaService = _LineaService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    NewMunicipioComponent.prototype.ngOnInit = function () {
+    NewLineaComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.municipio = new Municipio_1.Municipio(null, null, "", null);
-        this._DepartamentoService.getDepartamento().subscribe(function (response) {
-            _this.departamentos = response.data;
-            console.log(_this.departamentos[0].nombre);
+        this.linea = new linea_1.Linea(null, null, "", null);
+        this._MarcaService.getMarca().subscribe(function (response) {
+            _this.marcas = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -38,10 +37,11 @@ var NewMunicipioComponent = (function () {
             }
         });
     };
-    NewMunicipioComponent.prototype.onSubmit = function () {
+    NewLineaComponent.prototype.onSubmit = function () {
         var _this = this;
+        console.log(this.linea);
         var token = this._loginService.getToken();
-        this._MunicipioService.register(this.municipio, token).subscribe(function (response) {
+        this._LineaService.register(this.linea, token).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             (function (error) {
@@ -53,16 +53,16 @@ var NewMunicipioComponent = (function () {
             });
         });
     };
-    NewMunicipioComponent = __decorate([
+    NewLineaComponent = __decorate([
         core_1.Component({
             selector: 'register',
-            templateUrl: 'app/view/municipio/new.html',
+            templateUrl: 'app/view/linea/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, municipio_service_1.MunicipioService, departamento_service_1.DepartamentoService]
+            providers: [login_service_1.LoginService, linea_service_1.LineaService, marca_service_1.MarcaService]
         }), 
-        __metadata('design:paramtypes', [departamento_service_1.DepartamentoService, municipio_service_1.MunicipioService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], NewMunicipioComponent);
-    return NewMunicipioComponent;
+        __metadata('design:paramtypes', [marca_service_1.MarcaService, linea_service_1.LineaService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], NewLineaComponent);
+    return NewLineaComponent;
 }());
-exports.NewMunicipioComponent = NewMunicipioComponent;
-//# sourceMappingURL=new.municipio.component.js.map
+exports.NewLineaComponent = NewLineaComponent;
+//# sourceMappingURL=new.linea.component.js.map

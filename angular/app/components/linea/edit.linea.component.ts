@@ -1,44 +1,44 @@
 // Importar el núcleo de Angular
+import {LineaService} from "../../services/linea/linea.service";
+import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
+import {MarcaService} from '../../services/marca/marca.service';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {LoginService} from '../../services/login.service';
-import {DepartamentoService} from '../../services/departamento/departamento.service';
-import {MunicipioService} from "../../services/municipio/municipio.service";
-import {Municipio} from '../../model/municipio/Municipio';
+import {Linea} from '../../model/linea/linea';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/municipio/edit.html',
+    templateUrl: 'app/view/linea/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService ,DepartamentoService,MunicipioService]
+    providers: [LoginService ,LineaService,MarcaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class MunicipioEditComponent implements OnInit{ 
+export class LineaEditComponent implements OnInit{ 
 	public errorMessage;
-	public municipio : Municipio;
+	public linea : Linea;
 	public id;
 	public respuesta;
-	public departamentos;
+	public marcas;
 
 	constructor(
+		private _MarcaService: MarcaService,
 		private _loginService: LoginService,
-		private _DepartamentoService: DepartamentoService,
-		private _MunicipioService: MunicipioService,
+		private _LineaService: LineaService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
 		){}
 
 	ngOnInit(){	
-		
-		this.municipio = new Municipio(null,null, "", null);
+
+		this.linea = new Linea(null,null, "", null);
 		let token = this._loginService.getToken();
-		this._DepartamentoService.getDepartamento().subscribe(
+		this._MarcaService.getMarca().subscribe(
 				response => {
-					this.departamentos = response.data;
+					this.marcas = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -49,16 +49,16 @@ export class MunicipioEditComponent implements OnInit{
 					}
 				}
 			);
-
+		
 			this._route.params.subscribe(params =>{
 				this.id = +params["id"];
 			});
 
-			this._MunicipioService.showMunicipio(token,this.id).subscribe(
+			this._LineaService.showLinea(token,this.id).subscribe(
 
 						response => {
 							let data = response.data;
-							this.municipio = new Municipio(data.id,data.departamento.id, data.nombre, data.codigoDian);
+							this.linea = new Linea(data.id,data.marca.id, data.nombre, data.codigoMt);
 						},
 						error => {
 								this.errorMessage = <any>error;
@@ -75,9 +75,8 @@ export class MunicipioEditComponent implements OnInit{
 
 
 	onSubmit(){
-
 		let token = this._loginService.getToken();
-		this._MunicipioService.editMunicipio(this.municipio,token).subscribe(
+		this._LineaService.editLinea(this.linea,token).subscribe(
 			response => {
 				this.respuesta = response;
 			error => {

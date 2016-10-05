@@ -1,0 +1,53 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+	</div>
+	<br>
+
+	<form #newLinea="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Linea</div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+
+				<p class="col-md-6">
+					<label >Nombre:</label>
+					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="linea.nombre" ngControl="nombre"  required />
+					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorios</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Codigo Mt:</label>
+					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="linea.codigoMt" ngControl="codigo"  required />
+					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-12"> 
+					<label>Marca:</label>
+					<select class="form-control" #marcaId="ngForm" ngControl="marcaId" [(ngModel)]="linea.marcaId" required>
+					  <option *ngFor="#marca of marcas" [value]='marca.id' >{{marca.nombre}}</option>
+					</select>
+					<span *ngIf = "!marcaId.valid && marcaId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				[disabled]="!newLinea.valid"/>
+
+			    
+
+		  </div>
+		</div>
+	</form>
+
+</div>

@@ -19,6 +19,12 @@ var edit_color_component_1 = require("./components/color/edit.color.component");
 var index_clase_component_1 = require("./components/clase/index.clase.component");
 var edit_clase_component_1 = require("./components/clase/edit.clase.component");
 var new_clase_component_1 = require("./components/clase/new.clase.component");
+var index_combustible_component_1 = require("./components/combustible/index.combustible.component");
+var new_combustible_component_1 = require("./components/combustible/new.combustible.component");
+var edit_combustible_component_1 = require("./components/combustible/edit.combustible.component");
+var index_linea_component_1 = require("./components/linea/index.linea.component");
+var new_linea_component_1 = require("./components/linea/new.linea.component");
+var edit_linea_component_1 = require("./components/linea/edit.linea.component");
 exports.routes = [
     {
         path: '',
@@ -45,6 +51,12 @@ exports.routes = [
     { path: 'clase/index', component: index_clase_component_1.IndexClaseComponent },
     { path: 'clase/new', component: new_clase_component_1.NewClaseComponent },
     { path: 'clase/show/:id', component: edit_clase_component_1.ClaseEditComponent },
+    { path: 'combustible/index', component: index_combustible_component_1.IndexCombustibleComponent },
+    { path: 'combustible/new', component: new_combustible_component_1.NewCombustibleComponent },
+    { path: 'combustible/show/:id', component: edit_combustible_component_1.CombustibleEditComponent },
+    { path: 'linea/index', component: index_linea_component_1.IndexLineaComponent },
+    { path: 'linea/new', component: new_linea_component_1.NewLineaComponent },
+    { path: 'linea/show/:id', component: edit_linea_component_1.LineaEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

@@ -18,6 +18,13 @@ import { ColorEditComponent } from "./components/color/edit.color.component";
 import { IndexClaseComponent } from "./components/clase/index.clase.component";
 import { ClaseEditComponent } from "./components/clase/edit.clase.component";
 import { NewClaseComponent } from "./components/clase/new.clase.component";
+import { IndexCombustibleComponent } from "./components/combustible/index.combustible.component";
+import { NewCombustibleComponent } from "./components/combustible/new.combustible.component";
+import { CombustibleEditComponent } from "./components/combustible/edit.combustible.component";
+
+import { IndexLineaComponent } from "./components/linea/index.linea.component";
+import { NewLineaComponent } from "./components/linea/new.linea.component";
+import { LineaEditComponent } from "./components/linea/edit.linea.component";
 
 
 
@@ -50,6 +57,13 @@ export const routes: RouterConfig = [
     { path: 'clase/index', component: IndexClaseComponent},
     { path: 'clase/new', component: NewClaseComponent},
     { path: 'clase/show/:id', component: ClaseEditComponent},
+    { path: 'combustible/index', component: IndexCombustibleComponent},
+    { path: 'combustible/new', component: NewCombustibleComponent},
+    { path: 'combustible/show/:id', component: CombustibleEditComponent},
+
+    { path: 'linea/index', component: IndexLineaComponent},
+    { path: 'linea/new', component: NewLineaComponent},
+    { path: 'linea/show/:id', component: LineaEditComponent},
 
 ];
 
