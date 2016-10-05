@@ -15,22 +15,28 @@ use AppBundle\Form\MarcaType;
  * @Route("/marca")
  */
 class MarcaController extends Controller
-{
+{ 
     /**
-     * Lists all Marca entities.
+     * Lists all Marca entities. 
      *
      * @Route("/", name="marca_index")
      * @Method("GET")
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $marcas = $em->getRepository('AppBundle:Marca')->findAll();
-
-        return $this->render('AppBundle:marca:index.html.twig', array(
-            'marcas' => $marcas,
-        ));
+        $marcas = $em->getRepository('AppBundle:Marca')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado marcas", 
+                    'data'=> $marcas,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,175 @@ class MarcaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $marca = new Marca();
-        $form = $this->createForm('AppBundle\Form\MarcaType', $marca);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($marca);
-            $em->flush();
 
-            return $this->redirectToRoute('marca_show', array('id' => $marca->getId()));
-        }
-
-        return $this->render('AppBundle:marca:new.html.twig', array(
-            'marca' => $marca,
-            'form' => $form->createView(),
-        ));
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoMt = $params->codigoMt;
+                $em = $this->getDoctrine()->getManager();
+                $marca = $em->getRepository('AppBundle:Marca')->findBy(
+                    array('codigoMt' => $codigoMt)
+                );
+                    if ($marca==null) {
+                        $marca = new Marca();
+                        $marca->setNombre($nombre);
+                        $marca->setEstado(true);
+                        $marca->setCodigoMt($codigoMt);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($marca);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "marca creada con exito", 
+                        );
+                    }else{
+                         $responce = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "Codigo de ministerio de transporte debe ser unico",
+                        ); 
+                    }
+                }
+                
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Marca entity.
      *
-     * @Route("/{id}", name="marca_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="marca_show")
+     * @Method("POST")
      */
-    public function showAction(Marca $marca)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($marca);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:marca:show.html.twig', array(
-            'marca' => $marca,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $marca = $em->getRepository('AppBundle:Marca')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "marca encontrado", 
+                    'data'=> $marca,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Marca entity.
      *
-     * @Route("/{id}/edit", name="marca_edit")
+     * @Route("/edit", name="marca_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Marca $marca)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($marca);
-        $editForm = $this->createForm('AppBundle\Form\MarcaType', $marca);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($marca);
-            $em->flush();
+            $marca = $em->getRepository('AppBundle:Marca')->find($params->id);
+            if ($marca!=null) {
 
-            return $this->redirectToRoute('marca_edit', array('id' => $marca->getId()));
+                $marca->setNombre($nombre);
+                $marca->setEstado(true);
+                $marca->setCodigoMt($codigoMt);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($marca);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "marca editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La marca no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:marca:edit.html.twig', array(
-            'marca' => $marca,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Marca entity.
      *
-     * @Route("/{id}", name="marca_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="marca_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Marca $marca)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($marca);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($marca);
-            $em->flush();
-        }
+            $marca = $em->getRepository('AppBundle:Marca')->find($id);
 
-        return $this->redirectToRoute('marca_index');
+            $marca->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($marca);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "lase eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

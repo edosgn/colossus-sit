@@ -34,6 +34,13 @@ class Marca
      * @ORM\Column(name="codigoMt", type="integer")
      */
     private $codigoMt;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
     
 
     /**
@@ -144,5 +151,29 @@ class Marca
     public function getLineas()
     {
         return $this->lineas;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Marca
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
