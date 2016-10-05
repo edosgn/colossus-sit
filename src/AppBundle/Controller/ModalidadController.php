@@ -24,13 +24,19 @@ class ModalidadController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $modalidads = $em->getRepository('AppBundle:Modalidad')->findAll();
-
-        return $this->render('AppBundle:modalidad:index.html.twig', array(
-            'modalidads' => $modalidads,
-        ));
+        $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado modalidad", 
+                    'data'=> $modalidad,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,175 @@ class ModalidadController extends Controller
      */
     public function newAction(Request $request)
     {
-        $modalidad = new Modalidad();
-        $form = $this->createForm('AppBundle\Form\ModalidadType', $modalidad);
-        $form->handleRequest($request);
+       $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($modalidad);
-            $em->flush();
 
-            return $this->redirectToRoute('modalidad_show', array('id' => $modalidad->getId()));
-        }
-
-        return $this->render('AppBundle:modalidad:new.html.twig', array(
-            'modalidad' => $modalidad,
-            'form' => $form->createView(),
-        ));
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoMt = $params->codigoMt;
+                $em = $this->getDoctrine()->getManager();
+                $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
+                    array('codigoMt' => $codigoMt)
+                );
+                    if ($modalidad==null) {
+                        $modalidad = new Modalidad();
+                        $modalidad->setNombre($nombre);
+                        $modalidad->setEstado(true);
+                        $modalidad->setCodigoMt($codigoMt);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($modalidad);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "modalidad creada con exito", 
+                        );
+                    }else{
+                         $responce = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "Codigo de ministerio de transporte debe ser unico",
+                        ); 
+                    }
+                }
+                
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Modalidad entity.
      *
-     * @Route("/{id}", name="modalidad_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="modalidad_show")
+     * @Method("POST")
      */
-    public function showAction(Modalidad $modalidad)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($modalidad);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:modalidad:show.html.twig', array(
-            'modalidad' => $modalidad,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $modalidad = $em->getRepository('AppBundle:Modalidad')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "modalidad encontrado", 
+                    'data'=> $modalidad,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Modalidad entity.
      *
-     * @Route("/{id}/edit", name="modalidad_edit")
+     * @Route("/edit", name="modalidad_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Modalidad $modalidad)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($modalidad);
-        $editForm = $this->createForm('AppBundle\Form\ModalidadType', $modalidad);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($modalidad);
-            $em->flush();
+            $modalidad = $em->getRepository('AppBundle:Modalidad')->find($params->id);
+            if ($modalidad!=null) {
 
-            return $this->redirectToRoute('modalidad_edit', array('id' => $modalidad->getId()));
+                $modalidad->setNombre($nombre);
+                $modalidad->setEstado(true);
+                $modalidad->setCodigoMt($codigoMt);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($modalidad);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "modalidad editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La modalidad no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:modalidad:edit.html.twig', array(
-            'modalidad' => $modalidad,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Modalidad entity.
      *
-     * @Route("/{id}", name="modalidad_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="modalidad_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Modalidad $modalidad)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($modalidad);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($modalidad);
-            $em->flush();
-        }
+            $modalidad = $em->getRepository('AppBundle:Modalidad')->find($id);
 
-        return $this->redirectToRoute('modalidad_index');
+            $modalidad->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($modalidad);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "lase eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
