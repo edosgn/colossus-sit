@@ -36,6 +36,13 @@ class Servicio
     private $codigoServicio;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Almacen", mappedBy="servicio")
      */
     protected $almacenes;
@@ -182,5 +189,29 @@ class Servicio
     public function getVehiculos()
     {
         return $this->vehiculos;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Servicio
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

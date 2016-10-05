@@ -30,6 +30,13 @@ class OrganismoTransito
     private $nombre;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Almacen", mappedBy="organismoTransito")
      */
     protected $almacenes; 
@@ -152,5 +159,29 @@ class OrganismoTransito
     public function getVehiculos()
     {
         return $this->vehiculos;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return OrganismoTransito
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
