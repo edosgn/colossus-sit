@@ -24,13 +24,19 @@ class ConceptoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $conceptos = $em->getRepository('AppBundle:Concepto')->findAll();
-
-        return $this->render('AppBundle:concepto:index.html.twig', array(
-            'conceptos' => $conceptos,
-        ));
+        $conceptos = $em->getRepository('AppBundle:Concepto')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado conceptos", 
+                    'data'=> $conceptos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,180 @@ class ConceptoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $concepto = new Concepto();
-        $form = $this->createForm('AppBundle\Form\ConceptoType', $concepto);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $descripcion = $params->descripcion;
+                        $valor = $params->valor;
+                        $tramiteId = $params->tramiteId;
+                        $cuentaId = $params->cuentaId;
+                        $em = $this->getDoctrine()->getManager();
+                        $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                        $cuenta = $em->getRepository('AppBundle:Cuenta')->find($cuentaId);
+           
+                        $concepto = new Concepto();
+                        $concepto->setDescripcion($descripcion);
+                        $concepto->setValor($valor);
+                        $concepto->setTramite($tramite);
+                        $concepto->setCuenta($cuenta);
+                        $concepto->setEstado(true);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($concepto);
-            $em->flush();
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($concepto);
+                        $em->flush();
 
-            return $this->redirectToRoute('concepto_show', array('id' => $concepto->getId()));
-        }
-
-        return $this->render('AppBundle:concepto:new.html.twig', array(
-            'concepto' => $concepto,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "concepto creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Concepto entity.
      *
-     * @Route("/{id}", name="concepto_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="concepto_show")
+     * @Method("POST")
      */
-    public function showAction(Concepto $concepto)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($concepto);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:concepto:show.html.twig', array(
-            'concepto' => $concepto,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $concepto = $em->getRepository('AppBundle:Concepto')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "concepto encontrado", 
+                    'data'=> $concepto,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Concepto entity.
      *
-     * @Route("/{id}/edit", name="concepto_edit")
+     * @Route("/edit", name="concepto_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Concepto $concepto)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($concepto);
-        $editForm = $this->createForm('AppBundle\Form\ConceptoType', $concepto);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            
+            $descripcion = $params->descripcion;
+            $valor = $params->valor;
+            $tramiteId = $params->tramiteId;
+            $cuentaId = $params->cuentaId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($concepto);
-            $em->flush();
+            $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+            $cuenta = $em->getRepository('AppBundle:Cuenta')->find($cuentaId);
 
-            return $this->redirectToRoute('concepto_edit', array('id' => $concepto->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $concepto = $em->getRepository("AppBundle:Concepto")->find($params->id);
+
+            if ($concepto!=null) {
+                        $concepto->setDescripcion($descripcion);
+                        $concepto->setValor($valor);
+                        $concepto->setTramite($tramite);
+                        $concepto->setCuenta($cuenta);
+                        $concepto->setEstado(true);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($concepto);
+                        $em->flush();
+
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "concepto editado con exito", 
+                        );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El concepto no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar concepto", 
+                );
         }
 
-        return $this->render('AppBundle:concepto:edit.html.twig', array(
-            'concepto' => $concepto,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Concepto entity.
      *
-     * @Route("/{id}", name="concepto_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="concepto_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Concepto $concepto)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($concepto);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($concepto);
-            $em->flush();
-        }
+            $concepto = $em->getRepository('AppBundle:Concepto')->find($id);
 
-        return $this->redirectToRoute('concepto_index');
+            $concepto->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($concepto);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "concepto eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

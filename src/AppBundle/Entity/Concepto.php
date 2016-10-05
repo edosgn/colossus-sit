@@ -36,6 +36,13 @@ class Concepto
     private $valor;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="conceptos")
      **/
     protected $tramite;
@@ -154,5 +161,29 @@ class Concepto
     public function getCuenta()
     {
         return $this->cuenta;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Concepto
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
