@@ -10,7 +10,7 @@ use AppBundle\Entity\Combustible;
 use AppBundle\Form\CombustibleType;
 
 /**
- * Combustible controller.
+ * Combustible controller. 
  *
  * @Route("/combustible")
  */
@@ -24,13 +24,19 @@ class CombustibleController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $combustibles = $em->getRepository('AppBundle:Combustible')->findAll();
-
-        return $this->render('AppBundle:combustible:index.html.twig', array(
-            'combustibles' => $combustibles,
-        ));
+        $combustibles = $em->getRepository('AppBundle:Combustible')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado combustibles", 
+                    'data'=> $combustibles,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
