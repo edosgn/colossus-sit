@@ -35,7 +35,6 @@ export class MunicipioEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		
 		this.municipio = new Municipio(null,null, "", null);
 		let token = this._loginService.getToken();
 		this._DepartamentoService.getDepartamento().subscribe(
@@ -79,8 +78,6 @@ export class MunicipioEditComponent implements OnInit{
 	onSubmit(){
 
 		let token = this._loginService.getToken();
-		console.log(token);
-
 		this._MunicipioService.editMunicipio(this.municipio,token).subscribe(
 			response => {
 				this.respuesta = response;

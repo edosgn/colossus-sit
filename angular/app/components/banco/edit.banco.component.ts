@@ -61,8 +61,6 @@ export class BancoEditComponent implements OnInit{
 
 	onSubmit(){
 		let token = this._loginService.getToken();
-		console.log(token);
-
 		this._BancoService.editBanco(this.banco,token).subscribe(
 			response => {
 				this.respuesta = response;

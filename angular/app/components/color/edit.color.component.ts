@@ -1,29 +1,29 @@
 // Importar el núcleo de Angular
+import {ColorService} from "../../services/color/color.service";
+import {LoginService} from "../../services/login.service";
+import {Color} from '../../model/color/color';
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {LoginService} from '../../services/login.service';
-import {DepartamentoService} from '../../services/departamento/departamento.service';
-import {Departamento} from '../../model/departamento/Departamento';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/departamento/edit.html',
+    templateUrl: 'app/view/color/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService ,DepartamentoService]
+    providers: [LoginService ,ColorService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class DepartamentoEditComponent implements OnInit{ 
+export class ColorEditComponent implements OnInit{ 
 	public errorMessage;
-	public departamento : Departamento;
+	public color : Color;
 	public id;
 	public respuesta;
 
 	constructor(
 		private _loginService: LoginService,
-		private _DepartamentoService: DepartamentoService,
+		private _ColorService: ColorService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
@@ -31,15 +31,17 @@ export class DepartamentoEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		this.departamento = new Departamento(null, "",null);
+		this.color = new Color(null,"");
 		let token = this._loginService.getToken();
+
 			this._route.params.subscribe(params =>{
 				this.id = +params["id"];
 			});
-			this._DepartamentoService.showDepartamento(token,this.id).subscribe(
+
+			this._ColorService.showColor(token,this.id).subscribe(
 
 						response => {
-							this.departamento = response.data;
+							this.color = response.data;
 						},
 						error => {
 								this.errorMessage = <any>error;
@@ -57,7 +59,7 @@ export class DepartamentoEditComponent implements OnInit{
 
 	onSubmit(){
 		let token = this._loginService.getToken();
-		this._DepartamentoService.editDepartamento(this.departamento,token).subscribe(
+		this._ColorService.editColor(this.color,token).subscribe(
 			response => {
 				this.respuesta = response;
 			error => {

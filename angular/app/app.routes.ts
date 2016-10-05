@@ -12,6 +12,13 @@ import { MunicipioEditComponent } from "./components/municipio/edit.municipio.co
 import { IndexBancoComponent } from "./components/banco/index.banco.component";
 import { NewBancoComponent } from "./components/banco/new.banco.component";
 import { BancoEditComponent } from "./components/banco/edit.banco.component";
+import { IndexColorComponent } from "./components/color/index.color.component";
+import { NewColorComponent } from "./components/color/new.color.component";
+import { ColorEditComponent } from "./components/color/edit.color.component";
+import { IndexClaseComponent } from "./components/clase/index.clase.component";
+import { ClaseEditComponent } from "./components/clase/edit.clase.component";
+import { NewClaseComponent } from "./components/clase/new.clase.component";
+
 
 
 
@@ -37,7 +44,12 @@ export const routes: RouterConfig = [
     { path: 'banco/index', component: IndexBancoComponent},
     { path: 'banco/new', component: NewBancoComponent},
     { path: 'banco/show/:id', component: BancoEditComponent},
-
+    { path: 'color/index', component: IndexColorComponent},
+    { path: 'color/new', component: NewColorComponent},
+    { path: 'color/show/:id', component: ColorEditComponent},
+    { path: 'clase/index', component: IndexClaseComponent},
+    { path: 'clase/new', component: NewClaseComponent},
+    { path: 'clase/show/:id', component: ClaseEditComponent},
 
 ];
 

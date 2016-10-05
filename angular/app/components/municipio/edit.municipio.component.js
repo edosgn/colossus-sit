@@ -54,7 +54,6 @@ var MunicipioEditComponent = (function () {
     MunicipioEditComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        console.log(token);
         this._MunicipioService.editMunicipio(this.municipio, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {

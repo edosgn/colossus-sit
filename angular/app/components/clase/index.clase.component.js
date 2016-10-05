@@ -9,28 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
+var clase_service_1 = require("../../services/clase/clase.service");
+var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
-var login_service_1 = require('../../services/login.service');
-var banco_service_1 = require('../../services/banco/banco.service');
-var Banco_1 = require('../../model/banco/Banco');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var BancoEditComponent = (function () {
-    function BancoEditComponent(_loginService, _BancoService, _route, _router) {
+var IndexClaseComponent = (function () {
+    function IndexClaseComponent(_ClaseService, _loginService, _route, _router) {
+        this._ClaseService = _ClaseService;
         this._loginService = _loginService;
-        this._BancoService = _BancoService;
         this._route = _route;
         this._router = _router;
     }
-    BancoEditComponent.prototype.ngOnInit = function () {
+    IndexClaseComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.banco = new Banco_1.Banco(null, "");
         var token = this._loginService.getToken();
-        this._route.params.subscribe(function (params) {
-            _this.id = +params["id"];
-        });
-        this._BancoService.showBanco(token, this.id).subscribe(function (response) {
-            _this.banco = response.data;
+        if (token) {
+            console.log('logueado');
+        }
+        else {
+            this._router.navigate(["/login"]);
+        }
+        this._ClaseService.getClase().subscribe(function (response) {
+            _this.clases = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -39,30 +40,31 @@ var BancoEditComponent = (function () {
             }
         });
     };
-    BancoEditComponent.prototype.onSubmit = function () {
+    IndexClaseComponent.prototype.deleteClase = function (id) {
         var _this = this;
         var token = this._loginService.getToken();
-        this._BancoService.editBanco(this.banco, token).subscribe(function (response) {
+        this._ClaseService.deleteClase(token, id).subscribe(function (response) {
             _this.respuesta = response;
-            (function (error) {
-                _this.errorMessage = error;
-                if (_this.errorMessage != null) {
-                    console.log(_this.errorMessage);
-                    alert("Error en la petición");
-                }
-            });
+            console.log(_this.respuesta);
+            _this.ngOnInit();
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
         });
     };
-    BancoEditComponent = __decorate([
+    IndexClaseComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/banco/edit.html',
+            templateUrl: 'app/view/clase/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, banco_service_1.BancoService]
+            providers: [login_service_1.LoginService, clase_service_1.ClaseService]
         }), 
-        __metadata('design:paramtypes', [login_service_1.LoginService, banco_service_1.BancoService, router_1.ActivatedRoute, router_1.Router])
-    ], BancoEditComponent);
-    return BancoEditComponent;
+        __metadata('design:paramtypes', [clase_service_1.ClaseService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexClaseComponent);
+    return IndexClaseComponent;
 }());
-exports.BancoEditComponent = BancoEditComponent;
-//# sourceMappingURL=edit.banco.component.js.map
+exports.IndexClaseComponent = IndexClaseComponent;
+//# sourceMappingURL=index.clase.component.js.map
