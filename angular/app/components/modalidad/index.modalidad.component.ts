@@ -1,42 +1,41 @@
 // Importar el núcleo de Angular
-import {LineaService} from "../../services/linea/linea.service";
 import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
+import {ModalidadService} from '../../services/modalidad/modalidad.service';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {MarcaService} from '../../services/marca/marca.service';
-import {Linea} from '../../model/linea/linea';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'register',
-    templateUrl: 'app/view/linea/new.html',
+    selector: 'default',
+    templateUrl: 'app/view/modalidad/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,LineaService,MarcaService]
+    providers: [LoginService,ModalidadService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class NewLineaComponent {
-	public linea: Linea;
+export class IndexModalidadComponent implements OnInit{ 
 	public errorMessage;
+	public id;
 	public respuesta;
-	public marcas;
+	public modalidades;
+	
 
 	constructor(
-		private _MarcaService:MarcaService,
-		private _LineaService:LineaService,
+		private _ModalidadService:ModalidadService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-	){}
+		){}
 
-	ngOnInit(){
-		this.linea = new Linea(null,null,"",null);
 
-			this._MarcaService.getMarca().subscribe(
+	ngOnInit(){	
+		let token = this._loginService.getToken();
+		
+		this._ModalidadService.getModalidad().subscribe(
 					response => {
-						this.marcas = response.data;
+						this.modalidades = response.data;
 					}, 
 					error => {
 						this.errorMessage = <any>error;
@@ -47,17 +46,17 @@ export class NewLineaComponent {
 						}
 					}
 				);
+	  
 	}
 
-	onSubmit(){
-		console.log(this.linea);
+	deleteModalidad(id:string){
 		let token = this._loginService.getToken();
-		this._LineaService.register(this.linea,token).subscribe(
-			response => {
-				this.respuesta = response;
-				console.log(this.respuesta);
-
-			error => {
+		this._ModalidadService.deleteModalidad(token,id).subscribe(
+				response => {
+					    this.respuesta= response;
+					    this.ngOnInit();
+					}, 
+				error => {
 					this.errorMessage = <any>error;
 
 					if(this.errorMessage != null){
@@ -65,7 +64,8 @@ export class NewLineaComponent {
 						alert("Error en la petición");
 					}
 				}
-
-		});
+			);
 	}
- }
+
+
+}

@@ -1,0 +1,47 @@
+<br>
+<hr>
+<h3>Consumibles:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/consumible/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+         <div class="identity-data" *ngIf="respuesta">
+            <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+                {{respuesta.msj}}
+            </div>
+            <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+                {{respuesta.msj}}
+            </div>
+        </div>
+
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#Consumible of consumibles">
+                    <td >{{Consumible.id}}</td>
+                    <td >{{Consumible.nombre}}</td>
+
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteConsumible(Consumible.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/Consumible/show',Consumible.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

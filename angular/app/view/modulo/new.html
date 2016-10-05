@@ -1,0 +1,44 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+
+		
+	</div>
+	<br>
+
+	<form #newModulo="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Modulo</div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+
+				<p class="col-md-6">
+					<label >Nombre:</label>
+					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="modulo.nombre" ngControl="nombre"  required />
+					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Nombre:</label>
+					<input #abreviatura="ngForm"  type="text" class="form-control" [(ngModel)]="modulo.abreviatura" ngControl="abreviatura"  required />
+					<span *ngIf="!abreviatura.valid && abreviatura.touched" style="color:red;">abreviatura obligatorio</span>
+					<br>
+				</p>
+
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"
+				[disabled]="!newModulo.valid"/>
+		  </div>
+		</div>
+	</form>
+
+</div>

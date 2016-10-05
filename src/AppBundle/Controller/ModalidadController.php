@@ -68,7 +68,7 @@ class ModalidadController extends Controller
                 $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
                     array('codigoMt' => $codigoMt)
                 );
-                    if ($modalidad==null) {
+                    if ($modalidad == null) {
                         $modalidad = new Modalidad();
                         $modalidad->setNombre($nombre);
                         $modalidad->setEstado(true);

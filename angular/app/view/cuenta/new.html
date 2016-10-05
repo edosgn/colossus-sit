@@ -1,0 +1,55 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+	</div>
+	<br>
+
+	<form #newCuenta="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Cuenta</div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+
+				
+
+				<p class="col-md-6">
+					<label >Numero:</label>
+					<input #numero="ngForm"  type="number" class="form-control" [(ngModel)]="cuenta.numero" ngControl="numero"  required />
+					<span *ngIf="!numero.valid && numero.touched" style="color:red;">numero obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Banco:</label>
+					<select class="form-control" #bancoId="ngForm" ngControl="marcaId" [(ngModel)]="cuenta.bancoId" required>
+					  <option *ngFor="#banco of bancos" [value]='banco.id' >{{banco.nombre}}</option>
+					</select>
+					<span *ngIf = "!bancoId.valid && bancoId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-12">
+					<label >Observacion:</label>
+					<textarea  #observacion="ngForm"  type="textArea" class="form-control" [(ngModel)]="cuenta.observacion" ngControl="observacion"  required>Write something here</textarea>
+					<span *ngIf="!observacion.valid && observacion.touched" style="color:red;">observacion obligatorios</span>
+					<br>
+				</p>
+
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				[disabled]="!newCuenta.valid"/>
+
+			    
+
+		  </div>
+		</div>
+	</form>
+
+</div>

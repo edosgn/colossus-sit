@@ -1,0 +1,49 @@
+<br>
+<hr>
+<h3>cuenta:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/cuenta/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    <div class="identity-data" *ngIf="respuesta">
+        <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+            {{respuesta.msj}}
+        </div>
+        <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+            {{respuesta.msj}}
+        </div>
+    </div>
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>numero</th>
+                    <th>observacion</th>
+                    <th>banco</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#cuenta of cuentas">
+                    <td >{{cuenta.id}}</td>
+                    <td >{{cuenta.numero}}</td>
+                    <td >{{cuenta.observacion}}</td>
+                    <td >{{cuenta.banco.nombre}}</td>
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteCuenta(cuenta.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/cuenta/show',cuenta.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

@@ -25,6 +25,21 @@ var edit_combustible_component_1 = require("./components/combustible/edit.combus
 var index_linea_component_1 = require("./components/linea/index.linea.component");
 var new_linea_component_1 = require("./components/linea/new.linea.component");
 var edit_linea_component_1 = require("./components/linea/edit.linea.component");
+var index_marca_component_1 = require("./components/marca/index.marca.component");
+var new_marca_component_1 = require("./components/marca/new.marca.component");
+var edit_marca_component_1 = require("./components/marca/edit.marca.component");
+var index_modalidad_component_1 = require("./components/modalidad/index.modalidad.component");
+var new_modalidad_component_1 = require("./components/modalidad/new.modalidad.component");
+var edit_modalidad_component_1 = require("./components/modalidad/edit.modalidad.component");
+var index_consumible_component_1 = require("./components/consumible/index.consumible.component");
+var new_consumible_component_1 = require("./components/consumible/new.consumible.component");
+var edit_consumible_component_1 = require("./components/consumible/edit.consumible.component");
+var index_cuenta_components_1 = require("./components/cuenta/index.cuenta.components");
+var new_cuenta_component_1 = require("./components/cuenta/new.cuenta.component");
+var edit_cuenta_component_1 = require("./components/cuenta/edit.cuenta.component");
+var index_modulo_component_1 = require("./components/modulo/index.modulo.component");
+var new_modulo_component_1 = require("./components/modulo/new.modulo.component");
+var edit_modulo_component_1 = require("./components/modulo/edit.modulo.component");
 exports.routes = [
     {
         path: '',
@@ -57,6 +72,21 @@ exports.routes = [
     { path: 'linea/index', component: index_linea_component_1.IndexLineaComponent },
     { path: 'linea/new', component: new_linea_component_1.NewLineaComponent },
     { path: 'linea/show/:id', component: edit_linea_component_1.LineaEditComponent },
+    { path: 'marca/index', component: index_marca_component_1.IndexMarcaComponent },
+    { path: 'marca/new', component: new_marca_component_1.NewMarcaComponent },
+    { path: 'marca/show/:id', component: edit_marca_component_1.MarcaEditComponent },
+    { path: 'modalidad/index', component: index_modalidad_component_1.IndexModalidadComponent },
+    { path: 'modalidad/new', component: new_modalidad_component_1.NewModalidadComponent },
+    { path: 'modalidad/show/:id', component: edit_modalidad_component_1.ModalidadEditComponent },
+    { path: 'consumible/index', component: index_consumible_component_1.IndexConsumibleComponent },
+    { path: 'consumible/new', component: new_consumible_component_1.NewConsumibleComponent },
+    { path: 'Consumible/show/:id', component: edit_consumible_component_1.ConsumibleEditComponent },
+    { path: 'cuenta/index', component: index_cuenta_components_1.IndexCuentaComponent },
+    { path: 'cuenta/new', component: new_cuenta_component_1.NewCuentaComponent },
+    { path: 'cuenta/show/:id', component: edit_cuenta_component_1.CuentaEditComponent },
+    { path: 'modulo/index', component: index_modulo_component_1.IndexModuloComponent },
+    { path: 'modulo/new', component: new_modulo_component_1.NewModuloComponent },
+    { path: 'modulo/show/:id', component: edit_modulo_component_1.ModuloEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
