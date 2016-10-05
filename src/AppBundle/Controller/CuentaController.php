@@ -13,7 +13,7 @@ use AppBundle\Form\CuentaType;
  * Cuenta controller.
  *
  * @Route("/cuenta")
- */
+ */ 
 class CuentaController extends Controller
 {
     /**
@@ -24,13 +24,19 @@ class CuentaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $cuentas = $em->getRepository('AppBundle:Cuenta')->findAll();
-
-        return $this->render('AppBundle:cuenta:index.html.twig', array(
-            'cuentas' => $cuentas,
-        ));
+        $cuentas = $em->getRepository('AppBundle:Cuenta')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado cuentas", 
+                    'data'=> $cuentas,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,168 @@ class CuentaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cuentum = new Cuenta();
-        $form = $this->createForm('AppBundle\Form\CuentaType', $cuentum);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $numero = $params->numero;
+                $observacion = $params->observacion;
+                $bancoId = $params->bancoId;
+                $em = $this->getDoctrine()->getManager();
+                $banco = $em->getRepository('AppBundle:Banco')->find($bancoId);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($cuentum);
-            $em->flush();
-
-            return $this->redirectToRoute('cuenta_show', array('id' => $cuentum->getId()));
-        }
-
-        return $this->render('AppBundle:cuenta:new.html.twig', array(
-            'cuentum' => $cuentum,
-            'form' => $form->createView(),
-        ));
+                $cuenta = new Cuenta();
+                $cuenta->setNumero($numero);
+                $cuenta->setObservacion($observacion);
+                $cuenta->setBanco($banco);
+                $cuenta->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($cuenta);
+                $em->flush();
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "cuenta creado con exito", 
+                );
+                }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Cuenta entity.
      *
-     * @Route("/{id}", name="cuenta_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="cuenta_show")
+     * @Method("POST")
      */
-    public function showAction(Cuenta $cuentum)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($cuentum);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:cuenta:show.html.twig', array(
-            'cuentum' => $cuentum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $cuenta = $em->getRepository('AppBundle:Cuenta')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "cuenta encontrada", 
+                    'data'=> $cuenta,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Cuenta entity.
      *
-     * @Route("/{id}/edit", name="cuenta_edit")
+     * @Route("/edit", name="cuenta_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Cuenta $cuentum)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cuentum);
-        $editForm = $this->createForm('AppBundle\Form\CuentaType', $cuentum);
-        $editForm->handleRequest($request);
+       $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $numero = $params->numero;
+            $observacion = $params->observacion;
+            $bancoId = $params->bancoId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cuentum);
-            $em->flush();
+            $banco = $em->getRepository('AppBundle:Banco')->find($bancoId);
 
-            return $this->redirectToRoute('cuenta_edit', array('id' => $cuentum->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $cuenta = $em->getRepository("AppBundle:Cuenta")->find($params->id);
+
+            if ($cuenta!=null) {
+                $cuenta->setNumero($numero);
+                $cuenta->setObservacion($observacion);
+                $cuenta->setBanco($banco);
+                $cuenta->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($cuenta);
+                $em->flush();
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "cuenta actualizada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La cuenta no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:cuenta:edit.html.twig', array(
-            'cuentum' => $cuentum,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Cuenta entity.
      *
-     * @Route("/{id}", name="cuenta_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="cuenta_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Cuenta $cuentum)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($cuentum);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cuentum);
-            $em->flush();
-        }
+            $cuenta = $em->getRepository('AppBundle:Cuenta')->find($id);
 
-        return $this->redirectToRoute('cuenta_index');
+            $cuenta->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($cuenta);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "cuenta eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

@@ -32,7 +32,7 @@ class Cuenta
      * @var string
      *
      * @ORM\Column(name="observacion", type="string", length=255)
-     */ 
+     */
     private $observacion;
 
     /**
@@ -178,29 +178,5 @@ class Cuenta
     public function getConceptos()
     {
         return $this->conceptos;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Cuenta
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 }
