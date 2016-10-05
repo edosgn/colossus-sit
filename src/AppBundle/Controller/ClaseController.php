@@ -103,8 +103,8 @@ class ClaseController extends Controller
     /**
      * Finds and displays a Clase entity.
      *
-     * @Route("show/{id}", name="clase_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="clase_show")
+     * @Method("POST")
      */
     public function showAction(Request  $request, $id)
     {
@@ -134,48 +134,88 @@ class ClaseController extends Controller
     /**
      * Displays a form to edit an existing Clase entity.
      *
-     * @Route("/{id}/edit", name="clase_edit")
+     * @Route("/edit", name="clase_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Clase $clase)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($clase);
-        $editForm = $this->createForm('AppBundle\Form\ClaseType', $clase);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($clase);
-            $em->flush();
+            $clase = $em->getRepository('AppBundle:Clase')->find($params->id);
+            if ($clase!=null) {
 
-            return $this->redirectToRoute('clase_edit', array('id' => $clase->getId()));
+                $clase->setNombre($nombre);
+                $clase->setEstado(true);
+                $clase->setCodigoMt($codigoMt);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($clase);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Clase editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La clase no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:clase:edit.html.twig', array(
-            'clase' => $clase,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Clase entity.
      *
-     * @Route("/{id}", name="clase_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="clase_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Clase $clase)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($clase);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($clase);
-            $em->flush();
-        }
+            $clase = $em->getRepository('AppBundle:Clase')->find($id);
 
-        return $this->redirectToRoute('clase_index');
+            $clase->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($clase);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "lase eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

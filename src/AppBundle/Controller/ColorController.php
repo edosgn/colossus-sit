@@ -24,13 +24,19 @@ class ColorController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $colors = $em->getRepository('AppBundle:Color')->findAll();
-
-        return $this->render('AppBundle:color:index.html.twig', array(
-            'colors' => $colors,
-        ));
+        $colores = $em->getRepository('AppBundle:Color')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado colores", 
+                    'data'=> $colores,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,162 @@ class ColorController extends Controller
      */
     public function newAction(Request $request)
     {
-        $color = new Color();
-        $form = $this->createForm('AppBundle\Form\ColorType', $color);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($color);
-            $em->flush();
 
-            return $this->redirectToRoute('color_show', array('id' => $color->getId()));
-        }
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $color = new Color();
 
-        return $this->render('AppBundle:color:new.html.twig', array(
-            'color' => $color,
-            'form' => $form->createView(),
-        ));
+                $color->setNombre($nombre);
+                $color->setEstado(true);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($color);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Color creado con exito", 
+                );
+                }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Color entity.
      *
-     * @Route("/{id}", name="color_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="color_show")
+     * @Method("POST")
      */
-    public function showAction(Color $color)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($color);
+       $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:color:show.html.twig', array(
-            'color' => $color,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $color = $em->getRepository('AppBundle:Color')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "color encontrado", 
+                    'data'=> $color,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Color entity.
      *
-     * @Route("/{id}/edit", name="color_edit")
+     * @Route("/edit", name="color_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Color $color)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($color);
-        $editForm = $this->createForm('AppBundle\Form\ColorType', $color);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($color);
-            $em->flush();
+            $color = $em->getRepository('AppBundle:Color')->find($params->id);
+            if ($color!=null) {
 
-            return $this->redirectToRoute('color_edit', array('id' => $color->getId()));
+                $color->setNombre($nombre);
+                $color->setEstado(true);
+               
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($color);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "color editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La color no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:color:edit.html.twig', array(
-            'color' => $color,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Color entity.
      *
-     * @Route("/{id}", name="color_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="color_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Color $color)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($color);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($color);
-            $em->flush();
-        }
+            $color = $em->getRepository('AppBundle:Color')->find($id);
 
-        return $this->redirectToRoute('color_index');
+            $color->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($color);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "color eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
