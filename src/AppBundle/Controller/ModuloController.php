@@ -24,13 +24,19 @@ class ModuloController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $modulos = $em->getRepository('AppBundle:Modulo')->findAll();
-
-        return $this->render('AppBundle:modulo:index.html.twig', array(
-            'modulos' => $modulos,
-        ));
+        $modulo = $em->getRepository('AppBundle:Modulo')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado modulo", 
+                    'data'=> $modulo,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,163 @@ class ModuloController extends Controller
      */
     public function newAction(Request $request)
     {
-        $modulo = new Modulo();
-        $form = $this->createForm('AppBundle\Form\ModuloType', $modulo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $abreviatura = $params->abreviatura;
+                $modulo = new Modulo();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($modulo);
-            $em->flush();
+                $modulo->setNombre($nombre);
+                $modulo->setAbreviatura($abreviatura);
+                $modulo->setEstado(true);
 
-            return $this->redirectToRoute('modulo_show', array('id' => $modulo->getId()));
-        }
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($modulo);
+                $em->flush();
 
-        return $this->render('AppBundle:modulo:new.html.twig', array(
-            'modulo' => $modulo,
-            'form' => $form->createView(),
-        ));
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Modulo creado con exito", 
+                );
+                       
+                }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Modulo entity.
      *
-     * @Route("/{id}", name="modulo_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="modulo_show")
+     * @Method("POST")
      */
-    public function showAction(Modulo $modulo)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($modulo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:modulo:show.html.twig', array(
-            'modulo' => $modulo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "modulo con nombre"." ".$modulo->getNombre(), 
+                    'data'=> $modulo,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Modulo entity.
      *
-     * @Route("/{id}/edit", name="modulo_edit")
+     * @Route("/edit", name="modulo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Modulo $modulo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($modulo);
-        $editForm = $this->createForm('AppBundle\Form\ModuloType', $modulo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($modulo);
-            $em->flush();
+            $modulo = $em->getRepository("AppBundle:Modulo")->find($params->id);
 
-            return $this->redirectToRoute('modulo_edit', array('id' => $modulo->getId()));
+            if ($modulo!=null) {
+                $nombre = $params->nombre;
+                $abreviatura = $params->abreviatura;
+
+                $modulo->setNombre($nombre);
+                $modulo->setAbreviatura($abreviatura);
+                $modulo->setEstado(true);
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Modulo editado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El modulo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:modulo:edit.html.twig', array(
-            'modulo' => $modulo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Modulo entity.
      *
-     * @Route("/{id}", name="modulo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="modulo_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Modulo $modulo)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($modulo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($modulo);
-            $em->flush();
-        }
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($id);
 
-        return $this->redirectToRoute('modulo_index');
+            $modulo->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($modulo);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "modulo eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

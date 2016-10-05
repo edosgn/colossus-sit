@@ -35,6 +35,13 @@ class Modulo
      */
     private $abreviatura;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Tramite", mappedBy="modulo")
      */
@@ -143,5 +150,29 @@ class Modulo
     public function getTramites()
     {
         return $this->tramites;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Modulo
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
