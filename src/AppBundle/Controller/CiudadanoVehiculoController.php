@@ -24,13 +24,19 @@ class CiudadanoVehiculoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $ciudadanoVehiculos = $em->getRepository('AppBundle:CiudadanoVehiculo')->findAll();
-
-        return $this->render('AppBundle:ciudadanovehiculo:index.html.twig', array(
-            'ciudadanoVehiculos' => $ciudadanoVehiculos,
-        ));
+        $ciudadanoVehiculos = $em->getRepository('AppBundle:CiudadanoVehiculo')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado ciudadanoVehiculos", 
+                    'data'=> $ciudadanoVehiculos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,186 @@ class CiudadanoVehiculoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $ciudadanoVehiculo = new CiudadanoVehiculo();
-        $form = $this->createForm('AppBundle\Form\CiudadanoVehiculoType', $ciudadanoVehiculo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers"); 
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $licenciaTransito = $params->licenciaTransito;
+                        $fechaPropiedadInicial = $params->fechaPropiedadInicial;
+                        $fechaPropiedadFinal = $params->fechaPropiedadFinal;
+                        $estadoPropiedad = $params->estadoPropiedad;
+                        $ciudadanoId = $params->ciudadanoId;
+                        $vehiculoId = $params->vehiculoId;
+                        $em = $this->getDoctrine()->getManager();
+                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($ciudadanoVehiculo);
-            $em->flush();
+                        $ciudadanoVehiculo = new CiudadanoVehiculo();
 
-            return $this->redirectToRoute('ciudadanovehiculo_show', array('id' => $ciudadanoVehiculo->getId()));
-        }
+                        $ciudadanoVehiculo->setLicenciaTransito($licenciaTransito);
+                        $ciudadanoVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
+                        $ciudadanoVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
+                        $ciudadanoVehiculo->setEstadoPropiedad($estadoPropiedad);
+                        $ciudadanoVehiculo->setCiudadano($ciudadano);
+                        $ciudadanoVehiculo->setVehiculo($vehiculo);
 
-        return $this->render('AppBundle:ciudadanovehiculo:new.html.twig', array(
-            'ciudadanoVehiculo' => $ciudadanoVehiculo,
-            'form' => $form->createView(),
-        ));
+                        $ciudadanoVehiculo->setEstado(true);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($ciudadanoVehiculo);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "CiudadanoVehiculo creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a CiudadanoVehiculo entity.
      *
-     * @Route("/{id}", name="ciudadanovehiculo_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="ciudadanovehiculo_show")
+     * @Method("POST")
      */
-    public function showAction(CiudadanoVehiculo $ciudadanoVehiculo)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($ciudadanoVehiculo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:ciudadanovehiculo:show.html.twig', array(
-            'ciudadanoVehiculo' => $ciudadanoVehiculo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $ciudadanoVehiculo = $em->getRepository('AppBundle:CiudadanoVehiculo')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "ciudadanoVehiculo con nombre"." ".$ciudadanoVehiculo->getLicenciaTransito(), 
+                    'data'=> $ciudadanoVehiculo,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing CiudadanoVehiculo entity.
      *
-     * @Route("/{id}/edit", name="ciudadanovehiculo_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/edit", name="ciudadanovehiculo_edit")
+     * @Method({"POST", "POST"})
      */
-    public function editAction(Request $request, CiudadanoVehiculo $ciudadanoVehiculo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($ciudadanoVehiculo);
-        $editForm = $this->createForm('AppBundle\Form\CiudadanoVehiculoType', $ciudadanoVehiculo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $licenciaTransito = $params->licenciaTransito;
+            $fechaPropiedadInicial = $params->fechaPropiedadInicial;
+            $fechaPropiedadFinal = $params->fechaPropiedadFinal;
+            $estadoPropiedad = $params->estadoPropiedad;
+            $ciudadanoId = $params->ciudadanoId;
+            $vehiculoId = $params->vehiculoId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($ciudadanoVehiculo);
-            $em->flush();
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
-            return $this->redirectToRoute('ciudadanovehiculo_edit', array('id' => $ciudadanoVehiculo->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $ciudadanoVehiculo = $em->getRepository("AppBundle:CiudadanoVehiculo")->find($params->id);
+
+            if ($ciudadanoVehiculo!=null) {
+                $ciudadanoVehiculo->setLicenciaTransito($licenciaTransito);
+                $ciudadanoVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
+                $ciudadanoVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
+                $ciudadanoVehiculo->setEstadoPropiedad($estadoPropiedad);
+                $ciudadanoVehiculo->setCiudadano($ciudadano);
+                $ciudadanoVehiculo->setVehiculo($vehiculo);
+
+                $ciudadanoVehiculo->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($ciudadanoVehiculo);
+                $em->flush();
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "CiudadanoVehiculo actualizado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El ciudadanoVehiculo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar ciudadanoVehiculo", 
+                );
         }
 
-        return $this->render('AppBundle:ciudadanovehiculo:edit.html.twig', array(
-            'ciudadanoVehiculo' => $ciudadanoVehiculo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a CiudadanoVehiculo entity.
      *
-     * @Route("/{id}", name="ciudadanovehiculo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="ciudadanovehiculo_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, CiudadanoVehiculo $ciudadanoVehiculo)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($ciudadanoVehiculo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($ciudadanoVehiculo);
-            $em->flush();
-        }
+            $ciudadanoVehiculo = $em->getRepository('AppBundle:CiudadanoVehiculo')->find($id);
 
-        return $this->redirectToRoute('ciudadanovehiculo_index');
+            $ciudadanoVehiculo->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($ciudadanoVehiculo);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "ciudadanoVehiculo eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

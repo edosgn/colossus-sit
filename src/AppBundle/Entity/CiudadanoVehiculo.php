@@ -49,6 +49,13 @@ class CiudadanoVehiculo
      */
     private $estadoPropiedad;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="ciudadanosVehiculo") */
     private $ciudadano; 
 
@@ -100,8 +107,7 @@ class CiudadanoVehiculo
      */
     public function setFechaPropiedadInicial($fechaPropiedadInicial)
     {
-        $this->fechaPropiedadInicial = $fechaPropiedadInicial;
-
+        $this->fechaPropiedadInicial = new \DateTime($fechaPropiedadInicial);
         return $this;
     }
 
@@ -112,7 +118,7 @@ class CiudadanoVehiculo
      */
     public function getFechaPropiedadInicial()
     {
-        return $this->fechaPropiedadInicial;
+        return $this->fechaPropiedadInicial->format("Y-m-d");
     }
 
     /**
@@ -124,8 +130,7 @@ class CiudadanoVehiculo
      */
     public function setFechaPropiedadFinal($fechaPropiedadFinal)
     {
-        $this->fechaPropiedadFinal = $fechaPropiedadFinal;
-
+       $this->fechaPropiedadFinal = new \DateTime($fechaPropiedadFinal);
         return $this;
     }
 
@@ -136,7 +141,7 @@ class CiudadanoVehiculo
      */
     public function getFechaPropiedadFinal()
     {
-        return $this->fechaPropiedadFinal;
+        return $this->fechaPropiedadFinal->format("Y-m-d");
     }
 
     /**
@@ -209,5 +214,29 @@ class CiudadanoVehiculo
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return CiudadanoVehiculo
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
