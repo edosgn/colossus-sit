@@ -27,7 +27,7 @@ class Empresa
      * @ORM\Column(name="nit", type="integer")
      */
     private $nit;
-
+ 
     /**
      * @var string
      *
@@ -55,6 +55,13 @@ class Empresa
      * @ORM\Column(name="correoEmpresa", type="string", length=255)
      */
     private $correo;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
     
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="empresas") */
@@ -317,5 +324,29 @@ class Empresa
     public function getVehiculosPesado()
     {
         return $this->vehiculosPesado;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Empresa
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

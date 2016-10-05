@@ -24,13 +24,19 @@ class EmpresaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $empresas = $em->getRepository('AppBundle:Empresa')->findAll();
-
-        return $this->render('AppBundle:empresa:index.html.twig', array(
-            'empresas' => $empresas,
-        ));
+        $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado empresas", 
+                    'data'=> $empresas,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,218 @@ class EmpresaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $empresa = new Empresa();
-        $form = $this->createForm('AppBundle\Form\EmpresaType', $empresa);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nit = $params->nit;
+                        $nombre = $params->nombre;
+                        $telefono = $params->telefono;
+                        $direccion = $params->direccion;
+                        $correo = $params->correo;
+                        $em = $this->getDoctrine()->getManager();
+                        $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
+                            array('correo' => $correo)
+                        );
+                        if ($empresas==null) {
+                            $municipioId = $params->municipioId;
+                            $tipoEmpresaId = $params->tipoEmpresaId;
+                            $ciudadanoId = $params->ciudadanoId;
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($empresa);
-            $em->flush();
+                            $em = $this->getDoctrine()->getManager();
+                            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+                            $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($tipoEmpresaId);
+                            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                            $empresa = new Empresa();
 
-            return $this->redirectToRoute('empresa_show', array('id' => $empresa->getId()));
-        }
+                            $empresa->setNit($nit);
+                            $empresa->setNombre($nombre);
+                            $empresa->setTelefono($telefono);
+                            $empresa->setDireccion($direccion);
+                            $empresa->setCorreo($correo);
+                            $empresa->setMunicipio($municipio);
+                            $empresa->setTipoEmpresa($tipoEmpresa);
+                            $empresa->setCiudadano($ciudadano);
 
-        return $this->render('AppBundle:empresa:new.html.twig', array(
-            'empresa' => $empresa,
-            'form' => $form->createView(),
-        ));
+
+                            $empresa->setEstado(true);
+                            $em = $this->getDoctrine()->getManager();
+                            $em->persist($empresa);
+                            $em->flush();
+
+                            $responce = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'msj' => "Empresa creado con exito", 
+                            );
+                        }else{
+                           $responce = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'msj' => " Correo repetido en la base de datos", 
+                            ); 
+                        }
+
+                        
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Empresa entity.
      *
-     * @Route("/{id}", name="empresa_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="empresa_show")
+     * @Method("POST")
      */
-    public function showAction(Empresa $empresa)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($empresa);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:empresa:show.html.twig', array(
-            'empresa' => $empresa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "empresa con nombre"." ".$empresa->getNombre(), 
+                    'data'=> $empresa,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Empresa entity.
      *
-     * @Route("/{id}/edit", name="empresa_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/edit", name="empresa_edit")
+     * @Method({"POST", "POST"})
      */
-    public function editAction(Request $request, Empresa $empresa)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($empresa);
-        $editForm = $this->createForm('AppBundle\Form\EmpresaType', $empresa);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($empresa);
-            $em->flush();
+            $empresa = $em->getRepository("AppBundle:Empresa")->find($params->id);
 
-            return $this->redirectToRoute('empresa_edit', array('id' => $empresa->getId()));
+            if ($empresa!=null) {
+                $nit = $params->nit;
+                $nombre = $params->nombre;
+                $telefono = $params->telefono;
+                $direccion = $params->direccion;
+                $correo = $params->correo;
+                $municipioId = $params->municipioId;
+                $tipoEmpresaId = $params->tipoEmpresaId;
+                $ciudadanoId = $params->ciudadanoId;
+                $em = $this->getDoctrine()->getManager();
+                $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+                $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($tipoEmpresaId);
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+
+                $empresa->setNit($nit);
+                $empresa->setNombre($nombre);
+                $empresa->setTelefono($telefono);
+                $empresa->setDireccion($direccion);
+                $empresa->setCorreo($correo);
+                $empresa->setMunicipio($municipio);
+                $empresa->setTipoEmpresa($tipoEmpresa);
+                $empresa->setCiudadano($ciudadano);
+
+
+                $empresa->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($empresa);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Empresa editada con exito", 
+                );
+
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La empresa no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:empresa:edit.html.twig', array(
-            'empresa' => $empresa,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Empresa entity.
      *
-     * @Route("/{id}", name="empresa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="empresa_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Empresa $empresa)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($empresa);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($empresa);
-            $em->flush();
-        }
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
 
-        return $this->redirectToRoute('empresa_index');
+            $empresa->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($empresa);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "empresa eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
