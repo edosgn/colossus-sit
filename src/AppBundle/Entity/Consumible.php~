@@ -159,28 +159,4 @@ class Consumible
     {
         return $this->vehiculos;
     }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Consumible
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
 }

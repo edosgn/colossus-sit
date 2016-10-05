@@ -24,13 +24,19 @@ class ConsumibleController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $consumibles = $em->getRepository('AppBundle:Consumible')->findAll();
-
-        return $this->render('AppBundle:consumible:index.html.twig', array(
-            'consumibles' => $consumibles,
-        ));
+        $consumibles = $em->getRepository('AppBundle:Consumible')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado consumibles", 
+                    'data'=> $consumibles,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,161 @@ class ConsumibleController extends Controller
      */
     public function newAction(Request $request)
     {
-        $consumible = new Consumible();
-        $form = $this->createForm('AppBundle\Form\ConsumibleType', $consumible);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $consumible = new Consumible();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($consumible);
-            $em->flush();
+                        $consumible->setNombre($nombre);
+                        $consumible->setEstado(true);
 
-            return $this->redirectToRoute('consumible_show', array('id' => $consumible->getId()));
-        }
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($consumible);
+                        $em->flush();
 
-        return $this->render('AppBundle:consumible:new.html.twig', array(
-            'consumible' => $consumible,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "consumible creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Consumible entity.
      *
-     * @Route("/{id}", name="consumible_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="consumible_show")
+     * @Method("POST")
      */
-    public function showAction(Consumible $consumible)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($consumible);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:consumible:show.html.twig', array(
-            'consumible' => $consumible,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $consumible = $em->getRepository('AppBundle:Consumible')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "consumible encontrado", 
+                    'data'=> $consumible,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Consumible entity.
      *
-     * @Route("/{id}/edit", name="consumible_edit")
+     * @Route("/edit", name="consumible_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Consumible $consumible)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($consumible);
-        $editForm = $this->createForm('AppBundle\Form\ConsumibleType', $consumible);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $consumibleId = $params->id;
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($consumible);
-            $em->flush();
+            $consumible = $em->getRepository("AppBundle:Consumible")->find($consumibleId);
 
-            return $this->redirectToRoute('consumible_edit', array('id' => $consumible->getId()));
+            if ($consumible!=null) {
+                $consumible->setNombre($nombre);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($consumible);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "consumible actualizado con exito", 
+                        'data'=> $consumible,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El consumible no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar consumible", 
+                );
         }
 
-        return $this->render('AppBundle:consumible:edit.html.twig', array(
-            'consumible' => $consumible,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Consumible entity.
      *
-     * @Route("/{id}", name="consumible_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="consumible_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Consumible $consumible)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($consumible);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($consumible);
-            $em->flush();
-        }
+            $consumible = $em->getRepository('AppBundle:Consumible')->find($id);
 
-        return $this->redirectToRoute('consumible_index');
+            $consumible->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($consumible);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "consumible eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
