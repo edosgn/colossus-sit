@@ -24,13 +24,19 @@ class LineaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $lineas = $em->getRepository('AppBundle:Linea')->findAll();
-
-        return $this->render('AppBundle:linea:index.html.twig', array(
-            'lineas' => $lineas,
-        ));
+        $lineas = $em->getRepository('AppBundle:Linea')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado lineas", 
+                    'data'=> $lineas,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,182 @@ class LineaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $linea = new Linea();
-        $form = $this->createForm('AppBundle\Form\LineaType', $linea);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) { 
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($linea);
-            $em->flush();
 
-            return $this->redirectToRoute('linea_show', array('id' => $linea->getId()));
-        }
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoMt = $params->codigoMt;
+                $marcaId = $params->marcaId;
+                $em = $this->getDoctrine()->getManager();
+                $marca = $em->getRepository('AppBundle:Marca')->find($marcaId);
+                $linea = $em->getRepository('AppBundle:Linea')->findBy(
+                    array('codigoMt' => $codigoMt)
+                );
+                    if ($linea==null) {
+                        $linea = new Linea();
+                        $linea->setNombre($nombre);
+                        $linea->setEstado(true);
+                        $linea->setCodigoMt($codigoMt);
+                        $linea->setMarca($marca);
 
-        return $this->render('AppBundle:linea:new.html.twig', array(
-            'linea' => $linea,
-            'form' => $form->createView(),
-        ));
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($linea);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "linea creada con exito", 
+                        );
+                    }else{
+                         $responce = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "Codigo de ministerio de transporte debe ser unico",
+                        ); 
+                    }
+                }
+                
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Linea entity.
      *
-     * @Route("/{id}", name="linea_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="linea_show")
+     * @Method("POST")
      */
-    public function showAction(Linea $linea)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($linea);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:linea:show.html.twig', array(
-            'linea' => $linea,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $linea = $em->getRepository('AppBundle:Linea')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "linea encontrada", 
+                    'data'=> $linea,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Linea entity.
      *
-     * @Route("/{id}/edit", name="linea_edit")
+     * @Route("/edit", name="linea_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Linea $linea)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($linea);
-        $editForm = $this->createForm('AppBundle\Form\LineaType', $linea);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $marcaId = $params->marcaId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($linea);
-            $em->flush();
+            $marca = $em->getRepository('AppBundle:Marca')->find($marcaId);
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
+            $em = $this->getDoctrine()->getManager();
+            $linea = $em->getRepository('AppBundle:Linea')->find($params->id);
+            if ($linea!=null) {
 
-            return $this->redirectToRoute('linea_edit', array('id' => $linea->getId()));
+                $linea->setNombre($nombre);
+                $linea->setEstado(true);
+                $linea->setCodigoMt($codigoMt);
+                $linea->setMarca($marca);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($linea);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "linea editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La linea no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:linea:edit.html.twig', array(
-            'linea' => $linea,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Linea entity.
      *
-     * @Route("/{id}", name="linea_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="linea_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Linea $linea)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($linea);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($linea);
-            $em->flush();
-        }
+            $linea = $em->getRepository('AppBundle:Linea')->find($id);
 
-        return $this->redirectToRoute('linea_index');
+            $linea->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($linea);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "linea eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
