@@ -24,13 +24,19 @@ class TipoEmpresaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $tipoEmpresas = $em->getRepository('AppBundle:TipoEmpresa')->findAll();
-
-        return $this->render('AppBundle:TipoEmpresa:index.html.twig', array(
-            'tipoEmpresas' => $tipoEmpresas,
-        ));
+        $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado tipoEmpresa", 
+                    'data'=> $tipoEmpresa,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,161 @@ class TipoEmpresaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $tipoEmpresa = new TipoEmpresa();
-        $form = $this->createForm('AppBundle\Form\TipoEmpresaType', $tipoEmpresa);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $tipoEmpresa = new TipoEmpresa();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tipoEmpresa);
-            $em->flush();
+                        $tipoEmpresa->setNombre($nombre);
+                        $tipoEmpresa->setEstado(true);
 
-            return $this->redirectToRoute('tipoempresa_show', array('id' => $tipoEmpresa->getId()));
-        }
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($tipoEmpresa);
+                        $em->flush();
 
-        return $this->render('AppBundle:TipoEmpresa:new.html.twig', array(
-            'tipoEmpresa' => $tipoEmpresa,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "tipoEmpresa creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a TipoEmpresa entity.
      *
-     * @Route("/{id}", name="tipoempresa_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="tipoempresa_show")
+     * @Method("POST")
      */
-    public function showAction(TipoEmpresa $tipoEmpresa)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($tipoEmpresa);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:TipoEmpresa:show.html.twig', array(
-            'tipoEmpresa' => $tipoEmpresa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tipoEmpresa con nombre"." ".$tipoEmpresa->getNombre(), 
+                    'data'=> $tipoEmpresa,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing TipoEmpresa entity.
      *
-     * @Route("/{id}/edit", name="tipoempresa_edit")
+     * @Route("/edit", name="tipoempresa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, TipoEmpresa $tipoEmpresa)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($tipoEmpresa);
-        $editForm = $this->createForm('AppBundle\Form\TipoEmpresaType', $tipoEmpresa);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($tipoEmpresa);
-            $em->flush();
+            $tipoEmpresa = $em->getRepository("AppBundle:TipoEmpresa")->find($params->id);
 
-            return $this->redirectToRoute('tipoempresa_edit', array('id' => $tipoEmpresa->getId()));
+            if ($tipoEmpresa!=null) {
+                $tipoEmpresa->setNombre($nombre);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tipoEmpresa);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tipoEmpresa actualizado con exito", 
+                        'data'=> $tipoEmpresa,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El tipoEmpresa no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar tipoEmpresa", 
+                );
         }
 
-        return $this->render('AppBundle:TipoEmpresa:edit.html.twig', array(
-            'tipoEmpresa' => $tipoEmpresa,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a TipoEmpresa entity.
      *
-     * @Route("/{id}", name="tipoempresa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="tipoempresa_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, TipoEmpresa $tipoEmpresa)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($tipoEmpresa);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tipoEmpresa);
-            $em->flush();
-        }
+            $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($id);
 
-        return $this->redirectToRoute('tipoempresa_index');
+            $tipoEmpresa->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($tipoEmpresa);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tipoEmpresa eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
