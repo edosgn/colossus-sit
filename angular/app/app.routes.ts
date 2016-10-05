@@ -10,6 +10,8 @@ import { IndexMunicipioComponent } from "./components/municipio/index.municipio.
 import { NewMunicipioComponent } from "./components/municipio/new.municipio.component";
 import { MunicipioEditComponent } from "./components/municipio/edit.municipio.component";
 import { IndexBancoComponent } from "./components/banco/index.banco.component";
+import { NewBancoComponent } from "./components/banco/new.banco.component";
+import { BancoEditComponent } from "./components/banco/edit.banco.component";
 
 
 
@@ -33,6 +35,8 @@ export const routes: RouterConfig = [
     { path: 'municipio/new', component: NewMunicipioComponent},
     { path: 'municipio/show/:id', component: MunicipioEditComponent},
     { path: 'banco/index', component: IndexBancoComponent},
+    { path: 'banco/new', component: NewBancoComponent},
+    { path: 'banco/show/:id', component: BancoEditComponent},
 
 
 ];

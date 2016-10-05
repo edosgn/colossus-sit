@@ -1,6 +1,6 @@
-export class Departamento{
+export class Banco{
 	constructor(
 		public id:number,
-		public nombre:string,
+		public nombre:string
 	){}
 }
