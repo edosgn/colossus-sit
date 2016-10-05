@@ -47,85 +47,175 @@ class CombustibleController extends Controller
      */
     public function newAction(Request $request)
     {
-        $combustible = new Combustible();
-        $form = $this->createForm('AppBundle\Form\CombustibleType', $combustible);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($combustible);
-            $em->flush();
 
-            return $this->redirectToRoute('combustible_show', array('id' => $combustible->getId()));
-        }
-
-        return $this->render('AppBundle:combustible:new.html.twig', array(
-            'combustible' => $combustible,
-            'form' => $form->createView(),
-        ));
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                $nombre = $params->nombre;
+                $codigoMt = $params->codigoMt;
+                $em = $this->getDoctrine()->getManager();
+                $combustible = $em->getRepository('AppBundle:Combustible')->findBy(
+                    array('codigoMt' => $codigoMt)
+                );
+                    if ($combustible==null) {
+                        $combustible = new Combustible();
+                        $combustible->setNombre($nombre);
+                        $combustible->setEstado(true);
+                        $combustible->setCodigoMt($codigoMt);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($combustible);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Combustible creada con exito", 
+                        );
+                    }else{
+                         $responce = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "Codigo de ministerio de transporte debe ser unico",
+                        ); 
+                    }
+                }
+                
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Combustible entity.
      *
-     * @Route("/{id}", name="combustible_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="combustible_show")
+     * @Method("POST")
      */
-    public function showAction(Combustible $combustible)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($combustible);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:combustible:show.html.twig', array(
-            'combustible' => $combustible,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "combustible encontrado", 
+                    'data'=> $combustible,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Combustible entity.
      *
-     * @Route("/{id}/edit", name="combustible_edit")
+     * @Route("/edit", name="combustible_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Combustible $combustible)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($combustible);
-        $editForm = $this->createForm('AppBundle\Form\CombustibleType', $combustible);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($combustible);
-            $em->flush();
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($params->id);
+            if ($combustible!=null) {
 
-            return $this->redirectToRoute('combustible_edit', array('id' => $combustible->getId()));
+                $combustible->setNombre($nombre);
+                $combustible->setEstado(true);
+                $combustible->setCodigoMt($codigoMt);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($combustible);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "combustible editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La combustible no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:combustible:edit.html.twig', array(
-            'combustible' => $combustible,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Combustible entity.
      *
-     * @Route("/{id}", name="combustible_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="combustible_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Combustible $combustible)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($combustible);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($combustible);
-            $em->flush();
-        }
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($id);
 
-        return $this->redirectToRoute('combustible_index');
+            $combustible->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($combustible);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Combustible eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
