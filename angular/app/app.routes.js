@@ -11,6 +11,8 @@ var index_municipio_component_1 = require("./components/municipio/index.municipi
 var new_municipio_component_1 = require("./components/municipio/new.municipio.component");
 var edit_municipio_component_1 = require("./components/municipio/edit.municipio.component");
 var index_banco_component_1 = require("./components/banco/index.banco.component");
+var new_banco_component_1 = require("./components/banco/new.banco.component");
+var edit_banco_component_1 = require("./components/banco/edit.banco.component");
 exports.routes = [
     {
         path: '',
@@ -29,6 +31,8 @@ exports.routes = [
     { path: 'municipio/new', component: new_municipio_component_1.NewMunicipioComponent },
     { path: 'municipio/show/:id', component: edit_municipio_component_1.MunicipioEditComponent },
     { path: 'banco/index', component: index_banco_component_1.IndexBancoComponent },
+    { path: 'banco/new', component: new_banco_component_1.NewBancoComponent },
+    { path: 'banco/show/:id', component: edit_banco_component_1.BancoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

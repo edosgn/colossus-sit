@@ -1,10 +1,10 @@
 "use strict";
-var Departamento = (function () {
-    function Departamento(id, nombre) {
+var Banco = (function () {
+    function Banco(id, nombre) {
         this.id = id;
         this.nombre = nombre;
     }
-    return Departamento;
+    return Banco;
 }());
-exports.Departamento = Departamento;
-//# sourceMappingURL=banco.js.map
+exports.Banco = Banco;
+//# sourceMappingURL=Banco.js.map

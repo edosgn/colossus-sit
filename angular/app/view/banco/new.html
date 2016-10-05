@@ -15,30 +15,21 @@
 	<form #newDepartamento="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
 
 		<div class="panel panel-primary">
-		  <div class="panel-heading">Reguistrar Departamento</div>
+		  <div class="panel-heading">Reguistrar Banco</div>
 		  <div class="panel-body">
 		  	
 		  		<br>
 				<br>
 
-				<p class="col-md-6">
+				<p class="col-md-12">
 					<label >Nombre:</label>
-					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="departamento.nombre" ngControl="nombre"  required />
-					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorios</span>
+					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="banco.nombre" ngControl="nombre"  required />
+					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
-					<label >Codigo Dian:</label>
-					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="departamento.codigoDian" ngControl="codigo"  required />
-					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorio</span>
-					<br>
-				</p>
-
-				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"
 				[disabled]="!newDepartamento.valid"/>
-
-
 		  </div>
 		</div>
 
