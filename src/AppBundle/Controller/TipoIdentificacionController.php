@@ -24,13 +24,19 @@ class TipoIdentificacionController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $tipoIdentificacions = $em->getRepository('AppBundle:TipoIdentificacion')->findAll();
-
-        return $this->render('AppBundle:TipoIdentificacion:index.html.twig', array(
-            'tipoIdentificacions' => $tipoIdentificacions,
-        ));
+        $tipoIdentificaiones = $em->getRepository('AppBundle:TipoIdentificacion')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado Tipos de identificaion", 
+                    'data'=> $tipoIdentificaiones,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -40,86 +46,162 @@ class TipoIdentificacionController extends Controller
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
-    {
-        $tipoIdentificacion = new TipoIdentificacion();
-        $form = $this->createForm('AppBundle\Form\TipoIdentificacionType', $tipoIdentificacion);
-        $form->handleRequest($request);
+    { 
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $tipoIdentificacion = new TipoIdentificacion();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tipoIdentificacion);
-            $em->flush();
+                        $tipoIdentificacion->setNombre($nombre);
+                        $tipoIdentificacion->setEstado(true);
 
-            return $this->redirectToRoute('tipoidentificacion_show', array('id' => $tipoIdentificacion->getId()));
-        }
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($tipoIdentificacion);
+                        $em->flush();
 
-        return $this->render('AppBundle:TipoIdentificacion:new.html.twig', array(
-            'tipoIdentificacion' => $tipoIdentificacion,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Tipo identificaion creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a TipoIdentificacion entity.
      *
-     * @Route("/{id}", name="tipoidentificacion_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="tipoidentificacion_show")
+     * @Method("POST")
      */
-    public function showAction(TipoIdentificacion $tipoIdentificacion)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($tipoIdentificacion);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:TipoIdentificacion:show.html.twig', array(
-            'tipoIdentificacion' => $tipoIdentificacion,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tipoIdentificacion con nombre"." ".$tipoIdentificacion->getNombre(), 
+                    'data'=> $tipoIdentificacion,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing TipoIdentificacion entity.
      *
-     * @Route("/{id}/edit", name="tipoidentificacion_edit")
+     * @Route("/edit", name="tipoidentificacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, TipoIdentificacion $tipoIdentificacion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($tipoIdentificacion);
-        $editForm = $this->createForm('AppBundle\Form\TipoIdentificacionType', $tipoIdentificacion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            
+            $nombre = $params->nombre;
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($tipoIdentificacion);
-            $em->flush();
+            $tipoIdentificacion = $em->getRepository("AppBundle:TipoIdentificacion")->find($params->id);
 
-            return $this->redirectToRoute('tipoidentificacion_edit', array('id' => $tipoIdentificacion->getId()));
+            if ($tipoIdentificacion!=null) {
+                $tipoIdentificacion->setNombre($nombre);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tipoIdentificacion);
+                $em->flush();
+
+                 $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tipoIdentificacion actualizado con exito", 
+                        'data'=> $tipoIdentificacion,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El tipoIdentificacion no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar tipoIdentificacion", 
+                );
         }
 
-        return $this->render('AppBundle:TipoIdentificacion:edit.html.twig', array(
-            'tipoIdentificacion' => $tipoIdentificacion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a TipoIdentificacion entity.
      *
-     * @Route("/{id}", name="tipoidentificacion_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="tipoidentificacion_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, TipoIdentificacion $tipoIdentificacion)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($tipoIdentificacion);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tipoIdentificacion);
-            $em->flush();
-        }
+            $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($id);
 
-        return $this->redirectToRoute('tipoidentificacion_index');
+            $tipoIdentificacion->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($tipoIdentificacion);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tipoIdentificacion eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

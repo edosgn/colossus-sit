@@ -29,6 +29,13 @@ class TipoIdentificacion
     private $nombre;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ciudadano", mappedBy="tipoIdentificacion")
      */
     protected $ciudadanos;  
@@ -112,5 +119,29 @@ class TipoIdentificacion
     public function getCiudadanos()
     {
         return $this->ciudadanos;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return TipoIdentificacion
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
