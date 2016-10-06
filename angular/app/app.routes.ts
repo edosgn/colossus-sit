@@ -68,6 +68,10 @@ import { IndexEmpresaComponent } from "./components/empresa/index.empresa.compon
 import { NewEmpresaComponent } from "./components/empresa/new.empresa.component";
 import { EmpresaEditComponent } from "./components/empresa/edit.empresa.component";
 
+import { IndexServicioComponent } from "./components/servicio/index.servicio.component";
+import { NewServicioComponent } from "./components/servicio/new.servicio.component";
+import { ServicioEditComponent } from "./components/servicio/edit.servicio.component";
+
 
 
 
@@ -148,6 +152,10 @@ export const routes: RouterConfig = [
     { path: 'empresa/index', component: IndexEmpresaComponent},
     { path: 'empresa/new', component: NewEmpresaComponent},
     { path: 'empresa/show/:id', component: EmpresaEditComponent},
+
+    { path: 'servicio/index', component: IndexServicioComponent},
+    { path: 'servicio/new', component: NewServicioComponent},
+    { path: 'servicio/show/:id', component: ServicioEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
