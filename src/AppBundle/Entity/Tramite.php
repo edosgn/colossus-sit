@@ -56,6 +56,13 @@ class Tramite
      */
     private $afectacion;
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="Tramites")
      **/
@@ -423,5 +430,29 @@ class Tramite
     public function getTramitesEspecifico()
     {
         return $this->tramitesEspecifico;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Tramite
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

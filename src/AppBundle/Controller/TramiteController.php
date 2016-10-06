@@ -24,13 +24,19 @@ class TramiteController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $tramites = $em->getRepository('AppBundle:Tramite')->findAll();
-
-        return $this->render('AppBundle:Tramite:index.html.twig', array(
-            'tramites' => $tramites,
-        ));
+        $tramites = $em->getRepository('AppBundle:Tramite')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado tramites", 
+                    'data'=> $tramites,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,178 @@ class TramiteController extends Controller
      */
     public function newAction(Request $request)
     {
-        $tramite = new Tramite();
-        $form = $this->createForm('AppBundle\Form\TramiteType', $tramite);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $valor = $params->valor;
+                        $redondeo = $params->redondeo;
+                        $unidad = $params->unidad;
+                        $afectacion = $params->afectacion;
+                        $moduloId = $params->moduloId;
+                        $em = $this->getDoctrine()->getManager();
+                        $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+                        $tramite = new Tramite();
+                        $tramite->setNombre($nombre);
+                        $tramite->setValor($valor);
+                        $tramite->setRedondeo($redondeo);
+                        $tramite->setUnidad($unidad);
+                        $tramite->setAfectacion($afectacion);
+                        $tramite->setModulo($modulo);
+                        $tramite->setEstado(true);
+                        $em->persist($tramite);
+                        $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tramite);
-            $em->flush();
-
-            return $this->redirectToRoute('tramite_show', array('id' => $tramite->getId()));
-        }
-
-        return $this->render('AppBundle:Tramite:new.html.twig', array(
-            'tramite' => $tramite,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "tramite creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Tramite entity.
      *
-     * @Route("/{id}", name="tramite_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="tramite_show")
+     * @Method("POST")
      */
-    public function showAction(Tramite $tramite)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($tramite);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:Tramite:show.html.twig', array(
-            'tramite' => $tramite,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $tramite = $em->getRepository('AppBundle:Tramite')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramite con nombre"." ".$tramite->getNombre(), 
+                    'data'=> $tramite,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Tramite entity.
      *
-     * @Route("/{id}/edit", name="tramite_edit")
+     * @Route("/edit", name="tramite_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Tramite $tramite)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($tramite);
-        $editForm = $this->createForm('AppBundle\Form\TramiteType', $tramite);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $nombre = $params->nombre;
+            $valor = $params->valor;
+            $redondeo = $params->redondeo;
+            $unidad = $params->unidad;
+            $afectacion = $params->afectacion;
+            $moduloId = $params->moduloId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($tramite);
-            $em->flush();
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+            $tramite = $em->getRepository("AppBundle:Tramite")->find($params->id);
 
-            return $this->redirectToRoute('tramite_edit', array('id' => $tramite->getId()));
+            if ($tramite!=null) {
+                $tramite->setNombre($nombre);
+                $tramite->setValor($valor);
+                $tramite->setRedondeo($redondeo);
+                $tramite->setUnidad($unidad);
+                $tramite->setAfectacion($afectacion);
+                $tramite->setModulo($modulo);
+                $tramite->setEstado(true);
+                $em->persist($tramite);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramite editado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El tramite no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:Tramite:edit.html.twig', array(
-            'tramite' => $tramite,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Tramite entity.
      *
-     * @Route("/{id}", name="tramite_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="tramite_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Tramite $tramite)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($tramite);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tramite);
-            $em->flush();
-        }
+            $tramite = $em->getRepository('AppBundle:Tramite')->find($id);
 
-        return $this->redirectToRoute('tramite_index');
+            $tramite->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($tramite);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tramite eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
