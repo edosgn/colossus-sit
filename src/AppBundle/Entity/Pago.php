@@ -42,12 +42,6 @@ class Pago
      */
     private $horaPago;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="estado", type="string", length=255)
-     */
-    private $estado;
 
      /**
      * @var string
@@ -55,6 +49,13 @@ class Pago
      * @ORM\Column(name="fuente", type="string", length=255)
      */
     private $fuente;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="pagos")
@@ -109,7 +110,7 @@ class Pago
      */
     public function setFechaPago($fechaPago)
     {
-        $this->fechaPago = $fechaPago;
+        $this->fechaPago = new \DateTime($fechaPago);
 
         return $this;
     }
@@ -121,7 +122,7 @@ class Pago
      */
     public function getFechaPago()
     {
-        return $this->fechaPago;
+        return $this->fechaPago->format("y-m-d");
     }
 
     /**
@@ -133,7 +134,7 @@ class Pago
      */
     public function setHoraPago($horaPago)
     {
-        $this->horaPago = $horaPago;
+        $this->horaPago = new \DateTime($horaPago);
 
         return $this;
     }
@@ -145,32 +146,9 @@ class Pago
      */
     public function getHoraPago()
     {
-        return $this->horaPago;
+        return $this->horaPago->format("h:m:s");
     }
 
-    /**
-     * Set estado
-     *
-     * @param string $estado
-     *
-     * @return Pago
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return string
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
 
     /**
      * Set fuente
@@ -218,5 +196,29 @@ class Pago
     public function getTramite()
     {
         return $this->tramite;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Pago
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

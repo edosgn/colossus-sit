@@ -24,13 +24,19 @@ class PagoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $pagos = $em->getRepository('AppBundle:Pago')->findAll();
-
-        return $this->render('AppBundle:Pago:index.html.twig', array(
-            'pagos' => $pagos,
-        ));
+        $pagos = $em->getRepository('AppBundle:Pago')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado pagos", 
+                    'data'=> $pagos,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,38 +47,86 @@ class PagoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $pago = new Pago();
-        $form = $this->createForm('AppBundle\Form\PagoType', $pago);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $valor = $params->valor;
+                        $fechaPago = $params->fechaPago;
+                        $horaPago = $params->horaPago;
+                        $fuente = $params->fuente;
+                        $tramiteId = $params->tramiteId;
+                        $em = $this->getDoctrine()->getManager();
+                        $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($pago);
-            $em->flush();
+                        $pago = new Pago();
 
-            return $this->redirectToRoute('pago_show', array('id' => $pago->getId()));
-        }
+                        $pago->setValor($valor);
+                        $pago->setFechaPago($fechaPago);
+                        $pago->setHoraPago($horaPago);
+                        $pago->setFuente($fuente);
+                        $pago->setTramite($tramite);
 
-        return $this->render('AppBundle:Pago:new.html.twig', array(
-            'pago' => $pago,
-            'form' => $form->createView(),
-        ));
+                        $pago->setEstado(true);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($pago);
+                        $em->flush();
+
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "pago creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a Pago entity.
      *
-     * @Route("/{id}", name="pago_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="pago_show")
+     * @Method("POST")
      */
-    public function showAction(Pago $pago)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($pago);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:Pago:show.html.twig', array(
-            'pago' => $pago,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $pago = $em->getRepository('AppBundle:Pago')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "pago", 
+                    'data'=> $pago,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
