@@ -188,6 +188,8 @@ class Vehiculo
 
    
 
+   
+
     /**
      * Set placa
      *
@@ -245,7 +247,7 @@ class Vehiculo
      */
     public function setFechaFactura($fechaFactura)
     {
-        $this->fechaFactura = $fechaFactura;
+        $this->fechaFactura = new \DateTime($fechaFactura);
 
         return $this;
     }
@@ -257,7 +259,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura;
+        return $this->fechaFactura->format("y-m-d");
     }
 
     /**
@@ -317,7 +319,7 @@ class Vehiculo
      */
     public function setFechaManifiesto($fechaManifiesto)
     {
-        $this->fechaManifiesto = $fechaManifiesto;
+        $this->fechaManifiesto = new \DateTime($fechaManifiesto);
 
         return $this;
     }
@@ -329,7 +331,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto;
+        return $this->fechaManifiesto->format("y-m-d");
     }
 
     /**
@@ -365,7 +367,7 @@ class Vehiculo
      */
     public function setModelo($modelo)
     {
-        $this->modelo = $modelo;
+        $this->modelo = new \DateTime($modelo);
 
         return $this;
     }
@@ -377,7 +379,7 @@ class Vehiculo
      */
     public function getModelo()
     {
-        return $this->modelo;
+        return $this->modelo->format("y");
     }
 
     /**
@@ -692,7 +694,63 @@ class Vehiculo
         return $this->organismoTransito;
     }
 
-    
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return Vehiculo
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+
+    /**
+     * Add ciudadanosVehiculo
+     *
+     * @param \AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo
+     *
+     * @return Vehiculo
+     */
+    public function addCiudadanosVehiculo(\AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo)
+    {
+        $this->ciudadanosVehiculo[] = $ciudadanosVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Remove ciudadanosVehiculo
+     *
+     * @param \AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo
+     */
+    public function removeCiudadanosVehiculo(\AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo)
+    {
+        $this->ciudadanosVehiculo->removeElement($ciudadanosVehiculo);
+    }
+
+    /**
+     * Get ciudadanosVehiculo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCiudadanosVehiculo()
+    {
+        return $this->ciudadanosVehiculo;
+    }
 
     /**
      * Add vehiculosPesado
