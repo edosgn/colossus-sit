@@ -60,17 +60,17 @@ class ServicioController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{
-                        $nombreServicio = $params->nombreServicio;
-                        $codigoServicio = $params->codigoServicio;
+                        $nombre = $params->nombre;
+                        $codigo = $params->codigo;
                         $em = $this->getDoctrine()->getManager();
                        
                         $servicio = $em->getRepository('AppBundle:Servicio')->findBy(
-                            array('codigoServicio' => $codigoServicio)
+                            array('codigo' => $codigo)
                         );
                         if ($servicio==null) {
                             $servicio = new Servicio();
-                            $servicio->setNombreServicio($nombreServicio);
-                            $servicio->setCodigoServicio($codigoServicio);
+                            $servicio->setNombre($nombre);
+                            $servicio->setCodigo($codigo);
                             $servicio->setEstado(true);
                             $em = $this->getDoctrine()->getManager();
                             $em->persist($servicio);
@@ -119,7 +119,7 @@ class ServicioController extends Controller
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "servicio con nombre"." ".$servicio->getNombreServicio(), 
+                    'msj' => "servicio con nombre"." ".$servicio->getNombre(), 
                     'data'=> $servicio,
             );
         }else{
@@ -149,15 +149,15 @@ class ServicioController extends Controller
             $params = json_decode($json);
 
            
-            $nombreServicio = $params->nombreServicio;
-            $codigoServicio = $params->codigoServicio;
+            $nombre = $params->nombre;
+            $codigo = $params->codigo;
 
             $em = $this->getDoctrine()->getManager();
             $servicio = $em->getRepository("AppBundle:Servicio")->find($params->id);
 
             if ($servicio!=null) {
-                $servicio->setNombreServicio($nombreServicio);
-                $servicio->setCodigoServicio($codigoServicio);
+                $servicio->setNombre($nombre);
+                $servicio->setCodigo($codigo);
                 $servicio->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($servicio);

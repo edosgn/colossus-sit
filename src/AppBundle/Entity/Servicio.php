@@ -24,16 +24,16 @@ class Servicio
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreServicio", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombreServicio;
+    private $nombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="codigoServicio", type="integer", unique=true)
+     * @ORM\Column(name="codigo", type="integer", unique=true)
      */
-    private $codigoServicio;
+    private $codigo;
 
     /**
      * @var boolean
@@ -75,52 +75,78 @@ class Servicio
 
    
 
+   
+
     /**
-     * Set nombreServicio
+     * Set nombre
      *
-     * @param string $nombreServicio
+     * @param string $nombre
      *
      * @return Servicio
      */
-    public function setNombreServicio($nombreServicio)
+    public function setNombre($nombre)
     {
-        $this->nombreServicio = $nombreServicio;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreServicio
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreServicio()
+    public function getNombre()
     {
-        return $this->nombreServicio;
+        return $this->nombre;
     }
 
     /**
-     * Set codigoServicio
+     * Set codigo
      *
-     * @param integer $codigoServicio
+     * @param integer $codigo
      *
      * @return Servicio
      */
-    public function setCodigoServicio($codigoServicio)
+    public function setCodigo($codigo)
     {
-        $this->codigoServicio = $codigoServicio;
+        $this->codigo = $codigo;
 
         return $this;
     }
 
     /**
-     * Get codigoServicio
+     * Get codigo
      *
      * @return integer
      */
-    public function getCodigoServicio()
+    public function getCodigo()
     {
-        return $this->codigoServicio;
+        return $this->codigo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Servicio
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**
@@ -189,29 +215,5 @@ class Servicio
     public function getVehiculos()
     {
         return $this->vehiculos;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Servicio
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 }

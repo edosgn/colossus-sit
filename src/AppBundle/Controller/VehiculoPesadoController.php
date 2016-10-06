@@ -24,13 +24,18 @@ class VehiculoPesadoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $vehiculoPesados = $em->getRepository('AppBundle:VehiculoPesado')->findAll();
-
-        return $this->render('AppBundle:VehiculoPesado:index.html.twig', array(
-            'vehiculoPesados' => $vehiculoPesados,
-        ));
+        $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado vehiculoPesado", 
+                    'data'=> $vehiculoPesado,
+            );
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,22 +46,54 @@ class VehiculoPesadoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vehiculoPesado = new VehiculoPesado();
-        $form = $this->createForm('AppBundle\Form\VehiculoPesadoType', $vehiculoPesado);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $tonelaje = $params->tonelaje;
+                        $numeroEjes = $params->numeroEjes;
+                        $numeroMt = $params->numeroMt;
+                        $fichaTecnicaHomologacionCarroceria = $params->fichaTecnicaHomologacionCarroceria;
+                        $fichaTecnicaHomologacionChasis = $params->fichaTecnicaHomologacionChasis;
+                        $vehiculoId = $params->vehiculoId;
+                        $modalidadId = $params->modalidadId;
+                        $empresaId = $params->empresaId;
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vehiculoPesado);
-            $em->flush();
+                        $vehiculoPesado = new VehiculoPesado();
 
-            return $this->redirectToRoute('vehiculopesado_show', array('id' => $vehiculoPesado->getId()));
-        }
+                        $vehiculoPesado->setTonelaje($tonelaje);
+                        $vehiculoPesado->setNumeroEjes($numeroEjes);
+                        $vehiculoPesado->setNumeroMt($numeroMt);
+                        $vehiculoPesado->setEstado(true);
 
-        return $this->render('AppBundle:VehiculoPesado:new.html.twig', array(
-            'vehiculoPesado' => $vehiculoPesado,
-            'form' => $form->createView(),
-        ));
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($vehiculoPesado);
+                        $em->flush();
+
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "vehiculoPesado creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
