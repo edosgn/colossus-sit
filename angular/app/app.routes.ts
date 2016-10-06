@@ -52,6 +52,10 @@ import { IndexModuloComponent } from "./components/modulo/index.modulo.component
 import { NewModuloComponent } from "./components/modulo/new.modulo.component";
 import { ModuloEditComponent } from "./components/modulo/edit.modulo.component";
 
+import { IndexTipoIdentificacionComponent } from "./components/tipo_identificacion/index.tipoidentificacion.component";
+import { NewTipoIdentificacionComponent } from "./components/tipo_identificacion/new.tipoidentificacion.component";
+import { TipoIdentificacionEditComponent } from "./components/tipo_identificacion/edit.tipoidentificacion.component";
+
 
 
 
@@ -116,6 +120,10 @@ export const routes: RouterConfig = [
     { path: 'modulo/index', component: IndexModuloComponent},
     { path: 'modulo/new', component: NewModuloComponent},
     { path: 'modulo/show/:id', component: ModuloEditComponent},
+
+    { path: 'tipoIdentificacion/index', component: IndexTipoIdentificacionComponent},
+    { path: 'tipoIdentificacion/new', component: NewTipoIdentificacionComponent},
+    { path: 'tipoIdentificacion/show/:id', component: TipoIdentificacionEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

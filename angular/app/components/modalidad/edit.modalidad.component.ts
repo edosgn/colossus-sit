@@ -10,7 +10,7 @@ import {Modalidad} from '../../model/modalidad/modalidad';
     selector: 'default',
     templateUrl: 'app/view/modalidad/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,ModalidadService]]
+    providers: [LoginService,ModalidadService]
 })
  
 // combustible del componente donde irán los datos y funcionalidades

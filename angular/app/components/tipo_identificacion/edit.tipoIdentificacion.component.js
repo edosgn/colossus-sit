@@ -9,40 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var cuenta_service_1 = require("../../services/cuenta/cuenta.service");
-var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
-var banco_service_1 = require('../../services/banco/banco.service');
 var router_1 = require("@angular/router");
-var cuenta_1 = require('../../model/cuenta/cuenta');
+var login_service_1 = require('../../services/login.service');
+var tipoIdentificacion_service_1 = require('../../services/tipo_Identificacion/tipoIdentificacion.service');
+var TipoIdentificacion_1 = require('../../model/tipo_Identificacion/TipoIdentificacion');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var CuentaEditComponent = (function () {
-    function CuentaEditComponent(_BancoService, _loginService, _CuentaService, _route, _router) {
-        this._BancoService = _BancoService;
+var TipoIdentificacionEditComponent = (function () {
+    function TipoIdentificacionEditComponent(_loginService, _TipoIdentificacionService, _route, _router) {
         this._loginService = _loginService;
-        this._CuentaService = _CuentaService;
+        this._TipoIdentificacionService = _TipoIdentificacionService;
         this._route = _route;
         this._router = _router;
     }
-    CuentaEditComponent.prototype.ngOnInit = function () {
+    TipoIdentificacionEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.cuenta = new cuenta_1.Cuenta(null, null, null, "");
+        this.tipoIdentificacion = new TipoIdentificacion_1.TipoIdentificacion(null, "");
         var token = this._loginService.getToken();
-        this._BancoService.getBanco().subscribe(function (response) {
-            _this.bancos = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
         });
-        this._CuentaService.showCuenta(token, this.id).subscribe(function (response) {
-            var data = response.data;
-            _this.cuenta = new cuenta_1.Cuenta(data.id, data.banco.id, data.numero, data.observacion);
+        this._TipoIdentificacionService.showTipoIdentificacion(token, this.id).subscribe(function (response) {
+            _this.tipoIdentificacion = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -51,10 +39,10 @@ var CuentaEditComponent = (function () {
             }
         });
     };
-    CuentaEditComponent.prototype.onSubmit = function () {
+    TipoIdentificacionEditComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._CuentaService.editCuenta(this.cuenta, token).subscribe(function (response) {
+        this._TipoIdentificacionService.editTipoIdentificacion(this.tipoIdentificacion, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
                 _this.errorMessage = error;
@@ -65,16 +53,16 @@ var CuentaEditComponent = (function () {
             });
         });
     };
-    CuentaEditComponent = __decorate([
+    TipoIdentificacionEditComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/cuenta/edit.html',
+            templateUrl: 'app/view/Tipo_Identificacion/edit.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, cuenta_service_1.CuentaService, banco_service_1.BancoService]
+            providers: [login_service_1.LoginService, tipoIdentificacion_service_1.TipoIdentificacionService]
         }), 
-        __metadata('design:paramtypes', [banco_service_1.BancoService, login_service_1.LoginService, cuenta_service_1.CuentaService, router_1.ActivatedRoute, router_1.Router])
-    ], CuentaEditComponent);
-    return CuentaEditComponent;
+        __metadata('design:paramtypes', [login_service_1.LoginService, tipoIdentificacion_service_1.TipoIdentificacionService, router_1.ActivatedRoute, router_1.Router])
+    ], TipoIdentificacionEditComponent);
+    return TipoIdentificacionEditComponent;
 }());
-exports.CuentaEditComponent = CuentaEditComponent;
-//# sourceMappingURL=edit.cuenta.component.js.map
+exports.TipoIdentificacionEditComponent = TipoIdentificacionEditComponent;
+//# sourceMappingURL=edit.tipoidentificacion.component.js.map

@@ -34,7 +34,7 @@ export class CuentaEditComponent implements OnInit{
 
 	ngOnInit(){	
 
-		this.cuenta = new Cuenta(null,null, "", null);
+		this.cuenta = new Cuenta(null,null, null,""); 
 		let token = this._loginService.getToken();
 		this._BancoService.getBanco().subscribe(
 				response => {

@@ -1,28 +1,29 @@
 // Importar el núcleo de Angular
-import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
-import {MarcaService} from '../../services/marca/marca.service';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {Marca} from '../../model/marca/marca';
+import {LoginService} from '../../services/login.service';
+import {TipoIdentificacionService} from '../../services/tipo_Identificacion/tipoIdentificacion.service';
+import {TipoIdentificacion} from '../../model/tipo_Identificacion/TipoIdentificacion';
+ 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/marca/edit.html',
+    templateUrl: 'app/view/Tipo_Identificacion/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,MarcaService]
+    providers: [LoginService ,TipoIdentificacionService]
 })
  
-// combustible del componente donde irán los datos y funcionalidades
-export class MarcaEditComponent implements OnInit{ 
+// Clase del componente donde irán los datos y funcionalidades
+export class TipoIdentificacionEditComponent implements OnInit{ 
 	public errorMessage;
-	public marca : Marca;
+	public tipoIdentificacion : TipoIdentificacion;
 	public id;
 	public respuesta;
 
 	constructor(
 		private _loginService: LoginService,
-		private _MarcaService:MarcaService,
+		private _TipoIdentificacionService: TipoIdentificacionService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
@@ -30,15 +31,19 @@ export class MarcaEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		this.marca = new Marca(null, "",null);
+		this.tipoIdentificacion = new TipoIdentificacion(null,"");
+
+
 		let token = this._loginService.getToken();
+
 			this._route.params.subscribe(params =>{
 				this.id = +params["id"];
 			});
-			this._MarcaService.showMarca(token,this.id).subscribe(
+
+			this._TipoIdentificacionService.showTipoIdentificacion(token,this.id).subscribe(
 
 						response => {
-							this.marca = response.data;
+							this.tipoIdentificacion = response.data;
 						},
 						error => {
 								this.errorMessage = <any>error;
@@ -56,7 +61,7 @@ export class MarcaEditComponent implements OnInit{
 
 	onSubmit(){
 		let token = this._loginService.getToken();
-		this._MarcaService.editMarca(this.marca,token).subscribe(
+		this._TipoIdentificacionService.editTipoIdentificacion(this.tipoIdentificacion,token).subscribe(
 			response => {
 				this.respuesta = response;
 			error => {

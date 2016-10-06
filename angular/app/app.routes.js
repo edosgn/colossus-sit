@@ -40,6 +40,9 @@ var edit_cuenta_component_1 = require("./components/cuenta/edit.cuenta.component
 var index_modulo_component_1 = require("./components/modulo/index.modulo.component");
 var new_modulo_component_1 = require("./components/modulo/new.modulo.component");
 var edit_modulo_component_1 = require("./components/modulo/edit.modulo.component");
+var index_tipoidentificacion_component_1 = require("./components/tipo_identificacion/index.tipoidentificacion.component");
+var new_tipoidentificacion_component_1 = require("./components/tipo_identificacion/new.tipoidentificacion.component");
+var edit_tipoidentificacion_component_1 = require("./components/tipo_identificacion/edit.tipoidentificacion.component");
 exports.routes = [
     {
         path: '',
@@ -87,6 +90,9 @@ exports.routes = [
     { path: 'modulo/index', component: index_modulo_component_1.IndexModuloComponent },
     { path: 'modulo/new', component: new_modulo_component_1.NewModuloComponent },
     { path: 'modulo/show/:id', component: edit_modulo_component_1.ModuloEditComponent },
+    { path: 'tipoIdentificacion/index', component: index_tipoidentificacion_component_1.IndexTipoIdentificacionComponent },
+    { path: 'tipoIdentificacion/new', component: new_tipoidentificacion_component_1.NewTipoIdentificacionComponent },
+    { path: 'tipoIdentificacion/show/:id', component: edit_tipoidentificacion_component_1.TipoIdentificacionEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
