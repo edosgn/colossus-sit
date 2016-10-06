@@ -28,6 +28,13 @@ class Variante
      */
     private $nombre;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
 
      /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="variantes")
@@ -140,5 +147,29 @@ class Variante
     public function getTramitesEspecifico()
     {
         return $this->tramitesEspecifico;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Variante
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

@@ -24,13 +24,19 @@ class VarianteController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $variantes = $em->getRepository('AppBundle:Variante')->findAll();
-
-        return $this->render('AppBundle:Variante:index.html.twig', array(
-            'variantes' => $variantes,
-        ));
+        $variantes = $em->getRepository('AppBundle:Variante')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado variantes", 
+                    'data'=> $variantes,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,22 +47,44 @@ class VarianteController extends Controller
      */
     public function newAction(Request $request)
     {
-        $variante = new Variante();
-        $form = $this->createForm('AppBundle\Form\VarianteType', $variante);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $nombre = $params->nombre;
+                        $banco = new Banco();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($variante);
-            $em->flush();
+                        $banco->setNombre($nombre);
+                        $banco->setEstado(true);
 
-            return $this->redirectToRoute('variante_show', array('id' => $variante->getId()));
-        }
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($banco);
+                        $em->flush();
 
-        return $this->render('AppBundle:Variante:new.html.twig', array(
-            'variante' => $variante,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Banco creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**

@@ -45,14 +45,14 @@ class Empresa
     /**
      * @var string
      *
-     * @ORM\Column(name="direccionEmpresa", type="string", length=255)
+     * @ORM\Column(name="direccion", type="string", length=255)
      */
     private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="correoEmpresa", type="string", length=255)
+     * @ORM\Column(name="correo", type="string", length=255)
      */
     private $correo;
 
