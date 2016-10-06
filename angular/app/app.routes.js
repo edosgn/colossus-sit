@@ -52,6 +52,9 @@ var edit_tipoEmpresa_component_1 = require("./components/tipo_Empresa/edit.tipoE
 var index_empresa_component_1 = require("./components/empresa/index.empresa.component");
 var new_empresa_component_1 = require("./components/empresa/new.empresa.component");
 var edit_empresa_component_1 = require("./components/empresa/edit.empresa.component");
+var index_tramite_component_1 = require("./components/tramite/index.tramite.component");
+var new_tramite_component_1 = require("./components/tramite/new.tramite.component");
+var edit_tramite_component_1 = require("./components/tramite/edit.tramite.component");
 exports.routes = [
     {
         path: '',
@@ -111,6 +114,9 @@ exports.routes = [
     { path: 'empresa/index', component: index_empresa_component_1.IndexEmpresaComponent },
     { path: 'empresa/new', component: new_empresa_component_1.NewEmpresaComponent },
     { path: 'empresa/show/:id', component: edit_empresa_component_1.EmpresaEditComponent },
+    { path: 'tramite/index', component: index_tramite_component_1.IndexTramiteComponent },
+    { path: 'tramite/new', component: new_tramite_component_1.NewTramiteComponent },
+    { path: 'tramite/show/:id', component: edit_tramite_component_1.TramiteEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

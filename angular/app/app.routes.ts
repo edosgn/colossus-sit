@@ -68,6 +68,10 @@ import { IndexEmpresaComponent } from "./components/empresa/index.empresa.compon
 import { NewEmpresaComponent } from "./components/empresa/new.empresa.component";
 import { EmpresaEditComponent } from "./components/empresa/edit.empresa.component";
 
+import { IndexTramiteComponent } from "./components/tramite/index.tramite.component";
+import { NewTramiteComponent } from "./components/tramite/new.tramite.component";
+import { TramiteEditComponent } from "./components/tramite/edit.tramite.component";
+
 
 
 
@@ -148,6 +152,10 @@ export const routes: RouterConfig = [
     { path: 'empresa/index', component: IndexEmpresaComponent},
     { path: 'empresa/new', component: NewEmpresaComponent},
     { path: 'empresa/show/:id', component: EmpresaEditComponent},
+
+    { path: 'tramite/index', component: IndexTramiteComponent},
+    { path: 'tramite/new', component: NewTramiteComponent},
+    { path: 'tramite/show/:id', component: TramiteEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
