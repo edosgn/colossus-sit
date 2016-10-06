@@ -1,0 +1,57 @@
+<br>
+<hr>
+<h3>Empresas</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/empresa/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    <div class="identity-data" *ngIf="respuesta">
+        <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+            {{respuesta.msj}}
+        </div>
+        <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+            {{respuesta.msj}}
+        </div>
+    </div>
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>nombre</th>
+                    <th>nit</th>
+                    <th>direccion</th>
+                    <th>correo</th>
+                    <th>municipio</th>
+                    <th>ciudadano</th>
+                    <th>tipo empresa</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#empresa of empresas">
+                    <td >{{empresa.id}}</td>
+                    <td >{{empresa.nombre}}</td>
+                    <td >{{empresa.nit}}</td>
+                    <td >{{empresa.direccion}}</td>
+                    <td >{{empresa.correo}}</td>
+                    <td >{{empresa.municipio.nombre}}</td>
+                    <td >{{empresa.ciudadano.numeroIdentificacion}}</td>
+                    <td >{{empresa.tipoEmpresa.nombre}}</td>
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteEmpresa(empresa.id)">
+						eliminar
+					</button>
+                        
+        	        <a [routerLink]="['/empresa/show',empresa.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

@@ -7,4 +7,4 @@ var TipoEmpresa = (function () {
     return TipoEmpresa;
 }());
 exports.TipoEmpresa = TipoEmpresa;
-//# sourceMappingURL=tipoEmpresa.js.map
+//# sourceMappingURL=TipoEmpresa.js.map

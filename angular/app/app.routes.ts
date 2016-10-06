@@ -64,6 +64,10 @@ import { IndexTipoEmpresaComponent } from "./components/tipo_Empresa/index.tipoE
 import { NewTipoEmpresaComponent } from "./components/tipo_Empresa/new.tipoEmpresa.component";
 import { TipoEmpresaEditComponent } from "./components/tipo_Empresa/edit.tipoEmpresa.component";
 
+import { IndexEmpresaComponent } from "./components/empresa/index.empresa.component";
+import { NewEmpresaComponent } from "./components/empresa/new.empresa.component";
+import { EmpresaEditComponent } from "./components/empresa/edit.empresa.component";
+
 
 
 
@@ -140,6 +144,10 @@ export const routes: RouterConfig = [
     { path: 'tipoEmpresa/index', component: IndexTipoEmpresaComponent},
     { path: 'tipoEmpresa/new', component: NewTipoEmpresaComponent},
     { path: 'tipoEmpresa/show/:id', component: TipoEmpresaEditComponent},
+
+    { path: 'empresa/index', component: IndexEmpresaComponent},
+    { path: 'empresa/new', component: NewEmpresaComponent},
+    { path: 'empresa/show/:id', component: EmpresaEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
