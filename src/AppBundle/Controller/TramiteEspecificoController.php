@@ -24,13 +24,19 @@ class TramiteEspecificoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $tramiteEspecificos = $em->getRepository('AppBundle:TramiteEspecifico')->findAll();
-
-        return $this->render('AppBundle:TramiteEspecifico:index.html.twig', array(
-            'tramiteEspecificos' => $tramiteEspecificos,
-        ));
+        $tramiteEspecifico = $em->getRepository('AppBundle:TramiteEspecifico')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado tramiteEspecifico", 
+                    'data'=> $tramiteEspecifico,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,187 @@ class TramiteEspecificoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $tramiteEspecifico = new TramiteEspecifico();
-        $form = $this->createForm('AppBundle\Form\TramiteEspecificoType', $tramiteEspecifico);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $valor = $params->valor;
+                        $datos = $params->datos;
+                        $tramiteId = $params->tramiteId;
+                        $tramiteGeneralId = $params->tramiteGeneralId;
+                        $varianteId = $params->varianteId;
+                        $casoId = $params->casoId;
+                        $em = $this->getDoctrine()->getManager();
+                        $tramite= $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                        $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($tramiteGeneralId);
+                        $variante = $em->getRepository('AppBundle:Variante')->find($varianteId);
+                        $caso = $em->getRepository('AppBundle:Caso')->find($casoId);
+                        $tramiteEspecifico = new TramiteEspecifico();
+                        $tramiteEspecifico->setValor($valor);
+                        $tramiteEspecifico->setDatos(null);
+                        $tramiteEspecifico->setTramite($tramite);
+                        $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
+                        $tramiteEspecifico->setVariante($variante);
+                        $tramiteEspecifico->setCaso($caso);
+                        $tramiteEspecifico->setEstado(true);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($tramiteEspecifico);
+                        $em->flush();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tramiteEspecifico);
-            $em->flush();
-
-            return $this->redirectToRoute('tramiteespecifico_show', array('id' => $tramiteEspecifico->getId()));
-        }
-
-        return $this->render('AppBundle:TramiteEspecifico:new.html.twig', array(
-            'tramiteEspecifico' => $tramiteEspecifico,
-            'form' => $form->createView(),
-        ));
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "tramiteEspecifico creado con exito", 
+                        );
+                       
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a TramiteEspecifico entity.
      *
-     * @Route("/{id}", name="tramiteespecifico_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="tramiteespecifico_show")
+     * @Method("POST")
      */
-    public function showAction(TramiteEspecifico $tramiteEspecifico)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($tramiteEspecifico);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:TramiteEspecifico:show.html.twig', array(
-            'tramiteEspecifico' => $tramiteEspecifico,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $tramiteGeneral = $em->getRepository('AppBundle:TramiteEspecifico')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramiteGeneral", 
+                    'data'=> $tramiteGeneral,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing TramiteEspecifico entity.
      *
-     * @Route("/{id}/edit", name="tramiteespecifico_edit")
+     * @Route("/edit", name="tramiteespecifico_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, TramiteEspecifico $tramiteEspecifico)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($tramiteEspecifico);
-        $editForm = $this->createForm('AppBundle\Form\TramiteEspecificoType', $tramiteEspecifico);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $valor = $params->valor;
+            $datos = $params->datos;
+            $tramiteId = $params->tramiteId;
+            $tramiteGeneralId = $params->tramiteGeneralId;
+            $varianteId = $params->varianteId;
+            $casoId = $params->casoId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($tramiteEspecifico);
-            $em->flush();
+            $tramite= $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+            $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($tramiteGeneralId);
+            $variante = $em->getRepository('AppBundle:Variante')->find($varianteId);
+            $caso = $em->getRepository('AppBundle:Caso')->find($casoId);
 
-            return $this->redirectToRoute('tramiteespecifico_edit', array('id' => $tramiteEspecifico->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $tramiteEspecifico = $em->getRepository("AppBundle:TramiteEspecifico")->find($params->id);
+
+            if ($tramiteEspecifico!=null) {
+                $tramiteEspecifico->setValor($valor);
+                $tramiteEspecifico->setDatos(null);
+                $tramiteEspecifico->setTramite($tramite);
+                $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
+                $tramiteEspecifico->setVariante($variante);
+                $tramiteEspecifico->setCaso($caso);
+                $tramiteEspecifico->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tramiteEspecifico);
+                $em->flush();
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramiteEspecifico editado con exito", 
+                );   
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El banco no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:TramiteEspecifico:edit.html.twig', array(
-            'tramiteEspecifico' => $tramiteEspecifico,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a TramiteEspecifico entity.
      *
-     * @Route("/{id}", name="tramiteespecifico_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="tramiteespecifico_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, TramiteEspecifico $tramiteEspecifico)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($tramiteEspecifico);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tramiteEspecifico);
-            $em->flush();
-        }
+            $tramiteEspecifico = $em->getRepository('AppBundle:TramiteEspecifico')->find($id);
 
-        return $this->redirectToRoute('tramiteespecifico_index');
+            $tramiteEspecifico->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($tramiteEspecifico);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tramiteEspecifico eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
