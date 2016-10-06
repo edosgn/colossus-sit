@@ -132,48 +132,96 @@ class PagoController extends Controller
     /**
      * Displays a form to edit an existing Pago entity.
      *
-     * @Route("/{id}/edit", name="pago_edit")
+     * @Route("/edit", name="pago_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Pago $pago)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($pago);
-        $editForm = $this->createForm('AppBundle\Form\PagoType', $pago);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+           
+            $valor = $params->valor;
+            $fechaPago = $params->fechaPago;
+            $horaPago = $params->horaPago;
+            $fuente = $params->fuente;
+            $tramiteId = $params->tramiteId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($pago);
-            $em->flush();
+            $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+            $pago = $em->getRepository("AppBundle:Pago")->find($params->id);
 
-            return $this->redirectToRoute('pago_edit', array('id' => $pago->getId()));
+            if ($pago!=null) {
+                $pago->setValor($valor);
+                $pago->setFechaPago($fechaPago);
+                $pago->setHoraPago($horaPago);
+                $pago->setFuente($fuente);
+                $pago->setTramite($tramite);
+
+                $pago->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($pago);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "pago editado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El pago no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:Pago:edit.html.twig', array(
-            'pago' => $pago,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a Pago entity.
      *
-     * @Route("/{id}", name="pago_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="pago_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Pago $pago)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($pago);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($pago);
-            $em->flush();
-        }
+            $pago = $em->getRepository('AppBundle:Pago')->find($id);
 
-        return $this->redirectToRoute('pago_index');
+            $pago->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($pago);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "pago eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
