@@ -67,12 +67,21 @@ class VehiculoPesadoController extends Controller
                         $vehiculoId = $params->vehiculoId;
                         $modalidadId = $params->modalidadId;
                         $empresaId = $params->empresaId;
+                        $em = $this->getDoctrine()->getManager();
+                        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+                        $modalidad = $em->getRepository('AppBundle:Modalidad')->find($modalidadId);
+                        $empresa = $em->getRepository('AppBundle:Empresa')->find($empresaId);
 
                         $vehiculoPesado = new VehiculoPesado();
 
                         $vehiculoPesado->setTonelaje($tonelaje);
                         $vehiculoPesado->setNumeroEjes($numeroEjes);
                         $vehiculoPesado->setNumeroMt($numeroMt);
+                        $vehiculoPesado->setFichaTecnicaHomologacionCarroceria($fichaTecnicaHomologacionCarroceria);
+                        $vehiculoPesado->setFichaTecnicaHomologacionChasis($fichaTecnicaHomologacionChasis);
+                        $vehiculoPesado->setVehiculo($vehiculo);
+                        $vehiculoPesado->setModalidad($modalidad);
+                        $vehiculoPesado->setEmpresa($empresa);
                         $vehiculoPesado->setEstado(true);
 
                         $em = $this->getDoctrine()->getManager();
@@ -99,64 +108,136 @@ class VehiculoPesadoController extends Controller
     /**
      * Finds and displays a VehiculoPesado entity.
      *
-     * @Route("/{id}", name="vehiculopesado_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="vehiculopesado_show")
+     * @Method("POST")
      */
-    public function showAction(VehiculoPesado $vehiculoPesado)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($vehiculoPesado);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:VehiculoPesado:show.html.twig', array(
-            'vehiculoPesado' => $vehiculoPesado,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculoPesado", 
+                    'data'=> $vehiculoPesado,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing VehiculoPesado entity.
      *
-     * @Route("/{id}/edit", name="vehiculopesado_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/edit", name="vehiculopesado_edit")
+     * @Method({"POST", "POST"})
      */
-    public function editAction(Request $request, VehiculoPesado $vehiculoPesado)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vehiculoPesado);
-        $editForm = $this->createForm('AppBundle\Form\VehiculoPesadoType', $vehiculoPesado);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $tonelaje = $params->tonelaje;
+            $numeroEjes = $params->numeroEjes;
+            $numeroMt = $params->numeroMt;
+            $fichaTecnicaHomologacionCarroceria = $params->fichaTecnicaHomologacionCarroceria;
+            $fichaTecnicaHomologacionChasis = $params->fichaTecnicaHomologacionChasis;
+            $vehiculoId = $params->vehiculoId;
+            $modalidadId = $params->modalidadId;
+            $empresaId = $params->empresaId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vehiculoPesado);
-            $em->flush();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+            $modalidad = $em->getRepository('AppBundle:Modalidad')->find($modalidadId);
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($empresaId);
 
-            return $this->redirectToRoute('vehiculopesado_edit', array('id' => $vehiculoPesado->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $vehiculoPesado = $em->getRepository("AppBundle:VehiculoPesado")->find($params->id);
+
+            if ($vehiculoPesado!=null) {
+                $vehiculoPesado->setTonelaje($tonelaje);
+                $vehiculoPesado->setNumeroEjes($numeroEjes);
+                $vehiculoPesado->setNumeroMt($numeroMt);
+                $vehiculoPesado->setFichaTecnicaHomologacionCarroceria($fichaTecnicaHomologacionCarroceria);
+                $vehiculoPesado->setFichaTecnicaHomologacionChasis($fichaTecnicaHomologacionChasis);
+                $vehiculoPesado->setVehiculo($vehiculo);
+                $vehiculoPesado->setModalidad($modalidad);
+                $vehiculoPesado->setEmpresa($empresa);
+                $vehiculoPesado->setEstado(true);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($vehiculoPesado);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculoPesado editado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculoPesado no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar vehiculoPesado", 
+                );
         }
 
-        return $this->render('AppBundle:VehiculoPesado:edit.html.twig', array(
-            'vehiculoPesado' => $vehiculoPesado,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a VehiculoPesado entity.
      *
-     * @Route("/{id}", name="vehiculopesado_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="vehiculopesado_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, VehiculoPesado $vehiculoPesado)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($vehiculoPesado);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vehiculoPesado);
-            $em->flush();
-        }
+            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->find($id);
 
-        return $this->redirectToRoute('vehiculopesado_index');
+            $vehiculoPesado->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($vehiculoPesado);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "VehiculoPesado eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
