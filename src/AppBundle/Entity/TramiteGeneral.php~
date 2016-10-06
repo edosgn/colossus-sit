@@ -136,7 +136,7 @@ class TramiteGeneral
      */
     public function setFechaInicial($fechaInicial)
     {
-        $this->fechaInicial = new \DateTime($fechaInicial);
+        $this->fechaInicial = $fechaInicial;
 
         return $this;
     }
@@ -148,7 +148,7 @@ class TramiteGeneral
      */
     public function getFechaInicial()
     {
-        return $this->fechaInicial->format("y-m-d");
+        return $this->fechaInicial;
     }
 
     /**
@@ -160,7 +160,7 @@ class TramiteGeneral
      */
     public function setFechaFinal($fechaFinal)
     {
-        $this->fechaFinal = new \DateTime($fechaFinal);
+        $this->fechaFinal = $fechaFinal;
 
         return $this;
     }
@@ -172,7 +172,7 @@ class TramiteGeneral
      */
     public function getFechaFinal()
     {
-        return $this->fechaFinal->format("y-m-d");
+        return $this->fechaFinal;
     }
 
     /**

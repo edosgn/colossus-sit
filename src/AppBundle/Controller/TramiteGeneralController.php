@@ -24,13 +24,19 @@ class TramiteGeneralController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $tramiteGenerals = $em->getRepository('AppBundle:TramiteGeneral')->findAll();
-
-        return $this->render('AppBundle:TramiteGeneral:index.html.twig', array(
-            'tramiteGenerals' => $tramiteGenerals,
-        ));
+        $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findBy(
+            array('estado' => 1)
+        );
+        $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado tramiteGeneral", 
+                    'data'=> $tramiteGeneral,
+            );
+         
+        return $helpers->json($responce);
     }
 
     /**
@@ -41,85 +47,181 @@ class TramiteGeneralController extends Controller
      */
     public function newAction(Request $request)
     {
-        $tramiteGeneral = new TramiteGeneral();
-        $form = $this->createForm('AppBundle\Form\TramiteGeneralType', $tramiteGeneral);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tramiteGeneral);
-            $em->flush();
-
-            return $this->redirectToRoute('tramitegeneral_show', array('id' => $tramiteGeneral->getId()));
-        }
-
-        return $this->render('AppBundle:TramiteGeneral:new.html.twig', array(
-            'tramiteGeneral' => $tramiteGeneral,
-            'form' => $form->createView(),
-        ));
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            if (count($params)==0) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{
+                        $numeroQpl = $params->numeroQpl;
+                        $fechaInicial = $params->fechaInicial;
+                        $fechaFinal = $params->fechaFinal;
+                        $valor = $params->valor;
+                        $numeroLicencia = $params->numeroLicencia;
+                        $numeroSustrato = $params->numeroSustrato;
+                        $vehiculoId = $params->vehiculoId;
+                        $em = $this->getDoctrine()->getManager();
+                        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+                        $tramiteGeneral = new TramiteGeneral();
+                        $tramiteGeneral->setNumeroQpl($numeroQpl);
+                        $tramiteGeneral->setFechaInicial($fechaInicial);
+                        $tramiteGeneral->setFechaFinal($fechaFinal);
+                        $tramiteGeneral->setValor($valor);
+                        $tramiteGeneral->setNumeroLicencia($numeroLicencia);
+                        $tramiteGeneral->setNumeroSustrato($numeroSustrato);
+                        $tramiteGeneral->setVehiculo($vehiculo);
+                        $tramiteGeneral->setEstado(true);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($tramiteGeneral);
+                        $em->flush();
+                        $responce = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "tramiteGeneral creado con exito", 
+                        );
+                    }
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($responce);
     }
 
     /**
      * Finds and displays a TramiteGeneral entity.
      *
-     * @Route("/{id}", name="tramitegeneral_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="tramitegeneral_show")
+     * @Method("POST")
      */
-    public function showAction(TramiteGeneral $tramiteGeneral)
+    public function showAction(Request $request , $id)
     {
-        $deleteForm = $this->createDeleteForm($tramiteGeneral);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:TramiteGeneral:show.html.twig', array(
-            'tramiteGeneral' => $tramiteGeneral,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramiteGeneral", 
+                    'data'=> $tramiteGeneral,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing TramiteGeneral entity.
      *
-     * @Route("/{id}/edit", name="tramitegeneral_edit")
+     * @Route("/edit", name="tramitegeneral_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, TramiteGeneral $tramiteGeneral)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($tramiteGeneral);
-        $editForm = $this->createForm('AppBundle\Form\TramiteGeneralType', $tramiteGeneral);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $numeroQpl = $params->numeroQpl;
+            $fechaInicial = $params->fechaInicial;
+            $fechaFinal = $params->fechaFinal;
+            $valor = $params->valor;
+            $numeroLicencia = $params->numeroLicencia;
+            $numeroSustrato = $params->numeroSustrato;
+            $vehiculoId = $params->vehiculoId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($tramiteGeneral);
-            $em->flush();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+            $tramiteGeneral = $em->getRepository("AppBundle:TramiteGeneral")->find($params->id);
 
-            return $this->redirectToRoute('tramitegeneral_edit', array('id' => $tramiteGeneral->getId()));
+            if ($tramiteGeneral!=null) {
+                $tramiteGeneral->setNumeroQpl($numeroQpl);
+                $tramiteGeneral->setFechaInicial($fechaInicial);
+                $tramiteGeneral->setFechaFinal($fechaFinal);
+                $tramiteGeneral->setValor($valor);
+                $tramiteGeneral->setNumeroLicencia($numeroLicencia);
+                $tramiteGeneral->setNumeroSustrato($numeroSustrato);
+                $tramiteGeneral->setVehiculo($vehiculo);
+                $tramiteGeneral->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tramiteGeneral);
+                $em->flush();
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramiteGeneral editado con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El banco no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('AppBundle:TramiteGeneral:edit.html.twig', array(
-            'tramiteGeneral' => $tramiteGeneral,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
 
     /**
      * Deletes a TramiteGeneral entity.
      *
-     * @Route("/{id}", name="tramitegeneral_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="tramitegeneral_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, TramiteGeneral $tramiteGeneral)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($tramiteGeneral);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tramiteGeneral);
-            $em->flush();
-        }
+            $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($id);
 
-        return $this->redirectToRoute('tramitegeneral_index');
+            $tramiteGeneral->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($tramiteGeneral);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "tramiteGeneral eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
