@@ -12,23 +12,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
-var tipoIdentificacion_service_1 = require('../../services/tipo_Identificacion/tipoIdentificacion.service');
-var TipoIdentificacion_1 = require('../../model/tipo_Identificacion/TipoIdentificacion');
+var tipoEmpresa_service_1 = require('../../services/tipo_Empresa/tipoEmpresa.service');
+var TipoEmpresa_1 = require('../../model/tipo_Empresa/TipoEmpresa');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var NewTipoIdentificacionComponent = (function () {
-    function NewTipoIdentificacionComponent(_TipoIdentificacionService, _loginService, _route, _router) {
-        this._TipoIdentificacionService = _TipoIdentificacionService;
+var NewTipoEmpresaComponent = (function () {
+    function NewTipoEmpresaComponent(_TipoEmpresaService, _loginService, _route, _router) {
+        this._TipoEmpresaService = _TipoEmpresaService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    NewTipoIdentificacionComponent.prototype.ngOnInit = function () {
-        this.tipoIdentificacion = new TipoIdentificacion_1.TipoIdentificacion(null, "");
+    NewTipoEmpresaComponent.prototype.ngOnInit = function () {
+        this.tipoEmpresa = new TipoEmpresa_1.TipoEmpresa(null, "");
     };
-    NewTipoIdentificacionComponent.prototype.onSubmit = function () {
+    NewTipoEmpresaComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._TipoIdentificacionService.register(this.tipoIdentificacion, token).subscribe(function (response) {
+        this._TipoEmpresaService.register(this.tipoEmpresa, token).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             (function (error) {
@@ -40,16 +40,16 @@ var NewTipoIdentificacionComponent = (function () {
             });
         });
     };
-    NewTipoIdentificacionComponent = __decorate([
+    NewTipoEmpresaComponent = __decorate([
         core_1.Component({
             selector: 'register',
-            templateUrl: 'app/view/tipo_Identificacion/new.html',
+            templateUrl: 'app/view/tipo_Empresa/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tipoIdentificacion_service_1.TipoIdentificacionService]
+            providers: [login_service_1.LoginService, tipoEmpresa_service_1.TipoEmpresaService]
         }), 
-        __metadata('design:paramtypes', [tipoIdentificacion_service_1.TipoIdentificacionService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], NewTipoIdentificacionComponent);
-    return NewTipoIdentificacionComponent;
+        __metadata('design:paramtypes', [tipoEmpresa_service_1.TipoEmpresaService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], NewTipoEmpresaComponent);
+    return NewTipoEmpresaComponent;
 }());
-exports.NewTipoIdentificacionComponent = NewTipoIdentificacionComponent;
-//# sourceMappingURL=new.tipoidentificacion.component.js.map
+exports.NewTipoEmpresaComponent = NewTipoEmpresaComponent;
+//# sourceMappingURL=new.tipoEmpresa.component.js.map

@@ -43,6 +43,12 @@ var edit_modulo_component_1 = require("./components/modulo/edit.modulo.component
 var index_tipoidentificacion_component_1 = require("./components/tipo_identificacion/index.tipoidentificacion.component");
 var new_tipoidentificacion_component_1 = require("./components/tipo_identificacion/new.tipoidentificacion.component");
 var edit_tipoidentificacion_component_1 = require("./components/tipo_identificacion/edit.tipoidentificacion.component");
+var index_ciudadano_component_1 = require("./components/ciudadano/index.ciudadano.component");
+var new_ciudadano_component_1 = require("./components/ciudadano/new.ciudadano.component");
+var edit_ciudadano_component_1 = require("./components/ciudadano/edit.ciudadano.component");
+var index_tipoEmpresa_component_1 = require("./components/tipo_Empresa/index.tipoEmpresa.component");
+var new_tipoEmpresa_component_1 = require("./components/tipo_Empresa/new.tipoEmpresa.component");
+var edit_tipoEmpresa_component_1 = require("./components/tipo_Empresa/edit.tipoEmpresa.component");
 exports.routes = [
     {
         path: '',
@@ -93,6 +99,12 @@ exports.routes = [
     { path: 'tipoIdentificacion/index', component: index_tipoidentificacion_component_1.IndexTipoIdentificacionComponent },
     { path: 'tipoIdentificacion/new', component: new_tipoidentificacion_component_1.NewTipoIdentificacionComponent },
     { path: 'tipoIdentificacion/show/:id', component: edit_tipoidentificacion_component_1.TipoIdentificacionEditComponent },
+    { path: 'ciudadano/index', component: index_ciudadano_component_1.IndexCiudadanoComponent },
+    { path: 'ciudadano/new', component: new_ciudadano_component_1.NewCiudadanoComponent },
+    { path: 'ciudadano/show/:id', component: edit_ciudadano_component_1.CiudadanoEditComponent },
+    { path: 'tipoEmpresa/index', component: index_tipoEmpresa_component_1.IndexTipoEmpresaComponent },
+    { path: 'tipoEmpresa/new', component: new_tipoEmpresa_component_1.NewTipoEmpresaComponent },
+    { path: 'tipoEmpresa/show/:id', component: edit_tipoEmpresa_component_1.TipoEmpresaEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

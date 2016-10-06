@@ -7,4 +7,4 @@ var TipoIdentificacion = (function () {
     return TipoIdentificacion;
 }());
 exports.TipoIdentificacion = TipoIdentificacion;
-//# sourceMappingURL=tipoIdentificacion.js.map
+//# sourceMappingURL=TipoIdentificacion.js.map

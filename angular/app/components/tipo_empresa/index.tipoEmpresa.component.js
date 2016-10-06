@@ -9,23 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var tipoIdentificacion_service_1 = require('../../services/tipo_Identificacion/tipoIdentificacion.service');
+var tipoEmpresa_service_1 = require("../../services/tipo_Empresa/tipoEmpresa.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexTipoIdentificacionComponent = (function () {
-    function IndexTipoIdentificacionComponent(_TipoIdentificacionService, _loginService, _route, _router) {
-        this._TipoIdentificacionService = _TipoIdentificacionService;
+var IndexTipoEmpresaComponent = (function () {
+    function IndexTipoEmpresaComponent(_TipoEmpresaService, _loginService, _route, _router) {
+        this._TipoEmpresaService = _TipoEmpresaService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    IndexTipoIdentificacionComponent.prototype.ngOnInit = function () {
+    IndexTipoEmpresaComponent.prototype.ngOnInit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
-            _this.tipoIdentificaciones = response.data;
+        this._TipoEmpresaService.getTipoEmpresa().subscribe(function (response) {
+            _this.tiposEmpresa = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -34,10 +34,10 @@ var IndexTipoIdentificacionComponent = (function () {
             }
         });
     };
-    IndexTipoIdentificacionComponent.prototype.deleteBanco = function (id) {
+    IndexTipoEmpresaComponent.prototype.deleteTipoEmpresa = function (id) {
         var _this = this;
         var token = this._loginService.getToken();
-        this._TipoIdentificacionService.deleteTipoIdentificacion(token, id).subscribe(function (response) {
+        this._TipoEmpresaService.deleteTipoEmpresa(token, id).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             _this.ngOnInit();
@@ -49,16 +49,16 @@ var IndexTipoIdentificacionComponent = (function () {
             }
         });
     };
-    IndexTipoIdentificacionComponent = __decorate([
+    IndexTipoEmpresaComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/tipo_Identificacion/index.html',
+            templateUrl: 'app/view/tipo_empresa/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tipoIdentificacion_service_1.TipoIdentificacionService]
+            providers: [login_service_1.LoginService, tipoEmpresa_service_1.TipoEmpresaService]
         }), 
-        __metadata('design:paramtypes', [tipoIdentificacion_service_1.TipoIdentificacionService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexTipoIdentificacionComponent);
-    return IndexTipoIdentificacionComponent;
+        __metadata('design:paramtypes', [tipoEmpresa_service_1.TipoEmpresaService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexTipoEmpresaComponent);
+    return IndexTipoEmpresaComponent;
 }());
-exports.IndexTipoIdentificacionComponent = IndexTipoIdentificacionComponent;
-//# sourceMappingURL=index.tipoidentificacion.component.js.map
+exports.IndexTipoEmpresaComponent = IndexTipoEmpresaComponent;
+//# sourceMappingURL=index.tipoEmpresa.component.js.map

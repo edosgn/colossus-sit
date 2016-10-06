@@ -9,23 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var tipoIdentificacion_service_1 = require('../../services/tipo_Identificacion/tipoIdentificacion.service');
+var ciudadano_service_1 = require("../../services/ciudadano/ciudadano.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexTipoIdentificacionComponent = (function () {
-    function IndexTipoIdentificacionComponent(_TipoIdentificacionService, _loginService, _route, _router) {
-        this._TipoIdentificacionService = _TipoIdentificacionService;
+var IndexCiudadanoComponent = (function () {
+    function IndexCiudadanoComponent(_CiudadanoService, _loginService, _route, _router) {
+        this._CiudadanoService = _CiudadanoService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    IndexTipoIdentificacionComponent.prototype.ngOnInit = function () {
+    IndexCiudadanoComponent.prototype.ngOnInit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
-            _this.tipoIdentificaciones = response.data;
+        this._CiudadanoService.getCiudadano().subscribe(function (response) {
+            _this.ciudadanos = response.data;
+            console.log(_this.ciudadanos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -34,10 +35,10 @@ var IndexTipoIdentificacionComponent = (function () {
             }
         });
     };
-    IndexTipoIdentificacionComponent.prototype.deleteBanco = function (id) {
+    IndexCiudadanoComponent.prototype.deleteCiudadano = function (id) {
         var _this = this;
         var token = this._loginService.getToken();
-        this._TipoIdentificacionService.deleteTipoIdentificacion(token, id).subscribe(function (response) {
+        this._CiudadanoService.deleteCiudadano(token, id).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             _this.ngOnInit();
@@ -49,16 +50,16 @@ var IndexTipoIdentificacionComponent = (function () {
             }
         });
     };
-    IndexTipoIdentificacionComponent = __decorate([
+    IndexCiudadanoComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/tipo_Identificacion/index.html',
+            templateUrl: 'app/view/ciudadano/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tipoIdentificacion_service_1.TipoIdentificacionService]
+            providers: [login_service_1.LoginService, ciudadano_service_1.CiudadanoService]
         }), 
-        __metadata('design:paramtypes', [tipoIdentificacion_service_1.TipoIdentificacionService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexTipoIdentificacionComponent);
-    return IndexTipoIdentificacionComponent;
+        __metadata('design:paramtypes', [ciudadano_service_1.CiudadanoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexCiudadanoComponent);
+    return IndexCiudadanoComponent;
 }());
-exports.IndexTipoIdentificacionComponent = IndexTipoIdentificacionComponent;
-//# sourceMappingURL=index.tipoidentificacion.component.js.map
+exports.IndexCiudadanoComponent = IndexCiudadanoComponent;
+//# sourceMappingURL=index.ciudadano.component.js.map

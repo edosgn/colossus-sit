@@ -56,6 +56,14 @@ import { IndexTipoIdentificacionComponent } from "./components/tipo_identificaci
 import { NewTipoIdentificacionComponent } from "./components/tipo_identificacion/new.tipoidentificacion.component";
 import { TipoIdentificacionEditComponent } from "./components/tipo_identificacion/edit.tipoidentificacion.component";
 
+import { IndexCiudadanoComponent } from "./components/ciudadano/index.ciudadano.component";
+import { NewCiudadanoComponent } from "./components/ciudadano/new.ciudadano.component";
+import { CiudadanoEditComponent } from "./components/ciudadano/edit.ciudadano.component";
+
+import { IndexTipoEmpresaComponent } from "./components/tipo_Empresa/index.tipoEmpresa.component";
+import { NewTipoEmpresaComponent } from "./components/tipo_Empresa/new.tipoEmpresa.component";
+import { TipoEmpresaEditComponent } from "./components/tipo_Empresa/edit.tipoEmpresa.component";
+
 
 
 
@@ -124,6 +132,14 @@ export const routes: RouterConfig = [
     { path: 'tipoIdentificacion/index', component: IndexTipoIdentificacionComponent},
     { path: 'tipoIdentificacion/new', component: NewTipoIdentificacionComponent},
     { path: 'tipoIdentificacion/show/:id', component: TipoIdentificacionEditComponent},
+
+    { path: 'ciudadano/index', component: IndexCiudadanoComponent},
+    { path: 'ciudadano/new', component: NewCiudadanoComponent},
+    { path: 'ciudadano/show/:id', component: CiudadanoEditComponent},
+
+    { path: 'tipoEmpresa/index', component: IndexTipoEmpresaComponent},
+    { path: 'tipoEmpresa/new', component: NewTipoEmpresaComponent},
+    { path: 'tipoEmpresa/show/:id', component: TipoEmpresaEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

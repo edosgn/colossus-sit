@@ -12,10 +12,10 @@
 	</div>
 	<br>
 
-	<form #newtipoIdentificacion="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+	<form #newTipoEmpresa="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
 
 		<div class="panel panel-primary">
-		  <div class="panel-heading">Reguistrar tipo Identificacion</div>
+		  <div class="panel-heading">Reguistrar Tipo de Identificacion</div>
 		  <div class="panel-body">
 		  	
 		  		<br>
@@ -23,16 +23,17 @@
 
 				<p class="col-md-12">
 					<label >Nombre:</label>
-					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="tipoIdentificacion.nombre" ngControl="nombre"  required />
-					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorios</span>
+					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="tipoEmpresa.nombre" ngControl="nombre"  required />
+					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorio</span>
 					<br>
 				</p>
 
-			    <input  type="submit" value="Editar" class="btn btn-success col-md-12" 
-				[disabled]="!newtipoIdentificacion.valid"/>
-
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"
+				[disabled]="!newTipoEmpresa.valid"/>
 		  </div>
 		</div>
+
+
 
 	</form>
 

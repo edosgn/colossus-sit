@@ -1,9 +1,9 @@
 <br>
 <hr>
-<h3>tipos Identificacion:</h3>
+<h3>Tipos Empresas:</h3>
 <hr>
-	<div class="table-responsive">
-    <a [routerLink]="['/tipoIdentificacion/new']" class="btn btn-success">
+    <div class="table-responsive">
+    <a [routerLink]="['/tipoEmpresa/new']" class="btn btn-success">
          Nuevo
     </a>
     <br>
@@ -26,16 +26,16 @@
                 </tr>
             </thead>
             <tbody>
-               <tr *ngFor="#tipoIdentificacion of tipoIdentificaciones">
-                    <td >{{tipoIdentificacion.id}}</td>
-                    <td >{{tipoIdentificacion.nombre}}</td>
+               <tr *ngFor="#tipoEmpresa of tiposEmpresa">
+                    <td >{{tipoEmpresa.id}}</td>
+                    <td >{{tipoEmpresa.nombre}}</td> 
 
                     <td>
-                    <button class="btn btn-danger" value="Editar" (click)="deleteBanco(tipoIdentificacion.id)">
+                    <button class="btn btn-danger" value="Editar" (click)="deleteTipoEmpresa(tipoEmpresa.id)">
                         eliminar
                     </button>
                         
-                    <a [routerLink]="['/tipoIdentificacion/show',tipoIdentificacion.id]" class="btn btn-info">
+                    <a [routerLink]="['/tipoEmpresa/show',tipoEmpresa.id]" class="btn btn-info">
                          Editar
                     </a>
 
