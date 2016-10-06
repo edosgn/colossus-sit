@@ -1,13 +1,13 @@
 "use strict";
 var Tramite = (function () {
-    function Tramite(id, nombre, valor, redondeo, unidad, afectacion, modulo) {
+    function Tramite(id, nombre, valor, redondeo, unidad, afectacion, moduloId) {
         this.id = id;
         this.nombre = nombre;
         this.valor = valor;
         this.redondeo = redondeo;
         this.unidad = unidad;
         this.afectacion = afectacion;
-        this.modulo = modulo;
+        this.moduloId = moduloId;
     }
     return Tramite;
 }());

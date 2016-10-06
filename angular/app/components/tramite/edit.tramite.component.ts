@@ -4,6 +4,7 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {TramiteService} from '../../services/tramite/tramite.service';
 import {Tramite} from '../../model/tramite/Tramite';
+import {ModuloService} from '../../services/modulo/modulo.service';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -11,7 +12,7 @@ import {Tramite} from '../../model/tramite/Tramite';
     selector: 'default',
     templateUrl: 'app/view/tramite/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService ,TramiteService]
+    providers: [LoginService ,TramiteService,ModuloService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -22,6 +23,7 @@ export class TramiteEditComponent implements OnInit{
 	public respuesta;
 
 	constructor(
+		private _ModuloService:ModuloService,
 		private _loginService: LoginService,
 		private _TramiteService: TramiteService,
 		private _route: ActivatedRoute,
@@ -31,7 +33,7 @@ export class TramiteEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		this.tramite = new Tramite(null,"");
+		this.tramite = new Tramite(null,"",null,"","",null,null);
 
 
 		let token = this._loginService.getToken();
@@ -43,7 +45,9 @@ export class TramiteEditComponent implements OnInit{
 			this._TramiteService.showTramite(token,this.id).subscribe(
 
 						response => {
-							this.tramite = response.data;
+							let data = response.data;
+					        this.tramite = new Tramite(data.id,data.nombre,data.valor,data.redondeo,data.unidad,data.afectacion,data.modulo.id);
+					        console.log(this.tramite);
 						},
 						error => {
 								this.errorMessage = <any>error;
@@ -55,6 +59,20 @@ export class TramiteEditComponent implements OnInit{
 							}
 
 					);
+
+			this._ModuloService.getModulo().subscribe(
+				response => {
+					this.modulos = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
 	  
 	} 
 

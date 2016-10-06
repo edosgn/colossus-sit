@@ -21,47 +21,47 @@
 		  		<br>
 				<br>
 
-				<p class="col-md-12">
+				<p class="col-md-6">
 					<label >Nombre:</label>
 					<input #nombre="ngForm"  type="text" class="form-control" [(ngModel)]="tramite.nombre" ngControl="nombre"  required />
 					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-12">
+				<p class="col-md-6">
 					<label >Valor:</label>
 					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramite.valor" ngControl="valor"  required />
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-12">
+				<p class="col-md-6">
 					<label >Redondeo:</label>
 					<input #redondeo="ngForm"  type="text" class="form-control" [(ngModel)]="tramite.redondeo" ngControl="redondeo"  required />
 					<span *ngIf="!redondeo.valid && redondeo.touched" style="color:red;">redondeo obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-12">
+				<p class="col-md-6">
 					<label >Unidad:</label>
 					<input #unidad="ngForm"  type="text" class="form-control" [(ngModel)]="tramite.unidad" ngControl="unidad"  required />
 					<span *ngIf="!unidad.valid && unidad.touched" style="color:red;">unidad obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-12">
-					<label >Afectacion:</label>
-					<input #afectacion="ngForm"  type="checkbox" class="form-control" [(ngModel)]="tramite.afectacion" ngControl="afectacion"  />
-					<span *ngIf="!afectacion.valid && afectacion.touched" style="color:red;">afectacion obligatorio</span>
-					<br>
-				</p>
+				
 
-				<p class="col-md-12"> 
+				<p class="col-md-6"> 
 					<label>Modulo:</label>
 					<select class="form-control" #moduloId="ngForm" ngControl="moduloId" [(ngModel)]="tramite.moduloId" required>
 					  <option *ngFor="#modulo of modulos" [value]='modulo.id' >{{modulo.nombre}}</option>
 					</select>
 					<span *ngIf = "!moduloId.valid && moduloId.touched" class="text-danger">el modulo es obligatorio</span>
+				</p>
+				<p class="col-md-6">
+					<label >Afectacion: &nbsp;&nbsp;</label>
+					<input #afectacion="ngForm"  type="checkbox"  [(ngModel)]="tramite.afectacion" ngControl="afectacion"  />
+					<span *ngIf="!afectacion.valid && afectacion.touched" style="color:red;">afectacion obligatorio</span>
 				</p>
 
 				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"

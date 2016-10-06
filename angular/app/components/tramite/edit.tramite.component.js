@@ -14,9 +14,11 @@ var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
 var tramite_service_1 = require('../../services/tramite/tramite.service');
 var Tramite_1 = require('../../model/tramite/Tramite');
+var modulo_service_1 = require('../../services/modulo/modulo.service');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var TramiteEditComponent = (function () {
-    function TramiteEditComponent(_loginService, _TramiteService, _route, _router) {
+    function TramiteEditComponent(_ModuloService, _loginService, _TramiteService, _route, _router) {
+        this._ModuloService = _ModuloService;
         this._loginService = _loginService;
         this._TramiteService = _TramiteService;
         this._route = _route;
@@ -24,13 +26,24 @@ var TramiteEditComponent = (function () {
     }
     TramiteEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.tramite = new Tramite_1.Tramite(null, "");
+        this.tramite = new Tramite_1.Tramite(null, "", null, "", "", null, null);
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
         });
         this._TramiteService.showTramite(token, this.id).subscribe(function (response) {
-            _this.tramite = response.data;
+            var data = response.data;
+            _this.tramite = new Tramite_1.Tramite(data.id, data.nombre, data.valor, data.redondeo, data.unidad, data.afectacion, data.modulo.id);
+            console.log(_this.tramite);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+        this._ModuloService.getModulo().subscribe(function (response) {
+            _this.modulos = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -58,9 +71,9 @@ var TramiteEditComponent = (function () {
             selector: 'default',
             templateUrl: 'app/view/tramite/edit.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tramite_service_1.TramiteService]
+            providers: [login_service_1.LoginService, tramite_service_1.TramiteService, modulo_service_1.ModuloService]
         }), 
-        __metadata('design:paramtypes', [login_service_1.LoginService, tramite_service_1.TramiteService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [modulo_service_1.ModuloService, login_service_1.LoginService, tramite_service_1.TramiteService, router_1.ActivatedRoute, router_1.Router])
     ], TramiteEditComponent);
     return TramiteEditComponent;
 }());

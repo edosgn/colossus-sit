@@ -6,6 +6,6 @@ export class Tramite{
 		public redondeo:string,
 		public unidad:string,
 		public afectacion:boolean,
-		public modulo:number
+		public moduloId:number
 	){}
 }

@@ -26,7 +26,7 @@ var NewTramiteComponent = (function () {
     }
     NewTramiteComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.tramite = new Tramite_1.Tramite(null, "", null, "", "", true, null);
+        this.tramite = new Tramite_1.Tramite(null, "", null, "", "", false, null);
         this._ModuloService.getModulo().subscribe(function (response) {
             _this.modulos = response.data;
             console.log(_this.modulos);

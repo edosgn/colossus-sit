@@ -32,7 +32,7 @@ export class NewTramiteComponent {
 	){}
 
 	ngOnInit(){
-		this.tramite = new Tramite(null, "",null,"","",true,null);
+		this.tramite = new Tramite(null, "",null,"","",false,null);
 		this._ModuloService.getModulo().subscribe(
 				response => {
 					this.modulos = response.data;

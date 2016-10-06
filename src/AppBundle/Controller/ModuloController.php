@@ -135,10 +135,6 @@ class ModuloController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-            
-            $nombre = $params->nombre;
-
             $em = $this->getDoctrine()->getManager();
             $modulo = $em->getRepository("AppBundle:Modulo")->find($params->id);
 
@@ -149,6 +145,9 @@ class ModuloController extends Controller
                 $modulo->setNombre($nombre);
                 $modulo->setAbreviatura($abreviatura);
                 $modulo->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($modulo);
+                $em->flush();
                 $responce = array(
                     'status' => 'success',
                     'code' => 200,
