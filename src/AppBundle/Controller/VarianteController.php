@@ -61,19 +61,21 @@ class VarianteController extends Controller
                 );
             }else{
                         $nombre = $params->nombre;
-                        $banco = new Banco();
-
-                        $banco->setNombre($nombre);
-                        $banco->setEstado(true);
-
+                        $tramiteId = $params->tramiteId;
                         $em = $this->getDoctrine()->getManager();
-                        $em->persist($banco);
+                        $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                        $variante = new Variante();
+                        $variante->setNombre($nombre);
+                        $variante->setTramite($tramite);
+                        $variante->setEstado(true);
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($variante);
                         $em->flush();
 
                         $responce = array(
                             'status' => 'success',
                             'code' => 200,
-                            'msj' => "Banco creado con exito", 
+                            'msj' => "variante creado con exito", 
                         );
                        
                     }
@@ -90,64 +92,119 @@ class VarianteController extends Controller
     /**
      * Finds and displays a Variante entity.
      *
-     * @Route("/{id}", name="variante_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="variante_show")
+     * @Method("POST")
      */
-    public function showAction(Variante $variante)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($variante);
+       $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('AppBundle:Variante:show.html.twig', array(
-            'variante' => $variante,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $variante = $em->getRepository('AppBundle:Variante')->find($id);
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "variante con nombre"." ".$variante->getNombre(), 
+                    'data'=> $variante,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
      * Displays a form to edit an existing Variante entity.
      *
-     * @Route("/{id}/edit", name="variante_edit")
+     * @Route("/edit", name="variante_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Variante $variante)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($variante);
-        $editForm = $this->createForm('AppBundle\Form\VarianteType', $variante);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            
+            $nombre = $params->nombre;
+            $tramiteId = $params->tramiteId;
             $em = $this->getDoctrine()->getManager();
-            $em->persist($variante);
-            $em->flush();
+            $tramite = $em->getRepository("AppBundle:Tramite")->find($tramiteId);
+            $variante = $em->getRepository("AppBundle:Variante")->find($params->id);
 
-            return $this->redirectToRoute('variante_edit', array('id' => $variante->getId()));
+            if ($variante!=null) {
+                $variante->setNombre($nombre);
+                $variante->setTramite($tramite);
+                $variante->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($variante);
+                $em->flush();
+
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "variante editada con exito", 
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El variante no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar variante", 
+                );
         }
 
-        return $this->render('AppBundle:Variante:edit.html.twig', array(
-            'variante' => $variante,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($responce);
     }
-
     /**
      * Deletes a Variante entity.
      *
-     * @Route("/{id}", name="variante_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="variante_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, Variante $variante)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($variante);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($variante);
-            $em->flush();
-        }
+            $variante = $em->getRepository('AppBundle:Variante')->find($id);
 
-        return $this->redirectToRoute('variante_index');
+            $variante->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($variante);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "variante eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**
