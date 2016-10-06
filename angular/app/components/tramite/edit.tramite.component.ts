@@ -31,7 +31,7 @@ export class TramiteEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		this.tramite = new Tramite(null,"");
+		this.tramite = new Tramite(null,"",null,"","",null,null);
 
 
 		let token = this._loginService.getToken();

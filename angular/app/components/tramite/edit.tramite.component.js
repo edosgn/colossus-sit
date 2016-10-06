@@ -24,7 +24,7 @@ var TramiteEditComponent = (function () {
     }
     TramiteEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.tramite = new Tramite_1.Tramite(null, "");
+        this.tramite = new Tramite_1.Tramite(null, "", null, "", "", null, null);
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
