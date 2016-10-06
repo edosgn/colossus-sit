@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {ModuloService} from "../../services/modulo/modulo.service";
+import {ServicioService} from "../../services/servicio/servicio.service";
 import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
@@ -8,21 +8,21 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/modulo/index.html',
+    templateUrl: 'app/view/servicio/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,ModuloService]
+    providers: [LoginService,ServicioService]
 })
  
-// Clase del componente donde irán los datos y funcionalidades
-export class IndexModuloComponent implements OnInit{ 
+// Servicio del componente donde irán los datos y funcionalidades
+export class IndexServicioComponent implements OnInit{ 
 	public errorMessage;
 	public id;
 	public respuesta;
-	public modulos;
+	public servicios;
 	
 
 	constructor(
-		private _ModuloService: ModuloService,
+		private _ServicioService: ServicioService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
@@ -33,9 +33,15 @@ export class IndexModuloComponent implements OnInit{
 	ngOnInit(){	
 		let token = this._loginService.getToken();
 		
-		this._ModuloService.getModulo().subscribe(
+		if(token) {
+	     	console.log('logueado');
+	     }else{
+	     	this._router.navigate(["/login"]);
+	     }
+
+		this._ServicioService.getServicio().subscribe(
 				response => {
-					this.modulos = response.data;
+					this.servicios = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -49,9 +55,9 @@ export class IndexModuloComponent implements OnInit{
 	  
 	}
 
-	deleteModulo(id:string){
+	deleteServicio(id:string){
 		let token = this._loginService.getToken();
-		this._ModuloService.deleteModulo(token,id).subscribe(
+		this._ServicioService.deleteServicio(token,id).subscribe(
 				response => {
 					    this.respuesta= response;
 					    console.log(this.respuesta); 

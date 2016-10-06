@@ -1,0 +1,49 @@
+<br>
+<hr>
+<h3>servicios:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/servicio/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+         <div class="identity-data" *ngIf="respuesta">
+            <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+                {{respuesta.msj}}
+            </div>
+            <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+                {{respuesta.msj}}
+            </div>
+        </div>
+
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Codigo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#servicio of servicios">
+                    <td >{{servicio.id}}</td>
+                    <td >{{servicio.nombre}}</td>
+                    <td >{{servicio.codigo}}</td>
+
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteServicio(servicio.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/servicio/show',servicio.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

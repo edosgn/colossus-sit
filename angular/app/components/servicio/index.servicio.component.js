@@ -9,23 +9,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var modulo_service_1 = require("../../services/modulo/modulo.service");
+var servicio_service_1 = require("../../services/servicio/servicio.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexModuloComponent = (function () {
-    function IndexModuloComponent(_ModuloService, _loginService, _route, _router) {
-        this._ModuloService = _ModuloService;
+var IndexServicioComponent = (function () {
+    function IndexServicioComponent(_ServicioService, _loginService, _route, _router) {
+        this._ServicioService = _ServicioService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    IndexModuloComponent.prototype.ngOnInit = function () {
+    IndexServicioComponent.prototype.ngOnInit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._ModuloService.getModulo().subscribe(function (response) {
-            _this.modulos = response.data;
+        if (token) {
+            console.log('logueado');
+        }
+        else {
+            this._router.navigate(["/login"]);
+        }
+        this._ServicioService.getServicio().subscribe(function (response) {
+            _this.servicios = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -34,10 +40,10 @@ var IndexModuloComponent = (function () {
             }
         });
     };
-    IndexModuloComponent.prototype.deleteModulo = function (id) {
+    IndexServicioComponent.prototype.deleteServicio = function (id) {
         var _this = this;
         var token = this._loginService.getToken();
-        this._ModuloService.deleteModulo(token, id).subscribe(function (response) {
+        this._ServicioService.deleteServicio(token, id).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             _this.ngOnInit();
@@ -49,16 +55,16 @@ var IndexModuloComponent = (function () {
             }
         });
     };
-    IndexModuloComponent = __decorate([
+    IndexServicioComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/modulo/index.html',
+            templateUrl: 'app/view/servicio/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, modulo_service_1.ModuloService]
+            providers: [login_service_1.LoginService, servicio_service_1.ServicioService]
         }), 
-        __metadata('design:paramtypes', [modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexModuloComponent);
-    return IndexModuloComponent;
+        __metadata('design:paramtypes', [servicio_service_1.ServicioService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexServicioComponent);
+    return IndexServicioComponent;
 }());
-exports.IndexModuloComponent = IndexModuloComponent;
-//# sourceMappingURL=index.modulo.component.js.map
+exports.IndexServicioComponent = IndexServicioComponent;
+//# sourceMappingURL=index.servicio.component.js.map

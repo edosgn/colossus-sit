@@ -9,23 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var modulo_service_1 = require("../../services/modulo/modulo.service");
+var servicio_service_1 = require("../../services/servicio/servicio.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
+var servicio_1 = require('../../model/servicio/servicio');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexModuloComponent = (function () {
-    function IndexModuloComponent(_ModuloService, _loginService, _route, _router) {
-        this._ModuloService = _ModuloService;
+var ServicioEditComponent = (function () {
+    function ServicioEditComponent(_loginService, _ServicioService, _route, _router) {
         this._loginService = _loginService;
+        this._ServicioService = _ServicioService;
         this._route = _route;
         this._router = _router;
     }
-    IndexModuloComponent.prototype.ngOnInit = function () {
+    ServicioEditComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.servicio = new servicio_1.Servicio(null, "", null);
         var token = this._loginService.getToken();
-        this._ModuloService.getModulo().subscribe(function (response) {
-            _this.modulos = response.data;
+        this._route.params.subscribe(function (params) {
+            _this.id = +params["id"];
+        });
+        this._ServicioService.showServicio(token, this.id).subscribe(function (response) {
+            _this.servicio = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -34,31 +39,30 @@ var IndexModuloComponent = (function () {
             }
         });
     };
-    IndexModuloComponent.prototype.deleteModulo = function (id) {
+    ServicioEditComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._ModuloService.deleteModulo(token, id).subscribe(function (response) {
+        this._ServicioService.editServicio(this.servicio, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
-            _this.ngOnInit();
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
+            (function (error) {
+                _this.errorMessage = error;
+                if (_this.errorMessage != null) {
+                    console.log(_this.errorMessage);
+                    alert("Error en la petición");
+                }
+            });
         });
     };
-    IndexModuloComponent = __decorate([
+    ServicioEditComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/modulo/index.html',
+            templateUrl: 'app/view/servicio/edit.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, modulo_service_1.ModuloService]
+            providers: [login_service_1.LoginService, servicio_service_1.ServicioService]
         }), 
-        __metadata('design:paramtypes', [modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexModuloComponent);
-    return IndexModuloComponent;
+        __metadata('design:paramtypes', [login_service_1.LoginService, servicio_service_1.ServicioService, router_1.ActivatedRoute, router_1.Router])
+    ], ServicioEditComponent);
+    return ServicioEditComponent;
 }());
-exports.IndexModuloComponent = IndexModuloComponent;
-//# sourceMappingURL=index.modulo.component.js.map
+exports.ServicioEditComponent = ServicioEditComponent;
+//# sourceMappingURL=edit.servicio.component.js.map

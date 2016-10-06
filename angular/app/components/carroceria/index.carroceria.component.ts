@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {ModuloService} from "../../services/modulo/modulo.service";
+import {CarroceriaService} from "../../services/carroceria/carroceria.service";
 import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
@@ -8,21 +8,21 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/modulo/index.html',
+    templateUrl: 'app/view/carroceria/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,ModuloService]
+    providers: [LoginService,CarroceriaService]
 })
  
-// Clase del componente donde irán los datos y funcionalidades
-export class IndexModuloComponent implements OnInit{ 
+// Carroceria del componente donde irán los datos y funcionalidades
+export class IndexCarroceriaComponent implements OnInit{ 
 	public errorMessage;
 	public id;
 	public respuesta;
-	public modulos;
+	public carrocerias;
 	
 
 	constructor(
-		private _ModuloService: ModuloService,
+		private _CarroceriaService: CarroceriaService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
@@ -33,9 +33,15 @@ export class IndexModuloComponent implements OnInit{
 	ngOnInit(){	
 		let token = this._loginService.getToken();
 		
-		this._ModuloService.getModulo().subscribe(
+		if(token) {
+	     	console.log('logueado');
+	     }else{
+	     	this._router.navigate(["/login"]);
+	     }
+
+		this._CarroceriaService.getCarroceria().subscribe(
 				response => {
-					this.modulos = response.data;
+					this.carrocerias = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -49,9 +55,9 @@ export class IndexModuloComponent implements OnInit{
 	  
 	}
 
-	deleteModulo(id:string){
+	deleteCarroceria(id:string){
 		let token = this._loginService.getToken();
-		this._ModuloService.deleteModulo(token,id).subscribe(
+		this._CarroceriaService.deleteCarroceria(token,id).subscribe(
 				response => {
 					    this.respuesta= response;
 					    console.log(this.respuesta); 
