@@ -58,6 +58,9 @@ var edit_servicio_component_1 = require("./components/servicio/edit.servicio.com
 var index_carroceria_component_1 = require("./components/carroceria/index.carroceria.component");
 var new_carroceria_component_1 = require("./components/carroceria/new.carroceria.component");
 var edit_carroceria_component_1 = require("./components/carroceria/edit.carroceria.component");
+var index_tramite_component_1 = require("./components/tramite/index.tramite.component");
+var new_tramite_component_1 = require("./components/tramite/new.tramite.component");
+var edit_tramite_component_1 = require("./components/tramite/edit.tramite.component");
 exports.routes = [
     {
         path: '',
@@ -123,6 +126,9 @@ exports.routes = [
     { path: 'carroceria/index', component: index_carroceria_component_1.IndexCarroceriaComponent },
     { path: 'carroceria/new', component: new_carroceria_component_1.NewCarroceriaComponent },
     { path: 'carroceria/show/:id', component: edit_carroceria_component_1.CarroceriaEditComponent },
+    { path: 'tramite/index', component: index_tramite_component_1.IndexTramiteComponent },
+    { path: 'tramite/new', component: new_tramite_component_1.NewTramiteComponent },
+    { path: 'tramite/show/:id', component: edit_tramite_component_1.TramiteEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

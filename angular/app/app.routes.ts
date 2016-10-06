@@ -76,6 +76,10 @@ import { IndexCarroceriaComponent } from "./components/carroceria/index.carrocer
 import { NewCarroceriaComponent } from "./components/carroceria/new.carroceria.component";
 import { CarroceriaEditComponent } from "./components/carroceria/edit.carroceria.component";
 
+import { IndexTramiteComponent } from "./components/tramite/index.tramite.component";
+import { NewTramiteComponent } from "./components/tramite/new.tramite.component";
+import { TramiteEditComponent } from "./components/tramite/edit.tramite.component";
+
 
 
 
@@ -164,6 +168,10 @@ export const routes: RouterConfig = [
     { path: 'carroceria/index', component: IndexCarroceriaComponent},
     { path: 'carroceria/new', component: NewCarroceriaComponent},
     { path: 'carroceria/show/:id', component: CarroceriaEditComponent},
+
+    { path: 'tramite/index', component: IndexTramiteComponent},
+    { path: 'tramite/new', component: NewTramiteComponent},
+    { path: 'tramite/show/:id', component: TramiteEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
