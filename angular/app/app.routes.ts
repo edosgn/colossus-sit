@@ -72,6 +72,10 @@ import { IndexServicioComponent } from "./components/servicio/index.servicio.com
 import { NewServicioComponent } from "./components/servicio/new.servicio.component";
 import { ServicioEditComponent } from "./components/servicio/edit.servicio.component";
 
+import { IndexCarroceriaComponent } from "./components/carroceria/index.carroceria.component";
+import { NewCarroceriaComponent } from "./components/carroceria/new.carroceria.component";
+import { CarroceriaEditComponent } from "./components/carroceria/edit.carroceria.component";
+
 
 
 
@@ -156,6 +160,10 @@ export const routes: RouterConfig = [
     { path: 'servicio/index', component: IndexServicioComponent},
     { path: 'servicio/new', component: NewServicioComponent},
     { path: 'servicio/show/:id', component: ServicioEditComponent},
+
+    { path: 'carroceria/index', component: IndexCarroceriaComponent},
+    { path: 'carroceria/new', component: NewCarroceriaComponent},
+    { path: 'carroceria/show/:id', component: CarroceriaEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

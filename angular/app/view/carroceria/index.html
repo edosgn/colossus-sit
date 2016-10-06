@@ -1,0 +1,51 @@
+<br>
+<hr>
+<h3>carrocerias:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/carroceria/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+         <div class="identity-data" *ngIf="respuesta">
+            <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+                {{respuesta.msj}}
+            </div>
+            <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+                {{respuesta.msj}}
+            </div>
+        </div>
+
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Clase</th>
+                    <th>Codigo Mt</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#carroceria of carrocerias">
+                    <td >{{carroceria.id}}</td>
+                    <td >{{carroceria.nombre}}</td>
+                    <td >{{carroceria.clase.nombre}}</td>
+                    <td >{{carroceria.codigoMt}}</td>
+
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteCarroceria(carroceria.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/carroceria/show',carroceria.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
