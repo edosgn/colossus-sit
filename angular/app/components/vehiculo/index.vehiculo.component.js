@@ -9,29 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var caso_service_1 = require("../../services/caso/caso.service");
+var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexCasoComponent = (function () {
-    function IndexCasoComponent(_CasoService, _loginService, _route, _router) {
-        this._CasoService = _CasoService;
+var IndexVehiculoComponent = (function () {
+    function IndexVehiculoComponent(_VehiculoService, _loginService, _route, _router) {
+        this._VehiculoService = _VehiculoService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    IndexCasoComponent.prototype.ngOnInit = function () {
+    IndexVehiculoComponent.prototype.ngOnInit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        if (token) {
-            console.log('logueado');
-        }
-        else {
-            this._router.navigate(["/login"]);
-        }
-        this._CasoService.getCaso().subscribe(function (response) {
-            _this.casos = response.data;
+        this._VehiculoService.getVehiculo().subscribe(function (response) {
+            _this.vehiculos = response.data;
+            console.log(_this.vehiculos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -40,10 +35,10 @@ var IndexCasoComponent = (function () {
             }
         });
     };
-    IndexCasoComponent.prototype.deleteCaso = function (id) {
+    IndexVehiculoComponent.prototype.deleteVehiculo = function (id) {
         var _this = this;
         var token = this._loginService.getToken();
-        this._CasoService.deleteCaso(token, id).subscribe(function (response) {
+        this._VehiculoService.deleteVehiculo(token, id).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             _this.ngOnInit();
@@ -55,16 +50,16 @@ var IndexCasoComponent = (function () {
             }
         });
     };
-    IndexCasoComponent = __decorate([
+    IndexVehiculoComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/caso/index.html',
+            templateUrl: 'app/view/vehiculo/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, caso_service_1.CasoService]
+            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService]
         }), 
-        __metadata('design:paramtypes', [caso_service_1.CasoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexCasoComponent);
-    return IndexCasoComponent;
+        __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexVehiculoComponent);
+    return IndexVehiculoComponent;
 }());
-exports.IndexCasoComponent = IndexCasoComponent;
-//# sourceMappingURL=index.caso.component.js.map
+exports.IndexVehiculoComponent = IndexVehiculoComponent;
+//# sourceMappingURL=index.vehiculo.component.js.map

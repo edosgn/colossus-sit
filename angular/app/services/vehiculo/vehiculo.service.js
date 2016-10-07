@@ -11,45 +11,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
-var CasoService = (function () {
-    function CasoService(_http) {
+var VehiculoService = (function () {
+    function VehiculoService(_http) {
         this._http = _http;
-        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/caso";
+        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/vehiculo";
     }
-    CasoService.prototype.getCaso = function () {
+    VehiculoService.prototype.getVehiculo = function () {
         return this._http.get(this.url + "/").map(function (res) { return res.json(); });
     };
-    CasoService.prototype.register = function (caso, token) {
-        var json = JSON.stringify(caso);
+    VehiculoService.prototype.register = function (vehiculo, token) {
+        var json = JSON.stringify(vehiculo);
         var params = "json=" + json + "&authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/new", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService.prototype.deleteCaso = function (token, id) {
+    VehiculoService.prototype.deleteVehiculo = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/" + id + "/delete", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService.prototype.showCaso = function (token, id) {
+    VehiculoService.prototype.showVehiculo = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService.prototype.editCaso = function (caso, token) {
-        var json = JSON.stringify(caso);
+    VehiculoService.prototype.editVehiculo = function (vehiculo, token) {
+        var json = JSON.stringify(vehiculo);
         var params = "json=" + json + "&authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService = __decorate([
+    VehiculoService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
-    ], CasoService);
-    return CasoService;
+    ], VehiculoService);
+    return VehiculoService;
 }());
-exports.CasoService = CasoService;
-//# sourceMappingURL=variante.service.js.map
+exports.VehiculoService = VehiculoService;
+//# sourceMappingURL=vehiculo.service.js.map
