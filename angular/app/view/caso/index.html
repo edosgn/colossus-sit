@@ -1,0 +1,46 @@
+<br>
+<hr>
+<h3>caso:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/caso/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    <div class="identity-data" *ngIf="respuesta">
+        <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+            {{respuesta.msj}}
+        </div>
+        <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+            {{respuesta.msj}}
+        </div>
+    </div>
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Tramite</th>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#caso of casos">
+                    <td >{{caso.id}}</td>
+                    <td >{{caso.numero}}</td>
+                    <td >{{caso.tramite.nombre}}</td>
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteCaso(caso.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/caso/show',caso.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
