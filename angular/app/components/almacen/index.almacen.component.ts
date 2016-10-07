@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {EmpresaService} from "../../services/empresa/empresa.service";
+import {AlmacenService} from "../../services/almacen/almacen.service";
 import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
@@ -8,21 +8,21 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/empresa/index.html',
+    templateUrl: 'app/view/almacen/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,EmpresaService]
+    providers: [LoginService,AlmacenService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class IndexEmpresaComponent implements OnInit{ 
+export class IndexAlmacenComponent implements OnInit{ 
 	public errorMessage;
 	public id;
 	public respuesta;
-	public empresas;
+	public almacenes;
 	
 
 	constructor(
-		private _EmpresaService: EmpresaService,
+		private _AlmacenService: AlmacenService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
@@ -33,10 +33,9 @@ export class IndexEmpresaComponent implements OnInit{
 	ngOnInit(){	
 		let token = this._loginService.getToken();
 		
-		this._EmpresaService.getEmpresa().subscribe(
+		this._AlmacenService.getAlmacen().subscribe(
 				response => {
-					this.empresas = response.data;
-					console.log(this.empresas);
+					this.almacenes = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -50,9 +49,9 @@ export class IndexEmpresaComponent implements OnInit{
 	  
 	}
 
-	deleteEmpresa(id:string){
+	deleteAlmacen(id:string){
 		let token = this._loginService.getToken();
-		this._EmpresaService.deleteEmpresa(token,id).subscribe(
+		this._AlmacenService.deleteAlmacen(token,id).subscribe(
 				response => {
 					    this.respuesta= response;
 					    console.log(this.respuesta); 

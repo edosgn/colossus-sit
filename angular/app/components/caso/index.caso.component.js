@@ -62,10 +62,9 @@ var IndexCasoComponent = (function () {
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, caso_service_1.CasoService]
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof caso_service_1.CasoService !== 'undefined' && caso_service_1.CasoService) === 'function' && _a) || Object, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [caso_service_1.CasoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexCasoComponent);
     return IndexCasoComponent;
-    var _a;
 }());
 exports.IndexCasoComponent = IndexCasoComponent;
 //# sourceMappingURL=index.caso.component.js.map

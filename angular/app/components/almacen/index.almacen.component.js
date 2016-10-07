@@ -9,24 +9,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var empresa_service_1 = require("../../services/empresa/empresa.service");
+var almacen_service_1 = require("../../services/almacen/almacen.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexEmpresaComponent = (function () {
-    function IndexEmpresaComponent(_EmpresaService, _loginService, _route, _router) {
-        this._EmpresaService = _EmpresaService;
+var IndexAlmacenComponent = (function () {
+    function IndexAlmacenComponent(_AlmacenService, _loginService, _route, _router) {
+        this._AlmacenService = _AlmacenService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    IndexEmpresaComponent.prototype.ngOnInit = function () {
+    IndexAlmacenComponent.prototype.ngOnInit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._EmpresaService.getEmpresa().subscribe(function (response) {
-            _this.empresas = response.data;
-            console.log(_this.empresas);
+        this._AlmacenService.getAlmacen().subscribe(function (response) {
+            _this.almacenes = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -35,10 +34,10 @@ var IndexEmpresaComponent = (function () {
             }
         });
     };
-    IndexEmpresaComponent.prototype.deleteEmpresa = function (id) {
+    IndexAlmacenComponent.prototype.deleteAlmacen = function (id) {
         var _this = this;
         var token = this._loginService.getToken();
-        this._EmpresaService.deleteEmpresa(token, id).subscribe(function (response) {
+        this._AlmacenService.deleteAlmacen(token, id).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             _this.ngOnInit();
@@ -50,16 +49,16 @@ var IndexEmpresaComponent = (function () {
             }
         });
     };
-    IndexEmpresaComponent = __decorate([
+    IndexAlmacenComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/empresa/index.html',
+            templateUrl: 'app/view/almacen/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, empresa_service_1.EmpresaService]
+            providers: [login_service_1.LoginService, almacen_service_1.AlmacenService]
         }), 
-        __metadata('design:paramtypes', [empresa_service_1.EmpresaService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexEmpresaComponent);
-    return IndexEmpresaComponent;
+        __metadata('design:paramtypes', [almacen_service_1.AlmacenService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexAlmacenComponent);
+    return IndexAlmacenComponent;
 }());
-exports.IndexEmpresaComponent = IndexEmpresaComponent;
-//# sourceMappingURL=index.empresa.component.js.map
+exports.IndexAlmacenComponent = IndexAlmacenComponent;
+//# sourceMappingURL=index.almacen.component.js.map

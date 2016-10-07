@@ -4,28 +4,28 @@ import  "rxjs/add/operator/map";
 import  {Observable} from "rxjs/Observable";
 
 @Injectable()
-export class EmpresaService {
-	public url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/empresa";
+export class AlmacenService {
+	public url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/almacen";
 	public identity;
 	public token;
 
 	constructor(private _http: Http){}
 
-	getEmpresa(){
+	getAlmacen(){
 		
 		return this._http.get(this.url+"/").map(res => res.json());
 	}
 
-	register(empresa,token){
+	register(almacen,token){
 		
-		let json = JSON.stringify(empresa);
+		let json = JSON.stringify(almacen);
 		let params = "json="+json+"&authorization="+token;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
 		return this._http.post(this.url+"/new", params, {headers: headers})
 							  .map(res => res.json());
 	}
 
-	deleteEmpresa(token,id){
+	deleteAlmacen(token,id){
 
 		let params = "authorization="+token;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
@@ -33,7 +33,7 @@ export class EmpresaService {
 							  .map(res => res.json());
 	}
 
-	showEmpresa(token,id){
+	showAlmacen(token,id){
 		
 		let params = "authorization="+token;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
@@ -42,9 +42,9 @@ export class EmpresaService {
 
 	}
 
-	editEmpresa(empresa,token){
+	editAlmacen(almacen,token){
 
-		let json = JSON.stringify(empresa);
+		let json = JSON.stringify(almacen);
 		let params = "json="+json+"&authorization="+token;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
  			return this._http.post(this.url+"/edit", params, {headers: headers})

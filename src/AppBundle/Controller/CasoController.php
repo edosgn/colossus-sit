@@ -67,7 +67,7 @@ class CasoController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
 
-                        if ($tramite!=null) {
+                        if ($tramite==null) {
                             $responce = array(
                                 'status' => 'error',
                                 'code' => 400,

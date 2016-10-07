@@ -1,24 +1,24 @@
 // Importar el núcleo de Angular
-import {VarianteService} from "../../services/variante/variante.service";
+import {CasoService} from "../../services/caso/caso.service";
 import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import {TramiteService} from '../../services/tramite/tramite.service';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {Variante} from '../../model/variante/variante';
+import {Caso} from '../../model/caso/caso';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/variante/edit.html',
+    templateUrl: 'app/view/caso/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService ,VarianteService,TramiteService]
+    providers: [LoginService ,CasoService,TramiteService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class VarianteEditComponent implements OnInit{ 
+export class CasoEditComponent implements OnInit{ 
 	public errorMessage;
-	public variante : Variante;
+	public caso : Caso;
 	public id;
 	public respuesta;
 	public tramites;
@@ -26,7 +26,7 @@ export class VarianteEditComponent implements OnInit{
 	constructor(
 		private _TramiteService: TramiteService,
 		private _loginService: LoginService,
-		private _VarianteService: VarianteService,
+		private _CasoService: CasoService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
@@ -34,7 +34,7 @@ export class VarianteEditComponent implements OnInit{
 
 	ngOnInit(){	
 
-		this.variante = new Variante(null,null,""); 
+		this.caso = new Caso(null,null,""); 
 		let token = this._loginService.getToken();
 		this._TramiteService.getTramite().subscribe(
 				response => {
@@ -54,11 +54,11 @@ export class VarianteEditComponent implements OnInit{
 				this.id = +params["id"];
 			});
 
-			this._VarianteService.showVariante(token,this.id).subscribe(
+			this._CasoService.showCaso(token,this.id).subscribe(
 
 						response => {
 							let data = response.data;
-							this.variante = new Variante(data.id,data.tramite.id, data.nombre);
+							this.caso = new Caso(data.id,data.tramite.id, data.nombre);
 						},
 						error => {
 								this.errorMessage = <any>error;
@@ -76,7 +76,7 @@ export class VarianteEditComponent implements OnInit{
 
 	onSubmit(){
 		let token = this._loginService.getToken();
-		this._VarianteService.editVariante(this.variante,token).subscribe(
+		this._CasoService.editCaso(this.caso,token).subscribe(
 			response => {
 				this.respuesta = response;
 			error => {

@@ -96,6 +96,14 @@ import { IndexVarianteComponent } from "./components/variante/index.variante.com
 import { NewVarianteComponent } from "./components/variante/new.variante.component";
 import { VarianteEditComponent } from "./components/variante/edit.variante.component";
 
+import { IndexCasoComponent } from "./components/caso/index.caso.component";
+import { NewCasoComponent } from "./components/caso/new.caso.component";
+import { CasoEditComponent } from "./components/caso/edit.caso.component";
+
+import { IndexAlmacenComponent } from "./components/almacen/index.almacen.component";
+import { NewAlmacenComponent } from "./components/almacen/new.almacen.component";
+import { AlmacenEditComponent } from "./components/almacen/edit.almacen.component";
+
 
 
 
@@ -204,6 +212,14 @@ export const routes: RouterConfig = [
     { path: 'variante/index', component: IndexVarianteComponent},
     { path: 'variante/new', component: NewVarianteComponent},
     { path: 'variante/show/:id', component: VarianteEditComponent},
+
+    { path: 'caso/index', component: IndexCasoComponent},
+    { path: 'caso/new', component: NewCasoComponent},
+    { path: 'caso/show/:id', component: CasoEditComponent},
+
+    { path: 'almacen/index', component: IndexAlmacenComponent},
+    { path: 'almacen/new', component: NewAlmacenComponent},
+    { path: 'almacen/show/:id', component: AlmacenEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

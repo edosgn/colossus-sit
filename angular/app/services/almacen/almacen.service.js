@@ -11,45 +11,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
-var CasoService = (function () {
-    function CasoService(_http) {
+var AlmacenService = (function () {
+    function AlmacenService(_http) {
         this._http = _http;
-        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/caso";
+        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/almacen";
     }
-    CasoService.prototype.getCaso = function () {
+    AlmacenService.prototype.getAlmacen = function () {
         return this._http.get(this.url + "/").map(function (res) { return res.json(); });
     };
-    CasoService.prototype.register = function (caso, token) {
-        var json = JSON.stringify(caso);
+    AlmacenService.prototype.register = function (almacen, token) {
+        var json = JSON.stringify(almacen);
         var params = "json=" + json + "&authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/new", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService.prototype.deleteCaso = function (token, id) {
+    AlmacenService.prototype.deleteAlmacen = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/" + id + "/delete", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService.prototype.showCaso = function (token, id) {
+    AlmacenService.prototype.showAlmacen = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService.prototype.editCaso = function (caso, token) {
-        var json = JSON.stringify(caso);
+    AlmacenService.prototype.editAlmacen = function (almacen, token) {
+        var json = JSON.stringify(almacen);
         var params = "json=" + json + "&authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    CasoService = __decorate([
+    AlmacenService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
-    ], CasoService);
-    return CasoService;
+    ], AlmacenService);
+    return AlmacenService;
 }());
-exports.CasoService = CasoService;
-//# sourceMappingURL=variante.service.js.map
+exports.AlmacenService = AlmacenService;
+//# sourceMappingURL=almacen.service.js.map

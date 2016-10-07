@@ -9,24 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
-var variante_service_1 = require("../../services/variante/variante.service");
+var caso_service_1 = require("../../services/caso/caso.service");
 var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var tramite_service_1 = require('../../services/tramite/tramite.service');
 var router_1 = require("@angular/router");
-var variante_1 = require('../../model/variante/variante');
+var caso_1 = require('../../model/caso/caso');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var VarianteEditComponent = (function () {
-    function VarianteEditComponent(_TramiteService, _loginService, _VarianteService, _route, _router) {
+var CasoEditComponent = (function () {
+    function CasoEditComponent(_TramiteService, _loginService, _CasoService, _route, _router) {
         this._TramiteService = _TramiteService;
         this._loginService = _loginService;
-        this._VarianteService = _VarianteService;
+        this._CasoService = _CasoService;
         this._route = _route;
         this._router = _router;
     }
-    VarianteEditComponent.prototype.ngOnInit = function () {
+    CasoEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.variante = new variante_1.Variante(null, null, "");
+        this.caso = new caso_1.Caso(null, null, "");
         var token = this._loginService.getToken();
         this._TramiteService.getTramite().subscribe(function (response) {
             _this.tramites = response.data;
@@ -40,9 +40,9 @@ var VarianteEditComponent = (function () {
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
         });
-        this._VarianteService.showVariante(token, this.id).subscribe(function (response) {
+        this._CasoService.showCaso(token, this.id).subscribe(function (response) {
             var data = response.data;
-            _this.variante = new variante_1.Variante(data.id, data.tramite.id, data.nombre);
+            _this.caso = new caso_1.Caso(data.id, data.tramite.id, data.nombre);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -51,10 +51,10 @@ var VarianteEditComponent = (function () {
             }
         });
     };
-    VarianteEditComponent.prototype.onSubmit = function () {
+    CasoEditComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._VarianteService.editVariante(this.variante, token).subscribe(function (response) {
+        this._CasoService.editCaso(this.caso, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
                 _this.errorMessage = error;
@@ -65,16 +65,16 @@ var VarianteEditComponent = (function () {
             });
         });
     };
-    VarianteEditComponent = __decorate([
+    CasoEditComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/variante/edit.html',
+            templateUrl: 'app/view/caso/edit.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, variante_service_1.VarianteService, tramite_service_1.TramiteService]
+            providers: [login_service_1.LoginService, caso_service_1.CasoService, tramite_service_1.TramiteService]
         }), 
-        __metadata('design:paramtypes', [tramite_service_1.TramiteService, login_service_1.LoginService, variante_service_1.VarianteService, router_1.ActivatedRoute, router_1.Router])
-    ], VarianteEditComponent);
-    return VarianteEditComponent;
+        __metadata('design:paramtypes', [tramite_service_1.TramiteService, login_service_1.LoginService, caso_service_1.CasoService, router_1.ActivatedRoute, router_1.Router])
+    ], CasoEditComponent);
+    return CasoEditComponent;
 }());
-exports.VarianteEditComponent = VarianteEditComponent;
+exports.CasoEditComponent = CasoEditComponent;
 //# sourceMappingURL=edit.caso.component.js.map
