@@ -122,7 +122,7 @@ class Pago
      */
     public function getFechaPago()
     {
-        return $this->fechaPago->format("y-m-d");
+        return $this->fechaPago->format("Y-m-d");
     }
 
     /**
@@ -146,7 +146,12 @@ class Pago
      */
     public function getHoraPago()
     {
-        return $this->horaPago->format("h:m:s");
+        return $this->horaPago->format("h:m A");
+    }
+
+    public function getHoraPagoHM()
+    {
+        return $this->horaPago->format("h:m");
     }
 
 

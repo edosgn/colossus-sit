@@ -77,6 +77,7 @@ class LineaController extends Controller
                         $linea->setCodigoMt($codigoMt);
                         $linea->setMarca($marca);
 
+
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($linea);
                         $em->flush();

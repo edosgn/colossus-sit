@@ -113,6 +113,7 @@ class PagoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $pago = $em->getRepository('AppBundle:Pago')->find($id);
+           
             $responce = array(
                     'status' => 'success',
                     'code' => 200,

@@ -90,11 +90,6 @@
 					<input type="date" class="form-control" #fechaNacimiento="ngForm" ngControl="fechaNacimiento" [(ngModel)]="usuario.fechaNacimiento"  required />
 					<span *ngIf="!fechaNacimiento.valid && fechaNacimiento.touched" style="color:red;">fecha Nacimiento obligatorios</span>
 				</p>
-				<p class="col-md-12">
-				    <label >Nacimiento:</label>
-					<input type="Time" class="form-control" #fechaNacimiento="ngForm" ngControl="fechaNacimiento" [(ngModel)]="usuario.fechaNacimiento"  required />
-					<span *ngIf="!fechaNacimiento.valid && fechaNacimiento.touched" style="color:red;">fecha Nacimiento obligatorios</span>
-				</p>
 
 				<div class="clearfix"></div>
 				<br>
