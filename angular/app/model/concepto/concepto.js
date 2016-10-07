@@ -10,4 +10,4 @@ var Concepto = (function () {
     return Concepto;
 }());
 exports.Concepto = Concepto;
-//# sourceMappingURL=concepto.js.map
+//# sourceMappingURL=Concepto.js.map
