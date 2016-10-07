@@ -61,6 +61,9 @@ var edit_carroceria_component_1 = require("./components/carroceria/edit.carrocer
 var index_tramite_component_1 = require("./components/tramite/index.tramite.component");
 var new_tramite_component_1 = require("./components/tramite/new.tramite.component");
 var edit_tramite_component_1 = require("./components/tramite/edit.tramite.component");
+var index_pago_component_1 = require("./components/pago/index.pago.component");
+var new_pago_component_1 = require("./components/pago/new.pago.component");
+var edit_pago_component_1 = require("./components/pago/edit.pago.component");
 exports.routes = [
     {
         path: '',
@@ -129,6 +132,9 @@ exports.routes = [
     { path: 'tramite/index', component: index_tramite_component_1.IndexTramiteComponent },
     { path: 'tramite/new', component: new_tramite_component_1.NewTramiteComponent },
     { path: 'tramite/show/:id', component: edit_tramite_component_1.TramiteEditComponent },
+    { path: 'pago/index', component: index_pago_component_1.IndexPagoComponent },
+    { path: 'pago/new', component: new_pago_component_1.NewPagoComponent },
+    { path: 'pago/show/:id', component: edit_pago_component_1.PagoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

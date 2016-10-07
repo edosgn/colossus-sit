@@ -80,6 +80,10 @@ import { IndexTramiteComponent } from "./components/tramite/index.tramite.compon
 import { NewTramiteComponent } from "./components/tramite/new.tramite.component";
 import { TramiteEditComponent } from "./components/tramite/edit.tramite.component";
 
+import { IndexPagoComponent } from "./components/pago/index.pago.component";
+import { NewPagoComponent } from "./components/pago/new.pago.component";
+import { PagoEditComponent } from "./components/pago/edit.pago.component";
+
 
 
 
@@ -172,6 +176,10 @@ export const routes: RouterConfig = [
     { path: 'tramite/index', component: IndexTramiteComponent},
     { path: 'tramite/new', component: NewTramiteComponent},
     { path: 'tramite/show/:id', component: TramiteEditComponent},
+
+    { path: 'pago/index', component: IndexPagoComponent},
+    { path: 'pago/new', component: NewPagoComponent},
+    { path: 'pago/show/:id', component: PagoEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
