@@ -22,15 +22,16 @@
                     <th>Id</th>
                     <th>Tramite</th>
                     <th>Nombre</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
                <tr *ngFor="#variante of variantes">
                     <td >{{variante.id}}</td>
-                    <td >{{variante.numero}}</td>
                     <td >{{variante.tramite.nombre}}</td>
+                    <td >{{variante.nombre}}</td>
                     <td>
-                    <button class="btn btn-danger" value="Editar" (click)="deleteCuenta(variante.id)">
+                    <button class="btn btn-danger" value="Editar" (click)="deleteVariante(variante.id)">
                         eliminar
                     </button>
                         

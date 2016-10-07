@@ -70,6 +70,9 @@ var edit_organismoTransito_component_1 = require("./components/organismoTransito
 var index_concepto_component_1 = require("./components/concepto/index.concepto.component");
 var new_concepto_component_1 = require("./components/concepto/new.concepto.component");
 var edit_concepto_component_1 = require("./components/concepto/edit.concepto.component");
+var index_variante_components_1 = require("./components/variante/index.variante.components");
+var new_variante_component_1 = require("./components/variante/new.variante.component");
+var edit_variante_component_1 = require("./components/variante/edit.variante.component");
 exports.routes = [
     {
         path: '',
@@ -147,6 +150,9 @@ exports.routes = [
     { path: 'concepto/index', component: index_concepto_component_1.IndexConceptoComponent },
     { path: 'concepto/new', component: new_concepto_component_1.NewConceptoComponent },
     { path: 'concepto/show/:id', component: edit_concepto_component_1.ConceptoEditComponent },
+    { path: 'variante/index', component: index_variante_components_1.IndexVarianteComponent },
+    { path: 'variante/new', component: new_variante_component_1.NewVarianteComponent },
+    { path: 'variante/show/:id', component: edit_variante_component_1.VarianteEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

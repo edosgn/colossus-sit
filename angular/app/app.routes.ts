@@ -92,6 +92,10 @@ import { IndexConceptoComponent } from "./components/concepto/index.concepto.com
 import { NewConceptoComponent } from "./components/concepto/new.concepto.component";
 import { ConceptoEditComponent } from "./components/concepto/edit.concepto.component";
 
+import { IndexVarianteComponent } from "./components/variante/index.variante.components";
+import { NewVarianteComponent } from "./components/variante/new.variante.component";
+import { VarianteEditComponent } from "./components/variante/edit.variante.component";
+
 
 
 
@@ -196,6 +200,10 @@ export const routes: RouterConfig = [
     { path: 'concepto/index', component: IndexConceptoComponent},
     { path: 'concepto/new', component: NewConceptoComponent},
     { path: 'concepto/show/:id', component: ConceptoEditComponent},
+
+    { path: 'variante/index', component: IndexVarianteComponent},
+    { path: 'variante/new', component: NewVarianteComponent},
+    { path: 'variante/show/:id', component: VarianteEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
