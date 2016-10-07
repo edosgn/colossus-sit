@@ -29,7 +29,7 @@
 
 				<p class="col-md-6">
 					<label >Nombre:</label>
-					<input #nombre="ngForm"  type="number" class="form-control" [(ngModel)]="caso.nombre" ngControl="nombre"  required />
+					<input #nombre="ngForm"  type="nombre" class="form-control" [(ngModel)]="caso.nombre" ngControl="nombre"  required />
 					<span *ngIf="!nombre.valid && nombre.touched" style="color:red;">nombre obligatorio</span>
 					<br>
 				</p>

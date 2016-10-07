@@ -1,0 +1,57 @@
+<br>
+<hr>
+<h3>Almacenes</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/almacen/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    <div class="identity-data" *ngIf="respuesta">
+        <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+            {{respuesta.msj}}
+        </div>
+        <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+            {{respuesta.msj}}
+        </div>
+    </div>
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>rango Inicio</th>
+                    <th>rango Fin</th>
+                    <th>lote</th>
+                    <th>servicio</th>
+                    <th>organismo transito</th>
+                    <th>consumible</th>
+                    <th>clase</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#almacen of almacenes">
+                    <td >{{almacen.id}}</td>
+                    <td >{{almacen.rangoInicio}}</td>
+                    <td >{{almacen.rangoFin}}</td>
+                    <td >{{almacen.lote}}</td>
+                    <td >{{almacen.servicio.nombre}}</td>
+                    <td >{{almacen.organismoTransito.nombre}}</td>
+                    <td >{{almacen.consumible.nombre}}</td>
+                    <td >{{almacen.clase.nombre}}</td>
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteAlmacen(almacen.id)">
+						eliminar
+					</button>
+                        
+        	        <a [routerLink]="['/almacen/show',almacen.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
