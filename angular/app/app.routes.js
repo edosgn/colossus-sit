@@ -73,6 +73,12 @@ var edit_concepto_component_1 = require("./components/concepto/edit.concepto.com
 var index_variante_components_1 = require("./components/variante/index.variante.components");
 var new_variante_component_1 = require("./components/variante/new.variante.component");
 var edit_variante_component_1 = require("./components/variante/edit.variante.component");
+var index_caso_component_1 = require("./components/caso/index.caso.component");
+var new_caso_component_1 = require("./components/caso/new.caso.component");
+var edit_caso_component_1 = require("./components/caso/edit.caso.component");
+var index_almacen_component_1 = require("./components/almacen/index.almacen.component");
+var new_almacen_component_1 = require("./components/almacen/new.almacen.component");
+var edit_almacen_component_1 = require("./components/almacen/edit.almacen.component");
 exports.routes = [
     {
         path: '',
@@ -153,6 +159,12 @@ exports.routes = [
     { path: 'variante/index', component: index_variante_components_1.IndexVarianteComponent },
     { path: 'variante/new', component: new_variante_component_1.NewVarianteComponent },
     { path: 'variante/show/:id', component: edit_variante_component_1.VarianteEditComponent },
+    { path: 'caso/index', component: index_caso_component_1.IndexCasoComponent },
+    { path: 'caso/new', component: new_caso_component_1.NewCasoComponent },
+    { path: 'caso/show/:id', component: edit_caso_component_1.CasoEditComponent },
+    { path: 'almacen/index', component: index_almacen_component_1.IndexAlmacenComponent },
+    { path: 'almacen/new', component: new_almacen_component_1.NewAlmacenComponent },
+    { path: 'almacen/show/:id', component: edit_almacen_component_1.AlmacenEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
