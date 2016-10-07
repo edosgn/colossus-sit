@@ -27,23 +27,32 @@
 				</p>
 
 				<p class="col-md-6">
-					<label >Codigo Dian:</label>
-					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="municipio.codigoDian" ngControl="codigo"  required />
-					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorio</span>
+					<label >Fuente:</label>
+					<input #fuente="ngForm"  type="text" class="form-control" [(ngModel)]="pago.fuente" ngControl="fuente"  required />
+					<span *ngIf="!fuente.valid && fuente.touched" style="color:red;">fuente obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-12">
+				<p class="col-md-12"> 
+					<label>Tramite:</label>
+					<select class="form-control" #tramiteId="ngForm" ngControl="tramiteId" [(ngModel)]="pago.tramiteId" required>
+					  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
+					</select>
+					<span *ngIf = "!tramiteId.valid && tramiteId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+				<div class="clearfix"></div>
+				<p class="col-md-6">
+				    <label >Hora:</label>
+					<input type="Time" class="form-control" #hora="ngForm" ngControl="hora" [(ngModel)]="pago.horaPago"  required />
+					<span *ngIf="!hora.valid && hora.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+				</p>
+
+				<p class="col-md-6">
 				    <label >Fecha Pago:</label>
 					<input type="date" class="form-control" #fechaPago="ngForm" ngControl="fechaPago" [(ngModel)]="pago.fechaPago"  required />
 					<span *ngIf="!fechaPago.valid && fechaPago.touched" style="color:red;">fecha pago obligatorios</span>
 				</p>
 
-				<p class="col-md-12">
-				    <label >Hora:</label>
-					<input type="Time" class="form-control" #hora="ngForm" ngControl="hora" [(ngModel)]="pago.horaPago"  required />
-					<span *ngIf="!hora.valid && hora.touched" style="color:red;">fecha Nacimiento obligatorios</span>
-				</p>
 				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
 				[disabled]="!newMunicipio.valid"/>
 		  </div>

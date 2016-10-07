@@ -4,6 +4,7 @@ export class Pago{
 		public tramiteId:number,
 		public valor:number,
 		public fechaPago:string,
-		public horaPago:string
+		public horaPago:string,
+		public fuente:string
 	){}
 }

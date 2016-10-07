@@ -11,45 +11,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
-var OrganismoTransitoService = (function () {
-    function OrganismoTransitoService(_http) {
+var ConceptoService = (function () {
+    function ConceptoService(_http) {
         this._http = _http;
-        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/organismotransito";
+        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/concepto";
     }
-    OrganismoTransitoService.prototype.getOrganismoTransito = function () {
+    ConceptoService.prototype.getConcepto = function () {
         return this._http.get(this.url + "/").map(function (res) { return res.json(); });
     };
-    OrganismoTransitoService.prototype.register = function (organismoTransito, token) {
-        var json = JSON.stringify(organismoTransito);
+    ConceptoService.prototype.register = function (concepto, token) {
+        var json = JSON.stringify(concepto);
         var params = "json=" + json + "&authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/new", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    OrganismoTransitoService.prototype.deleteOrganismoTransito = function (token, id) {
+    ConceptoService.prototype.deleteConcepto = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/" + id + "/delete", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    OrganismoTransitoService.prototype.showOrganismoTransito = function (token, id) {
+    ConceptoService.prototype.showConcepto = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    OrganismoTransitoService.prototype.editOrganismoTransito = function (organismoTransito, token) {
-        var json = JSON.stringify(organismoTransito);
+    ConceptoService.prototype.editConcepto = function (concepto, token) {
+        var json = JSON.stringify(concepto);
         var params = "json=" + json + "&authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    OrganismoTransitoService = __decorate([
+    ConceptoService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
-    ], OrganismoTransitoService);
-    return OrganismoTransitoService;
+    ], ConceptoService);
+    return ConceptoService;
 }());
-exports.OrganismoTransitoService = OrganismoTransitoService;
-//# sourceMappingURL=organismoTransito.service.js.map
+exports.ConceptoService = ConceptoService;
+//# sourceMappingURL=concepto.service.js.map

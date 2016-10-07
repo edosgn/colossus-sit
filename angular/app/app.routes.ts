@@ -84,6 +84,14 @@ import { IndexPagoComponent } from "./components/pago/index.pago.component";
 import { NewPagoComponent } from "./components/pago/new.pago.component";
 import { PagoEditComponent } from "./components/pago/edit.pago.component";
 
+import { IndexOrganismoTransitoComponent } from "./components/organismoTransito/index.organismoTransito.component";
+import { NewOrganismoTransitoComponent } from "./components/organismoTransito/new.organismoTransito.component";
+import { OrganismoTransitoEditComponent } from "./components/organismoTransito/edit.organismoTransito.component";
+
+import { IndexConceptoComponent } from "./components/concepto/index.concepto.component";
+import { NewConceptoComponent } from "./components/concepto/new.concepto.component";
+import { ConceptoEditComponent } from "./components/concepto/edit.concepto.component";
+
 
 
 
@@ -180,6 +188,14 @@ export const routes: RouterConfig = [
     { path: 'pago/index', component: IndexPagoComponent},
     { path: 'pago/new', component: NewPagoComponent},
     { path: 'pago/show/:id', component: PagoEditComponent},
+
+    { path: 'organismoTransito/index', component: IndexOrganismoTransitoComponent},
+    { path: 'organismoTransito/new', component: NewOrganismoTransitoComponent},
+    { path: 'organismoTransito/show/:id', component: OrganismoTransitoEditComponent},
+
+    { path: 'concepto/index', component: IndexConceptoComponent},
+    { path: 'concepto/new', component: NewConceptoComponent},
+    { path: 'concepto/show/:id', component: ConceptoEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

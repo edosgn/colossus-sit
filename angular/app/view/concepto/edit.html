@@ -1,0 +1,67 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+
+		
+	</div>
+	<br>
+
+	<form #newCiudadano="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Empresa</div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+				<p class="col-md-6"> 
+					<label>Tramite:</label>
+					<select class="form-control" #tramiteId="ngForm" ngControl="tramiteId" [(ngModel)]="concepto.tramiteId" required>
+					  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
+					</select>
+					<span *ngIf = "!tramiteId.valid && tramiteId.touched" class="text-danger">tramite obligatorio</span>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Cuenta:</label>
+					<select class="form-control" #cuentaId="ngForm" ngControl="cuentaId" [(ngModel)]="concepto.cuentaId" required>
+					  <option *ngFor="#cuenta of cuentas" [value]='cuenta.id' >{{cuenta.numero}}</option>
+					</select>
+					<span *ngIf = "!cuentaId.valid && cuentaId.touched" class="text-danger">cuenta es obligatorio</span>
+				</p>
+
+				
+
+				<p class="col-md-6">
+					<label >Descripcion:</label>
+					<textarea  #descripcion="ngForm"  class="form-control" [(ngModel)]="concepto.descripcion" ngControl="descripcion" required>Write something here</textarea>
+					<span *ngIf="!descripcion.valid && descripcion.touched" style="color:red;">descripcion obligatorios</span>
+					<br>
+				</p>
+				
+
+				<p class="col-md-6">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="concepto.valor" ngControl="valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">numero valor obligatorios</span>
+					<br>
+				</p>
+
+				<div class="clearfix"></div>
+				<br>
+		        <p class="col-md-12"> 
+		        
+			    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				[disabled]="!newCiudadano.valid"/>
+			    
+			    </p>
+		  </div>
+		</div>
+	</form>
+</div>

@@ -173,21 +173,35 @@ class OrganismoTransitoController extends Controller
     /**
      * Deletes a OrganismoTransito entity.
      *
-     * @Route("/{id}", name="organismotransito_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="organismotransito_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, OrganismoTransito $organismoTransito)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($organismoTransito);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($organismoTransito);
-            $em->flush();
-        }
+            $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($id);
 
-        return $this->redirectToRoute('organismotransito_index');
+            $organismoTransito->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($organismoTransito);
+                $em->flush();
+            $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "organismoTransito eliminado con exito", 
+                );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 
     /**

@@ -1,9 +1,9 @@
 <br>
 <hr>
-<h3>Pagos:</h3>
+<h3>conceptos</h3>
 <hr>
 	<div class="table-responsive">
-    <a [routerLink]="['/pago/new']" class="btn btn-success">
+    <a [routerLink]="['/concepto/new']" class="btn btn-success">
          Nuevo
     </a>
     <br>
@@ -21,28 +21,25 @@
                 <tr>
                     <th>Id</th>
                     <th>tramite</th>
-                    <th>fuente</th>
+                    <th>cuenta</th>
+                    <th>descripcion</th>
                     <th>valor</th>
-                    <th>fecha pago</th>
-                    <th>hora</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-               <tr *ngFor="#pago of pagos">
-                    <td >{{pago.id}}</td>
-                    <td >{{pago.tramite.nombre}}</td>
-                    <td >{{pago.fuente}}</td>
-                    <td >{{pago.valor}}</td>
-                    <td >{{pago.fechaPago}}</td>
-                    <td >{{pago.horaPago}}</td>
-
-                    <td>
-                    <button class="btn btn-danger" value="Editar" (click)="deletePago(pago.id)">
-                        eliminar
-                    </button>
+                <tr *ngFor="#concepto of conceptos">
+                    <td >{{concepto.id}}</td>
+                    <td >{{concepto.tramite.nombre}}</td>
+                    <td >{{concepto.cuenta.numero}}</td>
+                    <td >{{concepto.descripcion}}</td>
+                    <td >{{concepto.valor}}</td>
+                   <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteConcepto(concepto.id)">
+						eliminar
+					</button>
                         
-                    <a [routerLink]="['/pago/show',pago.id]" class="btn btn-info">
+        	        <a [routerLink]="['/concepto/show',concepto.id]" class="btn btn-info">
                          Editar
                     </a>
 

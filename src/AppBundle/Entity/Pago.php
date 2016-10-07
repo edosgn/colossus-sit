@@ -146,12 +146,12 @@ class Pago
      */
     public function getHoraPago()
     {
-        return $this->horaPago->format("h:m A");
+        return $this->horaPago->format("h:i A");
     }
 
     public function getHoraPagoHM()
     {
-        return $this->horaPago->format("h:m");
+        return $this->horaPago->format("h:i");
     }
 
 

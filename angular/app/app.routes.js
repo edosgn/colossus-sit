@@ -64,6 +64,12 @@ var edit_tramite_component_1 = require("./components/tramite/edit.tramite.compon
 var index_pago_component_1 = require("./components/pago/index.pago.component");
 var new_pago_component_1 = require("./components/pago/new.pago.component");
 var edit_pago_component_1 = require("./components/pago/edit.pago.component");
+var index_organismoTransito_component_1 = require("./components/organismoTransito/index.organismoTransito.component");
+var new_organismoTransito_component_1 = require("./components/organismoTransito/new.organismoTransito.component");
+var edit_organismoTransito_component_1 = require("./components/organismoTransito/edit.organismoTransito.component");
+var index_concepto_component_1 = require("./components/concepto/index.concepto.component");
+var new_concepto_component_1 = require("./components/concepto/new.concepto.component");
+var edit_concepto_component_1 = require("./components/concepto/edit.concepto.component");
 exports.routes = [
     {
         path: '',
@@ -135,6 +141,12 @@ exports.routes = [
     { path: 'pago/index', component: index_pago_component_1.IndexPagoComponent },
     { path: 'pago/new', component: new_pago_component_1.NewPagoComponent },
     { path: 'pago/show/:id', component: edit_pago_component_1.PagoEditComponent },
+    { path: 'organismoTransito/index', component: index_organismoTransito_component_1.IndexOrganismoTransitoComponent },
+    { path: 'organismoTransito/new', component: new_organismoTransito_component_1.NewOrganismoTransitoComponent },
+    { path: 'organismoTransito/show/:id', component: edit_organismoTransito_component_1.OrganismoTransitoEditComponent },
+    { path: 'concepto/index', component: index_concepto_component_1.IndexConceptoComponent },
+    { path: 'concepto/new', component: new_concepto_component_1.NewConceptoComponent },
+    { path: 'concepto/show/:id', component: edit_concepto_component_1.ConceptoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

@@ -38,7 +38,7 @@
 
 				<p class="col-md-12">
 					<label >Observacion:</label>
-					<textarea  #observacion="ngForm"  type="textArea" class="form-control" [(ngModel)]="cuenta.observacion" ngControl="observacion"  required>Write something here</textarea>
+					<textarea  #observacion="ngForm"  class="form-control" [(ngModel)]="cuenta.observacion" ngControl="observacion"  required>Write something here</textarea>
 					<span *ngIf="!observacion.valid && observacion.touched" style="color:red;">observacion obligatorios</span>
 					<br>
 				</p>

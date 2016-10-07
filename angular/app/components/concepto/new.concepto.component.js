@@ -12,24 +12,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
-var pago_service_1 = require('../../services/pago/pago.service');
-var Pago_1 = require('../../model/pago/Pago');
+var cuenta_service_1 = require("../../services/cuenta/cuenta.service");
 var tramite_service_1 = require('../../services/tramite/tramite.service');
+var concepto_service_1 = require("../../services/concepto/concepto.service");
+var Concepto_1 = require('../../model/concepto/Concepto');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var NewPagoComponent = (function () {
-    function NewPagoComponent(_TramiteService, _PagoService, _loginService, _route, _router) {
+var NewConceptoComponent = (function () {
+    function NewConceptoComponent(_CuentaService, _TramiteService, _ConceptoService, _loginService, _route, _router) {
+        this._CuentaService = _CuentaService;
         this._TramiteService = _TramiteService;
-        this._PagoService = _PagoService;
+        this._ConceptoService = _ConceptoService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    NewPagoComponent.prototype.ngOnInit = function () {
+    NewConceptoComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.pago = new Pago_1.Pago(null, null, null, "", "", "");
+        this.concepto = new Concepto_1.Concepto(null, null, null, "", null);
+        var token = this._loginService.getToken();
         this._TramiteService.getTramite().subscribe(function (response) {
             _this.tramites = response.data;
-            console.log(_this.tramites[0].nombre);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+        this._CuentaService.getCuenta().subscribe(function (response) {
+            _this.cuentas = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -38,12 +49,11 @@ var NewPagoComponent = (function () {
             }
         });
     };
-    NewPagoComponent.prototype.onSubmit = function () {
+    NewConceptoComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._PagoService.register(this.pago, token).subscribe(function (response) {
+        this._ConceptoService.register(this.concepto, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -53,16 +63,16 @@ var NewPagoComponent = (function () {
             });
         });
     };
-    NewPagoComponent = __decorate([
+    NewConceptoComponent = __decorate([
         core_1.Component({
             selector: 'register',
-            templateUrl: 'app/view/pago/new.html',
+            templateUrl: 'app/view/concepto/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, pago_service_1.PagoService, tramite_service_1.TramiteService]
+            providers: [login_service_1.LoginService, concepto_service_1.ConceptoService, tramite_service_1.TramiteService, cuenta_service_1.CuentaService]
         }), 
-        __metadata('design:paramtypes', [tramite_service_1.TramiteService, pago_service_1.PagoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], NewPagoComponent);
-    return NewPagoComponent;
+        __metadata('design:paramtypes', [cuenta_service_1.CuentaService, tramite_service_1.TramiteService, concepto_service_1.ConceptoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], NewConceptoComponent);
+    return NewConceptoComponent;
 }());
-exports.NewPagoComponent = NewPagoComponent;
-//# sourceMappingURL=new.pago.component.js.map
+exports.NewConceptoComponent = NewConceptoComponent;
+//# sourceMappingURL=new.concepto.component.js.map

@@ -12,22 +12,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
+var cuenta_service_1 = require("../../services/cuenta/cuenta.service");
 var tramite_service_1 = require('../../services/tramite/tramite.service');
-var pago_service_1 = require("../../services/pago/pago.service");
-var Pago_1 = require('../../model/pago/Pago');
+var concepto_service_1 = require("../../services/concepto/concepto.service");
+var Concepto_1 = require('../../model/concepto/Concepto');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var PagoEditComponent = (function () {
-    function PagoEditComponent(_loginService, _TramiteService, _PagoService, _route, _router) {
-        this._loginService = _loginService;
+var ConceptoEditComponent = (function () {
+    function ConceptoEditComponent(_CuentaService, _TramiteService, _ConceptoService, _loginService, _route, _router) {
+        this._CuentaService = _CuentaService;
         this._TramiteService = _TramiteService;
-        this._PagoService = _PagoService;
+        this._ConceptoService = _ConceptoService;
+        this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    PagoEditComponent.prototype.ngOnInit = function () {
+    ConceptoEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.pago = new Pago_1.Pago(null, null, null, "", "", "");
+        this.concepto = new Concepto_1.Concepto(null, null, null, "", null);
         var token = this._loginService.getToken();
+        this._route.params.subscribe(function (params) {
+            _this.id = +params["id"];
+        });
+        this._ConceptoService.showConcepto(token, this.id).subscribe(function (response) {
+            var data = response.data;
+            _this.concepto = new Concepto_1.Concepto(data.id, data.tramite.id, data.cuenta.id, data.descripcion, data.valor);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+        this._CuentaService.getCuenta().subscribe(function (response) {
+            _this.cuentas = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
         this._TramiteService.getTramite().subscribe(function (response) {
             _this.tramites = response.data;
         }, function (error) {
@@ -37,25 +61,11 @@ var PagoEditComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this._route.params.subscribe(function (params) {
-            _this.id = +params["id"];
-        });
-        this._PagoService.showPago(token, this.id).subscribe(function (response) {
-            var data = response.data;
-            _this.pago = new Pago_1.Pago(data.id, data.tramite.id, data.valor, data.fechaPago, data.horaPagoHM, data.fuente);
-            console.log(_this.pago);
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
     };
-    PagoEditComponent.prototype.onSubmit = function () {
+    ConceptoEditComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._PagoService.editPago(this.pago, token).subscribe(function (response) {
+        this._ConceptoService.editConcepto(this.concepto, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
                 _this.errorMessage = error;
@@ -66,16 +76,16 @@ var PagoEditComponent = (function () {
             });
         });
     };
-    PagoEditComponent = __decorate([
+    ConceptoEditComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/pago/edit.html',
+            templateUrl: 'app/view/concepto/edit.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tramite_service_1.TramiteService, pago_service_1.PagoService]
+            providers: [login_service_1.LoginService, concepto_service_1.ConceptoService, tramite_service_1.TramiteService, cuenta_service_1.CuentaService]
         }), 
-        __metadata('design:paramtypes', [login_service_1.LoginService, tramite_service_1.TramiteService, pago_service_1.PagoService, router_1.ActivatedRoute, router_1.Router])
-    ], PagoEditComponent);
-    return PagoEditComponent;
+        __metadata('design:paramtypes', [cuenta_service_1.CuentaService, tramite_service_1.TramiteService, concepto_service_1.ConceptoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], ConceptoEditComponent);
+    return ConceptoEditComponent;
 }());
-exports.PagoEditComponent = PagoEditComponent;
-//# sourceMappingURL=edit.pago.component.js.map
+exports.ConceptoEditComponent = ConceptoEditComponent;
+//# sourceMappingURL=edit.concepto.component.js.map

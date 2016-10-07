@@ -1,44 +1,41 @@
 // Importar el núcleo de Angular
+import {ConceptoService} from "../../services/concepto/concepto.service";
+import {LoginService} from "../../services/login.service";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {LoginService} from '../../services/login.service';
-import {PagoService} from '../../services/pago/pago.service';
-import {Pago} from '../../model/pago/Pago';
-import {TramiteService} from '../../services/tramite/tramite.service';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'register',
-    templateUrl: 'app/view/pago/new.html',
+    selector: 'default',
+    templateUrl: 'app/view/concepto/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,PagoService,TramiteService]
+    providers: [LoginService,ConceptoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class NewPagoComponent {
-	public pago: Pago;
+export class IndexConceptoComponent implements OnInit{ 
 	public errorMessage;
+	public id;
 	public respuesta;
-	public tramites;
+	public conceptos;
+	
 
 	constructor(
-		private _TramiteService:TramiteService,
-		private _PagoService:PagoService,
+		private _ConceptoService: ConceptoService,
 		private _loginService: LoginService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-	){}
+		){}
 
-	ngOnInit(){
+
+	ngOnInit(){	
+		let token = this._loginService.getToken();
 		
-
-		this.pago = new Pago(null,null,null, "", "","");
-		this._TramiteService.getTramite().subscribe(
+		this._ConceptoService.getConcepto().subscribe(
 				response => {
-					this.tramites = response.data;
-					console.log(this.tramites[0].nombre);
+					this.conceptos = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -49,18 +46,17 @@ export class NewPagoComponent {
 					}
 				}
 			);
-
+	  
 	}
 
-	onSubmit(){
+	deleteConcepto(id:string){
 		let token = this._loginService.getToken();
-
-		this._PagoService.register(this.pago,token).subscribe(
-			response => {
-				this.respuesta = response;
-				console.log(this.respuesta);
-
-			error => {
+		this._ConceptoService.deleteConcepto(token,id).subscribe(
+				response => {
+					    this.respuesta= response;
+					    this.ngOnInit();
+					}, 
+				error => {
 					this.errorMessage = <any>error;
 
 					if(this.errorMessage != null){
@@ -68,9 +64,8 @@ export class NewPagoComponent {
 						alert("Error en la petición");
 					}
 				}
-
-		});
+			);
 	}
 
-	
- }
+
+}
