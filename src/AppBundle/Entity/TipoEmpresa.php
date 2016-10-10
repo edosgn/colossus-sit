@@ -35,30 +35,20 @@ class TipoEmpresa
      */
     private $estado;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Empresa", mappedBy="tipoEmpresa")
-     */
-    protected $empresas;  
 
-    public function __construct() {
-        $this->empresas = new \Doctrine\Common\Collections\ArrayCollection();
-        
-        
-    } 
 
+
+   
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-   
-
 
     /**
      * Set nombre
@@ -82,40 +72,6 @@ class TipoEmpresa
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add empresa
-     *
-     * @param \AppBundle\Entity\Empresa $empresa
-     *
-     * @return TipoEmpresa
-     */
-    public function addEmpresa(\AppBundle\Entity\Empresa $empresa)
-    {
-        $this->empresas[] = $empresa;
-
-        return $this;
-    }
-
-    /**
-     * Remove empresa
-     *
-     * @param \AppBundle\Entity\Empresa $empresa
-     */
-    public function removeEmpresa(\AppBundle\Entity\Empresa $empresa)
-    {
-        $this->empresas->removeElement($empresa);
-    }
-
-    /**
-     * Get empresas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmpresas()
-    {
-        return $this->empresas;
     }
 
     /**

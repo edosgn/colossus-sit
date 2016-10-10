@@ -65,17 +65,17 @@ class Pago
 
     
 
+  
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-  
 
     /**
      * Set valor
@@ -110,7 +110,7 @@ class Pago
      */
     public function setFechaPago($fechaPago)
     {
-        $this->fechaPago = new \DateTime($fechaPago);
+        $this->fechaPago = $fechaPago;
 
         return $this;
     }
@@ -122,7 +122,7 @@ class Pago
      */
     public function getFechaPago()
     {
-        return $this->fechaPago->format("Y-m-d");
+        return $this->fechaPago;
     }
 
     /**
@@ -134,7 +134,7 @@ class Pago
      */
     public function setHoraPago($horaPago)
     {
-        $this->horaPago = new \DateTime($horaPago);
+        $this->horaPago = $horaPago;
 
         return $this;
     }
@@ -146,14 +146,8 @@ class Pago
      */
     public function getHoraPago()
     {
-        return $this->horaPago->format("h:i A");
+        return $this->horaPago;
     }
-
-    public function getHoraPagoHM()
-    {
-        return $this->horaPago->format("h:i");
-    }
-
 
     /**
      * Set fuente
@@ -180,30 +174,6 @@ class Pago
     }
 
     /**
-     * Set tramite
-     *
-     * @param \AppBundle\Entity\Tramite $tramite
-     *
-     * @return Pago
-     */
-    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
-    {
-        $this->tramite = $tramite;
-
-        return $this;
-    }
-
-    /**
-     * Get tramite
-     *
-     * @return \AppBundle\Entity\Tramite
-     */
-    public function getTramite()
-    {
-        return $this->tramite;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -225,5 +195,29 @@ class Pago
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set tramite
+     *
+     * @param \AppBundle\Entity\Tramite $tramite
+     *
+     * @return Pago
+     */
+    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
+    {
+        $this->tramite = $tramite;
+
+        return $this;
+    }
+
+    /**
+     * Get tramite
+     *
+     * @return \AppBundle\Entity\Tramite
+     */
+    public function getTramite()
+    {
+        return $this->tramite;
     }
 }

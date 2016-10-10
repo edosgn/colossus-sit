@@ -43,32 +43,24 @@ class Departamento
     private $codigoDian;
 
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Municipio", mappedBy="departamento")
-     */
-    protected $municipios; 
-
-    public function __construct() {
-        $this->municipios = new \Doctrine\Common\Collections\ArrayCollection();
-        
-    }
+ 
 
     public function __toString()
     {
         return $this->getNombre();
     }
 
+   
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-    
 
     /**
      * Set nombre
@@ -95,64 +87,6 @@ class Departamento
     }
 
     /**
-     * Set codigoDian
-     *
-     * @param string $codigoDian
-     *
-     * @return Departamento
-     */
-    public function setCodigoDian($codigoDian)
-    {
-        $this->codigoDian = $codigoDian;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoDian
-     *
-     * @return string
-     */
-    public function getCodigoDian()
-    {
-        return $this->codigoDian;
-    }
-
-    /**
-     * Add municipio
-     *
-     * @param \AppBundle\Entity\Municipio $municipio
-     *
-     * @return Departamento
-     */
-    public function addMunicipio(\AppBundle\Entity\Municipio $municipio)
-    {
-        $this->municipios[] = $municipio;
-
-        return $this;
-    }
-
-    /**
-     * Remove municipio
-     *
-     * @param \AppBundle\Entity\Municipio $municipio
-     */
-    public function removeMunicipio(\AppBundle\Entity\Municipio $municipio)
-    {
-        $this->municipios->removeElement($municipio);
-    }
-
-    /**
-     * Get municipios
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getMunicipios()
-    {
-        return $this->municipios;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -174,5 +108,29 @@ class Departamento
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set codigoDian
+     *
+     * @param string $codigoDian
+     *
+     * @return Departamento
+     */
+    public function setCodigoDian($codigoDian)
+    {
+        $this->codigoDian = $codigoDian;
+
+        return $this;
+    }
+
+    /**
+     * Get codigoDian
+     *
+     * @return string
+     */
+    public function getCodigoDian()
+    {
+        return $this->codigoDian;
     }
 }

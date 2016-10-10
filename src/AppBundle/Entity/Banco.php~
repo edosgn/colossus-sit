@@ -5,23 +5,23 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Combustible
+ * Banco
  *
- * @ORM\Table(name="combustible")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CombustibleRepository")
+ * @ORM\Table(name="banco")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BancoRepository")
  */
-class Combustible
+class Banco
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer") 
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
@@ -29,24 +29,13 @@ class Combustible
     private $nombre;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="codigoMt", type="integer", unique=true)
-     */ 
-    private $codigoMt;
-
-    
-    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
 
- 
-
-
-    
+   
 
     /**
      * Get id
@@ -63,7 +52,7 @@ class Combustible
      *
      * @param string $nombre
      *
-     * @return Combustible
+     * @return Banco
      */
     public function setNombre($nombre)
     {
@@ -83,35 +72,11 @@ class Combustible
     }
 
     /**
-     * Set codigoMt
-     *
-     * @param integer $codigoMt
-     *
-     * @return Combustible
-     */
-    public function setCodigoMt($codigoMt)
-    {
-        $this->codigoMt = $codigoMt;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoMt
-     *
-     * @return integer
-     */
-    public function getCodigoMt()
-    {
-        return $this->codigoMt;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
      *
-     * @return Combustible
+     * @return Banco
      */
     public function setEstado($estado)
     {

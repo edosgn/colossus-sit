@@ -43,15 +43,6 @@ class Marca
     private $estado;
     
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Linea", mappedBy="marca")
-     */
-    protected $lineas; 
-
-    public function __construct() {
-        $this->lineas = new \Doctrine\Common\Collections\ArrayCollection();
-        
-    }
 
     public function __toString()
     {
@@ -59,17 +50,16 @@ class Marca
     }
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-  
 
     /**
      * Set nombre
@@ -117,40 +107,6 @@ class Marca
     public function getCodigoMt()
     {
         return $this->codigoMt;
-    }
-
-    /**
-     * Add linea
-     *
-     * @param \AppBundle\Entity\Linea $linea
-     *
-     * @return Marca
-     */
-    public function addLinea(\AppBundle\Entity\Linea $linea)
-    {
-        $this->lineas[] = $linea;
-
-        return $this;
-    }
-
-    /**
-     * Remove linea
-     *
-     * @param \AppBundle\Entity\Linea $linea
-     */
-    public function removeLinea(\AppBundle\Entity\Linea $linea)
-    {
-        $this->lineas->removeElement($linea);
-    }
-
-    /**
-     * Get lineas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLineas()
-    {
-        return $this->lineas;
     }
 
     /**

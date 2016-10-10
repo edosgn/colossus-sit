@@ -73,14 +73,7 @@ class Empresa
       /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
     private $ciudadano;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehiculoPesado", mappedBy="empresa")
-     */
-    protected $vehiculosPesado;  
-
-    public function __construct() {
-        $this->vehiculosPesado = new \Doctrine\Common\Collections\ArrayCollection();
-    } 
+  
 
     public function __toString()
     {
@@ -88,17 +81,17 @@ class Empresa
     }
 
 
+  
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-  
 
     /**
      * Set nit
@@ -221,6 +214,30 @@ class Empresa
     }
 
     /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Empresa
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
      * Set municipio
      *
      * @param \AppBundle\Entity\Municipio $municipio
@@ -290,63 +307,5 @@ class Empresa
     public function getCiudadano()
     {
         return $this->ciudadano;
-    }
-
-    /**
-     * Add vehiculosPesado
-     *
-     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
-     *
-     * @return Empresa
-     */
-    public function addVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
-    {
-        $this->vehiculosPesado[] = $vehiculosPesado;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculosPesado
-     *
-     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
-     */
-    public function removeVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
-    {
-        $this->vehiculosPesado->removeElement($vehiculosPesado);
-    }
-
-    /**
-     * Get vehiculosPesado
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehiculosPesado()
-    {
-        return $this->vehiculosPesado;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Empresa
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 }

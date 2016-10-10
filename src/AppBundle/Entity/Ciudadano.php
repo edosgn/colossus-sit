@@ -73,20 +73,7 @@ class Ciudadano
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="ciudadanos") */
     private $tipoIdentificacion;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CiudadanoVehiculo", mappedBy="ciudadano")
-     */
-    protected $ciudadanosVehiculo; 
-
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Empresa", mappedBy="ciudadano")
-     */
-    protected $empresas;  
-
-    public function __construct() {
-        $this->ciudadanosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->empresas = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+   
 
     public function __toString()
     {
@@ -94,10 +81,12 @@ class Ciudadano
     } 
 
 
+   
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -249,98 +238,6 @@ class Ciudadano
     }
 
     /**
-     * Set tipoIdentificacion
-     *
-     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
-     *
-     * @return Ciudadano
-     */
-    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
-    {
-        $this->tipoIdentificacion = $tipoIdentificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoIdentificacion
-     *
-     * @return \AppBundle\Entity\TipoIdentificacion
-     */
-    public function getTipoIdentificacion()
-    {
-        return $this->tipoIdentificacion;
-    }
-
-    /**
-     * Add ciudadanosVehiculo
-     *
-     * @param \AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo
-     *
-     * @return Ciudadano
-     */
-    public function addCiudadanosVehiculo(\AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo)
-    {
-        $this->ciudadanosVehiculo[] = $ciudadanosVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove ciudadanosVehiculo
-     *
-     * @param \AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo
-     */
-    public function removeCiudadanosVehiculo(\AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo)
-    {
-        $this->ciudadanosVehiculo->removeElement($ciudadanosVehiculo);
-    }
-
-    /**
-     * Get ciudadanosVehiculo
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCiudadanosVehiculo()
-    {
-        return $this->ciudadanosVehiculo;
-    }
-
-    /**
-     * Add empresa
-     *
-     * @param \AppBundle\Entity\Empresa $empresa
-     *
-     * @return Ciudadano
-     */
-    public function addEmpresa(\AppBundle\Entity\Empresa $empresa)
-    {
-        $this->empresas[] = $empresa;
-
-        return $this;
-    }
-
-    /**
-     * Remove empresa
-     *
-     * @param \AppBundle\Entity\Empresa $empresa
-     */
-    public function removeEmpresa(\AppBundle\Entity\Empresa $empresa)
-    {
-        $this->empresas->removeElement($empresa);
-    }
-
-    /**
-     * Get empresas
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmpresas()
-    {
-        return $this->empresas;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -362,5 +259,29 @@ class Ciudadano
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set tipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
+     *
+     * @return Ciudadano
+     */
+    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
     }
 }

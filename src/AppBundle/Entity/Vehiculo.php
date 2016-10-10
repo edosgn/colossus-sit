@@ -144,51 +144,24 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\CiudadanoVehiculo", mappedBy="vehiculo")
-     */
-    protected $ciudadanosVehiculo;
-
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\VehiculoPesado", mappedBy="vehiculo")
-     */
-    protected $vehiculosPesado; 
-
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteGeneral", mappedBy="vehiculo")
-     */
-    protected $tramitesGeneral;  
-
-    public function __construct() {
-        $this->propietariosVehiculo = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->vehiculosPesado = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tramitesGeneral = new \Doctrine\Common\Collections\ArrayCollection();
-        
-    } 
-
     public function __toString()
     {
         return $this->getPlaca();
     }
 
+   
 
-    
+   
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-    
-
-   
-
-   
 
     /**
      * Set placa
@@ -247,7 +220,7 @@ class Vehiculo
      */
     public function setFechaFactura($fechaFactura)
     {
-        $this->fechaFactura = new \DateTime($fechaFactura);
+        $this->fechaFactura = $fechaFactura;
 
         return $this;
     }
@@ -259,7 +232,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura->format("Y-m-d");
+        return $this->fechaFactura;
     }
 
     /**
@@ -319,7 +292,7 @@ class Vehiculo
      */
     public function setFechaManifiesto($fechaManifiesto)
     {
-        $this->fechaManifiesto = new \DateTime($fechaManifiesto);
+        $this->fechaManifiesto = $fechaManifiesto;
 
         return $this;
     }
@@ -331,7 +304,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto->format("Y-m-d");
+        return $this->fechaManifiesto;
     }
 
     /**
@@ -367,7 +340,7 @@ class Vehiculo
      */
     public function setModelo($modelo)
     {
-        $this->modelo = new \DateTime($modelo);
+        $this->modelo = $modelo;
 
         return $this;
     }
@@ -379,7 +352,7 @@ class Vehiculo
      */
     public function getModelo()
     {
-        return $this->modelo->format("Y");
+        return $this->modelo;
     }
 
     /**
@@ -716,107 +689,5 @@ class Vehiculo
     public function getClase()
     {
         return $this->clase;
-    }
-
-    /**
-     * Add ciudadanosVehiculo
-     *
-     * @param \AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo
-     *
-     * @return Vehiculo
-     */
-    public function addCiudadanosVehiculo(\AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo)
-    {
-        $this->ciudadanosVehiculo[] = $ciudadanosVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove ciudadanosVehiculo
-     *
-     * @param \AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo
-     */
-    public function removeCiudadanosVehiculo(\AppBundle\Entity\CiudadanoVehiculo $ciudadanosVehiculo)
-    {
-        $this->ciudadanosVehiculo->removeElement($ciudadanosVehiculo);
-    }
-
-    /**
-     * Get ciudadanosVehiculo
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCiudadanosVehiculo()
-    {
-        return $this->ciudadanosVehiculo;
-    }
-
-    /**
-     * Add vehiculosPesado
-     *
-     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
-     *
-     * @return Vehiculo
-     */
-    public function addVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
-    {
-        $this->vehiculosPesado[] = $vehiculosPesado;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculosPesado
-     *
-     * @param \AppBundle\Entity\VehiculoPesado $vehiculosPesado
-     */
-    public function removeVehiculosPesado(\AppBundle\Entity\VehiculoPesado $vehiculosPesado)
-    {
-        $this->vehiculosPesado->removeElement($vehiculosPesado);
-    }
-
-    /**
-     * Get vehiculosPesado
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehiculosPesado()
-    {
-        return $this->vehiculosPesado;
-    }
-
-    /**
-     * Add tramitesGeneral
-     *
-     * @param \AppBundle\Entity\TramiteGeneral $tramitesGeneral
-     *
-     * @return Vehiculo
-     */
-    public function addTramitesGeneral(\AppBundle\Entity\TramiteGeneral $tramitesGeneral)
-    {
-        $this->tramitesGeneral[] = $tramitesGeneral;
-
-        return $this;
-    }
-
-    /**
-     * Remove tramitesGeneral
-     *
-     * @param \AppBundle\Entity\TramiteGeneral $tramitesGeneral
-     */
-    public function removeTramitesGeneral(\AppBundle\Entity\TramiteGeneral $tramitesGeneral)
-    {
-        $this->tramitesGeneral->removeElement($tramitesGeneral);
-    }
-
-    /**
-     * Get tramitesGeneral
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTramitesGeneral()
-    {
-        return $this->tramitesGeneral;
     }
 }

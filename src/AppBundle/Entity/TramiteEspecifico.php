@@ -60,17 +60,17 @@ class TramiteEspecifico
     protected $caso;
 
 
+  
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-    
 
     /**
      * Set valor
@@ -118,6 +118,30 @@ class TramiteEspecifico
     public function getDatos()
     {
         return $this->datos;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return TramiteEspecifico
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**
@@ -214,29 +238,5 @@ class TramiteEspecifico
     public function getCaso()
     {
         return $this->caso;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return TramiteEspecifico
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 }

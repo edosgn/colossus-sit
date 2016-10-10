@@ -1,16 +1,16 @@
 <?php
 
 namespace AppBundle\Entity;
- 
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Caso
+ * Concepto
  *
- * @ORM\Table(name="caso")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CasoRepository")
+ * @ORM\Table(name="concepto")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\ConceptoRepository")
  */
-class Caso
+class Concepto
 {
     /**
      * @var int
@@ -21,13 +21,19 @@ class Caso
      */
     private $id;
 
-
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="descripcion", type="string", length=255)
      */
-    private $nombre;
+    private $descripcion;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor", type="integer")
+     */
+    private $valor;
 
     /**
      * @var boolean
@@ -36,18 +42,16 @@ class Caso
      */
     private $estado;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="casos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="conceptos")
      **/
     protected $tramite;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Cuenta", inversedBy="conceptos")
+     **/
+    protected $cuenta;
 
-
-    public function __toString()
-    {
-        return $this->getNombre();
-    }
 
     /**
      * Get id
@@ -59,30 +63,56 @@ class Caso
         return $this->id;
     }
 
+    
+
   
 
     /**
-     * Set nombre
+     * Set descripcion
      *
-     * @param string $nombre
+     * @param string $descripcion
      *
-     * @return Caso
+     * @return Concepto
      */
-    public function setNombre($nombre)
+    public function setDescripcion($descripcion)
     {
-        $this->nombre = $nombre;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
 
     /**
-     * Get nombre
+     * Get descripcion
      *
      * @return string
      */
-    public function getNombre()
+    public function getDescripcion()
     {
-        return $this->nombre;
+        return $this->descripcion;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param integer $valor
+     *
+     * @return Concepto
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return integer
+     */
+    public function getValor()
+    {
+        return $this->valor;
     }
 
     /**
@@ -90,7 +120,7 @@ class Caso
      *
      * @param \AppBundle\Entity\Tramite $tramite
      *
-     * @return Caso
+     * @return Concepto
      */
     public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
     {
@@ -110,37 +140,27 @@ class Caso
     }
 
     /**
-     * Add tramitesEspecifico
+     * Set cuenta
      *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
+     * @param \AppBundle\Entity\Cuenta $cuenta
      *
-     * @return Caso
+     * @return Concepto
      */
-    public function addTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
+    public function setCuenta(\AppBundle\Entity\Cuenta $cuenta = null)
     {
-        $this->tramitesEspecifico[] = $tramitesEspecifico;
+        $this->cuenta = $cuenta;
 
         return $this;
     }
 
     /**
-     * Remove tramitesEspecifico
+     * Get cuenta
      *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
+     * @return \AppBundle\Entity\Cuenta
      */
-    public function removeTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
+    public function getCuenta()
     {
-        $this->tramitesEspecifico->removeElement($tramitesEspecifico);
-    }
-
-    /**
-     * Get tramitesEspecifico
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTramitesEspecifico()
-    {
-        return $this->tramitesEspecifico;
+        return $this->cuenta;
     }
 
     /**
@@ -148,7 +168,7 @@ class Caso
      *
      * @param boolean $estado
      *
-     * @return Caso
+     * @return Concepto
      */
     public function setEstado($estado)
     {

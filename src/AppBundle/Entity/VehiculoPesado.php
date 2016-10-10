@@ -75,17 +75,17 @@ class VehiculoPesado
 
 
 
+   
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-   
 
     /**
      * Set tonelaje
@@ -208,6 +208,30 @@ class VehiculoPesado
     }
 
     /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return VehiculoPesado
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
      * Set vehiculo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
@@ -277,29 +301,5 @@ class VehiculoPesado
     public function getEmpresa()
     {
         return $this->empresa;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return VehiculoPesado
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 }
