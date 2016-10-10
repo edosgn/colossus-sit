@@ -47,7 +47,6 @@ export class NewBancoComponent {
 						alert("Error en la petición");
 					}
 				}
-
 		});
 	}
 
