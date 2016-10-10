@@ -169,6 +169,44 @@ class VehiculoController extends Controller
     }
 
     /**
+     * busca vehiculos por placa.
+     *
+     * @Route("/placa", name="vehiculo_show_ide")
+     * @Method("POST")
+     */
+    public function vehiculoPorPlaca(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
+            array('placa' => $params->placa)
+            );
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculo", 
+                    'data'=> $vehiculo,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
+    
+
+    /**
      * Displays a form to edit an existing Vehiculo entity.
      *
      * @Route("/edit", name="vehiculo_edit")
