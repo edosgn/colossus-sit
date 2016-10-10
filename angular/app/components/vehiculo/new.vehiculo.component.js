@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
-var departamento_service_1 = require('../../services/departamento/departamento.service');
+var municipio_service_1 = require('../../services/municipio/municipio.service');
 var linea_service_1 = require('../../services/linea/linea.service');
 var servicio_service_1 = require('../../services/servicio/servicio.service');
 var color_service_1 = require('../../services/color/color.service');
@@ -24,8 +24,8 @@ var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
 var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewVehiculoComponent = (function () {
-    function NewVehiculoComponent(_DepartamentoService, _LineaService, _ServicioService, _ColorService, _ClaseService, _CombustibleService, _CarroceriaService, _OrganismoTransitoService, _VehiculoService, _loginService, _route, _router) {
-        this._DepartamentoService = _DepartamentoService;
+    function NewVehiculoComponent(_MunicipioService, _LineaService, _ServicioService, _ColorService, _ClaseService, _CombustibleService, _CarroceriaService, _OrganismoTransitoService, _VehiculoService, _loginService, _route, _router) {
+        this._MunicipioService = _MunicipioService;
         this._LineaService = _LineaService;
         this._ServicioService = _ServicioService;
         this._ColorService = _ColorService;
@@ -42,8 +42,8 @@ var NewVehiculoComponent = (function () {
         var _this = this;
         this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         var token = this._loginService.getToken();
-        this._DepartamentoService.getDepartamento().subscribe(function (response) {
-            _this.departamentos = response.data;
+        this._MunicipioService.getMunicipio().subscribe(function (response) {
+            _this.municipios = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -135,9 +135,9 @@ var NewVehiculoComponent = (function () {
             selector: 'register',
             templateUrl: 'app/view/vehiculo/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, departamento_service_1.DepartamentoService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, clase_service_1.ClaseService]
+            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, municipio_service_1.MunicipioService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, clase_service_1.ClaseService]
         }), 
-        __metadata('design:paramtypes', [departamento_service_1.DepartamentoService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, clase_service_1.ClaseService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [municipio_service_1.MunicipioService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, clase_service_1.ClaseService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], NewVehiculoComponent);
     return NewVehiculoComponent;
 }());

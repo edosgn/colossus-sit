@@ -104,6 +104,10 @@ import { IndexAlmacenComponent } from "./components/almacen/index.almacen.compon
 import { NewAlmacenComponent } from "./components/almacen/new.almacen.component";
 import { AlmacenEditComponent } from "./components/almacen/edit.almacen.component";
 
+import { IndexVehiculoComponent } from "./components/vehiculo/index.vehiculo.component";
+import { NewVehiculoComponent } from "./components/vehiculo/new.vehiculo.component";
+import { VehiculoEditComponent } from "./components/vehiculo/edit.vehiculo.component";
+
 
 
 
@@ -220,6 +224,10 @@ export const routes: RouterConfig = [
     { path: 'almacen/index', component: IndexAlmacenComponent},
     { path: 'almacen/new', component: NewAlmacenComponent},
     { path: 'almacen/show/:id', component: AlmacenEditComponent},
+
+    { path: 'vehiculo/index', component: IndexVehiculoComponent},
+    { path: 'vehiculo/new', component: NewVehiculoComponent},
+    { path: 'vehiculo/show/:id', component: VehiculoEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

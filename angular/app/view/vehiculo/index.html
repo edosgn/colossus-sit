@@ -2,13 +2,7 @@
 <hr>
 <h3>Ciudadanos</h3>
 <hr>
-	<div class="table-responsive">
-    <a [routerLink]="['/vehiculo/new']" class="btn btn-success">
-         Nuevo
-    </a>
-    <br>
-    <br>
-    <div class="identity-data" *ngIf="respuesta">
+<div class="identity-data" *ngIf="respuesta">
         <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
             {{respuesta.msj}}
         </div>
@@ -16,7 +10,14 @@
             {{respuesta.msj}}
         </div>
     </div>
-        <table class="table  table-condensed table-responsive table-bordered ">
+	<div class="table-responsive">
+    <a [routerLink]="['/vehiculo/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>Id</th>

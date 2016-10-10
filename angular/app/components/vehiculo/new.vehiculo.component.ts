@@ -2,7 +2,7 @@
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
-import {DepartamentoService} from '../../services/departamento/departamento.service';
+import {MunicipioService} from '../../services/municipio/municipio.service';
 import {LineaService} from '../../services/linea/linea.service';
 import {ServicioService} from '../../services/servicio/servicio.service';
 import {ColorService} from '../../services/color/color.service';
@@ -19,7 +19,7 @@ import {Vehiculo} from '../../model/vehiculo/Vehiculo';
     selector: 'register',
     templateUrl: 'app/view/vehiculo/new.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,VehiculoService,DepartamentoService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService]
+    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -27,7 +27,7 @@ export class NewVehiculoComponent {
 	public vehiculo: Vehiculo;
 	public errorMessage;
 	public respuesta;
-	public departamentos;
+	public municipios;
 	public lineas;
 	public servicios;
 	public colores;
@@ -37,7 +37,7 @@ export class NewVehiculoComponent {
 	public organismosTransito;
 
 	constructor(
-		private _DepartamentoService: DepartamentoService,
+		private _MunicipioService: MunicipioService,
 		private _LineaService: LineaService,
 		private _ServicioService: ServicioService,
 		private _ColorService: ColorService,
@@ -55,9 +55,9 @@ export class NewVehiculoComponent {
 	ngOnInit(){
 		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 		let token = this._loginService.getToken();
-		this._DepartamentoService.getDepartamento().subscribe(
+		this._MunicipioService.getMunicipio().subscribe(
 				response => {
-					this.departamentos = response.data;
+					this.municipios = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;

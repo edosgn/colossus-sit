@@ -79,6 +79,9 @@ var edit_caso_component_1 = require("./components/caso/edit.caso.component");
 var index_almacen_component_1 = require("./components/almacen/index.almacen.component");
 var new_almacen_component_1 = require("./components/almacen/new.almacen.component");
 var edit_almacen_component_1 = require("./components/almacen/edit.almacen.component");
+var index_vehiculo_component_1 = require("./components/vehiculo/index.vehiculo.component");
+var new_vehiculo_component_1 = require("./components/vehiculo/new.vehiculo.component");
+var edit_vehiculo_component_1 = require("./components/vehiculo/edit.vehiculo.component");
 exports.routes = [
     {
         path: '',
@@ -165,6 +168,9 @@ exports.routes = [
     { path: 'almacen/index', component: index_almacen_component_1.IndexAlmacenComponent },
     { path: 'almacen/new', component: new_almacen_component_1.NewAlmacenComponent },
     { path: 'almacen/show/:id', component: edit_almacen_component_1.AlmacenEditComponent },
+    { path: 'vehiculo/index', component: index_vehiculo_component_1.IndexVehiculoComponent },
+    { path: 'vehiculo/new', component: new_vehiculo_component_1.NewVehiculoComponent },
+    { path: 'vehiculo/show/:id', component: edit_vehiculo_component_1.VehiculoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
