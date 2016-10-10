@@ -46,15 +46,7 @@ class Linea
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="lineas") */
     private $marca;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="linea")
-     */
-    protected $vehiculos;  
-
-    public function __construct() {
-        $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
-        
-    } 
+   
 
 
     /**
@@ -141,39 +133,7 @@ class Linea
         return $this->marca;
     }
 
-    /**
-     * Add vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Linea
-     */
-    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos[] = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     */
-    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos->removeElement($vehiculo);
-    }
-
-    /**
-     * Get vehiculos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehiculos()
-    {
-        return $this->vehiculos;
-    }
+   
 
     /**
      * Set estado
