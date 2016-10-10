@@ -12,4 +12,4 @@ var CiudadanoVehiculo = (function () {
     return CiudadanoVehiculo;
 }());
 exports.CiudadanoVehiculo = CiudadanoVehiculo;
-//# sourceMappingURL=ciudadanoVehiculo.js.map
+//# sourceMappingURL=CiudadanoVehiculo.js.map
