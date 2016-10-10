@@ -1,0 +1,39 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+
+		
+	</div>
+	<br>
+
+	<form #newVehiculo="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar vehiculo</div>
+		  <div class="panel-body">
+
+				<p class="col-md-6">
+					<label >Placa:</label>
+					<input #placa="ngForm"  type="text" class="form-control" [(ngModel)]="vehiculo.placa" ngControl="placa"  required />
+					<span *ngIf="!placa.valid && placa.touched" style="color:red;">placa es obligatoria</span>
+					<br>
+				</p>
+
+				<br>
+		        <p class="col-md-12"> 
+		        
+			    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				[disabled]="!newVehiculo.valid"/>
+			    
+			    </p>
+		  </div>
+		</div>
+	</form>
+
+</div>
