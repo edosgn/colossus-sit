@@ -20,6 +20,7 @@
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Id</th>
                     <th>Municipio</th>
                     <th>Linea</th>
                     <th>Servicio</th>
@@ -45,6 +46,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="#vehiculo of vehiculos">
+                    <td >{{vehiculo.id}}</td>
                     <td >{{vehiculo.municipio.nombre}}</td>
                     <td >{{vehiculo.linea.nombre}}</td>
                     <td >{{vehiculo.servicio.nombre}}</td>

@@ -109,39 +109,7 @@ class Caso
         return $this->tramite;
     }
 
-    /**
-     * Add tramitesEspecifico
-     *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
-     *
-     * @return Caso
-     */
-    public function addTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
-    {
-        $this->tramitesEspecifico[] = $tramitesEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Remove tramitesEspecifico
-     *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
-     */
-    public function removeTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
-    {
-        $this->tramitesEspecifico->removeElement($tramitesEspecifico);
-    }
-
-    /**
-     * Get tramitesEspecifico
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTramitesEspecifico()
-    {
-        return $this->tramitesEspecifico;
-    }
+    
 
     /**
      * Set estado
