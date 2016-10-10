@@ -15,16 +15,58 @@
 	<form #newVehiculo="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
 
 		<div class="panel panel-primary">
-		  <div class="panel-heading">Reguistrar vehiculo</div>
+		  <div class="panel-heading">Reguistrar ciudadano vehiculo</div>
 		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+
+				<p class="col-md-6"> 
+					<label>Vehiculo:</label>
+					<select class="form-control" #vehiculoId="ngForm" ngControl="vehiculoId" [(ngModel)]="ciudadanoVehiculo.vehiculoId" required>
+					  <option *ngFor="#Vehiculo of vehiculos" [value]='Vehiculo.id' >{{Vehiculo.placa}}</option>
+					</select>
+					<span *ngIf = "!vehiculoId.valid && vehiculoId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Ciudadano:</label>
+					<select class="form-control" #ciudadanoId="ngForm" ngControl="ciudadanoId" [(ngModel)]="ciudadanoVehiculo.ciudadanoId" required>
+					  <option *ngFor="#ciudadano of ciudadanos" [value]='ciudadano.id' >{{ciudadano.nombres}}</option>
+					</select>
+					<span *ngIf = "!ciudadanoId.valid && ciudadanoId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
 
 				<p class="col-md-6">
-					<label >Placa:</label>
-					<input #placa="ngForm"  type="text" class="form-control" [(ngModel)]="vehiculo.placa" ngControl="placa"  required />
-					<span *ngIf="!placa.valid && placa.touched" style="color:red;">placa es obligatoria</span>
+					<label >licencia transito:</label>
+					<input #licenciaTransito="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.licenciaTransito" ngControl="licenciaTransito"  required />
+					<span *ngIf="!licenciaTransito.valid && licenciaTransito.touched" style="color:red;">licenciaTransito obligatorios</span>
 					<br>
 				</p>
 
+
+				<p class="col-md-6">
+				    <label >fecha Propiedad Inicial:</label>
+					<input type="date" class="form-control" #fechaPropiedadInicial="ngForm" ngControl="fechaPropiedadInicial" [(ngModel)]="ciudadanoVehiculo.fechaPropiedadInicial"  required />
+					<span *ngIf="!fechaPropiedadInicial.valid && fechaPropiedadInicial.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+				</p>
+				<div class="clearfix"></div>
+
+				<p class="col-md-6">
+				    <label >fecha Propiedad Final:</label>
+					<input type="date" class="form-control" #fechaPropiedadFinal="ngForm" ngControl="fechaPropiedadFinal" [(ngModel)]="ciudadanoVehiculo.fechaPropiedadFinal"  required />
+					<span *ngIf="!fechaPropiedadFinal.valid && fechaPropiedadFinal.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+				</p>
+
+
+				<p class="col-md-6">
+				    <label >estado Propiedad:</label>
+					<input #estadoPropiedad="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.estadoPropiedad" ngControl="estadoPropiedad"  required />
+					<span *ngIf="!estadoPropiedad.valid && estadoPropiedad.touched" style="color:red;">estadoPropiedad obligatorios</span>
+					<br>
+				</p>
+
+					
 				<br>
 		        <p class="col-md-12"> 
 		        

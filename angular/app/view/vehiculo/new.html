@@ -85,10 +85,6 @@
 					<span *ngIf = "!claseId.valid && claseId.touched" class="text-danger">el role es obligatorio</span>
 				</p>
 
-
-
-				
-
 				<p class="col-md-6">
 					<label >Numero de factura:</label>
 					<input #numeroFactura="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.numeroFactura" ngControl="numeroFactura"  required />

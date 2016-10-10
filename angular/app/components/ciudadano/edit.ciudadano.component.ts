@@ -51,9 +51,9 @@ export class CiudadanoEditComponent implements OnInit{
 				}
 			);
 
-			this._route.params.subscribe(params =>{
-				this.id = +params["id"];
-			});
+				this._route.params.subscribe(params =>{
+					this.id = +params["id"];
+				});
 
 			this._CiudadanoService.showCiudadano(token,this.id).subscribe(
 

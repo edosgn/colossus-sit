@@ -12,30 +12,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
-var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
-var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
-var CiudadanoVehiculo_service_1 = require("../../services/CiudadanoVehiculo/CiudadanoVehiculo.service");
-var ciudadano_service_1 = require("../../services/ciudadano/ciudadano.service");
+var modalidad_service_1 = require('../../services/modalidad/modalidad.service');
+var vehiculo_service_1 = require('../../services/vehiculo/vehiculo.service');
+var empresa_service_1 = require('../../services/empresa/empresa.service');
+var vehiculopesado_service_1 = require("../../services/vehiculopesado/vehiculopesado.service");
+var VehiculoPesado_1 = require('../../model/vehiculopesado/VehiculoPesado');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var CiudadanoVehiculoEditComponent = (function () {
-    function CiudadanoVehiculoEditComponent(_CiudadanoService, _CiudadanoVehiculoService, _VehiculoService, _loginService, _route, _router) {
-        this._CiudadanoService = _CiudadanoService;
-        this._CiudadanoVehiculoService = _CiudadanoVehiculoService;
+var NewVehiculoPesadoComponent = (function () {
+    function NewVehiculoPesadoComponent(_ModalidadService, _VehiculoService, _EmpresaService, _VehiculoPesadoService, _loginService, _route, _router) {
+        this._ModalidadService = _ModalidadService;
         this._VehiculoService = _VehiculoService;
+        this._EmpresaService = _EmpresaService;
+        this._VehiculoPesadoService = _VehiculoPesadoService;
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
     }
-    CiudadanoVehiculoEditComponent.prototype.ngOnInit = function () {
+    NewVehiculoPesadoComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
+        this.vehiculoPesado = new VehiculoPesado_1.VehiculoPesado(null, null, null, null, null, null, null, "", "");
         var token = this._loginService.getToken();
-        this._route.params.subscribe(function (params) {
-            _this.id = +params["id"];
-        });
-        this._CiudadanoVehiculoService.showCiudadanoVehiculo(token, this.id).subscribe(function (response) {
-            var data = response.data;
-            _this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(data.id, data.ciudadano.id, data.vehiculo.id, data.licenciaTransito, data.fechaPropiedadInicial, data.fechaPropiedadFinal, data.estadoPropiedad);
+        this._ModalidadService.getModalidad().subscribe(function (response) {
+            _this.modalidades = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -52,9 +50,8 @@ var CiudadanoVehiculoEditComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this._CiudadanoService.getCiudadano().subscribe(function (response) {
-            _this.ciudadanos = response.data;
-            console.log(_this.ciudadanos);
+        this._EmpresaService.getEmpresa().subscribe(function (response) {
+            _this.empresas = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -63,11 +60,12 @@ var CiudadanoVehiculoEditComponent = (function () {
             }
         });
     };
-    CiudadanoVehiculoEditComponent.prototype.onSubmit = function () {
+    NewVehiculoPesadoComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.editCiudadanoVehiculo(this.ciudadanoVehiculo, token).subscribe(function (response) {
+        this._VehiculoPesadoService.register(this.vehiculoPesado, token).subscribe(function (response) {
             _this.respuesta = response;
+            console.log(_this.respuesta);
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -77,16 +75,16 @@ var CiudadanoVehiculoEditComponent = (function () {
             });
         });
     };
-    CiudadanoVehiculoEditComponent = __decorate([
+    NewVehiculoPesadoComponent = __decorate([
         core_1.Component({
-            selector: 'default',
-            templateUrl: 'app/view/ciudadanoVehiculo/edit.html',
+            selector: 'register',
+            templateUrl: 'app/view/vehiculopesado/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, CiudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService]
+            providers: [login_service_1.LoginService, vehiculopesado_service_1.VehiculoPesadoService, modalidad_service_1.ModalidadService, vehiculo_service_1.VehiculoService, empresa_service_1.EmpresaService]
         }), 
-        __metadata('design:paramtypes', [ciudadano_service_1.CiudadanoService, CiudadanoVehiculo_service_1.CiudadanoVehiculoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], CiudadanoVehiculoEditComponent);
-    return CiudadanoVehiculoEditComponent;
+        __metadata('design:paramtypes', [modalidad_service_1.ModalidadService, vehiculo_service_1.VehiculoService, empresa_service_1.EmpresaService, vehiculopesado_service_1.VehiculoPesadoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], NewVehiculoPesadoComponent);
+    return NewVehiculoPesadoComponent;
 }());
-exports.CiudadanoVehiculoEditComponent = CiudadanoVehiculoEditComponent;
-//# sourceMappingURL=edit.ciudadanoVehiculo.component.js.map
+exports.NewVehiculoPesadoComponent = NewVehiculoPesadoComponent;
+//# sourceMappingURL=new.vehiculoPesado.component.js.map

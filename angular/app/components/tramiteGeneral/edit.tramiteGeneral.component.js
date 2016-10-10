@@ -32,7 +32,8 @@ var TramiteGeneralEditComponent = (function () {
             _this.id = +params["id"];
         });
         this._TramiteGeneralService.showTramiteGeneral(token, this.id).subscribe(function (response) {
-            _this.tramiteGeneral = response.data;
+            var data = response.data;
+            _this.tramiteGeneral = new TramiteGeneral_1.TramiteGeneral(data.id, data.vehiculo.id, data.numeroQpl, data.fechaInicial, data.fechaFinal, data.valor, data.numeroLicencia, data.numeroSustrato, data.nombre);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {

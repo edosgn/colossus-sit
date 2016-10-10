@@ -46,7 +46,17 @@ export class TramiteGeneralEditComponent implements OnInit{
 			this._TramiteGeneralService.showTramiteGeneral(token,this.id).subscribe(
 
 						response => {
-							this.tramiteGeneral = response.data;
+							let data = response.data;
+							this.tramiteGeneral = new TramiteGeneral(
+								data.id,
+								data.vehiculo.id, 
+								data.numeroQpl,
+								data.fechaInicial,
+							    data.fechaFinal,
+							    data.valor,
+							    data.numeroLicencia, 
+							    data.numeroSustrato,
+							    data.nombre);
 						},
 						error => {
 								this.errorMessage = <any>error;
