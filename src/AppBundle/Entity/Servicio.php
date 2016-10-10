@@ -216,13 +216,4 @@ class Servicio
     {
         return $this->vehiculos;
     }
-
-    public function getServicioArray(){
-        $servicio = array(
-            'id' =>$this->id,
-            'nombre' =>$this->nombre,
-            'codigo' =>$this->codigo, 
-        );
-    return $servicio;
-    }
 }
