@@ -47,14 +47,7 @@ class Cuenta
      **/
     protected $banco;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Concepto", mappedBy="cuenta")
-     */
-    protected $conceptos;  
-
-    public function __construct() {
-        $this->conceptos = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+   
 
     public function __toString()
     {
@@ -62,17 +55,17 @@ class Cuenta
     }
 
 
+  
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-  
 
     /**
      * Set numero
@@ -123,64 +116,6 @@ class Cuenta
     }
 
     /**
-     * Set banco
-     *
-     * @param \AppBundle\Entity\Banco $banco
-     *
-     * @return Cuenta
-     */
-    public function setBanco(\AppBundle\Entity\Banco $banco = null)
-    {
-        $this->banco = $banco;
-
-        return $this;
-    }
-
-    /**
-     * Get banco
-     *
-     * @return \AppBundle\Entity\Banco
-     */
-    public function getBanco()
-    {
-        return $this->banco;
-    }
-
-    /**
-     * Add concepto
-     *
-     * @param \AppBundle\Entity\Concepto $concepto
-     *
-     * @return Cuenta
-     */
-    public function addConcepto(\AppBundle\Entity\Concepto $concepto)
-    {
-        $this->conceptos[] = $concepto;
-
-        return $this;
-    }
-
-    /**
-     * Remove concepto
-     *
-     * @param \AppBundle\Entity\Concepto $concepto
-     */
-    public function removeConcepto(\AppBundle\Entity\Concepto $concepto)
-    {
-        $this->conceptos->removeElement($concepto);
-    }
-
-    /**
-     * Get conceptos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getConceptos()
-    {
-        return $this->conceptos;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -202,5 +137,29 @@ class Cuenta
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set banco
+     *
+     * @param \AppBundle\Entity\Banco $banco
+     *
+     * @return Cuenta
+     */
+    public function setBanco(\AppBundle\Entity\Banco $banco = null)
+    {
+        $this->banco = $banco;
+
+        return $this;
+    }
+
+    /**
+     * Get banco
+     *
+     * @return \AppBundle\Entity\Banco
+     */
+    public function getBanco()
+    {
+        return $this->banco;
     }
 }

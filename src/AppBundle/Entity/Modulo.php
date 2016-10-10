@@ -42,15 +42,7 @@ class Modulo
      */
     private $estado;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Tramite", mappedBy="modulo")
-     */
-    protected $tramites;  
-
-    public function __construct() {
-        $this->tramites = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+  
 
     public function __toString()
     {
@@ -58,17 +50,16 @@ class Modulo
     }
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-  
 
     /**
      * Set nombre
@@ -116,40 +107,6 @@ class Modulo
     public function getAbreviatura()
     {
         return $this->abreviatura;
-    }
-
-    /**
-     * Add tramite
-     *
-     * @param \AppBundle\Entity\Tramite $tramite
-     *
-     * @return Modulo
-     */
-    public function addTramite(\AppBundle\Entity\Tramite $tramite)
-    {
-        $this->tramites[] = $tramite;
-
-        return $this;
-    }
-
-    /**
-     * Remove tramite
-     *
-     * @param \AppBundle\Entity\Tramite $tramite
-     */
-    public function removeTramite(\AppBundle\Entity\Tramite $tramite)
-    {
-        $this->tramites->removeElement($tramite);
-    }
-
-    /**
-     * Get tramites
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTramites()
-    {
-        return $this->tramites;
     }
 
     /**

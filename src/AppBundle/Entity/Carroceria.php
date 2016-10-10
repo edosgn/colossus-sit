@@ -44,28 +44,20 @@ class Carroceria
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="carrocerias") */
     private $clase; 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="carroceria")
-     */
-    protected $vehiculos;  
+ 
 
-    public function __construct() {
-        $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
-        
-    } 
 
+ 
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-    
 
     /**
      * Set nombre
@@ -116,64 +108,6 @@ class Carroceria
     }
 
     /**
-     * Set clase
-     *
-     * @param \AppBundle\Entity\Clase $clase
-     *
-     * @return Carroceria
-     */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
-    {
-        $this->clase = $clase;
-
-        return $this;
-    }
-
-    /**
-     * Get clase
-     *
-     * @return \AppBundle\Entity\Clase
-     */
-    public function getClase()
-    {
-        return $this->clase;
-    }
-
-    /**
-     * Add vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Carroceria
-     */
-    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos[] = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     */
-    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos->removeElement($vehiculo);
-    }
-
-    /**
-     * Get vehiculos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehiculos()
-    {
-        return $this->vehiculos;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -195,5 +129,29 @@ class Carroceria
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return Carroceria
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
     }
 }

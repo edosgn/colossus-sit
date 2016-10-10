@@ -35,15 +35,7 @@ class TipoIdentificacion
      */
     private $estado;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Ciudadano", mappedBy="tipoIdentificacion")
-     */
-    protected $ciudadanos;  
 
-
-    public function __construct() {
-        $this->ciudadanos = new \Doctrine\Common\Collections\ArrayCollection();       
-    }
 
     public function __toString()
     {
@@ -51,17 +43,16 @@ class TipoIdentificacion
     }
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-   
 
     /**
      * Set nombre
@@ -85,40 +76,6 @@ class TipoIdentificacion
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Add ciudadano
-     *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
-     *
-     * @return TipoIdentificacion
-     */
-    public function addCiudadano(\AppBundle\Entity\Ciudadano $ciudadano)
-    {
-        $this->ciudadanos[] = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Remove ciudadano
-     *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
-     */
-    public function removeCiudadano(\AppBundle\Entity\Ciudadano $ciudadano)
-    {
-        $this->ciudadanos->removeElement($ciudadano);
-    }
-
-    /**
-     * Get ciudadanos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCiudadanos()
-    {
-        return $this->ciudadanos;
     }
 
     /**

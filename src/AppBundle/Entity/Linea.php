@@ -46,28 +46,19 @@ class Linea
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="lineas") */
     private $marca;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="linea")
-     */
-    protected $vehiculos;  
+  
 
-    public function __construct() {
-        $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
-        
-    } 
 
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-   
 
     /**
      * Set nombre
@@ -118,64 +109,6 @@ class Linea
     }
 
     /**
-     * Set marca
-     *
-     * @param \AppBundle\Entity\Marca $marca
-     *
-     * @return Linea
-     */
-    public function setMarca(\AppBundle\Entity\Marca $marca = null)
-    {
-        $this->marca = $marca;
-
-        return $this;
-    }
-
-    /**
-     * Get marca
-     *
-     * @return \AppBundle\Entity\Marca
-     */
-    public function getMarca()
-    {
-        return $this->marca;
-    }
-
-    /**
-     * Add vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Linea
-     */
-    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos[] = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     */
-    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
-    {
-        $this->vehiculos->removeElement($vehiculo);
-    }
-
-    /**
-     * Get vehiculos
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehiculos()
-    {
-        return $this->vehiculos;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -199,14 +132,27 @@ class Linea
         return $this->estado;
     }
 
-    public function getLineaArray(){
-        $linea = array(
-        'id' => $this->id,
-        'nombre' => $this->nombre,
-        'codigoMt' => $this->codigoMt,
-        'marcaId'=>$this->marca->getId()
-        );   
+    /**
+     * Set marca
+     *
+     * @param \AppBundle\Entity\Marca $marca
+     *
+     * @return Linea
+     */
+    public function setMarca(\AppBundle\Entity\Marca $marca = null)
+    {
+        $this->marca = $marca;
 
-    return $linea;
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return \AppBundle\Entity\Marca
+     */
+    public function getMarca()
+    {
+        return $this->marca;
     }
 }

@@ -75,15 +75,7 @@ class TramiteGeneral
      **/
     protected $vehiculo;
 
-     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteEspecifico", mappedBy="tramiteGeneral")
-     */
-    protected $tramitesEspecifico;
-
-    public function __construct() {
-        $this->tramitesEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
+ 
 
 
     public function __toString()
@@ -91,17 +83,17 @@ class TramiteGeneral
         return $this->getEstado();
     }
 
+   
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-    
 
     /**
      * Set numeroQpl
@@ -136,7 +128,7 @@ class TramiteGeneral
      */
     public function setFechaInicial($fechaInicial)
     {
-        $this->fechaInicial = new \DateTime($fechaInicial);
+        $this->fechaInicial = $fechaInicial;
 
         return $this;
     }
@@ -148,7 +140,7 @@ class TramiteGeneral
      */
     public function getFechaInicial()
     {
-        return $this->fechaInicial->format("y-m-d");
+        return $this->fechaInicial;
     }
 
     /**
@@ -160,7 +152,7 @@ class TramiteGeneral
      */
     public function setFechaFinal($fechaFinal)
     {
-        $this->fechaFinal = new \DateTime($fechaFinal);
+        $this->fechaFinal = $fechaFinal;
 
         return $this;
     }
@@ -172,13 +164,13 @@ class TramiteGeneral
      */
     public function getFechaFinal()
     {
-        return $this->fechaFinal->format("y-m-d");
+        return $this->fechaFinal;
     }
 
     /**
      * Set estado
      *
-     * @param string $estado
+     * @param boolean $estado
      *
      * @return TramiteGeneral
      */
@@ -192,7 +184,7 @@ class TramiteGeneral
     /**
      * Get estado
      *
-     * @return string
+     * @return boolean
      */
     public function getEstado()
     {
@@ -293,39 +285,5 @@ class TramiteGeneral
     public function getVehiculo()
     {
         return $this->vehiculo;
-    }
-
-    /**
-     * Add tramitesEspecifico
-     *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
-     *
-     * @return TramiteGeneral
-     */
-    public function addTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
-    {
-        $this->tramitesEspecifico[] = $tramitesEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Remove tramitesEspecifico
-     *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
-     */
-    public function removeTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
-    {
-        $this->tramitesEspecifico->removeElement($tramitesEspecifico);
-    }
-
-    /**
-     * Get tramitesEspecifico
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTramitesEspecifico()
-    {
-        return $this->tramitesEspecifico;
     }
 }

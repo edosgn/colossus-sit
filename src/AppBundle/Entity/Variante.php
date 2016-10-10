@@ -41,31 +41,23 @@ class Variante
      **/
     protected $tramite;
 
-    /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\TramiteEspecifico", mappedBy="variante")
-     */
-    protected $tramitesEspecifico;
-
-    public function __construct() {
-        $this->tramitesEspecifico = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     public function __toString()
     {
         return $this->getNombre();
     }
 
+   
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
-    
 
     /**
      * Set nombre
@@ -92,64 +84,6 @@ class Variante
     }
 
     /**
-     * Set tramite
-     *
-     * @param \AppBundle\Entity\Tramite $tramite
-     *
-     * @return Variante
-     */
-    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
-    {
-        $this->tramite = $tramite;
-
-        return $this;
-    }
-
-    /**
-     * Get tramite
-     *
-     * @return \AppBundle\Entity\Tramite
-     */
-    public function getTramite()
-    {
-        return $this->tramite;
-    }
-
-    /**
-     * Add tramitesEspecifico
-     *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
-     *
-     * @return Variante
-     */
-    public function addTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
-    {
-        $this->tramitesEspecifico[] = $tramitesEspecifico;
-
-        return $this;
-    }
-
-    /**
-     * Remove tramitesEspecifico
-     *
-     * @param \AppBundle\Entity\TramiteEspecifico $tramitesEspecifico
-     */
-    public function removeTramitesEspecifico(\AppBundle\Entity\TramiteEspecifico $tramitesEspecifico)
-    {
-        $this->tramitesEspecifico->removeElement($tramitesEspecifico);
-    }
-
-    /**
-     * Get tramitesEspecifico
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTramitesEspecifico()
-    {
-        return $this->tramitesEspecifico;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -171,5 +105,29 @@ class Variante
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set tramite
+     *
+     * @param \AppBundle\Entity\Tramite $tramite
+     *
+     * @return Variante
+     */
+    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
+    {
+        $this->tramite = $tramite;
+
+        return $this;
+    }
+
+    /**
+     * Get tramite
+     *
+     * @return \AppBundle\Entity\Tramite
+     */
+    public function getTramite()
+    {
+        return $this->tramite;
     }
 }
