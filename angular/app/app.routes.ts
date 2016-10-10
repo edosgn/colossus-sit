@@ -116,6 +116,10 @@ import { IndexTramiteEspecificoComponent } from "./components/tramiteEspecifico/
 import { NewTramiteEspecificoComponent } from "./components/tramiteEspecifico/new.tramiteEspecifico.component";
 import { TramiteEspecificoEditComponent } from "./components/tramiteEspecifico/edit.tramiteEspecifico.component";
 
+import { IndexVehiculoPesadoComponent } from "./components/vehiculoPesado/index.vehiculoPesado.component";
+import { NewVehiculoPesadoComponent } from "./components/vehiculoPesado/new.vehiculoPesado.component";
+import { VehiculoPesadoEditComponent } from "./components/vehiculoPesado/edit.vehiculoPesado.component";
+
 
 
 
@@ -244,6 +248,10 @@ export const routes: RouterConfig = [
     { path: 'tramiteEspecifico/index', component: IndexTramiteEspecificoComponent},
     { path: 'tramiteEspecifico/new', component: NewTramiteEspecificoComponent},
     { path: 'tramiteEspecifico/show/:id', component: TramiteEspecificoEditComponent},
+
+     { path: 'vehiculoPesado/index', component: IndexVehiculoPesadoComponent},
+     { path: 'vehiculoPesado/new', component: NewVehiculoPesadoComponent},
+     { path: 'vehiculoPesado/show/:id', component: VehiculoPesadoEditComponent}
 ];
 
 export const APP_ROUTER_PROVIDERS = [

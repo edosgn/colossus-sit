@@ -88,6 +88,9 @@ var edit_tramiteGeneral_component_1 = require("./components/tramiteGeneral/edit.
 var index_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico/index.tramiteEspecifico.component");
 var new_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico/new.tramiteEspecifico.component");
 var edit_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico/edit.tramiteEspecifico.component");
+var index_vehiculoPesado_component_1 = require("./components/vehiculoPesado/index.vehiculoPesado.component");
+var new_vehiculoPesado_component_1 = require("./components/vehiculoPesado/new.vehiculoPesado.component");
+var edit_vehiculoPesado_component_1 = require("./components/vehiculoPesado/edit.vehiculoPesado.component");
 exports.routes = [
     {
         path: '',
@@ -183,6 +186,9 @@ exports.routes = [
     { path: 'tramiteEspecifico/index', component: index_tramiteEspecifico_component_1.IndexTramiteEspecificoComponent },
     { path: 'tramiteEspecifico/new', component: new_tramiteEspecifico_component_1.NewTramiteEspecificoComponent },
     { path: 'tramiteEspecifico/show/:id', component: edit_tramiteEspecifico_component_1.TramiteEspecificoEditComponent },
+    { path: 'vehiculoPesado/index', component: index_vehiculoPesado_component_1.IndexVehiculoPesadoComponent },
+    { path: 'vehiculoPesado/new', component: new_vehiculoPesado_component_1.NewVehiculoPesadoComponent },
+    { path: 'vehiculoPesado/show/:id', component: edit_vehiculoPesado_component_1.VehiculoPesadoEditComponent }
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
