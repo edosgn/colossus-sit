@@ -221,7 +221,6 @@ class Vehiculo
     public function setFechaFactura($fechaFactura)
     {
         $this->fechaFactura = new \DateTime($fechaFactura);
-
         return $this;
     }
 
@@ -341,7 +340,6 @@ class Vehiculo
     public function setModelo($modelo)
     {
         $this->modelo = new \DateTime($modelo);
-
         return $this;
     }
 
