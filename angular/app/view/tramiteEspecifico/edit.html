@@ -1,0 +1,66 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+	</div>
+	<br>
+
+	<form #newTramiteEspecifico="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar TramiteEspecifico</div>
+		  <div class="panel-body">
+		  	
+		  		<br>
+				<br>
+				<p class="col-md-6"> 
+					<label>Tramite:</label>
+					<select class="form-control" #tramiteId="ngForm" ngControl="tramiteId" [(ngModel)]="tramiteEspecifico.tramiteId" required>
+					  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
+					</select>
+					<span *ngIf = "!tramiteId.valid && tramiteId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Tramite General:</label>
+					<select class="form-control" #tramiteGeneralId="ngForm" ngControl="tramiteGeneralId" [(ngModel)]="tramiteEspecifico.tramiteGeneralId" required>
+					  <option *ngFor="#tramiteGeneral of tramitesGeneral" [value]='tramiteGeneral.id' >{{tramiteGeneral.numeroLicencia}}</option>
+					</select>
+					<span *ngIf = "!tramiteId.valid && tramiteId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Variantes:</label>
+					<select class="form-control" #varianteId="ngForm" ngControl="varianteId" [(ngModel)]="tramiteEspecifico.varianteId" required>
+					  <option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
+					</select>
+					<span *ngIf = "!tramiteId.valid && tramiteId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Casos:</label>
+					<select class="form-control" #casoId="ngForm" ngControl="casoId" [(ngModel)]="tramiteEspecifico.casoId" required>
+					  <option *ngFor="#caso of casos" [value]='caso.id' >{{caso.nombre}}</option>
+					</select>
+					<span *ngIf = "!tramiteId.valid && tramiteId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-12">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor" ngControl="valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+					<br>
+				</p>
+
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+				[disabled]="!newTramiteEspecifico.valid"/>
+		  </div>
+		</div>
+	</form>
+
+</div>

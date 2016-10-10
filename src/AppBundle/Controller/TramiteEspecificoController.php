@@ -61,7 +61,6 @@ class TramiteEspecificoController extends Controller
                 );
             }else{
                         $valor = $params->valor;
-                        $datos = $params->datos;
                         $tramiteId = $params->tramiteId;
                         $tramiteGeneralId = $params->tramiteGeneralId;
                         $varianteId = $params->varianteId;
@@ -146,9 +145,7 @@ class TramiteEspecificoController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             $valor = $params->valor;
-            $datos = $params->datos;
             $tramiteId = $params->tramiteId;
             $tramiteGeneralId = $params->tramiteGeneralId;
             $varianteId = $params->varianteId;

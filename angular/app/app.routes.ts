@@ -112,6 +112,10 @@ import { IndexTramiteGeneralComponent } from "./components/tramiteGeneral/index.
 import { NewTramiteGeneralComponent } from "./components/tramiteGeneral/new.tramiteGeneral.component";
 import { TramiteGeneralEditComponent } from "./components/tramiteGeneral/edit.tramiteGeneral.component";
 
+import { IndexTramiteEspecificoComponent } from "./components/tramiteEspecifico/index.tramiteEspecifico.component";
+import { NewTramiteEspecificoComponent } from "./components/tramiteEspecifico/new.tramiteEspecifico.component";
+import { TramiteEspecificoEditComponent } from "./components/tramiteEspecifico/edit.tramiteEspecifico.component";
+
 
 
 
@@ -236,6 +240,10 @@ export const routes: RouterConfig = [
     { path: 'tramiteGeneral/index', component: IndexTramiteGeneralComponent},
     { path: 'tramiteGeneral/new', component: NewTramiteGeneralComponent},
     { path: 'tramiteGeneral/show/:id', component: TramiteGeneralEditComponent},
+
+    { path: 'tramiteEspecifico/index', component: IndexTramiteEspecificoComponent},
+    { path: 'tramiteEspecifico/new', component: NewTramiteEspecificoComponent},
+    { path: 'tramiteEspecifico/show/:id', component: TramiteEspecificoEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

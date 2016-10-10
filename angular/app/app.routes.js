@@ -85,6 +85,9 @@ var edit_vehiculo_component_1 = require("./components/vehiculo/edit.vehiculo.com
 var index_tramiteGeneral_component_1 = require("./components/tramiteGeneral/index.tramiteGeneral.component");
 var new_tramiteGeneral_component_1 = require("./components/tramiteGeneral/new.tramiteGeneral.component");
 var edit_tramiteGeneral_component_1 = require("./components/tramiteGeneral/edit.tramiteGeneral.component");
+var index_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico/index.tramiteEspecifico.component");
+var new_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico/new.tramiteEspecifico.component");
+var edit_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico/edit.tramiteEspecifico.component");
 exports.routes = [
     {
         path: '',
@@ -177,6 +180,9 @@ exports.routes = [
     { path: 'tramiteGeneral/index', component: index_tramiteGeneral_component_1.IndexTramiteGeneralComponent },
     { path: 'tramiteGeneral/new', component: new_tramiteGeneral_component_1.NewTramiteGeneralComponent },
     { path: 'tramiteGeneral/show/:id', component: edit_tramiteGeneral_component_1.TramiteGeneralEditComponent },
+    { path: 'tramiteEspecifico/index', component: index_tramiteEspecifico_component_1.IndexTramiteEspecificoComponent },
+    { path: 'tramiteEspecifico/new', component: new_tramiteEspecifico_component_1.NewTramiteEspecificoComponent },
+    { path: 'tramiteEspecifico/show/:id', component: edit_tramiteEspecifico_component_1.TramiteEspecificoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

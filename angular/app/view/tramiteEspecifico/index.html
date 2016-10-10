@@ -1,0 +1,53 @@
+<br>
+<hr>
+<h3>Tramites Especificos:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/tramiteEspecifico/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    <div class="identity-data" *ngIf="respuesta">
+        <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+            {{respuesta.msj}}
+        </div>
+        <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+            {{respuesta.msj}}
+        </div>
+    </div>
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Tramite</th>
+                    <th>Tramite General</th>
+                    <th>Variante</th>
+                    <th>Caso</th>
+                    <th>valor</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#tramiteEspecifico of tramiteEspecificos">
+                    <td >{{tramiteEspecifico.id}}</td>
+                    <td >{{tramiteEspecifico.tramite.nombre}}</td>
+                    <td >{{tramiteEspecifico.tramiteGeneral.numeroLicencia}}</td>
+                    <td >{{tramiteEspecifico.variante.nombre}}</td>
+                    <td >{{tramiteEspecifico.caso.nombre}}</td>
+                     <td >{{tramiteEspecifico.valor}}</td>
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteTramiteEspecifico(tramiteEspecifico.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/tramiteEspecifico/show',tramiteEspecifico.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
