@@ -46,19 +46,28 @@ class Linea
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="lineas") */
     private $marca;
 
-  
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="linea")
+     */
+    protected $vehiculos;  
 
+    public function __construct() {
+        $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
+        
+    } 
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
+
+   
 
     /**
      * Set nombre
@@ -109,30 +118,6 @@ class Linea
     }
 
     /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Linea
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
-
-    /**
      * Set marca
      *
      * @param \AppBundle\Entity\Marca $marca
@@ -154,5 +139,63 @@ class Linea
     public function getMarca()
     {
         return $this->marca;
+    }
+
+    /**
+     * Add vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return Linea
+     */
+    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
+    {
+        $this->vehiculos[] = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Remove vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     */
+    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
+    {
+        $this->vehiculos->removeElement($vehiculo);
+    }
+
+    /**
+     * Get vehiculos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVehiculos()
+    {
+        return $this->vehiculos;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Linea
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

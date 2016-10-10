@@ -48,7 +48,20 @@ class Municipio
       */
     private $departamento;
 
-   
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Empresa", mappedBy="municipio")
+     */
+    protected $empresas;
+
+     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vehiculo", mappedBy="municipio")
+     */
+    protected $vehiculos;  
+
+    public function __construct() {
+        $this->empresas = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vehiculos = new \Doctrine\Common\Collections\ArrayCollection();
+    } 
 
     public function __toString()
     {
@@ -56,12 +69,10 @@ class Municipio
     }
 
 
-   
-
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -117,6 +128,97 @@ class Municipio
     }
 
     /**
+     * Set departamento
+     *
+     * @param \AppBundle\Entity\Departamento $departamento
+     *
+     * @return Municipio
+     */
+    public function setDepartamento(\AppBundle\Entity\Departamento $departamento = null)
+    {
+        $this->departamento = $departamento;
+        return $this;
+    }
+
+    /**
+     * Get departamento
+     *
+     * @return \AppBundle\Entity\Departamento
+     */
+    public function getDepartamento()
+    {
+        return $this->departamento;
+    }
+
+    /**
+     * Add empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Municipio
+     */
+    public function addEmpresa(\AppBundle\Entity\Empresa $empresa)
+    {
+        $this->empresas[] = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Remove empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     */
+    public function removeEmpresa(\AppBundle\Entity\Empresa $empresa)
+    {
+        $this->empresas->removeElement($empresa);
+    }
+
+    /**
+     * Get empresas
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmpresas()
+    {
+        return $this->empresas;
+    }
+
+    /**
+     * Add vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return Municipio
+     */
+    public function addVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
+    {
+        $this->vehiculos[] = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Remove vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     */
+    public function removeVehiculo(\AppBundle\Entity\Vehiculo $vehiculo)
+    {
+        $this->vehiculos->removeElement($vehiculo);
+    }
+
+    /**
+     * Get vehiculos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVehiculos()
+    {
+        return $this->vehiculos;
+    }
+
+    /**
      * Set estado
      *
      * @param boolean $estado
@@ -138,29 +240,5 @@ class Municipio
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set departamento
-     *
-     * @param \AppBundle\Entity\Departamento $departamento
-     *
-     * @return Municipio
-     */
-    public function setDepartamento(\AppBundle\Entity\Departamento $departamento = null)
-    {
-        $this->departamento = $departamento;
-
-        return $this;
-    }
-
-    /**
-     * Get departamento
-     *
-     * @return \AppBundle\Entity\Departamento
-     */
-    public function getDepartamento()
-    {
-        return $this->departamento;
     }
 }

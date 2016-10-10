@@ -36,11 +36,9 @@ class Helpers
 	public function json($data){
 
 		$normalizer = new \Symfony\Component\Serializer\Normalizer\ObjectNormalizer();
-
 		$normalizer->setCircularReferenceHandler(function ($object) {
 		    return $object->getId();
 		});
-		$normalizer->setCircularReferenceLimit(2);
 		$encoders =  new \Symfony\Component\Serializer\Encoder\JsonEncoder();
 		
 		$serializer = new \Symfony\Component\Serializer\Serializer(array($normalizer), array($encoders));

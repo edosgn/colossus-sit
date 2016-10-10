@@ -106,7 +106,7 @@ class Vehiculo
     private $vin;
 
     /**
-     * @var int 
+     * @var int
      *
      * @ORM\Column(name="numeroPasajeros", type="integer")
      */
