@@ -67,8 +67,6 @@ class Almacen
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="almacenes") */
     private $clase; 
-
-
     /**
      * Get id
      *
@@ -78,11 +76,6 @@ class Almacen
     {
         return $this->id;
     }
-
-    
-
-   
-
     /**
      * Set rangoInicio
      *

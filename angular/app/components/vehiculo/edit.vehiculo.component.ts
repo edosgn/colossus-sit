@@ -35,6 +35,7 @@ export class VehiculoEditComponent implements OnInit{
 	public carrocerias;
 	public clases;
 	public organismosTransito;
+	public id;
 
 	constructor(
 		private _MunicipioService: MunicipioService,

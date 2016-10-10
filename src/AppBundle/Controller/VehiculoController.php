@@ -89,7 +89,7 @@ class VehiculoController extends Controller
                         $color = $em->getRepository('AppBundle:Color')->find($colorId);
                         $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
                         $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-                        $organismoTransito = $em->getRepository('AppBundle:organismoTransito')->find($organismoTransitoId);
+                        $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($organismoTransitoId);
                         $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                         $vehiculo = new Vehiculo();
                         $vehiculo->setPlaca($placa);
@@ -212,7 +212,7 @@ class VehiculoController extends Controller
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-            $organismoTransito = $em->getRepository('AppBundle:organismoTransito')->find($organismoTransitoId);
+            $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($organismoTransitoId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);

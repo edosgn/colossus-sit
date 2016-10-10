@@ -220,7 +220,7 @@ class Vehiculo
      */
     public function setFechaFactura($fechaFactura)
     {
-        $this->fechaFactura = $fechaFactura;
+        $this->fechaFactura = new \DateTime($fechaFactura);
 
         return $this;
     }
@@ -232,7 +232,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura;
+        return $this->fechaFactura->format('Y-m-d');
     }
 
     /**
@@ -292,7 +292,7 @@ class Vehiculo
      */
     public function setFechaManifiesto($fechaManifiesto)
     {
-        $this->fechaManifiesto = $fechaManifiesto;
+        $this->fechaManifiesto = new \DateTime($fechaManifiesto);
 
         return $this;
     }
@@ -304,7 +304,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto;
+        return $this->fechaManifiesto->format('Y-m-d');
     }
 
     /**
@@ -340,7 +340,7 @@ class Vehiculo
      */
     public function setModelo($modelo)
     {
-        $this->modelo = $modelo;
+        $this->modelo = new \DateTime($modelo);
 
         return $this;
     }
@@ -352,7 +352,7 @@ class Vehiculo
      */
     public function getModelo()
     {
-        return $this->modelo;
+        return $this->modelo->format('Y');
     }
 
     /**
