@@ -198,4 +198,15 @@ class Linea
     {
         return $this->estado;
     }
+
+    public function getLineaArray(){
+        $linea = array(
+        'id' => $this->id,
+        'nombre' => $this->nombre,
+        'codigoMt' => $this->codigoMt,
+        'marcaId'=>$this->marca->getId()
+        );   
+
+    return $linea;
+    }
 }

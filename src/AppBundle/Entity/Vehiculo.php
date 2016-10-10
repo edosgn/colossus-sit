@@ -106,7 +106,7 @@ class Vehiculo
     private $vin;
 
     /**
-     * @var int
+     * @var int 
      *
      * @ORM\Column(name="numeroPasajeros", type="integer")
      */
@@ -547,7 +547,7 @@ class Vehiculo
      */
     public function getMunicipio()
     {
-        return $this->municipio;
+        return $this->municipio->getMunicipioArray();
     }
 
     /**
@@ -571,7 +571,7 @@ class Vehiculo
      */
     public function getLinea()
     {
-        return $this->linea;
+        return $this->linea->getLineaArray();
     }
 
     /**
@@ -595,7 +595,7 @@ class Vehiculo
      */
     public function getServicio()
     {
-        return $this->servicio;
+        return $this->servicio->getServicioArray();
     }
 
     /**

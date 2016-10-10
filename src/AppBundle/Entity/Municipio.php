@@ -241,4 +241,13 @@ class Municipio
     {
         return $this->estado;
     }
+
+    public function getMunicipioArray(){
+        $municipio = array(
+            'id' => $this->id,
+            'nombre' => $this->nombre,
+            'codigoDian' => $this->codigoDian, 
+        );
+    return $municipio;
+    }
 }
