@@ -1,0 +1,59 @@
+<br>
+<hr>
+<h3>Vehiculos pesados</h3>
+<hr>
+    <div class="table-responsive">
+    <a [routerLink]="['/vehiculoPesado/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+    <div class="identity-data" *ngIf="respuesta">
+        <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+            {{respuesta.msj}}
+        </div>
+        <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+            {{respuesta.msj}}
+        </div>
+    </div>
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>modalida</th>
+                    <th>vehiculo</th>
+                    <th>empresa</th>
+                    <th>tonelaje</th>
+                    <th>numeroEjes</th>
+                    <th>numeroMt</th>
+                    <th>fichaTecnicaHomologacionCarroceria</th>
+                    <th>fichaTecnicaHomologacionChasis</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="#vehiculoPesado of vehiculosPesados">
+                    <td >{{vehiculoPesado.id}}</td>
+                    <td >{{vehiculoPesado.modalidad.nombre}}</td>
+                    <td >{{vehiculoPesado.vehiculo.placa}}</td>
+                    <td >{{vehiculoPesado.empresa.nombre}}</td>
+                    <td >{{vehiculoPesado.tonelaje}}</td>
+                    <td >{{vehiculoPesado.numeroEjes}}</td>
+                    <td >{{vehiculoPesado.numeroMt}}</td>
+                    <td >{{vehiculoPesado.fichaTecnicaHomologacionCarroceria}}</td>
+                    <td >{{vehiculoPesado.fichaTecnicaHomologacionChasis}}</td>
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteVehiculoPesado(vehiculoPesado.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/vehiculoPesado/show',vehiculoPesado.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

@@ -112,6 +112,14 @@ import { IndexCiudadanoVehiculoComponent } from "./components/ciudadanoVehiculo/
 import { NewCiudadanoVehiculoComponent } from "./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component";
 import { CiudadanoVehiculoEditComponent } from "./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component";
 
+import { IndexTramiteGeneralComponent } from "./components/tramiteGeneral/index.tramiteGeneral.component";
+import { NewTramiteGeneralComponent } from "./components/tramiteGeneral/new.tramiteGeneral.component";
+import { TramiteGeneralEditComponent } from "./components/tramiteGeneral/edit.tramiteGeneral.component";
+
+import { IndexVehiculoPesadoComponent } from "./components/vehiculoPesado/index.vehiculoPesado.component";
+import { NewVehiculoPesadoComponent } from "./components/vehiculoPesado/new.vehiculoPesado.component";
+import { VehiculoPesadoEditComponent } from "./components/vehiculoPesado/edit.vehiculoPesado.component";
+
 
 
 
@@ -236,6 +244,14 @@ export const routes: RouterConfig = [
     { path: 'ciudadanoVehiculo/index', component: IndexCiudadanoVehiculoComponent},
     { path: 'ciudadanoVehiculo/new', component: NewCiudadanoVehiculoComponent},
     { path: 'ciudadanoVehiculo/show/:id', component: CiudadanoVehiculoEditComponent},
+
+    { path: 'tramiteGeneral/index', component: IndexTramiteGeneralComponent},
+    { path: 'tramiteGeneral/new', component: NewTramiteGeneralComponent},
+    { path: 'tramiteGeneral/show/:id', component: TramiteGeneralEditComponent},
+
+    { path: 'vehiculoPesado/index', component: IndexVehiculoPesadoComponent},
+    { path: 'vehiculoPesado/new', component: NewVehiculoPesadoComponent},
+    { path: 'vehiculoPesado/show/:id', component: VehiculoPesadoEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

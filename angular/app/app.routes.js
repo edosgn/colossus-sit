@@ -85,6 +85,12 @@ var edit_vehiculo_component_1 = require("./components/vehiculo/edit.vehiculo.com
 var index_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/index.ciudadanoVehiculo.component");
 var new_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component");
 var edit_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component");
+var index_tramiteGeneral_component_1 = require("./components/tramiteGeneral/index.tramiteGeneral.component");
+var new_tramiteGeneral_component_1 = require("./components/tramiteGeneral/new.tramiteGeneral.component");
+var edit_tramiteGeneral_component_1 = require("./components/tramiteGeneral/edit.tramiteGeneral.component");
+var index_vehiculoPesado_component_1 = require("./components/vehiculoPesado/index.vehiculoPesado.component");
+var new_vehiculoPesado_component_1 = require("./components/vehiculoPesado/new.vehiculoPesado.component");
+var edit_vehiculoPesado_component_1 = require("./components/vehiculoPesado/edit.vehiculoPesado.component");
 exports.routes = [
     {
         path: '',
@@ -177,6 +183,12 @@ exports.routes = [
     { path: 'ciudadanoVehiculo/index', component: index_ciudadanoVehiculo_component_1.IndexCiudadanoVehiculoComponent },
     { path: 'ciudadanoVehiculo/new', component: new_ciudadanoVehiculo_component_1.NewCiudadanoVehiculoComponent },
     { path: 'ciudadanoVehiculo/show/:id', component: edit_ciudadanoVehiculo_component_1.CiudadanoVehiculoEditComponent },
+    { path: 'tramiteGeneral/index', component: index_tramiteGeneral_component_1.IndexTramiteGeneralComponent },
+    { path: 'tramiteGeneral/new', component: new_tramiteGeneral_component_1.NewTramiteGeneralComponent },
+    { path: 'tramiteGeneral/show/:id', component: edit_tramiteGeneral_component_1.TramiteGeneralEditComponent },
+    { path: 'vehiculoPesado/index', component: index_vehiculoPesado_component_1.IndexVehiculoPesadoComponent },
+    { path: 'vehiculoPesado/new', component: new_vehiculoPesado_component_1.NewVehiculoPesadoComponent },
+    { path: 'vehiculoPesado/show/:id', component: edit_vehiculoPesado_component_1.VehiculoPesadoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)
