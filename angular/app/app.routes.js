@@ -84,6 +84,7 @@ var new_vehiculo_component_1 = require("./components/vehiculo/new.vehiculo.compo
 var edit_vehiculo_component_1 = require("./components/vehiculo/edit.vehiculo.component");
 var index_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/index.ciudadanoVehiculo.component");
 var new_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component");
+var edit_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component");
 exports.routes = [
     {
         path: '',
@@ -175,6 +176,7 @@ exports.routes = [
     { path: 'vehiculo/show/:id', component: edit_vehiculo_component_1.VehiculoEditComponent },
     { path: 'ciudadanoVehiculo/index', component: index_ciudadanoVehiculo_component_1.IndexCiudadanoVehiculoComponent },
     { path: 'ciudadanoVehiculo/new', component: new_ciudadanoVehiculo_component_1.NewCiudadanoVehiculoComponent },
+    { path: 'ciudadanoVehiculo/show/:id', component: edit_ciudadanoVehiculo_component_1.CiudadanoVehiculoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

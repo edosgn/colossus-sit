@@ -110,6 +110,7 @@ import { VehiculoEditComponent } from "./components/vehiculo/edit.vehiculo.compo
 
 import { IndexCiudadanoVehiculoComponent } from "./components/ciudadanoVehiculo/index.ciudadanoVehiculo.component";
 import { NewCiudadanoVehiculoComponent } from "./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component";
+import { CiudadanoVehiculoEditComponent } from "./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component";
 
 
 
@@ -234,6 +235,7 @@ export const routes: RouterConfig = [
 
     { path: 'ciudadanoVehiculo/index', component: IndexCiudadanoVehiculoComponent},
     { path: 'ciudadanoVehiculo/new', component: NewCiudadanoVehiculoComponent},
+    { path: 'ciudadanoVehiculo/show/:id', component: CiudadanoVehiculoEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
