@@ -82,6 +82,9 @@ var edit_almacen_component_1 = require("./components/almacen/edit.almacen.compon
 var index_vehiculo_component_1 = require("./components/vehiculo/index.vehiculo.component");
 var new_vehiculo_component_1 = require("./components/vehiculo/new.vehiculo.component");
 var edit_vehiculo_component_1 = require("./components/vehiculo/edit.vehiculo.component");
+var index_tramiteGeneral_component_1 = require("./components/tramiteGeneral/index.tramiteGeneral.component");
+var new_tramiteGeneral_component_1 = require("./components/tramiteGeneral/new.tramiteGeneral.component");
+var edit_tramiteGeneral_component_1 = require("./components/tramiteGeneral/edit.tramiteGeneral.component");
 exports.routes = [
     {
         path: '',
@@ -171,6 +174,9 @@ exports.routes = [
     { path: 'vehiculo/index', component: index_vehiculo_component_1.IndexVehiculoComponent },
     { path: 'vehiculo/new', component: new_vehiculo_component_1.NewVehiculoComponent },
     { path: 'vehiculo/show/:id', component: edit_vehiculo_component_1.VehiculoEditComponent },
+    { path: 'tramiteGeneral/index', component: index_tramiteGeneral_component_1.IndexTramiteGeneralComponent },
+    { path: 'tramiteGeneral/new', component: new_tramiteGeneral_component_1.NewTramiteGeneralComponent },
+    { path: 'tramiteGeneral/show/:id', component: edit_tramiteGeneral_component_1.TramiteGeneralEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

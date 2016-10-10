@@ -1,0 +1,59 @@
+<br>
+<hr>
+<h3>TRamiteGeneral:</h3>
+<hr>
+	<div class="table-responsive">
+    <a [routerLink]="['/tramiteGeneral/new']" class="btn btn-success">
+         Nuevo
+    </a>
+    <br>
+    <br>
+         <div class="identity-data" *ngIf="respuesta">
+            <div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+                {{respuesta.msj}}
+            </div>
+            <div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+                {{respuesta.msj}}
+            </div>
+        </div>
+
+        <table class="table  table-condensed table-responsive table-bordered ">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>vehiculo</th>
+                    <th>numeroQpl</th>
+                    <th>fecha inicial</th>
+                    <th>fecha final</th>
+                    <th>valor</th>
+                    <th>numero de licencia</th>
+                    <th>numero de sustrato</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="#tramiteGeneral of tramitesGeneral">
+                    <td >{{tramiteGeneral.id}}</td>
+                    <td >{{tramiteGeneral.vehiculo.placa}}</td>
+                    <td >{{tramiteGeneral.numeroQpl}}</td>
+                    <td >{{tramiteGeneral.fechaInicial}}</td>
+                    <td >{{tramiteGeneral.fechaFinal}}</td>
+                    <td >{{tramiteGeneral.valor}}</td>
+                    <td >{{tramiteGeneral.numeroLicencia}}</td>
+                    <td >{{tramiteGeneral.numeroSustrato}}</td>
+
+                    <td>
+                    <button class="btn btn-danger" value="Editar" (click)="deleteTramiteGeneral(tramiteGeneral.id)">
+                        eliminar
+                    </button>
+                        
+                    <a [routerLink]="['/tramiteGeneral/show',tramiteGeneral.id]" class="btn btn-info">
+                         Editar
+                    </a>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>

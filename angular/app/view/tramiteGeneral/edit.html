@@ -1,0 +1,78 @@
+<div class="col-md-12">
+	
+    <div class="identity-data" *ngIf="respuesta">
+		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
+			{{respuesta.msj}}
+		</div>
+		<div class="user-identity alert alert-success" *ngIf="respuesta.status == 'success'">
+			{{respuesta.msj}}
+		</div>
+
+		
+	</div>
+	<br>
+
+	<form #newTramiteGeneral="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Tramite general</div>
+		  <div class="panel-body">
+		  		<br>
+				<br>
+				<p class="col-md-6"> 
+					<label>Vehiculos:</label>
+					<select class="form-control" #vehiculoId="ngForm" ngControl="vehiculoId" [(ngModel)]="tramiteGeneral.vehiculoId" required>
+					<option *ngFor="#vehiculo of vehiculos" [value]='vehiculo.id' >{{vehiculo.placa}}</option>
+					</select>
+					<span *ngIf = "!vehiculoId.valid && vehiculoId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-6">
+					<label >Numero Qpl:</label>
+					<input #numeroQpl="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroQpl" ngControl="numeroQpl"  required />
+					<span *ngIf="!numeroQpl.valid && numeroQpl.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >fecha inicial:</label>
+					<input #fechaInicial="ngForm"  type="date" class="form-control" [(ngModel)]="tramiteGeneral.fechaInicial" ngControl="fechaInicial"  required />
+					<span *ngIf="!fechaInicial.valid && fechaInicial.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >fecha final:</label>
+					<input #fechaFinal="ngForm"  type="date" class="form-control" [(ngModel)]="tramiteGeneral.fechaFinal" ngControl="fechaFinal"  required />
+					<span *ngIf="!fechaFinal.valid && fechaFinal.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.valor" ngControl="valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Numero licenciia:</label>
+					<input #numeroLicencia="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroLicencia" ngControl="numeroLicencia"  required />
+					<span *ngIf="!numeroLicencia.valid && numeroLicencia.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Numero sustrato:</label>
+					<input #numeroSustrato="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroSustrato" ngControl="numeroSustrato"  required />
+					<span *ngIf="!numeroSustrato.valid && numeroLicencia.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"
+				[disabled]="!newTramiteGeneral.valid"/>
+		  </div>
+		</div>
+	</form>
+
+</div>

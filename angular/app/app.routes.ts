@@ -108,6 +108,10 @@ import { IndexVehiculoComponent } from "./components/vehiculo/index.vehiculo.com
 import { NewVehiculoComponent } from "./components/vehiculo/new.vehiculo.component";
 import { VehiculoEditComponent } from "./components/vehiculo/edit.vehiculo.component";
 
+import { IndexTramiteGeneralComponent } from "./components/tramiteGeneral/index.tramiteGeneral.component";
+import { NewTramiteGeneralComponent } from "./components/tramiteGeneral/new.tramiteGeneral.component";
+import { TramiteGeneralEditComponent } from "./components/tramiteGeneral/edit.tramiteGeneral.component";
+
 
 
 
@@ -228,6 +232,10 @@ export const routes: RouterConfig = [
     { path: 'vehiculo/index', component: IndexVehiculoComponent},
     { path: 'vehiculo/new', component: NewVehiculoComponent},
     { path: 'vehiculo/show/:id', component: VehiculoEditComponent},
+
+    { path: 'tramiteGeneral/index', component: IndexTramiteGeneralComponent},
+    { path: 'tramiteGeneral/new', component: NewTramiteGeneralComponent},
+    { path: 'tramiteGeneral/show/:id', component: TramiteGeneralEditComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [
