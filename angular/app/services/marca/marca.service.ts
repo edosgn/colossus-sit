@@ -9,7 +9,7 @@ export class MarcaService {
 	public identity;
 	public token;
 
-	constructor(private _http: Http){}
+	constructor(private _http: Http){} 
 
 	getMarca(){
 		
@@ -51,5 +51,7 @@ export class MarcaService {
 							  .map(res => res.json());
 
 	}
+
+	
 	
 }

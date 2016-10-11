@@ -12,6 +12,7 @@ import {CarroceriaService} from '../../services/carroceria/carroceria.service';
 import {OrganismoTransitoService} from '../../services/organismoTransito/organismoTransito.service';
 import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
 import {DepartamentoService} from "../../services/departamento/departamento.service";
+import {MarcaService} from "../../services/marca/marca.service";
 import {Vehiculo} from '../../model/vehiculo/Vehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -20,7 +21,7 @@ import {Vehiculo} from '../../model/vehiculo/Vehiculo';
     selector: 'default',
     templateUrl: 'app/view/vehiculo/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService]
+    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService,MarcaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -30,7 +31,7 @@ export class VehiculoEditComponent implements OnInit{
 	public respuesta;
 	public municipios;
 	public lineas;
-	public servicios;
+	public servicios; 
 	public colores;
 	public combustibles;
 	public carrocerias;
@@ -39,11 +40,15 @@ export class VehiculoEditComponent implements OnInit{
 	public id;
 	public departamentos;
 	public departamento;
+	public marcas;
+	public data;
+	public marca;
 
 	constructor(
 		private _MunicipioService: MunicipioService,
 		private _DepartamentoService: DepartamentoService,
-		private _LineaService: LineaService,
+		private _MarcaService: MarcaService,
+		private _LineaService: LineaService, 
 		private _ServicioService: ServicioService,
 		private _ColorService: ColorService,
 		private _ClaseService: ClaseService,
@@ -75,9 +80,29 @@ export class VehiculoEditComponent implements OnInit{
 					}
 				}
 			);
-	
-	
+
 	}
+	onChangeM(marcaValue) {
+
+	this.marca ={
+			"marcaId":marcaValue,
+	};
+    let token = this._loginService.getToken();
+    this._LineaService.getLineasMar(this.marca,token).subscribe(
+				response => {
+					this.lineas = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+	}
+
 
 	ngOnInit(){	
 		
@@ -93,31 +118,31 @@ export class VehiculoEditComponent implements OnInit{
 			this._VehiculoService.showVehiculo(token,this.id).subscribe(
 
 						response => {
-							let data = response.data;
-							console.log(data);
+							this.data = response.data;
+							console.log(this.data);
 							this.vehiculo = new Vehiculo(
-								data.id,
-								data.clase.id, 
-								data.municipio.id, 
-								data.linea.id,
-								data.servicio.id,
-								data.color.id,
-								data.combustible.id,
-								data.carroceria.id,
-								data.organismoTransito.id,
-								data.placa,
-								data.numeroFactura,
-								data.fechaFactura,
-								data.valor,
-								data.numeroManifiesto,
-								data.fechaManifiesto,
-								data.cilindraje,
-								data.modelo,
-								data.motor,
-								data.chasis,
-								data.serie,
-								data.vin,
-								data.numeroPasajeros
+								this.data.id,
+								this.data.clase.id, 
+								this.data.municipio.id, 
+								this.data.linea.id,
+								this.data.servicio.id,
+								this.data.color.id,
+								this.data.combustible.id,
+								this.data.carroceria.id,
+								this.data.organismoTransito.id,
+								this.data.placa,
+								this.data.numeroFactura,
+								this.data.fechaFactura,
+								this.data.valor,
+								this.data.numeroManifiesto,
+								this.data.fechaManifiesto,
+								this.data.cilindraje,
+								this.data.modelo,
+								this.data.motor,
+								this.data.chasis,
+								this.data.serie,
+								this.data.vin,
+								this.data.numeroPasajeros
 								);
 						},
 						error => {
@@ -133,19 +158,6 @@ export class VehiculoEditComponent implements OnInit{
 			this._MunicipioService.getMunicipio().subscribe(
 				response => {
 					this.municipios = response.data;
-				}, 
-				error => {
-					this.errorMessage = <any>error;
-
-					if(this.errorMessage != null){
-						console.log(this.errorMessage);
-						alert("Error en la petición");
-					}
-				}
-			);
-		this._LineaService.getLinea().subscribe(
-				response => {
-					this.lineas = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -172,6 +184,19 @@ export class VehiculoEditComponent implements OnInit{
 		this._ColorService.getColor().subscribe(
 				response => {
 					this.colores = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+		this._LineaService.getLinea().subscribe(
+				response => {
+					this.lineas = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -237,6 +262,19 @@ export class VehiculoEditComponent implements OnInit{
 		this._DepartamentoService.getDepartamento().subscribe(
 				response => {
 					this.departamentos = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+		this._MarcaService.getMarca().subscribe(
+				response => {
+					this.marcas = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;

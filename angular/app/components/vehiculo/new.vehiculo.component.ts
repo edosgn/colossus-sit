@@ -12,6 +12,7 @@ import {CarroceriaService} from '../../services/carroceria/carroceria.service';
 import {OrganismoTransitoService} from '../../services/organismoTransito/organismoTransito.service';
 import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
 import {DepartamentoService} from "../../services/departamento/departamento.service";
+import {MarcaService} from "../../services/marca/marca.service";
 import {Vehiculo} from '../../model/vehiculo/Vehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -20,7 +21,7 @@ import {Vehiculo} from '../../model/vehiculo/Vehiculo';
     selector: 'register',
     templateUrl: 'app/view/vehiculo/new.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService]
+    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService,MarcaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -39,6 +40,9 @@ export class NewVehiculoComponent {
 	public departamentos;
 	public departamento;
 	public habilitar;
+	public habilitarl;
+	public marcas;
+	public marca;
 
 	constructor(
 		private _MunicipioService: MunicipioService,
@@ -47,6 +51,7 @@ export class NewVehiculoComponent {
 		private _ColorService: ColorService,
 		private _ClaseService: ClaseService,
 		private _DepartamentoService: DepartamentoService,
+		private _MarcaService: MarcaService,
 		private _CombustibleService: CombustibleService,
 		private _CarroceriaService: CarroceriaService,
 		private _OrganismoTransitoService: OrganismoTransitoService,	
@@ -78,15 +83,16 @@ export class NewVehiculoComponent {
 				}
 			);
 	}
+	onChangeM(marcaValue) {
 
-	ngOnInit(){
-		this.habilitar=true;
-		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
-		let token = this._loginService.getToken();
-		
-		this._LineaService.getLinea().subscribe(
+	this.marca ={
+			"marcaId":marcaValue,
+	};
+    let token = this._loginService.getToken();
+    this._LineaService.getLineasMar(this.marca,token).subscribe(
 				response => {
 					this.lineas = response.data;
+					this.habilitarl=false;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -97,6 +103,15 @@ export class NewVehiculoComponent {
 					}
 				}
 			);
+	}
+
+	ngOnInit(){
+		this.habilitar=true;
+		this.habilitarl=true;
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
+		let token = this._loginService.getToken();
+		
+		
 		this._ServicioService.getServicio().subscribe(
 				response => {
 					this.servicios = response.data;
@@ -178,6 +193,19 @@ export class NewVehiculoComponent {
 		this._DepartamentoService.getDepartamento().subscribe(
 				response => {
 					this.departamentos = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+		this._MarcaService.getMarca().subscribe(
+				response => {
+					this.marcas = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
