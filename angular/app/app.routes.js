@@ -91,6 +91,9 @@ var edit_tramiteEspecifico_component_1 = require("./components/tramiteEspecifico
 var index_vehiculoPesado_component_1 = require("./components/vehiculoPesado/index.vehiculoPesado.component");
 var new_vehiculoPesado_component_1 = require("./components/vehiculoPesado/new.vehiculoPesado.component");
 var edit_vehiculoPesado_component_1 = require("./components/vehiculoPesado/edit.vehiculoPesado.component");
+var index_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/index.ciudadanoVehiculo.component");
+var new_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component");
+var edit_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component");
 exports.routes = [
     {
         path: '',
@@ -188,7 +191,10 @@ exports.routes = [
     { path: 'tramiteEspecifico/show/:id', component: edit_tramiteEspecifico_component_1.TramiteEspecificoEditComponent },
     { path: 'vehiculoPesado/index', component: index_vehiculoPesado_component_1.IndexVehiculoPesadoComponent },
     { path: 'vehiculoPesado/new', component: new_vehiculoPesado_component_1.NewVehiculoPesadoComponent },
-    { path: 'vehiculoPesado/show/:id', component: edit_vehiculoPesado_component_1.VehiculoPesadoEditComponent }
+    { path: 'vehiculoPesado/show/:id', component: edit_vehiculoPesado_component_1.VehiculoPesadoEditComponent },
+    { path: 'ciudadanoVehiculo/index', component: index_ciudadanoVehiculo_component_1.IndexCiudadanoVehiculoComponent },
+    { path: 'ciudadanoVehiculo/new', component: new_ciudadanoVehiculo_component_1.NewCiudadanoVehiculoComponent },
+    { path: 'ciudadanoVehiculo/show/:id', component: edit_ciudadanoVehiculo_component_1.CiudadanoVehiculoEditComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

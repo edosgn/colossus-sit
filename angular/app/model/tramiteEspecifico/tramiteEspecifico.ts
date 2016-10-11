@@ -5,6 +5,6 @@ export class TramiteEspecifico{
 		public tramiteGeneralId:number,
 		public varianteId:number,
 		public casoId:number,
-		public valor:string,
+		public valor:string
 	){}
 }

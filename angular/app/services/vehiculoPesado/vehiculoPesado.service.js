@@ -52,4 +52,4 @@ var VehiculoPesadoService = (function () {
     return VehiculoPesadoService;
 }());
 exports.VehiculoPesadoService = VehiculoPesadoService;
-//# sourceMappingURL=vehiculopesado.service.js.map
+//# sourceMappingURL=vehiculoPesado.service.js.map

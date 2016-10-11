@@ -24,7 +24,10 @@ export class TramiteEspecificoEditComponent implements OnInit{
 	public tramiteEspecifico : TramiteEspecifico;
 	public id;
 	public respuesta;
-	public Tramites;
+	public tramites;
+	public variantes;
+	public tramitesGeneral;
+	public casos;
 
 	constructor(
 		private _TramiteService:TramiteService,
@@ -44,7 +47,7 @@ export class TramiteEspecificoEditComponent implements OnInit{
 		let token = this._loginService.getToken();
 		this._TramiteService.getTramite().subscribe(
 				response => {
-					this.Tramites = response.data;
+					this.tramites = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;

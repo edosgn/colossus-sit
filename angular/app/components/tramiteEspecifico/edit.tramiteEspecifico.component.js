@@ -35,7 +35,7 @@ var TramiteEspecificoEditComponent = (function () {
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, null, null, null, null, null);
         var token = this._loginService.getToken();
         this._TramiteService.getTramite().subscribe(function (response) {
-            _this.Tramites = response.data;
+            _this.tramites = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
