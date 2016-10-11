@@ -245,6 +245,44 @@ class MunicipioController extends Controller
         return $helpers->json($responce);
         
     }
+
+    /**
+     * busca los municipios de un departamento.
+     *
+     * @Route("/mun/dep", name="municipio_dep")
+     * @Method("POST")
+     */
+    public function mundDepAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+
+        $departamentoId = $params->departamentoId;
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
+                array('departamento' => $departamentoId)
+            );
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "municipio encontrado", 
+                    'data'=> $municipios,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
     
 
     /**

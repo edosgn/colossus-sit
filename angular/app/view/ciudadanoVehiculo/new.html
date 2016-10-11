@@ -12,6 +12,8 @@
 	</div>
 	<br>
 
+
+
 	<form #newVehiculo="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
 
 		<div class="panel panel-primary">
@@ -28,6 +30,8 @@
 					</select>
 					<span *ngIf = "!vehiculoId.valid && vehiculoId.touched" class="text-danger">el role es obligatorio</span>
 				</p>
+
+
 
 				<p class="col-md-6"> 
 					<label>Ciudadano:</label>
