@@ -35,15 +35,6 @@ var NewCiudadanoVehiculoComponent = (function () {
         this.validate = false;
         this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
-        this._VehiculoService.getVehiculo().subscribe(function (response) {
-            _this.vehiculos = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
         this._CiudadanoService.getCiudadano().subscribe(function (response) {
             _this.ciudadanos = response.data;
             console.log(_this.ciudadanos);
@@ -57,7 +48,6 @@ var NewCiudadanoVehiculoComponent = (function () {
     };
     NewCiudadanoVehiculoComponent.prototype.onSubmit = function () {
         var _this = this;
-        console.log(this.ciudadanoVehiculo);
         var token = this._loginService.getToken();
         this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token).subscribe(function (response) {
             _this.respuesta = response;

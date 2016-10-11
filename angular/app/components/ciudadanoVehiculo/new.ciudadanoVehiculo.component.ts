@@ -52,19 +52,6 @@ export class NewCiudadanoVehiculoComponent {
      	this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 		this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
 
-		this._VehiculoService.getVehiculo().subscribe(
-				response => {
-					this.vehiculos = response.data;
-				}, 
-				error => {
-					this.errorMessage = <any>error;
-
-					if(this.errorMessage != null){
-						console.log(this.errorMessage);
-						alert("Error en la petición");
-					}
-				}
-			);
 		this._CiudadanoService.getCiudadano().subscribe(
 				response => {
 					this.ciudadanos = response.data;
@@ -84,7 +71,6 @@ export class NewCiudadanoVehiculoComponent {
 
 
 	onSubmit(){
-		console.log(this.ciudadanoVehiculo);
 		let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token).subscribe(
 			response => {

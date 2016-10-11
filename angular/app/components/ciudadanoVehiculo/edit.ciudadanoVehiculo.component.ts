@@ -69,19 +69,7 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 					}
 				}
 			);
-		this._VehiculoService.getVehiculo().subscribe(
-						response => {
-							this.vehiculos = response.data;
-						}, 
-						error => {
-							this.errorMessage = <any>error;
-
-							if(this.errorMessage != null){
-								console.log(this.errorMessage);
-								alert("Error en la petición");
-							}
-						}
-					);
+		
 				this._CiudadanoService.getCiudadano().subscribe(
 						response => {
 							this.ciudadanos = response.data;

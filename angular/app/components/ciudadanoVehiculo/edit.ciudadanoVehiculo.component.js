@@ -49,15 +49,6 @@ var CiudadanoVehiculoEditComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this._VehiculoService.getVehiculo().subscribe(function (response) {
-            _this.vehiculos = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
         this._CiudadanoService.getCiudadano().subscribe(function (response) {
             _this.ciudadanos = response.data;
             console.log(_this.ciudadanos);
