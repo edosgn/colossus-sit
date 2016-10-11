@@ -38,6 +38,13 @@ var VehiculoService = (function () {
         return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    VehiculoService.prototype.showVehiculoPlaca = function (token, placa) {
+        var json = JSON.stringify(placa);
+        var params = "json=" + json + "&authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/placa", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     VehiculoService.prototype.editVehiculo = function (vehiculo, token) {
         var json = JSON.stringify(vehiculo);
         var params = "json=" + json + "&authorization=" + token;

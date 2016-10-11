@@ -189,12 +189,20 @@ class VehiculoController extends Controller
             array('placa' => $params->placa)
             );
 
-            $responce = array(
+            if ($vehiculo!=null) {
+                $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "vehiculo", 
+                    'msj' => "vehiculo encontrado", 
                     'data'=> $vehiculo,
             );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Vehiculo no encotrado", 
+                );
+            }
         }else{
             $responce = array(
                     'status' => 'error',

@@ -42,6 +42,15 @@ export class VehiculoService {
 
 	}
 
+	showVehiculoPlaca(token,placa){
+		let json = JSON.stringify(placa);
+		let params = "json="+json+"&authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		return this._http.post(this.url+"/placa", params, {headers: headers})
+							  .map(res => res.json());
+
+	}
+
 	editVehiculo(vehiculo,token){
 
 		let json = JSON.stringify(vehiculo);

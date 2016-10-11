@@ -27,7 +27,7 @@ var AppComponent = (function () {
             selector: 'my-app',
             templateUrl: 'app/view/layout.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService]
+            providers: [login_service_1.LoginService],
         }), 
         __metadata('design:paramtypes', [login_service_1.LoginService, router_1.Router])
     ], AppComponent);

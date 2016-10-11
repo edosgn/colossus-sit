@@ -2,15 +2,14 @@
 import {Component} from '@angular/core';
 import {ROUTER_DIRECTIVES, Router, ActivatedRoute } from '@angular/router' ;
 import {LoginService} from './services/login.service'; 
-
- 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
+
     selector: 'my-app',
     templateUrl : 'app/view/layout.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService]
+    providers: [LoginService],
 })
  
 // Clase del componente donde irán los datos y funcionalidades

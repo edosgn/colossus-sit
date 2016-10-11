@@ -42,6 +42,7 @@ export class CiudadanoVehiculoService {
 
 	}
 
+
 	editCiudadanoVehiculo(ciudadanoVehiculo,token){
 
 		let json = JSON.stringify(ciudadanoVehiculo);

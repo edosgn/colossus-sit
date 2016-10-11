@@ -68,7 +68,10 @@ class CiudadanoVehiculoController extends Controller
                         $vehiculoId = $params->vehiculoId;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-                        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+                        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
+                            array('placa' => $vehiculoId)
+                        );
+                       
 
                         $ciudadanoVehiculo = new CiudadanoVehiculo();
 

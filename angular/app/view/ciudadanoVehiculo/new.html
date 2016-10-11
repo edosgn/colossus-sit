@@ -17,17 +17,18 @@
 		<div class="panel panel-primary">
 		  <div class="panel-heading">Reguistrar ciudadano vehiculo</div>
 		  <div class="panel-body">
-		  	
+
+
+		  		<div  [class]="calse">
+				  <label  class="control-label" for="inputSuccess2">{{msg}}</label>
+				  <input [(ngModel)]="ciudadanoVehiculo.vehiculoId" (blur)="onKey($event)" (keyup.enter)="onKey($event)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+				  <span [class]="claseSpan" aria-hidden="true"></span>
+				</div>
+
+	         		  	
 		  		<br>
 				<br>
 
-				<p class="col-md-6"> 
-					<label>Vehiculo:</label>
-					<select class="form-control" #vehiculoId="ngForm" ngControl="vehiculoId" [(ngModel)]="ciudadanoVehiculo.vehiculoId" required>
-					  <option *ngFor="#Vehiculo of vehiculos" [value]='Vehiculo.id' >{{Vehiculo.placa}}</option>
-					</select>
-					<span *ngIf = "!vehiculoId.valid && vehiculoId.touched" class="text-danger">el role es obligatorio</span>
-				</p>
 
 				<p class="col-md-6"> 
 					<label>Ciudadano:</label>
@@ -71,7 +72,7 @@
 		        <p class="col-md-12"> 
 		        
 			    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
-				[disabled]="!newVehiculo.valid"/>
+				[disabled]="!validate || !newVehiculo.valid"/>
 			    
 			    </p>
 		  </div>

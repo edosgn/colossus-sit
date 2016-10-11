@@ -16,6 +16,7 @@ var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var CiudadanoVehiculo_service_1 = require("../../services/CiudadanoVehiculo/CiudadanoVehiculo.service");
 var ciudadano_service_1 = require("../../services/ciudadano/ciudadano.service");
+var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewCiudadanoVehiculoComponent = (function () {
     function NewCiudadanoVehiculoComponent(_CiudadanoService, _CiudadanoVehiculoService, _VehiculoService, _loginService, _route, _router) {
@@ -28,6 +29,11 @@ var NewCiudadanoVehiculoComponent = (function () {
     }
     NewCiudadanoVehiculoComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.calse = "form-group has-feedback";
+        this.msg = "ingrese la placa";
+        this.claseSpan = "";
+        this.validate = false;
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
         this._VehiculoService.getVehiculo().subscribe(function (response) {
             _this.vehiculos = response.data;
@@ -51,6 +57,7 @@ var NewCiudadanoVehiculoComponent = (function () {
     };
     NewCiudadanoVehiculoComponent.prototype.onSubmit = function () {
         var _this = this;
+        console.log(this.ciudadanoVehiculo);
         var token = this._loginService.getToken();
         this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token).subscribe(function (response) {
             _this.respuesta = response;
@@ -62,6 +69,36 @@ var NewCiudadanoVehiculoComponent = (function () {
                     alert("Error en la petición");
                 }
             });
+        });
+    };
+    NewCiudadanoVehiculoComponent.prototype.onKey = function (event) {
+        var _this = this;
+        var token = this._loginService.getToken();
+        var values = event.target.value;
+        var placa = {
+            'placa': values,
+        };
+        this._VehiculoService.showVehiculoPlaca(token, placa).subscribe(function (response) {
+            _this.vehiculo = response.data;
+            var status = response.status;
+            if (status == 'error') {
+                _this.validate = false;
+                _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback";
+                _this.calse = "form-group has-error has-feedback";
+                _this.msg = response.msj;
+            }
+            else {
+                _this.validate = true;
+                _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback";
+                _this.calse = "form-group has-success has-feedback";
+                _this.msg = response.msj;
+            }
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
         });
     };
     NewCiudadanoVehiculoComponent = __decorate([

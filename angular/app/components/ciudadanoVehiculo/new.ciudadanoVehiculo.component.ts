@@ -6,6 +6,7 @@ import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {CiudadanoVehiculoService} from "../../services/CiudadanoVehiculo/CiudadanoVehiculo.service";
 import {CiudadanoService} from "../../services/ciudadano/ciudadano.service";
+import {Vehiculo} from '../../model/vehiculo/Vehiculo';
 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -15,15 +16,22 @@ import {CiudadanoService} from "../../services/ciudadano/ciudadano.service";
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService]
 })
+
  
 // Clase del componente donde irán los datos y funcionalidades
 export class NewCiudadanoVehiculoComponent {
 	public vehiculos;
+	public vehiculo: Vehiculo;
 	public ciudadanoVehiculo: CiudadanoVehiculo;
 	public errorMessage;
 	public token;
 	public ciudadanos;
 	public respuesta;
+	public values;
+	public calse;
+	public msg;
+	public claseSpan;
+	public validate;
 
 	constructor(
 		private _CiudadanoService: CiudadanoService,
@@ -35,7 +43,13 @@ export class NewCiudadanoVehiculoComponent {
 		
 	){}
 
+
 	ngOnInit(){
+		this.calse = "form-group has-feedback";
+		this.msg = "ingrese la placa";
+		this.claseSpan ="";
+		this.validate=false;
+     	this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 		this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
 
 		this._VehiculoService.getVehiculo().subscribe(
@@ -70,12 +84,12 @@ export class NewCiudadanoVehiculoComponent {
 
 
 	onSubmit(){
+		console.log(this.ciudadanoVehiculo);
 		let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token).subscribe(
 			response => {
 				this.respuesta = response;
 				console.log(this.respuesta);
-
 			error => {
 					this.errorMessage = <any>error;
 
@@ -87,6 +101,42 @@ export class NewCiudadanoVehiculoComponent {
 
 		});
 	}
+
+ onKey(event:any) {
+ 	let token = this._loginService.getToken();
+ 	let values = event.target.value;
+ 	let placa = {
+ 		'placa' : values,
+ 	};
+ 	this._VehiculoService.showVehiculoPlaca(token,placa).subscribe(
+				response => {
+					this.vehiculo = response.data;
+					let status = response.status;
+					if(status == 'error') {
+						this.validate=false	;
+						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback";
+						this.calse = "form-group has-error has-feedback";
+			            this.msg = response.msj;
+					}else{
+						this.validate=true;
+						this.claseSpan ="glyphicon glyphicon-ok form-control-feedback";
+						this.calse = "form-group has-success has-feedback";
+			            this.msg = response.msj;
+					}
+					
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+   
+
+  }
 
 	
  }
