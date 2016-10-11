@@ -85,7 +85,6 @@ var NewCiudadanoVehiculoComponent = (function () {
                 _this.validate = false;
                 _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback";
                 _this.calse = "form-group has-error has-feedback";
-                _this.msg = response.msj;
             }
             else {
                 _this.validate = true;

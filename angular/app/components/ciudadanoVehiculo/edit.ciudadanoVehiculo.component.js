@@ -16,6 +16,7 @@ var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var CiudadanoVehiculo_service_1 = require("../../services/CiudadanoVehiculo/CiudadanoVehiculo.service");
 var ciudadano_service_1 = require("../../services/ciudadano/ciudadano.service");
+var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var CiudadanoVehiculoEditComponent = (function () {
     function CiudadanoVehiculoEditComponent(_CiudadanoService, _CiudadanoVehiculoService, _VehiculoService, _loginService, _route, _router) {
@@ -28,14 +29,20 @@ var CiudadanoVehiculoEditComponent = (function () {
     }
     CiudadanoVehiculoEditComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.calse = "form-group has-feedback";
+        this.msg = "ingrese la placa";
+        this.claseSpan = "";
+        this.validate = false;
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
         });
         this._CiudadanoVehiculoService.showCiudadanoVehiculo(token, this.id).subscribe(function (response) {
-            var data = response.data;
-            _this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(data.id, data.ciudadano.id, data.vehiculo.id, data.licenciaTransito, data.fechaPropiedadInicial, data.fechaPropiedadFinal, data.estadoPropiedad);
+            _this.data = response.data;
+            _this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(_this.data.id, _this.data.ciudadano.id, _this.data.vehiculo.placa, _this.data.licenciaTransito, _this.data.fechaPropiedadInicial, _this.data.fechaPropiedadFinal, _this.data.estadoPropiedad);
+            _this.validate = true;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -75,6 +82,35 @@ var CiudadanoVehiculoEditComponent = (function () {
                     alert("Error en la petición");
                 }
             });
+        });
+    };
+    CiudadanoVehiculoEditComponent.prototype.onKey = function (event) {
+        var _this = this;
+        var token = this._loginService.getToken();
+        var values = event.target.value;
+        var placa = {
+            'placa': values,
+        };
+        this._VehiculoService.showVehiculoPlaca(token, placa).subscribe(function (response) {
+            _this.vehiculo = response.data;
+            var status = response.status;
+            if (status == 'error') {
+                _this.validate = false;
+                _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback";
+                _this.calse = "form-group has-error has-feedback";
+            }
+            else {
+                _this.validate = true;
+                _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback";
+                _this.calse = "form-group has-success has-feedback";
+                _this.msg = response.msj;
+            }
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
         });
     };
     CiudadanoVehiculoEditComponent = __decorate([

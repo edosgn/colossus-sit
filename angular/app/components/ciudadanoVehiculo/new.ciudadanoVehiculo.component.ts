@@ -116,7 +116,6 @@ export class NewCiudadanoVehiculoComponent {
 						this.validate=false	;
 						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback";
 						this.calse = "form-group has-error has-feedback";
-			            this.msg = response.msj;
 					}else{
 						this.validate=true;
 						this.claseSpan ="glyphicon glyphicon-ok form-control-feedback";

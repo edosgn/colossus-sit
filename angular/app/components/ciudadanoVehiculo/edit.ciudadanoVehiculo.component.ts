@@ -6,6 +6,7 @@ import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {CiudadanoVehiculoService} from "../../services/CiudadanoVehiculo/CiudadanoVehiculo.service";
 import {CiudadanoService} from "../../services/ciudadano/ciudadano.service";
+import {Vehiculo} from '../../model/vehiculo/Vehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -25,6 +26,12 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 	public ciudadanos;
 	public respuesta;
 	public id;
+	public validate;
+	public data;
+	public calse;
+	public msg;
+	public claseSpan;
+	public vehiculo: Vehiculo;
 
 	constructor(
 		private _CiudadanoService: CiudadanoService,
@@ -37,7 +44,11 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 		){}
 
 	ngOnInit(){	
-		
+		this.calse = "form-group has-feedback";
+		this.msg = "ingrese la placa";
+		this.claseSpan ="";
+		this.validate=false;
+     	this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 		this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
         let token = this._loginService.getToken();
         this._route.params.subscribe(params =>{
@@ -45,8 +56,9 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 			});
 		this._CiudadanoVehiculoService.showCiudadanoVehiculo(token,this.id).subscribe(
 				response => {
-					let data = response.data;
-					this.ciudadanoVehiculo = new CiudadanoVehiculo(data.id, data.ciudadano.id,data.vehiculo.id,data.licenciaTransito,data.fechaPropiedadInicial,data.fechaPropiedadFinal,data.estadoPropiedad);
+					this.data = response.data;
+					this.ciudadanoVehiculo = new CiudadanoVehiculo(this.data.id, this.data.ciudadano.id,this.data.vehiculo.placa,this.data.licenciaTransito,this.data.fechaPropiedadInicial,this.data.fechaPropiedadFinal,this.data.estadoPropiedad);
+					this.validate = true;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -103,6 +115,41 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 
 		});
 	}
+
+	onKey(event:any) {
+ 	let token = this._loginService.getToken();
+ 	let values = event.target.value;
+ 	let placa = {
+ 		'placa' : values,
+ 	};
+ 	this._VehiculoService.showVehiculoPlaca(token,placa).subscribe(
+				response => {
+					this.vehiculo = response.data;
+					let status = response.status;
+					if(status == 'error') {
+						this.validate=false	;
+						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback";
+						this.calse = "form-group has-error has-feedback";
+					}else{
+						this.validate=true;
+						this.claseSpan ="glyphicon glyphicon-ok form-control-feedback";
+						this.calse = "form-group has-success has-feedback";
+			            this.msg = response.msj;
+					}
+					
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+   
+
+  }
 
 
 }

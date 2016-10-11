@@ -22,9 +22,33 @@
 
 
 		  		<div  [class]="calse">
-				  <label  class="control-label" for="inputSuccess2">{{msg}}</label>
-				  <input [(ngModel)]="ciudadanoVehiculo.vehiculoId" (blur)="onKey($event)" (keyup.enter)="onKey($event)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status">
+				  <input [(ngModel)]="ciudadanoVehiculo.vehiculoId" (blur)="onKey($event)" (keyup.enter)="onKey($event)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
 				  <span [class]="claseSpan" aria-hidden="true"></span>
+				</div>
+
+				<div *ngIf="validate" class="panel panel-info">
+				  <div class="panel-heading">{{msg}}</div>
+				  <div class="panel-body">
+					    <table class="table table-bordered">
+				            <thead>
+				                <tr>
+				                    <th>Linea</th>
+				                    <th>Marca</th>
+				                    <th>Clase</th>
+				                    <th>Modelo</th>
+				                    
+				                </tr>
+				            </thead>
+				            <tbody>
+				                <tr>
+				                    <td >{{vehiculo.linea.nombre}}</td>
+				                    <td >{{vehiculo.linea.marca.nombre}}</td>
+				                    <td >{{vehiculo.clase.nombre}}</td>
+				                    <td >{{vehiculo.modelo}}</td>
+				                </tr>
+				            </tbody>
+				        </table>
+				  </div>
 				</div>
 
 	         		  	
