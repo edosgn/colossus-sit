@@ -11,6 +11,7 @@ import {CombustibleService} from '../../services/combustible/combustible.service
 import {CarroceriaService} from '../../services/carroceria/carroceria.service';
 import {OrganismoTransitoService} from '../../services/organismoTransito/organismoTransito.service';
 import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
+import {DepartamentoService} from "../../services/departamento/departamento.service";
 import {Vehiculo} from '../../model/vehiculo/Vehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -19,7 +20,7 @@ import {Vehiculo} from '../../model/vehiculo/Vehiculo';
     selector: 'register',
     templateUrl: 'app/view/vehiculo/new.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService]
+    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -35,6 +36,9 @@ export class NewVehiculoComponent {
 	public carrocerias;
 	public clases;
 	public organismosTransito;
+	public departamentos;
+	public departamento;
+	public habilitar;
 
 	constructor(
 		private _MunicipioService: MunicipioService,
@@ -42,6 +46,7 @@ export class NewVehiculoComponent {
 		private _ServicioService: ServicioService,
 		private _ColorService: ColorService,
 		private _ClaseService: ClaseService,
+		private _DepartamentoService: DepartamentoService,
 		private _CombustibleService: CombustibleService,
 		private _CarroceriaService: CarroceriaService,
 		private _OrganismoTransitoService: OrganismoTransitoService,	
@@ -52,12 +57,16 @@ export class NewVehiculoComponent {
 		
 	){}
 
-	ngOnInit(){
-		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
-		let token = this._loginService.getToken();
-		this._MunicipioService.getMunicipio().subscribe(
+	onChange(departamentoValue) {
+
+	this.departamento ={
+			"departamentoId":departamentoValue,
+	};
+    let token = this._loginService.getToken();
+    this._MunicipioService.getMunicipiosDep(this.departamento,token).subscribe(
 				response => {
 					this.municipios = response.data;
+					this.habilitar=false;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -68,6 +77,13 @@ export class NewVehiculoComponent {
 					}
 				}
 			);
+	}
+
+	ngOnInit(){
+		this.habilitar=true;
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
+		let token = this._loginService.getToken();
+		
 		this._LineaService.getLinea().subscribe(
 				response => {
 					this.lineas = response.data;
@@ -149,6 +165,19 @@ export class NewVehiculoComponent {
 		this._ClaseService.getClase().subscribe(
 				response => {
 					this.clases = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+		this._DepartamentoService.getDepartamento().subscribe(
+				response => {
+					this.departamentos = response.data;
 				}, 
 				error => {
 					this.errorMessage = <any>error;

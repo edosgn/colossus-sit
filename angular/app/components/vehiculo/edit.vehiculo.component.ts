@@ -11,6 +11,7 @@ import {CombustibleService} from '../../services/combustible/combustible.service
 import {CarroceriaService} from '../../services/carroceria/carroceria.service';
 import {OrganismoTransitoService} from '../../services/organismoTransito/organismoTransito.service';
 import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
+import {DepartamentoService} from "../../services/departamento/departamento.service";
 import {Vehiculo} from '../../model/vehiculo/Vehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -19,7 +20,7 @@ import {Vehiculo} from '../../model/vehiculo/Vehiculo';
     selector: 'default',
     templateUrl: 'app/view/vehiculo/edit.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService]
+    providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -36,9 +37,12 @@ export class VehiculoEditComponent implements OnInit{
 	public clases;
 	public organismosTransito;
 	public id;
+	public departamentos;
+	public departamento;
 
 	constructor(
 		private _MunicipioService: MunicipioService,
+		private _DepartamentoService: DepartamentoService,
 		private _LineaService: LineaService,
 		private _ServicioService: ServicioService,
 		private _ColorService: ColorService,
@@ -52,6 +56,28 @@ export class VehiculoEditComponent implements OnInit{
 		private _router: Router
 		
 		){}
+
+	onChange(departamentoValue) {
+		this.departamento ={
+			"departamentoId":departamentoValue,
+	};
+    let token = this._loginService.getToken();
+    this._MunicipioService.getMunicipiosDep(this.departamento,token).subscribe(
+				response => {
+					this.municipios = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+	
+	
+	}
 
 	ngOnInit(){	
 		
@@ -208,7 +234,21 @@ export class VehiculoEditComponent implements OnInit{
 					}
 				}
 			);
-	  
+		this._DepartamentoService.getDepartamento().subscribe(
+				response => {
+					this.departamentos = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+
+
 	} 
 
 

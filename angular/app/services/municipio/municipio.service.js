@@ -46,6 +46,14 @@ var MunicipioService = (function () {
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    MunicipioService.prototype.getMunicipiosDep = function (departamento, token) {
+        var json = JSON.stringify(departamento);
+        var params = "json=" + json + "&authorization=" + token;
+        console.log(params);
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/mun/dep", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     MunicipioService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
