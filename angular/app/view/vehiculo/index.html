@@ -11,8 +11,9 @@
         </div>
     </div>
       <div *ngIf="!vehiculos" id="contenedor">
-                 <div class="loader" id="loader">Loading...</div>
+                 <div class="loaderPrincipal" id="loaderPrincipal">Loading...</div>
         </div>
+
 	<div class="table-responsive">
     <a *ngIf="vehiculos" [routerLink]="['/vehiculo/new']" class="btn btn-success">
          Nuevo
