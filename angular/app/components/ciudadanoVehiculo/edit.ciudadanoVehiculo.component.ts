@@ -45,10 +45,9 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 
 	ngOnInit(){	
 		this.calse = "form-group has-feedback";
-		this.msg = "ingrese la placa";
+		this.msg = "vechiculo";
 		this.claseSpan ="";
 		this.validate=false;
-     	this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 		this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
         let token = this._loginService.getToken();
         this._route.params.subscribe(params =>{
@@ -57,6 +56,7 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 		this._CiudadanoVehiculoService.showCiudadanoVehiculo(token,this.id).subscribe(
 				response => {
 					this.data = response.data;
+					this.vehiculo = response.data.vehiculo;
 					this.ciudadanoVehiculo = new CiudadanoVehiculo(this.data.id, this.data.ciudadano.id,this.data.vehiculo.placa,this.data.licenciaTransito,this.data.fechaPropiedadInicial,this.data.fechaPropiedadFinal,this.data.estadoPropiedad);
 					this.validate = true;
 				}, 

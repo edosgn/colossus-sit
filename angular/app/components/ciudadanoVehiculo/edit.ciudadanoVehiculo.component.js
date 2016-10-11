@@ -16,7 +16,6 @@ var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var CiudadanoVehiculo_service_1 = require("../../services/CiudadanoVehiculo/CiudadanoVehiculo.service");
 var ciudadano_service_1 = require("../../services/ciudadano/ciudadano.service");
-var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var CiudadanoVehiculoEditComponent = (function () {
     function CiudadanoVehiculoEditComponent(_CiudadanoService, _CiudadanoVehiculoService, _VehiculoService, _loginService, _route, _router) {
@@ -30,10 +29,9 @@ var CiudadanoVehiculoEditComponent = (function () {
     CiudadanoVehiculoEditComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.calse = "form-group has-feedback";
-        this.msg = "ingrese la placa";
+        this.msg = "vechiculo";
         this.claseSpan = "";
         this.validate = false;
-        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
@@ -41,6 +39,7 @@ var CiudadanoVehiculoEditComponent = (function () {
         });
         this._CiudadanoVehiculoService.showCiudadanoVehiculo(token, this.id).subscribe(function (response) {
             _this.data = response.data;
+            _this.vehiculo = response.data.vehiculo;
             _this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(_this.data.id, _this.data.ciudadano.id, _this.data.vehiculo.placa, _this.data.licenciaTransito, _this.data.fechaPropiedadInicial, _this.data.fechaPropiedadFinal, _this.data.estadoPropiedad);
             _this.validate = true;
         }, function (error) {
