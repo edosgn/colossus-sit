@@ -241,4 +241,42 @@ class LineaController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     *busca las lineas de una marca.
+     *
+     * @Route("/lin/mar", name="linea_mar")
+     * @Method("POST")
+     */
+    public function LineaMarcaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+
+        $marcaId = $params->marcaId;
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $Lineas = $em->getRepository('AppBundle:Linea')->findBy(
+                array('marca' => $marcaId)
+            );
+
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Lineas encontradas", 
+                    'data'=> $Lineas,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }

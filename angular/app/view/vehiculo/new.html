@@ -12,7 +12,7 @@
 	</div>
 	<br>
 
-	<form #newVehiculo="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+	<form #newVehiculo="ngForm" (ngSubmit)="onSubmit()" class="col-md-12 "> 
 
 		<div class="panel panel-primary">
 		  <div class="panel-heading">Reguistrar vehiculo</div>
@@ -21,7 +21,7 @@
 		  		<br>
 				<br> 
 
-				<p class="col-md-12">  
+				<p class="col-md-6">  
 					<label>Departamento:</label>
 					<select  class="form-control" #departamentoId="ngForm"  (change)="onChange($event.target.value)" ngControl="departamentoId" required>
 					  <option *ngFor="#departamento of departamentos" [value]='departamento.id' >{{departamento.nombre}}</option>
@@ -37,15 +37,24 @@
 					<span *ngIf = "!municipioId.valid && municipioId.touched" class="text-danger">el municipop es obligatorio</span>
 				</p>
 
+
+				<p class="col-md-6"> 
+					<label>Marca:</label>
+					<select class="form-control" #marcaId="ngForm" ngControl="marcaId"  (change)="onChangeM($event.target.value)"  required>
+					  <option *ngFor="#marca of marcas" [value]='marca.id' >{{marca.nombre}}</option>
+					</select>
+					<span *ngIf = "!marcaId.valid && marcaId.touched" class="text-danger">la linea es obligatorio</span>
+				</p>
+
 				<p class="col-md-6"> 
 					<label>Linea:</label>
-					<select class="form-control" #lineaId="ngForm" ngControl="lineaId" [(ngModel)]="vehiculo.lineaId" required>
+					<select [disabled]="habilitarl" class="form-control" #lineaId="ngForm" ngControl="lineaId" [(ngModel)]="vehiculo.lineaId" required>
 					  <option *ngFor="#linea of lineas" [value]='linea.id' >{{linea.nombre}}</option>
 					</select>
 					<span *ngIf = "!lineaId.valid && lineaId.touched" class="text-danger">la linea es obligatorio</span>
 				</p>
 
-				<p class="col-md-6"> 
+				<p class="col-md-3"> 
 					<label>Servicio:</label>
 					<select class="form-control" #servicioId="ngForm" ngControl="servicioId" [(ngModel)]="vehiculo.servicioId" required>
 					  <option *ngFor="#servicio of servicios" [value]='servicio.id' >{{servicio.nombre}}</option>
@@ -53,7 +62,7 @@
 					<span *ngIf = "!servicioId.valid && servicioId.touched" class="text-danger">el servicio es obligatorio</span>
 				</p>
 
-				<p class="col-md-6"> 
+				<p class="col-md-3"> 
 					<label>Color:</label>
 					<select class="form-control" #colorId="ngForm" ngControl="colorId" [(ngModel)]="vehiculo.colorId" required>
 					  <option *ngFor="#color of colores" [value]='color.id' >{{color.nombre}}</option>
@@ -61,7 +70,7 @@
 					<span *ngIf = "!colorId.valid && colorId.touched" class="text-danger">el color es obligatorio</span>
 				</p>
 
-				<p class="col-md-6"> 
+				<p class="col-md-3"> 
 					<label>Combustible:</label>
 					<select class="form-control" #combustibleId="ngForm" ngControl="combustibleId" [(ngModel)]="vehiculo.combustibleId" required>
 					  <option *ngFor="#combustible of combustibles" [value]='combustible.id' >{{combustible.nombre}}</option>
@@ -69,7 +78,7 @@
 					<span *ngIf = "!combustibleId.valid && combustibleId.touched" class="text-danger">el combustible es obligatorio</span>
 				</p>
 
-				<p class="col-md-6"> 
+				<p class="col-md-3"> 
 					<label>Carroceria:</label>
 					<select class="form-control" #carroceriaId="ngForm" ngControl="carroceriaId" [(ngModel)]="vehiculo.carroceriaId" required>
 					  <option *ngFor="#carroceria of carrocerias" [value]='carroceria.id' >{{carroceria.nombre}}</option>
@@ -77,7 +86,7 @@
 					<span *ngIf = "!carroceriaId.valid && carroceriaId.touched" class="text-danger">la carroceria es obligatorio</span>
 				</p>
 
-				<p class="col-md-6"> 
+				<p class="col-md-3"> 
 					<label>Organismo de Transito:</label>
 					<select class="form-control" #organismoTransitoId="ngForm" ngControl="organismoTransitoId" [(ngModel)]="vehiculo.organismoTransitoId" required>
 					  <option *ngFor="#organismoTransito of organismosTransito" [value]='organismoTransito.id' >{{organismoTransito.nombre}}</option>
@@ -85,7 +94,7 @@
 					<span *ngIf = "!organismoTransitoId.valid && organismoTransitoId.touched" class="text-danger">el organismo de transito es obligatorio</span>
 				</p>
 
-				<p class="col-md-6"> 
+				<p class="col-md-3"> 
 					<label>Clases:</label>
 					<select class="form-control" #claseId="ngForm" ngControl="claseId" [(ngModel)]="vehiculo.claseId" required>
 					  <option *ngFor="#clase of clases" [value]='clase.id' >{{clase.nombre}}</option>
@@ -93,91 +102,91 @@
 					<span *ngIf = "!claseId.valid && claseId.touched" class="text-danger">la calase es obligatorio</span>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Numero de factura:</label>
 					<input #numeroFactura="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.numeroFactura" ngControl="numeroFactura"  required />
 					<span *ngIf="!numeroFactura.valid && numeroFactura.touched" style="color:red;">Numero de Factura es obligatorio</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Fecha de Factura:</label>
 					<input #fechaFactura="ngForm"  type="date" class="form-control" [(ngModel)]="vehiculo.fechaFactura" ngControl="fechaFactura"  required />
 					<span *ngIf="!fechaFactura.valid && fechaFactura.touched" style="color:red;">fechaFactura es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Valor:</label>
 					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.valor" ngControl="valor"  required />
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Numero de Manifiesto:</label>
 					<input #numeroManifiesto="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.numeroManifiesto" ngControl="numeroManifiesto"  required />
 					<span *ngIf="!numeroManifiesto.valid && numeroManifiesto.touched" style="color:red;">numeroManifiesto es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Fecha Manifiesto:</label>
 					<input #fechaManifiesto="ngForm"  type="date" class="form-control" [(ngModel)]="vehiculo.fechaManifiesto" ngControl="fechaManifiesto"  required />
 					<span *ngIf="!fechaManifiesto.valid && fechaManifiesto.touched" style="color:red;">fechaManifiesto es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Modelo:</label>
 					<input #modelo="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.modelo" ngControl="modelo"  required />
 					<span *ngIf="!modelo.valid && modelo.touched" style="color:red;">modelo es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Motor:</label>
 					<input #motor="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.motor" ngControl="motor"  required />
 					<span *ngIf="!motor.valid && motor.touched" style="color:red;">motor es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Placa:</label>
 					<input #placa="ngForm"  type="text" class="form-control" [(ngModel)]="vehiculo.placa" ngControl="placa"  required />
 					<span *ngIf="!placa.valid && placa.touched" style="color:red;">placa es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Cilindraje:</label>
 					<input #cilindraje="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.cilindraje" ngControl="cilindraje"  required />
 					<span *ngIf="!cilindraje.valid && cilindraje.touched" style="color:red;">cilindraje es obligatoria</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Chasis:</label>
 					<input #chasis="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.chasis" ngControl="chasis"  required />
 					<span *ngIf="!chasis.valid && chasis.touched" style="color:red;">chasis obligatorios</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Serie:</label>
 					<input #serie="ngForm"  type="text" class="form-control" [(ngModel)]="vehiculo.serie" ngControl="serie"  required />
 					<span *ngIf="!serie.valid && serie.touched" style="color:red;">serie obligatorios</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Vin:</label>
 					<input #vin="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.vin" ngControl="vin"  required />
 					<span *ngIf="!vin.valid && vin.touched" style="color:red;">vin obligatorios</span>
 					<br>
 				</p>
 
-				<p class="col-md-6">
+				<p class="col-md-3">
 					<label >Numero de Pasajeros:</label>
 					<input #numeroPasajeros="ngForm"  type="number" class="form-control" [(ngModel)]="vehiculo.numeroPasajeros" ngControl="numeroPasajeros"  required />
 					<span *ngIf="!numeroPasajeros.valid && numeroPasajeros.touched" style="color:red;">numeroPasajeros obligatorios</span>

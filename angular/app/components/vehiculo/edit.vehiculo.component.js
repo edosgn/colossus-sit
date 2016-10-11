@@ -22,12 +22,14 @@ var carroceria_service_1 = require('../../services/carroceria/carroceria.service
 var organismoTransito_service_1 = require('../../services/organismoTransito/organismoTransito.service');
 var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
 var departamento_service_1 = require("../../services/departamento/departamento.service");
+var marca_service_1 = require("../../services/marca/marca.service");
 var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var VehiculoEditComponent = (function () {
-    function VehiculoEditComponent(_MunicipioService, _DepartamentoService, _LineaService, _ServicioService, _ColorService, _ClaseService, _CombustibleService, _CarroceriaService, _OrganismoTransitoService, _VehiculoService, _loginService, _route, _router) {
+    function VehiculoEditComponent(_MunicipioService, _DepartamentoService, _MarcaService, _LineaService, _ServicioService, _ColorService, _ClaseService, _CombustibleService, _CarroceriaService, _OrganismoTransitoService, _VehiculoService, _loginService, _route, _router) {
         this._MunicipioService = _MunicipioService;
         this._DepartamentoService = _DepartamentoService;
+        this._MarcaService = _MarcaService;
         this._LineaService = _LineaService;
         this._ServicioService = _ServicioService;
         this._ColorService = _ColorService;
@@ -56,6 +58,22 @@ var VehiculoEditComponent = (function () {
             }
         });
     };
+    VehiculoEditComponent.prototype.onChangeM = function (marcaValue) {
+        var _this = this;
+        this.marca = {
+            "marcaId": marcaValue,
+        };
+        var token = this._loginService.getToken();
+        this._LineaService.getLineasMar(this.marca, token).subscribe(function (response) {
+            _this.lineas = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+    };
     VehiculoEditComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
@@ -64,9 +82,9 @@ var VehiculoEditComponent = (function () {
             _this.id = +params["id"];
         });
         this._VehiculoService.showVehiculo(token, this.id).subscribe(function (response) {
-            var data = response.data;
-            console.log(data);
-            _this.vehiculo = new Vehiculo_1.Vehiculo(data.id, data.clase.id, data.municipio.id, data.linea.id, data.servicio.id, data.color.id, data.combustible.id, data.carroceria.id, data.organismoTransito.id, data.placa, data.numeroFactura, data.fechaFactura, data.valor, data.numeroManifiesto, data.fechaManifiesto, data.cilindraje, data.modelo, data.motor, data.chasis, data.serie, data.vin, data.numeroPasajeros);
+            _this.data = response.data;
+            console.log(_this.data);
+            _this.vehiculo = new Vehiculo_1.Vehiculo(_this.data.id, _this.data.clase.id, _this.data.municipio.id, _this.data.linea.id, _this.data.servicio.id, _this.data.color.id, _this.data.combustible.id, _this.data.carroceria.id, _this.data.organismoTransito.id, _this.data.placa, _this.data.numeroFactura, _this.data.fechaFactura, _this.data.valor, _this.data.numeroManifiesto, _this.data.fechaManifiesto, _this.data.cilindraje, _this.data.modelo, _this.data.motor, _this.data.chasis, _this.data.serie, _this.data.vin, _this.data.numeroPasajeros);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -76,15 +94,6 @@ var VehiculoEditComponent = (function () {
         });
         this._MunicipioService.getMunicipio().subscribe(function (response) {
             _this.municipios = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
-        this._LineaService.getLinea().subscribe(function (response) {
-            _this.lineas = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -103,6 +112,15 @@ var VehiculoEditComponent = (function () {
         });
         this._ColorService.getColor().subscribe(function (response) {
             _this.colores = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+        this._LineaService.getLinea().subscribe(function (response) {
+            _this.lineas = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -155,6 +173,15 @@ var VehiculoEditComponent = (function () {
                 alert("Error en la petición");
             }
         });
+        this._MarcaService.getMarca().subscribe(function (response) {
+            _this.marcas = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
     };
     VehiculoEditComponent.prototype.onSubmit = function () {
         var _this = this;
@@ -175,9 +202,9 @@ var VehiculoEditComponent = (function () {
             selector: 'default',
             templateUrl: 'app/view/vehiculo/edit.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, municipio_service_1.MunicipioService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, clase_service_1.ClaseService, departamento_service_1.DepartamentoService]
+            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, municipio_service_1.MunicipioService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, clase_service_1.ClaseService, departamento_service_1.DepartamentoService, marca_service_1.MarcaService]
         }), 
-        __metadata('design:paramtypes', [municipio_service_1.MunicipioService, departamento_service_1.DepartamentoService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, clase_service_1.ClaseService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [municipio_service_1.MunicipioService, departamento_service_1.DepartamentoService, marca_service_1.MarcaService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, clase_service_1.ClaseService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], VehiculoEditComponent);
     return VehiculoEditComponent;
 }());

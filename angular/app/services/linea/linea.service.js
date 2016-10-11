@@ -45,6 +45,14 @@ var LineaService = (function () {
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    LineaService.prototype.getLineasMar = function (marca, token) {
+        var json = JSON.stringify(marca);
+        var params = "json=" + json + "&authorization=" + token;
+        console.log(params);
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/lin/mar", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     LineaService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])
