@@ -50,6 +50,7 @@ var NewVehiculoComponent = (function () {
         var token = this._loginService.getToken();
         this._MunicipioService.getMunicipiosDep(this.departamento, token).subscribe(function (response) {
             _this.municipios = response.data;
+            _this.vehiculo.municipioId = _this.municipios[0].id;
             _this.habilitar = false;
         }, function (error) {
             _this.errorMessage = error;
@@ -67,6 +68,7 @@ var NewVehiculoComponent = (function () {
         var token = this._loginService.getToken();
         this._LineaService.getLineasMar(this.marca, token).subscribe(function (response) {
             _this.lineas = response.data;
+            _this.vehiculo.lineaId = _this.lineas[0].id;
             _this.habilitarl = false;
         }, function (error) {
             _this.errorMessage = error;

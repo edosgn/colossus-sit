@@ -71,6 +71,7 @@ export class NewVehiculoComponent {
     this._MunicipioService.getMunicipiosDep(this.departamento,token).subscribe(
 				response => {
 					this.municipios = response.data;
+					this.vehiculo.municipioId=this.municipios[0].id;
 					this.habilitar=false;
 				}, 
 				error => {
@@ -92,6 +93,7 @@ export class NewVehiculoComponent {
     this._LineaService.getLineasMar(this.marca,token).subscribe(
 				response => {
 					this.lineas = response.data;
+					this.vehiculo.lineaId=this.lineas[0].id;
 					this.habilitarl=false;
 				}, 
 				error => {
