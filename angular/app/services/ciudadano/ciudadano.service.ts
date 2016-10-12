@@ -51,5 +51,15 @@ export class CiudadanoService {
 							  .map(res => res.json());
 
 	}
+
+	showCiudadanoCedula(token,ciudadano){
+		
+		let json = JSON.stringify(ciudadano);
+		let params = "json="+json+"&authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+ 			return this._http.post(this.url+"/cedula", params, {headers: headers})
+							  .map(res => res.json());
+
+	}
 	
 }

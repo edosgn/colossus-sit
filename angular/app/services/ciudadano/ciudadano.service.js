@@ -45,6 +45,13 @@ var CiudadanoService = (function () {
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    CiudadanoService.prototype.showCiudadanoCedula = function (token, ciudadano) {
+        var json = JSON.stringify(ciudadano);
+        var params = "json=" + json + "&authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/cedula", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     CiudadanoService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])

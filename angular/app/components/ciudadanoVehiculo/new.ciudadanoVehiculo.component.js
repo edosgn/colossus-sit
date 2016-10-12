@@ -17,6 +17,7 @@ var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehicu
 var CiudadanoVehiculo_service_1 = require("../../services/CiudadanoVehiculo/CiudadanoVehiculo.service");
 var ciudadano_service_1 = require("../../services/ciudadano/ciudadano.service");
 var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
+var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewCiudadanoVehiculoComponent = (function () {
     function NewCiudadanoVehiculoComponent(_CiudadanoService, _CiudadanoVehiculoService, _VehiculoService, _loginService, _route, _router) {
@@ -35,6 +36,7 @@ var NewCiudadanoVehiculoComponent = (function () {
         this.validate = false;
         this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
+        this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this._CiudadanoService.getCiudadano().subscribe(function (response) {
             _this.ciudadanos = response.data;
             console.log(_this.ciudadanos);
@@ -81,6 +83,35 @@ var NewCiudadanoVehiculoComponent = (function () {
                 _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback";
                 _this.calse = "form-group has-success has-feedback";
                 _this.msg = response.msj;
+            }
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+    };
+    NewCiudadanoVehiculoComponent.prototype.onKeyCiudadano = function (event) {
+        var _this = this;
+        var token = this._loginService.getToken();
+        var values = event.target.value;
+        var ciudadano = {
+            'numeroIdentificacion': values,
+        };
+        this._CiudadanoService.showCiudadanoCedula(token, ciudadano).subscribe(function (response) {
+            _this.ciudadano = response.data;
+            var status = response.status;
+            if (status == 'error') {
+                _this.validateCedula = false;
+                _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
+                _this.calseCedula = "form-group has-error has-feedback";
+            }
+            else {
+                _this.validateCedula = true;
+                _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
+                _this.calseCedula = "form-group has-success has-feedback";
+                _this.msgCiudadano = response.msj;
             }
         }, function (error) {
             _this.errorMessage = error;

@@ -165,12 +165,22 @@ class CiudadanoController extends Controller
             array('numeroIdentificacion' => $params->numeroIdentificacion)
             );
 
-            $responce = array(
+            if ($ciudadano!=null) {
+                $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "cuidadano", 
                     'data'=> $ciudadano,
             );
+            }else{
+                 $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Identificacion no encontrada en la base de datos", 
+                );
+            }
+
+            
         }else{
             $responce = array(
                     'status' => 'error',
@@ -295,4 +305,5 @@ class CiudadanoController extends Controller
             ->getForm()
         ;
     }
+
 }

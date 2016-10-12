@@ -46,18 +46,41 @@
 						                    <td >{{vehiculo.clase.nombre}}</td>
 						                    <td >{{vehiculo.modelo}}</td>
 						                </tr>
-						            </tbody>
+						            </tbody> 
 						        </table>
 						  </div>
 						</div>
 
-						<p *ngIf="validate" class="col-md-12"> 
-							<label>Ciudadano:</label>
-							<select class="form-control" #ciudadanoId="ngForm" ngControl="ciudadanoId" [(ngModel)]="ciudadanoVehiculo.ciudadanoId" required>
-							  <option *ngFor="#ciudadano of ciudadanos" [value]='ciudadano.id' >{{ciudadano.nombres}}</option>
-							</select>
-							<span *ngIf = "!ciudadanoId.valid && ciudadanoId.touched" class="text-danger">el role es obligatorio</span>
-						</p>
+
+						<div  [class]="calseCedula">
+						  <input [disabled]="!validate" [(ngModel)]="ciudadanoVehiculo.ciudadanoId" (blur)="onKeyCiudadano($event)" (keyup.enter)="onKeyCiudadano($event)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Numero de Identificacion ciudadano">
+						  <span [class]="claseSpanCedula" aria-hidden="true"></span>
+						</div>
+
+						<div *ngIf="validateCedula" class="panel panel-info">
+						  <div class="panel-heading">{{msgCiudadano}} encontrado</div>
+						  <div class="panel-body">
+							    <table class="table table-bordered">
+						            <thead>
+						                <tr>
+						                    <th>nombre</th>
+						                    <th>apellido</th>
+						                    <th>direccion</th>
+						                    <th>correo</th>
+						                    
+						                </tr>
+						            </thead>
+						            <tbody>
+						                <tr>
+						                    <td >{{ciudadano.nombres}}</td>
+						                    <td >{{ciudadano.apellidos}}</td>
+						                    <td >{{ciudadano.direccion}}</td>
+						                    <td >{{ciudadano.correo}}</td>
+						                </tr>
+						            </tbody> 
+						        </table>
+						  </div>
+						</div>
 				</div>
 
 			    <div class="col-md-6">
@@ -97,7 +120,7 @@
 				        <p class="col-md-12"> 
 				        
 					    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
-						[disabled]="!validate || !newVehiculo.valid"/>
+						[disabled]="!validate || !newVehiculo.valid || !validateCedula"/>
 					    
 					    </p>
 			    </div>			

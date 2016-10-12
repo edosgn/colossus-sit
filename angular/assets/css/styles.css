@@ -1,4 +1,7 @@
-
+.main{
+  	margin-top: 65px;
+ }
+ 
 .loaderPrincipal,
 .loaderPrincipal:before,
 .loaderPrincipal:after {
@@ -17,9 +20,13 @@
 .loaderPrincipal:before {
   left: -1.5em;
 }
+
+.contenedorCarga {
+  margin-top: 19%; !important 
+}
 .loaderPrincipal {
   text-indent: -9999em;
-  margin: 40% auto;
+  margin: 28% auto;
   position: relative;
   font-size: 11px;
   -webkit-animation-delay: 0.16s;
