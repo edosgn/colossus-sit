@@ -24,21 +24,21 @@ class TramiteGeneral
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroQpl", type="integer")
+     * @ORM\Column(name="numero_qpl", type="integer")
      */
     private $numeroQpl;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaInicial", type="date")
+     * @ORM\Column(name="fecha_inicial", type="date")
      */
     private $fechaInicial;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaFinal", type="date")
+     * @ORM\Column(name="fecha_final", type="date")
      */
     private $fechaFinal;
 
@@ -59,14 +59,14 @@ class TramiteGeneral
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroLicencia", type="integer")
+     * @ORM\Column(name="numero_licencia", type="integer")
      */
     private $numeroLicencia;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroSustrato", type="integer")
+     * @ORM\Column(name="numero_sustrato", type="integer")
      */
     private $numeroSustrato;
 

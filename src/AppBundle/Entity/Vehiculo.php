@@ -31,14 +31,14 @@ class Vehiculo
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroFactura", type="integer")
+     * @ORM\Column(name="numero_factura", type="integer")
      */
     private $numeroFactura;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaFactura", type="datetime")
+     * @ORM\Column(name="fecha_factura", type="datetime")
      */
     private $fechaFactura;
 
@@ -52,14 +52,14 @@ class Vehiculo
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroManifiesto", type="string", length=255)
+     * @ORM\Column(name="numero_manifiesto", type="string", length=255)
      */
     private $numeroManifiesto;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaManifiesto", type="datetime")
+     * @ORM\Column(name="fecha_manifiesto", type="datetime")
      */
     private $fechaManifiesto;
 
@@ -108,7 +108,7 @@ class Vehiculo
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroPasajeros", type="integer")
+     * @ORM\Column(name="numero_pasajeros", type="integer")
      */
     private $numeroPasajeros;
 

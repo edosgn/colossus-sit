@@ -31,7 +31,7 @@ class Linea
     /**
      * @var int
      *
-     * @ORM\Column(name="codigoMt", type="integer")
+     * @ORM\Column(name="codigo_mt", type="integer")
      */
     private $codigoMt;
 

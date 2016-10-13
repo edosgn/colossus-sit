@@ -31,14 +31,14 @@ class Pago
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaPago", type="datetime")
+     * @ORM\Column(name="fecha_pago", type="datetime")
      */
     private $fechaPago;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="horaPago", type="time")
+     * @ORM\Column(name="hora_pago", type="time")
      */
     private $horaPago;
 

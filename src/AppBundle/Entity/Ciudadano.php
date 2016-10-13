@@ -24,7 +24,7 @@ class Ciudadano
      /**
      * @var int
      *
-     * @ORM\Column(name="numeroIdentificacion", type="integer")
+     * @ORM\Column(name="numero_identificacion", type="integer")
      */
     private $numeroIdentificacion;
 

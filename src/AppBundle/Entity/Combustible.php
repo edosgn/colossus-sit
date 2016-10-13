@@ -31,7 +31,7 @@ class Combustible
     /**
      * @var int
      *
-     * @ORM\Column(name="codigoMt", type="integer", unique=true)
+     * @ORM\Column(name="codigo_mt", type="integer", unique=true)
      */ 
     private $codigoMt;
 

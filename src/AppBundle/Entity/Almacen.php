@@ -24,14 +24,14 @@ class Almacen
     /**
      * @var int
      *
-     * @ORM\Column(name="rangoInicio", type="integer")
+     * @ORM\Column(name="rango_inicio", type="integer")
      */
     private $rangoInicio;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="rangoFin", type="integer")
+     * @ORM\Column(name="rango_fin", type="integer")
      */
     private $rangoFin;
 

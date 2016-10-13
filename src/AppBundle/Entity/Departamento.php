@@ -38,7 +38,7 @@ class Departamento
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoDian", type="string", length=255)
+     * @ORM\Column(name="codigo_dian", type="string", length=255)
      */
     private $codigoDian;
 

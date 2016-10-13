@@ -24,28 +24,28 @@ class CiudadanoVehiculo
       /**
      * @var string
      *
-     * @ORM\Column(name="licenciaTransito", type="string", length=255)
+     * @ORM\Column(name="licencia_transito", type="string", length=255)
      */
     private $licenciaTransito;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaPropiedadInicial", type="datetime")
+     * @ORM\Column(name="fecha_propiedad_inicial", type="datetime")
      */
     private $fechaPropiedadInicial;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaPropiedadFinal", type="datetime")
+     * @ORM\Column(name="fecha_propiedad_final", type="datetime")
      */
     private $fechaPropiedadFinal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estadoPropiedad", type="string", length=255)
+     * @ORM\Column(name="estado_propiedad", type="string", length=255)
      */
     private $estadoPropiedad;
 

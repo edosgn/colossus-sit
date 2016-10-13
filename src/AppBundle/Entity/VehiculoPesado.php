@@ -31,28 +31,28 @@ class VehiculoPesado
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroEjes", type="integer")
+     * @ORM\Column(name="numero_ejes", type="integer")
      */
     private $numeroEjes;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroMt", type="integer")
+     * @ORM\Column(name="numero_mt", type="integer")
      */
     private $numeroMt;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fichaTecnicaHomologacionCarroceria", type="string", length=255)
+     * @ORM\Column(name="fichaTecnica_homologacion_carroceria", type="string", length=255)
      */
     private $fichaTecnicaHomologacionCarroceria;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fichaTecnicaHomologacionChasis", type="string", length=255)
+     * @ORM\Column(name="fichaTecnica_homologacion_chasis", type="string", length=255)
      */
     private $fichaTecnicaHomologacionChasis;
 
