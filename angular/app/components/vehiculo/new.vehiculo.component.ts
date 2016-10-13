@@ -14,12 +14,15 @@ import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
 import {DepartamentoService} from "../../services/departamento/departamento.service";
 import {MarcaService} from "../../services/marca/marca.service";
 import {Vehiculo} from '../../model/vehiculo/Vehiculo';
+
+
+
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'register',
-    templateUrl: 'app/view/vehiculo/new.html',
+    template: 'as{{saludo}}',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService,MarcaService]
 })

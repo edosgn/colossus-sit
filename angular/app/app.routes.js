@@ -96,6 +96,7 @@ var new_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/
 var edit_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component");
 var index_SeleccionarTramite_component_1 = require("./components/SeleccionarTramite/index.SeleccionarTramite.component");
 var index_tramiteCambioColor_component_1 = require("./components/tipoTramite/tramiteCambioColor/index.tramiteCambioColor.component");
+var index_subirCarpeta_component_1 = require("./components/SubirCarpeta/index.subirCarpeta.component");
 exports.routes = [
     {
         path: '',
@@ -199,6 +200,7 @@ exports.routes = [
     { path: 'ciudadanoVehiculo/show/:id', component: edit_ciudadanoVehiculo_component_1.CiudadanoVehiculoEditComponent },
     { path: 'seleccionarTramite/index', component: index_SeleccionarTramite_component_1.IndexSeleccionarTramiteComponent },
     { path: 'tramiteCambioColor/:tramiteId', component: index_tramiteCambioColor_component_1.IndexTramiteCambioColorComponent },
+    { path: 'subirCarpeta/index', component: index_subirCarpeta_component_1.IndexSubirCarpetaComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

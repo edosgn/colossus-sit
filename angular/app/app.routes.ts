@@ -127,6 +127,8 @@ import { CiudadanoVehiculoEditComponent } from "./components/ciudadanoVehiculo/e
 import { IndexSeleccionarTramiteComponent } from "./components/SeleccionarTramite/index.SeleccionarTramite.component";
 import { IndexTramiteCambioColorComponent } from "./components/tipoTramite/tramiteCambioColor/index.tramiteCambioColor.component";
 
+import { IndexSubirCarpetaComponent } from "./components/SubirCarpeta/index.subirCarpeta.component";
+
 
 
 
@@ -266,6 +268,8 @@ export const routes: RouterConfig = [
 
      { path: 'seleccionarTramite/index', component: IndexSeleccionarTramiteComponent},
      { path: 'tramiteCambioColor/:tramiteId', component: IndexTramiteCambioColorComponent},
+
+     { path: 'subirCarpeta/index', component: IndexSubirCarpetaComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

@@ -192,7 +192,7 @@ var NewVehiculoComponent = (function () {
     NewVehiculoComponent = __decorate([
         core_1.Component({
             selector: 'register',
-            templateUrl: 'app/view/vehiculo/new.html',
+            template: 'as{{saludo}}',
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, municipio_service_1.MunicipioService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, clase_service_1.ClaseService, departamento_service_1.DepartamentoService, marca_service_1.MarcaService]
         }), 
