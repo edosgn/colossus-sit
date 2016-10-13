@@ -124,6 +124,9 @@ import { IndexCiudadanoVehiculoComponent } from "./components/ciudadanoVehiculo/
 import { NewCiudadanoVehiculoComponent } from "./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component";
 import { CiudadanoVehiculoEditComponent } from "./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component";
 
+import { IndexSeleccionarTramiteComponent } from "./components/SeleccionarTramite/index.SeleccionarTramite.component";
+import { IndexTramiteCambioColorComponent } from "./components/tipoTramite/tramiteCambioColor/index.tramiteCambioColor.component";
+
 
 
 
@@ -260,6 +263,9 @@ export const routes: RouterConfig = [
      { path: 'ciudadanoVehiculo/index', component: IndexCiudadanoVehiculoComponent},
      { path: 'ciudadanoVehiculo/new', component: NewCiudadanoVehiculoComponent},
      { path: 'ciudadanoVehiculo/show/:id', component: CiudadanoVehiculoEditComponent},
+
+     { path: 'seleccionarTramite/index', component: IndexSeleccionarTramiteComponent},
+     { path: 'tramiteCambioColor/:tramiteId', component: IndexTramiteCambioColorComponent},
 ];
 
 export const APP_ROUTER_PROVIDERS = [

@@ -236,4 +236,48 @@ class TramiteController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Deletes a Tramite entity.
+     *
+     * @Route("/TramitesModulo/{id}", name="tramite_modulo")
+     * @Method("POST")
+     */
+    public function TramitesModulo(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();
+
+            $tramites = $em->getRepository('AppBundle:Tramite')->findBy(
+            array('modulo' => $id)
+            );
+
+            if ($tramites != null) {
+               $responce = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Tramites encontrados", 
+                        'data' => $tramites, 
+                );
+            }else{
+                $responce = array( 
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Aun no hay tramites", 
+                );
+            }
+
+            
+        }else{
+            $responce = array( 
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }

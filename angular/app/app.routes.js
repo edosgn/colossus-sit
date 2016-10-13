@@ -94,6 +94,8 @@ var edit_vehiculoPesado_component_1 = require("./components/vehiculoPesado/edit.
 var index_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/index.ciudadanoVehiculo.component");
 var new_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/new.ciudadanoVehiculo.component");
 var edit_ciudadanoVehiculo_component_1 = require("./components/ciudadanoVehiculo/edit.ciudadanoVehiculo.component");
+var index_SeleccionarTramite_component_1 = require("./components/SeleccionarTramite/index.SeleccionarTramite.component");
+var index_tramiteCambioColor_component_1 = require("./components/tipoTramite/tramiteCambioColor/index.tramiteCambioColor.component");
 exports.routes = [
     {
         path: '',
@@ -195,6 +197,8 @@ exports.routes = [
     { path: 'ciudadanoVehiculo/index', component: index_ciudadanoVehiculo_component_1.IndexCiudadanoVehiculoComponent },
     { path: 'ciudadanoVehiculo/new', component: new_ciudadanoVehiculo_component_1.NewCiudadanoVehiculoComponent },
     { path: 'ciudadanoVehiculo/show/:id', component: edit_ciudadanoVehiculo_component_1.CiudadanoVehiculoEditComponent },
+    { path: 'seleccionarTramite/index', component: index_SeleccionarTramite_component_1.IndexSeleccionarTramiteComponent },
+    { path: 'tramiteCambioColor/:tramiteId', component: index_tramiteCambioColor_component_1.IndexTramiteCambioColorComponent },
 ];
 exports.APP_ROUTER_PROVIDERS = [
     router_1.provideRouter(exports.routes)

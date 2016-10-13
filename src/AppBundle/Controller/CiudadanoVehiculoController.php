@@ -251,4 +251,49 @@ class CiudadanoVehiculoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * busca los ciudadanos por vehiculo.
+     *
+     * @Route("/ciudadano/vehiculo/{id}", name="ciudadano_vehiculo_show")
+     * @Method("POST")
+     */
+    public function ciudadanoVehiculoAction(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $ciudadanoVehiculo = $em->getRepository('AppBundle:CiudadanoVehiculo')->findBy(
+            array('vehiculo' => $id,
+                    'estado' => 1
+                )
+            );
+
+            if ($ciudadanoVehiculo!=null) {
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "ciudadano para vehiculo", 
+                    'data'=> $ciudadanoVehiculo,
+                );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "este vehiculo no tiene propietarios asignados", 
+                );
+            }
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }

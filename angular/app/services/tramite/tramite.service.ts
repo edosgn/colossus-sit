@@ -51,5 +51,14 @@ export class TramiteService {
 							  .map(res => res.json());
 
 	}
+
+	TramitesModulo(moduloId,token){
+
+		let params = "authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+ 			return this._http.post(this.url+"/TramitesModulo/"+moduloId, params, {headers: headers})
+							  .map(res => res.json());
+
+	}
 	
 }

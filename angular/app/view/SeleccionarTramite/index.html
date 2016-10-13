@@ -1,0 +1,34 @@
+<style>
+ .bloc { display:inline-block; vertical-align:top; overflow:hidden; border:solid grey 1px; }
+ .bloc select { padding:10px; margin:-5px -20px -5px -5px; }
+</style>
+
+	<div class="panel panel-primary">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">Modulos</h3>
+	  </div>
+	  <div class="panel-body">
+	    <select multiple class="form-control bloc" (change)="onChangeModulo($event.target.value)">
+		  <option *ngFor="#modulo of modulos" [value]='modulo.id' >{{modulo.nombre}} ({{modulo.abreviatura}})</option>
+		</select>
+	  </div>
+	</div>
+
+	<div *ngIf="activar" class="alert alert-danger alert-dismissible" role="alert">
+	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	  <strong>Uups!</strong> {{respuesta.msj}}
+	</div>
+
+    <div *ngIf="tramites" class="panel panel-info">
+	  <div class="panel-heading">
+	    <h3 class="panel-title">{{respuesta.msj}} para {{tramites[0].modulo.abreviatura}}</h3>
+	  </div>
+	  <div class="panel-body">
+	    <select multiple class="form-control bloc" (change)="onChangeTramite($event.target.value)">
+		  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
+		</select>
+	  </div>
+	</div>
+
+
+

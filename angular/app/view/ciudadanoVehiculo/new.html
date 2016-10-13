@@ -1,4 +1,4 @@
-<div class="col-md-12">
+ <div class="col-md-12">
 	
     <div class="identity-data" *ngIf="respuesta">
 		<div class="user-identity alert alert-danger" *ngIf="respuesta.status == 'error'">
@@ -50,7 +50,6 @@
 						        </table>
 						  </div>
 						</div>
-
 
 						<div  [class]="calseCedula">
 						  <input [disabled]="!validate" [(ngModel)]="ciudadanoVehiculo.ciudadanoId" (blur)="onKeyCiudadano($event)" (keyup.enter)="onKeyCiudadano($event)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Numero de Identificacion ciudadano">
