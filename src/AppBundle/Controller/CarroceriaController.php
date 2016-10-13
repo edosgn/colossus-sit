@@ -249,4 +249,50 @@ class CarroceriaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * encuentra las carrocerias de una clase.
+     *
+     * @Route("/clase/{id}", name="carroceria_clase")
+     * @Method("POST")
+     */
+    public function carroceriaClaseAction(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $carrocerias = $em->getRepository('AppBundle:Carroceria')->findBy(
+                array(
+                'estado' => 1,
+                'clase' => $id
+                )
+            );
+
+            if ($carrocerias != null) {
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Carroceria encontrada", 
+                    'data'=> $carrocerias,
+                 );
+            }else{
+                 $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "no existen carrocerias para esta clase", 
+                );
+            }
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }

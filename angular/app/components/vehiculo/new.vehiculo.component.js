@@ -78,10 +78,27 @@ var NewVehiculoComponent = (function () {
             }
         });
     };
+    NewVehiculoComponent.prototype.onChangeC = function (claseValue) {
+        var _this = this;
+        var token = this._loginService.getToken();
+        this._CarroceriaService.getCarroceriasClase(claseValue, token).subscribe(function (response) {
+            _this.carrocerias = response.data;
+            _this.vehiculo.carroceriaId = _this.carrocerias[0].id;
+            _this.habilitarc = false;
+            console.log(_this.carrocerias);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+    };
     NewVehiculoComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.habilitar = true;
         this.habilitarl = true;
+        this.habilitarc = true;
         this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         var token = this._loginService.getToken();
         this._ServicioService.getServicio().subscribe(function (response) {

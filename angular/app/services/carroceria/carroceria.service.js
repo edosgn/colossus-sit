@@ -45,6 +45,12 @@ var CarroceriaService = (function () {
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    CarroceriaService.prototype.getCarroceriasClase = function (calseId, token) {
+        var params = "authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/clase/" + calseId, params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     CarroceriaService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])

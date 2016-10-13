@@ -41,6 +41,7 @@ export class NewVehiculoComponent {
 	public departamento;
 	public habilitar;
 	public habilitarl;
+	public habilitarc;
 	public marcas;
 	public marca;
 
@@ -106,10 +107,30 @@ export class NewVehiculoComponent {
 				}
 			);
 	}
+	onChangeC(claseValue) {
+    let token = this._loginService.getToken();
+    this._CarroceriaService.getCarroceriasClase(claseValue,token).subscribe(
+				response => {
+					this.carrocerias = response.data;
+					this.vehiculo.carroceriaId=this.carrocerias[0].id;
+					this.habilitarc=false;
+					console.log(this.carrocerias);
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+	}
 
 	ngOnInit(){
 		this.habilitar=true;
 		this.habilitarl=true;
+		this.habilitarc=true;
 		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 		let token = this._loginService.getToken();
 		

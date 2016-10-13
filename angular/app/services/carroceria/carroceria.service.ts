@@ -51,5 +51,15 @@ export class CarroceriaService {
 							  .map(res => res.json());
 
 	}
+
+	getCarroceriasClase(calseId,token){
+
+
+		let params = "authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+ 			return this._http.post(this.url+"/clase/"+calseId, params, {headers: headers})
+							  .map(res => res.json());
+
+	}
 	
 }
