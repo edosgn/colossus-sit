@@ -294,28 +294,4 @@ class TramiteGeneral
     {
         return $this->vehiculo;
     }
-
-    /**
-     * Set estadoTramite
-     *
-     * @param integer $estadoTramite
-     *
-     * @return TramiteGeneral
-     */
-    public function setEstadoTramite($estadoTramite)
-    {
-        $this->estadoTramite = $estadoTramite;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoTramite
-     *
-     * @return integer
-     */
-    public function getEstadoTramite()
-    {
-        return $this->estadoTramite;
-    }
 }
