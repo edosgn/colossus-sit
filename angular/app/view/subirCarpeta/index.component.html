@@ -6,7 +6,6 @@
 	  <input [(ngModel)]="placa.placa" (blur)="onKey($placa)" (keyup.enter)="onKey($placa)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
 	  <span [class]="claseSpan" aria-hidden="true"></span>
 	</div>
-	 <button type="button" class="glyphicon glyphicon-ok"></button>
 	 
 
 
@@ -18,7 +17,7 @@
 <h1>{{resive}}</h1>
 
 
-<div *ngIf="validate" class="col-md-6">
+<div *ngIf="validate" class="col-md-12">
 	<div class="panel panel-info">
 	  <div class="panel-heading">{{msg}}</div>
 	  <div class="panel-body">
@@ -47,10 +46,92 @@
 
 	
 
-<div *ngIf="activar" class="col-md-6">
+<div *ngIf="activar" class="col-md-12">
 	<div  class="panel panel-info">
 	  <div class="panel-heading">ciudadanos asosiados a este vehiculo</div>
 	  <div class="panel-body">
+	  			<div  [class]="calseCedula">
+				  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion Ciudadano">
+				  <span [class]="claseSpanCedula" aria-hidden="true"></span>
+				</div>
+				<br>
+
+				<form *ngIf="validateCedula" #newVehiculo="ngForm" (ngSubmit)="VehiculoCiudadano()" class="col-md-12"> 
+						<div class="panel panel-primary">
+						  <div class="panel-heading">Reguistrar ciudadano vehiculo</div>
+						  <div class="panel-body">
+
+								<div class="col-md-12">
+
+										<div  class="panel panel-info">
+										  <div class="panel-heading">{{msgCiudadano}} encontrado</div>
+										  <div class="panel-body">
+											    <table class="table table-bordered">
+										            <thead>
+										                <tr>
+										                    <th>nombre</th>
+										                    <th>apellido</th>
+										                    <th>direccion</th>
+										                    <th>correo</th>
+										                    
+										                </tr>
+										            </thead>
+										            <tbody>
+										                <tr>
+										                    <td >{{ciudadano.nombres}}</td>
+										                    <td >{{ciudadano.apellidos}}</td>
+										                    <td >{{ciudadano.direccion}}</td>
+										                    <td >{{ciudadano.correo}}</td>
+										                </tr>
+										            </tbody> 
+										        </table>
+										  </div>
+										</div>
+								</div>
+
+
+										<p class="col-md-6">
+											<label >licencia transito:</label>
+											<input #licenciaTransito="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.licenciaTransito" ngControl="licenciaTransito"  required />
+											<span *ngIf="!licenciaTransito.valid && licenciaTransito.touched" style="color:red;">licenciaTransito obligatorios</span>
+											<br>
+										</p>
+
+
+										<p class="col-md-6">
+										    <label >fecha Propiedad Inicial:</label>
+											<input type="date" class="form-control" #fechaPropiedadInicial="ngForm" ngControl="fechaPropiedadInicial" [(ngModel)]="ciudadanoVehiculo.fechaPropiedadInicial"  required />
+											<span *ngIf="!fechaPropiedadInicial.valid && fechaPropiedadInicial.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+										</p>
+										<div class="clearfix"></div>
+
+
+										<p class="col-md-6">
+										    <label >fecha Propiedad Final:</label>
+											<input type="date" class="form-control" #fechaPropiedadFinal="ngForm" ngControl="fechaPropiedadFinal" [(ngModel)]="ciudadanoVehiculo.fechaPropiedadFinal"  required />
+											<span *ngIf="!fechaPropiedadFinal.valid && fechaPropiedadFinal.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+										</p>
+
+										<p class="col-md-6">
+										    <label >estado Propiedad:</label>
+											<input #estadoPropiedad="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.estadoPropiedad" ngControl="estadoPropiedad"  required />
+											<span *ngIf="!estadoPropiedad.valid && estadoPropiedad.touched" style="color:red;">estadoPropiedad obligatorios</span>
+											<br>
+										</p>
+
+											
+										<br>
+								        <p class="col-md-12"> 
+								        
+									    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+										[disabled]="!validate || !newVehiculo.valid || !validateCedula"/>
+									    
+									    </p>
+								
+						  </div>
+						</div>
+				</form>
+
 		    <table class="table table-bordered">
 	            <thead>
 	                <tr>
@@ -72,12 +153,11 @@
 	                </tr>
 	            </tbody> 
 	        </table>
-	        <a [routerLink]="['/ciudadano/new']" class="btn btn-success">
-         		Nuevo
-    		</a>
 	  </div>
 	</div>
 </div>	
+
+
 <!-- Button trigger modal-->
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
   Launch demo modal

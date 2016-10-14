@@ -20,7 +20,7 @@
 		  		<br>
 				<br> 
 
-				<p class="col-md-3">
+				<p class="col-md-12">
 					<label >Placa:</label>
 					<input #placa="ngForm"  type="text" class="form-control" [(ngModel)]="vehiculo.placa" ngControl="placa"  required />
 					<span *ngIf="!placa.valid && placa.touched" style="color:red;">placa es obligatoria</span>
