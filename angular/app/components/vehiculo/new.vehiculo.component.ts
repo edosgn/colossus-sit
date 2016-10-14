@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {MunicipioService} from '../../services/municipio/municipio.service';
@@ -22,7 +22,7 @@ import {Vehiculo} from '../../model/vehiculo/Vehiculo';
 
 @Component({
     selector: 'register',
-    template: 'as{{saludo}}',
+    templateUrl: 'app/view/vehiculo/new.component.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,VehiculoService,MunicipioService,LineaService,ServicioService,ColorService,CombustibleService,CarroceriaService,OrganismoTransitoService,ClaseService,DepartamentoService,MarcaService]
 })
@@ -47,6 +47,9 @@ export class NewVehiculoComponent {
 	public habilitarc;
 	public marcas;
 	public marca;
+	@Input() placaIngresada = '';
+	@Output() vheiculoCreado = new EventEmitter<any>();
+
 
 	constructor(
 		private _MunicipioService: MunicipioService,
@@ -64,7 +67,8 @@ export class NewVehiculoComponent {
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-	){}
+	){
+	}
 
 	onChange(departamentoValue) {
 
@@ -134,7 +138,8 @@ export class NewVehiculoComponent {
 		this.habilitar=true;
 		this.habilitarl=true;
 		this.habilitarc=true;
-		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,this.placaIngresada,"","","","","","","","","","",null,null);
+		
 		let token = this._loginService.getToken();
 		
 		
@@ -250,8 +255,7 @@ export class NewVehiculoComponent {
 		this._VehiculoService.register(this.vehiculo,token).subscribe(
 			response => {
 				this.respuesta = response;
-				console.log(this.respuesta);
-
+	   			 this.vheiculoCreado.emit(this.vehiculo.placa);
 			error => {
 					this.errorMessage = <any>error;
 
@@ -264,5 +268,5 @@ export class NewVehiculoComponent {
 		});
 	}
 
-	
+
  }

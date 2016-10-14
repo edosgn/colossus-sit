@@ -55,7 +55,7 @@ var NewCiudadanoComponent = (function () {
     };
     NewCiudadanoComponent = __decorate([
         core_1.Component({
-            selector: 'register',
+            selector: 'registerCiudadano',
             templateUrl: 'app/view/ciudadano/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService]

@@ -3,9 +3,20 @@
 <br>
 
 	<div  [class]="clase">
-	  <input  (blur)="onKey($event)" (keyup.enter)="onKey($event)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
+	  <input [(ngModel)]="placa.placa" (blur)="onKey($placa)" (keyup.enter)="onKey($placa)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
 	  <span [class]="claseSpan" aria-hidden="true"></span>
 	</div>
+	 <button type="button" class="glyphicon glyphicon-ok"></button>
+	 
+
+
+
+
+<div *ngIf="crear">
+ <register [placaIngresada]="placa.placa" (vheiculoCreado)="vheiculoCreado($event)"></register>
+</div>	
+<h1>{{resive}}</h1>
+
 
 <div *ngIf="validate" class="col-md-6">
 	<div class="panel panel-info">
@@ -34,11 +45,9 @@
 	</div>
 </div>						
 
-	<div *ngIf="activar" class="col-md-6 alert alert-danger alert-dismissible" role="alert">
-	  <strong>Uups!</strong> {{respuesta.msj}}
-	</div>
+	
 
-<div *ngIf="validateCiudadano" class="col-md-6">
+<div *ngIf="activar" class="col-md-6">
 	<div  class="panel panel-info">
 	  <div class="panel-heading">ciudadanos asosiados a este vehiculo</div>
 	  <div class="panel-body">
@@ -63,9 +72,37 @@
 	                </tr>
 	            </tbody> 
 	        </table>
+	        <a [routerLink]="['/ciudadano/new']" class="btn btn-success">
+         		Nuevo
+    		</a>
 	  </div>
 	</div>
 </div>	
+<!-- Button trigger modal-->
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Launch demo modal
+</button> 
+
+<!-- Modal-->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	      </div>
+			<registerCiudadano ></registerCiudadano>
+	      <div class="modal-footer">
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+</div> 
+
+
+<script type="text/javascript">
+$('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').focus()
+})</script>
 
 
    

@@ -6,13 +6,14 @@ import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../model/tramite/Tramite';
 import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.component';
+import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
-    template: '<register></register>',
-    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent],
+    templateUrl: 'app/view/subirCarpeta/index.component.html',
+    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent],
     providers: [LoginService,VehiculoService,CiudadanoVehiculoService]
 })
  
@@ -33,6 +34,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public colores;
 	public colorNuevo;
 	public finalizar;
+	public crear;
+	public placa;
+	public resive;
 
 
 
@@ -47,6 +51,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 
 	ngOnInit(){	
+		this.placa = {
+ 		'placa' : this.placa,
+ 	};
 
 		this._route.params.subscribe(params =>{
 				this.tramiteId = +params["tramiteId"];
@@ -58,25 +65,25 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 	onKey(event:any) {
  	let token = this._loginService.getToken();
- 	let values = event.target.value;
- 	let placa = {
- 		'placa' : values,
- 	};
- 	this._VehiculoService.showVehiculoPlaca(token,placa).subscribe(
+ 	console.log(this.placa);
+ 	
+ 	
+ 	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
 					this.vehiculo = response.data;
 					let status = response.status;
 					if(status == 'error') {
 						this.validate=false	;
 						this.validateCiudadano=false;
+						this.crear=true;
 						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback";
 						this.clase = "form-group has-error has-feedback";
 					}else{
-						    this.validate=true	;
 							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback";
 							this.clase = "form-group has-success has-feedback";
 				            this.msg = response.msj;
-
+				            this.crear=false;
+				            this.validate=true;
 				       		this._CiudadanoVehiculoService.showCiudadanoVehiculoId(token,this.vehiculo.id).subscribe(
 								response => {
 									this.ciudadanosVehiculo = response.data;
@@ -85,7 +92,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
 										this.activar=true;
 										this.validateCiudadano=false;
 									}else{
-									 this.activar=false;
+									 this.activar=true;
+									 this.validate=true	;
 									 this.validateCiudadano=true;
 									}
 																	
@@ -119,6 +127,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
   onChangeCiudadano(id) {
   	this.idCiudadanoSeleccionado = id;
   	console.log(this.idCiudadanoSeleccionado);
+  }
+
+  vheiculoCreado(event:any) {
+  	this.placa.placa=event
+    this.onKey("");
   }
  
 }

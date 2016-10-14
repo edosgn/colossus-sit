@@ -41,6 +41,8 @@ var NewVehiculoComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.placaIngresada = '';
+        this.vheiculoCreado = new core_1.EventEmitter();
     }
     NewVehiculoComponent.prototype.onChange = function (departamentoValue) {
         var _this = this;
@@ -99,7 +101,7 @@ var NewVehiculoComponent = (function () {
         this.habilitar = true;
         this.habilitarl = true;
         this.habilitarc = true;
-        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, this.placaIngresada, "", "", "", "", "", "", "", "", "", "", null, null);
         var token = this._loginService.getToken();
         this._ServicioService.getServicio().subscribe(function (response) {
             _this.servicios = response.data;
@@ -179,7 +181,7 @@ var NewVehiculoComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.register(this.vehiculo, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
+            _this.vheiculoCreado.emit(_this.vehiculo.placa);
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -189,10 +191,18 @@ var NewVehiculoComponent = (function () {
             });
         });
     };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewVehiculoComponent.prototype, "placaIngresada", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], NewVehiculoComponent.prototype, "vheiculoCreado", void 0);
     NewVehiculoComponent = __decorate([
         core_1.Component({
             selector: 'register',
-            template: 'as{{saludo}}',
+            templateUrl: 'app/view/vehiculo/new.component.html',
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, municipio_service_1.MunicipioService, linea_service_1.LineaService, servicio_service_1.ServicioService, color_service_1.ColorService, combustible_service_1.CombustibleService, carroceria_service_1.CarroceriaService, organismoTransito_service_1.OrganismoTransitoService, clase_service_1.ClaseService, departamento_service_1.DepartamentoService, marca_service_1.MarcaService]
         }), 

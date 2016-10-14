@@ -6,6 +6,7 @@
 	  <input  (blur)="onKey($event)" (keyup.enter)="onKey($event)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
 	  <span [class]="claseSpan" aria-hidden="true"></span>
 	</div>
+	
 
 <div *ngIf="validate" class="col-md-6">
 	<div class="panel panel-info">
@@ -67,7 +68,6 @@
 	</div>
 </div>	
 
-
    	<div *ngIf="idCiudadanoSeleccionado">
    		 <div  class="col-md-12 alert alert-info alert-dismissible" role="alert">
 		  <strong>color actual!</strong> {{vehiculo.color.nombre}}
@@ -82,4 +82,5 @@
 		        finalizar
 		    </button>
    	</div>
-   
+
+

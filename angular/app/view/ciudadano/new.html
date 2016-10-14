@@ -12,7 +12,7 @@
 	</div>
 	<br>
 
-	<form #newCiudadano="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
+	<form #newCiudadano="ngForm" (ngSubmit)="onSubmit()" class="col-md-12"> 
 
 		<div class="panel panel-primary">
 		  <div class="panel-heading">Reguistrar ciudadano</div>
@@ -20,6 +20,21 @@
 		  	
 		  		<br>
 				<br>
+
+				<p class="col-md-6"> 
+					<label>Tipo identificacion:</label>
+					<select class="form-control" #departamentoId="ngForm" ngControl="departamentoId" [(ngModel)]="ciudadano.tipoIdentificacionId" required>
+					  <option *ngFor="#tipoIdentificacion of tiposIdentificacion" [value]='tipoIdentificacion.id' >{{tipoIdentificacion.nombre}}</option>
+					</select>
+					<span *ngIf = "!departamentoId.valid && departamentoId.touched" class="text-danger">el role es obligatorio</span>
+				</p>
+
+				<p class="col-md-6">
+					<label >Numero Identificacion:</label>
+					<input #numeroIdentificacion="ngForm"  type="number" class="form-control" [(ngModel)]="ciudadano.numeroIdentificacion" ngControl="numeroIdentificacion"  required />
+					<span *ngIf="!numeroIdentificacion.valid && numeroIdentificacion.touched" style="color:red;">numero Identificacion obligatorios</span>
+					<br>
+				</p>
 
 				<p class="col-md-6">
 					<label >Nombres:</label>
@@ -35,20 +50,6 @@
 					<br>
 				</p>
 
-				<p class="col-md-6">
-					<label >Numero Identificacion:</label>
-					<input #numeroIdentificacion="ngForm"  type="number" class="form-control" [(ngModel)]="ciudadano.numeroIdentificacion" ngControl="numeroIdentificacion"  required />
-					<span *ngIf="!numeroIdentificacion.valid && numeroIdentificacion.touched" style="color:red;">numero Identificacion obligatorios</span>
-					<br>
-				</p>
-
-				<p class="col-md-6"> 
-					<label>Tipo identificacion:</label>
-					<select class="form-control" #departamentoId="ngForm" ngControl="departamentoId" [(ngModel)]="ciudadano.tipoIdentificacionId" required>
-					  <option *ngFor="#tipoIdentificacion of tiposIdentificacion" [value]='tipoIdentificacion.id' >{{tipoIdentificacion.nombre}}</option>
-					</select>
-					<span *ngIf = "!departamentoId.valid && departamentoId.touched" class="text-danger">el role es obligatorio</span>
-				</p>
 
 				<p class="col-md-12">
 					<label>Correo electrónico:</label>

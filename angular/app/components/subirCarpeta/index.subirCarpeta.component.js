@@ -15,6 +15,7 @@ var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var new_vehiculo_component_1 = require('../../components/vehiculo/new.vehiculo.component');
+var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadano.component');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_VehiculoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -26,6 +27,9 @@ var IndexSubirCarpetaComponent = (function () {
     }
     IndexSubirCarpetaComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.placa = {
+            'placa': this.placa,
+        };
         this._route.params.subscribe(function (params) {
             _this.tramiteId = +params["tramiteId"];
         });
@@ -34,24 +38,23 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.onKey = function (event) {
         var _this = this;
         var token = this._loginService.getToken();
-        var values = event.target.value;
-        var placa = {
-            'placa': values,
-        };
-        this._VehiculoService.showVehiculoPlaca(token, placa).subscribe(function (response) {
+        console.log(this.placa);
+        this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
             var status = response.status;
             if (status == 'error') {
                 _this.validate = false;
                 _this.validateCiudadano = false;
+                _this.crear = true;
                 _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback";
                 _this.clase = "form-group has-error has-feedback";
             }
             else {
-                _this.validate = true;
                 _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback";
                 _this.clase = "form-group has-success has-feedback";
                 _this.msg = response.msj;
+                _this.crear = false;
+                _this.validate = true;
                 _this._CiudadanoVehiculoService.showCiudadanoVehiculoId(token, _this.vehiculo.id).subscribe(function (response) {
                     _this.ciudadanosVehiculo = response.data;
                     _this.respuesta = response;
@@ -60,7 +63,8 @@ var IndexSubirCarpetaComponent = (function () {
                         _this.validateCiudadano = false;
                     }
                     else {
-                        _this.activar = false;
+                        _this.activar = true;
+                        _this.validate = true;
                         _this.validateCiudadano = true;
                     }
                 }, function (error) {
@@ -83,11 +87,15 @@ var IndexSubirCarpetaComponent = (function () {
         this.idCiudadanoSeleccionado = id;
         console.log(this.idCiudadanoSeleccionado);
     };
+    IndexSubirCarpetaComponent.prototype.vheiculoCreado = function (event) {
+        this.placa.placa = event;
+        this.onKey("");
+    };
     IndexSubirCarpetaComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            template: '<register></register>',
-            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent],
+            templateUrl: 'app/view/subirCarpeta/index.component.html',
+            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent],
             providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])

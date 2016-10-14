@@ -9,7 +9,7 @@ import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'register',
+    selector: 'registerCiudadano',
     templateUrl: 'app/view/ciudadano/new.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,CiudadanoService,TipoIdentificacionService]
