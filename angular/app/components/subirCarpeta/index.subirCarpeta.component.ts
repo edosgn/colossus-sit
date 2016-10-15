@@ -42,6 +42,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public resive;
 	public identificacion;
 	public ciudadano;
+	public validateCedula;
+	public msgCiudadano;
+	public calseCedula;
+	public claseSpanCedula;
+	public existe;
 
 
 
@@ -151,13 +156,17 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					this.ciudadano = response.data;
 					let status = response.status;
 
-					for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
-						if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-							let existe = true;
+					if(this.ciudadanosVehiculo) {
+						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+							if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+								let existe = true;
+							}
 						}
 					}
+					
 					if(existe){
 						alert ("existe una relacion con el ciudadano");
+						
 					}else{
 							if(status == 'error') {
 						this.validateCedula=false;

@@ -1,14 +1,12 @@
 <br>
 <h3 *ngIf="tramite">{{tramite.nombre}} <small>Seleccionado</small></h3>
-<br>
 
+	<h3>Carga <small>carpetas</small></h3>
+	<hr>
 	<div  [class]="clase">
 	  <input [(ngModel)]="placa.placa" (blur)="onKey($placa)" (keyup.enter)="onKey($placa)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
 	  <span [class]="claseSpan" aria-hidden="true"></span>
 	</div>
-	 
-
-
 
 
 <div *ngIf="crear">
@@ -18,7 +16,7 @@
 
 
 <div *ngIf="validate" class="col-md-12">
-	<div class="panel panel-info">
+	<div class="panel panel-primary">
 	  <div class="panel-heading">{{msg}}</div>
 	  <div class="panel-body">
 		    <table class="table table-bordered">
@@ -47,13 +45,16 @@
 	
 
 <div *ngIf="activar" class="col-md-12">
-	<div  class="panel panel-info">
-	  <div class="panel-heading">ciudadanos asosiados a este vehiculo</div>
+	<div  class="panel panel-primary">
+	  <div class="panel-heading">ciudadanos asosiados a este vehiculo 
+				<button data-toggle="modal" data-target="#myModal" class="col-md-offset-9 btn btn-primary btn-xs glyphicon glyphicon-plus"></button>
+	  </div>
 	  <div class="panel-body">
 	  			<div  [class]="calseCedula">
 				  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion Ciudadano">
 				  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 				</div>
+				<!-- Button trigger modal-->
 				<br>
 
 				<form *ngIf="validateCedula" #newVehiculo="ngForm" (ngSubmit)="VehiculoCiudadano()" class="col-md-12"> 
@@ -158,10 +159,7 @@
 </div>	
 
 
-<!-- Button trigger modal-->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button> 
+
 
 <!-- Modal-->
 

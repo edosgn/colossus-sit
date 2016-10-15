@@ -105,9 +105,11 @@ var IndexSubirCarpetaComponent = (function () {
         this._CiudadanoService.showCiudadanoCedula(token, identificacion).subscribe(function (response) {
             _this.ciudadano = response.data;
             var status = response.status;
-            for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
-                if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-                    var existe = true;
+            if (_this.ciudadanosVehiculo) {
+                for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+                    if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+                        var existe = true;
+                    }
                 }
             }
             if (existe) {
