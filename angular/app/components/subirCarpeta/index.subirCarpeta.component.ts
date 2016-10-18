@@ -49,6 +49,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public claseSpanCedula;
 	public existe;
     public tipoIdentificaciones;
+    public nit;
 
 
 
@@ -250,6 +251,16 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 		});
   }
+
+  onChangeNit(Value) {
+
+        if(Value == 4) {
+            this.nit = true;
+        }else{
+            this.nit = false;
+        }
+
+    }
 
 
  

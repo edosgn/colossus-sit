@@ -14,7 +14,7 @@ require("rxjs/add/operator/map");
 var CiudadanoVehiculoService = (function () {
     function CiudadanoVehiculoService(_http) {
         this._http = _http;
-        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/ciudadanovehiculo";
+        this.url = "http://localhost/GitHub/colossus-sit/web/app_dev.php/propietariovehiculo";
     }
     CiudadanoVehiculoService.prototype.getCiudadanoVehiculo = function () {
         return this._http.get(this.url + "/").map(function (res) { return res.json(); });
