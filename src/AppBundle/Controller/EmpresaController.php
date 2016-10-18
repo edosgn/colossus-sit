@@ -276,4 +276,48 @@ class EmpresaController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * busca empresas por nit.
+     *
+     * @Route("/show/nit", name="empresa_show")
+     * @Method("POST")
+     */
+    public function showNitAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $nit = $params->nit;
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
+            array('nit' => $nit)
+            );
+            if ($empresa!=null) {
+               $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "empresa encontrada", 
+                    'data'=> $empresa,
+            );
+            }else{
+                 $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Empresa no Encontrada", 
+                );
+            }
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }
