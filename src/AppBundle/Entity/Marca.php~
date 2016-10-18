@@ -110,28 +110,4 @@ class Marca
     {
         return $this->estado;
     }
-
-    /**
-     * Set codigoMt
-     *
-     * @param string $codigoMt
-     *
-     * @return Marca
-     */
-    public function setCodigoMt($codigoMt)
-    {
-        $this->codigoMt = $codigoMt;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoMt
-     *
-     * @return string
-     */
-    public function getCodigoMt()
-    {
-        return $this->codigoMt;
-    }
 }

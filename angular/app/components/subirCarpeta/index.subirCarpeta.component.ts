@@ -159,13 +159,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					if(this.ciudadanosVehiculo) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
 							if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-								let existe = true;
+								this.existe = true;
 							}
 						}
 					}
 					
-					if(existe){
+					if(this.existe){
 						alert ("existe una relacion con el ciudadano");
+						this.existe = false;
 						
 					}else{
 							if(status == 'error') {

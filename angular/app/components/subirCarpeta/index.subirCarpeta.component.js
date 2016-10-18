@@ -108,12 +108,13 @@ var IndexSubirCarpetaComponent = (function () {
             if (_this.ciudadanosVehiculo) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                     if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-                        var existe = true;
+                        _this.existe = true;
                     }
                 }
             }
-            if (existe) {
+            if (_this.existe) {
                 alert("existe una relacion con el ciudadano");
+                _this.existe = false;
             }
             else {
                 if (status == 'error') {
