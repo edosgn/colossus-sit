@@ -120,6 +120,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 								response => {
 									this.ciudadanosVehiculo = response.data;
 									this.respuesta = response;
+									console.log(this.ciudadanosVehiculo);
 									if(this.respuesta.status == 'error') {
 										this.activar=true;
 										this.validateCiudadano=false;

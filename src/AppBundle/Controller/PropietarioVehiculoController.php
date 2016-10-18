@@ -6,34 +6,34 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\CiudadanoVehiculo;
+use AppBundle\Entity\PropietarioVehiculo;
 use AppBundle\Form\CiudadanoVehiculoType;
 
 /**
- * CiudadanoVehiculo controller.
+ * ProìetarioVehiculo controller.
  *
- * @Route("/ciudadanovehiculo")
+ * @Route("/propietariovehiculo")
  */
-class CiudadanoVehiculoController extends Controller
+class PropietarioVehiculoController extends Controller
 {
     /**
      * Lists all CiudadanoVehiculo entities.
      *
-     * @Route("/", name="ciudadanovehiculo_index")
+     * @Route("/", name="propietariovehiculo_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $ciudadanoVehiculos = $em->getRepository('AppBundle:CiudadanoVehiculo')->findBy(
+        $propietarioVehiculos = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
             array('estado' => 1)
         );
         $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado ciudadanoVehiculos", 
-                    'data'=> $ciudadanoVehiculos,
+                    'msj' => "listado propietarioVehiculos", 
+                    'data'=> $propietarioVehiculos,
             );
          
         return $helpers->json($responce);
@@ -42,7 +42,7 @@ class CiudadanoVehiculoController extends Controller
     /**
      * Creates a new CiudadanoVehiculo entity.
      *
-     * @Route("/new", name="ciudadanovehiculo_new")
+     * @Route("/new", name="propietariovehiculo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -50,10 +50,11 @@ class CiudadanoVehiculoController extends Controller
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
+        if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
+
+           if (count($params)==0) {
                 $responce = array(
                     'status' => 'error',
                     'code' => 400,
@@ -64,8 +65,9 @@ class CiudadanoVehiculoController extends Controller
                         $fechaPropiedadInicial = $params->fechaPropiedadInicial;
                         $fechaPropiedadFinal = $params->fechaPropiedadFinal;
                         $estadoPropiedad = $params->estadoPropiedad;
-                        $ciudadanoId = $params->ciudadanoId;
+                        $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
                         $vehiculoId = $params->vehiculoId;
+                        $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
                             array('numeroIdentificacion' => $ciudadanoId)
@@ -73,25 +75,26 @@ class CiudadanoVehiculoController extends Controller
                         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
                             array('placa' => $vehiculoId)
                         );
-                       
 
-                        $ciudadanoVehiculo = new CiudadanoVehiculo();
-
-                        $ciudadanoVehiculo->setLicenciaTransito($licenciaTransito);
-                        $ciudadanoVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
-                        $ciudadanoVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
-                        $ciudadanoVehiculo->setEstadoPropiedad($estadoPropiedad);
-                        $ciudadanoVehiculo->setCiudadano($ciudadano);
-                        $ciudadanoVehiculo->setVehiculo($vehiculo);
-
-                        $ciudadanoVehiculo->setEstado(true);
+                        $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                            array('nit' => $empresaId)
+                        );
+                        $propietarioVehiculo = new PropietarioVehiculo();
+                        $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
+                        $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
+                        $propietarioVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
+                        $propietarioVehiculo->setEstadoPropiedad($estadoPropiedad);
+                        $propietarioVehiculo->setCiudadano($ciudadano);
+                        $propietarioVehiculo->setEmpresa($empresa);
+                        $propietarioVehiculo->setVehiculo($vehiculo);
+                        $propietarioVehiculo->setEstado(true);
                         $em = $this->getDoctrine()->getManager();
-                        $em->persist($ciudadanoVehiculo);
+                        $em->persist($propietarioVehiculo);
                         $em->flush();
                         $responce = array(
                             'status' => 'success',
                             'code' => 200,
-                            'msj' => "CiudadanoVehiculo creado con exito", 
+                            'msj' => "Proìetario Vehiculo creado con exito", 
                         );
                        
                     }
@@ -108,7 +111,7 @@ class CiudadanoVehiculoController extends Controller
     /**
      * Finds and displays a CiudadanoVehiculo entity.
      *
-     * @Route("/show/{id}", name="ciudadanovehiculo_show")
+     * @Route("/show/{id}", name="proìetariovehiculo_show")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)
@@ -119,12 +122,12 @@ class CiudadanoVehiculoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $ciudadanoVehiculo = $em->getRepository('AppBundle:CiudadanoVehiculo')->find($id);
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find($id);
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "ciudadanoVehiculo con nombre"." ".$ciudadanoVehiculo->getLicenciaTransito(), 
-                    'data'=> $ciudadanoVehiculo,
+                    'msj' => "propietarioVehiculo con nombre"." ".$propietarioVehiculo->getLicenciaTransito(), 
+                    'data'=> $propietarioVehiculo,
             );
         }else{
             $responce = array(
@@ -139,7 +142,7 @@ class CiudadanoVehiculoController extends Controller
     /**
      * Displays a form to edit an existing CiudadanoVehiculo entity.
      *
-     * @Route("/edit", name="ciudadanovehiculo_edit")
+     * @Route("/edit", name="proìetariovehiculo_edit")
      * @Method({"POST", "POST"})
      */
     public function editAction(Request $request)
@@ -156,28 +159,34 @@ class CiudadanoVehiculoController extends Controller
             $fechaPropiedadInicial = $params->fechaPropiedadInicial;
             $fechaPropiedadFinal = $params->fechaPropiedadFinal;
             $estadoPropiedad = $params->estadoPropiedad;
-            $ciudadanoId = $params->ciudadanoId;
+            $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+            $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
             $vehiculoId = $params->vehiculoId;
             $em = $this->getDoctrine()->getManager();
             $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
                             array('placa' => $vehiculoId)
-                        );
+            );
+
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                array('nit' => $empresaId)
+            );
 
             $em = $this->getDoctrine()->getManager();
-            $ciudadanoVehiculo = $em->getRepository("AppBundle:CiudadanoVehiculo")->find($params->id);
+            $propietarioVehiculo = $em->getRepository("AppBundle:ProìetarioVehiculo")->find($params->id);
 
-            if ($ciudadanoVehiculo!=null) {
-                $ciudadanoVehiculo->setLicenciaTransito($licenciaTransito);
-                $ciudadanoVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
-                $ciudadanoVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
-                $ciudadanoVehiculo->setEstadoPropiedad($estadoPropiedad);
-                $ciudadanoVehiculo->setCiudadano($ciudadano);
-                $ciudadanoVehiculo->setVehiculo($vehiculo);
+            if ($propietarioVehiculo!=null) {
+                $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
+                $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
+                $propietarioVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
+                $propietarioVehiculo->setEstadoPropiedad($estadoPropiedad);
+                $propietarioVehiculo->setCiudadano($ciudadano);
+                $propietarioVehiculo->setEmpresa($empresa); 
+                $propietarioVehiculo->setVehiculo($vehiculo);
 
-                $ciudadanoVehiculo->setEstado(true);
+                $propietarioVehiculo->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($ciudadanoVehiculo);
+                $em->persist($propietarioVehiculo);
                 $em->flush();
                 $responce = array(
                     'status' => 'success',
@@ -188,14 +197,14 @@ class CiudadanoVehiculoController extends Controller
                 $responce = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El ciudadanoVehiculo no se encuentra en la base de datos", 
+                    'msj' => "El propietarioVehiculo no se encuentra en la base de datos", 
                 );
             }
         }else{
             $responce = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar ciudadanoVehiculo", 
+                    'msj' => "Autorizacion no valida para editar propietarioVehiculo", 
                 );
         }
 
@@ -205,7 +214,7 @@ class CiudadanoVehiculoController extends Controller
     /**
      * Deletes a CiudadanoVehiculo entity.
      *
-     * @Route("/{id}/delete", name="ciudadanovehiculo_delete")
+     * @Route("/{id}/delete", name="propietariovehiculo_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
@@ -215,16 +224,16 @@ class CiudadanoVehiculoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $ciudadanoVehiculo = $em->getRepository('AppBundle:CiudadanoVehiculo')->find($id);
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find($id);
 
-            $ciudadanoVehiculo->setEstado(0);
+            $propietarioVehiculo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($ciudadanoVehiculo);
+                $em->persist($propietarioVehiculo);
                 $em->flush();
             $responce = array(
                     'status' => 'success',
                         'code' => 200,
-                        'msj' => "ciudadanoVehiculo eliminado con exito", 
+                        'msj' => "propietarioVehiculo eliminado con exito", 
                 );
         }else{
             $responce = array(
@@ -239,7 +248,7 @@ class CiudadanoVehiculoController extends Controller
     /**
      * Creates a form to delete a CiudadanoVehiculo entity.
      *
-     * @param CiudadanoVehiculo $ciudadanoVehiculo The CiudadanoVehiculo entity
+     * @param CiudadanoVehiculo $propietarioVehiculo The PropietarioVehiculo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -255,7 +264,7 @@ class CiudadanoVehiculoController extends Controller
     /**
      * busca los ciudadanos por vehiculo.
      *
-     * @Route("/ciudadano/vehiculo/{id}", name="ciudadano_vehiculo_show")
+     * @Route("/ciudadano/vehiculo/{id}", name="proìetario_vehiculo_show")
      * @Method("POST")
      */
     public function ciudadanoVehiculoAction(Request $request,$id)
@@ -266,18 +275,18 @@ class CiudadanoVehiculoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $ciudadanoVehiculo = $em->getRepository('AppBundle:CiudadanoVehiculo')->findBy(
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
             array('vehiculo' => $id,
                     'estado' => 1
                 )
             );
 
-            if ($ciudadanoVehiculo!=null) {
+            if ($propietarioVehiculo!=null) {
                 $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "ciudadano para vehiculo", 
-                    'data'=> $ciudadanoVehiculo,
+                    'msj' => "propietario para vehiculo", 
+                    'data'=> $propietarioVehiculo,
                 );
             }else{
                 $responce = array(
@@ -296,4 +305,6 @@ class CiudadanoVehiculoController extends Controller
         }
         return $helpers->json($responce);
     }
+
+   
 }

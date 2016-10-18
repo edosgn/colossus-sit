@@ -7,7 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
-class CiudadanoVehiculoType extends AbstractType
+class PropietarioVehiculoType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -31,7 +31,7 @@ class CiudadanoVehiculoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\CiudadanoVehiculo'
+            'data_class' => 'AppBundle\Entity\PropietarioVehiculo'
         ));
     }
 }
