@@ -1,5 +1,6 @@
 // Importar el núcleo de Angular
 import {CiudadanoVehiculoService} from "../../services/ciudadanoVehiculo/ciudadanoVehiculo.service";
+import {TipoIdentificacionService} from '../../services/tipo_Identificacion/tipoIdentificacion.service';
 import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
 import {CiudadanoService} from "../../services/ciudadano/ciudadano.service";
 import {LoginService} from "../../services/login.service";
@@ -16,7 +17,7 @@ import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
     directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent],
-    providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService]
+    providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -47,10 +48,12 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public calseCedula;
 	public claseSpanCedula;
 	public existe;
+    public tipoIdentificaciones;
 
 
 
 	constructor(
+        private _TipoIdentificacionService: TipoIdentificacionService,
 		private _VehiculoService: VehiculoService,
 		private _CiudadanoService: CiudadanoService,
 		private _CiudadanoVehiculoService: CiudadanoVehiculoService,
@@ -58,7 +61,24 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-		){this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");}
+		){
+            this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
+
+            let token = this._loginService.getToken();
+            this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
+                    response => {
+                        this.tipoIdentificaciones = response.data;
+                    }, 
+                    error => {
+                        this.errorMessage = <any>error;
+
+                        if(this.errorMessage != null){
+                            console.log(this.errorMessage);
+                            alert("Error en la petición");
+                        }
+                    }
+                );
+    }
 
 
 	ngOnInit(){	
@@ -165,8 +185,10 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					}
 					
 					if(this.existe){
+                        this.validateCedula = false;
+                        this.existe = false;
 						alert ("existe una relacion con el ciudadano");
-						this.existe = false;
+
 						
 					}else{
 							if(status == 'error') {
@@ -197,13 +219,20 @@ export class IndexSubirCarpetaComponent implements OnInit{
   VehiculoCiudadano(){
 
   	this.ciudadanoVehiculo.ciudadanoId=this.ciudadano.numeroIdentificacion;
-  	this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
+    this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
+    this.ciudadanoVehiculo.fechaPropiedadInicial=this.vehiculo.fechaFactura;
+    if(this.ciudadanosVehiculo != null) {
+       this.ciudadanoVehiculo.licenciaTransito=this.ciudadanosVehiculo[0].licenciaTransito;
+    }
+
+    console.log(this.ciudadanoVehiculo);
 
   	let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token).subscribe(
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=='success') {
+                    this.ciudadanoVehiculo.licenciaTransito="";
 					this.validateCedula=false;
 					this.onKey("");
 
@@ -220,5 +249,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 		});
   }
+
+
  
 }
