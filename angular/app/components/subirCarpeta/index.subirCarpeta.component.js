@@ -63,6 +63,7 @@ var IndexSubirCarpetaComponent = (function () {
                 _this._CiudadanoVehiculoService.showCiudadanoVehiculoId(token, _this.vehiculo.id).subscribe(function (response) {
                     _this.ciudadanosVehiculo = response.data;
                     _this.respuesta = response;
+                    console.log(_this.ciudadanosVehiculo);
                     if (_this.respuesta.status == 'error') {
                         _this.activar = true;
                         _this.validateCiudadano = false;

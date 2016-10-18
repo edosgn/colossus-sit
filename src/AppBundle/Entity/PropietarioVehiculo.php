@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CiudadanoVehiculo
  *
- * @ORM\Table(name="ciudadano_vehiculo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CiudadanoVehiculoRepository")
+ * @ORM\Table(name="propietario_vehiculo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PropietarioVehiculoRepository")
  */
-class CiudadanoVehiculo
+class PropietarioVehiculo
 {
     /**
      * @var int
@@ -56,18 +56,23 @@ class CiudadanoVehiculo
      */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="ciudadanosVehiculo") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="propietariosVehiculo") */
     private $ciudadano; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
     private $vehiculo;
 
+     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="propietariosVehiculo") */
+    private $empresa;
 
+
+
+   
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -79,7 +84,7 @@ class CiudadanoVehiculo
      *
      * @param string $licenciaTransito
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
     public function setLicenciaTransito($licenciaTransito)
     {
@@ -103,11 +108,12 @@ class CiudadanoVehiculo
      *
      * @param \DateTime $fechaPropiedadInicial
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
     public function setFechaPropiedadInicial($fechaPropiedadInicial)
     {
         $this->fechaPropiedadInicial = new \DateTime($fechaPropiedadInicial);
+
         return $this;
     }
 
@@ -126,11 +132,12 @@ class CiudadanoVehiculo
      *
      * @param \DateTime $fechaPropiedadFinal
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
     public function setFechaPropiedadFinal($fechaPropiedadFinal)
     {
-       $this->fechaPropiedadFinal = new \DateTime($fechaPropiedadFinal);
+        $this->fechaPropiedadFinal = new \DateTime($fechaPropiedadFinal);
+
         return $this;
     }
 
@@ -141,7 +148,7 @@ class CiudadanoVehiculo
      */
     public function getFechaPropiedadFinal()
     {
-        return $this->fechaPropiedadFinal->format("Y-m-d");
+        return $this->fechaPropiedadFinal->format("Y-m-d");;
     }
 
     /**
@@ -149,7 +156,7 @@ class CiudadanoVehiculo
      *
      * @param string $estadoPropiedad
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
     public function setEstadoPropiedad($estadoPropiedad)
     {
@@ -169,11 +176,35 @@ class CiudadanoVehiculo
     }
 
     /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return PropietarioVehiculo
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
      * Set ciudadano
      *
      * @param \AppBundle\Entity\Ciudadano $ciudadano
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
     public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
     {
@@ -197,7 +228,7 @@ class CiudadanoVehiculo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
     public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {
@@ -217,26 +248,26 @@ class CiudadanoVehiculo
     }
 
     /**
-     * Set estado
+     * Set empresa
      *
-     * @param boolean $estado
+     * @param \AppBundle\Entity\Empresa $empresa
      *
-     * @return CiudadanoVehiculo
+     * @return PropietarioVehiculo
      */
-    public function setEstado($estado)
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
     {
-        $this->estado = $estado;
+        $this->empresa = $empresa;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get empresa
      *
-     * @return boolean
+     * @return \AppBundle\Entity\Empresa
      */
-    public function getEstado()
+    public function getEmpresa()
     {
-        return $this->estado;
+        return $this->empresa;
     }
 }
