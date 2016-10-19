@@ -295,7 +295,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
   VehiculoCiudadano(){
 
   	this.ciudadanoVehiculo.ciudadanoId=this.ciudadano.numeroIdentificacion;
-  	this.ciudadanoVehiculo.estadoPropiedad=1;
+  	this.ciudadanoVehiculo.estadoPropiedad="1";
     this.ciudadanoVehiculo.empresaId=this.empresa.nit;
     this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
     this.ciudadanoVehiculo.fechaPropiedadInicial=this.vehiculo.fechaFactura;
