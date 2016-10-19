@@ -50,7 +50,7 @@ class TramiteGeneralController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
+        if ($authCheck== false) {
             $json = $request->get("json",null);
             $params = json_decode($json);
             if (count($params)==0) {
@@ -67,8 +67,21 @@ class TramiteGeneralController extends Controller
                         $numeroLicencia = $params->numeroLicencia;
                         $numeroSustrato = $params->numeroSustrato;
                         $vehiculoId = $params->vehiculoId;
+                        $apoderado = (isset($params->apoderado)) ? $params->apoderado : false;
+                        $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+                        $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
                         $em = $this->getDoctrine()->getManager();
                         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
+                            array(
+                            'estado' => 1,
+                            'numeroIdentificacion' => $ciudadanoId,
+                            ));
+                        $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                            array(
+                            'estado' => 1,
+                            'nit' => $empresaId,
+                            ));
                         $tramiteGeneral = new TramiteGeneral();
                         $tramiteGeneral->setNumeroQpl($numeroQpl);
                         $tramiteGeneral->setFechaInicial($fechaInicial);
@@ -78,6 +91,10 @@ class TramiteGeneralController extends Controller
                         $tramiteGeneral->setNumeroSustrato($numeroSustrato);
                         $tramiteGeneral->setVehiculo($vehiculo);
                         $tramiteGeneral->setEstado(true);
+                        $tramiteGeneral->setApoderado($apoderado);
+                        $tramiteGeneral->setCiudadano($ciudadano);
+                        $tramiteGeneral->setEmpresa($empresa);
+                        $tramiteGeneral->setEstadoTramite(2);
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($tramiteGeneral);
                         $em->flush();
@@ -143,7 +160,6 @@ class TramiteGeneralController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             $numeroQpl = $params->numeroQpl;
             $fechaInicial = $params->fechaInicial;
             $fechaFinal = $params->fechaFinal;
@@ -151,8 +167,22 @@ class TramiteGeneralController extends Controller
             $numeroLicencia = $params->numeroLicencia;
             $numeroSustrato = $params->numeroSustrato;
             $vehiculoId = $params->vehiculoId;
+            $apoderado = (isset($params->apoderado)) ? $params->ciudadanoId : false;
+            $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+            $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
+
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
+                array(
+                'estado' => 1,
+                'numeroIdentificacion' => $ciudadanoId,
+                ));
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                array(
+                'estado' => 1,
+                'nit' => $empresaId,
+                ));
             $tramiteGeneral = $em->getRepository("AppBundle:TramiteGeneral")->find($params->id);
 
             if ($tramiteGeneral!=null) {
@@ -164,6 +194,10 @@ class TramiteGeneralController extends Controller
                 $tramiteGeneral->setNumeroSustrato($numeroSustrato);
                 $tramiteGeneral->setVehiculo($vehiculo);
                 $tramiteGeneral->setEstado(true);
+                $tramiteGeneral->setApoderado($apoderado);
+                $tramiteGeneral->setCiudadano($ciudadano);
+                $tramitegeneral->setEmpresa($empresa);
+                $tramiteGeneral->setEstadoTramite(2);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteGeneral);
                 $em->flush();

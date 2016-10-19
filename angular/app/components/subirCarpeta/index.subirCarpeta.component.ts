@@ -18,7 +18,7 @@ import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
-    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent]
+    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent],
     providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
 })
  

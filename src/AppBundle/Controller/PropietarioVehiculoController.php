@@ -62,7 +62,7 @@ class PropietarioVehiculoController extends Controller
                 );
             }else{
                         $licenciaTransito = $params->licenciaTransito;
-                        $fechaPropiedadInicial = $params->fechaPropiedadInicial;
+                        $fechaPropiedadInicial = $params->fechaPropiedadInicial; 
                         $fechaPropiedadFinal = $params->fechaPropiedadFinal;
                         $estadoPropiedad = $params->estadoPropiedad;
                         $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
