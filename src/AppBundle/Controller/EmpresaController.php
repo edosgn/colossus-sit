@@ -77,7 +77,9 @@ class EmpresaController extends Controller
                             $em = $this->getDoctrine()->getManager();
                             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                             $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($tipoEmpresaId);
-                            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
+                                array('numeroIdentificacion' => $ciudadanoId)
+                            );
                             $empresa = new Empresa();
 
                             $empresa->setNit($nit);
