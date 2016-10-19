@@ -17,26 +17,56 @@
 		<div class="panel panel-primary">
 		  <div class="panel-heading">Reguistrar Empresa</div>
 		  <div class="panel-body">
-		  	
-		  		<br>
-				<br>
-				<p class="col-md-6"> 
-					<label>Ciudadano:</label>
-					<select class="form-control" #ciudadanoId="ngForm" ngControl="ciudadanoId" [(ngModel)]="empresa.ciudadanoId" required>
-					  <option *ngFor="#ciudadano of ciudadanos" [value]='ciudadano.id' >{{ciudadano.numeroIdentificacion}}</option>
+		  <p class="col-md-6">  
+					<label>Departamento:</label>
+					<select  class="form-control" #departamentoId="ngForm"  (change)="onChange($event.target.value)" ngControl="departamentoId" name="departamentos" required>
+					  <option  *ngFor="#departamento of departamentos" [value]='departamento.id' >{{departamento.nombre}}</option>
 					</select>
-					<span *ngIf = "!ciudadanoId.valid && ciudadanoId.touched" class="text-danger">el role es obligatorio</span>
+					<span *ngIf = "!departamentoId.valid && departamentoId.touched" class="text-danger">el departamento es obligatorio</span>
 				</p>
 
 				<p class="col-md-6"> 
 					<label>Municipio:</label>
-					<select class="form-control" #municipioId="ngForm" ngControl="municipioId" [(ngModel)]="empresa.municipioId" required>
+					<select [disabled]="habilitar"  class="form-control" #municipioId="ngForm" ngControl="municipioId" [(ngModel)]="empresa.municipioId" required>
 					  <option *ngFor="#municipio of municipios" [value]='municipio.id' >{{municipio.nombre}}</option>
 					</select>
 					<span *ngIf = "!municipioId.valid && municipioId.touched" class="text-danger">municipio es obligatorio</span>
 				</p>
 
-				
+				<div  class="col-md-12"> 	
+					<div  [class]="calseCedula">
+					  <input  [(ngModel)]="empresa.ciudadanoId" (blur)="onKeyCiudadano($event)" (keyup.enter)="onKeyCiudadano($event)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Numero de Identificacion ciudadano">
+					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
+					</div>
+					<br>
+				</div>
+				<div class="clearfix"></div>
+
+				<div *ngIf="validateCedula" class="panel panel-info">
+				  <div class="panel-heading">{{msgCiudadano}} encontrado</div>
+				  <div class="panel-body">
+					    <table class="table table-bordered">
+				            <thead>
+				                <tr>
+				                    <th>nombre</th>
+				                    <th>apellido</th>
+				                    <th>direccion</th>
+				                    <th>correo</th>
+				                    
+				                </tr>
+				            </thead>
+				            <tbody>
+				                <tr>
+				                    <td >{{ciudadano.nombres}}</td>
+				                    <td >{{ciudadano.apellidos}}</td>
+				                    <td >{{ciudadano.direccion}}</td>
+				                    <td >{{ciudadano.correo}}</td>
+				                </tr>
+				            </tbody> 
+				        </table>
+				  </div>
+				</div>
+
 
 				<p class="col-md-6"> 
 					<label>Tipo Empresa:</label>
@@ -87,7 +117,7 @@
 				<br>
 		        <p class="col-md-12"> 
 		        
-			    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+			    <input  type="submit" value="Enviar" class="btn btn-success col-md-12"  
 				[disabled]="!newCiudadano.valid"/>
 			    
 			    </p>

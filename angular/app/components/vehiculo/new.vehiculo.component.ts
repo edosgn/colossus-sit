@@ -69,7 +69,7 @@ export class NewVehiculoComponent {
 		
 	){
 	}
-
+ 
 	onChange(departamentoValue) {
 
 	this.departamento ={
