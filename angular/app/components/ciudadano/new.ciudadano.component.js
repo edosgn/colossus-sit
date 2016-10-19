@@ -23,10 +23,11 @@ var NewCiudadanoComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.ciudadanoCreado = new core_1.EventEmitter();
     }
     NewCiudadanoComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
+        this.ciudadano = new Ciudadano_1.Ciudadano(null, "", this.identificacionIngresada, "", "", "", "", "");
         var token = this._loginService.getToken();
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
             _this.tiposIdentificacion = response.data;
@@ -44,7 +45,8 @@ var NewCiudadanoComponent = (function () {
         this._CiudadanoService.register(this.ciudadano, token).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == "success") {
-                _this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
+                console.log("echo: " + _this.ciudadano.numeroIdentificacion);
+                _this.ciudadanoCreado.emit(_this.ciudadano.numeroIdentificacion);
             }
             (function (error) {
                 _this.errorMessage = error;
@@ -55,6 +57,14 @@ var NewCiudadanoComponent = (function () {
             });
         });
     };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewCiudadanoComponent.prototype, "identificacionIngresada", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], NewCiudadanoComponent.prototype, "ciudadanoCreado", void 0);
     NewCiudadanoComponent = __decorate([
         core_1.Component({
             selector: 'registerCiudadano',

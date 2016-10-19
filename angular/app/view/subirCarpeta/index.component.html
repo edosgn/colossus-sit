@@ -47,8 +47,9 @@
 <div *ngIf="activar" class="col-md-12">
 	<div  class="panel panel-primary">
 	  <div class="panel-heading">Propetarios 
-				<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary">Apoderado</button>
+				
 	  </div>
+
 	  <div class="panel-body">
 
 	  			<p class="col-md-6"> 
@@ -60,7 +61,7 @@
 				<div *ngIf="!nit" class="col-md-6"> 
 				    <div class="col-md-10">
 				    	<div  [class]="calseCedula">
-						  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
+						  <input [(ngModel)]="ciudadano.numeroIdentificacion" (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
 						  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 						</div>
 				    </div>
@@ -81,6 +82,7 @@
 
 					<div class="col-md-2">
 						<button [disabled]='!btnNewPropietario' data-toggle="modal" data-target="#myModalEmpresa" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button>
+
 					</div>
 				</div>
 				<br>
@@ -91,9 +93,12 @@
 						  <div class="panel-heading">Propietario a Vehiculo</div>
 						  <div class="panel-body">
 
-								<div *ngIf="ciudadano" class="col-md-12">
-										<div  class="panel panel-info">
-										  <div class="panel-heading">{{msgCiudadano}} encontrado</div>
+								<div *ngIf="ciudadano?.nombres" class="col-md-12">
+										<div  class="panel panel-dafault">
+										  <div class="panel-heading col-md-8">{{msgCiudadano}} encontrado</div>
+										  	<label class="checkbox inline  col-md-offset-2 col-md-2">
+											  <input type="checkbox" #apoderado (change)="onChangeApoderado(apoderado.checked)" id="inlineCheckbox1" value="option1"> Apoderado
+											</label>
 										  <div class="panel-body">
 											    <table class="table table-bordered">
 										            <thead>
@@ -119,7 +124,7 @@
 								</div>
 
 								<div *ngIf="empresa" class="col-md-12">
-										<div  class="panel panel-info">
+										<div  class="panel panel-dafault">
 										  <div class="panel-heading">{{msgCiudadano}}</div>
 										  <div class="panel-body">
 											    <table class="table table-bordered">
@@ -133,7 +138,7 @@
 										                </tr>
 										            </thead>
 										            <tbody>
-										            	<tr >
+										            	<tr>
 										                    <td >{{empresa.nit}}</td>
 										                    <td >{{empresa.nombre}}</td>
 										                    <td >{{empresa.direccion}}</td>
@@ -154,13 +159,21 @@
 										</p>
 											
 										<br>
-								        <p class="col-md-6 col-md-offset-4"> 
-									    <input  type="submit" value="Vincular" class="btn btn-success col-md-6 "  
-										/>
+								        <p class="col-md-12 col-md-offset-3"> 
+									    	<a *ngIf="!btnSeleccionarApoderado" (click)="btnCancelarVinculo()" class="btn btn-default col-md-3">cancelar</a>
+										    <input  *ngIf="!btnSeleccionarApoderado" type="submit" value="Vincular" class="btn btn-primary col-md-3 "  
+											/>
+											<a *ngIf="btnSeleccionarApoderado" (click)="onChangeCiudadano(ciudadano?.id)"  class="btn btn-primary col-md-6">Seleccionar</a>
 									    </p>
+
+									 
 						  </div>
 						</div>
 				</form>
+
+
+
+				
 				
 		<br>
 		<hr>
@@ -172,7 +185,7 @@
 						<th>apellidos</th>
 	                    <th>identificacion</th>
 	                    <th>correo</th>
-	                    <th>solicitante</th>
+	                    <th *ngIf="!btnSeleccionarApoderado">solicitante</th>
 	                </tr>
 	            </thead>
 	            <tbody>
@@ -181,7 +194,8 @@
 	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.apellidos}}</td>
 	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.numeroIdentificacion}}</td>
 	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.correo}}</td>
-	                    <td *ngIf="ciudadanoVehiculo.ciudadano"><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.ciudadano?.id}} 
+	                    <td *ngIf="ciudadanoVehiculo.ciudadano && !btnSeleccionarApoderado">
+	                    <input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.ciudadano?.id}} 
 	                    (change)="onChangeCiudadano(ciudadanoVehiculo.ciudadano?.id)"></td>
 	                </tr>
 	            </tbody> 
@@ -196,7 +210,7 @@
 						<th>direccion</th>
 		                <th>correo</th>
 		                <th>telefono</th>
-	                    <th>solicitante</th>
+	                    <th *ngIf="!btnSeleccionarApoderado">solicitante</th>
 	                </tr>
 	            </thead>
 	            <tbody>
@@ -206,7 +220,7 @@
 	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.direccion}}</td>
 	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.correo}}</td>
 	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.telefono}}</td>
-	                    <td *ngIf="ciudadanoVehiculo.empresa"><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
+	                    <td *ngIf="ciudadanoVehiculo.empresa && !btnSeleccionarApoderado"><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
 	                    (change)="onChangeCiudadano(ciudadanoVehiculo.empresa?.id)"></td>
 	                </tr>
 	            </tbody> 
@@ -220,13 +234,14 @@
 
 <!-- Modal-->
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div *ngIf="modalCiudadano" data-backdrop="static" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <button type="button" (click)="btnCancelarModalCedula()"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        	<h4 class="modal-title">Registrar Ciudadano</h4>
 	      </div>
-			<registerCiudadano ></registerCiudadano>
+			<registerCiudadano (ciudadanoCreado)="ciudadanoCreado($event)" [identificacionIngresada]="ciudadano.numeroIdentificacion"></registerCiudadano>
 	      <div class="modal-footer">
 	      </div>
 	    </div><!-- /.modal-content -->

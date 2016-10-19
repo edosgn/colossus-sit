@@ -12,6 +12,7 @@ import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.compo
 import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
 import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
+import {Ciudadano} from '../../model/ciudadano/Ciudadano';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -24,6 +25,7 @@ import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo
  
 // Clase del componente donde irán los datos y funcionalidades
 export class IndexSubirCarpetaComponent implements OnInit{ 
+	public ciudadano: Ciudadano;
 	public errorMessage; 
 	public tramiteId;
 	public respuesta;
@@ -44,7 +46,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public placa;
 	public resive;
 	public identificacion;
-	public ciudadano;
 	public validateCedula;
 	public msgCiudadano;
 	public calseCedula;
@@ -54,7 +55,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public nit;
     public empresa;
     public btnNewPropietario;
-
+    public modalCiudadano;
+    public btnSeleccionarApoderado;
 
 
 	constructor(
@@ -68,6 +70,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _router: Router
 		
 		){
+			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
             this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,"","","","");
 
             let token = this._loginService.getToken();
@@ -88,6 +91,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 
 	ngOnInit(){	
+
 		this.placa = {
  		'placa' : this.placa,
  	};
@@ -102,9 +106,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 	onKey(event:any) {
  	let token = this._loginService.getToken();
- 	console.log(this.placa);
- 	
- 	
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
 					this.vehiculo = response.data;
@@ -172,6 +173,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
   	this.placa.placa=event
     this.onKey("");
   }
+  ciudadanoCreado(event:any) {
+  	console.log(event);
+  	this.onKeyCiudadano(event);
+
+  }
 
   onKeyCiudadano(event:any){
   	let identificacion = {
@@ -180,7 +186,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
   	let token = this._loginService.getToken();
   	this._CiudadanoService.showCiudadanoCedula(token,identificacion).subscribe(
 				response => {
-					this.ciudadano = response.data;
+					
 					let status = response.status;
 
 					if(this.ciudadanosVehiculo) {
@@ -204,7 +210,10 @@ export class IndexSubirCarpetaComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 						this.calseCedula = "form-group has-error has-feedback ";
 						this.btnNewPropietario=true;
+						this.modalCiudadano=true;
+
 						}else{
+							this.ciudadano = response.data;
 							this.btnNewPropietario=false;
 							this.validateCedula=true;
 							this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
@@ -265,7 +274,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
                             this.calseCedula = "form-group has-success has-feedback ";
                             this.msgCiudadano = response.msj;
-                            this.ciudadano = false;
+                            this.ciudadano = new Ciudadano(null,"",null, "","","","","");
                         }
                     }
 
@@ -286,6 +295,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
   VehiculoCiudadano(){
 
   	this.ciudadanoVehiculo.ciudadanoId=this.ciudadano.numeroIdentificacion;
+  	this.ciudadanoVehiculo.estadoPropiedad=1;
     this.ciudadanoVehiculo.empresaId=this.empresa.nit;
     this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
     this.ciudadanoVehiculo.fechaPropiedadInicial=this.vehiculo.fechaFactura;
@@ -328,6 +338,22 @@ export class IndexSubirCarpetaComponent implements OnInit{
             this.validateCedula=false;
         }
 
+    }
+
+    btnCancelarVinculo(){
+        this.validateCedula=false;
+    }
+
+    btnCancelarModalCedula(){
+    	this.modalCiudadano=false;
+    }
+
+    onChangeApoderado(event:any){
+    	if(event==true){
+    		this.btnSeleccionarApoderado=true;
+    	}else{
+    		this.btnSeleccionarApoderado=false;
+    	}
     }
 
 

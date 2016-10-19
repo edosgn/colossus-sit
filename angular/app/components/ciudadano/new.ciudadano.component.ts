@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {TipoIdentificacionService} from '../../services/tipo_Identificacion/tipoIdentificacion.service';
@@ -21,6 +21,8 @@ export class NewCiudadanoComponent {
 	public errorMessage;
 	public respuesta;
 	public tiposIdentificacion;
+	@Input() identificacionIngresada;
+	@Output() ciudadanoCreado = new EventEmitter<any>();
 
 	constructor(
 		private _TipoIdentificacionService: TipoIdentificacionService,	
@@ -29,10 +31,12 @@ export class NewCiudadanoComponent {
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-	){}
+	){
+}
 
 	ngOnInit(){
-		this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+		
+		this.ciudadano = new Ciudadano(null,"",this.identificacionIngresada, "","","","","");
 		let token = this._loginService.getToken();
 		
 		this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
@@ -56,7 +60,8 @@ export class NewCiudadanoComponent {
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=="success"){
-					this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+					console.log("echo: "+ this.ciudadano.numeroIdentificacion);
+					this.ciudadanoCreado.emit(this.ciudadano.numeroIdentificacion);
 				}
 
 			error => {

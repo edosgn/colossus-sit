@@ -21,6 +21,7 @@ var new_vehiculo_component_1 = require('../../components/vehiculo/new.vehiculo.c
 var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadano.component');
 var new_empresa_component_1 = require('../../components/empresa/new.empresa.component');
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
+var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -33,6 +34,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
@@ -58,7 +60,6 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.onKey = function (event) {
         var _this = this;
         var token = this._loginService.getToken();
-        console.log(this.placa);
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
             var status = response.status;
@@ -113,6 +114,10 @@ var IndexSubirCarpetaComponent = (function () {
         this.placa.placa = event;
         this.onKey("");
     };
+    IndexSubirCarpetaComponent.prototype.ciudadanoCreado = function (event) {
+        console.log(event);
+        this.onKeyCiudadano(event);
+    };
     IndexSubirCarpetaComponent.prototype.onKeyCiudadano = function (event) {
         var _this = this;
         var identificacion = {
@@ -120,7 +125,6 @@ var IndexSubirCarpetaComponent = (function () {
         };
         var token = this._loginService.getToken();
         this._CiudadanoService.showCiudadanoCedula(token, identificacion).subscribe(function (response) {
-            _this.ciudadano = response.data;
             var status = response.status;
             if (_this.ciudadanosVehiculo) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
@@ -142,8 +146,10 @@ var IndexSubirCarpetaComponent = (function () {
                     _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                     _this.calseCedula = "form-group has-error has-feedback ";
                     _this.btnNewPropietario = true;
+                    _this.modalCiudadano = true;
                 }
                 else {
+                    _this.ciudadano = response.data;
                     _this.btnNewPropietario = false;
                     _this.validateCedula = true;
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
@@ -196,7 +202,7 @@ var IndexSubirCarpetaComponent = (function () {
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                     _this.calseCedula = "form-group has-success has-feedback ";
                     _this.msgCiudadano = response.msj;
-                    _this.ciudadano = false;
+                    _this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
                 }
             }
         }, function (error) {
@@ -210,6 +216,7 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.VehiculoCiudadano = function () {
         var _this = this;
         this.ciudadanoVehiculo.ciudadanoId = this.ciudadano.numeroIdentificacion;
+        this.ciudadanoVehiculo.estadoPropiedad = 1;
         this.ciudadanoVehiculo.empresaId = this.empresa.nit;
         this.ciudadanoVehiculo.vehiculoId = this.vehiculo.placa;
         this.ciudadanoVehiculo.fechaPropiedadInicial = this.vehiculo.fechaFactura;
@@ -243,6 +250,20 @@ var IndexSubirCarpetaComponent = (function () {
         else {
             this.nit = false;
             this.validateCedula = false;
+        }
+    };
+    IndexSubirCarpetaComponent.prototype.btnCancelarVinculo = function () {
+        this.validateCedula = false;
+    };
+    IndexSubirCarpetaComponent.prototype.btnCancelarModalCedula = function () {
+        this.modalCiudadano = false;
+    };
+    IndexSubirCarpetaComponent.prototype.onChangeApoderado = function (event) {
+        if (event == true) {
+            this.btnSeleccionarApoderado = true;
+        }
+        else {
+            this.btnSeleccionarApoderado = false;
         }
     };
     IndexSubirCarpetaComponent = __decorate([

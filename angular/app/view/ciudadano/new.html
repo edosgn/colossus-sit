@@ -14,12 +14,7 @@
 
 	<form #newCiudadano="ngForm" (ngSubmit)="onSubmit()" class="col-md-12"> 
 
-		<div class="panel panel-primary">
-		  <div class="panel-heading">Reguistrar ciudadano</div>
-		  <div class="panel-body">
-		  	
-		  		<br>
-				<br>
+		
 
 				<p class="col-md-6"> 
 					<label>Tipo identificacion:</label>
@@ -80,12 +75,9 @@
 				<br>
 		        <p class="col-md-12"> 
 		        
-			    <input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"  
+			    <input  type="submit" value="LLena los Campos" class="btn btn-primary col-md-12"  
 				[disabled]="!newCiudadano.valid"/>
-			    
 			    </p>
-		  </div>
-		</div>
+		
 	</form>
 
-</div>
