@@ -38,6 +38,13 @@ var EmpresaService = (function () {
         return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    EmpresaService.prototype.showNit = function (token, nit) {
+        var json = JSON.stringify(nit);
+        var params = "json=" + json + "&authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/show/nit", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     EmpresaService.prototype.editEmpresa = function (empresa, token) {
         var json = JSON.stringify(empresa);
         var params = "json=" + json + "&authorization=" + token;

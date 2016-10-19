@@ -1,4 +1,5 @@
 // Importar el núcleo de Angular
+import {EmpresaService} from "../../services/empresa/empresa.service";
 import {CiudadanoVehiculoService} from "../../services/ciudadanoVehiculo/ciudadanoVehiculo.service";
 import {TipoIdentificacionService} from '../../services/tipo_Identificacion/tipoIdentificacion.service';
 import {VehiculoService} from "../../services/vehiculo/vehiculo.service";
@@ -17,7 +18,7 @@ import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
     directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent],
-    providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService]
+    providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -50,10 +51,12 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public existe;
     public tipoIdentificaciones;
     public nit;
+    public empresa;
 
 
 
 	constructor(
+        private _EmpresaService: EmpresaService,
         private _TipoIdentificacionService: TipoIdentificacionService,
 		private _VehiculoService: VehiculoService,
 		private _CiudadanoService: CiudadanoService,
@@ -63,7 +66,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _router: Router
 		
 		){
-            this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
+            this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,"","","","");
 
             let token = this._loginService.getToken();
             this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
@@ -178,7 +181,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					this.ciudadano = response.data;
 					let status = response.status;
 
-					if(this.ciudadanosVehiculo) {
+					if(this.ciudadanosVehiculo.ciudadano) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
 							if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
 								this.existe = true;
@@ -202,6 +205,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 							this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 							this.calseCedula = "form-group has-success has-feedback";
 				            this.msgCiudadano = response.msj;
+                            this.empresa = false;
 						}
 					}
 
@@ -218,16 +222,71 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			);
   }
 
+  onKeyEmpresa(event:any){
+      let nit = {
+         'nit' : event,
+     };
+      let token = this._loginService.getToken();
+      this._EmpresaService.showNit(token,nit).subscribe(
+                response => {
+                    this.empresa = response.data;
+                    let status = response.status;
+
+                    if(this.ciudadanosVehiculo) {
+                        for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+                            if(this.ciudadanosVehiculo[i].empresa) {
+                                if(this.ciudadanosVehiculo[i].empresa.nit == event) {
+                                    this.existe = true;
+                                }
+                            }
+                        }
+                    }
+                    
+                    if(this.existe){
+                        this.validateCedula = false;
+                        this.existe = false;
+                        alert ("existe una relacion con la empresa");
+
+                        
+                    }else{
+                            if(status == 'error') {
+                        this.validateCedula=false;
+                        this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
+                        this.calseCedula = "form-group has-error has-feedback";
+                        }else{
+                            this.validateCedula=true;
+                            this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
+                            this.calseCedula = "form-group has-success has-feedback";
+                            this.msgCiudadano = response.msj;
+                            this.ciudadano = false;
+                        }
+                    }
+
+                    
+                }, 
+                error => {
+                    this.errorMessage = <any>error;
+
+                    if(this.errorMessage != null){
+                        console.log(this.errorMessage);
+                        alert("Error en la petición");
+                    }
+                }
+            );
+  }
+
+
   VehiculoCiudadano(){
 
   	this.ciudadanoVehiculo.ciudadanoId=this.ciudadano.numeroIdentificacion;
+    this.ciudadanoVehiculo.empresaId=this.empresa.nit;
     this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
     this.ciudadanoVehiculo.fechaPropiedadInicial=this.vehiculo.fechaFactura;
     if(this.ciudadanosVehiculo != null) {
        this.ciudadanoVehiculo.licenciaTransito=this.ciudadanosVehiculo[0].licenciaTransito;
     }
 
-    console.log(this.ciudadanoVehiculo);
+    //console.log(this.ciudadanoVehiculo);
 
   	let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token).subscribe(
@@ -256,8 +315,10 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
         if(Value == 4) {
             this.nit = true;
+            this.validateCedula=false;
         }else{
             this.nit = false;
+            this.validateCedula=false;
         }
 
     }

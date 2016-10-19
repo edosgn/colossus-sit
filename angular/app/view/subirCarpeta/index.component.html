@@ -59,16 +59,18 @@
 
 				<div *ngIf="!nit" class="col-md-6"> 
 					<div  [class]="calseCedula">
-					  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
+					  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control col-md-4" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
 					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 					</div>
+					<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary btn-xs glyphicon glyphicon-plus"></button>
 				</div>
 
-				<div *ngIf="nit" class="col-md-6"> 
+				<div *ngIf="nit" class="col-md-5"> 
 					<div  [class]="calseCedula">
-					  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="NIT">
+					  <input  (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="NIT">
 					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 					</div>
+					<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary btn-xs glyphicon glyphicon-plus"></button>
 				</div>
 
 				<br>
@@ -79,8 +81,7 @@
 						  <div class="panel-heading">Propietario a Vehiculo</div>
 						  <div class="panel-body">
 
-								<div class="col-md-12">
-
+								<div *ngIf="ciudadano" class="col-md-12">
 										<div  class="panel panel-info">
 										  <div class="panel-heading">{{msgCiudadano}} encontrado</div>
 										  <div class="panel-body">
@@ -105,9 +106,36 @@
 										        </table>
 										  </div>
 										</div>
-
-
 								</div>
+
+								<div *ngIf="empresa" class="col-md-12">
+										<div  class="panel panel-info">
+										  <div class="panel-heading">{{msgCiudadano}}</div>
+										  <div class="panel-body">
+											    <table class="table table-bordered">
+										            <thead>
+										                <tr>
+										                    <th>NIT</th>
+										                    <th>nombre</th>
+															<th>direccion</th>
+											                <th>correo</th>
+											                <th>telefono</th>
+										                </tr>
+										            </thead>
+										            <tbody>
+										            	<tr >
+										                    <td >{{empresa.nit}}</td>
+										                    <td >{{empresa.nombre}}</td>
+										                    <td >{{empresa.direccion}}</td>
+										                    <td >{{empresa.correo}}</td>
+										                    <td >{{empresa.telefono}}</td>
+										                </tr>
+										            </tbody> 
+										        </table>
+										  </div>
+										</div>
+								</div>
+
 										<p *ngIf="ciudadanosVehiculo == null" class="col-md-12">
 											<label >licencia transito:</label>
 											<input #licenciaTransito="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.licenciaTransito" ngControl="licenciaTransito"  required />
@@ -139,12 +167,12 @@
 	            </thead>
 	            <tbody>
 	                <tr *ngFor="#ciudadanoVehiculo of ciudadanosVehiculo">
-	                    <td >{{ciudadanoVehiculo.ciudadano.nombres}}</td>
-	                    <td >{{ciudadanoVehiculo.ciudadano.apellidos}}</td>
-	                    <td >{{ciudadanoVehiculo.ciudadano.numeroIdentificacion}}</td>
-	                    <td >{{ciudadanoVehiculo.ciudadano.correo}}</td>
-	                    <td ><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.ciudadano.id}} 
-	                    (change)="onChangeCiudadano(ciudadanoVehiculo.ciudadano.id)"></td>
+	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.nombres}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.apellidos}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.numeroIdentificacion}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.ciudadano">{{ciudadanoVehiculo.ciudadano?.correo}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.ciudadano"><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.ciudadano?.id}} 
+	                    (change)="onChangeCiudadano(ciudadanoVehiculo.ciudadano?.id)"></td>
 	                </tr>
 	            </tbody> 
 	        </table>
@@ -163,13 +191,13 @@
 	            </thead>
 	            <tbody>
 	            	<tr *ngFor="#ciudadanoVehiculo of ciudadanosVehiculo">
-	                    <td >{{ciudadanoVehiculo.empresa?.nit}}</td>
-	                    <td >{{ciudadanoVehiculo.empresa?.nombre}}</td>
-	                    <td >{{ciudadanoVehiculo.empresa?.direccion}}</td>
-	                    <td >{{ciudadanoVehiculo.empresa?.correo}}</td>
-	                    <td >{{ciudadanoVehiculo.empresa?.telefono}}</td>
-	                    <td ><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.ciudadano.id}} 
-	                    (change)="onChangeCiudadano(ciudadanoVehiculo.ciudadano.id)"></td>
+	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.nit}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.nombre}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.direccion}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.correo}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.telefono}}</td>
+	                    <td *ngIf="ciudadanoVehiculo.empresa"><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
+	                    (change)="onChangeCiudadano(ciudadanoVehiculo.empresa?.id)"></td>
 	                </tr>
 	            </tbody> 
 	        </table>

@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
+var empresa_service_1 = require("../../services/empresa/empresa.service");
 var ciudadanoVehiculo_service_1 = require("../../services/ciudadanoVehiculo/ciudadanoVehiculo.service");
 var tipoIdentificacion_service_1 = require('../../services/tipo_Identificacion/tipoIdentificacion.service');
 var vehiculo_service_1 = require("../../services/vehiculo/vehiculo.service");
@@ -21,8 +22,9 @@ var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadan
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
-    function IndexSubirCarpetaComponent(_TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
+    function IndexSubirCarpetaComponent(_EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
         var _this = this;
+        this._EmpresaService = _EmpresaService;
         this._TipoIdentificacionService = _TipoIdentificacionService;
         this._VehiculoService = _VehiculoService;
         this._CiudadanoService = _CiudadanoService;
@@ -30,7 +32,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
-        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
+        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
             _this.tipoIdentificaciones = response.data;
@@ -119,7 +121,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._CiudadanoService.showCiudadanoCedula(token, identificacion).subscribe(function (response) {
             _this.ciudadano = response.data;
             var status = response.status;
-            if (_this.ciudadanosVehiculo) {
+            if (_this.ciudadanosVehiculo.ciudadano) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                     if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
                         _this.existe = true;
@@ -142,6 +144,52 @@ var IndexSubirCarpetaComponent = (function () {
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                     _this.calseCedula = "form-group has-success has-feedback";
                     _this.msgCiudadano = response.msj;
+                    _this.empresa = false;
+                }
+            }
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+    };
+    IndexSubirCarpetaComponent.prototype.onKeyEmpresa = function (event) {
+        var _this = this;
+        var nit = {
+            'nit': event,
+        };
+        var token = this._loginService.getToken();
+        this._EmpresaService.showNit(token, nit).subscribe(function (response) {
+            _this.empresa = response.data;
+            var status = response.status;
+            if (_this.ciudadanosVehiculo) {
+                for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+                    if (_this.ciudadanosVehiculo[i].empresa) {
+                        if (_this.ciudadanosVehiculo[i].empresa.nit == event) {
+                            _this.existe = true;
+                        }
+                    }
+                }
+            }
+            if (_this.existe) {
+                _this.validateCedula = false;
+                _this.existe = false;
+                alert("existe una relacion con la empresa");
+            }
+            else {
+                if (status == 'error') {
+                    _this.validateCedula = false;
+                    _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
+                    _this.calseCedula = "form-group has-error has-feedback";
+                }
+                else {
+                    _this.validateCedula = true;
+                    _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
+                    _this.calseCedula = "form-group has-success has-feedback";
+                    _this.msgCiudadano = response.msj;
+                    _this.ciudadano = false;
                 }
             }
         }, function (error) {
@@ -155,12 +203,13 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.VehiculoCiudadano = function () {
         var _this = this;
         this.ciudadanoVehiculo.ciudadanoId = this.ciudadano.numeroIdentificacion;
+        this.ciudadanoVehiculo.empresaId = this.empresa.nit;
         this.ciudadanoVehiculo.vehiculoId = this.vehiculo.placa;
         this.ciudadanoVehiculo.fechaPropiedadInicial = this.vehiculo.fechaFactura;
         if (this.ciudadanosVehiculo != null) {
             this.ciudadanoVehiculo.licenciaTransito = this.ciudadanosVehiculo[0].licenciaTransito;
         }
-        console.log(this.ciudadanoVehiculo);
+        //console.log(this.ciudadanoVehiculo);
         var token = this._loginService.getToken();
         this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token).subscribe(function (response) {
             _this.respuesta = response;
@@ -182,9 +231,11 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.onChangeNit = function (Value) {
         if (Value == 4) {
             this.nit = true;
+            this.validateCedula = false;
         }
         else {
             this.nit = false;
+            this.validateCedula = false;
         }
     };
     IndexSubirCarpetaComponent = __decorate([
@@ -192,9 +243,9 @@ var IndexSubirCarpetaComponent = (function () {
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent],
-            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService]
+            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
         }), 
-        __metadata('design:paramtypes', [tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexSubirCarpetaComponent);
     return IndexSubirCarpetaComponent;
 }());

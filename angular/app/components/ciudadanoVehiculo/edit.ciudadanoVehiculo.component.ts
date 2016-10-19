@@ -48,7 +48,7 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 		this.msg = "vechiculo";
 		this.claseSpan ="";
 		this.validate=false;
-		this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,"","","","");
+		this.ciudadanoVehiculo = new CiudadanoVehiculo(null,null, null,null,"","","","");
         let token = this._loginService.getToken();
         this._route.params.subscribe(params =>{
 				this.id = +params["id"];
@@ -57,7 +57,7 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 				response => {
 					this.data = response.data;
 					this.vehiculo = response.data.vehiculo;
-					this.ciudadanoVehiculo = new CiudadanoVehiculo(this.data.id, this.data.ciudadano.id,this.data.vehiculo.placa,this.data.licenciaTransito,this.data.fechaPropiedadInicial,this.data.fechaPropiedadFinal,this.data.estadoPropiedad);
+					this.ciudadanoVehiculo = new CiudadanoVehiculo(this.data.id, this.data.ciudadano.id,this.data.vehiculo.placa,null,this.data.licenciaTransito,this.data.fechaPropiedadInicial,this.data.fechaPropiedadFinal,this.data.estadoPropiedad);
 					this.validate = true;
 				}, 
 				error => {

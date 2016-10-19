@@ -32,7 +32,7 @@ var CiudadanoVehiculoEditComponent = (function () {
         this.msg = "vechiculo";
         this.claseSpan = "";
         this.validate = false;
-        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, "", "", "", "");
+        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
@@ -40,7 +40,7 @@ var CiudadanoVehiculoEditComponent = (function () {
         this._CiudadanoVehiculoService.showCiudadanoVehiculo(token, this.id).subscribe(function (response) {
             _this.data = response.data;
             _this.vehiculo = response.data.vehiculo;
-            _this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(_this.data.id, _this.data.ciudadano.id, _this.data.vehiculo.placa, _this.data.licenciaTransito, _this.data.fechaPropiedadInicial, _this.data.fechaPropiedadFinal, _this.data.estadoPropiedad);
+            _this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(_this.data.id, _this.data.ciudadano.id, _this.data.vehiculo.placa, null, _this.data.licenciaTransito, _this.data.fechaPropiedadInicial, _this.data.fechaPropiedadFinal, _this.data.estadoPropiedad);
             _this.validate = true;
         }, function (error) {
             _this.errorMessage = error;
