@@ -55,7 +55,9 @@ export class NewCiudadanoComponent {
 		this._CiudadanoService.register(this.ciudadano,token).subscribe(
 			response => {
 				this.respuesta = response;
-				console.log(this.respuesta);
+				if(this.respuesta.status=="success"){
+					this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+				}
 
 			error => {
 					this.errorMessage = <any>error;

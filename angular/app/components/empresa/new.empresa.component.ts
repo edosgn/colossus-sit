@@ -12,7 +12,7 @@ import {Empresa} from '../../model/empresa/Empresa';
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'register',
+    selector: 'registerEmpresa',
     templateUrl: 'app/view/empresa/new.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,EmpresaService,MunicipioService,TipoEmpresaService,CiudadanoService,DepartamentoService]
@@ -140,9 +140,12 @@ export class NewEmpresaComponent {
 		this._EmpresaService.register(this.empresa,token).subscribe(
 			response => {
 				this.respuesta = response;
+				if(this.respuesta.status=="success") {
+					this.empresa = new Empresa(null,null,null,null,null,"","","","");
+				}
 			error => {
 					this.errorMessage = <any>error;
-
+					
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");

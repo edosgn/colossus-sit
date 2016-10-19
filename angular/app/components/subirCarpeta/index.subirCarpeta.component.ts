@@ -10,6 +10,7 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../model/tramite/Tramite';
 import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.component';
 import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
+import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -17,7 +18,7 @@ import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
-    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent],
+    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent]
     providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
 })
  
@@ -52,6 +53,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public tipoIdentificaciones;
     public nit;
     public empresa;
+    public btnNewPropietario;
 
 
 
@@ -111,11 +113,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
 						this.validate=false	;
 						this.validateCiudadano=false;
 						this.crear=true;
-						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback";
+						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback ";
 						this.clase = "form-group has-error has-feedback";
 						this.activar =false;
 					}else{
-							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback";
+							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback ";
 							this.clase = "form-group has-success has-feedback";
 				            this.msg = response.msj;
 				            this.crear=false;
@@ -181,11 +183,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					this.ciudadano = response.data;
 					let status = response.status;
 
-					if(this.ciudadanosVehiculo.ciudadano) {
+					if(this.ciudadanosVehiculo) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
-							if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-								this.existe = true;
+								if(this.ciudadanosVehiculo[i].ciudadano) {
+									if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+									this.existe = true;
+								}
 							}
+							
 						}
 					}
 					
@@ -193,17 +198,17 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         this.validateCedula = false;
                         this.existe = false;
 						alert ("existe una relacion con el ciudadano");
-
-						
 					}else{
 							if(status == 'error') {
 						this.validateCedula=false;
 						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
-						this.calseCedula = "form-group has-error has-feedback";
+						this.calseCedula = "form-group has-error has-feedback ";
+						this.btnNewPropietario=true;
 						}else{
+							this.btnNewPropietario=false;
 							this.validateCedula=true;
 							this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
-							this.calseCedula = "form-group has-success has-feedback";
+							this.calseCedula = "form-group has-success has-feedback ";
 				            this.msgCiudadano = response.msj;
                             this.empresa = false;
 						}
@@ -252,11 +257,13 @@ export class IndexSubirCarpetaComponent implements OnInit{
                             if(status == 'error') {
                         this.validateCedula=false;
                         this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
-                        this.calseCedula = "form-group has-error has-feedback";
+                        this.calseCedula = "form-group has-error has-feedback ";
+                        this.btnNewPropietario = true;
                         }else{
+                        	this.btnNewPropietario=false;
                             this.validateCedula=true;
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
-                            this.calseCedula = "form-group has-success has-feedback";
+                            this.calseCedula = "form-group has-success has-feedback ";
                             this.msgCiudadano = response.msj;
                             this.ciudadano = false;
                         }

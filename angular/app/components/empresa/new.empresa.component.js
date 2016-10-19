@@ -106,6 +106,9 @@ var NewEmpresaComponent = (function () {
         var token = this._loginService.getToken();
         this._EmpresaService.register(this.empresa, token).subscribe(function (response) {
             _this.respuesta = response;
+            if (_this.respuesta.status == "success") {
+                _this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
+            }
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -117,7 +120,7 @@ var NewEmpresaComponent = (function () {
     };
     NewEmpresaComponent = __decorate([
         core_1.Component({
-            selector: 'register',
+            selector: 'registerEmpresa',
             templateUrl: 'app/view/empresa/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, empresa_service_1.EmpresaService, municipio_service_1.MunicipioService, tipoEmpresa_service_1.TipoEmpresaService, ciudadano_service_1.CiudadanoService, departamento_service_1.DepartamentoService]

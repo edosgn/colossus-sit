@@ -43,7 +43,9 @@ var NewCiudadanoComponent = (function () {
         var token = this._loginService.getToken();
         this._CiudadanoService.register(this.ciudadano, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
+            if (_this.respuesta.status == "success") {
+                _this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
+            }
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {

@@ -29,7 +29,7 @@
 	                    
 	                </tr>
 	            </thead>
-	            <tbody>
+	            <tbody> 
 	                <tr>
 	                    <td >{{vehiculo.linea.nombre}}</td>
 	                    <td >{{vehiculo.linea.marca.nombre}}</td>
@@ -47,7 +47,7 @@
 <div *ngIf="activar" class="col-md-12">
 	<div  class="panel panel-primary">
 	  <div class="panel-heading">Propetarios 
-				<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary btn-xs glyphicon glyphicon-plus"></button>
+				<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary">Apoderado</button>
 	  </div>
 	  <div class="panel-body">
 
@@ -58,21 +58,31 @@
 				</p>
 
 				<div *ngIf="!nit" class="col-md-6"> 
-					<div  [class]="calseCedula">
-					  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control col-md-4" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
-					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
+				    <div class="col-md-10">
+				    	<div  [class]="calseCedula">
+						  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
+						  <span [class]="claseSpanCedula" aria-hidden="true"></span>
+						</div>
+				    </div>
+					
+					<div class="col-md-2">
+						<button [disabled]='!btnNewPropietario' data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button>
 					</div>
-					<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary btn-xs glyphicon glyphicon-plus"></button>
+					
 				</div>
 
-				<div *ngIf="nit" class="col-md-5"> 
-					<div  [class]="calseCedula">
-					  <input  (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="NIT">
-					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
-					</div>
-					<button data-toggle="modal" data-target="#myModal" class="col-md-offset-10 btn btn-primary btn-xs glyphicon glyphicon-plus"></button>
-				</div>
+				<div *ngIf="nit" class="col-md-6"> 
+					<div class="col-md-10">
+						<div  [class]="calseCedula">
+						  <input  (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="NIT">
+						  <span [class]="claseSpanCedula" aria-hidden="true"></span>
+						</div>
+				    </div>		
 
+					<div class="col-md-2">
+						<button [disabled]='!btnNewPropietario' data-toggle="modal" data-target="#myModalEmpresa" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button>
+					</div>
+				</div>
 				<br>
 				<br>
 
@@ -223,11 +233,30 @@
 	  </div><!-- /.modal-dialog -->
 </div> 
 
+<div class="modal fade" id="myModalEmpresa" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+	<div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	      </div>
+			<registerEmpresa ></registerEmpresa>
+	      <div class="modal-footer">
+	      </div>
+	    </div><!-- /.modal-content -->
+	  </div><!-- /.modal-dialog -->
+</div>
+
+
+
 
 <script type="text/javascript">
 $('#myModal').on('shown.bs.modal', function () {
   $('#myInput').focus()
-})</script>
+})
+$('#myModalEmpresa').on('shown.bs.modal', function () {
+  $('#myInput').focus()
+})
+</script>
 
 
    

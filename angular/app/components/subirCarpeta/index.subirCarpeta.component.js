@@ -19,6 +19,7 @@ var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var new_vehiculo_component_1 = require('../../components/vehiculo/new.vehiculo.component');
 var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadano.component');
+var new_empresa_component_1 = require('../../components/empresa/new.empresa.component');
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
@@ -65,12 +66,12 @@ var IndexSubirCarpetaComponent = (function () {
                 _this.validate = false;
                 _this.validateCiudadano = false;
                 _this.crear = true;
-                _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback";
+                _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback ";
                 _this.clase = "form-group has-error has-feedback";
                 _this.activar = false;
             }
             else {
-                _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback";
+                _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback ";
                 _this.clase = "form-group has-success has-feedback";
                 _this.msg = response.msj;
                 _this.crear = false;
@@ -121,10 +122,12 @@ var IndexSubirCarpetaComponent = (function () {
         this._CiudadanoService.showCiudadanoCedula(token, identificacion).subscribe(function (response) {
             _this.ciudadano = response.data;
             var status = response.status;
-            if (_this.ciudadanosVehiculo.ciudadano) {
+            if (_this.ciudadanosVehiculo) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
-                    if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-                        _this.existe = true;
+                    if (_this.ciudadanosVehiculo[i].ciudadano) {
+                        if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+                            _this.existe = true;
+                        }
                     }
                 }
             }
@@ -137,12 +140,14 @@ var IndexSubirCarpetaComponent = (function () {
                 if (status == 'error') {
                     _this.validateCedula = false;
                     _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
-                    _this.calseCedula = "form-group has-error has-feedback";
+                    _this.calseCedula = "form-group has-error has-feedback ";
+                    _this.btnNewPropietario = true;
                 }
                 else {
+                    _this.btnNewPropietario = false;
                     _this.validateCedula = true;
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
-                    _this.calseCedula = "form-group has-success has-feedback";
+                    _this.calseCedula = "form-group has-success has-feedback ";
                     _this.msgCiudadano = response.msj;
                     _this.empresa = false;
                 }
@@ -182,12 +187,14 @@ var IndexSubirCarpetaComponent = (function () {
                 if (status == 'error') {
                     _this.validateCedula = false;
                     _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
-                    _this.calseCedula = "form-group has-error has-feedback";
+                    _this.calseCedula = "form-group has-error has-feedback ";
+                    _this.btnNewPropietario = true;
                 }
                 else {
+                    _this.btnNewPropietario = false;
                     _this.validateCedula = true;
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
-                    _this.calseCedula = "form-group has-success has-feedback";
+                    _this.calseCedula = "form-group has-success has-feedback ";
                     _this.msgCiudadano = response.msj;
                     _this.ciudadano = false;
                 }
@@ -242,7 +249,7 @@ var IndexSubirCarpetaComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent],
+            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent],
             providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
         }), 
         __metadata('design:paramtypes', [empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
