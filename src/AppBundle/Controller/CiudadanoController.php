@@ -68,7 +68,7 @@ class CiudadanoController extends Controller
                         $correo = $params->correo;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
-                            array('correo' => $correo)
+                            array('numeroIdentificacion' => $numeroIdentificacion)
                         );
 
                         if ($ciudadanos==null) {
