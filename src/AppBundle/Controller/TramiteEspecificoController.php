@@ -113,12 +113,12 @@ class TramiteEspecificoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $tramiteGeneral = $em->getRepository('AppBundle:TramiteEspecifico')->find($id);
+            $tramiteEspecifico = $em->getRepository('AppBundle:TramiteEspecifico')->find($id);
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "tramiteGeneral", 
-                    'data'=> $tramiteGeneral,
+                    'msj' => "tramiteEspecifico", 
+                    'data'=> $tramiteEspecifico,
             );
         }else{
             $responce = array(
@@ -241,5 +241,47 @@ class TramiteEspecificoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Busca los tramites especifos de cada tramite general.
+     *
+     * @Route("/tramiteE/tramiteG/{id}", name="tramiteespecifico_tramiteGeneral_show")
+     * @Method("POST")
+     */
+    public function showTRamiteEAction(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $tramiteEspecificos = $em->getRepository('AppBundle:TramiteEspecifico')->findBy(
+            array('estado' => 1,'tramiteGeneral' => $id)
+            );
+            if ($tramiteEspecificos!=null) {
+               $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramiteEspecificos", 
+                    'data'=> $tramiteEspecificos,
+            );
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "No existen tramites generales para este tramite especifico", 
+                );
+            }
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
     }
 }
