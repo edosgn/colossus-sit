@@ -247,7 +247,7 @@ class TramiteEspecificoController extends Controller
      * Busca los tramites especifos de cada tramite general.
      *
      * @Route("/tramiteE/tramiteG/{id}", name="tramiteespecifico_tramiteGeneral_show")
-     * @Method("POST")
+     * @Method("POST") 
      */
     public function showTRamiteEAction(Request $request,$id)
     {

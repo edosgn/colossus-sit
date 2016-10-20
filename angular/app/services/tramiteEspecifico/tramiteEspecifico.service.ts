@@ -52,5 +52,13 @@ export class TramiteEspecificoService {
 							  .map(res => res.json());
 
 	}
+
+	showTramiteEspecificoGeneral(token,id){
+		let params = "authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		return this._http.post(this.url+"/tramiteE/tramiteG/"+id, params, {headers: headers})
+							  .map(res => res.json());
+
+	}
 	
 }

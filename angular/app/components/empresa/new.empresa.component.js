@@ -31,6 +31,7 @@ var NewEmpresaComponent = (function () {
         this._router = _router;
         this.habilitar = true;
         this.validateCedula = false;
+        this.empresaCreada = new core_1.EventEmitter();
     }
     NewEmpresaComponent.prototype.onChange = function (departamentoValue) {
         var _this = this;
@@ -80,7 +81,7 @@ var NewEmpresaComponent = (function () {
     };
     NewEmpresaComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
+        this.empresa = new Empresa_1.Empresa(null, null, null, null, this.nitIngresada, "", "", "", "");
         var token = this._loginService.getToken();
         this._DepartamentoService.getDepartamento().subscribe(function (response) {
             _this.departamentos = response.data;
@@ -107,7 +108,7 @@ var NewEmpresaComponent = (function () {
         this._EmpresaService.register(this.empresa, token).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == "success") {
-                _this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
+                _this.empresaCreada.emit(_this.empresa.nit);
             }
             (function (error) {
                 _this.errorMessage = error;
@@ -118,6 +119,14 @@ var NewEmpresaComponent = (function () {
             });
         });
     };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewEmpresaComponent.prototype, "nitIngresada", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], NewEmpresaComponent.prototype, "empresaCreada", void 0);
     NewEmpresaComponent = __decorate([
         core_1.Component({
             selector: 'registerEmpresa',

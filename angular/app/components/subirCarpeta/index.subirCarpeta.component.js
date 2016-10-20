@@ -23,10 +23,13 @@ var new_empresa_component_1 = require('../../components/empresa/new.empresa.comp
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
+var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tramiteEspecifico.service");
+var Empresa_1 = require('../../model/empresa/Empresa');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
-    function IndexSubirCarpetaComponent(_TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
+    function IndexSubirCarpetaComponent(_TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
         var _this = this;
+        this._TramiteEspecificoService = _TramiteEspecificoService;
         this._TramiteGeneral = _TramiteGeneral;
         this._EmpresaService = _EmpresaService;
         this._TipoIdentificacionService = _TipoIdentificacionService;
@@ -38,6 +41,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._router = _router;
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
+        this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
             _this.tipoIdentificaciones = response.data;
@@ -75,6 +79,7 @@ var IndexSubirCarpetaComponent = (function () {
                 _this.activar = false;
             }
             else {
+                _this.tramitesGeneralSeccion = true;
                 _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback ";
                 _this.clase = "form-group has-success has-feedback";
                 _this.msg = response.msj;
@@ -105,7 +110,7 @@ var IndexSubirCarpetaComponent = (function () {
                 };
                 _this._TramiteGeneral.showTramiteGeneralVehiculo(token, vehiculoTramite).subscribe(function (response) {
                     _this.tramitesGeneral = response.data;
-                    console.log("hola " + _this.tramitesGeneral);
+                    _this.tramiteEspecificos = null;
                 }, function (error) {
                     _this.errorMessage = error;
                     if (_this.errorMessage != null) {
@@ -127,8 +132,20 @@ var IndexSubirCarpetaComponent = (function () {
         console.log(this.idCiudadanoSeleccionado);
     };
     IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
+        var _this = this;
         var tramiteGeneral = id;
+        var token = this._loginService.getToken();
         console.log("tramite general: ", tramiteGeneral);
+        this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
+            _this.tramiteEspecificos = response.data;
+            console.log(_this.tramiteEspecificos);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
     };
     IndexSubirCarpetaComponent.prototype.onChangeApoderado = function (event) {
         if (event == true) {
@@ -143,8 +160,10 @@ var IndexSubirCarpetaComponent = (function () {
         this.onKey("");
     };
     IndexSubirCarpetaComponent.prototype.ciudadanoCreado = function (event) {
-        console.log(event);
         this.onKeyCiudadano(event);
+    };
+    IndexSubirCarpetaComponent.prototype.empresaCreada = function (event) {
+        this.onKeyEmpresa(event);
     };
     IndexSubirCarpetaComponent.prototype.onKeyCiudadano = function (event) {
         var _this = this;
@@ -201,7 +220,6 @@ var IndexSubirCarpetaComponent = (function () {
         };
         var token = this._loginService.getToken();
         this._EmpresaService.showNit(token, nit).subscribe(function (response) {
-            _this.empresa = response.data;
             var status = response.status;
             if (_this.ciudadanosVehiculo) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
@@ -223,8 +241,10 @@ var IndexSubirCarpetaComponent = (function () {
                     _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                     _this.calseCedula = "form-group has-error has-feedback ";
                     _this.btnNewPropietario = true;
+                    _this.modalEmpresa = true;
                 }
                 else {
+                    _this.empresa = response.data;
                     _this.btnNewPropietario = false;
                     _this.validateCedula = true;
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
@@ -285,15 +305,20 @@ var IndexSubirCarpetaComponent = (function () {
     };
     IndexSubirCarpetaComponent.prototype.btnCancelarModalCedula = function () {
         this.modalCiudadano = false;
+        this.btnNewPropietario = false;
+    };
+    IndexSubirCarpetaComponent.prototype.btnCancelarModalEmpresa = function () {
+        this.modalEmpresa = false;
+        this.btnNewPropietario = false;
     };
     IndexSubirCarpetaComponent = __decorate([
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent],
-            providers: [login_service_1.LoginService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
+            providers: [login_service_1.LoginService, , tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
         }), 
-        __metadata('design:paramtypes', [tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexSubirCarpetaComponent);
     return IndexSubirCarpetaComponent;
 }());

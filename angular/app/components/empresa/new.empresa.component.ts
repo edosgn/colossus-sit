@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {TipoEmpresaService} from "../../services/tipo_Empresa/tipoEmpresa.service";
@@ -32,6 +32,8 @@ export class NewEmpresaComponent {
 	public calseCedula;
 	public claseSpanCedula;
 	public validateCedula = false;
+	@Input() nitIngresada;
+	@Output() empresaCreada = new EventEmitter<any>();
 
 	constructor(
 		private _CiudadanoService: CiudadanoService,
@@ -104,7 +106,7 @@ export class NewEmpresaComponent {
 	
 
 	ngOnInit(){
-		this.empresa = new Empresa(null,null,null,null,null,"","","","");
+		this.empresa = new Empresa(null,null,null,null,this.nitIngresada,"","","","");
 		let token = this._loginService.getToken();
 		
 		this._DepartamentoService.getDepartamento().subscribe(
@@ -141,7 +143,7 @@ export class NewEmpresaComponent {
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=="success") {
-					this.empresa = new Empresa(null,null,null,null,null,"","","","");
+					this.empresaCreada.emit(this.empresa.nit);
 				}
 			error => {
 					this.errorMessage = <any>error;

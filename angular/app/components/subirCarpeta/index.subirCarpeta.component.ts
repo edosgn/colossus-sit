@@ -14,13 +14,15 @@ import {NewEmpresaComponent} from '../../components/empresa/new.empresa.componen
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
+import {TramiteEspecificoService} from "../../services/tramiteEspecifico/tramiteEspecifico.service";
+import {Empresa} from '../../model/empresa/Empresa';
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
     directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent],
-    providers: [LoginService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
+    providers: [LoginService,,TramiteEspecificoService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -34,6 +36,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public vehiculo;
 	public validate;
 	public ciudadanoVehiculo: CiudadanoVehiculo;
+	public empresa: Empresa;
 	public clase;
 	public msg;
 	public claseSpan;
@@ -54,13 +57,15 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public existe;
     public tipoIdentificaciones;
     public nit;
-    public empresa;
     public btnNewPropietario;
     public modalCiudadano;
+    public modalEmpresa;
     public btnSeleccionarApoderado;
+    public tramiteEspecificos;
 
 
 	constructor(
+		private _TramiteEspecificoService: TramiteEspecificoService,
 		private _TramiteGeneral: TramiteGeneralService,
         private _EmpresaService: EmpresaService,
         private _TipoIdentificacionService: TipoIdentificacionService,
@@ -74,7 +79,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		){
 			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
             this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,"","","","");
-
+            this.empresa = new Empresa(null,null,null,null,null,"","","","");
             let token = this._loginService.getToken();
             this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
                     response => {
@@ -120,6 +125,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 						this.clase = "form-group has-error has-feedback";
 						this.activar =false;
 					}else{
+							this.tramitesGeneralSeccion =true;
 							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback ";
 							this.clase = "form-group has-success has-feedback";
 				            this.msg = response.msj;
@@ -157,7 +163,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 							this._TramiteGeneral.showTramiteGeneralVehiculo(token,vehiculoTramite).subscribe(
 								response => {
 									this.tramitesGeneral = response.data;
-									console.log("hola "+this.tramitesGeneral);
+									this.tramiteEspecificos = null;
 								}, 
 								error => {
 									this.errorMessage = <any>error;
@@ -191,7 +197,22 @@ export class IndexSubirCarpetaComponent implements OnInit{
   }
   onChangeTramiteGeneral(id){
   	let tramiteGeneral = id;
+	let token = this._loginService.getToken();
   	console.log("tramite general: " tramiteGeneral);
+	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
+					response => {
+						this.tramiteEspecificos = response.data;
+						console.log(this.tramiteEspecificos);
+					}, 
+					error => {
+						this.errorMessage = <any>error;
+
+						if(this.errorMessage != null){
+							console.log(this.errorMessage);
+							alert("Error en la petición");
+						}
+					}
+				);  
   }
   
   onChangeApoderado(event:any){
@@ -207,9 +228,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
     this.onKey("");
   }
   ciudadanoCreado(event:any) {
-  	console.log(event);
   	this.onKeyCiudadano(event);
 
+  }
+  empresaCreada(event:any){
+  	this.onKeyEmpresa(event);
   }
 
   onKeyCiudadano(event:any){
@@ -238,13 +261,12 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         this.existe = false;
 						alert ("existe una relacion con el ciudadano");
 					}else{
-							if(status == 'error') {
+						if(status == 'error') {
 						this.validateCedula=false;
 						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 						this.calseCedula = "form-group has-error has-feedback ";
 						this.btnNewPropietario=true;
 						this.modalCiudadano=true;
-
 						}else{
 							this.ciudadano = response.data;
 							this.btnNewPropietario=false;
@@ -276,7 +298,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
       let token = this._loginService.getToken();
       this._EmpresaService.showNit(token,nit).subscribe(
                 response => {
-                    this.empresa = response.data;
                     let status = response.status;
 
                     if(this.ciudadanosVehiculo) {
@@ -293,15 +314,16 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         this.validateCedula = false;
                         this.existe = false;
                         alert ("existe una relacion con la empresa");
-
-                        
                     }else{
-                            if(status == 'error') {
+                        if(status == 'error') {
                         this.validateCedula=false;
                         this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
                         this.calseCedula = "form-group has-error has-feedback ";
                         this.btnNewPropietario = true;
+                        this.modalEmpresa=true;
                         }else{
+                   			 this.empresa = response.data;
+
                         	this.btnNewPropietario=false;
                             this.validateCedula=true;
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
@@ -379,7 +401,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
     btnCancelarModalCedula(){
     	this.modalCiudadano=false;
+    	this.btnNewPropietario=false;
     }
+
+    btnCancelarModalEmpresa(){
+	    this.modalEmpresa=false;
+	    this.btnNewPropietario=false;
+    }
+
 
     
 

@@ -45,7 +45,6 @@ var NewCiudadanoComponent = (function () {
         this._CiudadanoService.register(this.ciudadano, token).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == "success") {
-                console.log("echo: " + _this.ciudadano.numeroIdentificacion);
                 _this.ciudadanoCreado.emit(_this.ciudadano.numeroIdentificacion);
             }
             (function (error) {

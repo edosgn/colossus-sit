@@ -75,14 +75,13 @@
 				<div *ngIf="nit" class="col-md-6"> 
 					<div class="col-md-10">
 						<div  [class]="calseCedula">
-						  <input  (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="NIT">
+						  <input [(ngModel)]="empresa.nit" (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="NIT">
 						  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 						</div>
-				    </div>		
+				    </div>		 
 
 					<div class="col-md-2">
 						<button [disabled]='!btnNewPropietario' data-toggle="modal" data-target="#myModalEmpresa" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button>
-
 					</div>
 				</div>
 				<br>
@@ -165,8 +164,6 @@
 											/>
 											<a *ngIf="btnSeleccionarApoderado" (click)="onChangeCiudadano(ciudadano?.id)"  class="btn btn-primary col-md-6">Seleccionar</a>
 									    </p>
-
-									 
 						  </div>
 						</div>
 				</form>
@@ -229,7 +226,7 @@
 	</div>
 </div>	
 
-<div class="col-md-12">
+<div *ngIf="tramitesGeneralSeccion" class="col-md-12">
 	<div class="panel panel-primary">
 	  <div class="panel-heading">Tramites</div>
 	  <div class="panel-body">
@@ -254,7 +251,7 @@
 	                    <td >{{tramiteGeneral.fechaInicial}}</td>
 	                    <td >{{tramiteGeneral.fechaFinal}}</td>
 	                    <td >{{tramiteGeneral.valor}}</td>
-	                    <td ><input name="optionsTramites" ng-control="optionsTramites" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
+	                    <td ><input name="optionstrmiteGeneral" ng-control="optionstrmiteGeneral" type="radio" value={{tramiteGeneral.id}}
 	                    (change)="onChangeTramiteGeneral(tramiteGeneral.id)"></td>
 	                </tr>
 	            </tbody> 
@@ -265,17 +262,23 @@
 	        <table class="table table-bordered">
 	            <thead>
 	                <tr>
-	                    <th>Linea</th>
-	                    <th>Marca</th>
-	                    <th>Clase</th>
-	                    <th>Modelo</th>
-	                    
+	                   	<th>Id</th>
+	                    <th>Tramite</th>
+	                    <th>Tramite General</th>
+	                    <th>Variante</th>
+	                    <th>Caso</th>
+	                    <th>valor</th>
 	                </tr>
 	            </thead>
 	            <tbody> 
-	                <tr>
-	                    
-	                </tr>
+	                <tr *ngFor="#tramiteEspecifico of tramiteEspecificos">
+                    <td >{{tramiteEspecifico.id}}</td>
+                    <td >{{tramiteEspecifico.tramite.nombre}}</td>
+                    <td >{{tramiteEspecifico.tramiteGeneral.numeroLicencia}}</td>
+                    <td >{{tramiteEspecifico.variante.nombre}}</td>
+                    <td >{{tramiteEspecifico.caso.nombre}}</td>
+                    <td >{{tramiteEspecifico.valor}}</td>
+                </tr>
 	            </tbody> 
 	        </table>
 
@@ -299,13 +302,14 @@
 	  </div><!-- /.modal-dialog -->
 </div> 
 
-<div class="modal fade" id="myModalEmpresa" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+<div *ngIf="modalEmpresa" class="modal fade" id="myModalEmpresa" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
 	<div class="modal-dialog" role="document">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <button type="button" (click)="btnCancelarModalEmpresa()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title">Registrar Empresa</h4>
 	      </div>
-			<registerEmpresa ></registerEmpresa>
+			<registerEmpresa (empresaCreada)="empresaCreada($event)" [nitIngresada]="empresa.nit" ></registerEmpresa>
 	      <div class="modal-footer">
 	      </div>
 	    </div><!-- /.modal-content -->

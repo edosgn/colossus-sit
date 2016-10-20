@@ -14,26 +14,7 @@
 
 	<form #newCiudadano="ngForm" (ngSubmit)="onSubmit()"> 
 
-		<div class="panel panel-primary">
-		  <div class="panel-heading">Reguistrar Empresa</div>
-		  <div class="panel-body">
-		  <p class="col-md-6">  
-					<label>Departamento:</label>
-					<select  class="form-control" #departamentoId="ngForm"  (change)="onChange($event.target.value)" ngControl="departamentoId" name="departamentos" required>
-					  <option  *ngFor="#departamento of departamentos" [value]='departamento.id' >{{departamento.nombre}}</option>
-					</select>
-					<span *ngIf = "!departamentoId.valid && departamentoId.touched" class="text-danger">el departamento es obligatorio</span>
-				</p>
-
-				<p class="col-md-6"> 
-					<label>Municipio:</label>
-					<select [disabled]="habilitar"  class="form-control" #municipioId="ngForm" ngControl="municipioId" [(ngModel)]="empresa.municipioId" required>
-					  <option *ngFor="#municipio of municipios" [value]='municipio.id' >{{municipio.nombre}}</option>
-					</select>
-					<span *ngIf = "!municipioId.valid && municipioId.touched" class="text-danger">municipio es obligatorio</span>
-				</p>
-
-				<div  class="col-md-12"> 	
+	<div  class="col-md-12"> 	
 					<div  [class]="calseCedula">
 					  <input  [(ngModel)]="empresa.ciudadanoId" (blur)="onKeyCiudadano($event)" (keyup.enter)="onKeyCiudadano($event)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Numero de Identificacion ciudadano">
 					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
@@ -67,7 +48,13 @@
 				  </div>
 				</div>
 
-
+				<p class="col-md-6">
+					<label >Nit:</label>
+					<input #nit="ngForm"  type="number" class="form-control" [(ngModel)]="empresa.nit" ngControl="nit"  required />
+					<span *ngIf="!nit.valid && nit.touched" style="color:red;">numero Identificacion obligatorios</span>
+					<br>
+				</p>
+				
 				<p class="col-md-6"> 
 					<label>Tipo Empresa:</label>
 					<select class="form-control" #tipoEmpresaId="ngForm" ngControl="tipoEmpresaId" [(ngModel)]="empresa.tipoEmpresaId" required>
@@ -75,6 +62,27 @@
 					</select>
 					<span *ngIf = "!tipoEmpresaId.valid && tipoEmpresaId.touched" class="text-danger">el role es obligatorio</span>
 				</p>
+
+				
+
+		
+		  <p class="col-md-6">  
+					<label>Departamento:</label>
+					<select  class="form-control" #departamentoId="ngForm"  (change)="onChange($event.target.value)" ngControl="departamentoId" name="departamentos" required>
+					  <option  *ngFor="#departamento of departamentos" [value]='departamento.id' >{{departamento.nombre}}</option>
+					</select>
+					<span *ngIf = "!departamentoId.valid && departamentoId.touched" class="text-danger">el departamento es obligatorio</span>
+				</p>
+
+				<p class="col-md-6"> 
+					<label>Municipio:</label>
+					<select [disabled]="habilitar"  class="form-control" #municipioId="ngForm" ngControl="municipioId" [(ngModel)]="empresa.municipioId" required>
+					  <option *ngFor="#municipio of municipios" [value]='municipio.id' >{{municipio.nombre}}</option>
+					</select>
+					<span *ngIf = "!municipioId.valid && municipioId.touched" class="text-danger">municipio es obligatorio</span>
+				</p>
+
+
 
 				<p class="col-md-6">
 					<label >Nombres:</label>
@@ -97,14 +105,7 @@
 					<br>
 				</p>
 
-				<p class="col-md-6">
-					<label >Nit:</label>
-					<input #nit="ngForm"  type="number" class="form-control" [(ngModel)]="empresa.nit" ngControl="nit"  required />
-					<span *ngIf="!nit.valid && nit.touched" style="color:red;">numero Identificacion obligatorios</span>
-					<br>
-				</p>
-
-
+				
 
 				<p class="col-md-6">
 					<label >Telefono:</label>
@@ -119,10 +120,6 @@
 		        
 			    <input  type="submit" value="Enviar" class="btn btn-success col-md-12"  
 				[disabled]="!newCiudadano.valid"/>
-			    
 			    </p>
-		  </div>
-		</div>
+		 
 	</form>
-
-</div>

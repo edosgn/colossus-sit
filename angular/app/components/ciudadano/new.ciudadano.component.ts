@@ -21,7 +21,7 @@ export class NewCiudadanoComponent {
 	public errorMessage;
 	public respuesta;
 	public tiposIdentificacion;
-	@Input() identificacionIngresada;
+	@Input() identificacionIngresada; 
 	@Output() ciudadanoCreado = new EventEmitter<any>();
 
 	constructor(
@@ -60,7 +60,6 @@ export class NewCiudadanoComponent {
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=="success"){
-					console.log("echo: "+ this.ciudadano.numeroIdentificacion);
 					this.ciudadanoCreado.emit(this.ciudadano.numeroIdentificacion);
 				}
 
