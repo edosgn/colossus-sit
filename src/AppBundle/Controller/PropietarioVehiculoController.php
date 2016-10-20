@@ -44,13 +44,14 @@ class PropietarioVehiculoController extends Controller
     /**
      * Creates a new CiudadanoVehiculo entity.
      *
-     * @Route("/new", name="propietariovehiculo_new")
+     * @Route("/new/{idTramite}", name="propietariovehiculo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request,$idTramite)
     {
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
+        $datos = $reques->get("datos",null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
             $json = $request->get("json",null);
@@ -118,13 +119,13 @@ class PropietarioVehiculoController extends Controller
                             $tramiteEspecifico = new TramiteEspecifico();
 
                             $tramite = $em->getRepository('AppBundle:Tramite')->findOneBy(
-                                array('estado' => 1,'id' => 1)
+                                array('estado' => 1,'id' => $idTramite)
                             );
 
                             $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
                                 array('estado' => 1,'vehiculo' => $vehiculo->getId())
                             );
-
+                            $tramiteEspecifico->setDatos($datos);
                             $tramiteEspecifico->setTramite($tramite);
                             $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                             $tramiteEspecifico->setVariante(null);

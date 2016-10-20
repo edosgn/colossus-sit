@@ -190,8 +190,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					}
 				}
 			);
-   
-
   }
 
   onChangeCiudadano(id) {
