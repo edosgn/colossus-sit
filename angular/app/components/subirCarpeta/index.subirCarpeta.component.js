@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
+var organismoTransito_service_1 = require("../../services/organismoTransito/organismoTransito.service");
 var empresa_service_1 = require("../../services/empresa/empresa.service");
 var ciudadanoVehiculo_service_1 = require("../../services/ciudadanoVehiculo/ciudadanoVehiculo.service");
 var tipoIdentificacion_service_1 = require('../../services/tipo_Identificacion/tipoIdentificacion.service');
@@ -27,8 +28,9 @@ var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tram
 var Empresa_1 = require('../../model/empresa/Empresa');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
-    function IndexSubirCarpetaComponent(_TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
+    function IndexSubirCarpetaComponent(_OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
         var _this = this;
+        this._OrganismoTransitoService = _OrganismoTransitoService;
         this._TramiteEspecificoService = _TramiteEspecificoService;
         this._TramiteGeneral = _TramiteGeneral;
         this._EmpresaService = _EmpresaService;
@@ -40,12 +42,24 @@ var IndexSubirCarpetaComponent = (function () {
         this._route = _route;
         this._router = _router;
         this.TipoMatricula = 1;
+        this.json = {
+            'organismoTrancito': [],
+        };
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
         var token = this._loginService.getToken();
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
             _this.tipoIdentificaciones = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+        this._OrganismoTransitoService.getOrganismoTransito().subscribe(function (response) {
+            _this.organismoTransitos = response.data;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -272,9 +286,8 @@ var IndexSubirCarpetaComponent = (function () {
         if (this.ciudadanosVehiculo != null) {
             this.ciudadanoVehiculo.licenciaTransito = this.ciudadanosVehiculo[0].licenciaTransito;
         }
-        //console.log(this.ciudadanoVehiculo);
         var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula).subscribe(function (response) {
+        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula, this.json).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == 'success') {
                 _this.ciudadanoVehiculo.licenciaTransito = "";
@@ -303,7 +316,6 @@ var IndexSubirCarpetaComponent = (function () {
     };
     IndexSubirCarpetaComponent.prototype.onChangeTipoMatricula = function (event) {
         this.TipoMatricula = event;
-        console.log(this.TipoMatricula);
     };
     IndexSubirCarpetaComponent.prototype.btnCancelarVinculo = function () {
         this.validateCedula = false;
@@ -321,9 +333,9 @@ var IndexSubirCarpetaComponent = (function () {
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent],
-            providers: [login_service_1.LoginService, , tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
+            providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, organismoTransito_service_1.OrganismoTransitoService]
         }), 
-        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [organismoTransito_service_1.OrganismoTransitoService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexSubirCarpetaComponent);
     return IndexSubirCarpetaComponent;
 }());

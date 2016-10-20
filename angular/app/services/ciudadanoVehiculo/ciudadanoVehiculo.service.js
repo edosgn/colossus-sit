@@ -19,9 +19,10 @@ var CiudadanoVehiculoService = (function () {
     CiudadanoVehiculoService.prototype.getCiudadanoVehiculo = function () {
         return this._http.get(this.url + "/").map(function (res) { return res.json(); });
     };
-    CiudadanoVehiculoService.prototype.register = function (ciudadanoVehiculo, token, tramiteId) {
+    CiudadanoVehiculoService.prototype.register = function (ciudadanoVehiculo, token, tramiteId, datosT) {
         var json = JSON.stringify(ciudadanoVehiculo);
-        var params = "json=" + json + "&authorization=" + token;
+        var datos = JSON.stringify(datosT);
+        var params = "json=" + json + "&authorization=" + token + "&datos=" + datos;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/new/" + tramiteId, params, { headers: headers })
             .map(function (res) { return res.json(); });

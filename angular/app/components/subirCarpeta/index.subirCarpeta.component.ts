@@ -1,4 +1,5 @@
 // Importar el núcleo de Angular
+import {OrganismoTransitoService} from "../../services/organismoTransito/organismoTransito.service";
 import {EmpresaService} from "../../services/empresa/empresa.service";
 import {CiudadanoVehiculoService} from "../../services/ciudadanoVehiculo/ciudadanoVehiculo.service";
 import {TipoIdentificacionService} from '../../services/tipo_Identificacion/tipoIdentificacion.service';
@@ -22,7 +23,7 @@ import {Empresa} from '../../model/empresa/Empresa';
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
     directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent],
-    providers: [LoginService,,TramiteEspecificoService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
+    providers: [LoginService,TramiteEspecificoService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService,OrganismoTransitoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -65,9 +66,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public tramitesGeneralSeccion;
     public divEmpresa;
     public TipoMatricula = 1;
+    public organismoTransitos;
+    public json = {
+ 		'organismoTrancito' :[],
+ 	};
 
 
 	constructor(
+		private _OrganismoTransitoService: OrganismoTransitoService,
 		private _TramiteEspecificoService: TramiteEspecificoService,
 		private _TramiteGeneral: TramiteGeneralService,
         private _EmpresaService: EmpresaService,
@@ -97,6 +103,19 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         }
                     }
                 );
+            this._OrganismoTransitoService.getOrganismoTransito().subscribe(
+				response => {
+					this.organismoTransitos = response.data;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
     }
 
 
@@ -158,11 +177,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 									}
 								}
 							);
-
 				       		let vehiculoTramite = {
 						 		'vehiculoId' : this.vehiculo.id,
 						 	};
-
 							this._TramiteGeneral.showTramiteGeneralVehiculo(token,vehiculoTramite).subscribe(
 								response => {
 									this.tramitesGeneral = response.data;
@@ -177,7 +194,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 									}
 								}
 							);
-
 					}
 					
 				}, 
@@ -190,8 +206,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					}
 				}
 			);
-   
-
   }
 
   onChangeCiudadano(id) {
@@ -245,9 +259,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
   	let token = this._loginService.getToken();
   	this._CiudadanoService.showCiudadanoCedula(token,identificacion).subscribe(
 				response => {
-					
 					let status = response.status;
-
 					if(this.ciudadanosVehiculo) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
 								if(this.ciudadanosVehiculo[i].ciudadano) {
@@ -255,7 +267,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 									this.existe = true;
 								}
 							}
-							
 						}
 					}
 					
@@ -285,7 +296,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 				}, 
 				error => {
 					this.errorMessage = <any>error;
-
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");
@@ -325,8 +335,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         this.btnNewPropietario = true;
                         this.modalEmpresa=true;
                         }else{
-                   			 this.empresa = response.data;
-
+                   			this.empresa = response.data;
                         	this.btnNewPropietario=false;
                             this.validateCedula=true;
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
@@ -335,8 +344,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
                             this.ciudadano = new Ciudadano(null,"",null, "","","","","");
                         }
                     }
-
-                    
                 }, 
                 error => {
                     this.errorMessage = <any>error;
@@ -361,10 +368,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
        this.ciudadanoVehiculo.licenciaTransito=this.ciudadanosVehiculo[0].licenciaTransito;
     }
 
-    //console.log(this.ciudadanoVehiculo);
-
   	let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.TipoMatricula).subscribe(
+		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.TipoMatricula,this.json).subscribe(
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=='success') {
@@ -399,7 +404,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
     }
     onChangeTipoMatricula(event:any){
     	this.TipoMatricula = event;
-    	console.log(this.TipoMatricula);
     }
 
     btnCancelarVinculo(){
@@ -415,10 +419,4 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	    this.modalEmpresa=false;
 	    this.btnNewPropietario=false;
     }
-
-
-    
-
-
- 
 }

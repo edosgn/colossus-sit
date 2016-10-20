@@ -167,9 +167,17 @@
 											<br>
 											<br>
 											<br>
+											<hr>
+											<div *ngIf="TipoMatricula==4">
+												<select class="form-control" [(ngModel)]="json.organismoTrancito">
+												  <option *ngFor="#organismoTransito of organismoTransitos" [value]='organismoTransito.nombre' >{{organismoTransito.nombre}}</option>
+												</select>
+												<hr>
+											</div>
 										</div>
 										
 								        <div class="col-md-12 col-md-offset-3"> 
+
 									    	<a *ngIf="!btnSeleccionarApoderado" (click)="btnCancelarVinculo()" class="btn btn-default col-md-3">cancelar</a>
 										    <input  *ngIf="!btnSeleccionarApoderado" type="submit" value="Vincular" class="btn btn-primary col-md-3 "  
 											/>

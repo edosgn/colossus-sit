@@ -16,13 +16,15 @@ export class CiudadanoVehiculoService {
 		return this._http.get(this.url+"/").map(res => res.json());
 	}
 
-	register(ciudadanoVehiculo,token,tramiteId){
+	register(ciudadanoVehiculo,token,tramiteId,datosT){
 		
 		let json = JSON.stringify(ciudadanoVehiculo);
-		let params = "json="+json+"&authorization="+token;
+		let datos = JSON.stringify(datosT);
+		let params = "json="+json+"&authorization="+token+"&datos="+datos;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
 		return this._http.post(this.url+"/new/"+tramiteId, params, {headers: headers})
 							  .map(res => res.json());
+
 	}
 
 	deleteCiudadanoVehiculo(token,id){
@@ -31,6 +33,7 @@ export class CiudadanoVehiculoService {
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
 		return this._http.post(this.url+"/"+id+"/delete", params, {headers: headers})
 							  .map(res => res.json());
+
 	}
 
 	showCiudadanoVehiculo(token,id){
