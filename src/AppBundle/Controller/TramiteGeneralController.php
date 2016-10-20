@@ -235,6 +235,7 @@ class TramiteGeneralController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
             $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($id);
@@ -273,4 +274,41 @@ class TramiteGeneralController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * busca los tramites generales de un vehiculo por placa.
+     *
+     * @Route("/tramitesG/placa", name="tramitegeneral_show_placa")
+     * @Method("POST")
+     */
+    public function showTramiteGAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+
+        if ($authCheck == false) {
+            $em = $this->getDoctrine()->getManager();
+            $tramitesGenerales = $em->getRepository('AppBundle:TramiteGeneral')->findBy(
+            array('estado' => 1,'vehiculo' => $params->vehiculoId)
+            );
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramiteGeneral", 
+                    'data'=> $tramitesGenerales,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
+
+
 }

@@ -83,9 +83,7 @@ class CiudadanoController extends Controller
                             $ciudadano->setTelefono($telefono);
                             $ciudadano->setCorreo($correo);
                             $ciudadano->setTipoIdentificacion($tipoIdentificacion);
-
                             $ciudadano->setEstado(true);
-
                             $em = $this->getDoctrine()->getManager();
                             $em->persist($ciudadano);
                             $em->flush();
