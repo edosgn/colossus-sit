@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\PropietarioVehiculo;
+use AppBundle\Entity\TramiteGeneral;
 use AppBundle\Form\CiudadanoVehiculoType;
 
 /**
@@ -79,6 +80,7 @@ class PropietarioVehiculoController extends Controller
                         $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
                             array('nit' => $empresaId)
                         );
+
                         $propietarioVehiculo = new PropietarioVehiculo();
                         $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                         $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
@@ -91,6 +93,25 @@ class PropietarioVehiculoController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($propietarioVehiculo);
                         $em->flush();
+
+                        $tramiteGeneral = new TramiteGeneral();
+
+                        $tramiteGeneral->setVehiculo($vehiculo);
+                        $tramiteGeneral->setValor(0000);
+                        $tramiteGeneral->setNumeroQpl(0);
+                        $tramiteGeneral->setFechaInicial($fechaPropiedadInicial);
+                        $tramiteGeneral->setFechaFinal($fechaPropiedadFinal);
+                        $tramiteGeneral->setNumeroLicencia($licenciaTransito);
+                        $tramiteGeneral->setNumeroSustrato(0);
+                        $tramiteGeneral->setEstadoTramite(2);
+                        $tramiteGeneral->setCiudadano($ciudadano);
+                        $tramiteGeneral->setEmpresa($empresa);
+                        $tramiteGeneral->setApoderado(false);
+                        $tramiteGeneral->setEstado(1);
+
+                        $em->persist($tramiteGeneral);
+                        $em->flush();
+
                         $responce = array(
                             'status' => 'success',
                             'code' => 200,
