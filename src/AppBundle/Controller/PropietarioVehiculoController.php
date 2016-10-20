@@ -44,10 +44,10 @@ class PropietarioVehiculoController extends Controller
     /**
      * Creates a new CiudadanoVehiculo entity.
      *
-     * @Route("/new", name="propietariovehiculo_new")
+     * @Route("/new/{idTramite}", name="propietariovehiculo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request,$idTramite)
     {
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
@@ -63,6 +63,7 @@ class PropietarioVehiculoController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{
+                       
                         $licenciaTransito = $params->licenciaTransito;
                         $fechaPropiedadInicial = $params->fechaPropiedadInicial; 
                         $fechaPropiedadFinal = $params->fechaPropiedadFinal;
@@ -81,10 +82,6 @@ class PropietarioVehiculoController extends Controller
                         $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
                             array('nit' => $empresaId)
                         );
-
-                        
-
-
                         $propietarioVehiculo = new PropietarioVehiculo();
                         $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                         $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
@@ -97,9 +94,13 @@ class PropietarioVehiculoController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($propietarioVehiculo);
 
+                        $tramite = $em->getRepository('AppBundle:Tramite')->findOneBy(
+                            array('estado' => 1,'id' => $idTramite)
+                        );
+
                         $tramiteGeneral = new TramiteGeneral();
                         $tramiteGeneral->setVehiculo($vehiculo);
-                        $tramiteGeneral->setValor(0);
+                        $tramiteGeneral->setValor($tramite->getValor());
                         $tramiteGeneral->setNumeroQpl(0);
                         $tramiteGeneral->setFechaInicial($fechaPropiedadInicial);
                         $tramiteGeneral->setFechaFinal($fechaPropiedadFinal);
@@ -115,9 +116,7 @@ class PropietarioVehiculoController extends Controller
                         
                         $tramiteEspecifico = new TramiteEspecifico();
 
-                        $tramite = $em->getRepository('AppBundle:Tramite')->findOneBy(
-                            array('estado' => 1,'id' => 1)
-                        );
+                        
 
                         $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
                             array('estado' => 1,'vehiculo' => $vehiculo->getId())
@@ -127,7 +126,7 @@ class PropietarioVehiculoController extends Controller
                         $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                         $tramiteEspecifico->setVariante(null);
                         $tramiteEspecifico->setCaso(null);
-                        $tramiteEspecifico->setValor(0);
+                        $tramiteEspecifico->setValor($tramite->getValor());
                         $tramiteEspecifico->setEstado(1);
 
                         $em->persist($tramiteEspecifico);
