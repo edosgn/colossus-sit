@@ -103,24 +103,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			});
 
 		let token = this._loginService.getToken();
-
-		this._TramiteGeneral.getTramiteGeneral().subscribe(
-				response => {
-					this.tramitesGeneral = response.data;
-					console.log(this.tramitesGeneral);
-				}, 
-				error => {
-					this.errorMessage = <any>error;
-
-					if(this.errorMessage != null){
-						console.log(this.errorMessage);
-						alert("Error en la petición");
-					}
-				}
-			);
-	  
-	
-	  
 	}
 
 	onKey(event:any) {
@@ -130,6 +112,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					this.vehiculo = response.data;
 					let status = response.status;
 					if(status == 'error') {
+						this.tramitesGeneral=false;
 						this.validate=false	;
 						this.validateCiudadano=false;
 						this.crear=true;
@@ -167,6 +150,25 @@ export class IndexSubirCarpetaComponent implements OnInit{
 								}
 							);
 
+				       		let vehiculoTramite = {
+						 		'vehiculoId' : this.vehiculo.id,
+						 	};
+
+							this._TramiteGeneral.showTramiteGeneralVehiculo(token,vehiculoTramite).subscribe(
+								response => {
+									this.tramitesGeneral = response.data;
+									console.log("hola "+this.tramitesGeneral);
+								}, 
+								error => {
+									this.errorMessage = <any>error;
+
+									if(this.errorMessage != null){
+										console.log(this.errorMessage);
+										alert("Error en la petición");
+									}
+								}
+							);
+
 					}
 					
 				}, 
@@ -191,6 +193,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
   	let tramiteGeneral = id;
   	console.log("tramite general: " tramiteGeneral);
   }
+  
+  onChangeApoderado(event:any){
+    	if(event==true){
+    		this.btnSeleccionarApoderado=true;
+    	}else{
+    		this.btnSeleccionarApoderado=false;
+    	}
+    }
 
   vheiculoCreado(event:any) {
   	this.placa.placa=event
@@ -371,13 +381,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     	this.modalCiudadano=false;
     }
 
-    onChangeApoderado(event:any){
-    	if(event==true){
-    		this.btnSeleccionarApoderado=true;
-    	}else{
-    		this.btnSeleccionarApoderado=false;
-    	}
-    }
+    
 
 
  

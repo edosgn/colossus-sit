@@ -229,7 +229,7 @@
 	</div>
 </div>	
 
-<div *ngIf="tramitesGeneral" class="col-md-12">
+<div class="col-md-12">
 	<div class="panel panel-primary">
 	  <div class="panel-heading">Tramites</div>
 	  <div class="panel-body">
@@ -254,7 +254,7 @@
 	                    <td >{{tramiteGeneral.fechaInicial}}</td>
 	                    <td >{{tramiteGeneral.fechaFinal}}</td>
 	                    <td >{{tramiteGeneral.valor}}</td>
-	                    <td ><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
+	                    <td ><input name="optionsTramites" ng-control="optionsTramites" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
 	                    (change)="onChangeTramiteGeneral(tramiteGeneral.id)"></td>
 	                </tr>
 	            </tbody> 
@@ -282,9 +282,6 @@
 	  </div>
 	</div>
 </div>
-
-
-
 
 <!-- Modal-->
 

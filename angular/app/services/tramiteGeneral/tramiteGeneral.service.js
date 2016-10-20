@@ -45,6 +45,13 @@ var TramiteGeneralService = (function () {
         return this._http.post(this.url + "/edit", params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    TramiteGeneralService.prototype.showTramiteGeneralVehiculo = function (token, vechiculoid) {
+        var json = JSON.stringify(vechiculoid);
+        var params = "json=" + json + "&authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/tramitesG/placa", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     TramiteGeneralService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])

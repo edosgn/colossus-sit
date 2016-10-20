@@ -58,16 +58,6 @@ var IndexSubirCarpetaComponent = (function () {
             _this.tramiteId = +params["tramiteId"];
         });
         var token = this._loginService.getToken();
-        this._TramiteGeneral.getTramiteGeneral().subscribe(function (response) {
-            _this.tramitesGeneral = response.data;
-            console.log(_this.tramitesGeneral);
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
     };
     IndexSubirCarpetaComponent.prototype.onKey = function (event) {
         var _this = this;
@@ -76,6 +66,7 @@ var IndexSubirCarpetaComponent = (function () {
             _this.vehiculo = response.data;
             var status = response.status;
             if (status == 'error') {
+                _this.tramitesGeneral = false;
                 _this.validate = false;
                 _this.validateCiudadano = false;
                 _this.crear = true;
@@ -109,6 +100,19 @@ var IndexSubirCarpetaComponent = (function () {
                         alert("Error en la petición");
                     }
                 });
+                var vehiculoTramite = {
+                    'vehiculoId': _this.vehiculo.id,
+                };
+                _this._TramiteGeneral.showTramiteGeneralVehiculo(token, vehiculoTramite).subscribe(function (response) {
+                    _this.tramitesGeneral = response.data;
+                    console.log("hola " + _this.tramitesGeneral);
+                }, function (error) {
+                    _this.errorMessage = error;
+                    if (_this.errorMessage != null) {
+                        console.log(_this.errorMessage);
+                        alert("Error en la petición");
+                    }
+                });
             }
         }, function (error) {
             _this.errorMessage = error;
@@ -125,6 +129,14 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
         var tramiteGeneral = id;
         console.log("tramite general: ", tramiteGeneral);
+    };
+    IndexSubirCarpetaComponent.prototype.onChangeApoderado = function (event) {
+        if (event == true) {
+            this.btnSeleccionarApoderado = true;
+        }
+        else {
+            this.btnSeleccionarApoderado = false;
+        }
     };
     IndexSubirCarpetaComponent.prototype.vheiculoCreado = function (event) {
         this.placa.placa = event;
@@ -273,14 +285,6 @@ var IndexSubirCarpetaComponent = (function () {
     };
     IndexSubirCarpetaComponent.prototype.btnCancelarModalCedula = function () {
         this.modalCiudadano = false;
-    };
-    IndexSubirCarpetaComponent.prototype.onChangeApoderado = function (event) {
-        if (event == true) {
-            this.btnSeleccionarApoderado = true;
-        }
-        else {
-            this.btnSeleccionarApoderado = false;
-        }
     };
     IndexSubirCarpetaComponent = __decorate([
         core_1.Component({

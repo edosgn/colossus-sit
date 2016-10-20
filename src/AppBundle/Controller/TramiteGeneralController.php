@@ -279,7 +279,7 @@ class TramiteGeneralController extends Controller
      * busca los tramites generales de un vehiculo por placa.
      *
      * @Route("/tramitesG/placa", name="tramitegeneral_show_placa")
-     * @Method("POST")
+     * @Method("POST") 
      */
     public function showTramiteGAction(Request $request)
     {
@@ -289,17 +289,27 @@ class TramiteGeneralController extends Controller
         $json = $request->get("json",null);
         $params = json_decode($json);
 
-        if ($authCheck == false) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tramitesGenerales = $em->getRepository('AppBundle:TramiteGeneral')->findBy(
             array('estado' => 1,'vehiculo' => $params->vehiculoId)
             );
-            $responce = array(
+
+            if ($tramitesGenerales!=null) {
+               $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteGeneral", 
                     'data'=> $tramitesGenerales,
-            );
+            ); 
+            }else{
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "No existen tramites generales asociados", 
+                );
+            }
+            
         }else{
             $responce = array(
                     'status' => 'error',

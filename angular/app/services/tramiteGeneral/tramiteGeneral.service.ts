@@ -51,5 +51,13 @@ export class TramiteGeneralService {
 							  .map(res => res.json());
 
 	}
+	showTramiteGeneralVehiculo(token,vechiculoid){
+		let json = JSON.stringify(vechiculoid);
+		let params = "json="+json+"&authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		return this._http.post(this.url+"/tramitesG/placa", params, {headers: headers})
+							  .map(res => res.json());
+
+	}
 	
 }
