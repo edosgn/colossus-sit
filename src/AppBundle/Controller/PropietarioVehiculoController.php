@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\PropietarioVehiculo;
 use AppBundle\Entity\TramiteGeneral;
+use AppBundle\Entity\TramiteEspecifico;
 use AppBundle\Form\CiudadanoVehiculoType;
 
 /**
@@ -81,6 +82,9 @@ class PropietarioVehiculoController extends Controller
                             array('nit' => $empresaId)
                         );
 
+                        
+
+
                         $propietarioVehiculo = new PropietarioVehiculo();
                         $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                         $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
@@ -92,12 +96,10 @@ class PropietarioVehiculoController extends Controller
                         $propietarioVehiculo->setEstado(true);
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($propietarioVehiculo);
-                        $em->flush();
 
                         $tramiteGeneral = new TramiteGeneral();
-
                         $tramiteGeneral->setVehiculo($vehiculo);
-                        $tramiteGeneral->setValor(0000);
+                        $tramiteGeneral->setValor(0);
                         $tramiteGeneral->setNumeroQpl(0);
                         $tramiteGeneral->setFechaInicial($fechaPropiedadInicial);
                         $tramiteGeneral->setFechaFinal($fechaPropiedadFinal);
@@ -108,9 +110,29 @@ class PropietarioVehiculoController extends Controller
                         $tramiteGeneral->setEmpresa($empresa);
                         $tramiteGeneral->setApoderado(false);
                         $tramiteGeneral->setEstado(1);
-
                         $em->persist($tramiteGeneral);
                         $em->flush();
+                        
+                        $tramiteEspecifico = new TramiteEspecifico();
+
+                        $tramite = $em->getRepository('AppBundle:Tramite')->findOneBy(
+                            array('estado' => 1,'id' => 1)
+                        );
+
+                        $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
+                            array('estado' => 1,'vehiculo' => $vehiculo->getId())
+                        );
+
+                        $tramiteEspecifico->setTramite($tramite);
+                        $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
+                        $tramiteEspecifico->setVariante(null);
+                        $tramiteEspecifico->setCaso(null);
+                        $tramiteEspecifico->setValor(0);
+                        $tramiteEspecifico->setEstado(1);
+
+                        $em->persist($tramiteEspecifico);
+                        $em->flush();
+
 
                         $responce = array(
                             'status' => 'success',
