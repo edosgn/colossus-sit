@@ -97,7 +97,7 @@ class CiudadanoController extends Controller
                            $responce = array(
                                 'status' => 'error',
                                 'code' => 400,
-                                'msj' => "Este correo ya esta registrado en la base de datos", 
+                                'msj' => "Identificacion ya esta registrada en la base de datos", 
                             ); 
                         }
                     }

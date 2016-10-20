@@ -229,6 +229,60 @@
 	</div>
 </div>	
 
+<div *ngIf="tramitesGeneral" class="col-md-12">
+	<div class="panel panel-primary">
+	  <div class="panel-heading">Tramites</div>
+	  <div class="panel-body">
+	  		<h5>Licencias de transito</h5>
+		    <table  class="table table-bordered">
+	            <thead>
+	                <tr>
+	                   	<th>Id</th>
+	                    <th>vehiculo</th>
+	                    <th>numeroQpl</th>
+	                    <th>fecha inicial</th>
+	                    <th>fecha final</th>
+	                    <th>valor</th>
+	                    <th>seleccionar</th>
+	                </tr>
+	            </thead>
+	            <tbody> 
+	                <tr *ngFor="#tramiteGeneral of tramitesGeneral">
+	                    <td >{{tramiteGeneral.id}}</td>
+	                    <td >{{tramiteGeneral.vehiculo.placa}}</td>
+	                    <td >{{tramiteGeneral.numeroQpl}}</td>
+	                    <td >{{tramiteGeneral.fechaInicial}}</td>
+	                    <td >{{tramiteGeneral.fechaFinal}}</td>
+	                    <td >{{tramiteGeneral.valor}}</td>
+	                    <td ><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
+	                    (change)="onChangeTramiteGeneral(tramiteGeneral.id)"></td>
+	                </tr>
+	            </tbody> 
+	        </table>
+
+	        <h5>Tramites</h5>
+
+	        <table class="table table-bordered">
+	            <thead>
+	                <tr>
+	                    <th>Linea</th>
+	                    <th>Marca</th>
+	                    <th>Clase</th>
+	                    <th>Modelo</th>
+	                    
+	                </tr>
+	            </thead>
+	            <tbody> 
+	                <tr>
+	                    
+	                </tr>
+	            </tbody> 
+	        </table>
+
+	  </div>
+	</div>
+</div>
+
 
 
 

@@ -22,10 +22,12 @@ var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadan
 var new_empresa_component_1 = require('../../components/empresa/new.empresa.component');
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
+var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
-    function IndexSubirCarpetaComponent(_EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
+    function IndexSubirCarpetaComponent(_TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
         var _this = this;
+        this._TramiteGeneral = _TramiteGeneral;
         this._EmpresaService = _EmpresaService;
         this._TipoIdentificacionService = _TipoIdentificacionService;
         this._VehiculoService = _VehiculoService;
@@ -56,6 +58,16 @@ var IndexSubirCarpetaComponent = (function () {
             _this.tramiteId = +params["tramiteId"];
         });
         var token = this._loginService.getToken();
+        this._TramiteGeneral.getTramiteGeneral().subscribe(function (response) {
+            _this.tramitesGeneral = response.data;
+            console.log(_this.tramitesGeneral);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
     };
     IndexSubirCarpetaComponent.prototype.onKey = function (event) {
         var _this = this;
@@ -109,6 +121,10 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.onChangeCiudadano = function (id) {
         this.idCiudadanoSeleccionado = id;
         console.log(this.idCiudadanoSeleccionado);
+    };
+    IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
+        var tramiteGeneral = id;
+        console.log("tramite general: ", tramiteGeneral);
     };
     IndexSubirCarpetaComponent.prototype.vheiculoCreado = function (event) {
         this.placa.placa = event;
@@ -271,9 +287,9 @@ var IndexSubirCarpetaComponent = (function () {
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent],
-            providers: [login_service_1.LoginService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
+            providers: [login_service_1.LoginService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService]
         }), 
-        __metadata('design:paramtypes', [empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexSubirCarpetaComponent);
     return IndexSubirCarpetaComponent;
 }());

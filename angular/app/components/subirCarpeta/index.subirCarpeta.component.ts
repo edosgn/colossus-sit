@@ -13,18 +13,19 @@ import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.co
 import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {Ciudadano} from '../../model/ciudadano/Ciudadano';
- 
+import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
     directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent],
-    providers: [LoginService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
+    providers: [LoginService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
 export class IndexSubirCarpetaComponent implements OnInit{ 
+	public tramitesGeneral;
 	public ciudadano: Ciudadano;
 	public errorMessage; 
 	public tramiteId;
@@ -60,6 +61,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 
 	constructor(
+		private _TramiteGeneral: TramiteGeneralService,
         private _EmpresaService: EmpresaService,
         private _TipoIdentificacionService: TipoIdentificacionService,
 		private _VehiculoService: VehiculoService,
@@ -101,6 +103,23 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			});
 
 		let token = this._loginService.getToken();
+
+		this._TramiteGeneral.getTramiteGeneral().subscribe(
+				response => {
+					this.tramitesGeneral = response.data;
+					console.log(this.tramitesGeneral);
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+	  
+	
 	  
 	}
 
@@ -167,6 +186,10 @@ export class IndexSubirCarpetaComponent implements OnInit{
   onChangeCiudadano(id) {
   	this.idCiudadanoSeleccionado = id;
   	console.log(this.idCiudadanoSeleccionado);
+  }
+  onChangeTramiteGeneral(id){
+  	let tramiteGeneral = id;
+  	console.log("tramite general: " tramiteGeneral);
   }
 
   vheiculoCreado(event:any) {
