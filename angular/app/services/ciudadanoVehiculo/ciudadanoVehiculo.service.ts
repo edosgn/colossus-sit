@@ -16,12 +16,12 @@ export class CiudadanoVehiculoService {
 		return this._http.get(this.url+"/").map(res => res.json());
 	}
 
-	register(ciudadanoVehiculo,token){
+	register(ciudadanoVehiculo,token,tramiteId){
 		
 		let json = JSON.stringify(ciudadanoVehiculo);
 		let params = "json="+json+"&authorization="+token;
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
-		return this._http.post(this.url+"/new", params, {headers: headers})
+		return this._http.post(this.url+"/new/"+tramiteId, params, {headers: headers})
 							  .map(res => res.json());
 	}
 

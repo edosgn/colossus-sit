@@ -122,7 +122,7 @@
 										</div>
 								</div>
 
-								<div *ngIf="empresa" class="col-md-12">
+								<div *ngIf="divEmpresa" class="col-md-12">
 										<div  class="panel panel-dafault">
 										  <div class="panel-heading">{{msgCiudadano}}</div>
 										  <div class="panel-body">
@@ -150,20 +150,31 @@
 										</div>
 								</div>
 
-										<p *ngIf="ciudadanosVehiculo == null" class="col-md-12">
-											<label >licencia transito:</label>
-											<input #licenciaTransito="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.licenciaTransito" ngControl="licenciaTransito"  required />
-											<span *ngIf="!licenciaTransito.valid && licenciaTransito.touched" style="color:red;">licenciaTransito obligatorios</span>
+										<div *ngIf="ciudadanosVehiculo == null" class="col-md-12">
+											<div class="col-md-6">
+												<label >licencia transito:</label>
+												<input #licenciaTransito="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.licenciaTransito" ngControl="licenciaTransito"  required />
+												<span *ngIf="!licenciaTransito.valid && licenciaTransito.touched" style="color:red;">licenciaTransito obligatorios</span>
+											</div>
+											<div class="col-md-6">
+												<label >Tipo:</label>
+												<select class="form-control" (change)="onChangeTipoMatricula($event.target.value)">
+												  <option value="1">MATRICULA INICIAL</option>
+												  <option value="4">RADICADO</option>
+												</select>	
+											</div>
 											<br>
-										</p>
-											
-										<br>
-								        <p class="col-md-12 col-md-offset-3"> 
+											<br>
+											<br>
+											<br>
+										</div>
+										
+								        <div class="col-md-12 col-md-offset-3"> 
 									    	<a *ngIf="!btnSeleccionarApoderado" (click)="btnCancelarVinculo()" class="btn btn-default col-md-3">cancelar</a>
 										    <input  *ngIf="!btnSeleccionarApoderado" type="submit" value="Vincular" class="btn btn-primary col-md-3 "  
 											/>
 											<a *ngIf="btnSeleccionarApoderado" (click)="onChangeCiudadano(ciudadano?.id)"  class="btn btn-primary col-md-6">Seleccionar</a>
-									    </p>
+									    </div>
 						  </div>
 						</div>
 				</form>
@@ -275,8 +286,8 @@
                     <td >{{tramiteEspecifico.id}}</td>
                     <td >{{tramiteEspecifico.tramite.nombre}}</td>
                     <td >{{tramiteEspecifico.tramiteGeneral.numeroLicencia}}</td>
-                    <td >{{tramiteEspecifico.variante.nombre}}</td>
-                    <td >{{tramiteEspecifico.caso.nombre}}</td>
+                    <td >{{tramiteEspecifico.variante?.nombre}}</td>
+                    <td >{{tramiteEspecifico.caso?.nombre}}</td>
                     <td >{{tramiteEspecifico.valor}}</td>
                 </tr>
 	            </tbody> 

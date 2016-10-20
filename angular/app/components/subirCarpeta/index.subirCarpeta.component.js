@@ -39,6 +39,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.TipoMatricula = 1;
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
@@ -135,7 +136,7 @@ var IndexSubirCarpetaComponent = (function () {
         var _this = this;
         var tramiteGeneral = id;
         var token = this._loginService.getToken();
-        console.log("tramite general: ", tramiteGeneral);
+        console.log("tramite general: " + tramiteGeneral);
         this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
             _this.tramiteEspecificos = response.data;
             console.log(_this.tramiteEspecificos);
@@ -202,7 +203,7 @@ var IndexSubirCarpetaComponent = (function () {
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                     _this.calseCedula = "form-group has-success has-feedback ";
                     _this.msgCiudadano = response.msj;
-                    _this.empresa = false;
+                    _this.divEmpresa = false;
                 }
             }
         }, function (error) {
@@ -273,7 +274,7 @@ var IndexSubirCarpetaComponent = (function () {
         }
         //console.log(this.ciudadanoVehiculo);
         var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token).subscribe(function (response) {
+        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == 'success') {
                 _this.ciudadanoVehiculo.licenciaTransito = "";
@@ -299,6 +300,10 @@ var IndexSubirCarpetaComponent = (function () {
             this.nit = false;
             this.validateCedula = false;
         }
+    };
+    IndexSubirCarpetaComponent.prototype.onChangeTipoMatricula = function (event) {
+        this.TipoMatricula = event;
+        console.log(this.TipoMatricula);
     };
     IndexSubirCarpetaComponent.prototype.btnCancelarVinculo = function () {
         this.validateCedula = false;

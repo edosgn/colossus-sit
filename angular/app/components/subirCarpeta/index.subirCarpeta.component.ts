@@ -62,6 +62,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public modalEmpresa;
     public btnSeleccionarApoderado;
     public tramiteEspecificos;
+    public tramitesGeneralSeccion;
+    public divEmpresa;
+    public TipoMatricula = 1;
 
 
 	constructor(
@@ -198,7 +201,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
   onChangeTramiteGeneral(id){
   	let tramiteGeneral = id;
 	let token = this._loginService.getToken();
-  	console.log("tramite general: " tramiteGeneral);
+  	console.log("tramite general: " +tramiteGeneral);
 	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
 					response => {
 						this.tramiteEspecificos = response.data;
@@ -274,7 +277,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 							this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 							this.calseCedula = "form-group has-success has-feedback ";
 				            this.msgCiudadano = response.msj;
-                            this.empresa = false;
+                            this.divEmpresa = false;
 						}
 					}
 
@@ -361,7 +364,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     //console.log(this.ciudadanoVehiculo);
 
   	let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token).subscribe(
+		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.TipoMatricula).subscribe(
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=='success') {
@@ -393,6 +396,10 @@ export class IndexSubirCarpetaComponent implements OnInit{
             this.validateCedula=false;
         }
 
+    }
+    onChangeTipoMatricula(event:any){
+    	this.TipoMatricula = event;
+    	console.log(this.TipoMatricula);
     }
 
     btnCancelarVinculo(){
