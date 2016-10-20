@@ -38,6 +38,7 @@ export class NewCiudadanoVehiculoComponent {
 	public validate;
 	public ciudadano: Ciudadano;
 	public validateCedula;
+	public tipoMatricula;
 
 	constructor(
 		private _CiudadanoService: CiudadanoService,
@@ -79,7 +80,7 @@ export class NewCiudadanoVehiculoComponent {
 
 	onSubmit(){
 		let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token).subscribe(
+		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.tipoMatricula).subscribe(
 			response => {
 				this.respuesta = response;
 				console.log(this.respuesta);
@@ -92,7 +93,7 @@ export class NewCiudadanoVehiculoComponent {
 					}
 				}
 
-		});
+			});
 	}
 
  onKey(event:any) {
