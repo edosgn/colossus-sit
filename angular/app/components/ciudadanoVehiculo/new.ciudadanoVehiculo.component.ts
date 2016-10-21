@@ -39,6 +39,7 @@ export class NewCiudadanoVehiculoComponent {
 	public ciudadano: Ciudadano;
 	public validateCedula;
 	public tipoMatricula;
+	public datos;
 
 	constructor(
 		private _CiudadanoService: CiudadanoService,
@@ -80,7 +81,7 @@ export class NewCiudadanoVehiculoComponent {
 
 	onSubmit(){
 		let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.tipoMatricula).subscribe(
+		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.tipoMatricula,this.datos).subscribe(
 			response => {
 				this.respuesta = response;
 				console.log(this.respuesta);
