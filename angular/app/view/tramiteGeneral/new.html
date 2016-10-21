@@ -12,18 +12,20 @@
 	</div>
 	<br>
 
-	<form #newTramiteGeneral="ngForm" (ngSubmit)="onSubmit()"> 
+	<form #newTramiteGeneral="ngForm" (ngSubmit)="onSubmit()" class="col-md-6 col-md-offset-3"> 
 
-		
+		<div class="panel panel-primary">
+		  <div class="panel-heading">Reguistrar Tramite general</div>
+		  <div class="panel-body">
 		  		<br>
 				<br>
-				<!--<p class="col-md-6"> 
+				<p class="col-md-6"> 
 					<label>Vehiculos:</label>
 					<select class="form-control" #vehiculoId="ngForm" ngControl="vehiculoId" [(ngModel)]="tramiteGeneral.vehiculoId" required>
 					<option *ngFor="#vehiculo of vehiculos" [value]='vehiculo.id' >{{vehiculo.placa}}</option>
 					</select>
 					<span *ngIf = "!vehiculoId.valid && vehiculoId.touched" class="text-danger">el role es obligatorio</span>
-				</p>-->
+				</p>
 
 				<p class="col-md-6">
 					<label >Numero Qpl:</label>
@@ -32,14 +34,6 @@
 					<br>
 				</p>
 
-				
-
-				<p class="col-md-6">
-					<label >Valor:</label>
-					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.valor" ngControl="valor"  required />
-					<span *ngIf="!valor.valid && valor.touched" style="color:red;">Numero de Factura es obligatorio</span>
-					<br>
-				</p>
 				<p class="col-md-6">
 					<label >fecha inicial:</label>
 					<input #fechaInicial="ngForm"  type="date" class="form-control" [(ngModel)]="tramiteGeneral.fechaInicial" ngControl="fechaInicial"  required />
@@ -51,6 +45,13 @@
 					<label >fecha final:</label>
 					<input #fechaFinal="ngForm"  type="date" class="form-control" [(ngModel)]="tramiteGeneral.fechaFinal" ngControl="fechaFinal"  required />
 					<span *ngIf="!fechaFinal.valid && fechaFinal.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.valor" ngControl="valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">Numero de Factura es obligatorio</span>
 					<br>
 				</p>
 
@@ -68,8 +69,10 @@
 					<br>
 				</p>
 
-				<input  type="submit" value="LLena los Campos" class="btn btn-primary col-md-12"
+				<input  type="submit" value="LLena los Campos" class="btn btn-success col-md-12"
 				[disabled]="!newTramiteGeneral.valid"/>
-	
+		  </div>
+		</div>
 	</form>
 
+</div>

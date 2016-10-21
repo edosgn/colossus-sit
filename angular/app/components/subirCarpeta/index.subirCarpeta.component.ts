@@ -376,7 +376,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 				if(this.respuesta.status=='success') {
                     this.ciudadanoVehiculo.licenciaTransito="";
 					this.validateCedula=false;
-					this.json = null;
+					this.json = "";
 					this.onKey("");
 
 				}

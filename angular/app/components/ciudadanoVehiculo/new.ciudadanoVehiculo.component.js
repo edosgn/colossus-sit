@@ -51,7 +51,7 @@ var NewCiudadanoVehiculoComponent = (function () {
     NewCiudadanoVehiculoComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.tipoMatricula, this.datos).subscribe(function (response) {
+        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.tipoMatricula).subscribe(function (response) {
             _this.respuesta = response;
             console.log(_this.respuesta);
             (function (error) {
