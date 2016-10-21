@@ -79,21 +79,7 @@ export class NewCiudadanoVehiculoComponent {
 
 
 	onSubmit(){
-		let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.tipoMatricula).subscribe(
-			response => {
-				this.respuesta = response;
-				console.log(this.respuesta);
-			error => {
-					this.errorMessage = <any>error;
-
-					if(this.errorMessage != null){
-						console.log(this.errorMessage);
-						alert("Error en la petición");
-					}
-				}
-
-			});
+		
 	}
 
  onKey(event:any) {
