@@ -10,6 +10,7 @@ import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../model/tramite/Tramite';
 import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.component';
+import {NewTramiteGeneralComponent} from '../../components/tramiteGeneral/new.tramiteGeneral.component';
 import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
 import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
@@ -22,7 +23,7 @@ import {Empresa} from '../../model/empresa/Empresa';
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
-    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent],
+    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent,NewTramiteGeneralComponent],
     providers: [LoginService,TramiteEspecificoService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService,OrganismoTransitoService]
 })
  
@@ -46,7 +47,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	public idCiudadanoSeleccionado;
 	public colores;
 	public colorNuevo;
-	public finalizar;
+	public finalizar; 
 	public crear;
 	public placa;
 	public resive;

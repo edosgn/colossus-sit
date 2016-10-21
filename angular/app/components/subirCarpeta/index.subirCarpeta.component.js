@@ -19,6 +19,7 @@ var login_service_1 = require("../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var new_vehiculo_component_1 = require('../../components/vehiculo/new.vehiculo.component');
+var new_tramiteGeneral_component_1 = require('../../components/tramiteGeneral/new.tramiteGeneral.component');
 var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadano.component');
 var new_empresa_component_1 = require('../../components/empresa/new.empresa.component');
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
@@ -349,7 +350,7 @@ var IndexSubirCarpetaComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent],
+            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent, new_tramiteGeneral_component_1.NewTramiteGeneralComponent],
             providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, organismoTransito_service_1.OrganismoTransitoService]
         }), 
         __metadata('design:paramtypes', [organismoTransito_service_1.OrganismoTransitoService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])

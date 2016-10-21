@@ -56,7 +56,7 @@ var NewTramiteGeneralComponent = (function () {
     };
     NewTramiteGeneralComponent = __decorate([
         core_1.Component({
-            selector: 'register',
+            selector: 'registerTramiteGeneral',
             templateUrl: 'app/view/tramiteGeneral/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService]

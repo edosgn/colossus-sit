@@ -9,7 +9,7 @@ import {TramiteGeneral} from '../../model/tramiteGeneral/TramiteGeneral';
 // Decorador component, indicamos en que etiqueta se va a cargar la  
 
 @Component({
-    selector: 'register',
+    selector: 'registerTramiteGeneral',
     templateUrl: 'app/view/tramiteGeneral/new.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,TramiteGeneralService,VehiculoService]
