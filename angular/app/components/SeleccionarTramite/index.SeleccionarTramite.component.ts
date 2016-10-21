@@ -78,11 +78,6 @@ export class IndexSeleccionarTramiteComponent implements OnInit{
 	}
 
 	onChangeTramite(tramiteId){
-		if(tramiteId == 1) {
-		    this._router.navigate(['/tramiteCambioColor',tramiteId]);
-		}
-		
+	this._router.navigate(['/tramiteCuerpo',tramiteId]);
 	}
-
-
 }
