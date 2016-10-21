@@ -266,6 +266,7 @@ var IndexSubirCarpetaComponent = (function () {
                 }
                 else {
                     _this.empresa = response.data;
+                    _this.divEmpresa = true;
                     _this.btnNewPropietario = false;
                     _this.validateCedula = true;
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";

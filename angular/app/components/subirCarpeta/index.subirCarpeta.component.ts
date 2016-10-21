@@ -343,6 +343,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         this.modalEmpresa=true;
                         }else{
                    			this.empresa = response.data;
+                   			this.divEmpresa=true;
                         	this.btnNewPropietario=false;
                             this.validateCedula=true;
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
