@@ -42,8 +42,12 @@ var IndexSubirCarpetaComponent = (function () {
         this._route = _route;
         this._router = _router;
         this.TipoMatricula = 1;
+        this.TipoTramite = {
+            'caso': null,
+            'variante': null
+        };
         this.json = {
-            'organismoTrancito': [],
+            'datosGenerales': null,
         };
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
@@ -60,6 +64,7 @@ var IndexSubirCarpetaComponent = (function () {
         });
         this._OrganismoTransitoService.getOrganismoTransito().subscribe(function (response) {
             _this.organismoTransitos = response.data;
+            console.log(_this.organismoTransitos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -89,12 +94,12 @@ var IndexSubirCarpetaComponent = (function () {
                 _this.validate = false;
                 _this.validateCiudadano = false;
                 _this.crear = true;
+                _this.tramitesGeneralSeccion = false;
                 _this.claseSpan = "glyphicon glyphicon-remove form-control-feedback ";
                 _this.clase = "form-group has-error has-feedback";
                 _this.activar = false;
             }
             else {
-                _this.tramitesGeneralSeccion = true;
                 _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback ";
                 _this.clase = "form-group has-success has-feedback";
                 _this.msg = response.msj;
@@ -104,6 +109,7 @@ var IndexSubirCarpetaComponent = (function () {
                     _this.ciudadanosVehiculo = response.data;
                     _this.respuesta = response;
                     console.log(_this.ciudadanosVehiculo);
+                    _this.tramitesGeneralSeccion = true;
                     if (_this.respuesta.status == 'error') {
                         _this.activar = true;
                         _this.validateCiudadano = false;
@@ -286,13 +292,15 @@ var IndexSubirCarpetaComponent = (function () {
         if (this.ciudadanosVehiculo != null) {
             this.ciudadanoVehiculo.licenciaTransito = this.ciudadanosVehiculo[0].licenciaTransito;
         }
+        console.log(this.json);
         var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula, this.json).subscribe(function (response) {
+        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula, this.json, this.TipoTramite).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == 'success') {
                 _this.ciudadanoVehiculo.licenciaTransito = "";
                 _this.validateCedula = false;
-                _this.json = "";
+                _this.json = null;
+                _this.TipoTramite = null;
                 _this.onKey("");
             }
             console.log(_this.respuesta);
@@ -328,6 +336,14 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.btnCancelarModalEmpresa = function () {
         this.modalEmpresa = false;
         this.btnNewPropietario = false;
+    };
+    IndexSubirCarpetaComponent.prototype.prueba = function (event) {
+        if (event == "2") {
+            this.json.datosGenerales = "Con opcion de compra";
+        }
+        else {
+            this.json.datosGenerales = event;
+        }
     };
     IndexSubirCarpetaComponent = __decorate([
         core_1.Component({

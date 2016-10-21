@@ -66,9 +66,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public tramitesGeneralSeccion;
     public divEmpresa;
     public TipoMatricula = 1;
+    public TipoTramite = {
+    	'caso':null,
+    	'variante':null
+    };
+
     public organismoTransitos;
     public json = {
- 		'organismoTrancito' :[],
+ 		'datosGenerales' :null,
  	};
 
 
@@ -106,6 +111,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
             this._OrganismoTransitoService.getOrganismoTransito().subscribe(
 				response => {
 					this.organismoTransitos = response.data;
+					console.log(this.organismoTransitos);
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -143,11 +149,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
 						this.validate=false	;
 						this.validateCiudadano=false;
 						this.crear=true;
+						this.tramitesGeneralSeccion=false;
 						this.claseSpan ="glyphicon glyphicon-remove form-control-feedback ";
 						this.clase = "form-group has-error has-feedback";
 						this.activar =false;
 					}else{
-							this.tramitesGeneralSeccion =true;
 							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback ";
 							this.clase = "form-group has-success has-feedback";
 				            this.msg = response.msj;
@@ -158,6 +164,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 									this.ciudadanosVehiculo = response.data;
 									this.respuesta = response;
 									console.log(this.ciudadanosVehiculo);
+									this.tramitesGeneralSeccion =true;
 									if(this.respuesta.status == 'error') {
 										this.activar=true;
 										this.validateCiudadano=false;
@@ -368,15 +375,16 @@ export class IndexSubirCarpetaComponent implements OnInit{
     if(this.ciudadanosVehiculo != null) {
        this.ciudadanoVehiculo.licenciaTransito=this.ciudadanosVehiculo[0].licenciaTransito;
     }
-
+    console.log(this.json);
   	let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.TipoMatricula,this.json).subscribe(
+		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.TipoMatricula,this.json,this.TipoTramite).subscribe(
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=='success') {
                     this.ciudadanoVehiculo.licenciaTransito="";
 					this.validateCedula=false;
-					this.json = "";
+					this.json = null;
+					this.TipoTramite=null;
 					this.onKey("");
 
 				}
@@ -408,6 +416,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
     	this.TipoMatricula = event;
     }
 
+ 
+
     btnCancelarVinculo(){
         this.validateCedula=false;
     }
@@ -420,5 +430,12 @@ export class IndexSubirCarpetaComponent implements OnInit{
     btnCancelarModalEmpresa(){
 	    this.modalEmpresa=false;
 	    this.btnNewPropietario=false;
+    }
+    prueba(event:any){
+    	if(event=="2") {
+    		this.json.datosGenerales = "Con opcion de compra";
+    	}else{
+    		this.json.datosGenerales = event;
+    	}
     }
 }
