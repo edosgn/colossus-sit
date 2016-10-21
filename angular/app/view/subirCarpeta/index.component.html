@@ -170,18 +170,29 @@
 											<hr>
 											<div *ngIf="TipoMatricula==4">
 											<label >organismo Transito</label>
-												<select class="form-control" [(ngModel)]="json.organismoTrancito">
-												  <option *ngFor="#organismoTransito of organismoTransitos" [value]='organismoTransito.nombre' >{{organismoTransito.nombre}}</option>
+												<select class="form-control" [(ngModel)]="json.datosGenerales">
+												  <option *ngFor="#organismoTransito of organismoTransitos" [value]='organismoTransito.nombre'>{{organismoTransito.nombre}}</option>
 												</select>
 												<hr>
 											</div>
 
 											<div *ngIf="TipoMatricula==1">
 											<label >Tipo Tramite</label>
-												<select class="form-control">
-												  <option value="1">Leasing</option>
-												  <option value="4">Propio</option>
+												<select  (change)="prueba($event.target.value)" [(ngModel)]="TipoTramite.caso" class="form-control">
+												  <option value="3">Leasing</option>
+												  <option value="2">Propio</option>
 												</select>
+												<hr>
+											</div>
+
+											<div *ngIf="TipoTramite.caso==3 && TipoMatricula==1">
+											<label >Datos</label>
+												<div class="radio">
+												  <label><input  (change)="prueba($event.target.value)" checked="checked" type="radio" name="optradio" value="Con opcion de compra">Con opcion de compra</label>
+												</div>
+												<div class="radio">
+												  <label><input  (change)="prueba($event.target.value)" type="radio" name="optradio" value="Sin opcion de compra o renting">Sin opcion de compra o renting</label>
+												</div>
 												<hr>
 											</div>
 										</div>

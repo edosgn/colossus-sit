@@ -57,9 +57,7 @@ var IndexSeleccionarTramiteComponent = (function () {
         });
     };
     IndexSeleccionarTramiteComponent.prototype.onChangeTramite = function (tramiteId) {
-        if (tramiteId == 1) {
-            this._router.navigate(['/tramiteCambioColor', tramiteId]);
-        }
+        this._router.navigate(['/tramiteCuerpo', tramiteId]);
     };
     IndexSeleccionarTramiteComponent = __decorate([
         core_1.Component({

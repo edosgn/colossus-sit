@@ -11,16 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 // Importar el núcleo de Angular
 var modulo_service_1 = require("../../../services/modulo/modulo.service");
 var ciudadanoVehiculo_service_1 = require("../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service");
-var color_service_1 = require("../../../services/color/color.service");
 var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
 var tramite_service_1 = require("../../../services/tramite/tramite.service");
 var login_service_1 = require("../../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var IndexTramiteCambioColorComponent = (function () {
-    function IndexTramiteCambioColorComponent(_ColorService, _VehiculoService, _CiudadanoVehiculoService, _TramiteService, _ModuloService, _loginService, _route, _router) {
-        this._ColorService = _ColorService;
+var IndexTramiteCuerpoComponent = (function () {
+    function IndexTramiteCuerpoComponent(_VehiculoService, _CiudadanoVehiculoService, _TramiteService, _ModuloService, _loginService, _route, _router) {
         this._VehiculoService = _VehiculoService;
         this._CiudadanoVehiculoService = _CiudadanoVehiculoService;
         this._TramiteService = _TramiteService;
@@ -29,7 +27,7 @@ var IndexTramiteCambioColorComponent = (function () {
         this._route = _route;
         this._router = _router;
     }
-    IndexTramiteCambioColorComponent.prototype.ngOnInit = function () {
+    IndexTramiteCuerpoComponent.prototype.ngOnInit = function () {
         var _this = this;
         this._route.params.subscribe(function (params) {
             _this.tramiteId = +params["tramiteId"];
@@ -45,17 +43,8 @@ var IndexTramiteCambioColorComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this._ColorService.getColor().subscribe(function (response) {
-            _this.colores = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
     };
-    IndexTramiteCambioColorComponent.prototype.onKey = function (event) {
+    IndexTramiteCuerpoComponent.prototype.onKey = function (event) {
         var _this = this;
         var token = this._loginService.getToken();
         var values = event.target.value;
@@ -103,30 +92,20 @@ var IndexTramiteCambioColorComponent = (function () {
             }
         });
     };
-    IndexTramiteCambioColorComponent.prototype.onChangeCiudadano = function (id) {
+    IndexTramiteCuerpoComponent.prototype.onChangeCiudadano = function (id) {
         this.idCiudadanoSeleccionado = id;
         console.log(this.idCiudadanoSeleccionado);
     };
-    IndexTramiteCambioColorComponent.prototype.onChangeColorNuevo = function (colorId) {
-        this.colorNuevo = colorId;
-        this.finalizar = true;
-    };
-    IndexTramiteCambioColorComponent.prototype.FinalizarTramite = function () {
-        alert("color nuevo:" + this.colorNuevo +
-            "ciudadano:" + this.idCiudadanoSeleccionado +
-            "vehiculo:" + this.vehiculo.placa +
-            "tramite:" + this.tramiteId);
-    };
-    IndexTramiteCambioColorComponent = __decorate([
+    IndexTramiteCuerpoComponent = __decorate([
         core_1.Component({
             selector: 'default',
-            templateUrl: 'app/view/tipoTramite/cambioColor/index.component.html',
+            templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, color_service_1.ColorService]
+            providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService,]
         }), 
-        __metadata('design:paramtypes', [color_service_1.ColorService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tramite_service_1.TramiteService, modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], IndexTramiteCambioColorComponent);
-    return IndexTramiteCambioColorComponent;
+        __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tramite_service_1.TramiteService, modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+    ], IndexTramiteCuerpoComponent);
+    return IndexTramiteCuerpoComponent;
 }());
-exports.IndexTramiteCambioColorComponent = IndexTramiteCambioColorComponent;
-//# sourceMappingURL=index.tramiteCambioColor.component.js.map
+exports.IndexTramiteCuerpoComponent = IndexTramiteCuerpoComponent;
+//# sourceMappingURL=index.tramiteCuerpo.component.js.map
