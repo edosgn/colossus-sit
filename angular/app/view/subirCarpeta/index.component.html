@@ -158,7 +158,7 @@
 											</div>
 											<div class="col-md-6">
 												<label >Tipo:</label>
-												<select class="form-control" (change)="onChangeTipoMatricula($event.target.value)">
+												<select class="form-control" [(ngModel)]="TipoMatricula"  (change)="onChangeTipoMatricula($event.target.value)">
 												  <option value="1">MATRICULA INICIAL</option>
 												  <option value="4">RADICADO</option>
 												</select>	
@@ -169,8 +169,18 @@
 											<br>
 											<hr>
 											<div *ngIf="TipoMatricula==4">
+											<label >organismo Transito</label>
 												<select class="form-control" [(ngModel)]="json.organismoTrancito">
 												  <option *ngFor="#organismoTransito of organismoTransitos" [value]='organismoTransito.nombre' >{{organismoTransito.nombre}}</option>
+												</select>
+												<hr>
+											</div>
+
+											<div *ngIf="TipoMatricula==1">
+											<label >Tipo Tramite</label>
+												<select class="form-control">
+												  <option value="1">Leasing</option>
+												  <option value="4">Propio</option>
 												</select>
 												<hr>
 											</div>
@@ -287,6 +297,7 @@
 	                    <th>Variante</th>
 	                    <th>Caso</th>
 	                    <th>valor</th>
+	                    <th>datos</th>
 	                </tr>
 	            </thead>
 	            <tbody> 
@@ -294,9 +305,12 @@
                     <td >{{tramiteEspecifico.id}}</td>
                     <td >{{tramiteEspecifico.tramite.nombre}}</td>
                     <td >{{tramiteEspecifico.tramiteGeneral.numeroLicencia}}</td>
-                    <td >{{tramiteEspecifico.variante?.nombre}}</td>
-                    <td >{{tramiteEspecifico.caso?.nombre}}</td>
+                    <td *ngIf="tramiteEspecifico.variante">{{tramiteEspecifico.variante.nombre}}</td>
+                    <td *ngIf="!tramiteEspecifico.variante">N/A</td>
+                    <td *ngIf="tramiteEspecifico.caso">{{tramiteEspecifico.caso.nombre}}</td>
+                    <td *ngIf="!tramiteEspecifico.caso">N/A</td>
                     <td >{{tramiteEspecifico.valor}}</td>
+                    <td >{{tramiteEspecifico.datos | json}}</td>
                 </tr>
 	            </tbody> 
 	        </table>

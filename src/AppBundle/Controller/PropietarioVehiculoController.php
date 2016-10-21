@@ -51,7 +51,11 @@ class PropietarioVehiculoController extends Controller
     {
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
-        $datos = $reques->get("datos",null);
+        $data = $request->get("datos",null);
+        $data = json_decode($data);
+        $datos = array('OrganismoTrancitoTransferencia' =>$data->organismoTrancito);
+
+       
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
             $json = $request->get("json",null);

@@ -292,6 +292,7 @@ var IndexSubirCarpetaComponent = (function () {
             if (_this.respuesta.status == 'success') {
                 _this.ciudadanoVehiculo.licenciaTransito = "";
                 _this.validateCedula = false;
+                _this.json = "";
                 _this.onKey("");
             }
             console.log(_this.respuesta);

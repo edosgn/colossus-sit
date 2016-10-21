@@ -361,6 +361,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
   	this.ciudadanoVehiculo.ciudadanoId=this.ciudadano.numeroIdentificacion;
   	this.ciudadanoVehiculo.estadoPropiedad="1";
+
     this.ciudadanoVehiculo.empresaId=this.empresa.nit;
     this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
     this.ciudadanoVehiculo.fechaPropiedadInicial=this.vehiculo.fechaFactura;
@@ -375,6 +376,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 				if(this.respuesta.status=='success') {
                     this.ciudadanoVehiculo.licenciaTransito="";
 					this.validateCedula=false;
+					this.json = "";
 					this.onKey("");
 
 				}
