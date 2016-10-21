@@ -16,11 +16,13 @@ export class CiudadanoVehiculoService {
 		return this._http.get(this.url+"/").map(res => res.json());
 	}
 
-	register(ciudadanoVehiculo,token,tramiteId,datosT){
+	register(ciudadanoVehiculo,token,tramiteId,datosT,casosVariantesT){
 		
 		let json = JSON.stringify(ciudadanoVehiculo);
 		let datos = JSON.stringify(datosT);
-		let params = "json="+json+"&authorization="+token+"&datos="+datos;
+		let casosVariantes = JSON.stringify(casosVariantesT);
+		let params = "json="+json+"&authorization="+token+"&datos="+datos+"&casosVariantes="+casosVariantes;
+		console.log(params);
 		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
 		return this._http.post(this.url+"/new/"+tramiteId, params, {headers: headers})
 							  .map(res => res.json());

@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\PropietarioVehiculo;
 use AppBundle\Entity\TramiteGeneral;
+use AppBundle\Entity\Caso;
+use AppBundle\Entity\Variante;
 use AppBundle\Entity\TramiteEspecifico;
 use AppBundle\Form\CiudadanoVehiculoType;
 
@@ -49,13 +51,32 @@ class PropietarioVehiculoController extends Controller
      */
     public function newAction(Request $request,$idTramite)
     {
+        
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
         $data = $request->get("datos",null);
         $data = json_decode($data);
-        $datos = array('OrganismoTrancitoTransferencia' =>$data->organismoTrancito);
+        $casosVariantes = $request->get("casosVariantes",null);
+        $entradas = json_decode($casosVariantes);
+
+        $caso = (isset($entradas->caso)) ? $entradas->caso : null;
+        $variante = (isset($entradas->variante)) ? $entradas->variante : null;
+        $em = $this->getDoctrine()->getManager();
+
+
+        $casoBd = $em->getRepository('AppBundle:Caso')->findOneBy(
+            array('estado' => 1,'id' => $caso)
+        );
+
+        $varianteBd = $em->getRepository('AppBundle:Variante')->findOneBy(
+            array('estado' => 1,'id' => $variante)
+        );
 
        
+        $datos = array('datosGenerales' =>$data->datosGenerales);
+        
+
+
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
             $json = $request->get("json",null);
@@ -129,11 +150,12 @@ class PropietarioVehiculoController extends Controller
                             $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
                                 array('estado' => 1,'vehiculo' => $vehiculo->getId())
                             );
+
                             $tramiteEspecifico->setDatos($datos);
                             $tramiteEspecifico->setTramite($tramite);
                             $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
-                            $tramiteEspecifico->setVariante(null);
-                            $tramiteEspecifico->setCaso(null);
+                            $tramiteEspecifico->setCaso($casoBd);
+                            $tramiteEspecifico->setVariante($varianteBd);
                             $tramiteEspecifico->setValor(0);
                             $tramiteEspecifico->setEstado(1);
 

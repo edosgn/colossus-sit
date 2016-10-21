@@ -49,19 +49,6 @@ var NewCiudadanoVehiculoComponent = (function () {
         });
     };
     NewCiudadanoVehiculoComponent.prototype.onSubmit = function () {
-        var _this = this;
-        var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.tipoMatricula).subscribe(function (response) {
-            _this.respuesta = response;
-            console.log(_this.respuesta);
-            (function (error) {
-                _this.errorMessage = error;
-                if (_this.errorMessage != null) {
-                    console.log(_this.errorMessage);
-                    alert("Error en la petición");
-                }
-            });
-        });
     };
     NewCiudadanoVehiculoComponent.prototype.onKey = function (event) {
         var _this = this;

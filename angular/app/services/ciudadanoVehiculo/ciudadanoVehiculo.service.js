@@ -19,10 +19,12 @@ var CiudadanoVehiculoService = (function () {
     CiudadanoVehiculoService.prototype.getCiudadanoVehiculo = function () {
         return this._http.get(this.url + "/").map(function (res) { return res.json(); });
     };
-    CiudadanoVehiculoService.prototype.register = function (ciudadanoVehiculo, token, tramiteId, datosT) {
+    CiudadanoVehiculoService.prototype.register = function (ciudadanoVehiculo, token, tramiteId, datosT, casosVariantesT) {
         var json = JSON.stringify(ciudadanoVehiculo);
         var datos = JSON.stringify(datosT);
-        var params = "json=" + json + "&authorization=" + token + "&datos=" + datos;
+        var casosVariantes = JSON.stringify(casosVariantesT);
+        var params = "json=" + json + "&authorization=" + token + "&datos=" + datos + "&casosVariantes=" + casosVariantes;
+        console.log(params);
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
         return this._http.post(this.url + "/new/" + tramiteId, params, { headers: headers })
             .map(function (res) { return res.json(); });
