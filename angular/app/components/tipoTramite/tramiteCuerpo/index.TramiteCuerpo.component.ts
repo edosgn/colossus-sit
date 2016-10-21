@@ -140,6 +140,6 @@ export class IndexTramiteCuerpoComponent implements OnInit{
   	this.idCiudadanoSeleccionado = id;
   	console.log(this.idCiudadanoSeleccionado);
   }
-
+ 
  
 }
