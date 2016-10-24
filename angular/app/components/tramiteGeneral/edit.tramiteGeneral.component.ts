@@ -34,7 +34,7 @@ export class TramiteGeneralEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		this.tramiteGeneral = new TramiteGeneral(null, null, null, "", "", null, null, null ,"");
+	//	this.tramiteGeneral = new TramiteGeneral(null, null, null, "", "", null, null, null ,"");
 
 
 		let token = this._loginService.getToken();
@@ -47,7 +47,7 @@ export class TramiteGeneralEditComponent implements OnInit{
 
 						response => {
 							let data = response.data;
-							this.tramiteGeneral = new TramiteGeneral(
+						/*	this.tramiteGeneral = new TramiteGeneral(
 								data.id,
 								data.vehiculo.id, 
 								data.numeroQpl,
@@ -56,7 +56,7 @@ export class TramiteGeneralEditComponent implements OnInit{
 							    data.valor,
 							    data.numeroLicencia, 
 							    data.numeroSustrato,
-							    data.nombre);
+							    data.nombre);*/
 						},
 						error => {
 								this.errorMessage = <any>error;

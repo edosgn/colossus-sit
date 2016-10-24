@@ -272,8 +272,10 @@
 		  <button class="btn btn-default col-md-offset-10" type="submit" (click)="btnCancelarNuevoTramiteGeneral()">Cancelar</button>
 	  </div>
 	  <div class="panel-body">
-		<registerTramiteGeneral [vehiculoId]="vehiculo.id" [ciudadanoId]="idCiudadanoSeleccionado" 
-		[empresaId]="idEmpresaSeleccionada" ></registerTramiteGeneral>
+		<registerTramiteGeneral (tramiteGeneralCreado)="tramiteGeneralCreado($event)" [vehiculoId]="vehiculo.id"
+		 [ciudadanoId]="idCiudadanoSeleccionado" 
+		 [Apoderado]="btnSeleccionarApoderado"
+		[empresaId]="idEmpresaSeleccionada"  ></registerTramiteGeneral>
 	  </div>
 	</div>
 </div>	  
@@ -282,7 +284,7 @@
 <div *ngIf="tramitesGeneralSeccion" class="col-md-12">
 	<div class="panel panel-primary">
 	  <div class="panel-heading">Tramites 
-	 	 <button type="submit" class="btn btn-primary col-md-offset-10" (click)="btnNuevoTramiteGeneral()">Nuevo</button>
+	 	 <button type="submit" class="btn btn-primary col-md-offset-10"  [disabled]="!idCiudadanoSeleccionado && !idEmpresaSeleccionada"   (click)="btnNuevoTramiteGeneral()">Nuevo</button>
 	  </div>
 	  <div class="panel-body">
 	  		<h5>Licencias de transito</h5>
@@ -312,12 +314,30 @@
 	            </tbody> 
 	        </table>
 
-	        <h5>Tramites</h5>
+	        	
+
+	        <div>
+	        	<h5 >Tramites </h5> 
+	        </div>
+	        		<hr>
+    		<div class="col-md-12">
+    			<div class="col-md-8"> 
+					<label>Nuevo:</label>
+					<select class="form-control" [disabled]="!tramiteGeneralSeccion" [(ngModel)]="tramiteSeleccionado" required>
+					  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
+					</select>
+				</div>
+					<button type="submit" class="btn btn-primary col-md-2" style="margin-top: 27px;" [disabled]="!tramiteGeneralSeccion"   
+	        		(click)="btnNuevoTramiteEspesifico()">Nuevo Tremite</button>
+	        		<hr> <br><br> <br><br> 	
+    		</div>
+	        	
 
 	        <table class="table table-bordered">
+
 	            <thead>
 	                <tr>
-	                   	<th>Id</th>
+	                   	<th>Id</th> 
 	                    <th>Tramite</th>
 	                    <th>Tramite General</th>
 	                    <th>Variante</th>
@@ -375,6 +395,7 @@
 	  </div><!-- /.modal-dialog -->
 </div>
 
+			   
 
 
 

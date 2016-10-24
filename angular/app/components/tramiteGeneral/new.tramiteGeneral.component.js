@@ -26,15 +26,15 @@ var NewTramiteGeneralComponent = (function () {
         this.vehiculoId = null;
         this.ciudadanoId = null;
         this.empresaId = null;
+        this.Apoderado = null;
+        this.tramiteGeneralCreado = new core_1.EventEmitter();
     }
     NewTramiteGeneralComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.tramiteGeneral = new TramiteGeneral_1.TramiteGeneral(null, this.vehiculoId, null, "", "", null, null, null, "", null, this.empresaId, this.ciudadanoId);
-        console.log(this.tramiteGeneral);
         var token = this._loginService.getToken();
         this._VehiculoService.getVehiculo().subscribe(function (response) {
             _this.vehiculos = response.data;
-            console.log(_this.vehiculos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -46,9 +46,12 @@ var NewTramiteGeneralComponent = (function () {
     NewTramiteGeneralComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
+        this.tramiteGeneral.apoderado = this.Apoderado;
         this._TramiteGeneralService.register(this.tramiteGeneral, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
+            if (_this.respuesta.status == "success") {
+                _this.tramiteGeneralCreado.emit(true);
+            }
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -70,6 +73,14 @@ var NewTramiteGeneralComponent = (function () {
         core_1.Input(), 
         __metadata('design:type', Object)
     ], NewTramiteGeneralComponent.prototype, "empresaId", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewTramiteGeneralComponent.prototype, "Apoderado", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], NewTramiteGeneralComponent.prototype, "tramiteGeneralCreado", void 0);
     NewTramiteGeneralComponent = __decorate([
         core_1.Component({
             selector: 'registerTramiteGeneral',

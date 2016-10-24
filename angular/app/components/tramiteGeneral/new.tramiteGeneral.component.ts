@@ -1,10 +1,11 @@
 // Importar el núcleo de Angular
-import {Component, OnInit,Input} from '@angular/core';
+import {Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service';
 import {VehiculoService} from '../../services/vehiculo/vehiculo.service';
 import {TramiteGeneral} from '../../model/tramiteGeneral/TramiteGeneral';
+
  
 // Decorador component, indicamos en que etiqueta se va a cargar la  
 
@@ -24,6 +25,8 @@ export class NewTramiteGeneralComponent {
 	@Input() vehiculoId = null;
 	@Input() ciudadanoId = null;
 	@Input() empresaId = null;
+	@Input() Apoderado = null;
+	@Output() tramiteGeneralCreado = new EventEmitter<any>();
 	constructor(
 
 		private _TramiteGeneralService:TramiteGeneralService,
@@ -36,14 +39,11 @@ export class NewTramiteGeneralComponent {
 
 	ngOnInit(){
 		this.tramiteGeneral = new TramiteGeneral(null,this.vehiculoId, null, "", "", null, null, null ,"",null,this.empresaId,this.ciudadanoId);
-		console.log(this.tramiteGeneral);
-
 		let token = this._loginService.getToken();
 		
 		this._VehiculoService.getVehiculo().subscribe(
 				response => {
 					this.vehiculos = response.data;
-					console.log(this.vehiculos);
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -58,11 +58,15 @@ export class NewTramiteGeneralComponent {
 
 	onSubmit(){
 		let token = this._loginService.getToken();
+			this.tramiteGeneral.apoderado = this.Apoderado;
+
 		this._TramiteGeneralService.register(this.tramiteGeneral,token).subscribe(
 			response => {
 				this.respuesta = response;
-				console.log(this.respuesta);
-
+				
+				if(this.respuesta.status=="success") {
+					this.tramiteGeneralCreado.emit(true);
+				}
 			error => {
 					this.errorMessage = <any>error;
 
