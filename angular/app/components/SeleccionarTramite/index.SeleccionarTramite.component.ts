@@ -18,7 +18,7 @@ import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 export class IndexSeleccionarTramiteComponent implements OnInit{ 
 	public errorMessage;
 	public id;
-	public respuesta;
+	public respuesta; 
 	public modulos;
 	public tramites;
 	public activar;

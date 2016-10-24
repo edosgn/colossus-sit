@@ -14,6 +14,7 @@ var ciudadanoVehiculo_service_1 = require("../../../services/ciudadanoVehiculo/c
 var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
 var tramite_service_1 = require("../../../services/tramite/tramite.service");
 var login_service_1 = require("../../../services/login.service");
+var index_cambioColor_component_1 = require("../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -26,6 +27,7 @@ var IndexTramiteCuerpoComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.color = false;
     }
     IndexTramiteCuerpoComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -94,14 +96,14 @@ var IndexTramiteCuerpoComponent = (function () {
     };
     IndexTramiteCuerpoComponent.prototype.onChangeCiudadano = function (id) {
         this.idCiudadanoSeleccionado = id;
-        console.log(this.idCiudadanoSeleccionado);
+        this.divTramite = true;
     };
     IndexTramiteCuerpoComponent = __decorate([
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService,]
+            directives: [router_1.ROUTER_DIRECTIVES, index_cambioColor_component_1.IndexCambioColorComponent],
+            providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tramite_service_1.TramiteService, modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexTramiteCuerpoComponent);

@@ -4,6 +4,7 @@ import {CiudadanoVehiculoService} from "../../../services/ciudadanoVehiculo/ciud
 import {VehiculoService} from "../../../services/vehiculo/vehiculo.service";
 import {TramiteService} from "../../../services/tramite/tramite.service";
 import {LoginService} from "../../../services/login.service";
+import {IndexCambioColorComponent} from "../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../../model/tramite/Tramite';
@@ -13,8 +14,8 @@ import {Tramite} from '../../../model/tramite/Tramite';
 @Component({
     selector: 'default',
     templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
-    directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService,]
+    directives: [ROUTER_DIRECTIVES,IndexCambioColorComponent],
+    providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -35,6 +36,8 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 	public validateCiudadano;
 	public idCiudadanoSeleccionado;
 	public finalizar;
+	public divTramite;
+	public color;
 
 
 
@@ -47,7 +50,9 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 		private _route: ActivatedRoute,
 		private _router: Router
 		
-		){}
+		){
+		this.color=false;
+	}
 
 
 	ngOnInit(){	
@@ -138,7 +143,7 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 
   onChangeCiudadano(id) {
   	this.idCiudadanoSeleccionado = id;
-  	console.log(this.idCiudadanoSeleccionado);
+	this.divTramite=true;
   }
  
  

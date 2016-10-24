@@ -1,0 +1,25 @@
+<div class="clearfix"></div>
+
+<div  class="panel panel-primary">
+	  <div class="panel-heading">Selecione Nuevo Color</div>
+		<div class="panel-body">
+		  	
+			  	<div class="col-md-6">
+			  		<label>Color</label>
+				   	<select class="form-control"  (change)="onChangeColor($event.target.value)" required>
+							  <option *ngFor="#color of colores" [value]='color.nombre' >{{color.nombre}}</option>
+					</select>
+				</div>
+
+				<div class="col-md-6">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+					<br>
+				</div>
+				<div class="col-md-12">
+				<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
+				</div>
+		</div>
+	
+</div>
