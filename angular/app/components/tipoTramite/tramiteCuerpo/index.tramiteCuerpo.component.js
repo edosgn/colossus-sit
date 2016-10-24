@@ -17,6 +17,7 @@ var login_service_1 = require("../../../services/login.service");
 var index_cambioColor_component_1 = require("../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
+var Vehiculo_1 = require('../../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexTramiteCuerpoComponent = (function () {
     function IndexTramiteCuerpoComponent(_VehiculoService, _CiudadanoVehiculoService, _TramiteService, _ModuloService, _loginService, _route, _router) {
@@ -31,6 +32,7 @@ var IndexTramiteCuerpoComponent = (function () {
     }
     IndexTramiteCuerpoComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
         this._route.params.subscribe(function (params) {
             _this.tramiteId = +params["tramiteId"];
         });

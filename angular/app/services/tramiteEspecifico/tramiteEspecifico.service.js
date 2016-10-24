@@ -52,6 +52,14 @@ var TramiteEspecificoService = (function () {
         return this._http.post(this.url + "/tramiteE/tramiteG/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    TramiteEspecificoService.prototype.register2 = function (tramiteEspecifico, token, datos) {
+        var json = JSON.stringify(tramiteEspecifico);
+        var datosGenerales = JSON.stringify(datos);
+        var params = "json=" + json + "&authorization=" + token + "&datos=" + datosGenerales;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/new", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     TramiteEspecificoService = __decorate([
         core_1.Injectable(), 
         __metadata('design:paramtypes', [http_1.Http])

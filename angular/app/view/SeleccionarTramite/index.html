@@ -24,6 +24,7 @@
 	    <h3 class="panel-title">{{respuesta.msj}} para {{tramites[0].modulo.abreviatura}}</h3>
 	  </div>
 	  <div class="panel-body">
+
 	    <select multiple class="form-control bloc" (change)="onChangeTramite($event.target.value)">
 		  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
 		</select>

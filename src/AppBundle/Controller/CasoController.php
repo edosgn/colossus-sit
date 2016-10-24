@@ -235,4 +235,48 @@ class CasoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * busca los casos de un tramite.
+     *
+     * @Route("/showCasos/{id}", name="caso_tramites_show")
+     * @Method("POST")
+     */
+    public function showCasosAction(Request  $request, $id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $casos = $em->getRepository('AppBundle:Caso')->findBy(
+            array('estado' => 1,'tramite'=> $id)
+            );
+
+            if ($casos==null) {
+                $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "No hay casos asigandos a este tramite", 
+                );
+            }
+            else{
+               $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "casos encontrado", 
+                    'data'=> $casos,
+            ); 
+            }
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }

@@ -222,4 +222,43 @@ class VarianteController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * busca las variantes de un tramite.
+     *
+     * @Route("/showVariantes/{id}", name="variante_tramites_show")
+     * @Method("POST")
+     */
+    public function showVariantesAction(Request  $request, $id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $variantes = $em->getRepository('AppBundle:Variante')->findBy(
+            array('estado' => 1,'tramite'=> $id)
+            );
+
+            if ($variantes==null) {
+               $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "no hay variantes no valida", 
+                ); 
+            }else{
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "variantes encontrado", 
+                    'data'=> $variantes,
+            );
+            }
+            
+        }else{
+            
+        }
+        return $helpers->json($responce);
+    }
 }

@@ -50,6 +50,17 @@ class TramiteEspecificoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
+        $data = $request->get("datos",null);
+        $data = json_decode($data);
+     
+        $em = $this->getDoctrine()->getManager();
+
+        $viejo = (isset($data->viejo)) ? $data->viejo : null;
+        $nuevo = (isset($data->nuevo)) ? $data->nuevo : null;
+
+        $datos = array('nuevo' =>$data->nuevo,'viejo' =>$data->viejo);
+
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -60,19 +71,23 @@ class TramiteEspecificoController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{
-                        $valor = $params->valor;
-                        $tramiteId = $params->tramiteId;
-                        $tramiteGeneralId = $params->tramiteGeneralId;
-                        $varianteId = $params->varianteId;
-                        $casoId = $params->casoId;
+                        $valor = (isset($params->valor)) ? $params->valor : null;
+                        $tramiteId = (isset($params->tramiteId)) ? $params->tramiteId : null;
+                        $varianteId = (isset($params->varianteId)) ? $params->varianteId : null;
+                        $tramiteGeneralId = (isset($params->tramiteGeneralId)) ? $params->tramiteGeneralId : null;
+                        $casoId = (isset($params->casoId)) ? $params->casoId : null;
                         $em = $this->getDoctrine()->getManager();
                         $tramite= $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                        $caso = $em->getRepository('AppBundle:Caso')->findOneBy(
+                            array('estado' => 1,'id' => $casoId)
+                        );
+                        $variante = $em->getRepository('AppBundle:Variante')->findOneBy(
+                            array('estado' => 1,'id' => $varianteId)
+                        );
                         $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($tramiteGeneralId);
-                        $variante = $em->getRepository('AppBundle:Variante')->find($varianteId);
-                        $caso = $em->getRepository('AppBundle:Caso')->find($casoId);
                         $tramiteEspecifico = new TramiteEspecifico();
                         $tramiteEspecifico->setValor($valor);
-                        $tramiteEspecifico->setDatos(null);
+                        $tramiteEspecifico->setDatos($datos);
                         $tramiteEspecifico->setTramite($tramite);
                         $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                         $tramiteEspecifico->setVariante($variante);

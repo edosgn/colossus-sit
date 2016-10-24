@@ -8,6 +8,7 @@ import {IndexCambioColorComponent} from "../../../components/tipoTramite/tramite
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../../model/tramite/Tramite';
+import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -27,7 +28,7 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 	public tramites;
 	public activar;
 	public tramite:Tramite;
-	public vehiculo;
+	public vehiculo: Vehiculo;
 	public validate;
 	public clase;
 	public msg;
@@ -56,6 +57,7 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 
 
 	ngOnInit(){	
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
 
 		this._route.params.subscribe(params =>{
 				this.tramiteId = +params["tramiteId"];
