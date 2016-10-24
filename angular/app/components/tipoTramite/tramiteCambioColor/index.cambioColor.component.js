@@ -13,17 +13,27 @@ var login_service_1 = require("../../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var color_service_1 = require("../../../services/color/color.service");
+var vehiculo_1 = require("../../../model/vehiculo/vehiculo");
 var tramiteEspecifico_service_1 = require("../../../services/tramiteEspecifico/tramiteEspecifico.service");
 var TramiteEspecifico_1 = require('../../../model/tramiteEspecifico/TramiteEspecifico');
+var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
+var variante_service_1 = require("../../../services/variante/variante.service");
+var caso_service_1 = require("../../../services/caso/caso.service");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexCambioColorComponent = (function () {
-    function IndexCambioColorComponent(_TramiteEspecificoService, _loginService, _ColorService, _route, _router) {
+    function IndexCambioColorComponent(_TramiteEspecificoService, _VarianteService, _CasoService, _VehiculoService, _loginService, _ColorService, _route, _router) {
         this._TramiteEspecificoService = _TramiteEspecificoService;
+        this._VarianteService = _VarianteService;
+        this._CasoService = _CasoService;
+        this._VehiculoService = _VehiculoService;
         this._loginService = _loginService;
         this._ColorService = _ColorService;
         this._route = _route;
         this._router = _router;
         this.tramiteGeneralId = 22;
+        this.colorSeleccionado = null;
+        this.varianteTramite = null;
+        this.casoTramite = null;
         this.vehiculo = null;
         this.datos = {
             'nuevo': null,
@@ -32,6 +42,26 @@ var IndexCambioColorComponent = (function () {
     }
     IndexCambioColorComponent.prototype.ngOnInit = function () {
         var _this = this;
+        var token = this._loginService.getToken();
+        this._CasoService.showCasosTramite(token, 5).subscribe(function (response) {
+            _this.casos = response.data;
+            console.log(_this.casos);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+        this._VarianteService.showVariantesTramite(token, 5).subscribe(function (response) {
+            _this.variantes = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 5, this.tramiteGeneralId, null, null, null);
         this._ColorService.getColor().subscribe(function (response) {
             _this.colores = response.data;
@@ -45,16 +75,19 @@ var IndexCambioColorComponent = (function () {
         this.datos.viejo = this.vehiculo.color.nombre;
     };
     IndexCambioColorComponent.prototype.onChangeColor = function (event) {
-        this.datos.nuevo = event;
-        console.log(this.datos);
-        console.log(this.tramiteEspecifico);
+        for (var i = 0; i < this.colores.length; ++i) {
+            if (event == this.colores[i].id) {
+                this.colorSeleccionado = this.colores[i];
+                this.datos.nuevo = this.colorSeleccionado.nombre;
+            }
+        }
+        this.vehiculo2 = new vehiculo_1.Vehiculo(this.vehiculo.id, this.vehiculo.clase.id, this.vehiculo.municipio.id, this.vehiculo.linea.id, this.vehiculo.servicio.id, this.colorSeleccionado.id, this.vehiculo.combustible.id, this.vehiculo.carroceria.id, this.vehiculo.organismoTransito.id, this.vehiculo.placa, this.vehiculo.numeroFactura, this.vehiculo.fechaFactura, this.vehiculo.valor, this.vehiculo.numeroManifiesto, this.vehiculo.fechaManifiesto, this.vehiculo.cilindraje, this.vehiculo.modelo, this.vehiculo.motor, this.vehiculo.chasis, this.vehiculo.serie, this.vehiculo.vin, this.vehiculo.numeroPasajeros);
     };
     IndexCambioColorComponent.prototype.enviarTramite = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._TramiteEspecificoService.register(this.tramiteEspecifico, token).subscribe(function (response) {
+        this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -63,6 +96,23 @@ var IndexCambioColorComponent = (function () {
                 }
             });
         });
+        console.log(this.vehiculo2);
+        this._VehiculoService.editVehiculo(this.vehiculo2, token).subscribe(function (response) {
+            _this.respuesta = response;
+            (function (error) {
+                _this.errorMessage = error;
+                if (_this.errorMessage != null) {
+                    console.log(_this.errorMessage);
+                    alert("Error en la petición");
+                }
+            });
+        });
+    };
+    IndexCambioColorComponent.prototype.onChangeCaso = function (event) {
+        this.tramiteEspecifico.casoId = event;
+    };
+    IndexCambioColorComponent.prototype.onChangeVariante = function (event) {
+        this.tramiteEspecifico.varianteId = event;
     };
     __decorate([
         core_1.Input(), 
@@ -73,9 +123,9 @@ var IndexCambioColorComponent = (function () {
             selector: 'color',
             templateUrl: 'app/view/tipoTramite/cambioColor/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, color_service_1.ColorService, tramiteEspecifico_service_1.TramiteEspecificoService]
+            providers: [login_service_1.LoginService, color_service_1.ColorService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService]
         }), 
-        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, login_service_1.LoginService, color_service_1.ColorService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, color_service_1.ColorService, router_1.ActivatedRoute, router_1.Router])
     ], IndexCambioColorComponent);
     return IndexCambioColorComponent;
 }());

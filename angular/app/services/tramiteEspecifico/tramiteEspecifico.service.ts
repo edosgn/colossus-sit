@@ -60,5 +60,15 @@ export class TramiteEspecificoService {
 							  .map(res => res.json());
 
 	}
+
+	register2(tramiteEspecifico,token,datos){
+		
+		let json = JSON.stringify(tramiteEspecifico);
+		let datosGenerales = JSON.stringify(datos);
+		let params = "json="+json+"&authorization="+token+"&datos="+datosGenerales;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		return this._http.post(this.url+"/new", params, {headers: headers})
+							  .map(res => res.json());
+	}
 	
 }
