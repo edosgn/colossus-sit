@@ -67,6 +67,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public tramitesGeneralSeccion;
     public divEmpresa;
     public TipoMatricula = 1;
+    public divTramiteGeneral;
+    public idEmpresaSeleccionada;
     public TipoTramite = {
     	'caso':null,
     	'variante':null
@@ -102,7 +104,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
                     }, 
                     error => {
                         this.errorMessage = <any>error;
-
                         if(this.errorMessage != null){
                             console.log(this.errorMessage);
                             alert("Error en la petición");
@@ -112,7 +113,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
             this._OrganismoTransitoService.getOrganismoTransito().subscribe(
 				response => {
 					this.organismoTransitos = response.data;
-					console.log(this.organismoTransitos);
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -216,10 +216,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			);
   }
 
-  onChangeCiudadano(id) {
-  	this.idCiudadanoSeleccionado = id;
-  	console.log(this.idCiudadanoSeleccionado);
-  }
+  o
   onChangeTramiteGeneral(id){
   	let tramiteGeneral = id;
 	let token = this._loginService.getToken();
@@ -402,22 +399,30 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		});
   }
 
-  onChangeNit(Value) {
 
-        if(Value == 4) {
-            this.nit = true;
-            this.validateCedula=false;
-        }else{
-            this.nit = false;
-            this.validateCedula=false;
-        }
+    onChangeCiudadano(id) {
+    	this.divTramiteGeneral=false;
+  		this.idCiudadanoSeleccionado = id;
+  		this.idEmpresaSeleccionada = null;
+  	}
+   onChangeEmpresa(id){
+   	this.divTramiteGeneral=false;
+	  	this.idEmpresaSeleccionada = id;
+	  	this.idCiudadanoSeleccionado = null;
+	}
 
+    onChangeNit(Value) {
+	        if(Value == 4) {
+	            this.nit = true;
+	            this.validateCedula=false;
+	        }else{
+	            this.nit = false;
+	            this.validateCedula=false;
+	        }
     }
     onChangeTipoMatricula(event:any){
     	this.TipoMatricula = event;
     }
-
- 
 
     btnCancelarVinculo(){
         this.validateCedula=false;
@@ -431,6 +436,14 @@ export class IndexSubirCarpetaComponent implements OnInit{
     btnCancelarModalEmpresa(){
 	    this.modalEmpresa=false;
 	    this.btnNewPropietario=false;
+    }
+    btnNuevoTramiteGeneral(){
+    	if(this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada){
+    	 this.divTramiteGeneral=true;
+    	}
+    }
+    btnCancelarNuevoTramiteGeneral(){
+    	this.divTramiteGeneral=false;
     }
     prueba(event:any){
     	if(event=="2") {

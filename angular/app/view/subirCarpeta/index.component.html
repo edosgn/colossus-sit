@@ -258,7 +258,7 @@
 	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.correo}}</td>
 	                    <td *ngIf="ciudadanoVehiculo.empresa">{{ciudadanoVehiculo.empresa?.telefono}}</td>
 	                    <td *ngIf="ciudadanoVehiculo.empresa && !btnSeleccionarApoderado"><input name="options" ng-control="options" type="radio" value={{ciudadanoVehiculo.empresa?.id}} 
-	                    (change)="onChangeCiudadano(ciudadanoVehiculo.empresa?.id)"></td>
+	                    (change)="onChangeEmpresa(ciudadanoVehiculo.empresa?.id)"></td>
 	                </tr>
 	            </tbody> 
 	        </table>
@@ -266,11 +266,14 @@
 	</div>
 </div>	
 
-<div  class="col-md-12">
+<div *ngIf="divTramiteGeneral" class="col-md-12">
 	<div class="panel panel-primary">
-	  <div class="panel-heading">Tramites</div>
+	  <div class="panel-heading">Tramites
+		  <button class="btn btn-default col-md-offset-10" type="submit" (click)="btnCancelarNuevoTramiteGeneral()">Cancelar</button>
+	  </div>
 	  <div class="panel-body">
-		<registerTramiteGeneral></registerTramiteGeneral>
+		<registerTramiteGeneral [vehiculoId]="vehiculo.id" [ciudadanoId]="idCiudadanoSeleccionado" 
+		[empresaId]="idEmpresaSeleccionada" ></registerTramiteGeneral>
 	  </div>
 	</div>
 </div>	  
@@ -278,7 +281,9 @@
 
 <div *ngIf="tramitesGeneralSeccion" class="col-md-12">
 	<div class="panel panel-primary">
-	  <div class="panel-heading">Tramites</div>
+	  <div class="panel-heading">Tramites 
+	 	 <button type="submit" class="btn btn-primary col-md-offset-10" (click)="btnNuevoTramiteGeneral()">Nuevo</button>
+	  </div>
 	  <div class="panel-body">
 	  		<h5>Licencias de transito</h5>
 		    <table  class="table table-bordered">

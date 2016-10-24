@@ -47,10 +47,11 @@ class TramiteGeneralController extends Controller
      */
     public function newAction(Request $request)
     {
+       
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== false) {
+        if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
             if (count($params)==0) {
@@ -75,12 +76,12 @@ class TramiteGeneralController extends Controller
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
                             array(
                             'estado' => 1,
-                            'numeroIdentificacion' => $ciudadanoId,
+                            'id' => $ciudadanoId,
                             ));
                         $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
                             array(
                             'estado' => 1,
-                            'nit' => $empresaId,
+                            'id' => $empresaId,
                             ));
                         $tramiteGeneral = new TramiteGeneral();
                         $tramiteGeneral->setNumeroQpl($numeroQpl);

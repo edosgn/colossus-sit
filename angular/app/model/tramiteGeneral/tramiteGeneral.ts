@@ -8,6 +8,10 @@ export class TramiteGeneral{
 		public valor:number,
 		public numeroLicencia:number,
 		public numeroSustrato:number,
-		public nombre:string
+		public nombre:string,
+		public apoderado:boolean,
+		public empresaId:number,
+		public ciudadanoId:number
+
 	){}
 }

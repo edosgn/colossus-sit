@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Input} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service';
@@ -21,7 +21,9 @@ export class NewTramiteGeneralComponent {
 	public errorMessage;
 	public respuesta;
 	public vehiculos;
-
+	@Input() vehiculoId = null;
+	@Input() ciudadanoId = null;
+	@Input() empresaId = null;
 	constructor(
 
 		private _TramiteGeneralService:TramiteGeneralService,
@@ -33,7 +35,8 @@ export class NewTramiteGeneralComponent {
 	){}
 
 	ngOnInit(){
-		this.tramiteGeneral = new TramiteGeneral(null, null, null, "", "", null, null, null ,"");
+		this.tramiteGeneral = new TramiteGeneral(null,this.vehiculoId, null, "", "", null, null, null ,"",null,this.empresaId,this.ciudadanoId);
+		console.log(this.tramiteGeneral);
 
 		let token = this._loginService.getToken();
 		

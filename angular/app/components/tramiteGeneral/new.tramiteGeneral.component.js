@@ -23,10 +23,14 @@ var NewTramiteGeneralComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.vehiculoId = null;
+        this.ciudadanoId = null;
+        this.empresaId = null;
     }
     NewTramiteGeneralComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.tramiteGeneral = new TramiteGeneral_1.TramiteGeneral(null, null, null, "", "", null, null, null, "");
+        this.tramiteGeneral = new TramiteGeneral_1.TramiteGeneral(null, this.vehiculoId, null, "", "", null, null, null, "", null, this.empresaId, this.ciudadanoId);
+        console.log(this.tramiteGeneral);
         var token = this._loginService.getToken();
         this._VehiculoService.getVehiculo().subscribe(function (response) {
             _this.vehiculos = response.data;
@@ -54,6 +58,18 @@ var NewTramiteGeneralComponent = (function () {
             });
         });
     };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewTramiteGeneralComponent.prototype, "vehiculoId", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewTramiteGeneralComponent.prototype, "ciudadanoId", void 0);
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewTramiteGeneralComponent.prototype, "empresaId", void 0);
     NewTramiteGeneralComponent = __decorate([
         core_1.Component({
             selector: 'registerTramiteGeneral',

@@ -65,7 +65,6 @@ var IndexSubirCarpetaComponent = (function () {
         });
         this._OrganismoTransitoService.getOrganismoTransito().subscribe(function (response) {
             _this.organismoTransitos = response.data;
-            console.log(_this.organismoTransitos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -148,10 +147,6 @@ var IndexSubirCarpetaComponent = (function () {
                 alert("Error en la petición");
             }
         });
-    };
-    IndexSubirCarpetaComponent.prototype.onChangeCiudadano = function (id) {
-        this.idCiudadanoSeleccionado = id;
-        console.log(this.idCiudadanoSeleccionado);
     };
     IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
         var _this = this;
@@ -314,6 +309,16 @@ var IndexSubirCarpetaComponent = (function () {
             });
         });
     };
+    IndexSubirCarpetaComponent.prototype.onChangeCiudadano = function (id) {
+        this.divTramiteGeneral = false;
+        this.idCiudadanoSeleccionado = id;
+        this.idEmpresaSeleccionada = null;
+    };
+    IndexSubirCarpetaComponent.prototype.onChangeEmpresa = function (id) {
+        this.divTramiteGeneral = false;
+        this.idEmpresaSeleccionada = id;
+        this.idCiudadanoSeleccionado = null;
+    };
     IndexSubirCarpetaComponent.prototype.onChangeNit = function (Value) {
         if (Value == 4) {
             this.nit = true;
@@ -337,6 +342,14 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.btnCancelarModalEmpresa = function () {
         this.modalEmpresa = false;
         this.btnNewPropietario = false;
+    };
+    IndexSubirCarpetaComponent.prototype.btnNuevoTramiteGeneral = function () {
+        if (this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada) {
+            this.divTramiteGeneral = true;
+        }
+    };
+    IndexSubirCarpetaComponent.prototype.btnCancelarNuevoTramiteGeneral = function () {
+        this.divTramiteGeneral = false;
     };
     IndexSubirCarpetaComponent.prototype.prueba = function (event) {
         if (event == "2") {
