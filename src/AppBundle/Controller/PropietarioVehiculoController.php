@@ -238,7 +238,9 @@ class PropietarioVehiculoController extends Controller
             $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
             $vehiculoId = $params->vehiculoId;
             $em = $this->getDoctrine()->getManager();
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
+                array('id' => $ciudadanoId)
+            );
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
                             array('placa' => $vehiculoId)
             );

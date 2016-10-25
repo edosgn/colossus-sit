@@ -21,6 +21,7 @@ import {TramiteEspecificoService} from "../../services/tramiteEspecifico/tramite
 import {Empresa} from '../../model/empresa/Empresa';
 import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
+import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -33,7 +34,8 @@ import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tr
 	     NewEmpresaComponent,
 	     NewTramiteGeneralComponent,
 	     NewTramiteCambioColorComponent,
-	     NewTramiteTrasladoCuentaComponent],
+	     NewTramiteTrasladoCuentaComponent,
+	     NewTramiteTraspasoComponent],
     providers: [LoginService,
 	    TramiteService,
 	    TramiteEspecificoService
@@ -508,6 +510,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 	  tramiteCreado(isCreado:any){
 		if(isCreado) {
+			this.divTramite=false;
 		  		this.onKey("");
 		  	}
 	  }
