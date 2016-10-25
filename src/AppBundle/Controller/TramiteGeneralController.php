@@ -47,7 +47,7 @@ class TramiteGeneralController extends Controller
      */
     public function newAction(Request $request)
     {
-       
+        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);

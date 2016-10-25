@@ -1,4 +1,5 @@
 // Importar el núcleo de Angular
+import {TramiteService} from "../../services/tramite/tramite.service";
 import {OrganismoTransitoService} from "../../services/organismoTransito/organismoTransito.service";
 import {EmpresaService} from "../../services/empresa/empresa.service";
 import {CiudadanoVehiculoService} from "../../services/ciudadanoVehiculo/ciudadanoVehiculo.service";
@@ -13,6 +14,7 @@ import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.compo
 import {NewTramiteGeneralComponent} from '../../components/tramiteGeneral/new.tramiteGeneral.component';
 import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
 import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
+import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
@@ -23,8 +25,22 @@ import {Empresa} from '../../model/empresa/Empresa';
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
-    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent,NewTramiteGeneralComponent],
-    providers: [LoginService,TramiteEspecificoService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService,OrganismoTransitoService]
+    directives: [ROUTER_DIRECTIVES,
+	     NewVehiculoComponent,
+	     NewCiudadanoComponent,
+	     NewEmpresaComponent,
+	     NewTramiteGeneralComponent,
+	     NewTramiteCambioColorComponent],
+    providers: [LoginService,
+	    TramiteService,
+	    TramiteEspecificoService
+	    ,TramiteGeneralService,
+	    VehiculoService,
+	    CiudadanoVehiculoService,
+	    CiudadanoService,
+	    TipoIdentificacionService,
+	    EmpresaService,
+	    OrganismoTransitoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -69,6 +85,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public TipoMatricula = 1;
     public divTramiteGeneral;
     public idEmpresaSeleccionada;
+    public tramiteGeneralSeccion;
+    public tramites;
+    public tramiteEspesificolSeleccionado:number;
+    public divTramite;
+    public tramiteGeneralSeleccionado;
     public TipoTramite = {
     	'caso':null,
     	'variante':null
@@ -81,6 +102,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 
 	constructor(
+		private _TramiteService:TramiteService,
 		private _OrganismoTransitoService: OrganismoTransitoService,
 		private _TramiteEspecificoService: TramiteEspecificoService,
 		private _TramiteGeneral: TramiteGeneralService,
@@ -94,6 +116,21 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _router: Router
 		
 		){
+this._TramiteService.getTramite().subscribe(
+				response => {
+					this.tramites = response.data;
+					console.log(this.tramites);
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
+
 			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
             this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,"","","","");
             this.empresa = new Empresa(null,null,null,null,null,"","","","");
@@ -140,6 +177,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	}
 
 	onKey(event:any) {
+	this.tramiteEspesificolSeleccionado=null;
+	this.idCiudadanoSeleccionado=null
  	let token = this._loginService.getToken();
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
@@ -164,7 +203,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 								response => {
 									this.ciudadanosVehiculo = response.data;
 									this.respuesta = response;
-									console.log(this.ciudadanosVehiculo);
 									this.tramitesGeneralSeccion =true;
 									if(this.respuesta.status == 'error') {
 										this.activar=true;
@@ -218,13 +256,12 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
   
   onChangeTramiteGeneral(id){
-  	let tramiteGeneral = id;
+  	this.tramiteGeneralSeleccionado= id;
+  	this.tramiteEspesificolSeleccionado = id;
 	let token = this._loginService.getToken();
-  	console.log("tramite general: " +tramiteGeneral);
 	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
 					response => {
 						this.tramiteEspecificos = response.data;
-						console.log(this.tramiteEspecificos);
 					}, 
 					error => {
 						this.errorMessage = <any>error;
@@ -249,12 +286,27 @@ export class IndexSubirCarpetaComponent implements OnInit{
   	this.placa.placa=event
     this.onKey("");
   }
+  tramiteGeneralCreado(tramiteGeneral){
+  	if(tramiteGeneral) {
+  		this.divTramiteGeneral=false;
+  		this.idCiudadanoSeleccionado=null;
+  		this.idEmpresaSeleccionada=null;
+  		this.tramiteGeneralSeccion=null;
+  		this.onKey("");
+  	}
+  }
   ciudadanoCreado(event:any) {
   	this.onKeyCiudadano(event);
 
   }
   empresaCreada(event:any){
   	this.onKeyEmpresa(event);
+  }
+
+  tramiteCreado(isCreado:any){
+	if(isCreado) {
+	  		this.onKey("");
+	  	}
   }
 
   onKeyCiudadano(event:any){
@@ -342,6 +394,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         }else{
                    			this.empresa = response.data;
                         	this.btnNewPropietario=false;
+                        	this.divEmpresa=true;
                             this.validateCedula=true;
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
                             this.calseCedula = "form-group has-success has-feedback ";
@@ -373,7 +426,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
     if(this.ciudadanosVehiculo != null) {
        this.ciudadanoVehiculo.licenciaTransito=this.ciudadanosVehiculo[0].licenciaTransito;
     }
-    console.log(this.json);
   	let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo,token,this.TipoMatricula,this.json,this.TipoTramite).subscribe(
 			response => {
@@ -386,7 +438,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					this.onKey("");
 
 				}
-				console.log(this.respuesta);
 			error => {
 					this.errorMessage = <any>error;
 
@@ -438,12 +489,15 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	    this.btnNewPropietario=false;
     }
     btnNuevoTramiteGeneral(){
-    	if(this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada){
+    	if(this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada != null){
     	 this.divTramiteGeneral=true;
     	}
     }
     btnCancelarNuevoTramiteGeneral(){
     	this.divTramiteGeneral=false;
+    }
+    btnNuevoTramiteEspesifico(){
+    	this.divTramite=true;
     }
     prueba(event:any){
     	if(event=="2") {

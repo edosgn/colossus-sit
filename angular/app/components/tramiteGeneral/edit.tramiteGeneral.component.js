@@ -13,7 +13,6 @@ var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var login_service_1 = require('../../services/login.service');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
-var TramiteGeneral_1 = require('../../model/tramiteGeneral/TramiteGeneral');
 var vehiculo_service_1 = require('../../services/vehiculo/vehiculo.service');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var TramiteGeneralEditComponent = (function () {
@@ -25,15 +24,24 @@ var TramiteGeneralEditComponent = (function () {
         this._router = _router;
     }
     TramiteGeneralEditComponent.prototype.ngOnInit = function () {
+        //	this.tramiteGeneral = new TramiteGeneral(null, null, null, "", "", null, null, null ,"");
         var _this = this;
-        this.tramiteGeneral = new TramiteGeneral_1.TramiteGeneral(null, null, null, "", "", null, null, null, "");
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];
         });
         this._TramiteGeneralService.showTramiteGeneral(token, this.id).subscribe(function (response) {
             var data = response.data;
-            _this.tramiteGeneral = new TramiteGeneral_1.TramiteGeneral(data.id, data.vehiculo.id, data.numeroQpl, data.fechaInicial, data.fechaFinal, data.valor, data.numeroLicencia, data.numeroSustrato, data.nombre);
+            /*	this.tramiteGeneral = new TramiteGeneral(
+                    data.id,
+                    data.vehiculo.id,
+                    data.numeroQpl,
+                    data.fechaInicial,
+                    data.fechaFinal,
+                    data.valor,
+                    data.numeroLicencia,
+                    data.numeroSustrato,
+                    data.nombre);*/
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {

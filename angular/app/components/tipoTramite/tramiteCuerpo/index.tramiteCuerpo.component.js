@@ -105,7 +105,11 @@ var IndexTramiteCuerpoComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
+<<<<<<< HEAD
             directives: [router_1.ROUTER_DIRECTIVES, index_cambioColor_component_1.IndexCambioColorComponent, index_traspaso_component_1.IndexTraspasoComponent],
+=======
+            directives: [router_1.ROUTER_DIRECTIVES, index_cambioColor_component_1.NewTramiteCambioColorComponent],
+>>>>>>> 3a8b525bc0eb8260aeca9ce01bdf6a0e9905ceef
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tramite_service_1.TramiteService, modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
