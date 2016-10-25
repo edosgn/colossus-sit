@@ -1,6 +1,6 @@
 // Importar el núcleo de Angular
 import {LoginService} from "../../../services/login.service";
-import {Component, OnInit,Input} from '@angular/core';
+import {Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Vehiculo} from "../../../model/vehiculo/vehiculo";
 import {CiudadanoVehiculo} from "../../../model/ciudadanovehiculo/ciudadanovehiculo";
@@ -13,6 +13,8 @@ import {VarianteService} from "../../../services/variante/variante.service";
 import {CasoService} from "../../../services/caso/caso.service";
 import {TipoIdentificacionService} from '../../../services/tipo_Identificacion/tipoIdentificacion.service';
 import {CiudadanoVehiculoService} from '../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service';
+import {Ciudadano} from '../../../model/ciudadano/Ciudadano';
+import {Empresa} from '../../../model/empresa/Empresa';
 
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -25,7 +27,7 @@ import {CiudadanoVehiculoService} from '../../../services/ciudadanoVehiculo/ciud
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class IndexTraspasoComponent implements OnInit{ 
+export class NewTramiteTraspasoComponent implements OnInit{ 
 	
 	public tipoIdentificaciones;
 	public casos;
@@ -33,7 +35,6 @@ export class IndexTraspasoComponent implements OnInit{
 	public variantes;
 	public varianteSeleccionada;
 	public errorMessage;
-	public tramiteGeneralId= 22;
 	public valor;
 	public tramiteEspecifico;
 	public respuesta;
@@ -42,6 +43,8 @@ export class IndexTraspasoComponent implements OnInit{
 	public varianteTramite = null;
 	public casoTramite = null;
 	@Input() ciudadanosVehiculo = null;
+	@Input() tramiteGeneralId =null;
+	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
 		'nuevo':null,
@@ -51,10 +54,14 @@ export class IndexTraspasoComponent implements OnInit{
 	public validateCedula;
 	public claseSpanCedula;
 	public claseCedula;
-	public ciudadano;
-	public empresa;
+	public ciudadano:Ciudadano;
+	public empresa:Empresa;
 	public divDatos = false;
 	public ciudadanoVehiculo;
+	public divCiudadano;
+	public divEmpresa;
+	public idCiudadano = null;
+	public nitEmpresa= null;
 
 	
 
@@ -73,13 +80,18 @@ export class IndexTraspasoComponent implements OnInit{
 		private _router: Router
 		
 		){
-
-	}
+			this.empresa = new Empresa(null,null,null,null,null,"","","","");
+			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+	     }
 
 
 	ngOnInit(){
 
-	    this.datos.viejo=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+		if(this.ciudadanosVehiculo[0].ciudadano){
+	   	 	this.datos.viejo=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+		}else{
+			this.datos.viejo=this.ciudadanosVehiculo[0].empresa.nit;
+		}
 
 		let token = this._loginService.getToken();
 		this._CasoService.showCasosTramite(token,2).subscribe(
@@ -129,15 +141,13 @@ export class IndexTraspasoComponent implements OnInit{
 
 	enviarTramite(){
 
-		
-		
 	for (var i in this.ciudadanosVehiculo) {
 		let ciudadanoVehiculo = new CiudadanoVehiculo
 		(
 			this.ciudadanosVehiculo[i].id, 
-			this.ciudadano.id,
+			this.idCiudadano,
 			this.ciudadanosVehiculo[i].vehiculo.placa,
-			null,
+			this.nitEmpresa,
 			this.ciudadanosVehiculo[i].licenciaTransito,
 			this.ciudadanosVehiculo[i].fechaPropiedadInicial,
 			this.ciudadanosVehiculo[i].fechaPropiedadFinal,
@@ -147,6 +157,9 @@ export class IndexTraspasoComponent implements OnInit{
 		this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo,token).subscribe(
 			response => {
 				this.respuesta = response;
+				if(this.respuesta.status=="success") {
+					 this.tramiteCreado.emit(true);
+				}
 			error => {
 					this.errorMessage = <any>error;
 					if(this.errorMessage != null){
@@ -213,7 +226,9 @@ export class IndexTraspasoComponent implements OnInit{
 						this.claseCedula = "form-group has-error has-feedback ";
 						this.ciudadano=null;
 					}else{
+						this.divCiudadano = true;
 						this.ciudadano = response.data;
+                    	this.idCiudadano = this.ciudadano.id;
 						this.validateCedula=true;
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 						this.claseCedula = "form-group has-success has-feedback ";
@@ -245,7 +260,9 @@ export class IndexTraspasoComponent implements OnInit{
 		                this.claseCedula = "form-group has-error has-feedback ";
 		                this.empresa=null;
                     }else{
+                    	this.divEmpresa = true;
                     	this.empresa = response.data;
+                    	this.nitEmpresa = this.empresa.nit;
 		                this.validateCedula=true;
 		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 		                this.claseCedula = "form-group has-success has-feedback ";
