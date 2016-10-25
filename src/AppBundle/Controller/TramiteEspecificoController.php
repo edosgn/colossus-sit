@@ -58,8 +58,9 @@ class TramiteEspecificoController extends Controller
 
         $viejo = (isset($data->viejo)) ? $data->viejo : null;
         $nuevo = (isset($data->nuevo)) ? $data->nuevo : null;
+        $datosCasos = (isset($data->datosCasos)) ? $data->datosCasos : null;
 
-        $datos = array('nuevo' =>$data->nuevo,'viejo' =>$data->viejo);
+        $datos = array('datosNuevos' =>$nuevo,'DatosViejos' =>$viejo,'datosCasos'=>$datosCasos);
 
         if ($authCheck== true) {
             $json = $request->get("json",null);

@@ -216,7 +216,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			);
   }
 
-  o
+  
   onChangeTramiteGeneral(id){
   	let tramiteGeneral = id;
 	let token = this._loginService.getToken();

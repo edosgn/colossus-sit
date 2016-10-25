@@ -69,7 +69,8 @@
 </div>
 
 <div *ngIf="divTramite">
-	<color *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" ></color>	
+	<color *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" ></color>
+	<tramiteTraspaso *ngIf="tramite?.nombre=='TRASPASO'" [vehiculo] = "vehiculo" ></tramiteTraspaso>	
 </div>
 
    
