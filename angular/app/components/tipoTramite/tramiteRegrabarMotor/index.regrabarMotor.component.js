@@ -122,4 +122,4 @@ var NewTramiteRegrabarMotorComponent = (function () {
     return NewTramiteRegrabarMotorComponent;
 }());
 exports.NewTramiteRegrabarMotorComponent = NewTramiteRegrabarMotorComponent;
-//# sourceMappingURL=index.RegrabarMotor.component.js.map
+//# sourceMappingURL=index.regrabarMotor.component.js.map

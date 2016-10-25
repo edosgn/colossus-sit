@@ -90,7 +90,7 @@ var NewTramiteTraspasoComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 5, this.tramiteGeneralId, null, null, null);
+        this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 2, this.tramiteGeneralId, null, null, null);
         console.log(this.datos);
     };
     NewTramiteTraspasoComponent.prototype.enviarTramite = function () {

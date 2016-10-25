@@ -134,7 +134,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
        
 
-		this.tramiteEspecifico = new TramiteEspecifico(null,5,this.tramiteGeneralId,null,null,null);
+		this.tramiteEspecifico = new TramiteEspecifico(null,2,this.tramiteGeneralId,null,null,null);
 		console.log(this.datos);
 
 	}

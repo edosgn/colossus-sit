@@ -69,7 +69,6 @@ var IndexSubirCarpetaComponent = (function () {
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
-        var token = this._loginService.getToken();
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
             _this.tipoIdentificaciones = response.data;
         }, function (error) {
@@ -397,7 +396,8 @@ var IndexSubirCarpetaComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES,
+            directives: [
+                router_1.ROUTER_DIRECTIVES,
                 new_vehiculo_component_1.NewVehiculoComponent,
                 new_ciudadano_component_1.NewCiudadanoComponent,
                 new_empresa_component_1.NewEmpresaComponent,
@@ -406,7 +406,8 @@ var IndexSubirCarpetaComponent = (function () {
                 index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent,
                 index_traspaso_component_1.NewTramiteTraspasoComponent,
                 index_cambioServicio_component_1.NewTramiteCambioServicioComponent],
-            providers: [login_service_1.LoginService,
+            providers: [
+                login_service_1.LoginService,
                 tramite_service_1.TramiteService,
                 tramiteEspecifico_service_1.TramiteEspecificoService,
                 tramiteGeneral_service_1.TramiteGeneralService,

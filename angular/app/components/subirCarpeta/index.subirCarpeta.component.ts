@@ -29,7 +29,8 @@ import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tr
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
-    directives: [ROUTER_DIRECTIVES,
+    directives: [
+         ROUTER_DIRECTIVES,
 	     NewVehiculoComponent,
 	     NewCiudadanoComponent,
 	     NewEmpresaComponent,
@@ -38,10 +39,11 @@ import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tr
 	     NewTramiteTrasladoCuentaComponent,
 	     NewTramiteTraspasoComponent,
 	     NewTramiteCambioServicioComponent],
-    providers: [LoginService,
+    providers: [
+        LoginService,
 	    TramiteService,
-	    TramiteEspecificoService
-	    ,TramiteGeneralService,
+	    TramiteEspecificoService,
+	    TramiteGeneralService,
 	    VehiculoService,
 	    CiudadanoVehiculoService,
 	    CiudadanoService,
@@ -142,7 +144,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
             this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,"","","","");
             this.empresa = new Empresa(null,null,null,null,null,"","","","");
-            let token = this._loginService.getToken();
             this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
                     response => {
                         this.tipoIdentificaciones = response.data;
