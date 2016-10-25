@@ -323,14 +323,18 @@
     		<div class="col-md-12">
     			<div class="col-md-8"> 
 					<label>Nuevo:</label>
-					<select class="form-control" [disabled]="!tramiteGeneralSeccion" [(ngModel)]="tramiteSeleccionado" required>
+					<select class="form-control" [disabled]="!tramiteEspesificolSeleccionado" [(ngModel)]="tramiteEspesificolSeleccionado" required>
 					  <option *ngFor="#tramite of tramites" [value]='tramite.id' >{{tramite.nombre}}</option>
 					</select>
 				</div>
-					<button type="submit" class="btn btn-primary col-md-2" style="margin-top: 27px;" [disabled]="!tramiteGeneralSeccion"   
+					<button type="submit" class="btn btn-primary col-md-2" style="margin-top: 27px;" [disabled]="!tramiteEspesificolSeleccionado"   
 	        		(click)="btnNuevoTramiteEspesifico()">Nuevo Tremite</button>
 	        		<hr> <br><br> <br><br> 	
     		</div>
+
+    		<div *ngIf="divTramite">
+				<tramiteCambioColor *ngIf="tramiteEspesificolSeleccionado==5" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteCambioColor>	
+			</div>
 	        	
 
 	        <table class="table table-bordered">

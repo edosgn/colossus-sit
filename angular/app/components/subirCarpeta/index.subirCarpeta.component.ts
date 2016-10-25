@@ -14,6 +14,7 @@ import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.compo
 import {NewTramiteGeneralComponent} from '../../components/tramiteGeneral/new.tramiteGeneral.component';
 import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
 import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
+import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
@@ -24,8 +25,22 @@ import {Empresa} from '../../model/empresa/Empresa';
 @Component({
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
-    directives: [ROUTER_DIRECTIVES, NewVehiculoComponent,NewCiudadanoComponent,NewEmpresaComponent,NewTramiteGeneralComponent],
-    providers: [LoginService,TramiteService,TramiteEspecificoService,TramiteGeneralService,VehiculoService,CiudadanoVehiculoService,CiudadanoService,TipoIdentificacionService,EmpresaService,OrganismoTransitoService]
+    directives: [ROUTER_DIRECTIVES,
+	     NewVehiculoComponent,
+	     NewCiudadanoComponent,
+	     NewEmpresaComponent,
+	     NewTramiteGeneralComponent,
+	     NewTramiteCambioColorComponent],
+    providers: [LoginService,
+	    TramiteService,
+	    TramiteEspecificoService
+	    ,TramiteGeneralService,
+	    VehiculoService,
+	    CiudadanoVehiculoService,
+	    CiudadanoService,
+	    TipoIdentificacionService,
+	    EmpresaService,
+	    OrganismoTransitoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -72,7 +87,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public idEmpresaSeleccionada;
     public tramiteGeneralSeccion;
     public tramites;
-    public tramiteSeleccionado;
+    public tramiteEspesificolSeleccionado:number;
+    public divTramite;
+    public tramiteGeneralSeleccionado;
     public TipoTramite = {
     	'caso':null,
     	'variante':null
@@ -160,6 +177,8 @@ this._TramiteService.getTramite().subscribe(
 	}
 
 	onKey(event:any) {
+	this.tramiteEspesificolSeleccionado=null;
+	this.idCiudadanoSeleccionado=null
  	let token = this._loginService.getToken();
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
@@ -235,9 +254,10 @@ this._TramiteService.getTramite().subscribe(
 			);
   }
 
-  o
+  
   onChangeTramiteGeneral(id){
-  	this.tramiteGeneralSeccion = id;
+  	this.tramiteGeneralSeleccionado= id;
+  	this.tramiteEspesificolSeleccionado = id;
 	let token = this._loginService.getToken();
 	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
 					response => {
@@ -281,6 +301,12 @@ this._TramiteService.getTramite().subscribe(
   }
   empresaCreada(event:any){
   	this.onKeyEmpresa(event);
+  }
+
+  tramiteCreado(isCreado:any){
+	if(isCreado) {
+	  		this.onKey("");
+	  	}
   }
 
   onKeyCiudadano(event:any){
@@ -463,7 +489,6 @@ this._TramiteService.getTramite().subscribe(
 	    this.btnNewPropietario=false;
     }
     btnNuevoTramiteGeneral(){
-    	console.log(this.idCiudadanoSeleccionado, this.idEmpresaSeleccionada)
     	if(this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada != null){
     	 this.divTramiteGeneral=true;
     	}
@@ -472,7 +497,7 @@ this._TramiteService.getTramite().subscribe(
     	this.divTramiteGeneral=false;
     }
     btnNuevoTramiteEspesifico(){
-    	alert(this.tramiteSeleccionado);
+    	this.divTramite=true;
     }
     prueba(event:any){
     	if(event=="2") {

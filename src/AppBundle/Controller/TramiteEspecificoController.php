@@ -100,7 +100,7 @@ class TramiteEspecificoController extends Controller
                         $responce = array(
                             'status' => 'success',
                             'code' => 200,
-                            'msj' => "tramiteEspecifico creado con exito", 
+                            'msj' => $tramiteGeneral, 
                         );
                        
                     }
