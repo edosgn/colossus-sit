@@ -7,7 +7,7 @@ import {LoginService} from "../../../services/login.service";
 
 import {NewTramiteTraspasoComponent} from "../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
 import {NewTramiteCambioServicioComponent} from "../../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
-
+import {NewTramiteRegrabarMotorComponent} from "../../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
 import {NewTramiteCambioColorComponent} from "../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
@@ -20,7 +20,7 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
     selector: 'default',
     templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
 
-    directives: [ROUTER_DIRECTIVES,NewTramiteTraspasoComponent,NewTramiteCambioColorComponent,NewTramiteCambioServicioComponent],
+    directives: [ROUTER_DIRECTIVES,NewTramiteTraspasoComponent,NewTramiteCambioColorComponent,NewTramiteCambioServicioComponent,NewTramiteRegrabarMotorComponent],
 
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]
 })
