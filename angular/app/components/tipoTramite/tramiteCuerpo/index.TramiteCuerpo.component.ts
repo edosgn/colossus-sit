@@ -4,8 +4,12 @@ import {CiudadanoVehiculoService} from "../../../services/ciudadanoVehiculo/ciud
 import {VehiculoService} from "../../../services/vehiculo/vehiculo.service";
 import {TramiteService} from "../../../services/tramite/tramite.service";
 import {LoginService} from "../../../services/login.service";
+<<<<<<< HEAD
+import {IndexCambioColorComponent} from "../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {IndexTraspasoComponent} from "../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
+=======
 import {NewTramiteCambioColorComponent} from "../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
+>>>>>>> 3a8b525bc0eb8260aeca9ce01bdf6a0e9905ceef
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../../model/tramite/Tramite';
@@ -16,10 +20,11 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
 @Component({
     selector: 'default',
     templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
-
-
-    directives: [ROUTER_DIRECTIVES,NewTramiteCambioColorComponent,IndexTraspasoComponent],
-
+<<<<<<< HEAD
+    directives: [ROUTER_DIRECTIVES,IndexCambioColorComponent,IndexTraspasoComponent],
+=======
+    directives: [ROUTER_DIRECTIVES,NewTramiteCambioColorComponent],
+>>>>>>> 3a8b525bc0eb8260aeca9ce01bdf6a0e9905ceef
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]
 })
  
