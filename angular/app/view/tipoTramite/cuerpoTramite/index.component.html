@@ -19,6 +19,7 @@
 	                    <th>Marca</th> 
 	                    <th>Clase</th>
 	                    <th>Modelo</th>
+	                    <th>Servicio</th>
 	                    
 	                </tr>
 	            </thead>
@@ -28,6 +29,7 @@
 	                    <td >{{vehiculo.linea.marca.nombre}}</td>
 	                    <td >{{vehiculo.clase.nombre}}</td>
 	                    <td >{{vehiculo.modelo}}</td>
+	                    <td >{{vehiculo.servicio.nombre}}</td>
 	                </tr>
 	            </tbody> 
 	        </table>
@@ -70,7 +72,8 @@
 
 <div *ngIf="divTramite">
 	<tramiteTraspaso *ngIf="tramite?.nombre=='TRASPASO'" [ciudadanosVehiculo] = "ciudadanosVehiculo" ></tramiteTraspaso>	
-	<tramiteCambioColor *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" ></tramiteCambioColor>	
+	<tramiteCambioColor *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" ></tramiteCambioColor>
+	<tramiteCambioServicio *ngIf="tramite?.nombre=='CAMBIO DE SERVICIO'" [vehiculo] = "vehiculo" ></tramiteCambioServicio>	
 </div>
 
    
