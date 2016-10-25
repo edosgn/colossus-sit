@@ -33,7 +33,6 @@ var NewTramiteCambioServicioComponent = (function () {
         this.servicioSeleccionado = null;
         this.varianteTramite = null;
         this.casoTramite = null;
-        this.tramiteGeneralId = 22;
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
@@ -43,6 +42,7 @@ var NewTramiteCambioServicioComponent = (function () {
     }
     NewTramiteCambioServicioComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 6, this.tramiteGeneralId, null, null, null);
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 5).subscribe(function (response) {
             _this.casos = response.data;
@@ -71,7 +71,7 @@ var NewTramiteCambioServicioComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 6, this.tramiteGeneralId, null, null, null);
+        this.datos.viejo = this.vehiculo.servicio.nombre;
     };
     NewTramiteCambioServicioComponent.prototype.onChangeServicio = function (event) {
         for (var i = 0; i < this.servicios.length; ++i) {

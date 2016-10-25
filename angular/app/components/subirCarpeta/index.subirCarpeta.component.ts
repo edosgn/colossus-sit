@@ -22,6 +22,7 @@ import {Empresa} from '../../model/empresa/Empresa';
 import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
+import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -35,7 +36,8 @@ import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteT
 	     NewTramiteGeneralComponent,
 	     NewTramiteCambioColorComponent,
 	     NewTramiteTrasladoCuentaComponent,
-	     NewTramiteTraspasoComponent],
+	     NewTramiteTraspasoComponent,
+	     NewTramiteCambioServicioComponent],
     providers: [LoginService,
 	    TramiteService,
 	    TramiteEspecificoService
@@ -121,10 +123,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _router: Router
 		
 		){
-		this._TramiteService.getTramite().subscribe(
+			let token = this._loginService.getToken();
+		  this._TramiteService.TramitesModulo(1,token).subscribe(
 				response => {
 					this.tramites = response.data;
-					console.log(this.tramites);
+					
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -509,6 +512,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	  }
 
 	  tramiteCreado(isCreado:any){
+	  	console.log(isCreado);
 		if(isCreado) {
 			this.divTramite=false;
 		  		this.onKey("");

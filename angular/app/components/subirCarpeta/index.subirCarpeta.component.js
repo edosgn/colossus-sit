@@ -30,6 +30,8 @@ var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tram
 var Empresa_1 = require('../../model/empresa/Empresa');
 var index_cambioColor_component_1 = require("../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var index_TrasladoCuenta_component_1 = require("../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component");
+var index_traspaso_component_1 = require("../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
+var index_cambioServicio_component_1 = require("../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -54,9 +56,9 @@ var IndexSubirCarpetaComponent = (function () {
         this.json = {
             'datosGenerales': null,
         };
-        this._TramiteService.getTramite().subscribe(function (response) {
+        var token = this._loginService.getToken();
+        this._TramiteService.TramitesModulo(1, token).subscribe(function (response) {
             _this.tramites = response.data;
-            console.log(_this.tramites);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -385,7 +387,9 @@ var IndexSubirCarpetaComponent = (function () {
         this.onKeyEmpresa(event);
     };
     IndexSubirCarpetaComponent.prototype.tramiteCreado = function (isCreado) {
+        console.log(isCreado);
         if (isCreado) {
+            this.divTramite = false;
             this.onKey("");
         }
     };
@@ -399,7 +403,9 @@ var IndexSubirCarpetaComponent = (function () {
                 new_empresa_component_1.NewEmpresaComponent,
                 new_tramiteGeneral_component_1.NewTramiteGeneralComponent,
                 index_cambioColor_component_1.NewTramiteCambioColorComponent,
-                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent],
+                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent,
+                index_traspaso_component_1.NewTramiteTraspasoComponent,
+                index_cambioServicio_component_1.NewTramiteCambioServicioComponent],
             providers: [login_service_1.LoginService,
                 tramite_service_1.TramiteService,
                 tramiteEspecifico_service_1.TramiteEspecificoService,

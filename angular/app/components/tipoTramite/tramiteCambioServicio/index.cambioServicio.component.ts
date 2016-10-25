@@ -36,7 +36,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 	public servicioSeleccionado = null;
 	public varianteTramite = null;
 	public casoTramite = null;
-	@Input() tramiteGeneralId =22;
+	@Input() tramiteGeneralId ;
 	@Input() vehiculo = null;
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
@@ -63,6 +63,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 
 
 	ngOnInit(){
+		this.tramiteEspecifico = new TramiteEspecifico(null,6,this.tramiteGeneralId,null,null,null);
 		let token = this._loginService.getToken();
 		this._CasoService.showCasosTramite(token,5).subscribe(
 				response => {
@@ -106,10 +107,8 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 			);
 
 
-		this.tramiteEspecifico = new TramiteEspecifico(null,6,this.tramiteGeneralId,null,null,null);
-	
-		
-	}
+		this.datos.viejo = this.vehiculo.servicio.nombre;
+		}
 
 
 
