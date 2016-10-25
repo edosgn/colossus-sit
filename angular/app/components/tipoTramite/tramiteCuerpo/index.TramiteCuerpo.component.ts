@@ -34,7 +34,7 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 	public activar;
 	public tramite:Tramite;
 	public vehiculo: Vehiculo;
-	public validate;
+	public validate; 
 	public clase;
 	public msg;
 	public claseSpan;

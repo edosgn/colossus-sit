@@ -3,6 +3,7 @@ import {LoginService} from "../../../services/login.service";
 import {Component, OnInit,Input} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Vehiculo} from "../../../model/vehiculo/vehiculo";
+import {CiudadanoVehiculo} from "../../../model/ciudadanovehiculo/ciudadanovehiculo";
 import {TramiteEspecificoService} from "../../../services/tramiteEspecifico/tramiteEspecifico.service";
 import {EmpresaService} from "../../../services/empresa/empresa.service";
 import {CiudadanoService} from "../../../services/ciudadano/ciudadano.service";
@@ -11,6 +12,7 @@ import {VehiculoService} from "../../../services/vehiculo/vehiculo.service";
 import {VarianteService} from "../../../services/variante/variante.service";
 import {CasoService} from "../../../services/caso/caso.service";
 import {TipoIdentificacionService} from '../../../services/tipo_Identificacion/tipoIdentificacion.service';
+import {CiudadanoVehiculoService} from '../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service';
 
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -19,7 +21,7 @@ import {TipoIdentificacionService} from '../../../services/tipo_Identificacion/t
     selector: 'tramiteTraspaso',
     templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService]
+    providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService,CiudadanoVehiculoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
@@ -39,7 +41,7 @@ export class IndexTraspasoComponent implements OnInit{
 	public colorSeleccionado = null;
 	public varianteTramite = null;
 	public casoTramite = null;
-	@Input() vehiculo = null;
+	@Input() ciudadanosVehiculo = null;
 	public vehiculo2;
 	public datos = {
 		'nuevo':null,
@@ -52,13 +54,15 @@ export class IndexTraspasoComponent implements OnInit{
 	public ciudadano;
 	public empresa;
 	public divDatos = false;
+	public ciudadanoVehiculo;
 
 	
 
 	constructor(
 		
 		private _TramiteEspecificoService: TramiteEspecificoService, 
-		private _VarianteService: VarianteService, 
+		private _VarianteService: VarianteService,
+		private _CiudadanoVehiculoService: CiudadanoVehiculoService, 
 		private _TipoIdentificacionService: TipoIdentificacionService,
 		private _CasoService: CasoService, 
 		private _VehiculoService: VehiculoService, 
@@ -74,6 +78,9 @@ export class IndexTraspasoComponent implements OnInit{
 
 
 	ngOnInit(){
+
+	    this.datos.viejo=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+
 		let token = this._loginService.getToken();
 		this._CasoService.showCasosTramite(token,2).subscribe(
 				response => {
@@ -84,7 +91,6 @@ export class IndexTraspasoComponent implements OnInit{
 					this.errorMessage = <any>error;
 
 					if(this.errorMessage != null){
-						console.log(this.errorMessage);
 						alert("Error en la petición");
 					}
 				}
@@ -98,7 +104,6 @@ export class IndexTraspasoComponent implements OnInit{
 					this.errorMessage = <any>error;
 
 					if(this.errorMessage != null){
-						console.log(this.errorMessage);
 						alert("Error en la petición");
 					}
 				}
@@ -110,44 +115,69 @@ export class IndexTraspasoComponent implements OnInit{
             error => {
                 this.errorMessage = <any>error;
                 if(this.errorMessage != null){
-                    console.log(this.errorMessage);
                     alert("Error en la petición");
                 }
             }
         );
 
-        this.datos.datosCasos="con opcion de compra";
+       
 
 		this.tramiteEspecifico = new TramiteEspecifico(null,5,this.tramiteGeneralId,null,null,null);
-		
+		console.log(this.datos);
 
 	}
 
 	enviarTramite(){
 
-
+		
+		
+	for (var i in this.ciudadanosVehiculo) {
+		let ciudadanoVehiculo = new CiudadanoVehiculo
+		(
+			this.ciudadanosVehiculo[i].id, 
+			this.ciudadano.id,
+			this.ciudadanosVehiculo[i].vehiculo.placa,
+			null,
+			this.ciudadanosVehiculo[i].licenciaTransito,
+			this.ciudadanosVehiculo[i].fechaPropiedadInicial,
+			this.ciudadanosVehiculo[i].fechaPropiedadFinal,
+			this.ciudadanosVehiculo[i].estadoPropiedad
+		);
 		let token = this._loginService.getToken();
-		console.log(this.datos);
-		this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
+		this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo,token).subscribe(
 			response => {
 				this.respuesta = response;
-
 			error => {
 					this.errorMessage = <any>error;
-
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");
 					}
 				}
 
-		});
-		
-		
+		});	
+	}	
+	console.log(this.datos);
+	let token = this._loginService.getToken();
+	this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
+		response => {
+			this.respuesta = response;
+
+		error => {
+				this.errorMessage = <any>error;
+
+				if(this.errorMessage != null){
+					alert("Error en la petición");
+				}
+			}
+
+	});
+
 	}
 
-	onChangeCaso(event:any){
 
+	onChangeCaso(event:any){
+		this.datos.datosCasos="con opcion de compra";
 		for (var i = 0; i < this.casos.length; ++i) {
 			if(event == this.casos[i].id) {
 				this.casoSeleccionado = this.casos[i];
@@ -184,11 +214,11 @@ export class IndexTraspasoComponent implements OnInit{
 						this.ciudadano=null;
 					}else{
 						this.ciudadano = response.data;
-						this.datos.nuevo = this.ciudadano.numeroIdentificacion;
 						this.validateCedula=true;
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 						this.claseCedula = "form-group has-success has-feedback ";
 						this.empresa=null;
+						this.datos.nuevo = this.ciudadano.numeroIdentificacion;
 						
 					}
 				}, 
@@ -227,7 +257,6 @@ export class IndexTraspasoComponent implements OnInit{
                     this.errorMessage = <any>error;
 
                     if(this.errorMessage != null){
-                        console.log(this.errorMessage);
                         alert("Error en la petición");
                     }
                 }
@@ -237,7 +266,6 @@ export class IndexTraspasoComponent implements OnInit{
   onChangeCasoData(event:any){
 
   	this.datos.datosCasos=event;
-  	console.log(this.datos.datosCasos);
 
   }
 
