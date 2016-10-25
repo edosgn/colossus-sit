@@ -42,7 +42,8 @@ export class NewTramiteCambioColorComponent implements OnInit{
 	public vehiculo2;
 	public datos = {
 		'nuevo':null,
-		'viejo':null
+		'viejo':null,
+		'datosCasos':null
 	};
 	
 

@@ -14,12 +14,14 @@ import {NewVehiculoComponent} from '../../components/vehiculo/new.vehiculo.compo
 import {NewTramiteGeneralComponent} from '../../components/tramiteGeneral/new.tramiteGeneral.component';
 import {NewCiudadanoComponent} from '../../components/ciudadano/new.ciudadano.component';
 import {NewEmpresaComponent} from '../../components/empresa/new.empresa.component';
-import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
 import {TramiteEspecificoService} from "../../services/tramiteEspecifico/tramiteEspecifico.service";
 import {Empresa} from '../../model/empresa/Empresa';
+import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
+import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
+
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
@@ -30,7 +32,8 @@ import {Empresa} from '../../model/empresa/Empresa';
 	     NewCiudadanoComponent,
 	     NewEmpresaComponent,
 	     NewTramiteGeneralComponent,
-	     NewTramiteCambioColorComponent],
+	     NewTramiteCambioColorComponent,
+	     NewTramiteTrasladoCuentaComponent],
     providers: [LoginService,
 	    TramiteService,
 	    TramiteEspecificoService
@@ -116,7 +119,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _router: Router
 		
 		){
-this._TramiteService.getTramite().subscribe(
+		this._TramiteService.getTramite().subscribe(
 				response => {
 					this.tramites = response.data;
 					console.log(this.tramites);
@@ -255,59 +258,9 @@ this._TramiteService.getTramite().subscribe(
   }
 
   
-  onChangeTramiteGeneral(id){
-  	this.tramiteGeneralSeleccionado= id;
-  	this.tramiteEspesificolSeleccionado = id;
-	let token = this._loginService.getToken();
-	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
-					response => {
-						this.tramiteEspecificos = response.data;
-					}, 
-					error => {
-						this.errorMessage = <any>error;
-
-						if(this.errorMessage != null){
-							console.log(this.errorMessage);
-							alert("Error en la petición");
-						}
-					}
-				);  
-  }
   
-  onChangeApoderado(event:any){
-    	if(event==true){
-    		this.btnSeleccionarApoderado=true;
-    	}else{
-    		this.btnSeleccionarApoderado=false;
-    	}
-    }
 
-  vheiculoCreado(event:any) {
-  	this.placa.placa=event
-    this.onKey("");
-  }
-  tramiteGeneralCreado(tramiteGeneral){
-  	if(tramiteGeneral) {
-  		this.divTramiteGeneral=false;
-  		this.idCiudadanoSeleccionado=null;
-  		this.idEmpresaSeleccionada=null;
-  		this.tramiteGeneralSeccion=null;
-  		this.onKey("");
-  	}
-  }
-  ciudadanoCreado(event:any) {
-  	this.onKeyCiudadano(event);
-
-  }
-  empresaCreada(event:any){
-  	this.onKeyEmpresa(event);
-  }
-
-  tramiteCreado(isCreado:any){
-	if(isCreado) {
-	  		this.onKey("");
-	  	}
-  }
+  
 
   onKeyCiudadano(event:any){
   	let identificacion = {
@@ -436,7 +389,6 @@ this._TramiteService.getTramite().subscribe(
 					this.json = null;
 					this.TipoTramite=null;
 					this.onKey("");
-
 				}
 			error => {
 					this.errorMessage = <any>error;
@@ -450,6 +402,32 @@ this._TramiteService.getTramite().subscribe(
 		});
   }
 
+  onChangeTramiteGeneral(id){
+  	this.tramiteGeneralSeleccionado= id;
+  	this.tramiteEspesificolSeleccionado = id;
+	let token = this._loginService.getToken();
+	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
+					response => {
+						this.tramiteEspecificos = response.data;
+					}, 
+					error => {
+						this.errorMessage = <any>error;
+
+						if(this.errorMessage != null){
+							console.log(this.errorMessage);
+							alert("Error en la petición");
+						}
+					}
+				);  
+  }
+  
+  onChangeApoderado(event:any){
+    	if(event==true){
+    		this.btnSeleccionarApoderado=true;
+    	}else{
+    		this.btnSeleccionarApoderado=false;
+    	}
+    }
 
     onChangeCiudadano(id) {
     	this.divTramiteGeneral=false;
@@ -506,4 +484,31 @@ this._TramiteService.getTramite().subscribe(
     		this.json.datosGenerales = event;
     	}
     }
+
+    vheiculoCreado(event:any) {
+	  	this.placa.placa=event
+	    this.onKey("");
+		  }
+	  tramiteGeneralCreado(tramiteGeneral){
+	  	if(tramiteGeneral) {
+	  		this.divTramiteGeneral=false;
+	  		this.idCiudadanoSeleccionado=null;
+	  		this.idEmpresaSeleccionada=null;
+	  		this.tramiteGeneralSeccion=null;
+	  		this.onKey("");
+	  	}
+	  }
+	  ciudadanoCreado(event:any) {
+	  	this.onKeyCiudadano(event);
+
+	  }
+	  empresaCreada(event:any){
+	  	this.onKeyEmpresa(event);
+	  }
+
+	  tramiteCreado(isCreado:any){
+		if(isCreado) {
+		  		this.onKey("");
+		  	}
+	  }
 }

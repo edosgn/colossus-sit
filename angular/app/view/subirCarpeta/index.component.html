@@ -333,7 +333,9 @@
     		</div>
 
     		<div *ngIf="divTramite">
-				<tramiteCambioColor *ngIf="tramiteEspesificolSeleccionado==5" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteCambioColor>	
+				<tramiteCambioColor *ngIf="tramiteEspesificolSeleccionado==5" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteCambioColor>
+
+				<tramiteTraladoCuenta *ngIf="tramiteEspesificolSeleccionado==3" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteTraladoCuenta>	
 			</div>
 	        	
 

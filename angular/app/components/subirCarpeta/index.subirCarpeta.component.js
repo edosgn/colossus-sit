@@ -23,12 +23,13 @@ var new_vehiculo_component_1 = require('../../components/vehiculo/new.vehiculo.c
 var new_tramiteGeneral_component_1 = require('../../components/tramiteGeneral/new.tramiteGeneral.component');
 var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadano.component');
 var new_empresa_component_1 = require('../../components/empresa/new.empresa.component');
-var index_cambioColor_component_1 = require("../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
 var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tramiteEspecifico.service");
 var Empresa_1 = require('../../model/empresa/Empresa');
+var index_cambioColor_component_1 = require("../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
+var index_TrasladoCuenta_component_1 = require("../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -162,53 +163,6 @@ var IndexSubirCarpetaComponent = (function () {
             }
         });
     };
-    IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
-        var _this = this;
-        this.tramiteGeneralSeleccionado = id;
-        this.tramiteEspesificolSeleccionado = id;
-        var token = this._loginService.getToken();
-        this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
-            _this.tramiteEspecificos = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
-    };
-    IndexSubirCarpetaComponent.prototype.onChangeApoderado = function (event) {
-        if (event == true) {
-            this.btnSeleccionarApoderado = true;
-        }
-        else {
-            this.btnSeleccionarApoderado = false;
-        }
-    };
-    IndexSubirCarpetaComponent.prototype.vheiculoCreado = function (event) {
-        this.placa.placa = event;
-        this.onKey("");
-    };
-    IndexSubirCarpetaComponent.prototype.tramiteGeneralCreado = function (tramiteGeneral) {
-        if (tramiteGeneral) {
-            this.divTramiteGeneral = false;
-            this.idCiudadanoSeleccionado = null;
-            this.idEmpresaSeleccionada = null;
-            this.tramiteGeneralSeccion = null;
-            this.onKey("");
-        }
-    };
-    IndexSubirCarpetaComponent.prototype.ciudadanoCreado = function (event) {
-        this.onKeyCiudadano(event);
-    };
-    IndexSubirCarpetaComponent.prototype.empresaCreada = function (event) {
-        this.onKeyEmpresa(event);
-    };
-    IndexSubirCarpetaComponent.prototype.tramiteCreado = function (isCreado) {
-        if (isCreado) {
-            this.onKey("");
-        }
-    };
     IndexSubirCarpetaComponent.prototype.onKeyCiudadano = function (event) {
         var _this = this;
         var identificacion = {
@@ -335,6 +289,29 @@ var IndexSubirCarpetaComponent = (function () {
             });
         });
     };
+    IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
+        var _this = this;
+        this.tramiteGeneralSeleccionado = id;
+        this.tramiteEspesificolSeleccionado = id;
+        var token = this._loginService.getToken();
+        this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
+            _this.tramiteEspecificos = response.data;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
+    };
+    IndexSubirCarpetaComponent.prototype.onChangeApoderado = function (event) {
+        if (event == true) {
+            this.btnSeleccionarApoderado = true;
+        }
+        else {
+            this.btnSeleccionarApoderado = false;
+        }
+    };
     IndexSubirCarpetaComponent.prototype.onChangeCiudadano = function (id) {
         this.divTramiteGeneral = false;
         this.idCiudadanoSeleccionado = id;
@@ -388,6 +365,30 @@ var IndexSubirCarpetaComponent = (function () {
             this.json.datosGenerales = event;
         }
     };
+    IndexSubirCarpetaComponent.prototype.vheiculoCreado = function (event) {
+        this.placa.placa = event;
+        this.onKey("");
+    };
+    IndexSubirCarpetaComponent.prototype.tramiteGeneralCreado = function (tramiteGeneral) {
+        if (tramiteGeneral) {
+            this.divTramiteGeneral = false;
+            this.idCiudadanoSeleccionado = null;
+            this.idEmpresaSeleccionada = null;
+            this.tramiteGeneralSeccion = null;
+            this.onKey("");
+        }
+    };
+    IndexSubirCarpetaComponent.prototype.ciudadanoCreado = function (event) {
+        this.onKeyCiudadano(event);
+    };
+    IndexSubirCarpetaComponent.prototype.empresaCreada = function (event) {
+        this.onKeyEmpresa(event);
+    };
+    IndexSubirCarpetaComponent.prototype.tramiteCreado = function (isCreado) {
+        if (isCreado) {
+            this.onKey("");
+        }
+    };
     IndexSubirCarpetaComponent = __decorate([
         core_1.Component({
             selector: 'default',
@@ -397,7 +398,8 @@ var IndexSubirCarpetaComponent = (function () {
                 new_ciudadano_component_1.NewCiudadanoComponent,
                 new_empresa_component_1.NewEmpresaComponent,
                 new_tramiteGeneral_component_1.NewTramiteGeneralComponent,
-                index_cambioColor_component_1.NewTramiteCambioColorComponent],
+                index_cambioColor_component_1.NewTramiteCambioColorComponent,
+                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent],
             providers: [login_service_1.LoginService,
                 tramite_service_1.TramiteService,
                 tramiteEspecifico_service_1.TramiteEspecificoService,
