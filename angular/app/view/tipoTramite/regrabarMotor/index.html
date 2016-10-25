@@ -4,12 +4,6 @@
 	  <div class="panel-heading">Selecione Nuevo Color</div>
 		<div class="panel-body">
 		  	
-			  	<div class="col-md-6">
-			  		<label>Servicio</label>
-				   	<select class="form-control"  (change)="onChangeServicio($event.target.value)" required>
-							  <option *ngFor="#servicio of servicios" [value]='servicio.id' >{{servicio.nombre}}</option>
-					</select>
-				</div>
 
 				<div *ngIf="casos != null" class="col-md-6">
 			  		<label>Caso</label>
@@ -27,6 +21,20 @@
 				<div class="col-md-6">
 					<label >Valor:</label>
 					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+					<br>
+				</div>
+
+				<div class="col-md-6">
+					<label >Numero Motor Nuevo:</label>
+					<input #numeroMotor="ngForm"  type="number" class="form-control" [(ngModel)]="Motor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+					<br>
+				</div>
+
+				<div class="col-md-6">
+					<label >Numero revicion SIJIN DIJIN:</label>
+					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="datos.datosCasos"  required />
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
 					<br>
 				</div>
