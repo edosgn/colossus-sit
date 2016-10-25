@@ -22,11 +22,9 @@ var variante_service_1 = require("../../../services/variante/variante.service");
 var caso_service_1 = require("../../../services/caso/caso.service");
 var tipoIdentificacion_service_1 = require('../../../services/tipo_Identificacion/tipoIdentificacion.service');
 var ciudadanoVehiculo_service_1 = require('../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service');
-var Ciudadano_1 = require('../../../model/ciudadano/Ciudadano');
-var Empresa_1 = require('../../../model/empresa/Empresa');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var NewTramiteTraspasoComponent = (function () {
-    function NewTramiteTraspasoComponent(_TramiteEspecificoService, _VarianteService, _CiudadanoVehiculoService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
+var IndexTraspasoComponent = (function () {
+    function IndexTraspasoComponent(_TramiteEspecificoService, _VarianteService, _CiudadanoVehiculoService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
         this._TramiteEspecificoService = _TramiteEspecificoService;
         this._VarianteService = _VarianteService;
         this._CiudadanoVehiculoService = _CiudadanoVehiculoService;
@@ -38,31 +36,21 @@ var NewTramiteTraspasoComponent = (function () {
         this._EmpresaService = _EmpresaService;
         this._CiudadanoService = _CiudadanoService;
         this._router = _router;
+        this.tramiteGeneralId = 22;
         this.colorSeleccionado = null;
         this.varianteTramite = null;
         this.casoTramite = null;
         this.ciudadanosVehiculo = null;
-        this.tramiteGeneralId = null;
-        this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
             'nuevo': null,
             'viejo': null,
             'datosCasos': null
         };
         this.divDatos = false;
-        this.idCiudadano = null;
-        this.nitEmpresa = null;
-        this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
-        this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
     }
-    NewTramiteTraspasoComponent.prototype.ngOnInit = function () {
+    IndexTraspasoComponent.prototype.ngOnInit = function () {
         var _this = this;
-        if (this.ciudadanosVehiculo[0].ciudadano) {
-            this.datos.viejo = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
-        }
-        else {
-            this.datos.viejo = this.ciudadanosVehiculo[0].empresa.nit;
-        }
+        this.datos.viejo = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 2).subscribe(function (response) {
             _this.casos = response.data;
@@ -93,16 +81,13 @@ var NewTramiteTraspasoComponent = (function () {
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 5, this.tramiteGeneralId, null, null, null);
         console.log(this.datos);
     };
-    NewTramiteTraspasoComponent.prototype.enviarTramite = function () {
+    IndexTraspasoComponent.prototype.enviarTramite = function () {
         var _this = this;
         for (var i in this.ciudadanosVehiculo) {
-            var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.idCiudadano, this.ciudadanosVehiculo[i].vehiculo.placa, this.nitEmpresa, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, this.ciudadanosVehiculo[i].estadoPropiedad);
+            var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.ciudadano.id, this.ciudadanosVehiculo[i].vehiculo.placa, null, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, this.ciudadanosVehiculo[i].estadoPropiedad);
             var token_1 = this._loginService.getToken();
             this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo, token_1).subscribe(function (response) {
                 _this.respuesta = response;
-                if (_this.respuesta.status == "success") {
-                    _this.tramiteCreado.emit(true);
-                }
                 (function (error) {
                     _this.errorMessage = error;
                     if (_this.errorMessage != null) {
@@ -124,7 +109,7 @@ var NewTramiteTraspasoComponent = (function () {
             });
         });
     };
-    NewTramiteTraspasoComponent.prototype.onChangeCaso = function (event) {
+    IndexTraspasoComponent.prototype.onChangeCaso = function (event) {
         this.datos.datosCasos = "con opcion de compra";
         for (var i = 0; i < this.casos.length; ++i) {
             if (event == this.casos[i].id) {
@@ -139,10 +124,10 @@ var NewTramiteTraspasoComponent = (function () {
         }
         this.tramiteEspecifico.casoId = event;
     };
-    NewTramiteTraspasoComponent.prototype.onChangeVariante = function (event) {
+    IndexTraspasoComponent.prototype.onChangeVariante = function (event) {
         this.tramiteEspecifico.varianteId = event;
     };
-    NewTramiteTraspasoComponent.prototype.onKeyCiudadano = function (event) {
+    IndexTraspasoComponent.prototype.onKeyCiudadano = function (event) {
         var _this = this;
         var identificacion = {
             'numeroIdentificacion': event,
@@ -157,9 +142,7 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.ciudadano = null;
             }
             else {
-                _this.divCiudadano = true;
                 _this.ciudadano = response.data;
-                _this.idCiudadano = _this.ciudadano.id;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
@@ -173,7 +156,7 @@ var NewTramiteTraspasoComponent = (function () {
             }
         });
     };
-    NewTramiteTraspasoComponent.prototype.onKeyEmpresa = function (event) {
+    IndexTraspasoComponent.prototype.onKeyEmpresa = function (event) {
         var _this = this;
         var nit = {
             'nit': event,
@@ -188,9 +171,7 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.empresa = null;
             }
             else {
-                _this.divEmpresa = true;
                 _this.empresa = response.data;
-                _this.nitEmpresa = _this.empresa.nit;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
@@ -204,22 +185,14 @@ var NewTramiteTraspasoComponent = (function () {
             }
         });
     };
-    NewTramiteTraspasoComponent.prototype.onChangeCasoData = function (event) {
+    IndexTraspasoComponent.prototype.onChangeCasoData = function (event) {
         this.datos.datosCasos = event;
     };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
-    ], NewTramiteTraspasoComponent.prototype, "ciudadanosVehiculo", void 0);
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Object)
-    ], NewTramiteTraspasoComponent.prototype, "tramiteGeneralId", void 0);
-    __decorate([
-        core_1.Output(), 
-        __metadata('design:type', Object)
-    ], NewTramiteTraspasoComponent.prototype, "tramiteCreado", void 0);
-    NewTramiteTraspasoComponent = __decorate([
+    ], IndexTraspasoComponent.prototype, "ciudadanosVehiculo", void 0);
+    IndexTraspasoComponent = __decorate([
         core_1.Component({
             selector: 'tramiteTraspaso',
             templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
@@ -227,8 +200,8 @@ var NewTramiteTraspasoComponent = (function () {
             providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])
-    ], NewTramiteTraspasoComponent);
-    return NewTramiteTraspasoComponent;
+    ], IndexTraspasoComponent);
+    return IndexTraspasoComponent;
 }());
-exports.NewTramiteTraspasoComponent = NewTramiteTraspasoComponent;
+exports.IndexTraspasoComponent = IndexTraspasoComponent;
 //# sourceMappingURL=index.traspaso.component.js.map
