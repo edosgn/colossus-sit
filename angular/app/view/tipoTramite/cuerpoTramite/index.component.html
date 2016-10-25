@@ -71,9 +71,17 @@
 </div>
 
 <div *ngIf="divTramite">
-	<tramiteTraspaso *ngIf="tramite?.nombre=='TRASPASO'" [ciudadanosVehiculo] = "ciudadanosVehiculo" ></tramiteTraspaso>	
-	<tramiteCambioColor *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" ></tramiteCambioColor>
-	<tramiteCambioServicio *ngIf="tramite?.nombre=='CAMBIO DE SERVICIO'" [vehiculo] = "vehiculo" ></tramiteCambioServicio>	
+	<tramiteTraspaso *ngIf="tramite?.nombre=='TRASPASO'" [ciudadanosVehiculo] = "ciudadanosVehiculo" >
+	</tramiteTraspaso>	
+	
+	<tramiteCambioColor *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" >
+	</tramiteCambioColor>
+
+	<tramiteCambioServicio *ngIf="tramite?.nombre=='CAMBIO DE SERVICIO'" [vehiculo] = "vehiculo" >
+	</tramiteCambioServicio>
+
+	<tramiteRegrabarMotor *ngIf="tramite?.nombre=='REGRABAR MOTOR'" [vehiculo] = "vehiculo" >
+	</tramiteRegrabarMotor>	
 </div>
 
    
