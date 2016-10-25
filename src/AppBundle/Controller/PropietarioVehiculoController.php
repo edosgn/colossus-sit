@@ -248,7 +248,7 @@ class PropietarioVehiculoController extends Controller
             );
 
             $em = $this->getDoctrine()->getManager();
-            $propietarioVehiculo = $em->getRepository("AppBundle:ProìetarioVehiculo")->find($params->id);
+            $propietarioVehiculo = $em->getRepository("AppBundle:PropietarioVehiculo")->find($params->id);
 
             if ($propietarioVehiculo!=null) {
                 $propietarioVehiculo->setLicenciaTransito($licenciaTransito);

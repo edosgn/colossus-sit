@@ -12,6 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var login_service_1 = require("../../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
+var ciudadanovehiculo_1 = require("../../../model/ciudadanovehiculo/ciudadanovehiculo");
 var tramiteEspecifico_service_1 = require("../../../services/tramiteEspecifico/tramiteEspecifico.service");
 var empresa_service_1 = require("../../../services/empresa/empresa.service");
 var ciudadano_service_1 = require("../../../services/ciudadano/ciudadano.service");
@@ -20,11 +21,13 @@ var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
 var variante_service_1 = require("../../../services/variante/variante.service");
 var caso_service_1 = require("../../../services/caso/caso.service");
 var tipoIdentificacion_service_1 = require('../../../services/tipo_Identificacion/tipoIdentificacion.service');
+var ciudadanoVehiculo_service_1 = require('../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexTraspasoComponent = (function () {
-    function IndexTraspasoComponent(_TramiteEspecificoService, _VarianteService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
+    function IndexTraspasoComponent(_TramiteEspecificoService, _VarianteService, _CiudadanoVehiculoService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
         this._TramiteEspecificoService = _TramiteEspecificoService;
         this._VarianteService = _VarianteService;
+        this._CiudadanoVehiculoService = _CiudadanoVehiculoService;
         this._TipoIdentificacionService = _TipoIdentificacionService;
         this._CasoService = _CasoService;
         this._VehiculoService = _VehiculoService;
@@ -37,7 +40,7 @@ var IndexTraspasoComponent = (function () {
         this.colorSeleccionado = null;
         this.varianteTramite = null;
         this.casoTramite = null;
-        this.vehiculo = null;
+        this.ciudadanosVehiculo = null;
         this.datos = {
             'nuevo': null,
             'viejo': null,
@@ -47,6 +50,7 @@ var IndexTraspasoComponent = (function () {
     }
     IndexTraspasoComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.datos.viejo = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 2).subscribe(function (response) {
             _this.casos = response.data;
@@ -54,7 +58,6 @@ var IndexTraspasoComponent = (function () {
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
                 alert("Error en la petición");
             }
         });
@@ -64,7 +67,6 @@ var IndexTraspasoComponent = (function () {
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
                 alert("Error en la petición");
             }
         });
@@ -73,29 +75,42 @@ var IndexTraspasoComponent = (function () {
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
                 alert("Error en la petición");
             }
         });
-        this.datos.datosCasos = "con opcion de compra";
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 5, this.tramiteGeneralId, null, null, null);
+        console.log(this.datos);
     };
     IndexTraspasoComponent.prototype.enviarTramite = function () {
         var _this = this;
-        var token = this._loginService.getToken();
+        for (var i in this.ciudadanosVehiculo) {
+            var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.ciudadano.id, this.ciudadanosVehiculo[i].vehiculo.placa, null, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, this.ciudadanosVehiculo[i].estadoPropiedad);
+            var token_1 = this._loginService.getToken();
+            this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo, token_1).subscribe(function (response) {
+                _this.respuesta = response;
+                (function (error) {
+                    _this.errorMessage = error;
+                    if (_this.errorMessage != null) {
+                        console.log(_this.errorMessage);
+                        alert("Error en la petición");
+                    }
+                });
+            });
+        }
         console.log(this.datos);
+        var token = this._loginService.getToken();
         this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
-                    console.log(_this.errorMessage);
                     alert("Error en la petición");
                 }
             });
         });
     };
     IndexTraspasoComponent.prototype.onChangeCaso = function (event) {
+        this.datos.datosCasos = "con opcion de compra";
         for (var i = 0; i < this.casos.length; ++i) {
             if (event == this.casos[i].id) {
                 this.casoSeleccionado = this.casos[i];
@@ -128,11 +143,11 @@ var IndexTraspasoComponent = (function () {
             }
             else {
                 _this.ciudadano = response.data;
-                _this.datos.nuevo = _this.ciudadano.numeroIdentificacion;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
                 _this.empresa = null;
+                _this.datos.nuevo = _this.ciudadano.numeroIdentificacion;
             }
         }, function (error) {
             _this.errorMessage = error;
@@ -166,27 +181,25 @@ var IndexTraspasoComponent = (function () {
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
                 alert("Error en la petición");
             }
         });
     };
     IndexTraspasoComponent.prototype.onChangeCasoData = function (event) {
         this.datos.datosCasos = event;
-        console.log(this.datos.datosCasos);
     };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
-    ], IndexTraspasoComponent.prototype, "vehiculo", void 0);
+    ], IndexTraspasoComponent.prototype, "ciudadanosVehiculo", void 0);
     IndexTraspasoComponent = __decorate([
         core_1.Component({
             selector: 'tramiteTraspaso',
             templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService]
+            providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
-        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])
+        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])
     ], IndexTraspasoComponent);
     return IndexTraspasoComponent;
 }());
