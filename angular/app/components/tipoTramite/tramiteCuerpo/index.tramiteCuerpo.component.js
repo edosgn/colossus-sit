@@ -15,9 +15,9 @@ var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
 var tramite_service_1 = require("../../../services/tramite/tramite.service");
 var login_service_1 = require("../../../services/login.service");
 var index_traspaso_component_1 = require("../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
-var index_cambioColor_component_1 = require("../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var index_cambioServicio_component_1 = require("../../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component");
-var index_RegrabarMotor_component_1 = require("../../../components/tipoTramite/tramiteRegrabarMotor/index.RegrabarMotor.component");
+var index_regrabarMotor_component_1 = require("../../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component");
+var index_cambioColor_component_1 = require("../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var Vehiculo_1 = require('../../../model/vehiculo/Vehiculo');
@@ -107,7 +107,7 @@ var IndexTramiteCuerpoComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES, index_traspaso_component_1.IndexTraspasoComponent, index_cambioColor_component_1.NewTramiteCambioColorComponent, index_cambioServicio_component_1.NewTramiteCambioServicioComponent, index_RegrabarMotor_component_1.NewTramiteRegrabarMotorComponent],
+            directives: [router_1.ROUTER_DIRECTIVES, index_traspaso_component_1.NewTramiteTraspasoComponent, index_cambioColor_component_1.NewTramiteCambioColorComponent, index_cambioServicio_component_1.NewTramiteCambioServicioComponent, index_regrabarMotor_component_1.NewTramiteRegrabarMotorComponent],
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tramite_service_1.TramiteService, modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
