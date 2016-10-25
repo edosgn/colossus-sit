@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // Importar el núcleo de Angular
+var tramite_service_1 = require("../../services/tramite/tramite.service");
 var organismoTransito_service_1 = require("../../services/organismoTransito/organismoTransito.service");
 var empresa_service_1 = require("../../services/empresa/empresa.service");
 var ciudadanoVehiculo_service_1 = require("../../services/ciudadanoVehiculo/ciudadanoVehiculo.service");
@@ -22,6 +23,7 @@ var new_vehiculo_component_1 = require('../../components/vehiculo/new.vehiculo.c
 var new_tramiteGeneral_component_1 = require('../../components/tramiteGeneral/new.tramiteGeneral.component');
 var new_ciudadano_component_1 = require('../../components/ciudadano/new.ciudadano.component');
 var new_empresa_component_1 = require('../../components/empresa/new.empresa.component');
+var index_cambioColor_component_1 = require("../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
@@ -29,8 +31,9 @@ var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tram
 var Empresa_1 = require('../../model/empresa/Empresa');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
-    function IndexSubirCarpetaComponent(_OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
+    function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
         var _this = this;
+        this._TramiteService = _TramiteService;
         this._OrganismoTransitoService = _OrganismoTransitoService;
         this._TramiteEspecificoService = _TramiteEspecificoService;
         this._TramiteGeneral = _TramiteGeneral;
@@ -50,6 +53,16 @@ var IndexSubirCarpetaComponent = (function () {
         this.json = {
             'datosGenerales': null,
         };
+        this._TramiteService.getTramite().subscribe(function (response) {
+            _this.tramites = response.data;
+            console.log(_this.tramites);
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
         this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
@@ -85,6 +98,8 @@ var IndexSubirCarpetaComponent = (function () {
     };
     IndexSubirCarpetaComponent.prototype.onKey = function (event) {
         var _this = this;
+        this.tramiteEspesificolSeleccionado = null;
+        this.idCiudadanoSeleccionado = null;
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
@@ -108,7 +123,6 @@ var IndexSubirCarpetaComponent = (function () {
                 _this._CiudadanoVehiculoService.showCiudadanoVehiculoId(token, _this.vehiculo.id).subscribe(function (response) {
                     _this.ciudadanosVehiculo = response.data;
                     _this.respuesta = response;
-                    console.log(_this.ciudadanosVehiculo);
                     _this.tramitesGeneralSeccion = true;
                     if (_this.respuesta.status == 'error') {
                         _this.activar = true;
@@ -150,12 +164,11 @@ var IndexSubirCarpetaComponent = (function () {
     };
     IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
         var _this = this;
-        var tramiteGeneral = id;
+        this.tramiteGeneralSeleccionado = id;
+        this.tramiteEspesificolSeleccionado = id;
         var token = this._loginService.getToken();
-        console.log("tramite general: " + tramiteGeneral);
         this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
             _this.tramiteEspecificos = response.data;
-            console.log(_this.tramiteEspecificos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -176,11 +189,25 @@ var IndexSubirCarpetaComponent = (function () {
         this.placa.placa = event;
         this.onKey("");
     };
+    IndexSubirCarpetaComponent.prototype.tramiteGeneralCreado = function (tramiteGeneral) {
+        if (tramiteGeneral) {
+            this.divTramiteGeneral = false;
+            this.idCiudadanoSeleccionado = null;
+            this.idEmpresaSeleccionada = null;
+            this.tramiteGeneralSeccion = null;
+            this.onKey("");
+        }
+    };
     IndexSubirCarpetaComponent.prototype.ciudadanoCreado = function (event) {
         this.onKeyCiudadano(event);
     };
     IndexSubirCarpetaComponent.prototype.empresaCreada = function (event) {
         this.onKeyEmpresa(event);
+    };
+    IndexSubirCarpetaComponent.prototype.tramiteCreado = function (isCreado) {
+        if (isCreado) {
+            this.onKey("");
+        }
     };
     IndexSubirCarpetaComponent.prototype.onKeyCiudadano = function (event) {
         var _this = this;
@@ -263,6 +290,7 @@ var IndexSubirCarpetaComponent = (function () {
                 else {
                     _this.empresa = response.data;
                     _this.btnNewPropietario = false;
+                    _this.divEmpresa = true;
                     _this.validateCedula = true;
                     _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                     _this.calseCedula = "form-group has-success has-feedback ";
@@ -288,7 +316,6 @@ var IndexSubirCarpetaComponent = (function () {
         if (this.ciudadanosVehiculo != null) {
             this.ciudadanoVehiculo.licenciaTransito = this.ciudadanosVehiculo[0].licenciaTransito;
         }
-        console.log(this.json);
         var token = this._loginService.getToken();
         this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula, this.json, this.TipoTramite).subscribe(function (response) {
             _this.respuesta = response;
@@ -299,7 +326,6 @@ var IndexSubirCarpetaComponent = (function () {
                 _this.TipoTramite = null;
                 _this.onKey("");
             }
-            console.log(_this.respuesta);
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -344,12 +370,15 @@ var IndexSubirCarpetaComponent = (function () {
         this.btnNewPropietario = false;
     };
     IndexSubirCarpetaComponent.prototype.btnNuevoTramiteGeneral = function () {
-        if (this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada) {
+        if (this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada != null) {
             this.divTramiteGeneral = true;
         }
     };
     IndexSubirCarpetaComponent.prototype.btnCancelarNuevoTramiteGeneral = function () {
         this.divTramiteGeneral = false;
+    };
+    IndexSubirCarpetaComponent.prototype.btnNuevoTramiteEspesifico = function () {
+        this.divTramite = true;
     };
     IndexSubirCarpetaComponent.prototype.prueba = function (event) {
         if (event == "2") {
@@ -363,10 +392,24 @@ var IndexSubirCarpetaComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/subirCarpeta/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES, new_vehiculo_component_1.NewVehiculoComponent, new_ciudadano_component_1.NewCiudadanoComponent, new_empresa_component_1.NewEmpresaComponent, new_tramiteGeneral_component_1.NewTramiteGeneralComponent],
-            providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, ciudadano_service_1.CiudadanoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, organismoTransito_service_1.OrganismoTransitoService]
+            directives: [router_1.ROUTER_DIRECTIVES,
+                new_vehiculo_component_1.NewVehiculoComponent,
+                new_ciudadano_component_1.NewCiudadanoComponent,
+                new_empresa_component_1.NewEmpresaComponent,
+                new_tramiteGeneral_component_1.NewTramiteGeneralComponent,
+                index_cambioColor_component_1.NewTramiteCambioColorComponent],
+            providers: [login_service_1.LoginService,
+                tramite_service_1.TramiteService,
+                tramiteEspecifico_service_1.TramiteEspecificoService,
+                tramiteGeneral_service_1.TramiteGeneralService,
+                vehiculo_service_1.VehiculoService,
+                ciudadanoVehiculo_service_1.CiudadanoVehiculoService,
+                ciudadano_service_1.CiudadanoService,
+                tipoIdentificacion_service_1.TipoIdentificacionService,
+                empresa_service_1.EmpresaService,
+                organismoTransito_service_1.OrganismoTransitoService]
         }), 
-        __metadata('design:paramtypes', [organismoTransito_service_1.OrganismoTransitoService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [tramite_service_1.TramiteService, organismoTransito_service_1.OrganismoTransitoService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexSubirCarpetaComponent);
     return IndexSubirCarpetaComponent;
 }());

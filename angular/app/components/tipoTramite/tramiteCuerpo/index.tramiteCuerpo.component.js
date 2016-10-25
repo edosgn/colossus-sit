@@ -106,7 +106,11 @@ var IndexTramiteCuerpoComponent = (function () {
             selector: 'default',
             templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
 <<<<<<< HEAD
+<<<<<<< HEAD
             directives: [router_1.ROUTER_DIRECTIVES, index_cambioColor_component_1.IndexCambioColorComponent, index_traspaso_component_1.IndexTraspasoComponent],
+=======
+            directives: [router_1.ROUTER_DIRECTIVES, index_cambioColor_component_1.NewTramiteCambioColorComponent],
+>>>>>>> 3a8b525bc0eb8260aeca9ce01bdf6a0e9905ceef
 =======
             directives: [router_1.ROUTER_DIRECTIVES, index_cambioColor_component_1.NewTramiteCambioColorComponent],
 >>>>>>> 3a8b525bc0eb8260aeca9ce01bdf6a0e9905ceef
