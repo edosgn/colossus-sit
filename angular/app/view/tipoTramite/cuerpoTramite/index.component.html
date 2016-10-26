@@ -99,7 +99,10 @@
 	</tramiteCambioMotor>
 
 	<tramiteDuplicadoPlaca *ngIf="tramite?.nombre=='DUPLICADO DE PLACAS'">
-	</tramiteDuplicadoPlaca>	
+	</tramiteDuplicadoPlaca>
+
+	<tramiteCambioCarroceria *ngIf="tramite?.nombre=='CAMBIO CARROCERIA'" [vehiculo] = "vehiculo">
+	</tramiteCambioCarroceria>	
 
 	
 </div>

@@ -21,6 +21,7 @@ var index_cambioMotor_component_1 = require("../../../components/tipoTramite/tra
 var index_regrabarChasis_component_1 = require("../../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component");
 var index_regrabarSerie_component_1 = require("../../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component");
 var index_cambioColor_component_1 = require("../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
+var index_cambioCarroceria_component_1 = require("../../../components/tipoTramite/tramiteCambioCarroceria/index.cambioCarroceria.component");
 var index_duplicadoLicencia_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component");
 var index_duplicadoPlaca_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component");
 var index_cambioBlindaje_component_1 = require("../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component");
@@ -124,7 +125,8 @@ var IndexTramiteCuerpoComponent = (function () {
                 index_duplicadoLicencia_component_1.NewTramiteDuplicadoLicenciaComponent,
                 index_cambioBlindaje_component_1.NewTramiteCambioBlindajeComponent,
                 index_cambioMotor_component_1.NewTramiteCambioMotorComponent,
-                index_duplicadoPlaca_component_1.NewTramiteDuplicadoPlacaComponent
+                index_duplicadoPlaca_component_1.NewTramiteDuplicadoPlacaComponent,
+                index_cambioCarroceria_component_1.NewTramiteCambioCarroceriaComponent
             ],
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 

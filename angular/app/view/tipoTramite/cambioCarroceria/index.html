@@ -1,0 +1,40 @@
+<div class="clearfix"></div>
+
+<div  class="panel panel-primary">
+	  <div class="panel-heading">Asignar nueva carroceria de la clase {{vehiculo.clase.nombre}}</div>
+		<div class="panel-body">
+		  	
+
+				<div *ngIf="casos != null" class="col-md-6">
+			  		<label>Caso</label>
+				   	<select class="form-control"  (change)="onChangeCaso($event.target.value)" required>
+							  <option *ngFor="#caso of casos" [value]='caso.id' >{{caso.nombre}}</option>
+					</select>
+				</div>
+				<div  class="col-md-6">
+			  		<label>Carroceria:</label>
+				   	<select class="form-control"  (change)="onChangeCarroceria($event.target.value)" required>
+							  <option *ngFor="#carroceria of carrocerias" [value]='carroceria.id' >{{carroceria.nombre}}</option>
+					</select>
+				</div>
+
+				<div *ngIf="variantes != null" class="col-md-6">
+			  		<label>Variantes:</label>
+				   	<select class="form-control"  (change)="onChangeVariante($event.target.value)" required>
+							  <option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
+					</select>
+				</div>
+
+				<div class="col-md-6">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+					<br>
+				</div>
+
+				<div class="col-md-12">
+				<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
+				</div>
+		</div>
+	
+</div>

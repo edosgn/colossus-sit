@@ -12,6 +12,7 @@ import {NewTramiteCambioMotorComponent} from "../../../components/tipoTramite/tr
 import {NewTramiteRegrabarChasisComponent} from "../../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component";
 import {NewTramiteRegrabarSerieComponent} from "../../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component";
 import {NewTramiteCambioColorComponent} from "../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
+import {NewTramiteCambioCarroceriaComponent} from "../../../components/tipoTramite/tramiteCambioCarroceria/index.cambioCarroceria.component";
 import {NewTramiteDuplicadoLicenciaComponent} from "../../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component";
 import {NewTramiteDuplicadoPlacaComponent} from "../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component";
 import {NewTramiteCambioBlindajeComponent} from "../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";
@@ -37,7 +38,8 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
     NewTramiteDuplicadoLicenciaComponent,
     NewTramiteCambioBlindajeComponent,
     NewTramiteCambioMotorComponent,
-    NewTramiteDuplicadoPlacaComponent
+    NewTramiteDuplicadoPlacaComponent,
+    NewTramiteCambioCarroceriaComponent
     ],
 
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]
