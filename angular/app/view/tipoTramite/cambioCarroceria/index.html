@@ -3,8 +3,6 @@
 <div  class="panel panel-primary">
 	  <div class="panel-heading">Asignar nueva carroceria de la clase {{vehiculo.clase.nombre}}</div>
 		<div class="panel-body">
-		  	
-
 				<div *ngIf="casos != null" class="col-md-6">
 			  		<label>Caso</label>
 				   	<select class="form-control"  (change)="onChangeCaso($event.target.value)" required>
@@ -31,7 +29,6 @@
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
 					<br>
 				</div>
-
 				<div class="col-md-12">
 				<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
 				</div>

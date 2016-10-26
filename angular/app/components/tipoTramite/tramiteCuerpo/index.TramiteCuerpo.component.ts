@@ -6,6 +6,7 @@ import {TramiteService} from "../../../services/tramite/tramite.service";
 import {LoginService} from "../../../services/login.service";
 
 import {NewTramiteTraspasoComponent} from "../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
+import {NewTramiteTrasladoCuentaComponent} from "../../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteCambioServicioComponent} from "../../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
 import {NewTramiteRegrabarMotorComponent} from "../../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
 import {NewTramiteCambioMotorComponent} from "../../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component";
@@ -39,7 +40,8 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
     NewTramiteCambioBlindajeComponent,
     NewTramiteCambioMotorComponent,
     NewTramiteDuplicadoPlacaComponent,
-    NewTramiteCambioCarroceriaComponent
+    NewTramiteCambioCarroceriaComponent,
+    NewTramiteTrasladoCuentaComponent
     ],
 
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]

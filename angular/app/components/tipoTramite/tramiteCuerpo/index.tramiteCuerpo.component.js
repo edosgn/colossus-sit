@@ -15,6 +15,7 @@ var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
 var tramite_service_1 = require("../../../services/tramite/tramite.service");
 var login_service_1 = require("../../../services/login.service");
 var index_traspaso_component_1 = require("../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
+var index_TrasladoCuenta_component_1 = require("../../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component");
 var index_cambioServicio_component_1 = require("../../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component");
 var index_regrabarMotor_component_1 = require("../../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component");
 var index_cambioMotor_component_1 = require("../../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component");
@@ -126,7 +127,8 @@ var IndexTramiteCuerpoComponent = (function () {
                 index_cambioBlindaje_component_1.NewTramiteCambioBlindajeComponent,
                 index_cambioMotor_component_1.NewTramiteCambioMotorComponent,
                 index_duplicadoPlaca_component_1.NewTramiteDuplicadoPlacaComponent,
-                index_cambioCarroceria_component_1.NewTramiteCambioCarroceriaComponent
+                index_cambioCarroceria_component_1.NewTramiteCambioCarroceriaComponent,
+                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent
             ],
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
