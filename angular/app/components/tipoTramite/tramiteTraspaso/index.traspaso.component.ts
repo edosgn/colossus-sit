@@ -47,8 +47,8 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'nuevo':null,
-		'viejo':null,
+		'newPropietario':null,
+		'oldPropietario':null,
 		'datosCasos':null
 	};
 	public validateCedula;
@@ -88,9 +88,9 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	ngOnInit(){
 
 		if(this.ciudadanosVehiculo[0].ciudadano){
-	   	 	this.datos.viejo=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+	   	 	this.datos.oldPropietario=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
 		}else{
-			this.datos.viejo=this.ciudadanosVehiculo[0].empresa.nit;
+			this.datos.oldPropietario=this.ciudadanosVehiculo[0].empresa.nit;
 		}
 
 		let token = this._loginService.getToken();
@@ -233,7 +233,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 						this.claseCedula = "form-group has-success has-feedback ";
 						this.empresa=null;
-						this.datos.nuevo = this.ciudadano.numeroIdentificacion;
+						this.datos.newPropietario = this.ciudadano.numeroIdentificacion;
 						
 					}
 				}, 
@@ -267,7 +267,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 		                this.claseCedula = "form-group has-success has-feedback ";
 		                this.ciudadano=null;
-		                this.datos.nuevo = this.empresa.nit;
+		                this.datos.newPropietario = this.empresa.nit;
                     }
                 }, 
                 error => {

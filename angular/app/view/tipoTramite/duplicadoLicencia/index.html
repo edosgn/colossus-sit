@@ -1,7 +1,7 @@
 <div class="clearfix"></div>
 
 <div  class="panel panel-primary">
-	  <div class="panel-heading">Regrabar Motor</div>
+	  <div class="panel-heading">Duplicado de licencia <small><i>no requiere datos adicinales</i></small></div>
 		<div class="panel-body">
 		  	
 
@@ -18,26 +18,13 @@
 					</select>
 				</div>
 
-				<div class="col-md-6">
+				<div class="col-md-12">
 					<label >Valor:</label>
 					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
 					<br>
 				</div>
-
-				<div class="col-md-6">
-					<label >Numero Motor Nuevo:</label>
-					<input #numeroMotor="ngForm"  type="number" class="form-control" [(ngModel)]="Motor"  required />
-					<span *ngIf="!numeroMotor.valid && numeroMotor.touched" style="color:red;">numeroMotor obligatorios</span>
-					<br>
-				</div>
-
-				<div class="col-md-6">
-					<label >Numero revicion SIJIN DIJIN:</label>
-					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="datos.datosCasos"  required />
-					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorios</span>
-					<br>
-				</div>
+			
 				<div class="col-md-12">
 				<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
 				</div>

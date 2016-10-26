@@ -52,15 +52,8 @@ class TramiteEspecificoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         $data = $request->get("datos",null);
-        $data = json_decode($data);
      
         $em = $this->getDoctrine()->getManager();
-
-        $viejo = (isset($data->viejo)) ? $data->viejo : null;
-        $nuevo = (isset($data->nuevo)) ? $data->nuevo : null;
-        $datosCasos = (isset($data->datosCasos)) ? $data->datosCasos : null;
-
-        $datos = array('datosNuevos' =>$nuevo,'DatosViejos' =>$viejo,'datosCasos'=>$datosCasos);
 
         if ($authCheck== true) {
             $json = $request->get("json",null);
@@ -85,10 +78,12 @@ class TramiteEspecificoController extends Controller
                         $variante = $em->getRepository('AppBundle:Variante')->findOneBy(
                             array('estado' => 1,'id' => $varianteId)
                         );
-                        $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($tramiteGeneralId);
+                        $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
+                            array('estado' => 1,'id' => $tramiteGeneralId)
+                        );
                         $tramiteEspecifico = new TramiteEspecifico();
                         $tramiteEspecifico->setValor($valor);
-                        $tramiteEspecifico->setDatos($datos);
+                        $tramiteEspecifico->setDatos($data);
                         $tramiteEspecifico->setTramite($tramite);
                         $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                         $tramiteEspecifico->setVariante($variante);

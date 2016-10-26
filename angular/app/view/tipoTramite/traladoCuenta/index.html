@@ -3,24 +3,23 @@
 <div  class="panel panel-primary">
 	  <div class="panel-heading">Selecione Organismo de Transito</div>
 		<div class="panel-body">
-		  	
 			  	<div class="col-md-6">
 			  		<label>Organismos de Transito</label>
 				   	<select class="form-control"  (change)="onChangeOrganismoTransito($event.target.value)" required>
-							  <option *ngFor="#organismoTransito of organismosTransito" [value]='organismoTransito.id' >{{organismoTransito.nombre}}</option>
+						<option *ngFor="#organismoTransito of organismosTransito" [value]='organismoTransito.id' >{{organismoTransito.nombre}}</option>
 					</select>
 				</div>
 
 				<div *ngIf="casos != null" class="col-md-6">
 			  		<label>Caso</label>
 				   	<select class="form-control"  (change)="onChangeCaso($event.target.value)" required>
-							  <option *ngFor="#caso of casos" [value]='caso.id' >{{caso.nombre}}</option>
+						<option *ngFor="#caso of casos" [value]='caso.id' >{{caso.nombre}}</option>
 					</select>
 				</div>
 				<div *ngIf="variante != null" class="col-md-6">
 			  		<label>Variante</label>
 				   	<select class="form-control"  (change)="onChangeVariante($event.target.value)" required>
-							  <option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
+						<option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
 					</select>
 				</div>
 
@@ -35,7 +34,6 @@
 				<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
 				</div>
 		</div>
-	
 </div>
 
 				

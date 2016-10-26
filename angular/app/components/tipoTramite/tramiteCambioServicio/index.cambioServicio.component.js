@@ -36,15 +36,15 @@ var NewTramiteCambioServicioComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'nuevo': null,
-            'viejo': null
+            'newServicio': null,
+            'oldServicio': null
         };
     }
     NewTramiteCambioServicioComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 6, this.tramiteGeneralId, null, null, null);
         var token = this._loginService.getToken();
-        this._CasoService.showCasosTramite(token, 5).subscribe(function (response) {
+        this._CasoService.showCasosTramite(token, 6).subscribe(function (response) {
             _this.casos = response.data;
         }, function (error) {
             _this.errorMessage = error;
@@ -53,7 +53,7 @@ var NewTramiteCambioServicioComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this._VarianteService.showVariantesTramite(token, 5).subscribe(function (response) {
+        this._VarianteService.showVariantesTramite(token, 6).subscribe(function (response) {
             _this.variantes = response.data;
         }, function (error) {
             _this.errorMessage = error;
@@ -71,13 +71,13 @@ var NewTramiteCambioServicioComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.datos.viejo = this.vehiculo.servicio.nombre;
+        this.datos.oldServicio = this.vehiculo.servicio.nombre;
     };
     NewTramiteCambioServicioComponent.prototype.onChangeServicio = function (event) {
         for (var i = 0; i < this.servicios.length; ++i) {
             if (event == this.servicios[i].id) {
                 this.servicioSeleccionado = this.servicios[i];
-                this.datos.nuevo = this.servicioSeleccionado.nombre;
+                this.datos.newServicio = this.servicioSeleccionado.nombre;
             }
         }
     };

@@ -71,17 +71,37 @@
 </div>
 
 <div *ngIf="divTramite">
-	<tramiteTraspaso *ngIf="tramite?.nombre=='TRASPASO'" [ciudadanosVehiculo] = "ciudadanosVehiculo" >
+	<tramiteTraspaso *ngIf="tramite?.nombre=='TRASPASO'" [ciudadanosVehiculo] = "ciudadanosVehiculo">
 	</tramiteTraspaso>	
 	
-	<tramiteCambioColor *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo" >
+	<tramiteCambioColor *ngIf="tramite?.nombre=='CAMBIO DE COLOR'" [vehiculo] = "vehiculo">
 	</tramiteCambioColor>
 
-	<tramiteCambioServicio *ngIf="tramite?.nombre=='CAMBIO DE SERVICIO'" [vehiculo] = "vehiculo" >
+	<tramiteCambioServicio *ngIf="tramite?.nombre=='CAMBIO DE SERVICIO'" [vehiculo] = "vehiculo">
 	</tramiteCambioServicio>
 
-	<tramiteRegrabarMotor *ngIf="tramite?.nombre=='REGRABAR MOTOR'" [vehiculo] = "vehiculo" >
-	</tramiteRegrabarMotor>	
+	<tramiteRegrabarMotor *ngIf="tramite?.nombre=='REGRABAR MOTOR'" [vehiculo] = "vehiculo">
+	</tramiteRegrabarMotor>
+
+	<tramiteRegrabarChasis *ngIf="tramite?.nombre=='REGRABAR CHASIS'" [vehiculo] = "vehiculo">
+	</tramiteRegrabarChasis>
+
+	<tramiteRegrabarSerie *ngIf="tramite?.nombre=='REGRABAR SERIE'" [vehiculo] = "vehiculo">
+	</tramiteRegrabarSerie>
+
+	<tramiteDuplicadoLicencia *ngIf="tramite?.nombre=='DUPLICADO LICENCIA'">
+	</tramiteDuplicadoLicencia>
+
+	<tramiteCambioBlindaje *ngIf="tramite?.nombre=='AUTORIZACION A BLINDADO'">
+	</tramiteCambioBlindaje>
+
+	<tramiteCambioMotor *ngIf="tramite?.nombre=='CAMBIO MOTOR'" [vehiculo] = "vehiculo">
+	</tramiteCambioMotor>
+
+	<tramiteDuplicadoPlaca *ngIf="tramite?.nombre=='DUPLICADO DE PLACAS'">
+	</tramiteDuplicadoPlaca>	
+
+	
 </div>
 
    

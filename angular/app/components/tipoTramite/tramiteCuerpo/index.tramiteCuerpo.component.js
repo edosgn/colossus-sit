@@ -16,7 +16,14 @@ var tramite_service_1 = require("../../../services/tramite/tramite.service");
 var login_service_1 = require("../../../services/login.service");
 var index_traspaso_component_1 = require("../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
 var index_cambioServicio_component_1 = require("../../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component");
+var index_regrabarMotor_component_1 = require("../../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component");
+var index_cambioMotor_component_1 = require("../../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component");
+var index_regrabarChasis_component_1 = require("../../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component");
+var index_regrabarSerie_component_1 = require("../../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component");
 var index_cambioColor_component_1 = require("../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
+var index_duplicadoLicencia_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component");
+var index_duplicadoPlaca_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component");
+var index_cambioBlindaje_component_1 = require("../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var Vehiculo_1 = require('../../../model/vehiculo/Vehiculo');
@@ -106,7 +113,19 @@ var IndexTramiteCuerpoComponent = (function () {
         core_1.Component({
             selector: 'default',
             templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES, index_traspaso_component_1.NewTramiteTraspasoComponent, index_cambioColor_component_1.NewTramiteCambioColorComponent, index_cambioServicio_component_1.NewTramiteCambioServicioComponent],
+            directives: [
+                router_1.ROUTER_DIRECTIVES,
+                index_traspaso_component_1.NewTramiteTraspasoComponent,
+                index_cambioColor_component_1.NewTramiteCambioColorComponent,
+                index_cambioServicio_component_1.NewTramiteCambioServicioComponent,
+                index_regrabarMotor_component_1.NewTramiteRegrabarMotorComponent,
+                index_regrabarChasis_component_1.NewTramiteRegrabarChasisComponent,
+                index_regrabarSerie_component_1.NewTramiteRegrabarSerieComponent,
+                index_duplicadoLicencia_component_1.NewTramiteDuplicadoLicenciaComponent,
+                index_cambioBlindaje_component_1.NewTramiteCambioBlindajeComponent,
+                index_cambioMotor_component_1.NewTramiteCambioMotorComponent,
+                index_duplicadoPlaca_component_1.NewTramiteDuplicadoPlacaComponent
+            ],
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tramite_service_1.TramiteService, modulo_service_1.ModuloService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
