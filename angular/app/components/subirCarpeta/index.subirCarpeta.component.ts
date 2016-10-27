@@ -158,7 +158,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			);
 
 			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
-            this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,"","","","");
+            this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,null,"","","");
             this.empresa = new Empresa(null,null,null,null,null,"","","","");
             this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
                     response => {
@@ -406,7 +406,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			response => {
 				this.respuesta = response;
 				if(this.respuesta.status=='success') {
-                    this.ciudadanoVehiculo.licenciaTransito="";
+                    this.ciudadanoVehiculo.licenciaTransito=null;
 					this.validateCedula=false;
 					this.json = null;
 					this.TipoTramite=null;
@@ -512,7 +512,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	    this.onKey("");
 		  }
 	  tramiteGeneralCreado(tramiteGeneral){
-	  	console.log("ok");
 	  	if(tramiteGeneral) {
 	  		this.divTramiteGeneral=false;
 	  		this.idCiudadanoSeleccionado=null;

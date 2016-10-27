@@ -32,7 +32,7 @@ var CiudadanoVehiculoEditComponent = (function () {
         this.msg = "vechiculo";
         this.claseSpan = "";
         this.validate = false;
-        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
+        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, null, "", "", "");
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];

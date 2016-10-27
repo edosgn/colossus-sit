@@ -48,7 +48,7 @@ export class CiudadanoVehiculoEditComponent implements OnInit{
 		this.msg = "vechiculo";
 		this.claseSpan ="";
 		this.validate=false;
-		this.ciudadanoVehiculo = new CiudadanoVehiculo(null,null, null,null,"","","","");
+		this.ciudadanoVehiculo = new CiudadanoVehiculo(null,null, null,null,null,"","","");
         let token = this._loginService.getToken();
         this._route.params.subscribe(params =>{
 				this.id = +params["id"];

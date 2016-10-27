@@ -28,10 +28,19 @@ var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
 var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tramiteEspecifico.service");
 var Empresa_1 = require('../../model/empresa/Empresa');
-var index_cambioColor_component_1 = require("../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
-var index_TrasladoCuenta_component_1 = require("../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component");
 var index_traspaso_component_1 = require("../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
+var index_TrasladoCuenta_component_1 = require("../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component");
 var index_cambioServicio_component_1 = require("../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component");
+var index_regrabarMotor_component_1 = require("../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component");
+var index_cambioMotor_component_1 = require("../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component");
+var index_regrabarChasis_component_1 = require("../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component");
+var index_regrabarSerie_component_1 = require("../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component");
+var index_cambioColor_component_1 = require("../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component");
+var index_cambioCarroceria_component_1 = require("../../components/tipoTramite/tramiteCambioCarroceria/index.cambioCarroceria.component");
+var index_duplicadoLicencia_component_1 = require("../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component");
+var index_duplicadoPlaca_component_1 = require("../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component");
+var index_cambioBlindaje_component_1 = require("../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component");
+;
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -67,7 +76,7 @@ var IndexSubirCarpetaComponent = (function () {
             }
         });
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
-        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, "", "", "", "");
+        this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, null, "", "", "");
         this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
         this._TipoIdentificacionService.getTipoIdentificacion().subscribe(function (response) {
             _this.tipoIdentificaciones = response.data;
@@ -275,7 +284,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._CiudadanoVehiculoService.register(this.ciudadanoVehiculo, token, this.TipoMatricula, this.json, this.TipoTramite).subscribe(function (response) {
             _this.respuesta = response;
             if (_this.respuesta.status == 'success') {
-                _this.ciudadanoVehiculo.licenciaTransito = "";
+                _this.ciudadanoVehiculo.licenciaTransito = null;
                 _this.validateCedula = false;
                 _this.json = null;
                 _this.TipoTramite = null;
@@ -386,7 +395,6 @@ var IndexSubirCarpetaComponent = (function () {
         this.onKeyEmpresa(event);
     };
     IndexSubirCarpetaComponent.prototype.tramiteCreado = function (isCreado) {
-        console.log(isCreado);
         if (isCreado) {
             this.divTramite = false;
             this.onKey("");
@@ -402,10 +410,18 @@ var IndexSubirCarpetaComponent = (function () {
                 new_ciudadano_component_1.NewCiudadanoComponent,
                 new_empresa_component_1.NewEmpresaComponent,
                 new_tramiteGeneral_component_1.NewTramiteGeneralComponent,
-                index_cambioColor_component_1.NewTramiteCambioColorComponent,
-                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent,
                 index_traspaso_component_1.NewTramiteTraspasoComponent,
-                index_cambioServicio_component_1.NewTramiteCambioServicioComponent],
+                index_cambioColor_component_1.NewTramiteCambioColorComponent,
+                index_cambioServicio_component_1.NewTramiteCambioServicioComponent,
+                index_regrabarMotor_component_1.NewTramiteRegrabarMotorComponent,
+                index_regrabarChasis_component_1.NewTramiteRegrabarChasisComponent,
+                index_regrabarSerie_component_1.NewTramiteRegrabarSerieComponent,
+                index_duplicadoLicencia_component_1.NewTramiteDuplicadoLicenciaComponent,
+                index_cambioBlindaje_component_1.NewTramiteCambioBlindajeComponent,
+                index_cambioMotor_component_1.NewTramiteCambioMotorComponent,
+                index_duplicadoPlaca_component_1.NewTramiteDuplicadoPlacaComponent,
+                index_cambioCarroceria_component_1.NewTramiteCambioCarroceriaComponent,
+                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent],
             providers: [
                 login_service_1.LoginService,
                 tramite_service_1.TramiteService,
