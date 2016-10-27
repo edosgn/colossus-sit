@@ -113,6 +113,7 @@ class VehiculoController extends Controller
                         $vehiculo->setCarroceria($carroceria);
                         $vehiculo->setOrganismoTransito($organismoTransito);
                         $vehiculo->setClase($clase);
+                        $vehiculo->setPignorado(false);
 
                         
                         $vehiculo->setEstado(true);
@@ -285,6 +286,7 @@ class VehiculoController extends Controller
                 $vehiculo->setCarroceria($carroceria);
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 $vehiculo->setClase($clase);
+                $vehiculo->setPignorado(false);
 
                 
                 $vehiculo->setEstado(true);

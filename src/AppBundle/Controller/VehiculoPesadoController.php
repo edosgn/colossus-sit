@@ -268,7 +268,7 @@ class VehiculoPesadoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == false) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneBy(array('estado' =>1,'vehiculo'=>$id));
             $responce = array(
