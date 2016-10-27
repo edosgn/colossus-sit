@@ -41,8 +41,8 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'nuevo':null,
-		'viejo':null
+		'newServicio':null,
+		'oldServicio':null
 	};
 	
 
@@ -65,7 +65,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 	ngOnInit(){
 		this.tramiteEspecifico = new TramiteEspecifico(null,6,this.tramiteGeneralId,null,null,null);
 		let token = this._loginService.getToken();
-		this._CasoService.showCasosTramite(token,5).subscribe(
+		this._CasoService.showCasosTramite(token,6).subscribe(
 				response => {
 					this.casos = response.data;
 				}, 
@@ -78,7 +78,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 					}
 				}
 		);
-		this._VarianteService.showVariantesTramite(token,5).subscribe(
+		this._VarianteService.showVariantesTramite(token,6).subscribe(
 				response => {
 					this.variantes = response.data;
 				}, 
@@ -107,7 +107,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 			);
 
 
-		this.datos.viejo = this.vehiculo.servicio.nombre;
+		this.datos.oldServicio = this.vehiculo.servicio.nombre;
 		}
 
 
@@ -117,7 +117,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 		for (var i = 0; i < this.servicios.length; ++i) {
 			if(event == this.servicios[i].id) {
 				this.servicioSeleccionado = this.servicios[i];
-				this.datos.nuevo = this.servicioSeleccionado.nombre;
+				this.datos.newServicio = this.servicioSeleccionado.nombre;
 			}
 			
 		}

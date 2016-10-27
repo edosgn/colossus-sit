@@ -6,9 +6,17 @@ import {TramiteService} from "../../../services/tramite/tramite.service";
 import {LoginService} from "../../../services/login.service";
 
 import {NewTramiteTraspasoComponent} from "../../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
+import {NewTramiteTrasladoCuentaComponent} from "../../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteCambioServicioComponent} from "../../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
 import {NewTramiteRegrabarMotorComponent} from "../../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
+import {NewTramiteCambioMotorComponent} from "../../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component";
+import {NewTramiteRegrabarChasisComponent} from "../../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component";
+import {NewTramiteRegrabarSerieComponent} from "../../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component";
 import {NewTramiteCambioColorComponent} from "../../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
+import {NewTramiteCambioCarroceriaComponent} from "../../../components/tipoTramite/tramiteCambioCarroceria/index.cambioCarroceria.component";
+import {NewTramiteDuplicadoLicenciaComponent} from "../../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component";
+import {NewTramiteDuplicadoPlacaComponent} from "../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component";
+import {NewTramiteCambioBlindajeComponent} from "../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../../model/tramite/Tramite';
@@ -20,7 +28,21 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
     selector: 'default',
     templateUrl: 'app/view/tipoTramite/cuerpoTramite/index.component.html',
 
-    directives: [ROUTER_DIRECTIVES,NewTramiteTraspasoComponent,NewTramiteCambioColorComponent,NewTramiteCambioServicioComponent,NewTramiteRegrabarMotorComponent],
+    directives: [
+    ROUTER_DIRECTIVES,
+    NewTramiteTraspasoComponent,
+    NewTramiteCambioColorComponent,
+    NewTramiteCambioServicioComponent,
+    NewTramiteRegrabarMotorComponent,
+    NewTramiteRegrabarChasisComponent,
+    NewTramiteRegrabarSerieComponent,
+    NewTramiteDuplicadoLicenciaComponent,
+    NewTramiteCambioBlindajeComponent,
+    NewTramiteCambioMotorComponent,
+    NewTramiteDuplicadoPlacaComponent,
+    NewTramiteCambioCarroceriaComponent,
+    NewTramiteTrasladoCuentaComponent
+    ],
 
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]
 })

@@ -1,7 +1,7 @@
 <div class="clearfix"></div>
 
 <div  class="panel panel-primary">
-	  <div class="panel-heading">Regrabar Motor</div>
+	  <div class="panel-heading">Regrabar Serie</div>
 		<div class="panel-body">
 		  	
 
@@ -26,9 +26,9 @@
 				</div>
 
 				<div class="col-md-6">
-					<label >Numero Motor Nuevo:</label>
-					<input #numeroMotor="ngForm"  type="number" class="form-control" [(ngModel)]="Motor"  required />
-					<span *ngIf="!numeroMotor.valid && numeroMotor.touched" style="color:red;">numeroMotor obligatorios</span>
+					<label >Numero Serie Nuevo:</label>
+					<input #numeroSerie="ngForm"  type="number" class="form-control" [(ngModel)]="serie"  required />
+					<span *ngIf="!numeroSerie.valid && numeroSerie.touched" style="color:red;">numeroSerie obligatorios</span>
 					<br>
 				</div>
 

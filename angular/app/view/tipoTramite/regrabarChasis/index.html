@@ -1,7 +1,7 @@
 <div class="clearfix"></div>
 
 <div  class="panel panel-primary">
-	  <div class="panel-heading">Regrabar Motor</div>
+	  <div class="panel-heading">Regrabar Chasis</div>
 		<div class="panel-body">
 		  	
 
@@ -26,15 +26,15 @@
 				</div>
 
 				<div class="col-md-6">
-					<label >Numero Motor Nuevo:</label>
-					<input #numeroMotor="ngForm"  type="number" class="form-control" [(ngModel)]="Motor"  required />
-					<span *ngIf="!numeroMotor.valid && numeroMotor.touched" style="color:red;">numeroMotor obligatorios</span>
+					<label >Numero Chasis Nuevo:</label>
+					<input #numeroChasis="ngForm"  type="number" class="form-control" [(ngModel)]="chasis"  required />
+					<span *ngIf="!numeroChasis.valid && numeroChasis.touched" style="color:red;">numeroChasis obligatorios</span>
 					<br>
 				</div>
 
 				<div class="col-md-6">
 					<label >Numero revicion SIJIN DIJIN:</label>
-					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="datos.datosCasos"  required />
+					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="datos.codigoDIJIN_SIJIN"  required />
 					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorios</span>
 					<br>
 				</div>

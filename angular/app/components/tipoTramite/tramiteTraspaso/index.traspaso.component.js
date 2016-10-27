@@ -45,8 +45,8 @@ var NewTramiteTraspasoComponent = (function () {
         this.tramiteGeneralId = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'nuevo': null,
-            'viejo': null,
+            'newPropietario': null,
+            'oldPropietario': null,
             'datosCasos': null
         };
         this.divDatos = false;
@@ -58,10 +58,10 @@ var NewTramiteTraspasoComponent = (function () {
     NewTramiteTraspasoComponent.prototype.ngOnInit = function () {
         var _this = this;
         if (this.ciudadanosVehiculo[0].ciudadano) {
-            this.datos.viejo = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+            this.datos.oldPropietario = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
         }
         else {
-            this.datos.viejo = this.ciudadanosVehiculo[0].empresa.nit;
+            this.datos.oldPropietario = this.ciudadanosVehiculo[0].empresa.nit;
         }
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 2).subscribe(function (response) {
@@ -164,7 +164,7 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
                 _this.empresa = null;
-                _this.datos.nuevo = _this.ciudadano.numeroIdentificacion;
+                _this.datos.newPropietario = _this.ciudadano.numeroIdentificacion;
             }
         }, function (error) {
             _this.errorMessage = error;
@@ -195,7 +195,7 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
                 _this.ciudadano = null;
-                _this.datos.nuevo = _this.empresa.nit;
+                _this.datos.newPropietario = _this.empresa.nit;
             }
         }, function (error) {
             _this.errorMessage = error;

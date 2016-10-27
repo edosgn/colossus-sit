@@ -2,8 +2,6 @@
 import {LoginService} from "../../../services/login.service";
 import {Component, OnInit,Input,Output,EventEmitter} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
-import {ColorService} from "../../../services/color/color.service";
-import {Color} from "../../../model/color/color";
 import {Vehiculo} from "../../../model/vehiculo/vehiculo";
 import {TramiteEspecificoService} from "../../../services/tramiteEspecifico/tramiteEspecifico.service";
 import {TramiteEspecifico} from '../../../model/tramiteEspecifico/TramiteEspecifico';
@@ -15,34 +13,34 @@ import {CasoService} from "../../../services/caso/caso.service";
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'tramiteCambioColor',
-    templateUrl: 'app/view/tipoTramite/cambioColor/index.component.html',
+    selector: 'tramiteRegrabarChasis',
+    templateUrl: 'app/view/tipoTramite/regrabarChasis/index.html',
     directives: [ROUTER_DIRECTIVES],
-    providers: [LoginService,ColorService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService]
+    providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class NewTramiteCambioColorComponent implements OnInit{ 
+export class NewTramiteRegrabarChasisComponent implements OnInit{ 
 	
-	public colores;
 	public casos;
 	public casoSeleccionado;
 	public variantes;
 	public varianteSeleccionada;
 	public errorMessage;
 	public valor;
+	public chasis;
 	public tramiteEspecifico;
 	public respuesta;
-	public colorSeleccionado = null;
+	public servicioSeleccionado = null;
 	public varianteTramite = null;
 	public casoTramite = null;
-	@Input() tramiteGeneralId =null;
+	@Input() tramiteGeneralId =22;
 	@Input() vehiculo = null;
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newColor':null,
-		'oldColor':null
+		'newChasis':null,
+		'oldChasis':null
 	};
 	
 
@@ -53,7 +51,6 @@ export class NewTramiteCambioColorComponent implements OnInit{
 		private _CasoService: CasoService, 
 		private _VehiculoService: VehiculoService, 
 		private _loginService: LoginService,
-		private _ColorService: ColorService,
 		private _route: ActivatedRoute,
 		private _router: Router
 		
@@ -63,8 +60,10 @@ export class NewTramiteCambioColorComponent implements OnInit{
 
 
 	ngOnInit(){
+		this.datos.oldChasis=this.vehiculo.chasis;
+		this.tramiteEspecifico = new TramiteEspecifico(null,8,this.tramiteGeneralId,null,null,null);
 		let token = this._loginService.getToken();
-		this._CasoService.showCasosTramite(token,5).subscribe(
+		this._CasoService.showCasosTramite(token,8).subscribe(
 				response => {
 					this.casos = response.data;
 				}, 
@@ -77,7 +76,7 @@ export class NewTramiteCambioColorComponent implements OnInit{
 					}
 				}
 		);
-		this._VarianteService.showVariantesTramite(token,5).subscribe(
+		this._VarianteService.showVariantesTramite(token,8).subscribe(
 				response => {
 					this.variantes = response.data;
 				}, 
@@ -91,44 +90,16 @@ export class NewTramiteCambioColorComponent implements OnInit{
 				}
 		);
 
-
-		this.tramiteEspecifico = new TramiteEspecifico(null,5,this.tramiteGeneralId,null,null,null);
-	
-		this._ColorService.getColor().subscribe(
-				response => {
-					this.colores = response.data;
-					this.colorSeleccionado = this.colores[0];
-					this.datos.newColor = this.colorSeleccionado.nombre;
-				}, 
-				error => {
-					this.errorMessage = <any>error;
-
-					if(this.errorMessage != null){
-						console.log(this.errorMessage);
-						alert("Error en la petición");
-					}
-				}
-			);
-		this.datos.oldColor=this.vehiculo.color.nombre;
-
-	}
-
-
-
-	onChangeColor(event:any){
-
-		for (var i = 0; i < this.colores.length; ++i) {
-			if(event == this.colores[i].id) {
-				this.colorSeleccionado = this.colores[i];
-				this.datos.newColor = this.colorSeleccionado.nombre;
-			}
-			
-		}
+		
 		
 	}
 
-	enviarTramite(){
 
+
+
+
+	enviarTramite(){
+		this.datos.newChasis= this.chasis;
 		let token = this._loginService.getToken();
 		this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
 			response => {
@@ -154,7 +125,7 @@ export class NewTramiteCambioColorComponent implements OnInit{
 			this.vehiculo.municipio.id, 
 			this.vehiculo.linea.id,
 			this.vehiculo.servicio.id,
-			this.colorSeleccionado.id,
+			this.vehiculo.color.id,
 			this.vehiculo.combustible.id,
 			this.vehiculo.carroceria.id,
 			this.vehiculo.organismoTransito.id,
@@ -167,7 +138,7 @@ export class NewTramiteCambioColorComponent implements OnInit{
 			this.vehiculo.cilindraje,
 			this.vehiculo.modelo,
 			this.vehiculo.motor,
-			this.vehiculo.chasis,
+			this.chasis,
 			this.vehiculo.serie,
 			this.vehiculo.vin,
 			this.vehiculo.numeroPasajeros

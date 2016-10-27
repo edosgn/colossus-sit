@@ -55,7 +55,6 @@ class PropietarioVehiculoController extends Controller
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
         $data = $request->get("datos",null);
-        $data = json_decode($data);
         $casosVariantes = $request->get("casosVariantes",null);
         $entradas = json_decode($casosVariantes);
 
@@ -73,7 +72,6 @@ class PropietarioVehiculoController extends Controller
         );
 
        
-        $datos = array('datosGenerales' =>$data->datosGenerales);
         
 
 
@@ -151,7 +149,7 @@ class PropietarioVehiculoController extends Controller
                                 array('estado' => 1,'vehiculo' => $vehiculo->getId())
                             );
 
-                            $tramiteEspecifico->setDatos($datos);
+                            $tramiteEspecifico->setDatos($data);
                             $tramiteEspecifico->setTramite($tramite);
                             $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                             $tramiteEspecifico->setCaso($casoBd);

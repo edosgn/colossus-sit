@@ -1,0 +1,56 @@
+<div class="clearfix"></div>
+
+<div  class="panel panel-primary">
+	  <div class="panel-heading">Cambio de Blindaje <small><i>no requiere datos adicinales</i></small></div>
+		<div class="panel-body">
+		  	
+
+				<div *ngIf="casos != null" class="col-md-6">
+			  		<label>Caso</label>
+				   	<select class="form-control"  (change)="onChangeCaso($event.target.value)" required>
+							  <option *ngFor="#caso of casos" [value]='caso.id' >{{caso.nombre}}</option>
+					</select>
+				</div>
+				<div *ngIf="variantes != null" class="col-md-6">
+			  		<label>Variante</label>
+				   	<select class="form-control"  (change)="onChangeVariante($event.target.value)" required>
+							  <option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
+					</select>
+				</div>
+
+
+				<div class="col-md-6">
+			  		<label>Nivel de Blindaje:</label>
+				   	<select class="form-control"  [(ngModel)]="datos.nivelBlindaje" required>
+				   			
+						  	<option [value]=1 >UNO</option>
+						  	<option [value]=2 >DOS</option>
+						  	<option [value]=3 >TRES</option>
+						  	<option [value]=4 >CUATRO</option>
+						  	<option [value]=5 >CINCO</option>
+						  	<option [value]=6 >SEIS</option>
+						  	<option [value]=7 >SIETE</option>
+						  	<option [value]=8 >OCHO</option>
+					</select>
+				</div>
+
+				<div class="col-md-12">
+					<label >Empresa Blindadora:</label>
+					<input #empresa="ngForm"  type="text" class="form-control" [(ngModel)]="datos.empresaBlindadora"  required />
+					<span *ngIf="!empresa.valid && empresa.touched" style="color:red;">empresa obligatorios</span>
+					<br>
+				</div>
+
+				<div class="col-md-12">
+					<label >Valor:</label>
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+					<br>
+				</div>
+			
+				<div class="col-md-12">
+				<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
+				</div>
+		</div>
+	
+</div>
