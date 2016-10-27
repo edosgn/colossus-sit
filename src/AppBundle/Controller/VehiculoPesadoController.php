@@ -255,4 +255,35 @@ class VehiculoPesadoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * busca los vehiculos pesados por id vehiculo.
+     *
+     * @Route("/vehiculo/{id}", name="vehiculopesado_show_vehiculo")
+     * @Method("POST")
+     */
+    public function showPesadoVehiculoAction(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == false) {
+            $em = $this->getDoctrine()->getManager();
+            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneBy(array('estado' =>1,'vehiculo'=>$id));
+            $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculoPesado", 
+                    'data'=> $vehiculoPesado,
+            );
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($responce);
+    }
 }

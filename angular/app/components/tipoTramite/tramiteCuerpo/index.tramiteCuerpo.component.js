@@ -26,6 +26,7 @@ var index_cambioCarroceria_component_1 = require("../../../components/tipoTramit
 var index_duplicadoLicencia_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component");
 var index_duplicadoPlaca_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component");
 var index_cambioBlindaje_component_1 = require("../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component");
+var index_cambioCombustible_component_1 = require("../../../components/tipoTramite/tramiteCambioCombustible/index.cambioCombustible.component");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var Vehiculo_1 = require('../../../model/vehiculo/Vehiculo');
@@ -128,7 +129,8 @@ var IndexTramiteCuerpoComponent = (function () {
                 index_cambioMotor_component_1.NewTramiteCambioMotorComponent,
                 index_duplicadoPlaca_component_1.NewTramiteDuplicadoPlacaComponent,
                 index_cambioCarroceria_component_1.NewTramiteCambioCarroceriaComponent,
-                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent
+                index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent,
+                index_cambioCombustible_component_1.NewTramiteCambioCombustibleComponent
             ],
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 

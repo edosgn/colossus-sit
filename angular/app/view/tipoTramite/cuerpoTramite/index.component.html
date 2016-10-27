@@ -30,6 +30,7 @@
 	                    <td >{{vehiculo.clase.nombre}}</td>
 	                    <td >{{vehiculo.modelo}}</td>
 	                    <td >{{vehiculo.servicio.nombre}}</td>
+	                    
 	                </tr>
 	            </tbody> 
 	        </table>
@@ -105,7 +106,12 @@
 	</tramiteCambioCarroceria>
 
 	<tramiteTraladoCuenta *ngIf="tramite?.nombre=='TRASLADO DE CUENTA - NO GENERA E.V.'" [vehiculo] = "vehiculo">
-	</tramiteTraladoCuenta>	
+	</tramiteTraladoCuenta>
+
+	<tramiteCambioCombustible *ngIf="tramite?.nombre=='CAMBIO TIPO COMBUSTIBLE'" [vehiculo] = "vehiculo">
+	</tramiteCambioCombustible>	
+
+	
 
 	
 </div>
