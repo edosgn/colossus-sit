@@ -34,7 +34,7 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 	public servicioSeleccionado = null;
 	public varianteTramite = null;
 	public casoTramite = null;
-	@Input() tramiteGeneralId =22;
+	@Input() tramiteGeneralId = null;
 	@Input() vehiculo = null;
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;

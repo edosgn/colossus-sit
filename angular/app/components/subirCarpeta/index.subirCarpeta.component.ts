@@ -23,6 +23,7 @@ import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/trami
 import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
 import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
+import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -38,7 +39,8 @@ import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tr
 	     NewTramiteCambioColorComponent,
 	     NewTramiteTrasladoCuentaComponent,
 	     NewTramiteTraspasoComponent,
-	     NewTramiteCambioServicioComponent],
+	     NewTramiteCambioServicioComponent,
+	     NewTramiteRegrabarMotorComponent],
     providers: [
         LoginService,
 	    TramiteService,

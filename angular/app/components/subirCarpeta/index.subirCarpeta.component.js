@@ -32,6 +32,7 @@ var index_cambioColor_component_1 = require("../../components/tipoTramite/tramit
 var index_TrasladoCuenta_component_1 = require("../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component");
 var index_traspaso_component_1 = require("../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
 var index_cambioServicio_component_1 = require("../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component");
+var index_regrabarMotor_component_1 = require("../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -405,7 +406,8 @@ var IndexSubirCarpetaComponent = (function () {
                 index_cambioColor_component_1.NewTramiteCambioColorComponent,
                 index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent,
                 index_traspaso_component_1.NewTramiteTraspasoComponent,
-                index_cambioServicio_component_1.NewTramiteCambioServicioComponent],
+                index_cambioServicio_component_1.NewTramiteCambioServicioComponent,
+                index_regrabarMotor_component_1.NewTramiteRegrabarMotorComponent],
             providers: [
                 login_service_1.LoginService,
                 tramite_service_1.TramiteService,

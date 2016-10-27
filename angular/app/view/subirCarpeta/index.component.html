@@ -329,7 +329,7 @@
 				</div>
 					<button type="submit" class="btn btn-primary col-md-2" style="margin-top: 27px;" [disabled]="!tramiteEspesificolSeleccionado"   
 	        		(click)="btnNuevoTramiteEspesifico()">Nuevo Tremite</button>
-	        		<hr> <br><br> <br><br> 	
+	        		<br> <br><br> <br><br> 	
     		</div>
 
     		<div *ngIf="divTramite">
@@ -338,9 +338,11 @@
 
 				<tramiteTraladoCuenta *ngIf="tramiteEspesificolSeleccionado==3" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteTraladoCuenta>	
 
+				<tramiteCambioColor *ngIf="tramiteEspesificolSeleccionado==5" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteCambioColor>
+
 				<tramiteCambioServicio *ngIf="tramiteEspesificolSeleccionado==6" (tramiteCreado)="tramiteCreado($event)" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado"></tramiteCambioServicio>
 
-				<tramiteCambioColor *ngIf="tramiteEspesificolSeleccionado==5" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteCambioColor>
+				<tramiteRegrabarMotor *ngIf="tramiteEspesificolSeleccionado==7" [vehiculo]="vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)" ></tramiteRegrabarMotor>
 
 			</div>
 	        	
