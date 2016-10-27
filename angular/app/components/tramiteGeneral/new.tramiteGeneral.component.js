@@ -15,16 +15,13 @@ var login_service_1 = require('../../services/login.service');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
 var vehiculo_service_1 = require('../../services/vehiculo/vehiculo.service');
 var TramiteGeneral_1 = require('../../model/tramiteGeneral/TramiteGeneral');
-var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
-var ciudadanoVehiculo_service_1 = require("../../services/ciudadanoVehiculo/ciudadanoVehiculo.service");
 // Decorador component, indicamos en que etiqueta se va a cargar la  
 var NewTramiteGeneralComponent = (function () {
-    function NewTramiteGeneralComponent(_TramiteGeneralService, _VehiculoService, _loginService, _route, _CiudadanoVehiculoService, _router) {
+    function NewTramiteGeneralComponent(_TramiteGeneralService, _VehiculoService, _loginService, _route, _router) {
         this._TramiteGeneralService = _TramiteGeneralService;
         this._VehiculoService = _VehiculoService;
         this._loginService = _loginService;
         this._route = _route;
-        this._CiudadanoVehiculoService = _CiudadanoVehiculoService;
         this._router = _router;
         this.vehiculoId = null;
         this.ciudadanoId = null;
@@ -49,37 +46,11 @@ var NewTramiteGeneralComponent = (function () {
     NewTramiteGeneralComponent.prototype.onSubmit = function () {
         var _this = this;
         var token = this._loginService.getToken();
-        this._CiudadanoVehiculoService.showCiudadanoVehiculoId(token, this.vehiculoId).subscribe(function (response) {
-            _this.ciudadanosVehiculo = response.data;
-        }, function (error) {
-            _this.errorMessage = error;
-            if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
-                alert("Error en la petición");
-            }
-        });
         this.tramiteGeneral.apoderado = this.Apoderado;
         this._TramiteGeneralService.register(this.tramiteGeneral, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.ciudadanosVehiculo);
             if (_this.respuesta.status == "success") {
-                for (var i in _this.ciudadanosVehiculo) {
-                    var ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(_this.ciudadanosVehiculo[i].id, _this.ciudadanoId, _this.ciudadanosVehiculo[i].vehiculo.placa, _this.empresaId, _this.tramiteGeneral.numeroLicencia, _this.ciudadanosVehiculo[i].fechaPropiedadInicial, _this.ciudadanosVehiculo[i].fechaPropiedadFinal, _this.ciudadanosVehiculo[i].estadoPropiedad);
-                    var token_1 = _this._loginService.getToken();
-                    _this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo, token_1).subscribe(function (response) {
-                        _this.respuesta = response;
-                        if (_this.respuesta.status == "success") {
-                            _this.tramiteGeneralCreado.emit(true);
-                        }
-                        (function (error) {
-                            _this.errorMessage = error;
-                            if (_this.errorMessage != null) {
-                                console.log(_this.errorMessage);
-                                alert("Error en la petición");
-                            }
-                        });
-                    });
-                }
+                _this.tramiteGeneralCreado.emit(true);
             }
             (function (error) {
                 _this.errorMessage = error;
@@ -115,9 +86,9 @@ var NewTramiteGeneralComponent = (function () {
             selector: 'registerTramiteGeneral',
             templateUrl: 'app/view/tramiteGeneral/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
+            providers: [login_service_1.LoginService, tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService]
         }), 
-        __metadata('design:paramtypes', [tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, router_1.Router])
+        __metadata('design:paramtypes', [tramiteGeneral_service_1.TramiteGeneralService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], NewTramiteGeneralComponent);
     return NewTramiteGeneralComponent;
 }());
