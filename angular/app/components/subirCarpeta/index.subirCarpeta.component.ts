@@ -19,11 +19,18 @@ import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
 import {TramiteEspecificoService} from "../../services/tramiteEspecifico/tramiteEspecifico.service";
 import {Empresa} from '../../model/empresa/Empresa';
-import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
-import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
+import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
 import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
+import {NewTramiteCambioMotorComponent} from "../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component";
+import {NewTramiteRegrabarChasisComponent} from "../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component";
+import {NewTramiteRegrabarSerieComponent} from "../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component";
+import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/tramiteCambioColor/index.cambioColor.component";
+import {NewTramiteCambioCarroceriaComponent} from "../../components/tipoTramite/tramiteCambioCarroceria/index.cambioCarroceria.component";
+import {NewTramiteDuplicadoLicenciaComponent} from "../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component";
+import {NewTramiteDuplicadoPlacaComponent} from "../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component";
+import {NewTramiteCambioBlindajeComponent} from "../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";;
 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -36,11 +43,18 @@ import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tra
 	     NewCiudadanoComponent,
 	     NewEmpresaComponent,
 	     NewTramiteGeneralComponent,
-	     NewTramiteCambioColorComponent,
-	     NewTramiteTrasladoCuentaComponent,
 	     NewTramiteTraspasoComponent,
-	     NewTramiteCambioServicioComponent,
-	     NewTramiteRegrabarMotorComponent],
+	    NewTramiteCambioColorComponent,
+	    NewTramiteCambioServicioComponent,
+	    NewTramiteRegrabarMotorComponent,
+	    NewTramiteRegrabarChasisComponent,
+	    NewTramiteRegrabarSerieComponent,
+	    NewTramiteDuplicadoLicenciaComponent,
+	    NewTramiteCambioBlindajeComponent,
+	    NewTramiteCambioMotorComponent,
+	    NewTramiteDuplicadoPlacaComponent,
+	    NewTramiteCambioCarroceriaComponent,
+	    NewTramiteTrasladoCuentaComponent],
     providers: [
         LoginService,
 	    TramiteService,
@@ -498,6 +512,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	    this.onKey("");
 		  }
 	  tramiteGeneralCreado(tramiteGeneral){
+	  	console.log("ok");
 	  	if(tramiteGeneral) {
 	  		this.divTramiteGeneral=false;
 	  		this.idCiudadanoSeleccionado=null;
@@ -515,7 +530,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	  }
 
 	  tramiteCreado(isCreado:any){
-	  	console.log(isCreado);
 		if(isCreado) {
 			this.divTramite=false;
 		  		this.onKey("");
