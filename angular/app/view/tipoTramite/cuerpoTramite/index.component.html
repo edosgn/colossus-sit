@@ -112,7 +112,13 @@
 	</tramiteCambioCombustible>	
 
 	<tramitePrenda *ngIf="tramite?.nombre=='PRENDA'" [vehiculo] = "vehiculo">
-	</tramitePrenda>	
+	</tramitePrenda>
+
+	<tramiteLevantarPrenda *ngIf="tramite?.nombre=='LEVANTAMIENTO DE PRENDA'" [vehiculo] = "vehiculo">
+	</tramiteLevantarPrenda>
+
+	<tramiteCambioPrendario *ngIf="tramite?.nombre=='CAMBIO PRENDARIO'" [vehiculo] = "vehiculo">
+	</tramiteCambioPrendario>	
 
 	
 

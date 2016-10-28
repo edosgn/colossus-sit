@@ -71,10 +71,6 @@ class PropietarioVehiculoController extends Controller
             array('estado' => 1,'id' => $variante)
         );
 
-       
-        
-
-
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
             $json = $request->get("json",null);

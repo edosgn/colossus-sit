@@ -28,6 +28,8 @@ var index_duplicadoLicencia_component_1 = require("../../../components/tipoTrami
 var index_duplicadoPlaca_component_1 = require("../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component");
 var index_cambioBlindaje_component_1 = require("../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component");
 var index_cambioCombustible_component_1 = require("../../../components/tipoTramite/tramiteCambioCombustible/index.cambioCombustible.component");
+var index_levantarPrenda_component_1 = require("../../../components/tipoTramite/tramiteLevantarPrenda/index.levantarPrenda.component");
+var index_cambioPrendario_component_1 = require("../../../components/tipoTramite/tramiteCambioPrendario/index.cambioPrendario.component");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var Vehiculo_1 = require('../../../model/vehiculo/Vehiculo');
@@ -132,7 +134,9 @@ var IndexTramiteCuerpoComponent = (function () {
                 index_cambioCarroceria_component_1.NewTramiteCambioCarroceriaComponent,
                 index_TrasladoCuenta_component_1.NewTramiteTrasladoCuentaComponent,
                 index_cambioCombustible_component_1.NewTramiteCambioCombustibleComponent,
-                index_prenda_component_1.NewTramitePrendaComponent
+                index_prenda_component_1.NewTramitePrendaComponent,
+                index_levantarPrenda_component_1.NewTramiteLevantarPrendaComponent,
+                index_cambioPrendario_component_1.NewTramiteCambioPrendarioComponent
             ],
             providers: [login_service_1.LoginService, modulo_service_1.ModuloService, tramite_service_1.TramiteService, vehiculo_service_1.VehiculoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 

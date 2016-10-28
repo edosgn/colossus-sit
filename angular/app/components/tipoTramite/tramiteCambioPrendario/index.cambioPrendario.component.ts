@@ -17,14 +17,14 @@ import {CiudadanoService} from "../../../services/ciudadano/ciudadano.service";
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'tramitePrenda',
-    templateUrl: 'app/view/tipoTramite/prenda/index.html',
+    selector: 'tramiteCambioPrendario',
+    templateUrl: 'app/view/tipoTramite/cambioPrendario/index.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,CombustibleService,TipoIdentificacionService,CiudadanoService,EmpresaService]
 })
  
 // Clase del componente donde irán los datos y funcionalidades
-export class NewTramitePrendaComponent implements OnInit{ 
+export class NewTramiteCambioPrendarioComponent implements OnInit{ 
 	
 	public casos;
 	public casoSeleccionado;
@@ -84,9 +84,9 @@ export class NewTramitePrendaComponent implements OnInit{
 
 
 	ngOnInit(){
-		this.tramiteEspecifico = new TramiteEspecifico(null,46,this.tramiteGeneralId,null,null,null);
+		this.tramiteEspecifico = new TramiteEspecifico(null,54,this.tramiteGeneralId,null,null,null);
 		let token = this._loginService.getToken();
-		this._CasoService.showCasosTramite(token,46).subscribe(
+		this._CasoService.showCasosTramite(token,54).subscribe(
 				response => {
 					this.casos = response.data;
 					if(this.casos!=null) {
@@ -102,7 +102,7 @@ export class NewTramitePrendaComponent implements OnInit{
 					}
 				}
 		);
-		this._VarianteService.showVariantesTramite(token,46).subscribe(
+		this._VarianteService.showVariantesTramite(token,54).subscribe(
 				response => {
 					this.variantes = response.data;
 					if(this.variantes!=null) {
@@ -131,6 +131,10 @@ export class NewTramitePrendaComponent implements OnInit{
             }
         );
 
+		
+
+		
+		
 	}
 
 
@@ -180,7 +184,7 @@ export class NewTramitePrendaComponent implements OnInit{
 			this.vehiculo.vin,
 			this.vehiculo.numeroPasajeros,
 			this.pignorado,
-			this.cancelado
+			this.vehiculo.cancelado
 		);
 		console.log(this.vehiculo2);
 

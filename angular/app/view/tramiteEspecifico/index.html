@@ -25,6 +25,7 @@
                     <th>Variante</th>
                     <th>Caso</th>
                     <th>valor</th>
+                    <th>datos</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -33,9 +34,10 @@
                     <td >{{tramiteEspecifico.id}}</td>
                     <td >{{tramiteEspecifico.tramite.nombre}}</td>
                     <td >{{tramiteEspecifico.tramiteGeneral.numeroLicencia}}</td>
-                    <td >{{tramiteEspecifico.variante.nombre}}</td>
-                    <td >{{tramiteEspecifico.caso.nombre}}</td>
-                     <td >{{tramiteEspecifico.valor}}</td>
+                    <td >{{tramiteEspecifico.variante?.nombre}}</td>
+                    <td >{{tramiteEspecifico.caso?.nombre}}</td>
+                    <td >{{tramiteEspecifico.valor}}</td>
+                    <th>{{tramiteEspecifico.datos}}</th>
                     <td>
                     <button class="btn btn-danger" value="Editar" (click)="deleteTramiteEspecifico(tramiteEspecifico.id)">
                         eliminar

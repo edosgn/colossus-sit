@@ -19,6 +19,8 @@ import {NewTramiteDuplicadoLicenciaComponent} from "../../../components/tipoTram
 import {NewTramiteDuplicadoPlacaComponent} from "../../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component";
 import {NewTramiteCambioBlindajeComponent} from "../../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";
 import {NewTramiteCambioCombustibleComponent} from "../../../components/tipoTramite/tramiteCambioCombustible/index.cambioCombustible.component";
+import {NewTramiteLevantarPrendaComponent} from "../../../components/tipoTramite/tramiteLevantarPrenda/index.levantarPrenda.component";
+import {NewTramiteCambioPrendarioComponent} from "../../../components/tipoTramite/tramiteCambioPrendario/index.cambioPrendario.component";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../../model/tramite/Tramite';
@@ -45,7 +47,9 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
     NewTramiteCambioCarroceriaComponent,
     NewTramiteTrasladoCuentaComponent,
     NewTramiteCambioCombustibleComponent,
-    NewTramitePrendaComponent
+    NewTramitePrendaComponent,
+    NewTramiteLevantarPrendaComponent,
+    NewTramiteCambioPrendarioComponent
     ],
 
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]

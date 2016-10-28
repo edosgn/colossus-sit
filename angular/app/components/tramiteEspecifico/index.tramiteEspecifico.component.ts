@@ -19,6 +19,8 @@ export class IndexTramiteEspecificoComponent implements OnInit{
 	public id;
 	public respuesta;
 	public tramiteEspecificos;
+	public datos;
+	public var;
 	
 
 	constructor(
@@ -35,6 +37,8 @@ export class IndexTramiteEspecificoComponent implements OnInit{
 		this._TramiteEspecificoService.getTramiteEspecifico().subscribe(
 				response => {
 					this.tramiteEspecificos = response.data;
+					this.var = response.data.datos;
+					console.log(this.var);
 				}, 
 				error => {
 					this.errorMessage = <any>error;
