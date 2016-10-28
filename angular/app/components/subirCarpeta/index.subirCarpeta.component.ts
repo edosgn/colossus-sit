@@ -38,12 +38,12 @@ import {NewTramiteCambioBlindajeComponent} from "../../components/tipoTramite/tr
     selector: 'default',
     templateUrl: 'app/view/subirCarpeta/index.component.html',
     directives: [
-         ROUTER_DIRECTIVES,
-	     NewVehiculoComponent,
-	     NewCiudadanoComponent,
-	     NewEmpresaComponent,
-	     NewTramiteGeneralComponent,
-	     NewTramiteTraspasoComponent,
+        ROUTER_DIRECTIVES,
+	    NewVehiculoComponent,
+	    NewCiudadanoComponent,
+	    NewEmpresaComponent,
+	    NewTramiteGeneralComponent,
+	    NewTramiteTraspasoComponent,
 	    NewTramiteCambioColorComponent,
 	    NewTramiteCambioServicioComponent,
 	    NewTramiteRegrabarMotorComponent,
@@ -189,7 +189,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
 
 	ngOnInit(){	
-
 		this.placa = {
  		'placa' : this.placa,
  	};
@@ -279,11 +278,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 			);
   }
 
-  
-  
-
-  
-
   onKeyCiudadano(event:any){
   	let identificacion = {
  		'numeroIdentificacion' : event,
@@ -301,6 +295,24 @@ export class IndexSubirCarpetaComponent implements OnInit{
 							}
 						}
 					}
+
+					if(this.ciudadanosVehiculo) {
+                        for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+                            if(this.ciudadanosVehiculo[i].empresa) {
+                                if(this.ciudadanosVehiculo[i].empresa.nit == event) {
+                                    this.existeEmpresa = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if(this.existeEmpresa){
+                        this.validateCedula = false;
+                        this.existe = false;
+                        alert ("existe una relacion con una empresa imposible asociar ciudadano");
+                        return(0);
+                    }
+
 					
 					if(this.existe){
                         this.validateCedula = false;
@@ -354,6 +366,24 @@ export class IndexSubirCarpetaComponent implements OnInit{
                             }
                         }
                     }
+
+                    if(this.ciudadanosVehiculo) {
+						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+								if(this.ciudadanosVehiculo[i].ciudadano) {
+									if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+									this.existeCiudadano = true;
+								}
+							}
+						}
+					}
+
+					if(this.existeCiudadano){
+                        this.validateCedula = false;
+                        this.existe = false;
+                        alert ("existe una relacion con un siudadano imposible asociar empresa");
+                        return(0);
+                    }
+
                     
                     if(this.existe){
                         this.validateCedula = false;
@@ -394,7 +424,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
   	this.ciudadanoVehiculo.ciudadanoId=this.ciudadano.numeroIdentificacion;
   	this.ciudadanoVehiculo.estadoPropiedad="1";
-
     this.ciudadanoVehiculo.empresaId=this.empresa.nit;
     this.ciudadanoVehiculo.vehiculoId=this.vehiculo.placa;
     this.ciudadanoVehiculo.fechaPropiedadInicial=this.vehiculo.fechaFactura;

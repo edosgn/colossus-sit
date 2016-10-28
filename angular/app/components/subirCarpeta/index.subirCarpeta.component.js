@@ -190,6 +190,21 @@ var IndexSubirCarpetaComponent = (function () {
                     }
                 }
             }
+            if (_this.ciudadanosVehiculo) {
+                for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+                    if (_this.ciudadanosVehiculo[i].empresa) {
+                        if (_this.ciudadanosVehiculo[i].empresa.nit == event) {
+                            _this.existeEmpresa = true;
+                        }
+                    }
+                }
+            }
+            if (_this.existeEmpresa) {
+                _this.validateCedula = false;
+                _this.existe = false;
+                alert("existe una relacion con una empresa imposible asociar ciudadano");
+                return (0);
+            }
             if (_this.existe) {
                 _this.validateCedula = false;
                 _this.existe = false;
@@ -237,6 +252,21 @@ var IndexSubirCarpetaComponent = (function () {
                         }
                     }
                 }
+            }
+            if (_this.ciudadanosVehiculo) {
+                for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
+                    if (_this.ciudadanosVehiculo[i].ciudadano) {
+                        if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+                            _this.existeCiudadano = true;
+                        }
+                    }
+                }
+            }
+            if (_this.existeCiudadano) {
+                _this.validateCedula = false;
+                _this.existe = false;
+                alert("existe una relacion con un siudadano imposible asociar empresa");
+                return (0);
             }
             if (_this.existe) {
                 _this.validateCedula = false;

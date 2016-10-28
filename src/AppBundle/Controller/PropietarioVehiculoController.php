@@ -239,6 +239,7 @@ class PropietarioVehiculoController extends Controller
             $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
                 array('id' => $ciudadanoId)
             );
+
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
                             array('placa' => $vehiculoId)
             );
@@ -352,7 +353,8 @@ class PropietarioVehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
             array('vehiculo' => $id,
-                    'estado' => 1
+                    'estado' => 1,
+                    'estadoPropiedad' => '1'
                 )
             );
 
@@ -378,6 +380,72 @@ class PropietarioVehiculoController extends Controller
                     'msj' => "Autorizacion no valida", 
                 );
         }
+        return $helpers->json($responce);
+    }
+
+    /**
+     * Displays a form to edit an existing CiudadanoVehiculo entity.
+     *
+     * @Route("/new/propietario/vehiculo", name="proìetariovehiculo_Propietario")
+     * @Method("POST")
+     */
+    public function newPropietarioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $licenciaTransito = $params->licenciaTransito;
+            $fechaPropiedadInicial = $params->fechaPropiedadInicial;
+            $fechaPropiedadFinal = $params->fechaPropiedadFinal;
+            $estadoPropiedad = $params->estadoPropiedad;
+            $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+            $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
+            $vehiculoId = $params->vehiculoId;
+            $em = $this->getDoctrine()->getManager();
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
+                array('id' => $ciudadanoId)
+            );
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
+                            array('placa' => $vehiculoId)
+            );
+
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                array('nit' => $empresaId)
+            );
+
+            $em = $this->getDoctrine()->getManager();
+            $propietarioVehiculo = new PropietarioVehiculo();
+                $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
+                $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
+                $propietarioVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
+                $propietarioVehiculo->setEstadoPropiedad($estadoPropiedad);
+                $propietarioVehiculo->setCiudadano($ciudadano);
+                $propietarioVehiculo->setEmpresa($empresa); 
+                $propietarioVehiculo->setVehiculo($vehiculo);
+
+                $propietarioVehiculo->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($propietarioVehiculo);
+                $em->flush();
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "CiudadanoVehiculo creado con exito", 
+                );
+            
+        }else{
+            $responce = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar propietarioVehiculo", 
+                );
+        }
+
         return $helpers->json($responce);
     }
 

@@ -29,6 +29,14 @@ var CiudadanoVehiculoService = (function () {
         return this._http.post(this.url + "/new/" + tramiteId, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    CiudadanoVehiculoService.prototype.registerPropietario = function (ciudadanoVehiculo, token) {
+        var json = JSON.stringify(ciudadanoVehiculo);
+        var params = "json=" + json + "&authorization=" + token;
+        console.log(params);
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/new/propietario/vehiculo", params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     CiudadanoVehiculoService.prototype.deleteCiudadanoVehiculo = function (token, id) {
         var params = "authorization=" + token;
         var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });

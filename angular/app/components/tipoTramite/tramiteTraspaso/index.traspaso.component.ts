@@ -60,8 +60,12 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	public ciudadanoVehiculo;
 	public divCiudadano;
 	public divEmpresa;
-	public idCiudadano = null;
-	public nitEmpresa= null;
+	public idCiudadanoOld = null;
+	public nitEmpresaOld= null;
+	public idCiudadanoNew = null;
+	public nitEmpresaNew= null;
+	public ciudadanoVehiculoRegister;
+
 
 	
 
@@ -89,8 +93,10 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
 		if(this.ciudadanosVehiculo[0].ciudadano){
 	   	 	this.datos.oldPropietario=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+	   	 	this.idCiudadanoOld = this.ciudadanosVehiculo[0].ciudadano.id;
 		}else{
 			this.datos.oldPropietario=this.ciudadanosVehiculo[0].empresa.nit;
+			this.nitEmpresaOld = this.ciudadanosVehiculo[0].empresa.nit;
 		}
 
 		let token = this._loginService.getToken();
@@ -145,13 +151,13 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		let ciudadanoVehiculo = new CiudadanoVehiculo
 		(
 			this.ciudadanosVehiculo[i].id, 
-			this.idCiudadano,
+			this.idCiudadanoOld,
 			this.ciudadanosVehiculo[i].vehiculo.placa,
-			this.nitEmpresa,
+			this.nitEmpresaOld,
 			this.ciudadanosVehiculo[i].licenciaTransito,
 			this.ciudadanosVehiculo[i].fechaPropiedadInicial,
 			this.ciudadanosVehiculo[i].fechaPropiedadFinal,
-			this.ciudadanosVehiculo[i].estadoPropiedad
+			'0'
 		);
 		let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo,token).subscribe(
@@ -170,8 +176,38 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
 		});	
 	}	
-	console.log(this.datos);
+
 	let token = this._loginService.getToken();
+
+	this.ciudadanoVehiculoRegister = new CiudadanoVehiculo
+		(
+			this.ciudadanosVehiculo[i].id, 
+			this.idCiudadanoNew,
+			this.ciudadanosVehiculo[i].vehiculo.placa,
+			this.nitEmpresaNew,
+			this.ciudadanosVehiculo[i].licenciaTransito,
+			this.ciudadanosVehiculo[i].fechaPropiedadInicial,
+			this.ciudadanosVehiculo[i].fechaPropiedadFinal,
+			'1'
+		);
+
+		console.log(this.ciudadanoVehiculoRegister);
+
+	this._CiudadanoVehiculoService.registerPropietario(this.ciudadanoVehiculoRegister,token).subscribe(
+			response => {
+				this.respuesta = response;
+			error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+
+		});
+
+
 	this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
 		response => {
 			this.respuesta = response;
@@ -228,7 +264,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 					}else{
 						this.divCiudadano = true;
 						this.ciudadano = response.data;
-                    	this.idCiudadano = this.ciudadano.id;
+                    	this.idCiudadanoNew = this.ciudadano.id;
 						this.validateCedula=true;
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 						this.claseCedula = "form-group has-success has-feedback ";
@@ -262,7 +298,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
                     }else{
                     	this.divEmpresa = true;
                     	this.empresa = response.data;
-                    	this.nitEmpresa = this.empresa.nit;
+                    	this.nitEmpresaNew = this.empresa.nit;
 		                this.validateCedula=true;
 		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 		                this.claseCedula = "form-group has-success has-feedback ";

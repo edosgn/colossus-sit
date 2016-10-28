@@ -50,8 +50,10 @@ var NewTramiteTraspasoComponent = (function () {
             'datosCasos': null
         };
         this.divDatos = false;
-        this.idCiudadano = null;
-        this.nitEmpresa = null;
+        this.idCiudadanoOld = null;
+        this.nitEmpresaOld = null;
+        this.idCiudadanoNew = null;
+        this.nitEmpresaNew = null;
         this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
     }
@@ -59,9 +61,11 @@ var NewTramiteTraspasoComponent = (function () {
         var _this = this;
         if (this.ciudadanosVehiculo[0].ciudadano) {
             this.datos.oldPropietario = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+            this.idCiudadanoOld = this.ciudadanosVehiculo[0].ciudadano.id;
         }
         else {
             this.datos.oldPropietario = this.ciudadanosVehiculo[0].empresa.nit;
+            this.nitEmpresaOld = this.ciudadanosVehiculo[0].empresa.nit;
         }
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 2).subscribe(function (response) {
@@ -96,7 +100,7 @@ var NewTramiteTraspasoComponent = (function () {
     NewTramiteTraspasoComponent.prototype.enviarTramite = function () {
         var _this = this;
         for (var i in this.ciudadanosVehiculo) {
-            var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.idCiudadano, this.ciudadanosVehiculo[i].vehiculo.placa, this.nitEmpresa, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, this.ciudadanosVehiculo[i].estadoPropiedad);
+            var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.idCiudadanoOld, this.ciudadanosVehiculo[i].vehiculo.placa, this.nitEmpresaOld, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, '0');
             var token_1 = this._loginService.getToken();
             this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo, token_1).subscribe(function (response) {
                 _this.respuesta = response;
@@ -112,8 +116,19 @@ var NewTramiteTraspasoComponent = (function () {
                 });
             });
         }
-        console.log(this.datos);
         var token = this._loginService.getToken();
+        this.ciudadanoVehiculoRegister = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.idCiudadanoNew, this.ciudadanosVehiculo[i].vehiculo.placa, this.nitEmpresaNew, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, '1');
+        console.log(this.ciudadanoVehiculoRegister);
+        this._CiudadanoVehiculoService.registerPropietario(this.ciudadanoVehiculoRegister, token).subscribe(function (response) {
+            _this.respuesta = response;
+            (function (error) {
+                _this.errorMessage = error;
+                if (_this.errorMessage != null) {
+                    console.log(_this.errorMessage);
+                    alert("Error en la petición");
+                }
+            });
+        });
         this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
@@ -159,7 +174,7 @@ var NewTramiteTraspasoComponent = (function () {
             else {
                 _this.divCiudadano = true;
                 _this.ciudadano = response.data;
-                _this.idCiudadano = _this.ciudadano.id;
+                _this.idCiudadanoNew = _this.ciudadano.id;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
@@ -190,7 +205,7 @@ var NewTramiteTraspasoComponent = (function () {
             else {
                 _this.divEmpresa = true;
                 _this.empresa = response.data;
-                _this.nitEmpresa = _this.empresa.nit;
+                _this.nitEmpresaNew = _this.empresa.nit;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";

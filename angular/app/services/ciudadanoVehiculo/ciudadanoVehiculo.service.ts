@@ -29,6 +29,17 @@ export class CiudadanoVehiculoService {
 
 	}
 
+	registerPropietario(ciudadanoVehiculo,token){
+		
+		let json = JSON.stringify(ciudadanoVehiculo);
+		let params = "json="+json+"&authorization="+token;
+		console.log(params);
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		return this._http.post(this.url+"/new/propietario/vehiculo", params, {headers: headers})
+							  .map(res => res.json());
+
+	}
+
 	deleteCiudadanoVehiculo(token,id){
 
 		let params = "authorization="+token;
