@@ -106,7 +106,7 @@ export class VehiculoEditComponent implements OnInit{
 
 	ngOnInit(){	
 		
-		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null,null,null);
 
 		let token = this._loginService.getToken();
 		

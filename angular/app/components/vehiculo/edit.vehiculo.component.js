@@ -76,7 +76,7 @@ var VehiculoEditComponent = (function () {
     };
     VehiculoEditComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null, null, null);
         var token = this._loginService.getToken();
         this._route.params.subscribe(function (params) {
             _this.id = +params["id"];

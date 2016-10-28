@@ -125,6 +125,13 @@ class Vehiculo
      * @ORM\Column(name="pignorado", type="boolean")
      */
     private $pignorado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cancelado", type="boolean")
+     */
+    private $cancelado;
     
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
@@ -720,5 +727,29 @@ class Vehiculo
     public function getPignorado()
     {
         return $this->pignorado;
+    }
+
+    /**
+     * Set cancelado
+     *
+     * @param boolean $cancelado
+     *
+     * @return Vehiculo
+     */
+    public function setCancelado($cancelado)
+    {
+        $this->cancelado = $cancelado;
+
+        return $this;
+    }
+
+    /**
+     * Get cancelado
+     *
+     * @return boolean
+     */
+    public function getCancelado()
+    {
+        return $this->cancelado;
     }
 }

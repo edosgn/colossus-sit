@@ -101,7 +101,7 @@ var NewVehiculoComponent = (function () {
         this.habilitar = true;
         this.habilitarl = true;
         this.habilitarc = true;
-        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, this.placaIngresada, "", "", "", "", "", "", "", "", "", "", null, null);
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, this.placaIngresada, "", "", "", "", "", "", "", "", "", "", null, null, null, null);
         var token = this._loginService.getToken();
         this._ServicioService.getServicio().subscribe(function (response) {
             _this.servicios = response.data;

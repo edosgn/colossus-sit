@@ -82,6 +82,8 @@ class VehiculoController extends Controller
                         $carroceriaId = $params->carroceriaId;
                         $organismoTransitoId = $params->organismoTransitoId;
                         $claseId = $params->claseId;
+                        $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
+                        $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
                         $em = $this->getDoctrine()->getManager();
                         $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                         $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
@@ -113,9 +115,9 @@ class VehiculoController extends Controller
                         $vehiculo->setCarroceria($carroceria);
                         $vehiculo->setOrganismoTransito($organismoTransito);
                         $vehiculo->setClase($clase);
-                        $vehiculo->setPignorado(false);
+                        $vehiculo->setPignorado($pignorado);
+                        $vehiculo->setCancelado($cancelado);
 
-                        
                         $vehiculo->setEstado(true);
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($vehiculo);
@@ -252,6 +254,8 @@ class VehiculoController extends Controller
             $carroceriaId = $params->carroceriaId;
             $organismoTransitoId = $params->organismoTransitoId;
             $claseId = $params->claseId;
+            $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
+            $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
             $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
@@ -263,7 +267,6 @@ class VehiculoController extends Controller
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-
             if ($vehiculo!=null) {
                 $vehiculo->setPlaca($placa);
                 $vehiculo->setNumeroFactura($numeroFactura);
@@ -286,14 +289,12 @@ class VehiculoController extends Controller
                 $vehiculo->setCarroceria($carroceria);
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 $vehiculo->setClase($clase);
-                $vehiculo->setPignorado(false);
-
-                
+                $vehiculo->setPignorado($pignorado);
+                $vehiculo->setcancelado($cancelado);
                 $vehiculo->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);
                 $em->flush();
-
                 $responce = array(
                     'status' => 'success',
                     'code' => 200,

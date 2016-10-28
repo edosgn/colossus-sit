@@ -22,6 +22,8 @@ export class Vehiculo{
 		public serie:string,
 		public vin:number,
 		public numeroPasajeros:number
+		public pignorado:number,
+		public cancelado:number
 		
 	){}
 }

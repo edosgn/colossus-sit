@@ -1,6 +1,6 @@
 "use strict";
 var Vehiculo = (function () {
-    function Vehiculo(id, claseId, municipioId, lineaId, servicioId, colorId, combustibleId, carroceriaId, organismoTransitoId, placa, numeroFactura, fechaFactura, valor, numeroManifiesto, fechaManifiesto, cilindraje, modelo, motor, chasis, serie, vin, numeroPasajeros) {
+    function Vehiculo(id, claseId, municipioId, lineaId, servicioId, colorId, combustibleId, carroceriaId, organismoTransitoId, placa, numeroFactura, fechaFactura, valor, numeroManifiesto, fechaManifiesto, cilindraje, modelo, motor, chasis, serie, vin, numeroPasajeros, pignorado, cancelado) {
         this.id = id;
         this.claseId = claseId;
         this.municipioId = municipioId;
@@ -23,6 +23,8 @@ var Vehiculo = (function () {
         this.serie = serie;
         this.vin = vin;
         this.numeroPasajeros = numeroPasajeros;
+        this.pignorado = pignorado;
+        this.cancelado = cancelado;
     }
     return Vehiculo;
 }());

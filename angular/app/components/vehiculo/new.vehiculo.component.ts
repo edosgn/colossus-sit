@@ -138,7 +138,7 @@ export class NewVehiculoComponent {
 		this.habilitar=true;
 		this.habilitarl=true;
 		this.habilitarc=true;
-		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,this.placaIngresada,"","","","","","","","","","",null,null);
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,this.placaIngresada,"","","","","","","","","","",null,null,null,null);
 		
 		let token = this._loginService.getToken();
 		
