@@ -124,6 +124,7 @@ export class NewCiudadanoVehiculoComponent {
  	let ciudadano = {
  		'numeroIdentificacion' : values,
  	};
+
  	this._CiudadanoService.showCiudadanoCedula(token,ciudadano).subscribe(
 				response => {
 					this.ciudadano = response.data;
