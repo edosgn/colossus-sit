@@ -124,6 +124,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public json = {
  		'datosGenerales' :null,
  	};
+ 	public existeCiudadano;
+ 	public existeEmpresa;
 
 
 	constructor(

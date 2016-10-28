@@ -21,7 +21,7 @@ export class Vehiculo{
 		public chasis:string,
 		public serie:string,
 		public vin:number,
-		public numeroPasajeros:number
+		public numeroPasajeros:number,
 		public pignorado:number,
 		public cancelado:number
 		

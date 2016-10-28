@@ -89,7 +89,7 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 
 
 	ngOnInit(){	
-		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
+		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null,null,null);
 
 		this._route.params.subscribe(params =>{
 				this.tramiteId = +params["tramiteId"];

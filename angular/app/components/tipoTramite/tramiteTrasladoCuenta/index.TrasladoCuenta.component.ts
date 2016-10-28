@@ -169,7 +169,9 @@ export class NewTramiteTrasladoCuentaComponent implements OnInit{
 			this.vehiculo.chasis,
 			this.vehiculo.serie,
 			this.vehiculo.vin,
-			this.vehiculo.numeroPasajeros
+			this.vehiculo.numeroPasajeros,
+			this.vehiculo.pignorado,
+			this.vehiculo.cancelado
 		);
 
 

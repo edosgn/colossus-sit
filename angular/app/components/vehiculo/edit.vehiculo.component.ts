@@ -142,7 +142,10 @@ export class VehiculoEditComponent implements OnInit{
 								this.data.chasis,
 								this.data.serie,
 								this.data.vin,
-								this.data.numeroPasajeros
+								this.data.numeroPasajeros,
+								this.data.pignorado,
+								this.data.cancelado
+
 								);
 						},
 						error => {

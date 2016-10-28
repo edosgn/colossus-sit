@@ -34,7 +34,7 @@ var NewCiudadanoVehiculoComponent = (function () {
         this.msg = "ingrese la placa";
         this.claseSpan = "";
         this.validate = false;
-        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null, null, null);
         this.ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(null, null, null, null, null, "", "", "");
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
         this._CiudadanoService.getCiudadano().subscribe(function (response) {

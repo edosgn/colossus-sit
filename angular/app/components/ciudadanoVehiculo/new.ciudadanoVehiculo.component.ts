@@ -56,7 +56,7 @@ export class NewCiudadanoVehiculoComponent {
 		this.msg = "ingrese la placa";
 		this.claseSpan ="";
 		this.validate=false;
-     	this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null);
+     	this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,"","","","","","","","","","","",null,null,null,null);
 		this.ciudadanoVehiculo = new CiudadanoVehiculo(null,null, null,null,null,"","","");
 		this.ciudadano = new Ciudadano(null,"",null, "","","","","");
 

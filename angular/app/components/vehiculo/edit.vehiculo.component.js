@@ -84,7 +84,7 @@ var VehiculoEditComponent = (function () {
         this._VehiculoService.showVehiculo(token, this.id).subscribe(function (response) {
             _this.data = response.data;
             console.log(_this.data);
-            _this.vehiculo = new Vehiculo_1.Vehiculo(_this.data.id, _this.data.clase.id, _this.data.municipio.id, _this.data.linea.id, _this.data.servicio.id, _this.data.color.id, _this.data.combustible.id, _this.data.carroceria.id, _this.data.organismoTransito.id, _this.data.placa, _this.data.numeroFactura, _this.data.fechaFactura, _this.data.valor, _this.data.numeroManifiesto, _this.data.fechaManifiesto, _this.data.cilindraje, _this.data.modelo, _this.data.motor, _this.data.chasis, _this.data.serie, _this.data.vin, _this.data.numeroPasajeros);
+            _this.vehiculo = new Vehiculo_1.Vehiculo(_this.data.id, _this.data.clase.id, _this.data.municipio.id, _this.data.linea.id, _this.data.servicio.id, _this.data.color.id, _this.data.combustible.id, _this.data.carroceria.id, _this.data.organismoTransito.id, _this.data.placa, _this.data.numeroFactura, _this.data.fechaFactura, _this.data.valor, _this.data.numeroManifiesto, _this.data.fechaManifiesto, _this.data.cilindraje, _this.data.modelo, _this.data.motor, _this.data.chasis, _this.data.serie, _this.data.vin, _this.data.numeroPasajeros, _this.data.pignorado, _this.data.cancelado);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {

@@ -219,7 +219,7 @@ export class NewTramitePrendaComponent implements OnInit{
 					}else{
 						this.divCiudadano = true;
 						this.ciudadano = response.data;
-						this.datos.prendario=this.ciudadano;
+						this.datos.prendario=this.ciudadano.numeroIdentificacion;
                     	this.idCiudadano = this.ciudadano.id;
 						this.validateCedula=true;
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
@@ -253,7 +253,7 @@ export class NewTramitePrendaComponent implements OnInit{
                     }else{
                     	this.divEmpresa = true;
                     	this.empresa = response.data;
-                    	this.datos.prendario=this.empresa;
+                    	this.datos.prendario=this.empresa.nit;
                     	this.nitEmpresa = this.empresa.nit;
 		                this.validateCedula=true;
 		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";

@@ -45,7 +45,7 @@ var IndexTramiteCuerpoComponent = (function () {
     }
     IndexTramiteCuerpoComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null);
+        this.vehiculo = new Vehiculo_1.Vehiculo(null, null, null, null, null, null, null, null, null, "", "", "", "", "", "", "", "", "", "", "", null, null, null, null);
         this._route.params.subscribe(function (params) {
             _this.tramiteId = +params["tramiteId"];
         });

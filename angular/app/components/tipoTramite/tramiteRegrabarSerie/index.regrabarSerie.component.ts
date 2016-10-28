@@ -141,7 +141,9 @@ export class NewTramiteRegrabarSerieComponent implements OnInit{
 			this.vehiculo.chasis,
 			this.serie,
 			this.vehiculo.vin,
-			this.vehiculo.numeroPasajeros
+			this.vehiculo.numeroPasajeros,
+			this.vehiculo.pignorado,
+			this.vehiculo.cancelado
 		);
 
 		this._VehiculoService.editVehiculo(this.vehiculo2,token).subscribe(
