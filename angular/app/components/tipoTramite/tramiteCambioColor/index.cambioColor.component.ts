@@ -41,8 +41,8 @@ export class NewTramiteCambioColorComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newColor':null,
-		'oldColor':null
+		'newData':null,
+		'oldData':null
 	};
 	
 
@@ -98,7 +98,7 @@ export class NewTramiteCambioColorComponent implements OnInit{
 				response => {
 					this.colores = response.data;
 					this.colorSeleccionado = this.colores[0];
-					this.datos.newColor = this.colorSeleccionado.nombre;
+					this.datos.newData = this.colorSeleccionado.nombre;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -109,7 +109,7 @@ export class NewTramiteCambioColorComponent implements OnInit{
 					}
 				}
 			);
-		this.datos.oldColor=this.vehiculo.color.nombre;
+		this.datos.oldData=this.vehiculo.color.nombre;
 
 	}
 
@@ -120,7 +120,7 @@ export class NewTramiteCambioColorComponent implements OnInit{
 		for (var i = 0; i < this.colores.length; ++i) {
 			if(event == this.colores[i].id) {
 				this.colorSeleccionado = this.colores[i];
-				this.datos.newColor = this.colorSeleccionado.nombre;
+				this.datos.newData = this.colorSeleccionado.nombre;
 			}
 			
 		}

@@ -47,12 +47,20 @@ class TramiteEspecificoController extends Controller
      */
     public function newAction(Request $request)
     {
+
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         $data = $request->get("datos",null);
-     
+        $dataangular = json_decode($data);
+
+        $datos = array(
+            'newData' => (isset($dataangular->newData)) ? $dataangular->newData : null,
+            'oldData' => (isset($dataangular->oldData)) ? $dataangular->oldData : null,
+            'codigoDijin'=>(isset($dataangular->codigoDIJIN_SIJIN)) ? $dataangular->codigoDIJIN_SIJIN : null
+        );
+
         $em = $this->getDoctrine()->getManager();
 
         if ($authCheck== true) {
@@ -83,7 +91,7 @@ class TramiteEspecificoController extends Controller
                         );
                         $tramiteEspecifico = new TramiteEspecifico();
                         $tramiteEspecifico->setValor($valor);
-                        $tramiteEspecifico->setDatos($data);
+                        $tramiteEspecifico->setDatos($datos);
                         $tramiteEspecifico->setTramite($tramite);
                         $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                         $tramiteEspecifico->setVariante($variante);

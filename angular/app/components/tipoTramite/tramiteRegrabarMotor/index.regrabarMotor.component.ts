@@ -39,8 +39,8 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newMotor':null,
-		'oldMotor':null
+		'newData':null,
+		'oldData':null
 	};
 	
 
@@ -89,7 +89,7 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 				}
 		);
 
-		this.datos.oldMotor=this.vehiculo.motor;
+		this.datos.oldData=this.vehiculo.motor;
 		
 	}
 
@@ -98,7 +98,7 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 
 
 	enviarTramite(){
-		this.datos.newMotor= this.Motor;
+		this.datos.newData= this.Motor;
 		let token = this._loginService.getToken();
 		this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
 			response => {

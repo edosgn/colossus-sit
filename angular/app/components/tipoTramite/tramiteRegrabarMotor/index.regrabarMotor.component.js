@@ -35,8 +35,8 @@ var NewTramiteRegrabarMotorComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newMotor': null,
-            'oldMotor': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteRegrabarMotorComponent.prototype.ngOnInit = function () {
@@ -61,11 +61,11 @@ var NewTramiteRegrabarMotorComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.datos.oldMotor = this.vehiculo.motor;
+        this.datos.oldData = this.vehiculo.motor;
     };
     NewTramiteRegrabarMotorComponent.prototype.enviarTramite = function () {
         var _this = this;
-        this.datos.newMotor = this.Motor;
+        this.datos.newData = this.Motor;
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;

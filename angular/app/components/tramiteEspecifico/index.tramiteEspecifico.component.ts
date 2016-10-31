@@ -37,7 +37,7 @@ export class IndexTramiteEspecificoComponent implements OnInit{
 		this._TramiteEspecificoService.getTramiteEspecifico().subscribe(
 				response => {
 					this.tramiteEspecificos = response.data;
-					this.var = response.data.datos;
+					this.var = response.data;
 					console.log(this.var);
 				}, 
 				error => {

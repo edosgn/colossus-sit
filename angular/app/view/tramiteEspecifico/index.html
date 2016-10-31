@@ -37,7 +37,7 @@
                     <td >{{tramiteEspecifico.variante?.nombre}}</td>
                     <td >{{tramiteEspecifico.caso?.nombre}}</td>
                     <td >{{tramiteEspecifico.valor}}</td>
-                    <th>{{tramiteEspecifico.datos}}</th>
+                    <th>{{tramiteEspecifico.datos|json}}</th>
                     <td>
                     <button class="btn btn-danger" value="Editar" (click)="deleteTramiteEspecifico(tramiteEspecifico.id)">
                         eliminar

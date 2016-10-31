@@ -394,7 +394,7 @@
 					<td *ngIf="tramiteEspecifico.caso">{{tramiteEspecifico.caso.nombre}}</td>
 					<td *ngIf="!tramiteEspecifico.caso">N/A</td>
 					<td >{{tramiteEspecifico.valor}}</td>
-					<td >{{tramiteEspecifico.datos}}</td>
+					<td >{{tramiteEspecifico.datos | json}}</td>
 				</tr>
 			</tbody> 
 		</table>
