@@ -37,9 +37,8 @@ var NewTramiteTrasladoCuentaComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'nuevo': null,
-            'viejo': null,
-            'datosCasos': null
+            'newData': null,
+            'oldData': null,
         };
     }
     NewTramiteTrasladoCuentaComponent.prototype.ngOnInit = function () {
@@ -67,7 +66,7 @@ var NewTramiteTrasladoCuentaComponent = (function () {
         this._OrganismoTransitoService.getOrganismoTransito().subscribe(function (response) {
             _this.organismosTransito = response.data;
             _this.organismoTransitoSeleccionado = _this.organismosTransito[0];
-            _this.datos.nuevo = _this.organismoTransitoSeleccionado.nombre;
+            _this.datos.newData = _this.organismoTransitoSeleccionado.nombre;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -75,13 +74,13 @@ var NewTramiteTrasladoCuentaComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.datos.viejo = this.vehiculo.organismoTransito.nombre;
+        this.datos.oldData = this.vehiculo.organismoTransito.nombre;
     };
     NewTramiteTrasladoCuentaComponent.prototype.onChangeOrganismoTransito = function (event) {
         for (var i = 0; i < this.organismosTransito.length; ++i) {
             if (event == this.organismosTransito[i].id) {
                 this.organismoTransitoSeleccionado = this.organismosTransito[i];
-                this.datos.nuevo = this.organismoTransitoSeleccionado.nombre;
+                this.datos.newData = this.organismoTransitoSeleccionado.nombre;
             }
         }
     };

@@ -118,12 +118,13 @@
 	</tramiteLevantarPrenda>
 
 	<tramiteCambioPrendario *ngIf="tramite?.nombre=='CAMBIO PRENDARIO'" [vehiculo] = "vehiculo">
-	</tramiteCambioPrendario>	
+	</tramiteCambioPrendario>
 
-	
-
-	
+	<tramiteCancelarMatricula *ngIf="tramite?.nombre=='CANCELACION MATRICULA - NO GENERA E.V.'" [vehiculo] = "vehiculo" [ciudadanosVehiculo] = "ciudadanosVehiculo">
+	</tramiteCancelarMatricula>	
 </div>
+	<tramiteRematricula *ngIf="vehiculo?.cancelado==true" [vehiculo] = "vehiculo">
+	</tramiteRematricula>	
 
    
 

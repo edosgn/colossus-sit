@@ -13,50 +13,58 @@ var login_service_1 = require("../../../services/login.service");
 var core_1 = require('@angular/core');
 var router_1 = require("@angular/router");
 var vehiculo_1 = require("../../../model/vehiculo/vehiculo");
+var ciudadanovehiculo_1 = require("../../../model/ciudadanovehiculo/ciudadanovehiculo");
 var tramiteEspecifico_service_1 = require("../../../services/tramiteEspecifico/tramiteEspecifico.service");
+var empresa_service_1 = require("../../../services/empresa/empresa.service");
+var ciudadano_service_1 = require("../../../services/ciudadano/ciudadano.service");
 var TramiteEspecifico_1 = require('../../../model/tramiteEspecifico/TramiteEspecifico');
 var vehiculo_service_1 = require("../../../services/vehiculo/vehiculo.service");
 var variante_service_1 = require("../../../services/variante/variante.service");
 var caso_service_1 = require("../../../services/caso/caso.service");
-var combustible_service_1 = require("../../../services/combustible/combustible.service");
 var tipoIdentificacion_service_1 = require('../../../services/tipo_Identificacion/tipoIdentificacion.service');
-var empresa_service_1 = require("../../../services/empresa/empresa.service");
-var ciudadano_service_1 = require("../../../services/ciudadano/ciudadano.service");
+var ciudadanoVehiculo_service_1 = require('../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service');
+var Ciudadano_1 = require('../../../model/ciudadano/Ciudadano');
+var Empresa_1 = require('../../../model/empresa/Empresa');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
-var NewTramiteCambioPrendarioComponent = (function () {
-    function NewTramiteCambioPrendarioComponent(_TramiteEspecificoService, _VarianteService, _TipoIdentificacionService, _CombustibleService, _CasoService, _EmpresaService, _CiudadanoService, _VehiculoService, _loginService, _route, _router) {
+var NewTramiteRematriculaComponent = (function () {
+    function NewTramiteRematriculaComponent(_TramiteEspecificoService, _VarianteService, _CiudadanoVehiculoService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
         this._TramiteEspecificoService = _TramiteEspecificoService;
         this._VarianteService = _VarianteService;
+        this._CiudadanoVehiculoService = _CiudadanoVehiculoService;
         this._TipoIdentificacionService = _TipoIdentificacionService;
-        this._CombustibleService = _CombustibleService;
         this._CasoService = _CasoService;
-        this._EmpresaService = _EmpresaService;
-        this._CiudadanoService = _CiudadanoService;
         this._VehiculoService = _VehiculoService;
         this._loginService = _loginService;
         this._route = _route;
+        this._EmpresaService = _EmpresaService;
+        this._CiudadanoService = _CiudadanoService;
         this._router = _router;
-        this.nuevo = true;
-        this.usado = null;
         this.varianteTramite = null;
         this.casoTramite = null;
-        this.tramiteGeneralId = 22;
         this.vehiculo = null;
+        this.tramiteGeneralId = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newData': null
+            'newData': null,
+            'oldData': null,
+            'datosRematricula': null
         };
         this.divDatos = false;
-        this.idCiudadano = null;
-        this.nitEmpresa = null;
-        this.cancelado = null;
-        this.pignorado = null;
+        this.idCiudadanoOld = null;
+        this.nitEmpresaOld = null;
+        this.idCiudadanoNew = null;
+        this.nitEmpresaNew = null;
+        this.TipoMatricula = null;
+        this.TipoTramite = null;
+        this.json = null;
+        this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
+        this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
+        this.ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(null, null, null, null, null, "", "", "");
     }
-    NewTramiteCambioPrendarioComponent.prototype.ngOnInit = function () {
+    NewTramiteRematriculaComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 54, this.tramiteGeneralId, null, null, null);
         var token = this._loginService.getToken();
-        this._CasoService.showCasosTramite(token, 54).subscribe(function (response) {
+        this._CasoService.showCasosTramite(token, 36).subscribe(function (response) {
             _this.casos = response.data;
             if (_this.casos != null) {
                 _this.tramiteEspecifico.casoId = _this.casos[0].id;
@@ -64,11 +72,10 @@ var NewTramiteCambioPrendarioComponent = (function () {
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
                 alert("Error en la petición");
             }
         });
-        this._VarianteService.showVariantesTramite(token, 54).subscribe(function (response) {
+        this._VarianteService.showVariantesTramite(token, 36).subscribe(function (response) {
             _this.variantes = response.data;
             if (_this.variantes != null) {
                 _this.tramiteEspecifico.varianteId = _this.variantes[0].id;
@@ -76,7 +83,6 @@ var NewTramiteCambioPrendarioComponent = (function () {
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
-                console.log(_this.errorMessage);
                 alert("Error en la petición");
             }
         });
@@ -88,16 +94,14 @@ var NewTramiteCambioPrendarioComponent = (function () {
                 alert("Error en la petición");
             }
         });
+        this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 36, this.tramiteGeneralId, null, null, null);
     };
-    NewTramiteCambioPrendarioComponent.prototype.enviarTramite = function () {
+    NewTramiteRematriculaComponent.prototype.enviarTramite = function () {
         var _this = this;
-        this.pignorado = true;
+        var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(null, this.idCiudadanoNew, this.vehiculo.placa, this.nitEmpresaNew, this.ciudadanoVehiculo.licenciaTransito, this.ciudadanoVehiculo.fechaPropiedadInicial, this.ciudadanoVehiculo.fechaPropiedadInicial, "1");
         var token = this._loginService.getToken();
-        this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
+        this._CiudadanoVehiculoService.register(ciudadanoVehiculo, token, this.TipoMatricula, this.json, this.TipoTramite).subscribe(function (response) {
             _this.respuesta = response;
-            if (_this.respuesta.status == "success") {
-                _this.tramiteCreado.emit(true);
-            }
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -106,8 +110,16 @@ var NewTramiteCambioPrendarioComponent = (function () {
                 }
             });
         });
-        this.vehiculo2 = new vehiculo_1.Vehiculo(this.vehiculo.id, this.vehiculo.clase.id, this.vehiculo.municipio.id, this.vehiculo.linea.id, this.vehiculo.servicio.id, this.vehiculo.color.id, this.vehiculo.combustible.id, this.vehiculo.carroceria.id, this.vehiculo.organismoTransito.id, this.vehiculo.placa, this.vehiculo.numeroFactura, this.vehiculo.fechaFactura, this.vehiculo.valor, this.vehiculo.numeroManifiesto, this.vehiculo.fechaManifiesto, this.vehiculo.cilindraje, this.vehiculo.modelo, this.vehiculo.motor, this.vehiculo.chasis, this.vehiculo.serie, this.vehiculo.vin, this.vehiculo.numeroPasajeros, this.pignorado, this.vehiculo.cancelado);
-        console.log(this.vehiculo2);
+        this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
+            _this.respuesta = response;
+            (function (error) {
+                _this.errorMessage = error;
+                if (_this.errorMessage != null) {
+                    alert("Error en la petición");
+                }
+            });
+        });
+        this.vehiculo2 = new vehiculo_1.Vehiculo(this.vehiculo.id, this.vehiculo.clase.id, this.vehiculo.municipio.id, this.vehiculo.linea.id, this.vehiculo.servicio.id, this.vehiculo.color.id, this.vehiculo.combustible.id, this.vehiculo.carroceria.id, this.vehiculo.organismoTransito.id, this.vehiculo.placa, this.vehiculo.numeroFactura, this.vehiculo.fechaFactura, this.vehiculo.valor, this.vehiculo.numeroManifiesto, this.vehiculo.fechaManifiesto, this.vehiculo.cilindraje, this.vehiculo.modelo, this.vehiculo.motor, this.vehiculo.chasis, this.vehiculo.serie, this.vehiculo.vin, this.vehiculo.numeroPasajeros, this.vehiculo.pignorado, 0);
         this._VehiculoService.editVehiculo(this.vehiculo2, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
@@ -119,7 +131,25 @@ var NewTramiteCambioPrendarioComponent = (function () {
             });
         });
     };
-    NewTramiteCambioPrendarioComponent.prototype.onKeyCiudadano = function (event) {
+    NewTramiteRematriculaComponent.prototype.onChangeCaso = function (event) {
+        this.datos.datosRematricula = "con opcion de compra";
+        for (var i = 0; i < this.casos.length; ++i) {
+            if (event == this.casos[i].id) {
+                this.casoSeleccionado = this.casos[i];
+            }
+        }
+        if (this.casoSeleccionado.nombre == "LEASING") {
+            this.divDatos = true;
+        }
+        else {
+            this.divDatos = false;
+        }
+        this.tramiteEspecifico.casoId = event;
+    };
+    NewTramiteRematriculaComponent.prototype.onChangeVariante = function (event) {
+        this.tramiteEspecifico.varianteId = event;
+    };
+    NewTramiteRematriculaComponent.prototype.onKeyCiudadano = function (event) {
         var _this = this;
         var identificacion = {
             'numeroIdentificacion': event,
@@ -136,8 +166,7 @@ var NewTramiteCambioPrendarioComponent = (function () {
             else {
                 _this.divCiudadano = true;
                 _this.ciudadano = response.data;
-                _this.datos.newData = _this.ciudadano.numeroIdentificacion;
-                _this.idCiudadano = _this.ciudadano.id;
+                _this.idCiudadanoNew = _this.ciudadano.numeroIdentificacion;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
@@ -150,7 +179,7 @@ var NewTramiteCambioPrendarioComponent = (function () {
             }
         });
     };
-    NewTramiteCambioPrendarioComponent.prototype.onKeyEmpresa = function (event) {
+    NewTramiteRematriculaComponent.prototype.onKeyEmpresa = function (event) {
         var _this = this;
         var nit = {
             'nit': event,
@@ -167,12 +196,12 @@ var NewTramiteCambioPrendarioComponent = (function () {
             else {
                 _this.divEmpresa = true;
                 _this.empresa = response.data;
-                _this.datos.newData = _this.empresa.nit;
-                _this.nitEmpresa = _this.empresa.nit;
+                _this.nitEmpresaNew = _this.empresa.nit;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
                 _this.ciudadano = null;
+                _this.nitEmpresaNew = _this.empresa.nit;
             }
         }, function (error) {
             _this.errorMessage = error;
@@ -181,34 +210,31 @@ var NewTramiteCambioPrendarioComponent = (function () {
             }
         });
     };
-    NewTramiteCambioPrendarioComponent.prototype.onChangeCaso = function (event) {
-        this.tramiteEspecifico.casoId = event;
-    };
-    NewTramiteCambioPrendarioComponent.prototype.onChangeVariante = function (event) {
-        this.tramiteEspecifico.varianteId = event;
+    NewTramiteRematriculaComponent.prototype.onChangeCasoData = function (event) {
+        this.datos.datosRematricula = event;
     };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
-    ], NewTramiteCambioPrendarioComponent.prototype, "tramiteGeneralId", void 0);
+    ], NewTramiteRematriculaComponent.prototype, "vehiculo", void 0);
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
-    ], NewTramiteCambioPrendarioComponent.prototype, "vehiculo", void 0);
+    ], NewTramiteRematriculaComponent.prototype, "tramiteGeneralId", void 0);
     __decorate([
         core_1.Output(), 
         __metadata('design:type', Object)
-    ], NewTramiteCambioPrendarioComponent.prototype, "tramiteCreado", void 0);
-    NewTramiteCambioPrendarioComponent = __decorate([
+    ], NewTramiteRematriculaComponent.prototype, "tramiteCreado", void 0);
+    NewTramiteRematriculaComponent = __decorate([
         core_1.Component({
-            selector: 'tramiteCambioPrendario',
-            templateUrl: 'app/view/tipoTramite/cambioPrendario/index.html',
+            selector: 'tramiteRematricula',
+            templateUrl: 'app/view/tipoTramite/tramiteRematricula/index.html',
             directives: [router_1.ROUTER_DIRECTIVES],
-            providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, combustible_service_1.CombustibleService, tipoIdentificacion_service_1.TipoIdentificacionService, ciudadano_service_1.CiudadanoService, empresa_service_1.EmpresaService]
+            providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
-        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, tipoIdentificacion_service_1.TipoIdentificacionService, combustible_service_1.CombustibleService, caso_service_1.CasoService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
-    ], NewTramiteCambioPrendarioComponent);
-    return NewTramiteCambioPrendarioComponent;
+        __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])
+    ], NewTramiteRematriculaComponent);
+    return NewTramiteRematriculaComponent;
 }());
-exports.NewTramiteCambioPrendarioComponent = NewTramiteCambioPrendarioComponent;
-//# sourceMappingURL=index.cambioPrendario.component.js.map
+exports.NewTramiteRematriculaComponent = NewTramiteRematriculaComponent;
+//# sourceMappingURL=index.rematricula.component.js.map

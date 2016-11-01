@@ -21,6 +21,8 @@ import {NewTramiteCambioBlindajeComponent} from "../../../components/tipoTramite
 import {NewTramiteCambioCombustibleComponent} from "../../../components/tipoTramite/tramiteCambioCombustible/index.cambioCombustible.component";
 import {NewTramiteLevantarPrendaComponent} from "../../../components/tipoTramite/tramiteLevantarPrenda/index.levantarPrenda.component";
 import {NewTramiteCambioPrendarioComponent} from "../../../components/tipoTramite/tramiteCambioPrendario/index.cambioPrendario.component";
+import {NewTramiteCancelarMatriculaComponent} from "../../../components/tipoTramite/tramiteCancelacionMatricula/index.cancelarMatricula.component";
+import {NewTramiteRematriculaComponent} from "../../../components/tipoTramite/tramiteRematricula/index.rematricula.component";
 import {Component, OnInit} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {Tramite} from '../../../model/tramite/Tramite';
@@ -49,7 +51,9 @@ import {Vehiculo} from '../../../model/vehiculo/Vehiculo';
     NewTramiteCambioCombustibleComponent,
     NewTramitePrendaComponent,
     NewTramiteLevantarPrendaComponent,
-    NewTramiteCambioPrendarioComponent
+    NewTramiteCambioPrendarioComponent,
+    NewTramiteCancelarMatriculaComponent,
+    NewTramiteRematriculaComponent
     ],
 
     providers: [LoginService,ModuloService,TramiteService,VehiculoService,CiudadanoVehiculoService]
@@ -75,6 +79,7 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 	public finalizar;
 	public divTramite;
 	public color;
+	public rematricula=false;
 
 
 
@@ -104,7 +109,6 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 
 			response => {
 				this.tramite=response.data;
-		        console.log(this.tramite);
 			},
 			error => {
 					this.errorMessage = <any>error;
@@ -139,6 +143,10 @@ export class IndexTramiteCuerpoComponent implements OnInit{
 							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback";
 							this.clase = "form-group has-success has-feedback";
 				            this.msg = response.msj;
+				            console.log(this.vehiculo);
+				            if (this.vehiculo.cancelado){
+				            	this.rematricula=true;
+				            }
 
 				       		this._CiudadanoVehiculoService.showCiudadanoVehiculoId(token,this.vehiculo.id).subscribe(
 								response => {

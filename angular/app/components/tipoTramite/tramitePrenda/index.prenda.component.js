@@ -44,7 +44,7 @@ var NewTramitePrendaComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'prendario': null
+            'newData': null
         };
         this.divDatos = false;
         this.idCiudadano = null;
@@ -136,7 +136,7 @@ var NewTramitePrendaComponent = (function () {
             else {
                 _this.divCiudadano = true;
                 _this.ciudadano = response.data;
-                _this.datos.prendario = _this.ciudadano.numeroIdentificacion;
+                _this.datos.newData = _this.ciudadano.numeroIdentificacion;
                 _this.idCiudadano = _this.ciudadano.id;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
@@ -167,7 +167,7 @@ var NewTramitePrendaComponent = (function () {
             else {
                 _this.divEmpresa = true;
                 _this.empresa = response.data;
-                _this.datos.prendario = _this.empresa.nit;
+                _this.datos.newData = _this.empresa.nit;
                 _this.nitEmpresa = _this.empresa.nit;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";

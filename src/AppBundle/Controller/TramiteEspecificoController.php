@@ -46,7 +46,7 @@ class TramiteEspecificoController extends Controller
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
-    {
+    { 
 
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -58,7 +58,15 @@ class TramiteEspecificoController extends Controller
         $datos = array(
             'newData' => (isset($dataangular->newData)) ? $dataangular->newData : null,
             'oldData' => (isset($dataangular->oldData)) ? $dataangular->oldData : null,
-            'codigoDijin'=>(isset($dataangular->codigoDIJIN_SIJIN)) ? $dataangular->codigoDIJIN_SIJIN : null
+            'codigoDijin'=>(isset($dataangular->codigoDIJIN_SIJIN)) ? $dataangular->codigoDIJIN_SIJIN : null,
+            'numeroAceptacion'=>(isset($dataangular->numeroAceptacion)) ? $dataangular->numeroAceptacion : null,
+            'numeroFactura'=>(isset($dataangular->numeroFactura)) ? $dataangular->numeroFactura : null,
+            'fechaFactura'=>(isset($dataangular->fechaFactura)) ? $dataangular->fechaFactura : null,
+            'numeroContrato'=>(isset($dataangular->numeroContrato)) ? $dataangular->numeroContrato : null,
+            'fechaCompra'=>(isset($dataangular->fechaCompra)) ? $dataangular->fechaCompra : null,
+            'datosTraspaso'=>(isset($dataangular->datosTraspaso)) ? $dataangular->datosTraspaso : null,
+            'datosRematricula'=>(isset($dataangular->datosRematricula   )) ? $dataangular->datosRematricula    : null
+
         );
 
         $em = $this->getDoctrine()->getManager();

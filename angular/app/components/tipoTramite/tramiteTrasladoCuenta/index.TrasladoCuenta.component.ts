@@ -40,9 +40,8 @@ export class NewTramiteTrasladoCuentaComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'nuevo':null,
-		'viejo':null,
-		'datosCasos':null
+		'newData':null,
+		'oldData':null,
 	};
 	
 
@@ -98,7 +97,7 @@ export class NewTramiteTrasladoCuentaComponent implements OnInit{
 				response => {
 					this.organismosTransito = response.data;
 					this.organismoTransitoSeleccionado = this.organismosTransito[0];
-					this.datos.nuevo = this.organismoTransitoSeleccionado.nombre;
+					this.datos.newData = this.organismoTransitoSeleccionado.nombre;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -109,7 +108,8 @@ export class NewTramiteTrasladoCuentaComponent implements OnInit{
 					}
 				}
 			);
-		this.datos.viejo=this.vehiculo.organismoTransito.nombre;
+		this.datos.oldData=this.vehiculo.organismoTransito.nombre;
+
 
 	}
 
@@ -120,7 +120,7 @@ export class NewTramiteTrasladoCuentaComponent implements OnInit{
 		for (var i = 0; i < this.organismosTransito.length; ++i) {
 			if(event == this.organismosTransito[i].id) {
 				this.organismoTransitoSeleccionado = this.organismosTransito[i];
-				this.datos.nuevo = this.organismoTransitoSeleccionado.nombre;
+				this.datos.newData = this.organismoTransitoSeleccionado.nombre;
 			}
 			
 		}
