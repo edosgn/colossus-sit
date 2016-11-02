@@ -198,9 +198,7 @@ var IndexSubirCarpetaComponent = (function () {
             if (_this.ciudadanosVehiculo) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                     if (_this.ciudadanosVehiculo[i].empresa) {
-                        if (_this.ciudadanosVehiculo[i].empresa.nit == event) {
-                            _this.existeEmpresa = true;
-                        }
+                        _this.existeEmpresa = true;
                     }
                 }
             }
@@ -261,9 +259,7 @@ var IndexSubirCarpetaComponent = (function () {
             if (_this.ciudadanosVehiculo) {
                 for (var i = _this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                     if (_this.ciudadanosVehiculo[i].ciudadano) {
-                        if (_this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
-                            _this.existeCiudadano = true;
-                        }
+                        _this.existeCiudadano = true;
                     }
                 }
             }

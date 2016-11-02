@@ -319,9 +319,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					if(this.ciudadanosVehiculo) {
                         for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                             if(this.ciudadanosVehiculo[i].empresa) {
-                                if(this.ciudadanosVehiculo[i].empresa.nit == event) {
+                                
                                     this.existeEmpresa = true;
-                                }
+                               
                             }
                         }
                     }
@@ -390,9 +390,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
                     if(this.ciudadanosVehiculo) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
 								if(this.ciudadanosVehiculo[i].ciudadano) {
-									if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+									
 									this.existeCiudadano = true;
-								}
+								
 							}
 						}
 					}
