@@ -182,7 +182,7 @@ export class NewTramitePrendaComponent implements OnInit{
 			this.pignorado,
 			this.cancelado
 		);
-		console.log(this.vehiculo2);
+		
 
 		this._VehiculoService.editVehiculo(this.vehiculo2,token).subscribe(
 			response => {
