@@ -462,6 +462,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
 					response => {
 						this.tramiteEspecificos = response.data;
+						console.log(this.tramiteEspecificos);
 					}, 
 					error => {
 						this.errorMessage = <any>error;

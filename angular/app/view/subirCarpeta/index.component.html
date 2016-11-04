@@ -287,7 +287,7 @@
 		<div *ngIf="tramitesGeneralSeccion" class="col-md-12">
 			<div class="panel panel-primary">
 				<div class="panel-heading">Tramites 
-					<button type="submit" class="btn btn-primary col-md-offset-10"  [disabled]="!idCiudadanoSeleccionado && !idEmpresaSeleccionada"   (click)="btnNuevoTramiteGeneral()">Nuevo</button>
+					<button type="submit" class="btn btn-primary col-md-offset-10"  [disabled]="!idCiudadanoSeleccionado && !idEmpresaSeleccionada" (click)="btnNuevoTramiteGeneral()">Nuevo</button>
 				</div>
 				<div class="panel-body">
 					<h5>Licencias de transito</h5>
@@ -394,7 +394,7 @@
 					<td *ngIf="tramiteEspecifico.caso">{{tramiteEspecifico.caso.nombre}}</td>
 					<td *ngIf="!tramiteEspecifico.caso">N/A</td>
 					<td >{{tramiteEspecifico.valor}}</td>
-					<td >{{tramiteEspecifico.datos}}</td>
+					<td >{{tramiteEspecifico.datos.datosGenerales | json}}</td>
 				</tr>
 			</tbody> 
 		</table>

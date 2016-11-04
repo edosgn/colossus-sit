@@ -336,6 +336,7 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
             _this.tramiteEspecificos = response.data;
+            console.log(_this.tramiteEspecificos);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
