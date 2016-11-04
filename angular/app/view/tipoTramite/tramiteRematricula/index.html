@@ -1,0 +1,147 @@
+<div class="clearfix"></div>
+
+<div  class="panel panel-primary">
+	<div class="panel-heading">Rematricula</div>
+	<div class="panel-body">
+		<div class="col-md-12">
+			<p class="col-md-6">
+				<label>Tipo Identificacion</label>
+				<select class="form-control" [(ngModel)]="tipoIdentificacion">
+					<option *ngFor="#tipoIdentificacion of tipoIdentificaciones" [value]='tipoIdentificacion.id' >{{tipoIdentificacion.nombre}}</option>
+				</select>
+			</p>
+
+			<div *ngIf="tipoIdentificacion!=4" class="col-md-6"> 
+				<div>
+					<div  [class]="claseCedula">
+						<label>Numero Identificacion</label>
+						<input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
+						<span [class]="claseSpanCedula" aria-hidden="true"></span>
+					</div>
+				</div>
+			</div>
+			<div *ngIf="tipoIdentificacion==4" class="col-md-6"> 
+				<div>
+					<div  [class]="claseCedula">
+						<label>Numero Identificacion</label>
+						<input  (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Nit">
+						<span [class]="claseSpanCedula" aria-hidden="true"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div  *ngIf="divCiudadano">
+			<div class="clearfix"></div>
+			<div  class="panel panel-primary">
+				<div class="panel-heading">Traspaso</div>
+				<div class="panel-body">
+					<table class="table  table-condensed table-bordered ">
+						<thead>
+							<tr>
+								<th>Nombres</th>
+								<th>Tipo Identificacion</th>
+								<th>Numero Identificacion</th>
+								<th>Apellidos</th>
+								<th>direccion</th>
+								<th>Telefono</th>
+								<th>correo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td >{{ciudadano.nombres}}</td>
+								<td >{{ciudadano.tipoIdentificacion.nombre}}</td>
+								<td >{{ciudadano.numeroIdentificacion}}</td>
+								<td >{{ciudadano.apellidos}}</td>
+								<td >{{ciudadano.direccion}}</td>
+								<td >{{ciudadano.telefono}}</td>
+								<td >{{ciudadano.correo}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div  *ngIf="divEmpresa">
+			<div class="clearfix"></div>
+			<div  class="panel panel-primary">
+				<div class="panel-heading">Traspaso</div>
+				<div class="panel-body">
+					<table class="table  table-condensed table-bordered ">
+						<thead>
+							<tr>
+								<th>nombre</th>
+								<th>nit</th>
+								<th>direccion</th>
+								<th>correo</th>
+								<th>municipio</th>
+								<th>ciudadano</th>
+								<th>tipo empresa</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td >{{empresa.nombre}}</td>
+								<td >{{empresa.nit}}</td>
+								<td >{{empresa.direccion}}</td>
+								<td >{{empresa.correo}}</td>
+								<td >{{empresa.municipio.nombre}}</td>
+								<td >{{empresa.ciudadano.numeroIdentificacion}}</td>
+								<td >{{empresa.tipoEmpresa.nombre}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div *ngIf="casos != null" class="col-md-12">
+			<label>Caso</label>
+			<select class="form-control" (change)="onChangeCaso($event.target.value)" required>
+				<option *ngFor="#caso of casos" [value]='caso.id' >{{caso.nombre}}</option>
+			</select>
+		</div>
+		<div class="clearfix"></div>
+		<div *ngIf="divDatos" class="col-md-12">
+			<label>Datos:</label>
+			<label>
+				<input (change)="onChangeCasoData($event.target.value)"   checked="checked" type="radio" name="optradio" value="Con opcion de compra">Con opcion de compra
+			</label>
+			<label>
+				<input  (change)="onChangeCasoData($event.target.value)"  type="radio" name="optradio" value="sin opcion de compra o renting">sin opcion de compra o renting
+			</label>
+		</div>
+
+		<div *ngIf="variantes != null" class="col-md-6">
+			<label>Variante</label>
+			<select class="form-control"  (change)="onChangeVariante($event.target.value)" required>
+				<option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
+			</select>
+		</div>
+
+		<div class="col-md-6">
+			<label >Valor:</label>
+			<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+			<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
+			<br>
+		</div>
+
+		<p class="col-md-6">
+			<label >licencia transito:</label>
+			<input #licenciaTransito="ngForm"  type="text" class="form-control" [(ngModel)]="ciudadanoVehiculo.licenciaTransito"  required />
+			<span *ngIf="!licenciaTransito.valid && licenciaTransito.touched" style="color:red;">licenciaTransito obligatorios</span>
+			<br>
+		</p>
+
+
+		<p class="col-md-6">
+			<label >fecha Propiedad Inicial:</label>
+			<input type="date" class="form-control" #fechaPropiedadInicial="ngForm"  [(ngModel)]="ciudadanoVehiculo.fechaPropiedadInicial"  required />
+			<span *ngIf="!fechaPropiedadInicial.valid && fechaPropiedadInicial.touched" style="color:red;">fecha Nacimiento obligatorios</span>
+		</p>
+		<div class="col-md-12">
+			<button (click)="enviarTramite()" type="submit" class="btn btn-primary form-control">Enviar</button>
+		</div>
+	</div>
+</div>

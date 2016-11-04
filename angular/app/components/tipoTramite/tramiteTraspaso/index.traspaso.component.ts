@@ -47,9 +47,9 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newPropietario':null,
-		'oldPropietario':null,
-		'datosCasos':null
+		'newData':null,
+		'oldData':null,
+		'datosTraspaso':null
 	};
 	public validateCedula;
 	public claseSpanCedula;
@@ -92,10 +92,10 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	ngOnInit(){
 
 		if(this.ciudadanosVehiculo[0].ciudadano){
-	   	 	this.datos.oldPropietario=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+	   	 	this.datos.oldData=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
 	   	 	this.idCiudadanoOld = this.ciudadanosVehiculo[0].ciudadano.id;
 		}else{
-			this.datos.oldPropietario=this.ciudadanosVehiculo[0].empresa.nit;
+			this.datos.oldData=this.ciudadanosVehiculo[0].empresa.nit;
 			this.nitEmpresaOld = this.ciudadanosVehiculo[0].empresa.nit;
 		}
 
@@ -141,7 +141,6 @@ export class NewTramiteTraspasoComponent implements OnInit{
        
 
 		this.tramiteEspecifico = new TramiteEspecifico(null,2,this.tramiteGeneralId,null,null,null);
-		console.log(this.datos);
 
 	}
 
@@ -191,7 +190,6 @@ export class NewTramiteTraspasoComponent implements OnInit{
 			'1'
 		);
 
-		console.log(this.ciudadanoVehiculoRegister);
 
 	this._CiudadanoVehiculoService.registerPropietario(this.ciudadanoVehiculoRegister,token).subscribe(
 			response => {
@@ -226,7 +224,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
 
 	onChangeCaso(event:any){
-		this.datos.datosCasos="con opcion de compra";
+		this.datos.datosTraspaso="con opcion de compra";
 		for (var i = 0; i < this.casos.length; ++i) {
 			if(event == this.casos[i].id) {
 				this.casoSeleccionado = this.casos[i];
@@ -269,7 +267,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 						this.claseCedula = "form-group has-success has-feedback ";
 						this.empresa=null;
-						this.datos.newPropietario = this.ciudadano.numeroIdentificacion;
+						this.datos.newData = this.ciudadano.numeroIdentificacion;
 						
 					}
 				}, 
@@ -303,7 +301,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 		                this.claseCedula = "form-group has-success has-feedback ";
 		                this.ciudadano=null;
-		                this.datos.newPropietario = this.empresa.nit;
+		                this.datos.newData = this.empresa.nit;
                     }
                 }, 
                 error => {
@@ -318,7 +316,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
   onChangeCasoData(event:any){
 
-  	this.datos.datosCasos=event;
+  	this.datos.datosTraspaso=event;
 
   }
 

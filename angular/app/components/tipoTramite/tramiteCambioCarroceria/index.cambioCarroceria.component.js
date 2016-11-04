@@ -37,13 +37,13 @@ var NewTramiteCambioCarroceriaComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newCarroceria': null,
-            'oldCarroceria': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteCambioCarroceriaComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.datos.oldCarroceria = this.vehiculo.carroceria.nombre;
+        this.datos.oldData = this.vehiculo.carroceria.nombre;
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 32, this.tramiteGeneralId, null, null, null);
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 32).subscribe(function (response) {
@@ -72,7 +72,7 @@ var NewTramiteCambioCarroceriaComponent = (function () {
         });
         this._CarroceriaService.getCarroceriasClase(this.vehiculo.clase.id, token).subscribe(function (response) {
             _this.carrocerias = response.data;
-            _this.datos.newCarroceria = _this.carrocerias[0].nombre;
+            _this.datos.newData = _this.carrocerias[0].nombre;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -113,7 +113,7 @@ var NewTramiteCambioCarroceriaComponent = (function () {
         for (var i = 0; i < this.carrocerias.length; ++i) {
             if (event == this.carrocerias[i].id) {
                 this.carroceriaSeleccionada = this.carrocerias[i];
-                this.datos.newCarroceria = this.carroceriaSeleccionada.nombre;
+                this.datos.newData = this.carroceriaSeleccionada.nombre;
             }
         }
     };

@@ -39,8 +39,8 @@ export class NewTramiteRegrabarSerieComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newSerie':null,
-		'oldSerie':null
+		'newData':null,
+		'oldData':null
 	};
 	
 
@@ -60,7 +60,7 @@ export class NewTramiteRegrabarSerieComponent implements OnInit{
 
 
 	ngOnInit(){
-		this.datos.oldSerie=this.vehiculo.serie;
+		this.datos.oldData=this.vehiculo.serie;
 		this.tramiteEspecifico = new TramiteEspecifico(null,9,this.tramiteGeneralId,null,null,null);
 		let token = this._loginService.getToken();
 		this._CasoService.showCasosTramite(token,9).subscribe(
@@ -99,7 +99,7 @@ export class NewTramiteRegrabarSerieComponent implements OnInit{
 
 
 	enviarTramite(){
-		this.datos.newSerie= this.serie;
+		this.datos.newData= this.serie;
 		let token = this._loginService.getToken();
 		this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
 			response => {

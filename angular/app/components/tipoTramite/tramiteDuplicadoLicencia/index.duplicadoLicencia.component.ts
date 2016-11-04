@@ -35,8 +35,8 @@ export class NewTramiteDuplicadoLicenciaComponent implements OnInit{
 	@Input() tramiteGeneralId =22;
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public datos = {
-		'nuevo':null,
-		'viejo':null
+		'newData':null,
+		'oldData':null
 	};
 	
 

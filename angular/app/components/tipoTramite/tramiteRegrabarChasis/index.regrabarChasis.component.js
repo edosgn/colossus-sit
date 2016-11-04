@@ -35,13 +35,13 @@ var NewTramiteRegrabarChasisComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newChasis': null,
-            'oldChasis': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteRegrabarChasisComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.datos.oldChasis = this.vehiculo.chasis;
+        this.datos.oldData = this.vehiculo.chasis;
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 8, this.tramiteGeneralId, null, null, null);
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 8).subscribe(function (response) {
@@ -65,7 +65,7 @@ var NewTramiteRegrabarChasisComponent = (function () {
     };
     NewTramiteRegrabarChasisComponent.prototype.enviarTramite = function () {
         var _this = this;
-        this.datos.newChasis = this.chasis;
+        this.datos.newData = this.chasis;
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;

@@ -41,8 +41,8 @@ export class NewTramiteCambioCombustibleComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newCombustible':null,
-		'oldCombustible':null
+		'newData':null,
+		'oldData':null
 	};
 	public combustibles;
 	
@@ -113,7 +113,7 @@ export class NewTramiteCambioCombustibleComponent implements OnInit{
 				}
 			);
 
-		this.datos.oldCombustible=this.vehiculo.combustible.nombre;
+		this.datos.oldData=this.vehiculo.combustible.nombre;
 		
 	}
 
@@ -122,7 +122,7 @@ export class NewTramiteCambioCombustibleComponent implements OnInit{
 
 
 	enviarTramite(){
-		this.datos.newCombustible= this.combustibleSeleccionado.nombre;
+		this.datos.newData= this.combustibleSeleccionado.nombre;
 		let token = this._loginService.getToken();
 		this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
 			response => {
@@ -195,7 +195,7 @@ export class NewTramiteCambioCombustibleComponent implements OnInit{
 		for (var i = 0; i < this.combustibles.length; ++i) {
 			if(event == this.combustibles[i].id) {
 				this.combustibleSeleccionado = this.combustibles[i];
-				this.datos.newCombustible = this.combustibleSeleccionado.nombre;
+				this.datos.newData = this.combustibleSeleccionado.nombre;
 			}
 			
 		}

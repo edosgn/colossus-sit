@@ -31,8 +31,8 @@ var NewTramiteDuplicadoLicenciaComponent = (function () {
         this.tramiteGeneralId = 22;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'nuevo': null,
-            'viejo': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteDuplicadoLicenciaComponent.prototype.ngOnInit = function () {

@@ -44,7 +44,7 @@ export class NewTramitePrendaComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'prendario':null
+		'newData':null
 	};
 
 
@@ -131,10 +131,6 @@ export class NewTramitePrendaComponent implements OnInit{
             }
         );
 
-		
-
-		
-		
 	}
 
 
@@ -186,7 +182,7 @@ export class NewTramitePrendaComponent implements OnInit{
 			this.pignorado,
 			this.cancelado
 		);
-		console.log(this.vehiculo2);
+		
 
 		this._VehiculoService.editVehiculo(this.vehiculo2,token).subscribe(
 			response => {
@@ -219,7 +215,7 @@ export class NewTramitePrendaComponent implements OnInit{
 					}else{
 						this.divCiudadano = true;
 						this.ciudadano = response.data;
-						this.datos.prendario=this.ciudadano.numeroIdentificacion;
+						this.datos.newData=this.ciudadano.numeroIdentificacion;
                     	this.idCiudadano = this.ciudadano.id;
 						this.validateCedula=true;
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
@@ -253,7 +249,7 @@ export class NewTramitePrendaComponent implements OnInit{
                     }else{
                     	this.divEmpresa = true;
                     	this.empresa = response.data;
-                    	this.datos.prendario=this.empresa.nit;
+                    	this.datos.newData=this.empresa.nit;
                     	this.nitEmpresa = this.empresa.nit;
 		                this.validateCedula=true;
 		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";

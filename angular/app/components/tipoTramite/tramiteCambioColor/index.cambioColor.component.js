@@ -37,8 +37,8 @@ var NewTramiteCambioColorComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newColor': null,
-            'oldColor': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteCambioColorComponent.prototype.ngOnInit = function () {
@@ -66,7 +66,7 @@ var NewTramiteCambioColorComponent = (function () {
         this._ColorService.getColor().subscribe(function (response) {
             _this.colores = response.data;
             _this.colorSeleccionado = _this.colores[0];
-            _this.datos.newColor = _this.colorSeleccionado.nombre;
+            _this.datos.newData = _this.colorSeleccionado.nombre;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -74,13 +74,13 @@ var NewTramiteCambioColorComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.datos.oldColor = this.vehiculo.color.nombre;
+        this.datos.oldData = this.vehiculo.color.nombre;
     };
     NewTramiteCambioColorComponent.prototype.onChangeColor = function (event) {
         for (var i = 0; i < this.colores.length; ++i) {
             if (event == this.colores[i].id) {
                 this.colorSeleccionado = this.colores[i];
-                this.datos.newColor = this.colorSeleccionado.nombre;
+                this.datos.newData = this.colorSeleccionado.nombre;
             }
         }
     };

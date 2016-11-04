@@ -26,6 +26,8 @@ var IndexTramiteEspecificoComponent = (function () {
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.getTramiteEspecifico().subscribe(function (response) {
             _this.tramiteEspecificos = response.data;
+            _this.var = response.data;
+            console.log(_this.var);
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {

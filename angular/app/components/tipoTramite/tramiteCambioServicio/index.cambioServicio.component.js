@@ -36,8 +36,8 @@ var NewTramiteCambioServicioComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newServicio': null,
-            'oldServicio': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteCambioServicioComponent.prototype.ngOnInit = function () {
@@ -71,13 +71,13 @@ var NewTramiteCambioServicioComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.datos.oldServicio = this.vehiculo.servicio.nombre;
+        this.datos.oldData = this.vehiculo.servicio.nombre;
     };
     NewTramiteCambioServicioComponent.prototype.onChangeServicio = function (event) {
         for (var i = 0; i < this.servicios.length; ++i) {
             if (event == this.servicios[i].id) {
                 this.servicioSeleccionado = this.servicios[i];
-                this.datos.newServicio = this.servicioSeleccionado.nombre;
+                this.datos.newData = this.servicioSeleccionado.nombre;
             }
         }
     };

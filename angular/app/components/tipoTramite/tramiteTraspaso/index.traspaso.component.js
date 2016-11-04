@@ -45,9 +45,9 @@ var NewTramiteTraspasoComponent = (function () {
         this.tramiteGeneralId = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newPropietario': null,
-            'oldPropietario': null,
-            'datosCasos': null
+            'newData': null,
+            'oldData': null,
+            'datosTraspaso': null
         };
         this.divDatos = false;
         this.idCiudadanoOld = null;
@@ -60,11 +60,11 @@ var NewTramiteTraspasoComponent = (function () {
     NewTramiteTraspasoComponent.prototype.ngOnInit = function () {
         var _this = this;
         if (this.ciudadanosVehiculo[0].ciudadano) {
-            this.datos.oldPropietario = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+            this.datos.oldData = this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
             this.idCiudadanoOld = this.ciudadanosVehiculo[0].ciudadano.id;
         }
         else {
-            this.datos.oldPropietario = this.ciudadanosVehiculo[0].empresa.nit;
+            this.datos.oldData = this.ciudadanosVehiculo[0].empresa.nit;
             this.nitEmpresaOld = this.ciudadanosVehiculo[0].empresa.nit;
         }
         var token = this._loginService.getToken();
@@ -95,7 +95,6 @@ var NewTramiteTraspasoComponent = (function () {
             }
         });
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 2, this.tramiteGeneralId, null, null, null);
-        console.log(this.datos);
     };
     NewTramiteTraspasoComponent.prototype.enviarTramite = function () {
         var _this = this;
@@ -118,7 +117,6 @@ var NewTramiteTraspasoComponent = (function () {
         }
         var token = this._loginService.getToken();
         this.ciudadanoVehiculoRegister = new ciudadanovehiculo_1.CiudadanoVehiculo(this.ciudadanosVehiculo[i].id, this.idCiudadanoNew, this.ciudadanosVehiculo[i].vehiculo.placa, this.nitEmpresaNew, this.ciudadanosVehiculo[i].licenciaTransito, this.ciudadanosVehiculo[i].fechaPropiedadInicial, this.ciudadanosVehiculo[i].fechaPropiedadFinal, '1');
-        console.log(this.ciudadanoVehiculoRegister);
         this._CiudadanoVehiculoService.registerPropietario(this.ciudadanoVehiculoRegister, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
@@ -140,7 +138,7 @@ var NewTramiteTraspasoComponent = (function () {
         });
     };
     NewTramiteTraspasoComponent.prototype.onChangeCaso = function (event) {
-        this.datos.datosCasos = "con opcion de compra";
+        this.datos.datosTraspaso = "con opcion de compra";
         for (var i = 0; i < this.casos.length; ++i) {
             if (event == this.casos[i].id) {
                 this.casoSeleccionado = this.casos[i];
@@ -179,7 +177,7 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
                 _this.empresa = null;
-                _this.datos.newPropietario = _this.ciudadano.numeroIdentificacion;
+                _this.datos.newData = _this.ciudadano.numeroIdentificacion;
             }
         }, function (error) {
             _this.errorMessage = error;
@@ -210,7 +208,7 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
                 _this.claseCedula = "form-group has-success has-feedback ";
                 _this.ciudadano = null;
-                _this.datos.newPropietario = _this.empresa.nit;
+                _this.datos.newData = _this.empresa.nit;
             }
         }, function (error) {
             _this.errorMessage = error;
@@ -220,7 +218,7 @@ var NewTramiteTraspasoComponent = (function () {
         });
     };
     NewTramiteTraspasoComponent.prototype.onChangeCasoData = function (event) {
-        this.datos.datosCasos = event;
+        this.datos.datosTraspaso = event;
     };
     __decorate([
         core_1.Input(), 

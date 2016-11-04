@@ -22,7 +22,6 @@ import {Empresa} from '../../model/empresa/Empresa';
 import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
 import {NewTramiteTrasladoCuentaComponent} from "../../components/tipoTramite/tramiteTrasladoCuenta/index.TrasladoCuenta.component";
 import {NewTramiteCambioServicioComponent} from "../../components/tipoTramite/tramiteCambioServicio/index.cambioServicio.component";
-import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
 import {NewTramiteCambioMotorComponent} from "../../components/tipoTramite/tramiteCambioMotor/index.cambioMotor.component";
 import {NewTramiteRegrabarChasisComponent} from "../../components/tipoTramite/tramiteRegrabarChasis/index.regrabarChasis.component";
 import {NewTramiteRegrabarSerieComponent} from "../../components/tipoTramite/tramiteRegrabarSerie/index.regrabarSerie.component";
@@ -30,7 +29,18 @@ import {NewTramiteCambioColorComponent} from "../../components/tipoTramite/trami
 import {NewTramiteCambioCarroceriaComponent} from "../../components/tipoTramite/tramiteCambioCarroceria/index.cambioCarroceria.component";
 import {NewTramiteDuplicadoLicenciaComponent} from "../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component";
 import {NewTramiteDuplicadoPlacaComponent} from "../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component";
-import {NewTramiteCambioBlindajeComponent} from "../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";;
+import {NewTramiteCambioBlindajeComponent} from "../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";
+
+
+import {NewTramiteCambioCombustibleComponent} from "../../components/tipoTramite/tramiteCambioCombustible/index.CambioCombustible.component";
+import {NewTramitePrendaComponent} from "../../components/tipoTramite/tramitePrenda/index.Prenda.component";
+import {NewTramiteLevantarPrendaComponent} from "../../components/tipoTramite/tramiteLevantarPrenda/index.LevantarPrenda.component";
+import {NewTramiteCambioPrendarioComponent} from "../../components/tipoTramite/tramiteCambioPrendario/index.CambioPrendario.component";
+import {NewTramiteCancelarMatriculaComponent} from "../../components/tipoTramite/tramiteCancelacionMatricula/index.CancelarMatricula.component";
+import {NewTramiteRematriculaComponent} from "../../components/tipoTramite/tramiteRematricula/index.Rematricula.component";
+import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
+
+
 
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
@@ -54,7 +64,15 @@ import {NewTramiteCambioBlindajeComponent} from "../../components/tipoTramite/tr
 	    NewTramiteCambioMotorComponent,
 	    NewTramiteDuplicadoPlacaComponent,
 	    NewTramiteCambioCarroceriaComponent,
-	    NewTramiteTrasladoCuentaComponent],
+	    NewTramiteTrasladoCuentaComponent,
+	    NewTramiteCambioCombustibleComponent,
+	    NewTramitePrendaComponent,
+	    NewTramiteLevantarPrendaComponent,
+	    NewTramiteCambioPrendarioComponent,
+	    NewTramiteCancelarMatriculaComponent,
+	    NewTramiteRematriculaComponent,
+	    NewTramiteRegrabarMotorComponent,
+	    ],
     providers: [
         LoginService,
 	    TramiteService,
@@ -301,9 +319,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					if(this.ciudadanosVehiculo) {
                         for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                             if(this.ciudadanosVehiculo[i].empresa) {
-                                if(this.ciudadanosVehiculo[i].empresa.nit == event) {
+                                
                                     this.existeEmpresa = true;
-                                }
+                               
                             }
                         }
                     }
@@ -372,9 +390,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
                     if(this.ciudadanosVehiculo) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
 								if(this.ciudadanosVehiculo[i].ciudadano) {
-									if(this.ciudadanosVehiculo[i].ciudadano.numeroIdentificacion == event) {
+									
 									this.existeCiudadano = true;
-								}
+								
 							}
 						}
 					}

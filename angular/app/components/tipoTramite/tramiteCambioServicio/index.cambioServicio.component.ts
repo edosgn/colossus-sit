@@ -41,8 +41,8 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 	@Output() tramiteCreado = new EventEmitter<any>();
 	public vehiculo2;
 	public datos = {
-		'newServicio':null,
-		'oldServicio':null
+		'newData':null,
+		'oldData':null
 	};
 	
 
@@ -107,7 +107,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 			);
 
 
-		this.datos.oldServicio = this.vehiculo.servicio.nombre;
+		this.datos.oldData = this.vehiculo.servicio.nombre;
 		}
 
 
@@ -117,7 +117,7 @@ export class NewTramiteCambioServicioComponent implements OnInit{
 		for (var i = 0; i < this.servicios.length; ++i) {
 			if(event == this.servicios[i].id) {
 				this.servicioSeleccionado = this.servicios[i];
-				this.datos.newServicio = this.servicioSeleccionado.nombre;
+				this.datos.newData = this.servicioSeleccionado.nombre;
 			}
 			
 		}

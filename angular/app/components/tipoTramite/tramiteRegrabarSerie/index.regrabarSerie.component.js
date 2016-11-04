@@ -35,13 +35,13 @@ var NewTramiteRegrabarSerieComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newSerie': null,
-            'oldSerie': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteRegrabarSerieComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.datos.oldSerie = this.vehiculo.serie;
+        this.datos.oldData = this.vehiculo.serie;
         this.tramiteEspecifico = new TramiteEspecifico_1.TramiteEspecifico(null, 9, this.tramiteGeneralId, null, null, null);
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 9).subscribe(function (response) {
@@ -65,7 +65,7 @@ var NewTramiteRegrabarSerieComponent = (function () {
     };
     NewTramiteRegrabarSerieComponent.prototype.enviarTramite = function () {
         var _this = this;
-        this.datos.newSerie = this.serie;
+        this.datos.newData = this.serie;
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;

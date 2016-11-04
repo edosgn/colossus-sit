@@ -44,7 +44,7 @@ var NewTramitePrendaComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'prendario': null
+            'newData': null
         };
         this.divDatos = false;
         this.idCiudadano = null;
@@ -107,7 +107,6 @@ var NewTramitePrendaComponent = (function () {
             });
         });
         this.vehiculo2 = new vehiculo_1.Vehiculo(this.vehiculo.id, this.vehiculo.clase.id, this.vehiculo.municipio.id, this.vehiculo.linea.id, this.vehiculo.servicio.id, this.vehiculo.color.id, this.vehiculo.combustible.id, this.vehiculo.carroceria.id, this.vehiculo.organismoTransito.id, this.vehiculo.placa, this.vehiculo.numeroFactura, this.vehiculo.fechaFactura, this.vehiculo.valor, this.vehiculo.numeroManifiesto, this.vehiculo.fechaManifiesto, this.vehiculo.cilindraje, this.vehiculo.modelo, this.vehiculo.motor, this.vehiculo.chasis, this.vehiculo.serie, this.vehiculo.vin, this.vehiculo.numeroPasajeros, this.pignorado, this.cancelado);
-        console.log(this.vehiculo2);
         this._VehiculoService.editVehiculo(this.vehiculo2, token).subscribe(function (response) {
             _this.respuesta = response;
             (function (error) {
@@ -136,7 +135,7 @@ var NewTramitePrendaComponent = (function () {
             else {
                 _this.divCiudadano = true;
                 _this.ciudadano = response.data;
-                _this.datos.prendario = _this.ciudadano.numeroIdentificacion;
+                _this.datos.newData = _this.ciudadano.numeroIdentificacion;
                 _this.idCiudadano = _this.ciudadano.id;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
@@ -167,7 +166,7 @@ var NewTramitePrendaComponent = (function () {
             else {
                 _this.divEmpresa = true;
                 _this.empresa = response.data;
-                _this.datos.prendario = _this.empresa.nit;
+                _this.datos.newData = _this.empresa.nit;
                 _this.nitEmpresa = _this.empresa.nit;
                 _this.validateCedula = true;
                 _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";

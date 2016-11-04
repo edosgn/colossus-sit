@@ -38,8 +38,8 @@ var NewTramiteCambioCombustibleComponent = (function () {
         this.vehiculo = null;
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
-            'newCombustible': null,
-            'oldCombustible': null
+            'newData': null,
+            'oldData': null
         };
     }
     NewTramiteCambioCombustibleComponent.prototype.ngOnInit = function () {
@@ -79,11 +79,11 @@ var NewTramiteCambioCombustibleComponent = (function () {
                 alert("Error en la petición");
             }
         });
-        this.datos.oldCombustible = this.vehiculo.combustible.nombre;
+        this.datos.oldData = this.vehiculo.combustible.nombre;
     };
     NewTramiteCambioCombustibleComponent.prototype.enviarTramite = function () {
         var _this = this;
-        this.datos.newCombustible = this.combustibleSeleccionado.nombre;
+        this.datos.newData = this.combustibleSeleccionado.nombre;
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
             _this.respuesta = response;
@@ -120,7 +120,7 @@ var NewTramiteCambioCombustibleComponent = (function () {
         for (var i = 0; i < this.combustibles.length; ++i) {
             if (event == this.combustibles[i].id) {
                 this.combustibleSeleccionado = this.combustibles[i];
-                this.datos.newCombustible = this.combustibleSeleccionado.nombre;
+                this.datos.newData = this.combustibleSeleccionado.nombre;
             }
         }
     };
