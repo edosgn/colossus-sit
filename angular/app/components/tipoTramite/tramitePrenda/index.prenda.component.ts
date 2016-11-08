@@ -46,8 +46,6 @@ export class NewTramitePrendaComponent implements OnInit{
 	public datos = {
 		'newData':null
 	};
-
-
 	public validateCedula;
 	public claseSpanCedula;
 	public claseCedula;
@@ -111,7 +109,6 @@ export class NewTramitePrendaComponent implements OnInit{
 				}, 
 				error => {
 					this.errorMessage = <any>error;
-
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");
@@ -266,7 +263,6 @@ export class NewTramitePrendaComponent implements OnInit{
                 }
             );
   }
-
 	onChangeCaso(event:any){
 		this.tramiteEspecifico.casoId=event;
 	}
@@ -275,3 +271,5 @@ export class NewTramitePrendaComponent implements OnInit{
 	}
 	
 }
+
+

@@ -30,8 +30,6 @@ import {NewTramiteCambioCarroceriaComponent} from "../../components/tipoTramite/
 import {NewTramiteDuplicadoLicenciaComponent} from "../../components/tipoTramite/tramiteDuplicadoLicencia/index.duplicadoLicencia.component";
 import {NewTramiteDuplicadoPlacaComponent} from "../../components/tipoTramite/tramiteDuplicadoPlaca/index.duplicadoPlaca.component";
 import {NewTramiteCambioBlindajeComponent} from "../../components/tipoTramite/tramiteCambioBlindaje/index.cambioBlindaje.component";
-
-
 import {NewTramiteCambioCombustibleComponent} from "../../components/tipoTramite/tramiteCambioCombustible/index.CambioCombustible.component";
 import {NewTramitePrendaComponent} from "../../components/tipoTramite/tramitePrenda/index.Prenda.component";
 import {NewTramiteLevantarPrendaComponent} from "../../components/tipoTramite/tramiteLevantarPrenda/index.LevantarPrenda.component";
@@ -319,9 +317,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					if(this.ciudadanosVehiculo) {
                         for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
                             if(this.ciudadanosVehiculo[i].empresa) {
-                                
                                     this.existeEmpresa = true;
-                               
                             }
                         }
                     }
