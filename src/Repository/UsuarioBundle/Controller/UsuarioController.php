@@ -220,7 +220,7 @@ class UsuarioController extends Controller
                 $telefono = (isset($params->telefono)) ? $params->telefono : null;
                 $fecha_nacimiento = (isset($params->fecha_nacimiento)) ? $params->fecha_nacimiento : null;
                 $estado = (isset($params->estado)) ? $params->estado : "activo";
-                $rol = (isset($params->rol)) ? $params->rol : "ROL_USER";
+                $rol = (isset($params->rol)) ? $params->rol : "ROLE_USER";
                 $password = (isset($params->password)) ? $params->password : null;
 
 
