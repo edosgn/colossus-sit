@@ -163,12 +163,15 @@ export class NewTramiteRematriculaComponent implements OnInit{
 			this.ciudadanoVehiculo.fechaPropiedadInicial,
 			"1"
 		);
-
 	
+	this.TipoMatricula=36;
   	let token = this._loginService.getToken();
 		this._CiudadanoVehiculoService.register(ciudadanoVehiculo,token,this.TipoMatricula,this.json,this.TipoTramite).subscribe(
 			response => {
 				this.respuesta = response;
+				if(this.respuesta.status=="success") {
+					 this.tramiteCreado.emit(true);
+				}
 				
 			error => {
 					this.errorMessage = <any>error;
@@ -180,21 +183,6 @@ export class NewTramiteRematriculaComponent implements OnInit{
 				}
 
 		});
-
-
-	this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
-		response => {
-			this.respuesta = response;
-
-		error => {
-				this.errorMessage = <any>error;
-
-				if(this.errorMessage != null){
-					alert("Error en la petición");
-				}
-			}
-
-	});
 
 	this.vehiculo2 = new Vehiculo(
 			this.vehiculo.id,
@@ -276,6 +264,7 @@ export class NewTramiteRematriculaComponent implements OnInit{
 						this.claseCedula = "form-group has-error has-feedback ";
 						this.ciudadano=null;
 					}else{
+						this.divEmpresa = false;
 						this.divCiudadano = true;
 						this.ciudadano = response.data;
                     	this.idCiudadanoNew = this.ciudadano.numeroIdentificacion;
@@ -311,6 +300,7 @@ export class NewTramiteRematriculaComponent implements OnInit{
 		                this.claseCedula = "form-group has-error has-feedback ";
 		                this.empresa=null;
                     }else{
+                    	this.divCiudadano = false;
                     	this.divEmpresa = true;
                     	this.empresa = response.data;
                     	this.nitEmpresaNew = this.empresa.nit;

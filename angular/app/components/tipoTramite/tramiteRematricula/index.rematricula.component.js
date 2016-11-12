@@ -99,22 +99,17 @@ var NewTramiteRematriculaComponent = (function () {
     NewTramiteRematriculaComponent.prototype.enviarTramite = function () {
         var _this = this;
         var ciudadanoVehiculo = new ciudadanovehiculo_1.CiudadanoVehiculo(null, this.idCiudadanoNew, this.vehiculo.placa, this.nitEmpresaNew, this.ciudadanoVehiculo.licenciaTransito, this.ciudadanoVehiculo.fechaPropiedadInicial, this.ciudadanoVehiculo.fechaPropiedadInicial, "1");
+        this.TipoMatricula = 36;
         var token = this._loginService.getToken();
         this._CiudadanoVehiculoService.register(ciudadanoVehiculo, token, this.TipoMatricula, this.json, this.TipoTramite).subscribe(function (response) {
             _this.respuesta = response;
+            if (_this.respuesta.status == "success") {
+                _this.tramiteCreado.emit(true);
+            }
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
                     console.log(_this.errorMessage);
-                    alert("Error en la petición");
-                }
-            });
-        });
-        this._TramiteEspecificoService.register2(this.tramiteEspecifico, token, this.datos).subscribe(function (response) {
-            _this.respuesta = response;
-            (function (error) {
-                _this.errorMessage = error;
-                if (_this.errorMessage != null) {
                     alert("Error en la petición");
                 }
             });
@@ -164,6 +159,7 @@ var NewTramiteRematriculaComponent = (function () {
                 _this.ciudadano = null;
             }
             else {
+                _this.divEmpresa = false;
                 _this.divCiudadano = true;
                 _this.ciudadano = response.data;
                 _this.idCiudadanoNew = _this.ciudadano.numeroIdentificacion;
@@ -194,6 +190,7 @@ var NewTramiteRematriculaComponent = (function () {
                 _this.empresa = null;
             }
             else {
+                _this.divCiudadano = false;
                 _this.divEmpresa = true;
                 _this.empresa = response.data;
                 _this.nitEmpresaNew = _this.empresa.nit;
