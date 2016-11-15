@@ -18,20 +18,20 @@ import {Empresa} from '../../../model/empresa/Empresa';
 import {NewCiudadanoComponent} from '../../../components/ciudadano/new.ciudadano.component';
 import {NewEmpresaComponent} from '../../../components/empresa/new.empresa.component';
 
- 
+
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'tramiteTraspaso',
-    templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
-    directives: [ROUTER_DIRECTIVES, NewCiudadanoComponent,
-	    NewEmpresaComponent],
-    providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService,CiudadanoVehiculoService]
+	selector: 'tramiteTraspaso',
+	templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
+	directives: [ROUTER_DIRECTIVES, NewCiudadanoComponent,
+	NewEmpresaComponent],
+	providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService,CiudadanoVehiculoService]
 })
- 
+
 // Clase del componente donde irán los datos y funcionalidades
 export class NewTramiteTraspasoComponent implements OnInit{ 
-	
+
 	public tipoIdentificaciones;
 	public casos;
 	public casoSeleccionado;
@@ -74,11 +74,8 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	public numeroIdentificacion;
 	public nit;
 
-
-	
-
 	constructor(
-		
+
 		private _TramiteEspecificoService: TramiteEspecificoService, 
 		private _VarianteService: VarianteService,
 		private _CiudadanoVehiculoService: CiudadanoVehiculoService, 
@@ -90,18 +87,18 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		private _EmpresaService: EmpresaService,
 		private _CiudadanoService: CiudadanoService,
 		private _router: Router
-		
+
 		){
-			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
-			this.empresa = new Empresa(null,null,null,null,null,"","","","");
-	     }
+		this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+		this.empresa = new Empresa(null,null,null,null,null,"","","","");
+	}
 
 
 	ngOnInit(){
 
 		if(this.ciudadanosVehiculo[0].ciudadano){
-	   	 	this.datos.oldData=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
-	   	 	this.idCiudadanoOld = this.ciudadanosVehiculo[0].ciudadano.id;
+			this.datos.oldData=this.ciudadanosVehiculo[0].ciudadano.numeroIdentificacion;
+			this.idCiudadanoOld = this.ciudadanosVehiculo[0].ciudadano.id;
 		}else{
 			this.datos.oldData=this.ciudadanosVehiculo[0].empresa.nit;
 			this.nitEmpresaOld = this.ciudadanosVehiculo[0].empresa.nit;
@@ -109,44 +106,44 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
 		let token = this._loginService.getToken();
 		this._CasoService.showCasosTramite(token,2).subscribe(
-				response => {
-					this.casos = response.data;
-					this.tramiteEspecifico.casoId=this.casos[0].id;
-				}, 
-				error => {
-					this.errorMessage = <any>error;
+			response => {
+				this.casos = response.data;
+				this.tramiteEspecifico.casoId=this.casos[0].id;
+			}, 
+			error => {
+				this.errorMessage = <any>error;
 
-					if(this.errorMessage != null){
-						alert("Error en la petición");
-					}
+				if(this.errorMessage != null){
+					alert("Error en la petición");
 				}
-		);
+			}
+			);
 		this._VarianteService.showVariantesTramite(token,2).subscribe(
-				response => {
-					this.variantes = response.data;
-					this.tramiteEspecifico.varianteId=this.variantes[0].id;
-				}, 
-				error => {
-					this.errorMessage = <any>error;
+			response => {
+				this.variantes = response.data;
+				this.tramiteEspecifico.varianteId=this.variantes[0].id;
+			}, 
+			error => {
+				this.errorMessage = <any>error;
 
-					if(this.errorMessage != null){
-						alert("Error en la petición");
-					}
+				if(this.errorMessage != null){
+					alert("Error en la petición");
 				}
-		);
+			}
+			);
 		this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
-            response => {
-                this.tipoIdentificaciones = response.data;
-            }, 
-            error => {
-                this.errorMessage = <any>error;
-                if(this.errorMessage != null){
-                    alert("Error en la petición");
-                }
-            }
-        );
+			response => {
+				this.tipoIdentificaciones = response.data;
+			}, 
+			error => {
+				this.errorMessage = <any>error;
+				if(this.errorMessage != null){
+					alert("Error en la petición");
+				}
+			}
+			);
 
-       
+
 
 		this.tramiteEspecifico = new TramiteEspecifico(null,2,this.tramiteGeneralId,null,null,null);
 
@@ -154,39 +151,39 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
 	enviarTramite(){
 
-	for (var i in this.ciudadanosVehiculo) {
-		let ciudadanoVehiculo = new CiudadanoVehiculo
-		(
-			this.ciudadanosVehiculo[i].id, 
-			this.idCiudadanoOld,
-			this.ciudadanosVehiculo[i].vehiculo.placa,
-			this.nitEmpresaOld,
-			this.ciudadanosVehiculo[i].licenciaTransito,
-			this.ciudadanosVehiculo[i].fechaPropiedadInicial,
-			this.ciudadanosVehiculo[i].fechaPropiedadFinal,
-			'0'
-		);
-		let token = this._loginService.getToken();
-		this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo,token).subscribe(
-			response => {
-				this.respuesta = response;
-				if(this.respuesta.status=="success") {
-					 this.tramiteCreado.emit(true);
-				}
-			error => {
-					this.errorMessage = <any>error;
-					if(this.errorMessage != null){
-						console.log(this.errorMessage);
-						alert("Error en la petición");
+		for (var i in this.ciudadanosVehiculo) {
+			let ciudadanoVehiculo = new CiudadanoVehiculo
+			(
+				this.ciudadanosVehiculo[i].id, 
+				this.idCiudadanoOld,
+				this.ciudadanosVehiculo[i].vehiculo.placa,
+				this.nitEmpresaOld,
+				this.ciudadanosVehiculo[i].licenciaTransito,
+				this.ciudadanosVehiculo[i].fechaPropiedadInicial,
+				this.ciudadanosVehiculo[i].fechaPropiedadFinal,
+				'0'
+				);
+			let token = this._loginService.getToken();
+			this._CiudadanoVehiculoService.editCiudadanoVehiculo(ciudadanoVehiculo,token).subscribe(
+				response => {
+					this.respuesta = response;
+					if(this.respuesta.status=="success") {
+						this.tramiteCreado.emit(true);
 					}
-				}
+					error => {
+						this.errorMessage = <any>error;
+						if(this.errorMessage != null){
+							console.log(this.errorMessage);
+							alert("Error en la petición");
+						}
+					}
 
-		});	
-	}	
+				});	
+		}	
 
-	let token = this._loginService.getToken();
+		let token = this._loginService.getToken();
 
-	this.ciudadanoVehiculoRegister = new CiudadanoVehiculo
+		this.ciudadanoVehiculoRegister = new CiudadanoVehiculo
 		(
 			this.ciudadanosVehiculo[i].id, 
 			this.idCiudadanoNew,
@@ -196,13 +193,13 @@ export class NewTramiteTraspasoComponent implements OnInit{
 			this.ciudadanosVehiculo[i].fechaPropiedadInicial,
 			this.ciudadanosVehiculo[i].fechaPropiedadFinal,
 			'1'
-		);
+			);
 
 
-	this._CiudadanoVehiculoService.registerPropietario(this.ciudadanoVehiculoRegister,token).subscribe(
+		this._CiudadanoVehiculoService.registerPropietario(this.ciudadanoVehiculoRegister,token).subscribe(
 			response => {
 				this.respuesta = response;
-			error => {
+				error => {
 					this.errorMessage = <any>error;
 
 					if(this.errorMessage != null){
@@ -211,22 +208,22 @@ export class NewTramiteTraspasoComponent implements OnInit{
 					}
 				}
 
-		});
+			});
 
 
-	this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
-		response => {
-			this.respuesta = response;
+		this._TramiteEspecificoService.register2(this.tramiteEspecifico,token,this.datos).subscribe(
+			response => {
+				this.respuesta = response;
 
-		error => {
-				this.errorMessage = <any>error;
+				error => {
+					this.errorMessage = <any>error;
 
-				if(this.errorMessage != null){
-					alert("Error en la petición");
+					if(this.errorMessage != null){
+						alert("Error en la petición");
+					}
 				}
-			}
 
-	});
+			});
 
 	}
 
@@ -237,7 +234,7 @@ export class NewTramiteTraspasoComponent implements OnInit{
 			if(event == this.casos[i].id) {
 				this.casoSeleccionado = this.casos[i];
 			}
-			
+
 		}
 		if(this.casoSeleccionado.nombre == "Leasing") {
 			this.divDatos= true;
@@ -246,110 +243,108 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		}
 		this.tramiteEspecifico.casoId=event;
 
-		
-	
-		
+
+
+
 	}
 	onChangeVariante(event:any){
 		this.tramiteEspecifico.varianteId=event;
 	}
 
 	onKeyCiudadano(event:any){
-  	let identificacion = {
- 		'numeroIdentificacion' : event,
- 	};
-  	let token = this._loginService.getToken();
-  	this._CiudadanoService.showCiudadanoCedula(token,identificacion).subscribe(
-				response => {
-					let status = response.status;
-					if(status=="error") {
-						this.validateCedula=false;
-						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
-						this.claseCedula = "form-group has-error has-feedback ";
-						this.ciudadano=null;
-						this.divCiudadano = null;
-						this.btnNewPropietario=true;
-						this.modalCiudadano=true;
-					}else{
-						this.divCiudadano = true;
-						this.ciudadano = response.data;
-                    	this.idCiudadanoNew = this.ciudadano.id;
-						this.validateCedula=true;
-						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
-						this.claseCedula = "form-group has-success has-feedback ";
-						this.empresa=null;
-						this.datos.newData = this.ciudadano.numeroIdentificacion;
-						
-					}
-				}, 
-				error => {
-					this.errorMessage = <any>error;
-					if(this.errorMessage != null){
-						alert("Error en la petición");
-					}
+		let identificacion = {
+			'numeroIdentificacion' : event,
+		};
+		let token = this._loginService.getToken();
+		this._CiudadanoService.showCiudadanoCedula(token,identificacion).subscribe(
+			response => {
+				let status = response.status;
+				if(status=="error") {
+					this.validateCedula=false;
+					this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
+					this.claseCedula = "form-group has-error has-feedback ";
+					this.ciudadano=null;
+					this.divCiudadano = null;
+					this.btnNewPropietario=true;
+					this.modalCiudadano=true;
+				}else{
+					this.divCiudadano = true;
+					this.ciudadano = response.data;
+					this.idCiudadanoNew = this.ciudadano.id;
+					this.validateCedula=true;
+					this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
+					this.claseCedula = "form-group has-success has-feedback ";
+					this.empresa=null;
+					this.datos.newData = this.ciudadano.numeroIdentificacion;
+
 				}
+			}, 
+			error => {
+				this.errorMessage = <any>error;
+				if(this.errorMessage != null){
+					alert("Error en la petición");
+				}
+			}
 			);
- 	}
-  
- 	onKeyEmpresa(event:any){
-    let nit = {
-         'nit' : event,
-    };
-      let token = this._loginService.getToken();
-      this._EmpresaService.showNit(token,nit).subscribe(
-                response => {
-                    let status = response.status;
-                    if(status=="error") {
-                    	this.validateCedula=false;
-		                this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
-		                this.claseCedula = "form-group has-error has-feedback ";
-		                this.empresa=null;
-						this.divEmpresa = null;
-		                this.btnNewPropietario=true;
-		                this.modalEmpresa=true;
-                    }else{
-                    	this.divEmpresa = true;
-                    	this.empresa = response.data;
-                    	this.nitEmpresaNew = this.empresa.nit;
-		                this.validateCedula=true;
-		                this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
-		                this.claseCedula = "form-group has-success has-feedback ";
-		                this.ciudadano=null;
-		                this.datos.newData = this.empresa.nit;
-                    }
-                }, 
-                error => {
-                    this.errorMessage = <any>error;
+	}
 
-                    if(this.errorMessage != null){
-                        alert("Error en la petición");
-                    }
-                }
-            );
-  }
+	onKeyEmpresa(event:any){
+		let nit = {
+			'nit' : event,
+		};
+		let token = this._loginService.getToken();
+		this._EmpresaService.showNit(token,nit).subscribe(
+			response => {
+				let status = response.status;
+				if(status=="error") {
+					this.validateCedula=false;
+					this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
+					this.claseCedula = "form-group has-error has-feedback ";
+					this.empresa=null;
+					this.divEmpresa = null;
+					this.btnNewPropietario=true;
+					this.modalEmpresa=true;
+				}else{
+					this.divEmpresa = true;
+					this.empresa = response.data;
+					this.nitEmpresaNew = this.empresa.nit;
+					this.validateCedula=true;
+					this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
+					this.claseCedula = "form-group has-success has-feedback ";
+					this.ciudadano=null;
+					this.datos.newData = this.empresa.nit;
+				}
+			}, 
+			error => {
+				this.errorMessage = <any>error;
 
-  onChangeCasoData(event:any){
+				if(this.errorMessage != null){
+					alert("Error en la petición");
+				}
+			}
+			);
+	}
 
-  	this.datos.datosTraspaso=event;
+	onChangeCasoData(event:any){
+		this.datos.datosTraspaso=event;
+	}
 
-  }
+	ciudadanoCreado(event:any) {
+		this.onKeyCiudadano(event);
 
-      ciudadanoCreado(event:any) {
-	  	this.onKeyCiudadano(event);
+	}
+	empresaCreada(event:any){
+		this.onKeyEmpresa(event);
+	}
 
-	  }
-	  empresaCreada(event:any){
-	  	this.onKeyEmpresa(event);
-	  }
+	btnCancelarModalCedula(){
+		this.modalCiudadano=false;
+		this.btnNewPropietario=false;
+	}
 
-btnCancelarModalCedula(){
-    	this.modalCiudadano=false;
-    	this.btnNewPropietario=false;
-    }
+	btnCancelarModalEmpresa(){
+		this.modalEmpresa=false;
+		this.btnNewPropietario=false;
+	}
 
-    btnCancelarModalEmpresa(){
-	    this.modalEmpresa=false;
-	    this.btnNewPropietario=false;
-    }
- 
 }

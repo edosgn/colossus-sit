@@ -95,8 +95,6 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 
 
 
-
-
 	enviarTramite(){
 		this.datos.newData= this.Motor;
 		let token = this._loginService.getToken();
