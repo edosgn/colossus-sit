@@ -118,7 +118,7 @@ class PropietarioVehiculoController extends Controller
                             array('estado' => 1,'numeroLicencia' => $licenciaTransito)
                         );
 
-                        if( $tramiteGeneral == null){
+                          if( $tramiteGeneral == null || $idTramite == 36){
                             $tramiteGeneral = new TramiteGeneral();
                             $tramiteGeneral->setVehiculo($vehiculo);
                             $tramiteGeneral->setValor(0);
@@ -142,7 +142,7 @@ class PropietarioVehiculoController extends Controller
                             );
 
                             $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
-                                array('estado' => 1,'vehiculo' => $vehiculo->getId())
+                                array('estado' => 1,'numeroLicencia' => $licenciaTransito)
                             );
 
                             $tramiteEspecifico->setDatos($data);
@@ -163,7 +163,7 @@ class PropietarioVehiculoController extends Controller
                         $responce = array(
                             'status' => 'success',
                             'code' => 200,
-                            'msj' => "Proìetario Vehiculo creado con exito", 
+                            'msj' => "Proìetario Vehiculo creado con exito: "+ $licenciaTransito, 
                         );
                        
                     }

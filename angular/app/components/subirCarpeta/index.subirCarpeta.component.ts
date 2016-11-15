@@ -131,6 +131,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public tramiteEspesificolSeleccionado:number;
     public divTramite;
     public tramiteGeneralSeleccionado;
+    public divVehiculo;
     public TipoTramite = {
     	'caso':null,
     	'variante':null
@@ -159,6 +160,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
 		private _router: Router
 		
 		){
+		  this.divVehiculo = 'panel panel-primary';
+
 			let token = this._loginService.getToken();
 		  this._TramiteService.TramitesModulo(1,token).subscribe(
 				response => {
@@ -225,6 +228,16 @@ export class IndexSubirCarpetaComponent implements OnInit{
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
 					this.vehiculo = response.data;
+
+					if(this.vehiculo) { 
+					    if(this.vehiculo.cancelado == 1 || this.vehiculo.pignorado == 1) { 
+							 this.divVehiculo = 'panel panel-danger';
+						}else {
+							 this.divVehiculo = 'panel panel-primary';
+						}
+					} 
+
+					
 					let status = response.status;
 					if(status == 'error') {
 						this.tramitesGeneral=false;
@@ -471,7 +484,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 
   onChangeTramiteGeneral(id){
   	this.tramiteGeneralSeleccionado= id;
-  	this.tramiteEspesificolSeleccionado = id;
+  	if(this.vehiculo.cancelado == 0 && this.vehiculo.pignorado ==0) { 
+	  	this.tramiteEspesificolSeleccionado = id;
+  	}
 	let token = this._loginService.getToken();
 	  	this._TramiteEspecificoService.showTramiteEspecificoGeneral(token,id).subscribe(
 					response => {

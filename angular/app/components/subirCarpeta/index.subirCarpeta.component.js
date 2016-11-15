@@ -70,6 +70,7 @@ var IndexSubirCarpetaComponent = (function () {
         this.json = {
             'datosGenerales': null,
         };
+        this.divVehiculo = 'panel panel-primary';
         var token = this._loginService.getToken();
         this._TramiteService.TramitesModulo(1, token).subscribe(function (response) {
             _this.tramites = response.data;
@@ -119,6 +120,14 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
+            if (_this.vehiculo) {
+                if (_this.vehiculo.cancelado == 1 || _this.vehiculo.pignorado == 1) {
+                    _this.divVehiculo = 'panel panel-danger';
+                }
+                else {
+                    _this.divVehiculo = 'panel panel-primary';
+                }
+            }
             var status = response.status;
             if (status == 'error') {
                 _this.tramitesGeneral = false;
@@ -333,7 +342,9 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.onChangeTramiteGeneral = function (id) {
         var _this = this;
         this.tramiteGeneralSeleccionado = id;
-        this.tramiteEspesificolSeleccionado = id;
+        if (this.vehiculo.cancelado == 0 && this.vehiculo.pignorado == 0) {
+            this.tramiteEspesificolSeleccionado = id;
+        }
         var token = this._loginService.getToken();
         this._TramiteEspecificoService.showTramiteEspecificoGeneral(token, id).subscribe(function (response) {
             _this.tramiteEspecificos = response.data;

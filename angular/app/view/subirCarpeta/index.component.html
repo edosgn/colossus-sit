@@ -16,8 +16,10 @@
 
 
 <div *ngIf="validate" class="col-md-12">
-	<div class="panel panel-primary">
-		<div class="panel-heading">{{msg}}</div>
+	<div [class]="divVehiculo" >
+ 		<div *ngIf="vehiculo?.cancelado == 1" class="panel-heading">Matricula del Vehiculo Cancelada</div>
+ 		<div *ngIf="vehiculo?.pignorado == 1" class="panel-heading">Vehiculo pignorado</div>
+		<div *ngIf="vehiculo?.cancelado == 0 && vehiculo.pignorado == 0" class="panel-heading">{{msg}}</div>
 		<div class="panel-body">
 			<table class="table table-bordered">
 				<thead>
@@ -392,6 +394,9 @@
 
 		<tramiteRematricula *ngIf="vehiculo.cancelado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
 	    </tramiteRematricula>
+
+	    <tramiteLevantarPrenda *ngIf="vehiculo.pignorado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
+		</tramiteLevantarPrenda>
 
 
 		<table class="table table-bordered">
