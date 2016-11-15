@@ -24,6 +24,8 @@ var tipoIdentificacion_service_1 = require('../../../services/tipo_Identificacio
 var ciudadanoVehiculo_service_1 = require('../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service');
 var Ciudadano_1 = require('../../../model/ciudadano/Ciudadano');
 var Empresa_1 = require('../../../model/empresa/Empresa');
+var new_ciudadano_component_1 = require('../../../components/ciudadano/new.ciudadano.component');
+var new_empresa_component_1 = require('../../../components/empresa/new.empresa.component');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewTramiteTraspasoComponent = (function () {
     function NewTramiteTraspasoComponent(_TramiteEspecificoService, _VarianteService, _CiudadanoVehiculoService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
@@ -54,8 +56,9 @@ var NewTramiteTraspasoComponent = (function () {
         this.nitEmpresaOld = null;
         this.idCiudadanoNew = null;
         this.nitEmpresaNew = null;
-        this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
+        this.btnNewPropietario = null;
         this.ciudadano = new Ciudadano_1.Ciudadano(null, "", null, "", "", "", "", "");
+        this.empresa = new Empresa_1.Empresa(null, null, null, null, null, "", "", "", "");
     }
     NewTramiteTraspasoComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -168,6 +171,9 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                 _this.claseCedula = "form-group has-error has-feedback ";
                 _this.ciudadano = null;
+                _this.divCiudadano = null;
+                _this.btnNewPropietario = true;
+                _this.modalCiudadano = true;
             }
             else {
                 _this.divCiudadano = true;
@@ -199,6 +205,9 @@ var NewTramiteTraspasoComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                 _this.claseCedula = "form-group has-error has-feedback ";
                 _this.empresa = null;
+                _this.divEmpresa = null;
+                _this.btnNewPropietario = true;
+                _this.modalEmpresa = true;
             }
             else {
                 _this.divEmpresa = true;
@@ -220,6 +229,20 @@ var NewTramiteTraspasoComponent = (function () {
     NewTramiteTraspasoComponent.prototype.onChangeCasoData = function (event) {
         this.datos.datosTraspaso = event;
     };
+    NewTramiteTraspasoComponent.prototype.ciudadanoCreado = function (event) {
+        this.onKeyCiudadano(event);
+    };
+    NewTramiteTraspasoComponent.prototype.empresaCreada = function (event) {
+        this.onKeyEmpresa(event);
+    };
+    NewTramiteTraspasoComponent.prototype.btnCancelarModalCedula = function () {
+        this.modalCiudadano = false;
+        this.btnNewPropietario = false;
+    };
+    NewTramiteTraspasoComponent.prototype.btnCancelarModalEmpresa = function () {
+        this.modalEmpresa = false;
+        this.btnNewPropietario = false;
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -236,7 +259,8 @@ var NewTramiteTraspasoComponent = (function () {
         core_1.Component({
             selector: 'tramiteTraspaso',
             templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES],
+            directives: [router_1.ROUTER_DIRECTIVES, new_ciudadano_component_1.NewCiudadanoComponent,
+                new_empresa_component_1.NewEmpresaComponent],
             providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])

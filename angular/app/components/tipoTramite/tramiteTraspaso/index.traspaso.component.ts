@@ -15,6 +15,8 @@ import {TipoIdentificacionService} from '../../../services/tipo_Identificacion/t
 import {CiudadanoVehiculoService} from '../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service';
 import {Ciudadano} from '../../../model/ciudadano/Ciudadano';
 import {Empresa} from '../../../model/empresa/Empresa';
+import {NewCiudadanoComponent} from '../../../components/ciudadano/new.ciudadano.component';
+import {NewEmpresaComponent} from '../../../components/empresa/new.empresa.component';
 
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -22,7 +24,8 @@ import {Empresa} from '../../../model/empresa/Empresa';
 @Component({
     selector: 'tramiteTraspaso',
     templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [ROUTER_DIRECTIVES, NewCiudadanoComponent,
+	    NewEmpresaComponent],
     providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService,CiudadanoVehiculoService]
 })
  
@@ -65,6 +68,11 @@ export class NewTramiteTraspasoComponent implements OnInit{
 	public idCiudadanoNew = null;
 	public nitEmpresaNew= null;
 	public ciudadanoVehiculoRegister;
+	public btnNewPropietario=null;
+	public modalCiudadano;
+	public modalEmpresa;
+	public numeroIdentificacion;
+	public nit;
 
 
 	
@@ -84,8 +92,8 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		private _router: Router
 		
 		){
-			this.empresa = new Empresa(null,null,null,null,null,"","","","");
 			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+			this.empresa = new Empresa(null,null,null,null,null,"","","","");
 	     }
 
 
@@ -259,6 +267,9 @@ export class NewTramiteTraspasoComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 						this.claseCedula = "form-group has-error has-feedback ";
 						this.ciudadano=null;
+						this.divCiudadano = null;
+						this.btnNewPropietario=true;
+						this.modalCiudadano=true;
 					}else{
 						this.divCiudadano = true;
 						this.ciudadano = response.data;
@@ -293,6 +304,9 @@ export class NewTramiteTraspasoComponent implements OnInit{
 		                this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 		                this.claseCedula = "form-group has-error has-feedback ";
 		                this.empresa=null;
+						this.divEmpresa = null;
+		                this.btnNewPropietario=true;
+		                this.modalEmpresa=true;
                     }else{
                     	this.divEmpresa = true;
                     	this.empresa = response.data;
@@ -320,5 +334,22 @@ export class NewTramiteTraspasoComponent implements OnInit{
 
   }
 
+      ciudadanoCreado(event:any) {
+	  	this.onKeyCiudadano(event);
+
+	  }
+	  empresaCreada(event:any){
+	  	this.onKeyEmpresa(event);
+	  }
+
+btnCancelarModalCedula(){
+    	this.modalCiudadano=false;
+    	this.btnNewPropietario=false;
+    }
+
+    btnCancelarModalEmpresa(){
+	    this.modalEmpresa=false;
+	    this.btnNewPropietario=false;
+    }
  
 }
