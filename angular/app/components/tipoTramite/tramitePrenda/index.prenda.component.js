@@ -22,6 +22,8 @@ var combustible_service_1 = require("../../../services/combustible/combustible.s
 var tipoIdentificacion_service_1 = require('../../../services/tipo_Identificacion/tipoIdentificacion.service');
 var empresa_service_1 = require("../../../services/empresa/empresa.service");
 var ciudadano_service_1 = require("../../../services/ciudadano/ciudadano.service");
+var new_ciudadano_component_1 = require('../../../components/ciudadano/new.ciudadano.component');
+var new_empresa_component_1 = require('../../../components/empresa/new.empresa.component');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewTramitePrendaComponent = (function () {
     function NewTramitePrendaComponent(_TramiteEspecificoService, _VarianteService, _TipoIdentificacionService, _CombustibleService, _CasoService, _EmpresaService, _CiudadanoService, _VehiculoService, _loginService, _route, _router) {
@@ -131,6 +133,8 @@ var NewTramitePrendaComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                 _this.claseCedula = "form-group has-error has-feedback ";
                 _this.ciudadano = null;
+                _this.btnNewPropietario = true;
+                _this.modalCiudadano = true;
             }
             else {
                 _this.divCiudadano = true;
@@ -162,6 +166,8 @@ var NewTramitePrendaComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                 _this.claseCedula = "form-group has-error has-feedback ";
                 _this.empresa = null;
+                _this.btnNewPropietario = true;
+                _this.modalEmpresa = true;
             }
             else {
                 _this.divEmpresa = true;
@@ -186,6 +192,20 @@ var NewTramitePrendaComponent = (function () {
     NewTramitePrendaComponent.prototype.onChangeVariante = function (event) {
         this.tramiteEspecifico.varianteId = event;
     };
+    NewTramitePrendaComponent.prototype.ciudadanoCreado = function (event) {
+        this.onKeyCiudadano(event);
+    };
+    NewTramitePrendaComponent.prototype.empresaCreada = function (event) {
+        this.onKeyEmpresa(event);
+    };
+    NewTramitePrendaComponent.prototype.btnCancelarModalCedula = function () {
+        this.modalCiudadano = false;
+        this.btnNewPropietario = false;
+    };
+    NewTramitePrendaComponent.prototype.btnCancelarModalEmpresa = function () {
+        this.modalEmpresa = false;
+        this.btnNewPropietario = false;
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -202,7 +222,11 @@ var NewTramitePrendaComponent = (function () {
         core_1.Component({
             selector: 'tramitePrenda',
             templateUrl: 'app/view/tipoTramite/prenda/index.html',
-            directives: [router_1.ROUTER_DIRECTIVES],
+            directives: [
+                router_1.ROUTER_DIRECTIVES,
+                new_ciudadano_component_1.NewCiudadanoComponent,
+                new_empresa_component_1.NewEmpresaComponent
+            ],
             providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, combustible_service_1.CombustibleService, tipoIdentificacion_service_1.TipoIdentificacionService, ciudadano_service_1.CiudadanoService, empresa_service_1.EmpresaService]
         }), 
         __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, tipoIdentificacion_service_1.TipoIdentificacionService, combustible_service_1.CombustibleService, caso_service_1.CasoService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])

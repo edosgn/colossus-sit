@@ -15,6 +15,8 @@ import {TipoIdentificacionService} from '../../../services/tipo_Identificacion/t
 import {CiudadanoVehiculoService} from '../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service';
 import {Ciudadano} from '../../../model/ciudadano/Ciudadano';
 import {Empresa} from '../../../model/empresa/Empresa';
+import {NewCiudadanoComponent} from '../../../components/ciudadano/new.ciudadano.component';
+import {NewEmpresaComponent} from '../../../components/empresa/new.empresa.component';
 
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -22,7 +24,12 @@ import {Empresa} from '../../../model/empresa/Empresa';
 @Component({
     selector: 'tramiteRematricula',
     templateUrl: 'app/view/tipoTramite/tramiteRematricula/index.html',
-    directives: [ROUTER_DIRECTIVES],
+    directives:
+	[
+	ROUTER_DIRECTIVES, 
+	NewCiudadanoComponent,
+	NewEmpresaComponent
+	],
     providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService,CiudadanoVehiculoService]
 })
  
@@ -69,6 +76,11 @@ export class NewTramiteRematriculaComponent implements OnInit{
 	public json=null;
 	public licenciaTransito;
 	public fechaRematricula;
+	public numeroIdentificacion;
+	public nit;
+	public btnNewPropietario;
+	public modalEmpresa;
+	public modalCiudadano;
 
 
 
@@ -263,6 +275,8 @@ export class NewTramiteRematriculaComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 						this.claseCedula = "form-group has-error has-feedback ";
 						this.ciudadano=null;
+						this.btnNewPropietario=true;
+						this.modalCiudadano=true;
 					}else{
 						this.divEmpresa = false;
 						this.divCiudadano = true;
@@ -272,6 +286,7 @@ export class NewTramiteRematriculaComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
 						this.claseCedula = "form-group has-success has-feedback ";
 						this.empresa=null;
+
 						
 
 						
@@ -299,6 +314,8 @@ export class NewTramiteRematriculaComponent implements OnInit{
 		                this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 		                this.claseCedula = "form-group has-error has-feedback ";
 		                this.empresa=null;
+		                this.btnNewPropietario=true;
+		                this.modalEmpresa=true;
                     }else{
                     	this.divCiudadano = false;
                     	this.divEmpresa = true;
@@ -327,6 +344,24 @@ export class NewTramiteRematriculaComponent implements OnInit{
   	this.datos.datosRematricula=event;
 
   }
+
+  ciudadanoCreado(event:any) {
+		this.onKeyCiudadano(event);
+
+	}
+	empresaCreada(event:any){
+		this.onKeyEmpresa(event);
+	}
+
+	btnCancelarModalCedula(){
+		this.modalCiudadano=false;
+		this.btnNewPropietario=false;
+	}
+
+	btnCancelarModalEmpresa(){
+		this.modalEmpresa=false;
+		this.btnNewPropietario=false;
+	}
 
  
 }

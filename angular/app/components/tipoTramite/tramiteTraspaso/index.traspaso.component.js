@@ -259,8 +259,11 @@ var NewTramiteTraspasoComponent = (function () {
         core_1.Component({
             selector: 'tramiteTraspaso',
             templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
-            directives: [router_1.ROUTER_DIRECTIVES, new_ciudadano_component_1.NewCiudadanoComponent,
-                new_empresa_component_1.NewEmpresaComponent],
+            directives: [
+                router_1.ROUTER_DIRECTIVES,
+                new_ciudadano_component_1.NewCiudadanoComponent,
+                new_empresa_component_1.NewEmpresaComponent
+            ],
             providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])

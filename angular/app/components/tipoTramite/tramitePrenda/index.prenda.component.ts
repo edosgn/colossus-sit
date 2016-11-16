@@ -12,6 +12,8 @@ import {CombustibleService} from "../../../services/combustible/combustible.serv
 import {TipoIdentificacionService} from '../../../services/tipo_Identificacion/tipoIdentificacion.service';
 import {EmpresaService} from "../../../services/empresa/empresa.service";
 import {CiudadanoService} from "../../../services/ciudadano/ciudadano.service";
+import {NewCiudadanoComponent} from '../../../components/ciudadano/new.ciudadano.component';
+import {NewEmpresaComponent} from '../../../components/empresa/new.empresa.component';
 
  
 // Decorador component, indicamos en que etiqueta se va a cargar la 
@@ -19,7 +21,12 @@ import {CiudadanoService} from "../../../services/ciudadano/ciudadano.service";
 @Component({
     selector: 'tramitePrenda',
     templateUrl: 'app/view/tipoTramite/prenda/index.html',
-    directives: [ROUTER_DIRECTIVES],
+    directives:
+	[
+	ROUTER_DIRECTIVES, 
+	NewCiudadanoComponent,
+	NewEmpresaComponent
+	],
     providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,CombustibleService,TipoIdentificacionService,CiudadanoService,EmpresaService]
 })
  
@@ -60,6 +67,11 @@ export class NewTramitePrendaComponent implements OnInit{
 	public tipoIdentificaciones;
 	public cancelado=null;
 	public pignorado=null;
+	public numeroIdentificacion;
+	public nit;
+	public btnNewPropietario;
+	public modalEmpresa;
+	public modalCiudadano;
 	
 
 	constructor(
@@ -209,6 +221,8 @@ export class NewTramitePrendaComponent implements OnInit{
 						this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 						this.claseCedula = "form-group has-error has-feedback ";
 						this.ciudadano=null;
+						this.btnNewPropietario=true;
+						this.modalCiudadano=true;
 					}else{
 						this.divCiudadano = true;
 						this.ciudadano = response.data;
@@ -243,6 +257,8 @@ export class NewTramitePrendaComponent implements OnInit{
 		                this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
 		                this.claseCedula = "form-group has-error has-feedback ";
 		                this.empresa=null;
+		                this.btnNewPropietario=true;
+		                this.modalEmpresa=true;
                     }else{
                     	this.divEmpresa = true;
                     	this.empresa = response.data;
@@ -269,6 +285,24 @@ export class NewTramitePrendaComponent implements OnInit{
 	onChangeVariante(event:any){
 		this.tramiteEspecifico.varianteId=event;
 	}
+	ciudadanoCreado(event:any) {
+		this.onKeyCiudadano(event);
+
+	}
+	empresaCreada(event:any){
+		this.onKeyEmpresa(event);
+	}
+
+	btnCancelarModalCedula(){
+		this.modalCiudadano=false;
+		this.btnNewPropietario=false;
+	}
+
+	btnCancelarModalEmpresa(){
+		this.modalEmpresa=false;
+		this.btnNewPropietario=false;
+	}
+
 	
 }
 

@@ -25,6 +25,8 @@ var tipoIdentificacion_service_1 = require('../../../services/tipo_Identificacio
 var ciudadanoVehiculo_service_1 = require('../../../services/ciudadanoVehiculo/ciudadanoVehiculo.service');
 var Ciudadano_1 = require('../../../model/ciudadano/Ciudadano');
 var Empresa_1 = require('../../../model/empresa/Empresa');
+var new_ciudadano_component_1 = require('../../../components/ciudadano/new.ciudadano.component');
+var new_empresa_component_1 = require('../../../components/empresa/new.empresa.component');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewTramiteRematriculaComponent = (function () {
     function NewTramiteRematriculaComponent(_TramiteEspecificoService, _VarianteService, _CiudadanoVehiculoService, _TipoIdentificacionService, _CasoService, _VehiculoService, _loginService, _route, _EmpresaService, _CiudadanoService, _router) {
@@ -157,6 +159,8 @@ var NewTramiteRematriculaComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                 _this.claseCedula = "form-group has-error has-feedback ";
                 _this.ciudadano = null;
+                _this.btnNewPropietario = true;
+                _this.modalCiudadano = true;
             }
             else {
                 _this.divEmpresa = false;
@@ -188,6 +192,8 @@ var NewTramiteRematriculaComponent = (function () {
                 _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
                 _this.claseCedula = "form-group has-error has-feedback ";
                 _this.empresa = null;
+                _this.btnNewPropietario = true;
+                _this.modalEmpresa = true;
             }
             else {
                 _this.divCiudadano = false;
@@ -210,6 +216,20 @@ var NewTramiteRematriculaComponent = (function () {
     NewTramiteRematriculaComponent.prototype.onChangeCasoData = function (event) {
         this.datos.datosRematricula = event;
     };
+    NewTramiteRematriculaComponent.prototype.ciudadanoCreado = function (event) {
+        this.onKeyCiudadano(event);
+    };
+    NewTramiteRematriculaComponent.prototype.empresaCreada = function (event) {
+        this.onKeyEmpresa(event);
+    };
+    NewTramiteRematriculaComponent.prototype.btnCancelarModalCedula = function () {
+        this.modalCiudadano = false;
+        this.btnNewPropietario = false;
+    };
+    NewTramiteRematriculaComponent.prototype.btnCancelarModalEmpresa = function () {
+        this.modalEmpresa = false;
+        this.btnNewPropietario = false;
+    };
     __decorate([
         core_1.Input(), 
         __metadata('design:type', Object)
@@ -226,7 +246,11 @@ var NewTramiteRematriculaComponent = (function () {
         core_1.Component({
             selector: 'tramiteRematricula',
             templateUrl: 'app/view/tipoTramite/tramiteRematricula/index.html',
-            directives: [router_1.ROUTER_DIRECTIVES],
+            directives: [
+                router_1.ROUTER_DIRECTIVES,
+                new_ciudadano_component_1.NewCiudadanoComponent,
+                new_empresa_component_1.NewEmpresaComponent
+            ],
             providers: [login_service_1.LoginService, tramiteEspecifico_service_1.TramiteEspecificoService, vehiculo_service_1.VehiculoService, variante_service_1.VarianteService, caso_service_1.CasoService, tipoIdentificacion_service_1.TipoIdentificacionService, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService]
         }), 
         __metadata('design:paramtypes', [tramiteEspecifico_service_1.TramiteEspecificoService, variante_service_1.VarianteService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, tipoIdentificacion_service_1.TipoIdentificacionService, caso_service_1.CasoService, vehiculo_service_1.VehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, empresa_service_1.EmpresaService, ciudadano_service_1.CiudadanoService, router_1.Router])

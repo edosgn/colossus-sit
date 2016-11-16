@@ -24,8 +24,12 @@ import {NewEmpresaComponent} from '../../../components/empresa/new.empresa.compo
 @Component({
 	selector: 'tramiteTraspaso',
 	templateUrl: 'app/view/tipoTramite/tramiteTraspaso/index.component.html',
-	directives: [ROUTER_DIRECTIVES, NewCiudadanoComponent,
-	NewEmpresaComponent],
+	directives:
+	[
+	ROUTER_DIRECTIVES, 
+	NewCiudadanoComponent,
+	NewEmpresaComponent
+	],
 	providers: [LoginService,TramiteEspecificoService,VehiculoService,VarianteService,CasoService,TipoIdentificacionService,EmpresaService,CiudadanoService,CiudadanoVehiculoService]
 })
 

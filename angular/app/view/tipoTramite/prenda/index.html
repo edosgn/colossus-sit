@@ -5,7 +5,7 @@
 		<div class="panel-body">
 
 		<div class="col-md-12">
-			<p class="col-md-6">
+			<p class="col-md-6"> 
 				<label>Tipo Identificacion</label>
 				<select class="form-control" [(ngModel)]="tipoIdentificacion">
 				<option *ngFor="#tipoIdentificacion of tipoIdentificaciones" [value]='tipoIdentificacion.id' >{{tipoIdentificacion.nombre}}</option>
@@ -13,23 +13,33 @@
 			</p>
 
 			<div *ngIf="tipoIdentificacion!=4" class="col-md-6"> 
-			    <div>
+			    <div class="col-md-10">
 			    	<div  [class]="claseCedula">
 			    	  <label>Numero Identificacion</label>
-					  <input  (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
+					  <input [(ngModel)]="numeroIdentificacion" (blur)="onKeyCiudadano($event.target.value)" (keyup.enter)="onKeyCiudadano($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Identificacion">
 					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 					</div>
-			    </div>
+				</div>
+				<div class="col-md-2" style="margin-top: 37px;">
+						<button [disabled]='!btnNewPropietario' data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button>
+				</div>
 			</div>
+			
+			
 			<div *ngIf="tipoIdentificacion==4" class="col-md-6"> 
-			    <div>
+			    <div class="col-md-10">
 			    	<div  [class]="claseCedula">
 			    	  <label>Numero Identificacion</label>
-					  <input  (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Nit">
+					  <input [(ngModel)]="nit" (blur)="onKeyEmpresa($event.target.value)" (keyup.enter)="onKeyEmpresa($event.target.value)" type="number" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Nit">
 					  <span [class]="claseSpanCedula" aria-hidden="true"></span>
 					</div>
 			    </div>
+			   <div class="col-md-2" style="margin-top: 37px;">
+					<button [disabled]='!btnNewPropietario' data-toggle="modal" data-target="#myModalEmpresa" class="btn btn-primary btn-sm glyphicon glyphicon-plus"></button>
+				</div>
 			</div>
+			
+			
 		</div>
 
 		<div  *ngIf="divCiudadano">
@@ -123,3 +133,39 @@
 		</div>
 	
 </div>
+
+<div *ngIf="modalCiudadano" data-backdrop="static" class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" (click)="btnCancelarModalCedula()"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Registrar Ciudadano</h4>
+			</div>
+			<registerCiudadano (ciudadanoCreado)="ciudadanoCreado($event)" [identificacionIngresada]="numeroIdentificacion"></registerCiudadano>
+			<div class="modal-footer">
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div> 
+
+<div *ngIf="modalEmpresa" class="modal fade" id="myModalEmpresa" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" (click)="btnCancelarModalEmpresa()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Registrar Empresa</h4>
+			</div>
+			<registerEmpresa (empresaCreada)="empresaCreada($event)" [nitIngresada]="nit" ></registerEmpresa>
+			<div class="modal-footer">
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+<script type="text/javascript">
+	$('#myModal').on('shown.bs.modal', function () {
+		$('#myInput').focus()
+	})
+	$('#myModalEmpresa').on('shown.bs.modal', function () {
+		$('#myInput').focus()
+	})
+</script>
