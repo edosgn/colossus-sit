@@ -26,41 +26,29 @@
 				</p>-->
 
 				<p class="col-md-6">
-					<label >Numero Qpl:</label>
-					<input #numeroQpl="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroQpl" ngControl="numeroQpl"  required />
-					<span *ngIf="!numeroQpl.valid && numeroQpl.touched" style="color:red;">Numero de Factura es obligatorio</span>
-					<br>
-				</p>
-				
-				<p class="col-md-6">
-					<label >Valor:</label>
-					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.valor" ngControl="valor"  required />
-					<span *ngIf="!valor.valid && valor.touched" style="color:red;">Numero de Factura es obligatorio</span>
-					<br>
-				</p>
-				<p class="col-md-6">
-					<label >fecha final:</label>
+					<label >fecha Tramite *:</label>
 					<input #fechaFinal="ngForm"  type="date" class="form-control" [(ngModel)]="tramiteGeneral.fechaFinal" ngControl="fechaFinal"  required />
 					<span *ngIf="!fechaFinal.valid && fechaFinal.touched" style="color:red;">Numero de Factura es obligatorio</span>
 					<br>
 				</p>
-				<p class="col-md-6">
-					<label >fecha inicial:</label>
-					<input #fechaInicial="ngForm"  type="date" class="form-control" [(ngModel)]="tramiteGeneral.fechaInicial" ngControl="fechaInicial"  required />
-					<span *ngIf="!fechaInicial.valid && fechaInicial.touched" style="color:red;">Numero de Factura es obligatorio</span>
-					<br>
-				</p>
 				
 				<p class="col-md-6">
-					<label >Numero licenciia:</label>
+					<label >Numero licenciia *:</label>
 					<input #numeroLicencia="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroLicencia" ngControl="numeroLicencia"  required />
 					<span *ngIf="!numeroLicencia.valid && numeroLicencia.touched" style="color:red;">Numero de Factura es obligatorio</span>
 					<br>
 				</p>
 
 				<p class="col-md-6">
+					<label >Numero Qpl:</label>
+					<input #numeroQpl="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroQpl" ngControl="numeroQpl" />
+					<span *ngIf="!numeroQpl.valid && numeroQpl.touched" style="color:red;">Numero de Factura es obligatorio</span>
+					<br>
+				</p>
+
+				<p class="col-md-6">
 					<label >Numero sustrato:</label>
-					<input #numeroSustrato="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroSustrato" ngControl="numeroSustrato"  required />
+					<input #numeroSustrato="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteGeneral.numeroSustrato" ngControl="numeroSustrato" />
 					<span *ngIf="!numeroSustrato.valid && numeroLicencia.touched" style="color:red;">Numero de Factura es obligatorio</span>
 					<br>
 				</p>

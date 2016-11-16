@@ -61,12 +61,12 @@ class TramiteGeneralController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{
-                        $numeroQpl = $params->numeroQpl;
-                        $fechaInicial = $params->fechaInicial;
+                        $numeroQpl = (isset($params->numeroQpl)) ? $params->numeroQpl : 0; 
+                        $fechaInicial = $params->fechaFinal;
                         $fechaFinal = $params->fechaFinal;
-                        $valor = $params->valor;
+                        $valor = (isset($params->valor)) ? $params->valor : 0; 
                         $numeroLicencia = $params->numeroLicencia;
-                        $numeroSustrato = $params->numeroSustrato;
+                        $numeroSustrato = (isset($params->numeroSustrato)) ? $params->numeroSustrato : false;
                         $vehiculoId = $params->vehiculoId;
                         $apoderado = (isset($params->apoderado)) ? $params->apoderado : false;
                         $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
