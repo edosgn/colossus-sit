@@ -55,6 +55,15 @@ class PropietarioVehiculoController extends Controller
         $helpers = $this->get("app.helpers"); 
         $hash = $request->get("authorization", null);
         $data = $request->get("datos",null);
+        $pibote= json_decode($data);
+
+        $dataTramite = array(
+            'datosLeasing' => (isset($pibote->datosGenerales)) ? $pibote->datosGenerales : null, 
+        );
+
+        
+
+
         $casosVariantes = $request->get("casosVariantes",null);
         $entradas = json_decode($casosVariantes);
 
@@ -145,7 +154,7 @@ class PropietarioVehiculoController extends Controller
                                 array('estado' => 1,'numeroLicencia' => $licenciaTransito)
                             );
 
-                            $tramiteEspecifico->setDatos($data);
+                            $tramiteEspecifico->setDatos($dataTramite);
                             $tramiteEspecifico->setTramite($tramite);
                             $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
                             $tramiteEspecifico->setCaso($casoBd);

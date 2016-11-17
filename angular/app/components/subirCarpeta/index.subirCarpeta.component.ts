@@ -557,11 +557,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     	this.divTramite=true;
     }
     prueba(event:any){
-    	if(event=="2") {
-    		this.json.datosGenerales = "Con opcion de compra";
-    	}else{
-    		this.json.datosGenerales = event;
-    	}
+    	this.json.datosGenerales = event;
     }
 
     vheiculoCreado(event:any) {

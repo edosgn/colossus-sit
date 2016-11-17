@@ -410,12 +410,7 @@ var IndexSubirCarpetaComponent = (function () {
         this.divTramite = true;
     };
     IndexSubirCarpetaComponent.prototype.prueba = function (event) {
-        if (event == "2") {
-            this.json.datosGenerales = "Con opcion de compra";
-        }
-        else {
-            this.json.datosGenerales = event;
-        }
+        this.json.datosGenerales = event;
     };
     IndexSubirCarpetaComponent.prototype.vheiculoCreado = function (event) {
         this.placa.placa = event;
