@@ -40,7 +40,8 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 	public vehiculo2;
 	public datos = {
 		'newData':null,
-		'oldData':null
+		'oldData':null,
+		'codigoDijin': null
 	};
 	
 
@@ -65,6 +66,7 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 		this._CasoService.showCasosTramite(token,7).subscribe(
 				response => {
 					this.casos = response.data;
+					this.tramiteEspecifico.casoId=this.casos[0].id;
 				}, 
 				error => {
 					this.errorMessage = <any>error;
@@ -78,6 +80,7 @@ export class NewTramiteRegrabarMotorComponent implements OnInit{
 		this._VarianteService.showVariantesTramite(token,7).subscribe(
 				response => {
 					this.variantes = response.data;
+					this.tramiteEspecifico.varianteId=this.variantes[0].id;
 				}, 
 				error => {
 					this.errorMessage = <any>error;

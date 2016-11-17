@@ -20,7 +20,7 @@
 
 				<div class="col-md-6">
 					<label >Valor:</label>
-					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"   />
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
 					<br>
 				</div>
@@ -34,7 +34,7 @@
 
 				<div class="col-md-6">
 					<label >Numero revicion SIJIN DIJIN:</label>
-					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="datos.datosCasos"  required />
+					<input #codigo="ngForm"  type="number" class="form-control" [(ngModel)]="datos.codigoDijin"   />
 					<span *ngIf="!codigo.valid && codigo.touched" style="color:red;">codigo obligatorios</span>
 					<br>
 				</div>

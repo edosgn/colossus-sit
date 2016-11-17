@@ -36,7 +36,8 @@ var NewTramiteRegrabarMotorComponent = (function () {
         this.tramiteCreado = new core_1.EventEmitter();
         this.datos = {
             'newData': null,
-            'oldData': null
+            'oldData': null,
+            'codigoDijin': null
         };
     }
     NewTramiteRegrabarMotorComponent.prototype.ngOnInit = function () {
@@ -45,6 +46,7 @@ var NewTramiteRegrabarMotorComponent = (function () {
         var token = this._loginService.getToken();
         this._CasoService.showCasosTramite(token, 7).subscribe(function (response) {
             _this.casos = response.data;
+            _this.tramiteEspecifico.casoId = _this.casos[0].id;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {
@@ -54,6 +56,7 @@ var NewTramiteRegrabarMotorComponent = (function () {
         });
         this._VarianteService.showVariantesTramite(token, 7).subscribe(function (response) {
             _this.variantes = response.data;
+            _this.tramiteEspecifico.varianteId = _this.variantes[0].id;
         }, function (error) {
             _this.errorMessage = error;
             if (_this.errorMessage != null) {

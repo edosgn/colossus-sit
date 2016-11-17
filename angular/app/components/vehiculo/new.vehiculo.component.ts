@@ -47,6 +47,7 @@ export class NewVehiculoComponent {
 	public habilitarc;
 	public marcas;
 	public marca;
+	public departamentoDefecto;
 	@Input() placaIngresada = '';
 	@Output() vheiculoCreado = new EventEmitter<any>();
 
@@ -68,6 +69,27 @@ export class NewVehiculoComponent {
 		private _router: Router
 		
 	){
+		this.departamentoDefecto = 21;
+
+		this.departamento ={
+			"departamentoId":this.departamentoDefecto,
+	};
+    let token = this._loginService.getToken();
+    this._MunicipioService.getMunicipiosDep(this.departamento,token).subscribe(
+				response => {
+					this.municipios = response.data;
+					this.vehiculo.municipioId=this.municipios[0].id;
+					this.habilitar=false;
+				}, 
+				error => {
+					this.errorMessage = <any>error;
+
+					if(this.errorMessage != null){
+						console.log(this.errorMessage);
+						alert("Error en la petición");
+					}
+				}
+			);
 	}
  
 	onChange(departamentoValue) {
@@ -84,7 +106,6 @@ export class NewVehiculoComponent {
 				}, 
 				error => {
 					this.errorMessage = <any>error;
-
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");
@@ -141,7 +162,6 @@ export class NewVehiculoComponent {
 		this.vehiculo = new Vehiculo(null,null,null,null,null,null,null,null,null,this.placaIngresada,"","","","","","","","","","",null,null,null,null);
 		
 		let token = this._loginService.getToken();
-		
 		
 		this._ServicioService.getServicio().subscribe(
 				response => {

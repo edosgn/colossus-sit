@@ -27,6 +27,7 @@ var Vehiculo_1 = require('../../model/vehiculo/Vehiculo');
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var NewVehiculoComponent = (function () {
     function NewVehiculoComponent(_MunicipioService, _LineaService, _ServicioService, _ColorService, _ClaseService, _DepartamentoService, _MarcaService, _CombustibleService, _CarroceriaService, _OrganismoTransitoService, _VehiculoService, _loginService, _route, _router) {
+        var _this = this;
         this._MunicipioService = _MunicipioService;
         this._LineaService = _LineaService;
         this._ServicioService = _ServicioService;
@@ -43,6 +44,22 @@ var NewVehiculoComponent = (function () {
         this._router = _router;
         this.placaIngresada = '';
         this.vheiculoCreado = new core_1.EventEmitter();
+        this.departamentoDefecto = 21;
+        this.departamento = {
+            "departamentoId": this.departamentoDefecto,
+        };
+        var token = this._loginService.getToken();
+        this._MunicipioService.getMunicipiosDep(this.departamento, token).subscribe(function (response) {
+            _this.municipios = response.data;
+            _this.vehiculo.municipioId = _this.municipios[0].id;
+            _this.habilitar = false;
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                console.log(_this.errorMessage);
+                alert("Error en la petición");
+            }
+        });
     }
     NewVehiculoComponent.prototype.onChange = function (departamentoValue) {
         var _this = this;

@@ -60,7 +60,7 @@ class TramiteEspecificoController extends Controller
             'oldData' => (isset($dataangular->oldData)) ? $dataangular->oldData : null,
             'nivelBlindaje'=>(isset($dataangular->nivelBlindaje)) ? $dataangular->nivelBlindaje : null,
             'empresaBlindadora'=>(isset($dataangular->empresaBlindadora)) ? $dataangular->empresaBlindadora : null,
-            'codigoDijin'=>(isset($dataangular->codigoDIJIN_SIJIN)) ? $dataangular->codigoDIJIN_SIJIN : null,
+            'codigoDijin'=>(isset($dataangular->codigoDijin)) ? $dataangular->codigoDijin : null,
             'numeroAceptacion'=>(isset($dataangular->numeroAceptacion)) ? $dataangular->numeroAceptacion : null,
             'numeroFactura'=>(isset($dataangular->numeroFactura)) ? $dataangular->numeroFactura : null,
             'fechaFactura'=>(isset($dataangular->fechaFactura)) ? $dataangular->fechaFactura : null,

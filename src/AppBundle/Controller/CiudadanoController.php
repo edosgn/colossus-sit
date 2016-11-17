@@ -63,13 +63,13 @@ class CiudadanoController extends Controller
                         $numeroIdentificacion = $params->numeroIdentificacion;
                         $nombres = $params->nombres;
                         $apellidos = $params->apellidos;
-                        $direccion = $params->direccion;
-                        $telefono = $params->telefono;
-                        $correo = $params->correo;
+                        $direccion = (isset($params->direccion)) ? $params->direccion : null;
+                        $telefono = (isset($params->telefono)) ? $params->telefono : null;
+                        $correo = (isset($params->correo)) ? $params->correo : null;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
                             array('numeroIdentificacion' => $numeroIdentificacion)
-                        );
+                        ); 
 
                         if ($ciudadanos==null) {
                             $tipoIdentificacionId = $params->tipoIdentificacionId;

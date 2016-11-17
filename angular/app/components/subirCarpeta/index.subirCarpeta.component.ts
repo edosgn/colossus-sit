@@ -44,7 +44,7 @@ import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tra
 
 @Component({
     selector: 'default',
-    templateUrl: 'app/view/subirCarpeta/index.component.html',
+    templateUrl: 'app/view/subirCarpeta/index.component.html', 
     directives: [
         ROUTER_DIRECTIVES,
 	    NewVehiculoComponent,
@@ -178,7 +178,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 				}
 			);
 
-			this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+			this.ciudadano = new Ciudadano(null,"",null,"","","","","");
             this.ciudadanoVehiculo = new CiudadanoVehiculo(null, null,null,null,null,"","","");
             this.empresa = new Empresa(null,null,null,null,null,"","","","");
             this._TipoIdentificacionService.getTipoIdentificacion().subscribe(
@@ -342,7 +342,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         return(0);
                     }
 
-					
 					if(this.existe){
                         this.validateCedula = false;
                         this.existe = false;
@@ -399,9 +398,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
                     if(this.ciudadanosVehiculo) {
 						for (var i = this.ciudadanosVehiculo.length - 1; i >= 0; i--) {
 								if(this.ciudadanosVehiculo[i].ciudadano) {
-									
 									this.existeCiudadano = true;
-								
 							}
 						}
 					}

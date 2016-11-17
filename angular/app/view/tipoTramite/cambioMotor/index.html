@@ -5,19 +5,19 @@
 		<div class="panel-body">
 				<div *ngIf="casos != null" class="col-md-12">
 			  		<label>Caso tipo de ingreso</label>
-				   	<select class="form-control"  (change)="onChangeCaso($event.target.value)" required>
+				   	<select class="form-control"  (change)="onChangeCaso($event.target.value)" >
 							  <option *ngFor="#caso of casos" [value]='caso.id'>{{caso.nombre}}</option>
 					</select>
 				</div>
 				<div *ngIf="variantes != null" class="col-md-6">
 			  		<label>Variante</label>
-				   	<select class="form-control"  (change)="onChangeVariante($event.target.value)" required>
+				   	<select class="form-control"  (change)="onChangeVariante($event.target.value)" >
 							  <option *ngFor="#variante of variantes" [value]='variante.id' >{{variante.nombre}}</option>
 					</select>
 				</div>
 				<div class="col-md-6">
 					<label >Valor del Tramite:</label>
-					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"  required />
+					<input #valor="ngForm"  type="number" class="form-control" [(ngModel)]="tramiteEspecifico.valor"   />
 					<span *ngIf="!valor.valid && valor.touched" style="color:red;">valor obligatorios</span>
 					<br>
 				</div>
@@ -29,31 +29,31 @@
 				</div>
 				<div *ngIf="nuevo==true" class="col-md-6">
 					<label >Numero de Aceptacion:</label>
-					<input #numeroMotor="ngForm"  type="number" class="form-control" [(ngModel)]="datos.numeroAceptacion"  required />
+					<input #numeroMotor="ngForm"  type="number" class="form-control" [(ngModel)]="datos.numeroAceptacion"   />
 					<span *ngIf="!numeroMotor.valid && numeroMotor.touched" style="color:red;">numeroMotor obligatorios</span>
 					<br>
 				</div>
 				<div *ngIf="nuevo==true" class="col-md-6">
 					<label >Numero de Factura:</label>
-					<input #numeroFactura="ngForm"  type="number" class="form-control" [(ngModel)]="datos.numeroFactura"  required />
+					<input #numeroFactura="ngForm"  type="number" class="form-control" [(ngModel)]="datos.numeroFactura"   />
 					<span *ngIf="!numeroFactura.valid && numeroFactura.touched" style="color:red;">numero Factura obligatorios</span>
 					<br>
 				</div>
 				<div *ngIf="nuevo==true" class="col-md-6">
 					<label >Fecha de Factura:</label>
-					<input #fechaFactura="ngForm"  type="date" class="form-control" [(ngModel)]="datos.fechaFactura"  required />
+					<input #fechaFactura="ngForm"  type="date" class="form-control" [(ngModel)]="datos.fechaFactura"   />
 					<span *ngIf="!fechaFactura.valid && fechaFactura.touched" style="color:red;">fecha Factura obligatorios</span>
 					<br>
 				</div>
 				<div *ngIf="usado==true" class="col-md-6">
 					<label >Numero de Contrato compraventa:</label>
-					<input #numeroContrato="ngForm"  type="number" class="form-control" [(ngModel)]="datos.numeroContrato"  required />
+					<input #numeroContrato="ngForm"  type="number" class="form-control" [(ngModel)]="datos.numeroContrato"   />
 					<span *ngIf="!numeroContrato.valid && numeroContrato.touched" style="color:red;">numero Cntrato obligatorios</span>
 					<br>
 				</div>
 				<div *ngIf="usado==true" class="col-md-6">
 					<label >Fecha de Contrato Compraventa:</label>
-					<input #fechaCompra="ngForm"  type="date" class="form-control" [(ngModel)]="datos.fechaCompra"  required />
+					<input #fechaCompra="ngForm"  type="date" class="form-control" [(ngModel)]="datos.fechaCompra"   />
 					<span *ngIf="!fechaCompra.valid && fechaCompra.touched" style="color:red;">fecha Compra obligatorios</span>
 					<br>
 				</div>

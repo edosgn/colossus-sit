@@ -30,8 +30,8 @@
 
 				<p class="col-md-6">  
 					<label>Departamento:</label>
-					<select  class="form-control" #departamentoId="ngForm"  (change)="onChange($event.target.value)" ngControl="departamentoId" name="departamentos" required>
-					  <option  *ngFor="#departamento of departamentos" [value]='departamento.id' >{{departamento.nombre}}</option>
+					<select  class="form-control" [(ngModel)]="departamentoDefecto" #departamentoId="ngForm"  (change)="onChange($event.target.value)" ngControl="departamentoId" name="departamentos"  required>
+						<option  *ngFor="#departamento of departamentos" [value]='departamento.id'>{{departamento.nombre}}  </option>
 					</select>
 					<span *ngIf = "!departamentoId.valid && departamentoId.touched" class="text-danger">el departamento es obligatorio</span>
 				</p>
@@ -39,7 +39,7 @@
 
 				<p class="col-md-6"> 
 					<label>Municipio:</label>
-					<select [disabled]="habilitar"  class="form-control" #municipioId="ngForm" ngControl="municipioId" [(ngModel)]="vehiculo.municipioId" required>
+					<select class="form-control" #municipioId="ngForm" ngControl="municipioId" [(ngModel)]="vehiculo.municipioId" required>
 					<option *ngFor="#municipio of municipios" [value]='municipio.id' >{{municipio.nombre}}</option>
 					</select>
 					<span *ngIf = "!municipioId.valid && municipioId.touched" class="text-danger">el municipop es obligatorio</span>

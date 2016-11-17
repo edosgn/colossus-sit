@@ -24,7 +24,7 @@ class TramiteEspecifico
     /**
      * @var int
      *
-     * @ORM\Column(name="valor", type="integer")
+     * @ORM\Column(name="valor", type="integer", nullable = true)
      */
     private $valor;
 

@@ -301,7 +301,6 @@
 								<th>numeroQpl</th>
 								<th>fecha inicial</th>
 								<th>fecha final</th>
-								<th>valor</th>
 								<th>seleccionar</th>
 							</tr>
 						</thead>
@@ -389,7 +388,7 @@
 							<tramiteRegrabarMotor *ngIf="tramiteEspesificolSeleccionado==7" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
 							</tramiteRegrabarMotor>
 
-		</div>
+						</div>
 
 		<tramiteRematricula *ngIf="vehiculo.cancelado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
 	    </tramiteRematricula>
