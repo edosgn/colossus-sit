@@ -419,7 +419,21 @@
 					<td *ngIf="tramiteEspecifico.caso">{{tramiteEspecifico.caso.nombre}}</td>
 					<td *ngIf="!tramiteEspecifico.caso">N/A</td>
 					<td >{{tramiteEspecifico.valor}}</td>
-					<td >{{tramiteEspecifico.datos| json}}</td>
+					<td >
+						<div *ngIf="tramiteEspecifico.datos.newData"><b>Datos nuevos:</b> {{tramiteEspecifico.datos.newData}}</div>
+						<div *ngIf="tramiteEspecifico.datos.oldData"><b>Datos antiguos:</b> {{tramiteEspecifico.datos.oldData}}</div>
+						<div *ngIf="tramiteEspecifico.datos.nivelBlindaje"><b>Nivel Blindaje:</b> {{tramiteEspecifico.datos.nivelBlindaje}}</div>
+						<div *ngIf="tramiteEspecifico.datos.empresaBlindadora"><b>Empresa Blindadora:</b>{{tramiteEspecifico.datos.empresaBlindadora}}</div>
+						<div *ngIf="tramiteEspecifico.datos.codigoDijin"><b>Codigo DIJID SIJIN:</b> {{tramiteEspecifico.datos.codigoDijin}}</div>
+						<div *ngIf="tramiteEspecifico.datos.numeroAceptacion"><b>Numero de Aceptacion:</b> {{tramiteEspecifico.datos.numeroAceptacion}}</div>
+						<div *ngIf="tramiteEspecifico.datos.numeroFactura"><b>Numero de Factura:</b> {{tramiteEspecifico.datos.numeroFactura}}</div>
+						<div *ngIf="tramiteEspecifico.datos.fechaFactura"><b>Fecha de Factura:</b> {{tramiteEspecifico.datos.fechaFactura}}</div>
+						<div *ngIf="tramiteEspecifico.datos.numeroContrato"><b>Numero de Contrato C/V: </b>{{tramiteEspecifico.datos.numeroContrato}}</div>
+						<div *ngIf="tramiteEspecifico.datos.fechaCompra"><b>Fecha de Compra:</b> {{tramiteEspecifico.datos.fechaCompra}}</div>
+						<div *ngIf="tramiteEspecifico.datos.datosTraspaso"><b>Datos Leasing: </b>{{tramiteEspecifico.datos.datosTraspaso}}</div>
+						<div *ngIf="tramiteEspecifico.datos.datosRematricula"><b>Datos Rematricula:</b> {{tramiteEspecifico.datos.datosRematricula}}</div>
+						<div *ngIf="tramiteEspecifico.datos.datosLeasing"><b>Datos Leasing:</b>{{tramiteEspecifico.datos.datosLeasing}}</div>
+					</td>
 				</tr>
 			</tbody> 
 		</table>
