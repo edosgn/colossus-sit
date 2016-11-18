@@ -337,6 +337,7 @@
 								<th>numeroQpl</th>
 								<th>fecha inicial</th>
 								<th>fecha final</th>
+								<th>Numero de Licencia</th>
 								<th>seleccionar</th>
 							</tr>
 						</thead>
@@ -347,6 +348,7 @@
 								<td >{{tramiteGeneral.numeroQpl}}</td>
 								<td >{{tramiteGeneral.fechaInicial}}</td>
 								<td >{{tramiteGeneral.fechaFinal}}</td>
+								<td >{{tramiteGeneral.numeroLicencia}}</td>
 								<td ><input name="optionstrmiteGeneral" ng-control="optionstrmiteGeneral" type="radio" value={{tramiteGeneral.id}}
 									(change)="onChangeTramiteGeneral(tramiteGeneral.id)"></td>
 								</tr>

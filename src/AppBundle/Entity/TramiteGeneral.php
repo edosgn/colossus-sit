@@ -67,7 +67,7 @@ class TramiteGeneral
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_licencia", type="integer")
+     * @ORM\Column(name="numero_licencia", type="bigint")
      */
     private $numeroLicencia;
 
@@ -240,29 +240,7 @@ class TramiteGeneral
         return $this->valor;
     }
 
-    /**
-     * Set numeroLicencia
-     *
-     * @param integer $numeroLicencia
-     *
-     * @return TramiteGeneral
-     */
-    public function setNumeroLicencia($numeroLicencia)
-    {
-        $this->numeroLicencia = $numeroLicencia;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroLicencia
-     *
-     * @return integer
-     */
-    public function getNumeroLicencia()
-    {
-        return $this->numeroLicencia;
-    }
+   
 
     /**
      * Set numeroSustrato
@@ -406,5 +384,29 @@ class TramiteGeneral
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set numeroLicencia
+     *
+     * @param integer $numeroLicencia
+     *
+     * @return TramiteGeneral
+     */
+    public function setNumeroLicencia($numeroLicencia)
+    {
+        $this->numeroLicencia = $numeroLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLicencia
+     *
+     * @return integer
+     */
+    public function getNumeroLicencia()
+    {
+        return $this->numeroLicencia;
     }
 }
