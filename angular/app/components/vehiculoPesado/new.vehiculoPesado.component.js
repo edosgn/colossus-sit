@@ -27,10 +27,12 @@ var NewVehiculoPesadoComponent = (function () {
         this._loginService = _loginService;
         this._route = _route;
         this._router = _router;
+        this.tramiteCreado = new core_1.EventEmitter();
     }
     NewVehiculoPesadoComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.vehiculoPesado = new VehiculoPesado_1.VehiculoPesado(null, null, null, null, null, null, null, "", "");
+        this.vehiculoPesado = new VehiculoPesado_1.VehiculoPesado(null, null, this.placaIngresada, null, null, null, null, "", "");
+        console.log(this.vehiculoPesado);
         var token = this._loginService.getToken();
         this._ModalidadService.getModalidad().subscribe(function (response) {
             _this.modalidades = response.data;
@@ -65,7 +67,9 @@ var NewVehiculoPesadoComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoPesadoService.register(this.vehiculoPesado, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.respuesta);
+            if (_this.respuesta.status == "success") {
+                _this.tramiteCreado.emit(true);
+            }
             (function (error) {
                 _this.errorMessage = error;
                 if (_this.errorMessage != null) {
@@ -105,9 +109,17 @@ var NewVehiculoPesadoComponent = (function () {
             }
         });
     };
+    __decorate([
+        core_1.Input(), 
+        __metadata('design:type', Object)
+    ], NewVehiculoPesadoComponent.prototype, "placaIngresada", void 0);
+    __decorate([
+        core_1.Output(), 
+        __metadata('design:type', Object)
+    ], NewVehiculoPesadoComponent.prototype, "tramiteCreado", void 0);
     NewVehiculoPesadoComponent = __decorate([
         core_1.Component({
-            selector: 'register',
+            selector: 'registrarVehiculoPesado',
             templateUrl: 'app/view/vehiculopesado/new.html',
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, vehiculopesado_service_1.VehiculoPesadoService, modalidad_service_1.ModalidadService, vehiculo_service_1.VehiculoService, empresa_service_1.EmpresaService]

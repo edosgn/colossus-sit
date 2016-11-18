@@ -37,6 +37,7 @@ import {NewTramiteCambioPrendarioComponent} from "../../components/tipoTramite/t
 import {NewTramiteCancelarMatriculaComponent} from "../../components/tipoTramite/tramiteCancelacionMatricula/index.CancelarMatricula.component";
 import {NewTramiteRematriculaComponent} from "../../components/tipoTramite/tramiteRematricula/index.Rematricula.component";
 import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component";
+import {NewVehiculoPesadoComponent} from "../../components/vehiculoPesado/new.vehiculoPesado.component";
 
 
 
@@ -70,6 +71,7 @@ import {NewTramiteRegrabarMotorComponent} from "../../components/tipoTramite/tra
 	    NewTramiteCancelarMatriculaComponent,
 	    NewTramiteRematriculaComponent,
 	    NewTramiteRegrabarMotorComponent,
+	    NewVehiculoPesadoComponent,
 	    ],
     providers: [
         LoginService,

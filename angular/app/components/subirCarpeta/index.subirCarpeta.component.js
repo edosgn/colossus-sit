@@ -46,6 +46,7 @@ var index_CambioPrendario_component_1 = require("../../components/tipoTramite/tr
 var index_CancelarMatricula_component_1 = require("../../components/tipoTramite/tramiteCancelacionMatricula/index.CancelarMatricula.component");
 var index_Rematricula_component_1 = require("../../components/tipoTramite/tramiteRematricula/index.Rematricula.component");
 var index_regrabarMotor_component_1 = require("../../components/tipoTramite/tramiteRegrabarMotor/index.regrabarMotor.component");
+var new_vehiculoPesado_component_1 = require("../../components/vehiculoPesado/new.vehiculoPesado.component");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
     function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
@@ -466,6 +467,7 @@ var IndexSubirCarpetaComponent = (function () {
                 index_CancelarMatricula_component_1.NewTramiteCancelarMatriculaComponent,
                 index_Rematricula_component_1.NewTramiteRematriculaComponent,
                 index_regrabarMotor_component_1.NewTramiteRegrabarMotorComponent,
+                new_vehiculoPesado_component_1.NewVehiculoPesadoComponent,
             ],
             providers: [
                 login_service_1.LoginService,

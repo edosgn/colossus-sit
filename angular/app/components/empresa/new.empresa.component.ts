@@ -28,7 +28,7 @@ export class NewEmpresaComponent {
 	public ciudadano;
 	public departamentos;
 	public departamento;
-	public habilitar = true;
+	public habilitar = true; 
 	public calseCedula;
 	public claseSpanCedula;
 	public validateCedula = false;

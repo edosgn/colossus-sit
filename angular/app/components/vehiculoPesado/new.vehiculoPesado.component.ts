@@ -1,5 +1,5 @@
 // Importar el núcleo de Angular
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit,Output,EventEmitter,Input} from '@angular/core';
 import { ROUTER_DIRECTIVES, Router, ActivatedRoute } from "@angular/router";
 import {LoginService} from '../../services/login.service';
 import {ModalidadService} from '../../services/modalidad/modalidad.service';
@@ -15,7 +15,7 @@ import {VehiculoPesado} from '../../model/vehiculopesado/VehiculoPesado';
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 
 @Component({
-    selector: 'register',
+    selector: 'registrarVehiculoPesado',
     templateUrl: 'app/view/vehiculopesado/new.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [LoginService,VehiculoPesadoService,ModalidadService,VehiculoService,EmpresaService]
@@ -39,6 +39,8 @@ export class NewVehiculoPesadoComponent {
 	public claseCedula;
 	public empresa;
 	public divEmpresa;
+	@Input() placaIngresada;
+	@Output() tramiteCreado = new EventEmitter<any>();
 
 
 
@@ -54,7 +56,9 @@ export class NewVehiculoPesadoComponent {
 	){}
 
 	ngOnInit(){
-		this.vehiculoPesado = new VehiculoPesado(null,null,null,null,null,null,null,"","");
+		this.vehiculoPesado = new VehiculoPesado(null,null,this.placaIngresada,null,null,null,null,"","");
+		console.log(this.vehiculoPesado);
+
 		let token = this._loginService.getToken();
 		this._ModalidadService.getModalidad().subscribe(
 				response => {
@@ -104,7 +108,9 @@ export class NewVehiculoPesadoComponent {
 		this._VehiculoPesadoService.register(this.vehiculoPesado,token).subscribe(
 			response => {
 				this.respuesta = response;
-				console.log(this.respuesta);
+				if(this.respuesta.status=="success") {
+					 this.tramiteCreado.emit(true);
+				}
 
 			error => {
 					this.errorMessage = <any>error;

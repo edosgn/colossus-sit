@@ -15,12 +15,19 @@
 <h1>{{resive}}</h1>
 
 
+
+
 <div *ngIf="validate" class="col-md-12">
 	<div [class]="divVehiculo" >
+
+		
  		<div *ngIf="vehiculo?.cancelado == 1" class="panel-heading">Matricula del Vehiculo Cancelada</div>
  		<div *ngIf="vehiculo?.pignorado == 1" class="panel-heading">Vehiculo pignorado</div>
-		<div *ngIf="vehiculo?.cancelado == 0 && vehiculo.pignorado == 0" class="panel-heading">{{msg}}</div>
+		<div *ngIf="vehiculo?.cancelado == 0 && vehiculo.pignorado == 0" class="panel-heading">{{msg}}
+				<button data-toggle="modal" data-target="#myModalVehiucloPesado" class="btn btn-primary col-md-offset-9">Vehiculo Pesado</button>
+		</div>
 		<div class="panel-body">
+
 			<table class="table table-bordered">
 				<thead>
 					<tr>
@@ -51,13 +58,14 @@
 			</table>
 		</div>
 	</div>
-</div>						
-
+</div>			
 
 
 <div *ngIf="activar" class="col-md-12">
 	<div  class="panel panel-primary">
 		<div class="panel-heading">Propetarios 
+
+
 
 		</div>
 
@@ -486,11 +494,28 @@
 	</div><!-- /.modal-dialog -->
 </div>
 
+<div *ngIf="vehiculo" class="modal fade" id="myModalVehiucloPesado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" style="width: 159%; margin-left: -25%;">
+			<div class="modal-header">
+				<button type="button" (click)="btnCancelarModalEmpresa()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">Registrar Empresa</h4>
+			</div>
+			<registrarVehiculoPesado (tramiteCreado)="tramiteCreado($event)" [placaIngresada]="vehiculo?.id" ></registrarVehiculoPesado>
+			<div class="modal-footer">
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+
 <script type="text/javascript">
 	$('#myModal').on('shown.bs.modal', function () {
 		$('#myInput').focus()
 	})
 	$('#myModalEmpresa').on('shown.bs.modal', function () {
+		$('#myInput').focus()
+	})
+	$('#myModalVehiucloPesado').on('shown.bs.modal', function () {
 		$('#myInput').focus()
 	})
 </script>
