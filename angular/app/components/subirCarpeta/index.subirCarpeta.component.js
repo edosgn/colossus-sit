@@ -64,6 +64,7 @@ var IndexSubirCarpetaComponent = (function () {
         this._route = _route;
         this._router = _router;
         this.TipoMatricula = 1;
+        this.modalVehiculoPesado = false;
         this.TipoTramite = {
             'caso': null,
             'variante': null
@@ -121,6 +122,7 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
+            _this.modalVehiculoPesado = true;
             if (_this.vehiculo) {
                 if (_this.vehiculo.cancelado == 1 || _this.vehiculo.pignorado == 1) {
                     _this.divVehiculo = 'panel panel-danger';
@@ -398,6 +400,10 @@ var IndexSubirCarpetaComponent = (function () {
     IndexSubirCarpetaComponent.prototype.btnCancelarModalEmpresa = function () {
         this.modalEmpresa = false;
         this.btnNewPropietario = false;
+    };
+    IndexSubirCarpetaComponent.prototype.btnCancelarModalVehiculoPesado = function () {
+        this.modalVehiculoPesado = false;
+        this.onKey("");
     };
     IndexSubirCarpetaComponent.prototype.btnNuevoTramiteGeneral = function () {
         if (this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada != null) {

@@ -494,11 +494,11 @@
 	</div><!-- /.modal-dialog -->
 </div>
 
-<div *ngIf="vehiculo" class="modal fade" id="myModalVehiucloPesado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+<div *ngIf="modalVehiculoPesado" class="modal fade" id="myModalVehiucloPesado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content" style="width: 159%; margin-left: -25%;">
 			<div class="modal-header">
-				<button type="button" (click)="btnCancelarModalEmpresa()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" (click)="btnCancelarModalVehiculoPesado()" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title">Registrar Empresa</h4>
 			</div>
 			<registrarVehiculoPesado (tramiteCreado)="tramiteCreado($event)" [placaIngresada]="vehiculo?.id" ></registrarVehiculoPesado>

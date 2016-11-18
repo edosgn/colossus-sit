@@ -134,6 +134,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     public divTramite;
     public tramiteGeneralSeleccionado;
     public divVehiculo;
+    public modalVehiculoPesado = false;
     public TipoTramite = {
     	'caso':null,
     	'variante':null
@@ -230,6 +231,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
 					this.vehiculo = response.data;
+
+					this.modalVehiculoPesado=true;
 
 					if(this.vehiculo) { 
 					    if(this.vehiculo.cancelado == 1 || this.vehiculo.pignorado == 1) { 
@@ -546,6 +549,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
     btnCancelarModalEmpresa(){
 	    this.modalEmpresa=false;
 	    this.btnNewPropietario=false;
+    }
+    btnCancelarModalVehiculoPesado(){
+    	 this.modalVehiculoPesado=false;
+    	 this.onKey("");
+
     }
     btnNuevoTramiteGeneral(){
     	if(this.idCiudadanoSeleccionado != null || this.idEmpresaSeleccionada != null){
