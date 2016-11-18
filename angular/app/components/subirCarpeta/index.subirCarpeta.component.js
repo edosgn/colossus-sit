@@ -122,7 +122,7 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
-            _this.modalVehiculoPesado = true;
+            _this.modalVehiculoPesado = false;
             if (_this.vehiculo) {
                 if (_this.vehiculo.cancelado == 1 || _this.vehiculo.pignorado == 1) {
                     _this.divVehiculo = 'panel panel-danger';
@@ -143,6 +143,7 @@ var IndexSubirCarpetaComponent = (function () {
                 _this.activar = false;
             }
             else {
+                _this.modalVehiculoPesado = true;
                 _this.claseSpan = "glyphicon glyphicon-ok form-control-feedback ";
                 _this.clase = "form-group has-success has-feedback";
                 _this.msg = response.msj;

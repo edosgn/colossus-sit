@@ -232,7 +232,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 				response => {
 					this.vehiculo = response.data;
 
-					this.modalVehiculoPesado=true;
+					this.modalVehiculoPesado=false;
 
 					if(this.vehiculo) { 
 					    if(this.vehiculo.cancelado == 1 || this.vehiculo.pignorado == 1) { 
@@ -254,6 +254,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 						this.clase = "form-group has-error has-feedback";
 						this.activar =false;
 					}else{
+						this.modalVehiculoPesado=true;
 							this.claseSpan ="glyphicon glyphicon-ok form-control-feedback ";
 							this.clase = "form-group has-success has-feedback";
 				            this.msg = response.msj;
@@ -422,11 +423,11 @@ export class IndexSubirCarpetaComponent implements OnInit{
                         alert ("existe una relacion con la empresa");
                     }else{
                         if(status == 'error') {
-                        this.validateCedula=false;
-                        this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
-                        this.calseCedula = "form-group has-error has-feedback ";
-                        this.btnNewPropietario = true;
-                        this.modalEmpresa=true;
+	                        this.validateCedula=false;
+	                        this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
+	                        this.calseCedula = "form-group has-error has-feedback ";
+	                        this.btnNewPropietario = true;
+	                        this.modalEmpresa=true;
                         }else{
                    			this.empresa = response.data;
                         	this.btnNewPropietario=false;
@@ -435,7 +436,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
                             this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
                             this.calseCedula = "form-group has-success has-feedback ";
                             this.msgCiudadano = response.msj;
-                            this.ciudadano = new Ciudadano(null,"",null, "","","","","");
+                            this.ciudadano = new Ciudadano(null,"",null,"","","","","");
                         }
                     }
                 }, 

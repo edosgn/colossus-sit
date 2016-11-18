@@ -218,9 +218,10 @@
 						<div class="col-md-12 col-md-offset-3"> 
 
 							<a *ngIf="!btnSeleccionarApoderado" (click)="btnCancelarVinculo()" class="btn btn-default col-md-3">cancelar</a>
-							<input  *ngIf="!btnSeleccionarApoderado" type="submit" value="Vincular" class="btn btn-primary col-md-3 "  
+							<input *ngIf="!btnSeleccionarApoderado" type="submit" value="Vincular" class="btn btn-primary col-md-3 "  
 							/>
 							<a *ngIf="btnSeleccionarApoderado" (click)="onChangeCiudadano(ciudadano?.id)"  class="btn btn-primary col-md-6">Seleccionar</a>
+
 						</div>
 					</div>
 				</div>
@@ -455,7 +456,8 @@
 						
 						<div *ngIf="tramiteEspecifico.datos.datosLeasing"><b>Datos Leasing:</b>{{tramiteEspecifico.datos.datosLeasing}}</div>
 						
-						<div *ngIf="!tramiteEspecifico.datos.newData && !tramiteEspecifico.datos.datosLeasing && !tramiteEspecifico.datos.datosRematricula && !tramiteEspecifico.datos.datosTraspaso && !tramiteEspecifico.datos.fechaCompra && !tramiteEspecifico.datos.numeroContrato && !tramiteEspecifico.datos.fechaFactura && !tramiteEspecifico.datos.numeroFactura && !tramiteEspecifico.datos.numeroAceptacion && !tramiteEspecifico.datos.codigoDijin && !tramiteEspecifico.datos.empresaBlindadora && !tramiteEspecifico.datos.nivelBlindaje && !tramiteEspecifico.datos.oldData && !tramiteEspecifico.datos.newData"><b style="color:red;">Sin Datos</b></div>
+						<div *ngIf="!tramiteEspecifico.datos.newData && !tramiteEspecifico.datos.datosLeasing && !tramiteEspecifico.datos.datosRematricula && !tramiteEspecifico.datos.datosTraspaso && !tramiteEspecifico.datos.fechaCompra && !tramiteEspecifico.datos.numeroContrato && !tramiteEspecifico.datos.fechaFactura && !tramiteEspecifico.datos.numeroFactura && !tramiteEspecifico.datos.numeroAceptacion && !tramiteEspecifico.datos.codigoDijin && !tramiteEspecifico.datos.empresaBlindadora && !tramiteEspecifico.datos.nivelBlindaje && !tramiteEspecifico.datos.oldData && !tramiteEspecifico.datos.newData">
+						<b style="color:red;">Sin Datos</b></div>
 					</td>
 				</tr>
 			</tbody> 
@@ -480,7 +482,7 @@
 	</div><!-- /.modal-dialog -->
 </div> 
 
-<div *ngIf="modalEmpresa" class="modal fade" id="myModalEmpresa" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+<div *ngIf="modalEmpresa" data-backdrop="static" class="modal fade" id="myModalEmpresa" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -494,7 +496,7 @@
 	</div><!-- /.modal-dialog -->
 </div>
 
-<div *ngIf="modalVehiculoPesado" class="modal fade" id="myModalVehiucloPesado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
+<div *ngIf="modalVehiculoPesado" data-backdrop="static" class="modal fade" id="myModalVehiucloPesado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpresaLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content" style="width: 159%; margin-left: -25%;">
 			<div class="modal-header">
