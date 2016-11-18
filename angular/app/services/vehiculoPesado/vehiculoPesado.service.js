@@ -38,6 +38,12 @@ var VehiculoPesadoService = (function () {
         return this._http.post(this.url + "/show/" + id, params, { headers: headers })
             .map(function (res) { return res.json(); });
     };
+    VehiculoPesadoService.prototype.showVehiculoPesadoVehiculoId = function (token, vehiculoId) {
+        var params = "authorization=" + token;
+        var headers = new http_1.Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+        return this._http.post(this.url + "/vehiculoPesado/idVehiculo/" + vehiculoId, params, { headers: headers })
+            .map(function (res) { return res.json(); });
+    };
     VehiculoPesadoService.prototype.editVehiculoPesado = function (vehiculoPesado, token) {
         var json = JSON.stringify(vehiculoPesado);
         var params = "json=" + json + "&authorization=" + token;

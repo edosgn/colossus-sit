@@ -4,7 +4,7 @@
 <h3>Carga <small>carpetas</small></h3>
 <hr>
 <div  [class]="clase">
-	<input [(ngModel)]="placa.placa" (blur)="onKey($placa)" (keyup.enter)="onKey($placa)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo">
+	<input [(ngModel)]="placa.placa" (blur)="onKey($placa)" (keyup.enter)="onKey($placa)" type="text" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status" placeholder="Placa Vheiculo" required>
 	<span [class]="claseSpan" aria-hidden="true"></span>
 </div>
 
@@ -24,7 +24,9 @@
  		<div *ngIf="vehiculo?.cancelado == 1" class="panel-heading">Matricula del Vehiculo Cancelada</div>
  		<div *ngIf="vehiculo?.pignorado == 1" class="panel-heading">Vehiculo pignorado</div>
 		<div *ngIf="vehiculo?.cancelado == 0 && vehiculo.pignorado == 0" class="panel-heading">{{msg}}
-				<button data-toggle="modal" data-target="#myModalVehiucloPesado" class="btn btn-primary col-md-offset-9">Vehiculo Pesado</button>
+
+				<label *ngIf="vehiculoPesado">Pesado</label> 
+				<button *ngIf="!vehiculoPesado" data-toggle="modal" data-target="#myModalVehiucloPesado" class="btn btn-primary col-md-offset-9">Vehiculo Pesado</button>
 		</div>
 		<div class="panel-body">
 
@@ -40,19 +42,45 @@
 						<th>Municipio</th>
 						<th>Organismo Transito</th>
 						<th>Valor</th>
+
 					</tr>
 				</thead>
 				<tbody> 
 					<tr>
-						<td >{{vehiculo.linea.nombre}}</td>
-						<td >{{vehiculo.linea.marca.nombre}}</td>
-						<td >{{vehiculo.clase.nombre}}</td>
-						<td >{{vehiculo.color.nombre}}</td>
-						<td >{{vehiculo.modelo}}</td>
-						<td >{{vehiculo.combustible.nombre}}</td>
-						<td >{{vehiculo.municipio.nombre}}</td>
-						<td >{{vehiculo.organismoTransito.nombre}}</td>
-						<td >{{vehiculo.valor}}</td>
+						<td >{{vehiculo?.linea.nombre}}</td>
+						<td >{{vehiculo?.linea.marca.nombre}}</td>
+						<td >{{vehiculo?.clase?.nombre}}</td>
+						<td >{{vehiculo?.color?.nombre}}</td>
+						<td >{{vehiculo?.modelo}}</td>
+						<td >{{vehiculo?.combustible?.nombre}}</td>
+						<td >{{vehiculo?.municipio?.nombre}}</td>
+						<td >{{vehiculo?.organismoTransito?.nombre}}</td>
+						<td >{{vehiculo?.valor}}</td>
+						
+					</tr>
+				</tbody> 
+			</table>
+
+			<table *ngIf="vehiculoPesado" class="table table-bordered">
+				<thead>
+					<tr>
+						<th>Tonelaje</th>
+						<th>Numero de Ejes</th>
+						<th>Codigo Ministerio</th>
+						<th>Homologacion Carroceria</th>
+						<th>Homologacion Chasis</th>
+						<th>Empresa</th>
+					</tr>
+				</thead>
+				<tbody> 
+					<tr>
+						<td >{{vehiculoPesado?.tonelaje}}</td>
+						<td >{{vehiculoPesado?.numeroEjes}}</td>
+						<td >{{vehiculoPesado?.numeroMt}}</td>
+						<td >{{vehiculoPesado?.fichaTecnicaHomologacionCarroceria}}</td>
+						<td >{{vehiculoPesado?.fichaTecnicaHomologacionChasis}}</td>
+						<td >{{vehiculoPesado?.empresa?.nombre}}</td>
+						
 					</tr>
 				</tbody> 
 			</table>

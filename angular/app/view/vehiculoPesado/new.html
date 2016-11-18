@@ -55,7 +55,7 @@
 			</div>
 		</div>
 
-		<p class="col-md-6"> 
+		<p class="col-md-12"> 
 			<label>Modalidad:</label>
 			<select class="form-control" #ModalidadId="ngForm" ngControl="ModalidadId" [(ngModel)]="vehiculoPesado.modalidadId" required>
 				<option *ngFor="#modalidad of modalidades" [value]='modalidad.id' >{{modalidad.nombre}}</option>

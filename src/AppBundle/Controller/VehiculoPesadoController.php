@@ -16,6 +16,8 @@ use AppBundle\Form\VehiculoPesadoType;
  */
 class VehiculoPesadoController extends Controller
 {
+
+
     /**
      * Lists all VehiculoPesado entities.
      *
@@ -45,7 +47,7 @@ class VehiculoPesadoController extends Controller
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
-    {
+    {   $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -59,15 +61,21 @@ class VehiculoPesadoController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{
+
                         $tonelaje = $params->tonelaje;
                         $numeroEjes = $params->numeroEjes;
                         $numeroMt = $params->numeroMt;
                         $fichaTecnicaHomologacionCarroceria = $params->fichaTecnicaHomologacionCarroceria;
                         $fichaTecnicaHomologacionChasis = $params->fichaTecnicaHomologacionChasis;
                         $vehiculoId = $params->vehiculoId;
+                        $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneBy(
+                             array('vehiculo' => $vehiculoId)
+                        );
+
+                        if ($vehiculoPesado == null) {
                         $modalidadId = $params->modalidadId;
                         $empresaId = $params->empresaId;
-                        $em = $this->getDoctrine()->getManager();
+                        
                         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
                         $modalidad = $em->getRepository('AppBundle:Modalidad')->find($modalidadId);
                         $empresa = $em->getRepository('AppBundle:Empresa')->find($empresaId);
@@ -93,6 +101,14 @@ class VehiculoPesadoController extends Controller
                             'code' => 200,
                             'msj' => "vehiculoPesado creado con exito", 
                         );
+                        }else{
+                            $responce = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'msj' => "Este vehiculo ya es pesado", 
+                            );
+                        }
+                        
                        
                     }
         }else{
@@ -257,9 +273,9 @@ class VehiculoPesadoController extends Controller
     }
 
     /**
-     * busca los vehiculos pesados por id vehiculo.
+     * busca un vehiculos pesados por id vehiculo.
      *
-     * @Route("/vehiculo/{id}", name="vehiculopesado_show_vehiculo")
+     * @Route("/vehiculoPesado/idVehiculo/{id}", name="vehiculopesado_show_vehiculo")
      * @Method("POST")
      */
     public function showPesadoVehiculoAction(Request $request,$id)

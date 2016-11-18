@@ -17,6 +17,7 @@ import {NewEmpresaComponent} from '../../components/empresa/new.empresa.componen
 import {CiudadanoVehiculo} from '../../model/CiudadanoVehiculo/CiudadanoVehiculo';
 import {Ciudadano} from '../../model/ciudadano/Ciudadano';
 import {TramiteGeneralService} from '../../services/tramiteGeneral/tramiteGeneral.service'; 
+import {VehiculoPesadoService} from '../../services/vehiculoPesado/vehiculoPesado.service'; 
 import {TramiteEspecificoService} from "../../services/tramiteEspecifico/tramiteEspecifico.service";
 import {Empresa} from '../../model/empresa/Empresa';
 import {NewTramiteTraspasoComponent} from "../../components/tipoTramite/tramiteTraspaso/index.traspaso.component";
@@ -83,6 +84,7 @@ import {NewVehiculoPesadoComponent} from "../../components/vehiculoPesado/new.ve
 	    CiudadanoService,
 	    TipoIdentificacionService,
 	    EmpresaService,
+	    VehiculoPesadoService,
 	    OrganismoTransitoService]
 })
  
@@ -139,6 +141,8 @@ export class IndexSubirCarpetaComponent implements OnInit{
     	'caso':null,
     	'variante':null
     };
+    public vehiculoPesado = null;
+    public vehiculoId;
 
     public organismoTransitos;
     public json = {
@@ -146,10 +150,12 @@ export class IndexSubirCarpetaComponent implements OnInit{
  	};
  	public existeCiudadano;
  	public existeEmpresa;
+ 	public tablaPesado = false;
 
 
 	constructor(
 		private _TramiteService:TramiteService,
+		private _VehiculoPesadoService:VehiculoPesadoService,
 		private _OrganismoTransitoService: OrganismoTransitoService,
 		private _TramiteEspecificoService: TramiteEspecificoService,
 		private _TramiteGeneral: TramiteGeneralService,
@@ -231,14 +237,33 @@ export class IndexSubirCarpetaComponent implements OnInit{
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
 					this.vehiculo = response.data;
+					this.vehiculoId= response.data.id;
+					
 
 					this.modalVehiculoPesado=true;
+					this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token,this.vehiculoId).subscribe(
+							response => {
+								this.vehiculoPesado = response.data;
+								console.log(this.vehiculoPesado);
+								this.tablaPesado=true;
+							}, 
+							error => {
+								this.errorMessage = <any>error;
+
+								if(this.errorMessage != null){
+									console.log(this.errorMessage);
+									alert("Error en la petición");
+								}
+							}
+						);
 
 					if(this.vehiculo) { 
 					    if(this.vehiculo.cancelado == 1 || this.vehiculo.pignorado == 1) { 
 							 this.divVehiculo = 'panel panel-danger';
 						}else {
 							 this.divVehiculo = 'panel panel-primary';
+						
+
 						}
 					} 
 
@@ -312,6 +337,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					}
 				}
 			);
+		
   }
 
   onKeyCiudadano(event:any){

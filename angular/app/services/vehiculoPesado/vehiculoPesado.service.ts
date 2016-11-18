@@ -42,6 +42,15 @@ export class VehiculoPesadoService {
 
 	}
 
+	showVehiculoPesadoVehiculoId(token,vehiculoId){
+		
+		let params = "authorization="+token;
+		let headers = new Headers({'Content-Type':'application/x-www-form-urlencoded'});
+		return this._http.post(this.url+"/vehiculoPesado/idVehiculo/"+vehiculoId, params, {headers: headers})
+							  .map(res => res.json());
+
+	}
+
 	editVehiculoPesado(vehiculoPesado,token){
 
 		let json = JSON.stringify(vehiculoPesado);
