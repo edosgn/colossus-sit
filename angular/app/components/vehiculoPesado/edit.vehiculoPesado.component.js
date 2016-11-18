@@ -95,10 +95,9 @@ var VehiculoPesadoEditComponent = (function () {
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, vehiculopesado_service_1.VehiculoPesadoService, modalidad_service_1.ModalidadService, vehiculo_service_1.VehiculoService, empresa_service_1.EmpresaService]
         }), 
-        __metadata('design:paramtypes', [modalidad_service_1.ModalidadService, vehiculo_service_1.VehiculoService, empresa_service_1.EmpresaService, (typeof (_a = typeof vehiculopesado_service_1.VehiculoPesadoService !== 'undefined' && vehiculopesado_service_1.VehiculoPesadoService) === 'function' && _a) || Object, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [modalidad_service_1.ModalidadService, vehiculo_service_1.VehiculoService, empresa_service_1.EmpresaService, vehiculopesado_service_1.VehiculoPesadoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], VehiculoPesadoEditComponent);
     return VehiculoPesadoEditComponent;
-    var _a;
 }());
 exports.VehiculoPesadoEditComponent = VehiculoPesadoEditComponent;
 //# sourceMappingURL=edit.vehiculoPesado.component.js.map

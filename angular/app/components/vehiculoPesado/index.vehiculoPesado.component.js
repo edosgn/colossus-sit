@@ -57,10 +57,9 @@ var IndexVehiculoPesadoComponent = (function () {
             directives: [router_1.ROUTER_DIRECTIVES],
             providers: [login_service_1.LoginService, vehiculoPesado_service_1.VehiculoPesadoService]
         }), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof vehiculoPesado_service_1.VehiculoPesadoService !== 'undefined' && vehiculoPesado_service_1.VehiculoPesadoService) === 'function' && _a) || Object, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [vehiculoPesado_service_1.VehiculoPesadoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexVehiculoPesadoComponent);
     return IndexVehiculoPesadoComponent;
-    var _a;
 }());
 exports.IndexVehiculoPesadoComponent = IndexVehiculoPesadoComponent;
 //# sourceMappingURL=index.vehiculoPesado.component.js.map
