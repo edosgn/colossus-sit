@@ -390,11 +390,11 @@
 
 						</div>
 
-		<tramiteRematricula *ngIf="vehiculo.cancelado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
-	    </tramiteRematricula>
+							<tramiteRematricula *ngIf="vehiculo.cancelado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
+						    </tramiteRematricula>
 
-	    <tramiteLevantarPrenda *ngIf="vehiculo.pignorado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
-		</tramiteLevantarPrenda>
+						    <tramiteLevantarPrenda *ngIf="vehiculo.pignorado==1" [vehiculo] = "vehiculo" [tramiteGeneralId] = "tramiteGeneralSeleccionado" (tramiteCreado)="tramiteCreado($event)">
+							</tramiteLevantarPrenda>
 
 
 		<table class="table table-bordered">

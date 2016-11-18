@@ -31,9 +31,16 @@ export class NewVehiculoPesadoComponent {
 	public vehiculos;
 	public empresas;
 	public combustibles;
-	public carrocerias;
+	public carrocerias; 
 	public clases;
 	public organismosTransito;
+	public validateCedula;
+	public claseSpanCedula;	
+	public claseCedula;
+	public empresa;
+	public divEmpresa;
+
+
 
 	constructor(
 		private _ModalidadService: ModalidadService,
@@ -109,6 +116,39 @@ export class NewVehiculoPesadoComponent {
 				}
 
 		});
+	}
+
+	onKeyEmpresa(event:any){
+		let nit = {
+			'nit' : event,
+		};
+		let token = this._loginService.getToken();
+		this._EmpresaService.showNit(token,nit).subscribe(
+			response => {
+				let status = response.status;
+				if(status=="error") {
+					this.validateCedula=false;
+					this.claseSpanCedula ="glyphicon glyphicon-remove form-control-feedback";
+					this.claseCedula = "form-group has-error has-feedback ";
+					this.empresa=null;
+					this.divEmpresa = null;
+				}else{
+					this.divEmpresa = true;
+					this.empresa = response.data;
+					this.validateCedula=true;
+					this.claseSpanCedula ="glyphicon glyphicon-ok form-control-feedback";
+					this.claseCedula = "form-group has-success has-feedback ";
+					this.vehiculoPesado.empresaId=this.empresa.id;
+				}
+			}, 
+			error => {
+				this.errorMessage = <any>error;
+
+				if(this.errorMessage != null){
+					alert("Error en la petición");
+				}
+			}
+			);
 	}
 
 	

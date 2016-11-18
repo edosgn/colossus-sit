@@ -75,6 +75,36 @@ var NewVehiculoPesadoComponent = (function () {
             });
         });
     };
+    NewVehiculoPesadoComponent.prototype.onKeyEmpresa = function (event) {
+        var _this = this;
+        var nit = {
+            'nit': event,
+        };
+        var token = this._loginService.getToken();
+        this._EmpresaService.showNit(token, nit).subscribe(function (response) {
+            var status = response.status;
+            if (status == "error") {
+                _this.validateCedula = false;
+                _this.claseSpanCedula = "glyphicon glyphicon-remove form-control-feedback";
+                _this.claseCedula = "form-group has-error has-feedback ";
+                _this.empresa = null;
+                _this.divEmpresa = null;
+            }
+            else {
+                _this.divEmpresa = true;
+                _this.empresa = response.data;
+                _this.validateCedula = true;
+                _this.claseSpanCedula = "glyphicon glyphicon-ok form-control-feedback";
+                _this.claseCedula = "form-group has-success has-feedback ";
+                _this.vehiculoPesado.empresaId = _this.empresa.id;
+            }
+        }, function (error) {
+            _this.errorMessage = error;
+            if (_this.errorMessage != null) {
+                alert("Error en la petición");
+            }
+        });
+    };
     NewVehiculoPesadoComponent = __decorate([
         core_1.Component({
             selector: 'register',
