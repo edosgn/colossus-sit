@@ -196,7 +196,7 @@ class VehiculoController extends Controller
                 $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "vehiculo encontrado", 
+                    'msj' => "vehiculo", 
                     'data'=> $vehiculo,
             );
             }else{
