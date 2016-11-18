@@ -26,6 +26,7 @@ var new_empresa_component_1 = require('../../components/empresa/new.empresa.comp
 var CiudadanoVehiculo_1 = require('../../model/CiudadanoVehiculo/CiudadanoVehiculo');
 var Ciudadano_1 = require('../../model/ciudadano/Ciudadano');
 var tramiteGeneral_service_1 = require('../../services/tramiteGeneral/tramiteGeneral.service');
+var vehiculoPesado_service_1 = require('../../services/vehiculoPesado/vehiculoPesado.service');
 var tramiteEspecifico_service_1 = require("../../services/tramiteEspecifico/tramiteEspecifico.service");
 var Empresa_1 = require('../../model/empresa/Empresa');
 var index_traspaso_component_1 = require("../../components/tipoTramite/tramiteTraspaso/index.traspaso.component");
@@ -49,9 +50,10 @@ var index_regrabarMotor_component_1 = require("../../components/tipoTramite/tram
 var new_vehiculoPesado_component_1 = require("../../components/vehiculoPesado/new.vehiculoPesado.component");
 // Decorador component, indicamos en que etiqueta se va a cargar la 
 var IndexSubirCarpetaComponent = (function () {
-    function IndexSubirCarpetaComponent(_TramiteService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
+    function IndexSubirCarpetaComponent(_TramiteService, _VehiculoPesadoService, _OrganismoTransitoService, _TramiteEspecificoService, _TramiteGeneral, _EmpresaService, _TipoIdentificacionService, _VehiculoService, _CiudadanoService, _CiudadanoVehiculoService, _loginService, _route, _router) {
         var _this = this;
         this._TramiteService = _TramiteService;
+        this._VehiculoPesadoService = _VehiculoPesadoService;
         this._OrganismoTransitoService = _OrganismoTransitoService;
         this._TramiteEspecificoService = _TramiteEspecificoService;
         this._TramiteGeneral = _TramiteGeneral;
@@ -69,9 +71,11 @@ var IndexSubirCarpetaComponent = (function () {
             'caso': null,
             'variante': null
         };
+        this.vehiculoPesado = null;
         this.json = {
             'datosGenerales': null,
         };
+        this.tablaPesado = false;
         this.divVehiculo = 'panel panel-primary';
         var token = this._loginService.getToken();
         this._TramiteService.TramitesModulo(1, token).subscribe(function (response) {
@@ -122,7 +126,23 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
+<<<<<<< HEAD
             _this.modalVehiculoPesado = false;
+=======
+            _this.vehiculoId = response.data.id;
+            _this.modalVehiculoPesado = true;
+            _this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token, _this.vehiculoId).subscribe(function (response) {
+                _this.vehiculoPesado = response.data;
+                console.log(_this.vehiculoPesado);
+                _this.tablaPesado = true;
+            }, function (error) {
+                _this.errorMessage = error;
+                if (_this.errorMessage != null) {
+                    console.log(_this.errorMessage);
+                    alert("Error en la petición");
+                }
+            });
+>>>>>>> 1384dd2f9606ca323421eb22a6c6afdf83d5452f
             if (_this.vehiculo) {
                 if (_this.vehiculo.cancelado == 1 || _this.vehiculo.pignorado == 1) {
                     _this.divVehiculo = 'panel panel-danger';
@@ -486,9 +506,10 @@ var IndexSubirCarpetaComponent = (function () {
                 ciudadano_service_1.CiudadanoService,
                 tipoIdentificacion_service_1.TipoIdentificacionService,
                 empresa_service_1.EmpresaService,
+                vehiculoPesado_service_1.VehiculoPesadoService,
                 organismoTransito_service_1.OrganismoTransitoService]
         }), 
-        __metadata('design:paramtypes', [tramite_service_1.TramiteService, organismoTransito_service_1.OrganismoTransitoService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
+        __metadata('design:paramtypes', [tramite_service_1.TramiteService, vehiculoPesado_service_1.VehiculoPesadoService, organismoTransito_service_1.OrganismoTransitoService, tramiteEspecifico_service_1.TramiteEspecificoService, tramiteGeneral_service_1.TramiteGeneralService, empresa_service_1.EmpresaService, tipoIdentificacion_service_1.TipoIdentificacionService, vehiculo_service_1.VehiculoService, ciudadano_service_1.CiudadanoService, ciudadanoVehiculo_service_1.CiudadanoVehiculoService, login_service_1.LoginService, router_1.ActivatedRoute, router_1.Router])
     ], IndexSubirCarpetaComponent);
     return IndexSubirCarpetaComponent;
 }());
