@@ -308,7 +308,7 @@ class Vehiculo
      */
     public function setFechaManifiesto($fechaManifiesto)
     {
-        $this->fechaManifiesto = new \Datetime($fechaManifiesto);
+        $this->fechaManifiesto = new Datetime($fechaManifiesto);
 
         return $this;
     }
@@ -356,7 +356,7 @@ class Vehiculo
      */
     public function setModelo($modelo)
     {
-        $this->modelo = new \Datetime($modelo);
+        $this->modelo = new Datetime($modelo);
 
         return $this;
     }
