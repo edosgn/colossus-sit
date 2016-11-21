@@ -83,9 +83,10 @@ export class NewTramiteGeneralComponent {
 		this.tramiteGeneral.apoderado = this.Apoderado;
 
 		this._TramiteGeneralService.register(this.tramiteGeneral,token).subscribe(
+
 			response => {
 				this.respuesta = response;
-				console.log(this.ciudadanosVehiculo);
+				console.log(this.tramiteGeneral);
 				if(this.respuesta.status=="success") {
 						for (var i in this.ciudadanosVehiculo) {
 							let ciudadanoVehiculo = new CiudadanoVehiculo

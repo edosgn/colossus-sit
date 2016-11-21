@@ -101,7 +101,7 @@ class Vehiculo
     /**
      * @var int
      *
-     * @ORM\Column(name="vin", type="integer")
+     * @ORM\Column(name="vin", type="bigint")
      */
     private $vin;
 
@@ -236,7 +236,8 @@ class Vehiculo
      */
     public function setFechaFactura($fechaFactura)
     {
-        $this->fechaFactura = new \DateTime($fechaFactura);
+        $this->fechaFactura = new \Datetime($fechaFactura);
+
         return $this;
     }
 
@@ -307,7 +308,7 @@ class Vehiculo
      */
     public function setFechaManifiesto($fechaManifiesto)
     {
-        $this->fechaManifiesto = new \DateTime($fechaManifiesto);
+        $this->fechaManifiesto = new Datetime($fechaManifiesto);
 
         return $this;
     }
@@ -355,7 +356,8 @@ class Vehiculo
      */
     public function setModelo($modelo)
     {
-        $this->modelo = new \DateTime($modelo);
+        $this->modelo = new Datetime($modelo);
+
         return $this;
     }
 
@@ -511,6 +513,54 @@ class Vehiculo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set pignorado
+     *
+     * @param boolean $pignorado
+     *
+     * @return Vehiculo
+     */
+    public function setPignorado($pignorado)
+    {
+        $this->pignorado = $pignorado;
+
+        return $this;
+    }
+
+    /**
+     * Get pignorado
+     *
+     * @return boolean
+     */
+    public function getPignorado()
+    {
+        return $this->pignorado;
+    }
+
+    /**
+     * Set cancelado
+     *
+     * @param boolean $cancelado
+     *
+     * @return Vehiculo
+     */
+    public function setCancelado($cancelado)
+    {
+        $this->cancelado = $cancelado;
+
+        return $this;
+    }
+
+    /**
+     * Get cancelado
+     *
+     * @return boolean
+     */
+    public function getCancelado()
+    {
+        return $this->cancelado;
     }
 
     /**
@@ -703,53 +753,5 @@ class Vehiculo
     public function getClase()
     {
         return $this->clase;
-    }
-
-    /**
-     * Set pignorado
-     *
-     * @param boolean $pignorado
-     *
-     * @return Vehiculo
-     */
-    public function setPignorado($pignorado)
-    {
-        $this->pignorado = $pignorado;
-
-        return $this;
-    }
-
-    /**
-     * Get pignorado
-     *
-     * @return boolean
-     */
-    public function getPignorado()
-    {
-        return $this->pignorado;
-    }
-
-    /**
-     * Set cancelado
-     *
-     * @param boolean $cancelado
-     *
-     * @return Vehiculo
-     */
-    public function setCancelado($cancelado)
-    {
-        $this->cancelado = $cancelado;
-
-        return $this;
-    }
-
-    /**
-     * Get cancelado
-     *
-     * @return boolean
-     */
-    public function getCancelado()
-    {
-        return $this->cancelado;
     }
 }

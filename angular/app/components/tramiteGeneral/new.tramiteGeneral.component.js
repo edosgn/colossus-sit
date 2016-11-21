@@ -61,7 +61,7 @@ var NewTramiteGeneralComponent = (function () {
         this.tramiteGeneral.apoderado = this.Apoderado;
         this._TramiteGeneralService.register(this.tramiteGeneral, token).subscribe(function (response) {
             _this.respuesta = response;
-            console.log(_this.ciudadanosVehiculo);
+            console.log(_this.tramiteGeneral);
             if (_this.respuesta.status == "success") {
                 for (var i in _this.ciudadanosVehiculo) {
                     var ciudadanoVehiculo = new CiudadanoVehiculo_1.CiudadanoVehiculo(_this.ciudadanosVehiculo[i].id, _this.ciudadanoId, _this.ciudadanosVehiculo[i].vehiculo.placa, _this.empresaId, _this.tramiteGeneral.numeroLicencia, _this.ciudadanosVehiculo[i].fechaPropiedadInicial, _this.ciudadanosVehiculo[i].fechaPropiedadFinal, _this.ciudadanosVehiculo[i].estadoPropiedad);
