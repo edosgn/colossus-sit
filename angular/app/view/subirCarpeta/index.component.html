@@ -335,8 +335,10 @@
 								<th>Id</th>
 								<th>vehiculo</th>
 								<th>numeroQpl</th>
-								<th>fecha inicial</th>
-								<th>fecha final</th>
+								<th>fecha Tramite</th>
+								<th>Tipo Identificacion</th>
+								<th>Ciudadano tramitante</th>
+								<th>Apoderado</th>
 								<th>Numero de Licencia</th>
 								<th>seleccionar</th>
 							</tr>
@@ -347,7 +349,14 @@
 								<td >{{tramiteGeneral.vehiculo.placa}}</td>
 								<td >{{tramiteGeneral.numeroQpl}}</td>
 								<td >{{tramiteGeneral.fechaInicial}}</td>
-								<td >{{tramiteGeneral.fechaFinal}}</td>
+								<td>{{tramiteGeneral.ciudadano.tipoIdentificacion.nombre}}</td>
+								<td>{{tramiteGeneral.ciudadano.numeroIdentificacion}}</td>
+								<td *ngIf="tramiteGeneral.apoderado==true">
+									apoderado
+								</td>
+								<td *ngIf="tramiteGeneral.apoderado==false">
+									sin apoderado
+								</td>
 								<td >{{tramiteGeneral.numeroLicencia}}</td>
 								<td ><input name="optionstrmiteGeneral" ng-control="optionstrmiteGeneral" type="radio" value={{tramiteGeneral.id}}
 									(change)="onChangeTramiteGeneral(tramiteGeneral.id)"></td>
