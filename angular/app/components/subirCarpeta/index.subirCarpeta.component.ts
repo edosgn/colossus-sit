@@ -240,9 +240,6 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					this.vehiculoId= response.data.id;
 					
 
-<<<<<<< HEAD
-					this.modalVehiculoPesado=false;
-=======
 					this.modalVehiculoPesado=true;
 					this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token,this.vehiculoId).subscribe(
 							response => {
@@ -259,7 +256,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 								}
 							}
 						);
->>>>>>> 1384dd2f9606ca323421eb22a6c6afdf83d5452f
+
 
 					if(this.vehiculo) { 
 					    if(this.vehiculo.cancelado == 1 || this.vehiculo.pignorado == 1) { 

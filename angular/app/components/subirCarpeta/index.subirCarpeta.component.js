@@ -126,9 +126,6 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
-<<<<<<< HEAD
-            _this.modalVehiculoPesado = false;
-=======
             _this.vehiculoId = response.data.id;
             _this.modalVehiculoPesado = true;
             _this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token, _this.vehiculoId).subscribe(function (response) {
@@ -142,7 +139,6 @@ var IndexSubirCarpetaComponent = (function () {
                     alert("Error en la petición");
                 }
             });
->>>>>>> 1384dd2f9606ca323421eb22a6c6afdf83d5452f
             if (_this.vehiculo) {
                 if (_this.vehiculo.cancelado == 1 || _this.vehiculo.pignorado == 1) {
                     _this.divVehiculo = 'panel panel-danger';
