@@ -506,6 +506,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
 					if(this.errorMessage != null){
 						console.log(this.errorMessage);
 						alert("Error en la petición");
+						
 					}
 				}
 
