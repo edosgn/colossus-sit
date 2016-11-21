@@ -72,6 +72,7 @@ var IndexSubirCarpetaComponent = (function () {
             'variante': null
         };
         this.vehiculoPesado = null;
+        this.vehiculoId = null;
         this.json = {
             'datosGenerales': null,
         };
@@ -126,19 +127,21 @@ var IndexSubirCarpetaComponent = (function () {
         var token = this._loginService.getToken();
         this._VehiculoService.showVehiculoPlaca(token, this.placa).subscribe(function (response) {
             _this.vehiculo = response.data;
-            _this.vehiculoId = response.data.id;
-            _this.modalVehiculoPesado = true;
-            _this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token, _this.vehiculoId).subscribe(function (response) {
-                _this.vehiculoPesado = response.data;
-                console.log(_this.vehiculoPesado);
-                _this.tablaPesado = true;
-            }, function (error) {
-                _this.errorMessage = error;
-                if (_this.errorMessage != null) {
-                    console.log(_this.errorMessage);
-                    alert("Error en la petición");
-                }
-            });
+            if (_this.vehiculo != null) {
+                _this.vehiculoId = response.data.id;
+                _this.modalVehiculoPesado = true;
+                _this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token, _this.vehiculoId).subscribe(function (response) {
+                    _this.vehiculoPesado = response.data;
+                    console.log(_this.vehiculoPesado);
+                    _this.tablaPesado = true;
+                }, function (error) {
+                    _this.errorMessage = error;
+                    if (_this.errorMessage != null) {
+                        console.log(_this.errorMessage);
+                        alert("Error en la petición");
+                    }
+                });
+            }
             if (_this.vehiculo) {
                 if (_this.vehiculo.cancelado == 1 || _this.vehiculo.pignorado == 1) {
                     _this.divVehiculo = 'panel panel-danger';

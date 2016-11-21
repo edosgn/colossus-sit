@@ -142,7 +142,7 @@ export class IndexSubirCarpetaComponent implements OnInit{
     	'variante':null
     };
     public vehiculoPesado = null;
-    public vehiculoId;
+    public vehiculoId=null;
 
     public organismoTransitos;
     public json = {
@@ -237,11 +237,10 @@ export class IndexSubirCarpetaComponent implements OnInit{
  	this._VehiculoService.showVehiculoPlaca(token,this.placa).subscribe(
 				response => {
 					this.vehiculo = response.data;
-					this.vehiculoId= response.data.id;
-					
-
-					this.modalVehiculoPesado=true;
-					this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token,this.vehiculoId).subscribe(
+					if(this.vehiculo!=null) {
+						this.vehiculoId= response.data.id;
+						this.modalVehiculoPesado=true;
+						this._VehiculoPesadoService.showVehiculoPesadoVehiculoId(token,this.vehiculoId).subscribe(
 							response => {
 								this.vehiculoPesado = response.data;
 								console.log(this.vehiculoPesado);
@@ -256,6 +255,9 @@ export class IndexSubirCarpetaComponent implements OnInit{
 								}
 							}
 						);
+					}
+					
+					
 
 
 					if(this.vehiculo) { 
