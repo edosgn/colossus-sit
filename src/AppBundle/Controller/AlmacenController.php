@@ -158,7 +158,6 @@ class AlmacenController extends Controller
                 $rangoInicio = $params->rangoInicio;
                 $rangoFin = $params->rangoFin;
                 $lote = $params->lote;
-                $disponibles = $params->disponibles;
                 $estado = true;
                 $em = $this->getDoctrine()->getManager();
                 $servicio = $em->getRepository('AppBundle:Servicio')->find($params->servicioId);
@@ -172,7 +171,6 @@ class AlmacenController extends Controller
                     $almacen->setRangoInicio($rangoInicio);
                     $almacen->setRangoFin($rangoFin);
                     $almacen->setLote($lote);
-                    $almacen->setDisponibles($disponibles);
                     $almacen->setEstado($estado);
                     $almacen->setServicio($servicio);
                     $almacen->setOrganismoTransito($organismoTransito);
