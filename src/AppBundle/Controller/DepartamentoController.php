@@ -217,7 +217,7 @@ class DepartamentoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $departamento = $em->getRepository('AppBundle:Departamento')->find($id);
 
-            if ($departamento->getMunicipios()!=null) {
+            if ($departamento) {
                if ($departamento!=null) {
 
                 $departamento->setEstado(0);

@@ -126,7 +126,7 @@ class EmpresaController extends Controller
     /**
      * Finds and displays a Empresa entity.
      *
-     * @Route("/show/{id}", name="empresa_show")
+     * @Route("/show/{id}/empresa", name="empresa_show_original")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)
