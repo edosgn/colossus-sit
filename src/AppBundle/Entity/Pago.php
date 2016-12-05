@@ -110,7 +110,7 @@ class Pago
      */
     public function setFechaPago($fechaPago)
     {
-        $this->fechaPago = $fechaPago;
+        $this->fechaPago = new \DateTime($fechaPago);
 
         return $this;
     }
@@ -122,7 +122,7 @@ class Pago
      */
     public function getFechaPago()
     {
-        return $this->fechaPago;
+        return $this->fechaPago->format("Y-m-d");
     }
 
     /**
@@ -134,7 +134,7 @@ class Pago
      */
     public function setHoraPago($horaPago)
     {
-        $this->horaPago = $horaPago;
+        $this->horaPago = new \DateTime($horaPago);
 
         return $this;
     }
@@ -146,7 +146,7 @@ class Pago
      */
     public function getHoraPago()
     {
-        return $this->horaPago;
+        return $this->horaPago->format("H:i a");
     }
 
     /**
