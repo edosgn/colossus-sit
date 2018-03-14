@@ -1,3 +1,7 @@
+app_modulo_sistema:
+    resource: "@AppBundle/Controller/ModuloSistemaController.php"
+    type:     annotation
+
 app_dependencia:
     resource: "@AppBundle/Controller/DependenciaController.php"
     type:     annotation
