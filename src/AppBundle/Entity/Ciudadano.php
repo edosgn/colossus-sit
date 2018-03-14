@@ -64,6 +64,49 @@ class Ciudadano
     private $correo;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_expedicion_documento", type="datetime")
+     */
+    private $fechaExpedicionDocumento;
+
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="edad", type="integer")
+     */
+    private $edad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="genero", type="string", length=255)
+     */
+    private $genero;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="grupo_sanguineo", type="string", length=255)
+     */
+    private $grupoSanguineo;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="direccion_casa", type="string", length=255)
+     */
+    private $direccionCasa;
+
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="direccion_trabajo", type="string", length=255)
+     */
+    private $direccionTrabajo;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
@@ -72,6 +115,12 @@ class Ciudadano
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="ciudadanos") */
     private $tipoIdentificacion;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
+    private $municipioNacimiento;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
+    private $municipioResidencia;
 
    
 
@@ -283,5 +332,197 @@ class Ciudadano
     public function getTipoIdentificacion()
     {
         return $this->tipoIdentificacion;
+    }
+
+    /**
+     * Set fechaExpedicionDocumento
+     *
+     * @param \DateTime $fechaExpedicionDocumento
+     *
+     * @return Ciudadano
+     */
+    public function setFechaExpedicionDocumento($fechaExpedicionDocumento)
+    {
+        $this->fechaExpedicionDocumento = $fechaExpedicionDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaExpedicionDocumento
+     *
+     * @return \DateTime
+     */
+    public function getFechaExpedicionDocumento()
+    {
+        return $this->fechaExpedicionDocumento;
+    }
+
+    /**
+     * Set edad
+     *
+     * @param integer $edad
+     *
+     * @return Ciudadano
+     */
+    public function setEdad($edad)
+    {
+        $this->edad = $edad;
+
+        return $this;
+    }
+
+    /**
+     * Get edad
+     *
+     * @return integer
+     */
+    public function getEdad()
+    {
+        return $this->edad;
+    }
+
+    /**
+     * Set genero
+     *
+     * @param string $genero
+     *
+     * @return Ciudadano
+     */
+    public function setGenero($genero)
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
+    /**
+     * Get genero
+     *
+     * @return string
+     */
+    public function getGenero()
+    {
+        return $this->genero;
+    }
+
+    /**
+     * Set grupoSanguineo
+     *
+     * @param string $grupoSanguineo
+     *
+     * @return Ciudadano
+     */
+    public function setGrupoSanguineo($grupoSanguineo)
+    {
+        $this->grupoSanguineo = $grupoSanguineo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupoSanguineo
+     *
+     * @return string
+     */
+    public function getGrupoSanguineo()
+    {
+        return $this->grupoSanguineo;
+    }
+
+    /**
+     * Set direccionCasa
+     *
+     * @param string $direccionCasa
+     *
+     * @return Ciudadano
+     */
+    public function setDireccionCasa($direccionCasa)
+    {
+        $this->direccionCasa = $direccionCasa;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionCasa
+     *
+     * @return string
+     */
+    public function getDireccionCasa()
+    {
+        return $this->direccionCasa;
+    }
+
+    /**
+     * Set direccionTrabajo
+     *
+     * @param string $direccionTrabajo
+     *
+     * @return Ciudadano
+     */
+    public function setDireccionTrabajo($direccionTrabajo)
+    {
+        $this->direccionTrabajo = $direccionTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionTrabajo
+     *
+     * @return string
+     */
+    public function getDireccionTrabajo()
+    {
+        return $this->direccionTrabajo;
+    }
+
+    /**
+     * Set municipioNacimiento
+     *
+     * @param \AppBundle\Entity\Municipio $municipioNacimiento
+     *
+     * @return Ciudadano
+     */
+    public function setMunicipioNacimiento(\AppBundle\Entity\Municipio $municipioNacimiento = null)
+    {
+        $this->municipioNacimiento = $municipioNacimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get municipioNacimiento
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipioNacimiento()
+    {
+        return $this->municipioNacimiento;
+    }
+
+    /**
+     * Set municipioResidencia
+     *
+     * @param \AppBundle\Entity\Municipio $municipioResidencia
+     *
+     * @return Ciudadano
+     */
+    public function setMunicipioResidencia(\AppBundle\Entity\Municipio $municipioResidencia = null)
+    {
+        $this->municipioResidencia = $municipioResidencia;
+
+        return $this;
+    }
+
+    /**
+     * Get municipioResidencia
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipioResidencia()
+    {
+        return $this->municipioResidencia;
     }
 }

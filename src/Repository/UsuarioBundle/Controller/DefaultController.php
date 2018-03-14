@@ -20,9 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class DefaultController extends Controller
 {
-   
-   
-
     /**
      * Creates a new Usuario entity.
      *

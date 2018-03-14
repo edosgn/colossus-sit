@@ -233,4 +233,27 @@ class MarcaController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="marca_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $marcas = $em->getRepository('AppBundle:Marca')->findBy(
+        array('estado' => 1)
+    );
+     
+      foreach ($marcas as $key => $marca) {
+        $responce[$key] = array(
+            'value' => $marca->getId(),
+            'label' => $marca->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

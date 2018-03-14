@@ -72,6 +72,10 @@ class VehiculoController extends Controller
                         $motor = $params->motor;
                         $chasis = $params->chasis;
                         $serie = $params->serie;
+                        $tipoVehiculo = $params->tipoVehiculo;
+                        $radioAccion = $params->radioAccion;
+                        $modalidadTransporte = $params->modalidadTransporte;
+                        $transportePasajeros = $params->transportePasajeros;
                         $vin = $params->vin;
                         $numeroPasajeros = $params->numeroPasajeros;
                         $municipioId = $params->municipioId;
@@ -104,6 +108,12 @@ class VehiculoController extends Controller
                         $vehiculo->setModelo($modelo);
                         $vehiculo->setMotor($motor);
                         $vehiculo->setChasis($chasis);
+                        $vehiculo->setSerie($serie);
+                        $vehiculo->setTipoVehiculo($tipoVehiculo);
+                        $vehiculo->setRadioAccion($radioAccion);
+                        $vehiculo->setModalidadTRansporte($modalidadTransporte);
+                        $vehiculo->setTransportePasajeros($transportePasajeros);
+                        $vehiculo->setSerie($serie);
                         $vehiculo->setSerie($serie);
                         $vehiculo->setVin($vin);
                         $vehiculo->setNumeroPasajeros($numeroPasajeros);
@@ -244,6 +254,10 @@ class VehiculoController extends Controller
             $motor = $params->motor;
             $chasis = $params->chasis;
             $serie = $params->serie;
+            $tipoVehiculo = $params->tipoVehiculo;
+            $radioAccion = $params->radioAccion;
+            $modalidadTransporte = $params->modalidadTransporte;
+            $transportePasajeros = $params->transportePasajeros;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
             $municipioId = $params->municipioId;
@@ -279,6 +293,12 @@ class VehiculoController extends Controller
                 $vehiculo->setMotor($motor);
                 $vehiculo->setChasis($chasis);
                 $vehiculo->setSerie($serie);
+                $vehiculo->setTipoVehiculo($tipoVehiculo);
+                $vehiculo->setRadioAccion($radioAccion);
+                $vehiculo->setModalidadTRansporte($modalidadTransporte);
+                $vehiculo->setTransportePasajeros($transportePasajeros);
+                $vehiculo->setSerie($serie);
+                $vehiculo->setSerie($serie);
                 $vehiculo->setVin($vin);
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
                 $vehiculo->setMunicipio($municipio);
@@ -290,7 +310,7 @@ class VehiculoController extends Controller
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 $vehiculo->setClase($clase);
                 $vehiculo->setPignorado($pignorado);
-                $vehiculo->setcancelado($cancelado);
+                $vehiculo->setCancelado($cancelado);
                 $vehiculo->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);

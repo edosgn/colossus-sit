@@ -99,8 +99,6 @@ class UsuarioController extends Controller
             $usuario->setCreatedAt();
             $usuario->setUpdatedAt();
 
-            
-
             //Cifrar la password
                 $pwd = hash('sha256', $password);
                 $usuario->setPassword($pwd);

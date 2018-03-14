@@ -192,7 +192,7 @@ class DepartamentoController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar departamento", 
-                );
+                );  
         }
 
         return $helpers->json($responce);

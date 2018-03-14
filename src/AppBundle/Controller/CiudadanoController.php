@@ -66,6 +66,16 @@ class CiudadanoController extends Controller
                         $direccion = (isset($params->direccion)) ? $params->direccion : null;
                         $telefono = (isset($params->telefono)) ? $params->telefono : null;
                         $correo = (isset($params->correo)) ? $params->correo : null;
+
+                        $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
+                        $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
+                        $edad = (isset($params->edad)) ? $params->edad : null;
+                        $genero = (isset($params->genero)) ? $params->genero : null;
+                        $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
+                        $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
+                        $grupoSanguineo = (isset($params->grupoSanguineo)) ? $params->grupoSanguineo : null;
+                        $direccionCasa = (isset($params->direccionCasa)) ? $params->direccionCasa : null;
+                        $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
                             array('numeroIdentificacion' => $numeroIdentificacion)
@@ -73,15 +83,29 @@ class CiudadanoController extends Controller
 
                         if ($ciudadanos==null) {
                             $tipoIdentificacionId = $params->tipoIdentificacionId;
+                            $municipioNacimientoId = $params->municipioNacimientoId;
+                            $municipioResidenciaId = $params->municipioResidenciaId;
                             $em = $this->getDoctrine()->getManager();
                             $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
+                            $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
+                            $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
                             $ciudadano = new Ciudadano();
                             $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
+                            $ciudadano->setMunicipioNacimiento($municipioNacimiento);
+                            $ciudadano->setMunicipioResidencia($municipioResidencia);
                             $ciudadano->setNombres($nombres);
                             $ciudadano->setApellidos($apellidos);
                             $ciudadano->setDireccion($direccion);
                             $ciudadano->setTelefono($telefono);
                             $ciudadano->setCorreo($correo);
+
+                            $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
+                            $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
+                            $ciudadano->setEdad($edad);
+                            $ciudadano->setGenero($genero);
+                            $ciudadano->setGrupoSanguineo($grupoSanguineo);
+                            $ciudadano->setDireccionCasa($direccionCasa);
+                            $ciudadano->setDireccionTrabajo($direccionTrabajo);
                             $ciudadano->setTipoIdentificacion($tipoIdentificacion);
                             $ciudadano->setEstado(true);
                             $em = $this->getDoctrine()->getManager();
@@ -208,21 +232,46 @@ class CiudadanoController extends Controller
             $numeroIdentificacion = $params->numeroIdentificacion;
             $nombres = $params->nombres;
             $apellidos = $params->apellidos;
-            $direccion = $params->direccion;
-            $telefono = $params->telefono;
-            $correo = $params->correo;
+            $direccion = (isset($params->direccion)) ? $params->direccion : null;
+            $telefono = (isset($params->telefono)) ? $params->telefono : null;
+            $correo = (isset($params->correo)) ? $params->correo : null;
+
+            $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
+            $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
+            $edad = (isset($params->edad)) ? $params->edad : null;
+            $genero = (isset($params->genero)) ? $params->genero : null;
+            $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
+            $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
+            $grupoSanguineo = (isset($params->grupoSanguineo)) ? $params->grupoSanguineo : null;
+            $direccionCasa = (isset($params->direccionCasa)) ? $params->direccionCasa : null;
+            $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
+
             $tipoIdentificacionId = $params->tipoIdentificacionId;
             $em = $this->getDoctrine()->getManager();
             $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
+            $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
+            $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
+
+
             $ciudadano = $em->getRepository("AppBundle:Ciudadano")->find($params->id);
 
             if ($ciudadano!=null) {
                 $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
+                $ciudadano->setMunicipioNacimiento($municipioNacimiento);
+                $ciudadano->setMunicipioResidencia($municipioResidencia);
                 $ciudadano->setNombres($nombres);
                 $ciudadano->setApellidos($apellidos);
                 $ciudadano->setDireccion($direccion);
                 $ciudadano->setTelefono($telefono);
                 $ciudadano->setCorreo($correo);
+
+                $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
+                $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
+                $ciudadano->setEdad($edad);
+                $ciudadano->setGenero($genero);
+                $ciudadano->setGrupoSanguineo($grupoSanguineo);
+                $ciudadano->setDireccionCasa($direccionCasa);
+                $ciudadano->setDireccionTrabajo($direccionTrabajo);
                 $ciudadano->setTipoIdentificacion($tipoIdentificacion);
                 $ciudadano->setEstado(true);
 

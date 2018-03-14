@@ -97,6 +97,34 @@ class Vehiculo
      * @ORM\Column(name="serie", type="string", length=255)
      */
     private $serie;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_vehiculo", type="string", length=255)
+     */
+    private $tipoVehiculo;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="radio_accion", type="string", length=255)
+     */
+    private $radioAccion;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="modalidad_transporte", type="string", length=255)
+     */
+    private $modalidadTransporte;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="transporte_pasajeros", type="string", length=255)
+     */
+    private $transportePasajeros;
   
     /**
      * @var int
@@ -753,5 +781,101 @@ class Vehiculo
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set tipoVehiculo
+     *
+     * @param string $tipoVehiculo
+     *
+     * @return Vehiculo
+     */
+    public function setTipoVehiculo($tipoVehiculo)
+    {
+        $this->tipoVehiculo = $tipoVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVehiculo
+     *
+     * @return string
+     */
+    public function getTipoVehiculo()
+    {
+        return $this->tipoVehiculo;
+    }
+
+    /**
+     * Set radioAccion
+     *
+     * @param string $radioAccion
+     *
+     * @return Vehiculo
+     */
+    public function setRadioAccion($radioAccion)
+    {
+        $this->radioAccion = $radioAccion;
+
+        return $this;
+    }
+
+    /**
+     * Get radioAccion
+     *
+     * @return string
+     */
+    public function getRadioAccion()
+    {
+        return $this->radioAccion;
+    }
+
+    /**
+     * Set modalidadTransporte
+     *
+     * @param string $modalidadTransporte
+     *
+     * @return Vehiculo
+     */
+    public function setModalidadTransporte($modalidadTransporte)
+    {
+        $this->modalidadTransporte = $modalidadTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadTransporte
+     *
+     * @return string
+     */
+    public function getModalidadTransporte()
+    {
+        return $this->modalidadTransporte;
+    }
+
+    /**
+     * Set transportePasajeros
+     *
+     * @param string $transportePasajeros
+     *
+     * @return Vehiculo
+     */
+    public function setTransportePasajeros($transportePasajeros)
+    {
+        $this->transportePasajeros = $transportePasajeros;
+
+        return $this;
+    }
+
+    /**
+     * Get transportePasajeros
+     *
+     * @return string
+     */
+    public function getTransportePasajeros()
+    {
+        return $this->transportePasajeros;
     }
 }
