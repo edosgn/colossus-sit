@@ -47,11 +47,13 @@ class MunicipioController extends Controller
      */
     public function newAction(Request $request)
     {
+        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
+           
             
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -66,6 +68,7 @@ class MunicipioController extends Controller
                 $nombre = $params->nombre;
                 $codigoDian = $params->codigoDian;
                 $departamentoId = $params->departamentoId;
+                
 
                 $em = $this->getDoctrine()->getManager();
                 $municipios = $em->getRepository('AppBundle:Municipio')->findBy(

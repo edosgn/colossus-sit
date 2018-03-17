@@ -286,4 +286,28 @@ class DepartamentoController extends Controller
             ->getForm()
         ;
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="departamento_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
+        array('estado' => 1)
+    );
+     
+      foreach ($departamentos as $key => $departamento) {
+        $responce[$key] = array(
+            'value' => $departamento->getId(),
+            'label' => $departamento->getNombre()."_".$departamento->getCodigoDian(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
