@@ -121,9 +121,9 @@ class ModuloController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Modulo entity.
+     * Displays a form to edit an existing Linea entity.
      *
-     * @Route("/edit", name="modulo_edit")
+     * @Route("/edit", name="Modulo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
