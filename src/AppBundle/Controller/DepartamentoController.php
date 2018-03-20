@@ -301,11 +301,10 @@ class DepartamentoController extends Controller
     $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
         array('estado' => 1)
     );
-     
       foreach ($departamentos as $key => $departamento) {
         $responce[$key] = array(
             'value' => $departamento->getId(),
-            'label' => $departamento->getNombre()."_".$departamento->getCodigoDian(),
+            'label' => $departamento->getCodigoDian()."_".$departamento->getNombre(),
             );
       }
        return $helpers->json($responce);

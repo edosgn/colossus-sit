@@ -251,7 +251,7 @@ class MarcaController extends Controller
       foreach ($marcas as $key => $marca) {
         $responce[$key] = array(
             'value' => $marca->getId(),
-            'label' => $marca->getNombre(),
+            'label' => $marca->getCodigoMt."_".$marca->getNombre(),
             );
       }
        return $helpers->json($responce);
