@@ -219,4 +219,27 @@ class ConsumibleController extends Controller
             ->getForm()
         ;
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="consumible_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $consumibles = $em->getRepository('AppBundle:Consumible')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($consumibles as $key => $consumible) {
+        $responce[$key] = array(
+            'value' => $consumible->getId(),
+            'label' => $consumible->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
