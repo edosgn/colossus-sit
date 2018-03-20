@@ -235,4 +235,27 @@ class ServicioController extends Controller
             ->getForm()
         ;
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="servicio_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $servicios = $em->getRepository('AppBundle:Servicio')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($servicios as $key => $servicio) {
+        $responce[$key] = array(
+            'value' => $servicio->getId(),
+            'label' => $servicio->getCodigo()."_".$servicio->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

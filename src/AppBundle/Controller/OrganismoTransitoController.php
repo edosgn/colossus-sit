@@ -219,4 +219,26 @@ class OrganismoTransitoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="organismoTransito_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $organismoTransitos = $em->getRepository('AppBundle:OrganismoTransito')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($organismoTransitos as $key => $organismoTransito) {
+        $responce[$key] = array(
+            'value' => $organismoTransito->getId(),
+            'label' => $organismoTransito->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

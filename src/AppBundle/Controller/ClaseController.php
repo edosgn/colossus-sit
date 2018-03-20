@@ -233,4 +233,26 @@ class ClaseController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="clase_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $clases = $em->getRepository('AppBundle:Clase')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($clases as $key => $clase) {
+        $responce[$key] = array(
+            'value' => $clase->getId(),
+            'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
