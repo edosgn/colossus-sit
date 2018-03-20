@@ -28,6 +28,13 @@ class AgenteTransito
      */
     private $placa;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
 
     /**
      * Get id
@@ -61,5 +68,29 @@ class AgenteTransito
     public function getPlaca()
     {
         return $this->placa;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return AgenteTransito
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

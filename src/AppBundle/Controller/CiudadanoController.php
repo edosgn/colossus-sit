@@ -89,6 +89,7 @@ class CiudadanoController extends Controller
                             $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
                             $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
                             $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
+
                             $ciudadano = new Ciudadano();
                             $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
                             $ciudadano->setMunicipioNacimiento($municipioNacimiento);
@@ -247,6 +248,9 @@ class CiudadanoController extends Controller
             $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
 
             $tipoIdentificacionId = $params->tipoIdentificacionId;
+            $municipioNacimientoId = $params->municipioNacimientoId;
+            $municipioResidenciaId = $params->municipioResidenciaId;
+            
             $em = $this->getDoctrine()->getManager();
             $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
             $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);

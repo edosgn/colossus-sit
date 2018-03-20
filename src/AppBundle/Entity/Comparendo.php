@@ -106,6 +106,13 @@ class Comparendo
     private $gradoAlchoholemia;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
      **/
     protected $municipio;
@@ -427,6 +434,30 @@ class Comparendo
     public function getGradoAlchoholemia()
     {
         return $this->gradoAlchoholemia;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Comparendo
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

@@ -1,3 +1,11 @@
+app_comparendo:
+    resource: "@AppBundle/Controller/ComparendoController.php"
+    type:     annotation
+
+app_agente_transito:
+    resource: "@AppBundle/Controller/AgenteTransitoController.php"
+    type:     annotation
+
 app_modulo_sistema:
     resource: "@AppBundle/Controller/ModuloSistemaController.php"
     type:     annotation

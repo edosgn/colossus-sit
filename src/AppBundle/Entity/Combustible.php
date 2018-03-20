@@ -43,10 +43,6 @@ class Combustible
      */
     private $estado;
 
- 
-
-
-    
 
     /**
      * Get id
