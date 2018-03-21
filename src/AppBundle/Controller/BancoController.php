@@ -219,4 +219,26 @@ class BancoController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="banco_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $bancos = $em->getRepository('AppBundle:Banco')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($bancos as $key => $banco) {
+        $responce[$key] = array(
+            'value' => $banco->getId(),
+            'label' => $banco->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
