@@ -112,6 +112,7 @@ class Ciudadano
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
+    
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="ciudadanos") */
     private $tipoIdentificacion;
@@ -128,8 +129,6 @@ class Ciudadano
     {
         return $this->getNombres();
     } 
-
-
    
 
     /**

@@ -220,4 +220,27 @@ class ColorController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="color_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $colors = $em->getRepository('AppBundle:Color')->findBy(
+        array('estado' => 1)
+    );
+    
+    foreach ($colors as $key => $color) {
+        $responce[$key] = array(
+            'value' => $color->getId(),
+            'label' => $color->getNombre(),
+        );
+      }
+       return $helpers->json($responce);
+    }
 }

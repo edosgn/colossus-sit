@@ -233,4 +233,26 @@ class CombustibleController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="combustible_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $combustibles = $em->getRepository('AppBundle:Combustible')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($combustibles as $key => $combustible) {
+        $responce[$key] = array(
+            'value' => $combustible->getId(),
+            'label' => $combustible->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

@@ -264,11 +264,18 @@ class LineaController extends Controller
                 array('marca' => $marcaId)
             );
 
+            foreach ($Lineas as $key => $linea) {
+            $lineasArray[$key] = array(
+                'value' => $linea->getId(),
+                'label' => $linea->getNombre(),
+                );
+            }
+
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Lineas encontradas", 
-                    'data'=> $Lineas,
+                    'data'=> $lineasArray,
             );
         }else{
             $responce = array(

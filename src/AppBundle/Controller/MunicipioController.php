@@ -271,11 +271,18 @@ class MunicipioController extends Controller
                 array('departamento' => $departamentoId)
             );
 
+            foreach ($municipios as $key => $municipio) {
+            $municipioArray[$key] = array(
+                'value' => $municipio->getId(),
+                'label' => $municipio->getCodigoDian()."_".$municipio->getNombre(),
+                );
+            }
+
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "municipio encontrado", 
-                    'data'=> $municipios,
+                    'data'=> $municipioArray,
             );
         }else{
             $responce = array(
@@ -303,4 +310,5 @@ class MunicipioController extends Controller
             ->getForm()
         ;
     }
+
 }
