@@ -311,4 +311,27 @@ class MunicipioController extends Controller
         ;
     }
 
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="municipio_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($municipios as $key => $municipio) {
+        $responce[$key] = array(
+            'value' => $municipio->getId(),
+            'label' => $municipio->getCodigoDian()."_".$municipio->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
+
 }

@@ -71,10 +71,7 @@ class CiudadanoController extends Controller
                         $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
                         $edad = (isset($params->edad)) ? $params->edad : null;
                         $genero = (isset($params->genero)) ? $params->genero : null;
-                        $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
-                        $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
                         $grupoSanguineo = (isset($params->grupoSanguineo)) ? $params->grupoSanguineo : null;
-                        $direccionCasa = (isset($params->direccionCasa)) ? $params->direccionCasa : null;
                         $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
@@ -101,11 +98,9 @@ class CiudadanoController extends Controller
                             $ciudadano->setCorreo($correo);
 
                             $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
-                            $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
                             $ciudadano->setEdad($edad);
                             $ciudadano->setGenero($genero);
                             $ciudadano->setGrupoSanguineo($grupoSanguineo);
-                            $ciudadano->setDireccionCasa($direccionCasa);
                             $ciudadano->setDireccionTrabajo($direccionTrabajo);
                             $ciudadano->setTipoIdentificacion($tipoIdentificacion);
                             $ciudadano->setEstado(true);
@@ -241,10 +236,7 @@ class CiudadanoController extends Controller
             $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
             $edad = (isset($params->edad)) ? $params->edad : null;
             $genero = (isset($params->genero)) ? $params->genero : null;
-            $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
-            $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
             $grupoSanguineo = (isset($params->grupoSanguineo)) ? $params->grupoSanguineo : null;
-            $direccionCasa = (isset($params->direccionCasa)) ? $params->direccionCasa : null;
             $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
 
             $tipoIdentificacionId = $params->tipoIdentificacionId;
@@ -270,11 +262,9 @@ class CiudadanoController extends Controller
                 $ciudadano->setCorreo($correo);
 
                 $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
-                $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
                 $ciudadano->setEdad($edad);
                 $ciudadano->setGenero($genero);
                 $ciudadano->setGrupoSanguineo($grupoSanguineo);
-                $ciudadano->setDireccionCasa($direccionCasa);
                 $ciudadano->setDireccionTrabajo($direccionTrabajo);
                 $ciudadano->setTipoIdentificacion($tipoIdentificacion);
                 $ciudadano->setEstado(true);

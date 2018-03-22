@@ -91,13 +91,6 @@ class Ciudadano
      */
     private $grupoSanguineo;
 
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="direccion_casa", type="string", length=255)
-     */
-    private $direccionCasa;
-
 
      /**
      * @var string
@@ -427,30 +420,6 @@ class Ciudadano
     public function getGrupoSanguineo()
     {
         return $this->grupoSanguineo;
-    }
-
-    /**
-     * Set direccionCasa
-     *
-     * @param string $direccionCasa
-     *
-     * @return Ciudadano
-     */
-    public function setDireccionCasa($direccionCasa)
-    {
-        $this->direccionCasa = $direccionCasa;
-
-        return $this;
-    }
-
-    /**
-     * Get direccionCasa
-     *
-     * @return string
-     */
-    public function getDireccionCasa()
-    {
-        return $this->direccionCasa;
     }
 
     /**

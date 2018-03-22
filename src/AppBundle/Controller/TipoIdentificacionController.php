@@ -219,4 +219,26 @@ class TipoIdentificacionController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="tipoIdentificacion_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $tipoIdentificacions = $em->getRepository('AppBundle:TipoIdentificacion')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($tipoIdentificacions as $key => $tipoIdentificacion) {
+        $responce[$key] = array(
+            'value' => $tipoIdentificacion->getId(),
+            'label' => $tipoIdentificacion->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
