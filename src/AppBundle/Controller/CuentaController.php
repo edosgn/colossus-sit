@@ -226,4 +226,26 @@ class CuentaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="cuenta_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $cuentas = $em->getRepository('AppBundle:Cuenta')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($cuentas as $key => $cuenta) {
+        $responce[$key] = array(
+            'value' => $cuenta->getId(),
+            'label' => $cuenta->getBanco()->getNombre()."_".$cuenta->getNumero(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

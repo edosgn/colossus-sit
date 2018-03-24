@@ -322,4 +322,30 @@ class EmpresaController extends Controller
         }
         return $helpers->json($responce);
     }
+
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="empresa_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
+        array('estado' => 1)
+    );
+    if ($empresas == null) {
+       $responce = null;
+    }
+      foreach ($empresas as $key => $empresa) {
+        $responce[$key] = array(
+            'value' => $empresa->getId(),
+            'label' => $empresa->getNit()."_".$empresa->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

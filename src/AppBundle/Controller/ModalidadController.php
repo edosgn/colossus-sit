@@ -233,4 +233,29 @@ class ModalidadController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="modalidad_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $modalidads = $em->getRepository('AppBundle:Modalidad')->findBy(
+        array('estado' => 1)
+    );
+    if ($modalidads == null) {
+       $responce = null;
+    }
+      foreach ($modalidads as $key => $modalidad) {
+        $responce[$key] = array(
+            'value' => $modalidad->getId(),
+            'label' => $modalidad->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

@@ -220,4 +220,29 @@ class ModuloController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="modulo_select")
+     * @Method({"GET", "POST"})
+    */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $modulos = $em->getRepository('AppBundle:Modulo')->findBy(
+        array('estado' => 1)
+    );
+    if ($modulos == null) {
+       $responce = null;
+    }
+      foreach ($modulos as $key => $modulo) {
+        $responce[$key] = array(
+            'value' => $modulo->getId(),
+            'label' => $modulo->getAbreviatura()."_".$modulo->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

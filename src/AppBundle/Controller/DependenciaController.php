@@ -242,4 +242,26 @@ class DependenciaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="dependencia_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $dependencias = $em->getRepository('AppBundle:Dependencia')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($dependencias as $key => $dependencia) {
+        $responce[$key] = array(
+            'value' => $dependencia->getId(),
+            'label' => $dependencia->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

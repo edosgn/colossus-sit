@@ -198,4 +198,29 @@ class ModuloSistemaController extends Controller
             ->getForm()
         ;
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="moduloSistema_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $moduloSistemas = $em->getRepository('AppBundle:ModuloSistema')->findAll();
+        
+    if ($moduloSistemas == null) {
+       $responce = null;
+    }
+      foreach ($moduloSistemas as $key => $moduloSistema) {
+        $responce[$key] = array(
+            'value' => $moduloSistema->getId(),
+            'label' => $moduloSistema->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
