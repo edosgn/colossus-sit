@@ -218,7 +218,7 @@ class ModuloSistemaController extends Controller
       foreach ($moduloSistemas as $key => $moduloSistema) {
         $responce[$key] = array(
             'value' => $moduloSistema->getId(),
-            'label' => $moduloSistema->getNombre(),
+            'label' => $moduloSistema->getNombreModulo(),
             );
       }
        return $helpers->json($responce);

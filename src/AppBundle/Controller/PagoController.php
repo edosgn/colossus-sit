@@ -240,4 +240,29 @@ class PagoController extends Controller
             ->getForm()
         ;
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="pago_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $pagos = $em->getRepository('AppBundle:Pago')->findAll();
+        
+    if ($pagos == null) {
+       $responce = null;
+    }
+      foreach ($pagos as $key => $pago) {
+        $responce[$key] = array(
+            'value' => $pago->getId(),
+            'label' => $pago->getTramite()->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
