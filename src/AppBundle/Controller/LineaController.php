@@ -286,4 +286,27 @@ class LineaController extends Controller
         }
         return $helpers->json($responce);
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="linea_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $lineas = $em->getRepository('AppBundle:Linea')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($lineas as $key => $linea) {
+        $responce[$key] = array(
+            'value' => $linea->getId(),
+            'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }

@@ -347,7 +347,7 @@ class Ciudadano
      */
     public function getFechaExpedicionDocumento()
     {
-        return $this->fechaExpedicionDocumento;
+        return $this->fechaExpedicionDocumento->format('Y-m-d');
     }
 
     /**

@@ -72,7 +72,8 @@ class CiudadanoController extends Controller
                         $edad = (isset($params->edad)) ? $params->edad : null;
                         $genero = (isset($params->genero)) ? $params->genero : null;
                         $grupoSanguineo = (isset($params->grupoSanguineo)) ? $params->grupoSanguineo : null;
-                        $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
+                        
+                        $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
                         $em = $this->getDoctrine()->getManager();
                         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
                             array('numeroIdentificacion' => $numeroIdentificacion)
@@ -237,7 +238,8 @@ class CiudadanoController extends Controller
             $edad = (isset($params->edad)) ? $params->edad : null;
             $genero = (isset($params->genero)) ? $params->genero : null;
             $grupoSanguineo = (isset($params->grupoSanguineo)) ? $params->grupoSanguineo : null;
-            $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->grupoSanguineo : null;
+            
+            $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
 
             $tipoIdentificacionId = $params->tipoIdentificacionId;
             $municipioNacimientoId = $params->municipioNacimientoId;

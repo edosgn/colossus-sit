@@ -295,4 +295,27 @@ class CarroceriaController extends Controller
         }
         return $helpers->json($responce);
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="carroceria_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $carrocerias = $em->getRepository('AppBundle:Carroceria')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($carrocerias as $key => $carroceria) {
+        $responce[$key] = array(
+            'value' => $carroceria->getId(),
+            'label' => $carroceria->getCodigoMt()."_".$carroceria->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
