@@ -71,16 +71,16 @@ class Comparendo
     private $tarjetaOperacionInfractor;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="fuga", type="string", length=1)
+     * @ORM\Column(name="fuga", type="boolean")
      */
     private $fuga;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="accidente", type="string", length=1)
+     * @ORM\Column(name="accidente", type="boolean")
      */
     private $accidente;
 
@@ -326,7 +326,7 @@ class Comparendo
     /**
      * Set fuga
      *
-     * @param string $fuga
+     * @param boolean $fuga
      *
      * @return Comparendo
      */
@@ -340,7 +340,7 @@ class Comparendo
     /**
      * Get fuga
      *
-     * @return string
+     * @return boolean
      */
     public function getFuga()
     {
@@ -350,7 +350,7 @@ class Comparendo
     /**
      * Set accidente
      *
-     * @param string $accidente
+     * @param boolean $accidente
      *
      * @return Comparendo
      */
@@ -364,7 +364,7 @@ class Comparendo
     /**
      * Get accidente
      *
-     * @return string
+     * @return boolean
      */
     public function getAccidente()
     {
