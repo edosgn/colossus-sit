@@ -60,9 +60,13 @@ class AgenteTransitoController extends Controller
                 );
             }else{
                 $placa = $params->placa;
+                $ciudadanoId = $params->ciudadanoId;
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+
                 $agenteTransito = new Agentetransito();
 
                 $agenteTransito->setPlaca($placa);
+                $agenteTransito->setCiudadano($ciudadano);
                 $agenteTransito->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
@@ -89,7 +93,7 @@ class AgenteTransitoController extends Controller
      * Finds and displays a agenteTransito entity.
      *
      * @Route("/{id}/show", name="agentetransito_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request, AgenteTransito $agenteTransito)
     {
@@ -123,6 +127,7 @@ class AgenteTransitoController extends Controller
      */
     public function editAction(Request $request, AgenteTransito $agenteTransito)
     {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -134,10 +139,11 @@ class AgenteTransitoController extends Controller
             $id = $params->id;
             $placa = $params->placa;
 
-            $em = $this->getDoctrine()->getManager();
-
+            $ciudadanoId = $params->ciudadanoId;
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
             if ($agenteTransito!=null) {
                 $agenteTransito->setPlaca($placa);
+                $agenteTransito->setCiudadano($ciudadano);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($agenteTransito);
                 $em->flush();
@@ -159,7 +165,7 @@ class AgenteTransitoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'msj' => "Autorizacion no valida para editar agente de transito", 
                 );
         }
 
@@ -213,5 +219,27 @@ class AgenteTransitoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="agenteTransito_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $agenteTransitos = $em->getRepository('AppBundle:AgenteTransito')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($agenteTransitos as $key => $agenteTransito) {
+        $response[$key] = array(
+            'value' => $agenteTransito->getId(),
+            'label' => $agenteTransito->getPlaca()."_".$agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
+            'agenteNombres' => $agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
+            );
+      }
+       return $helpers->json($response);
     }
 }
