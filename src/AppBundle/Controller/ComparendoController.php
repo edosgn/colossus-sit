@@ -326,6 +326,7 @@ class ComparendoController extends Controller
                 $fechaNotificacion = new \DateTime($comparendo[14]);
                 $comparendoNew->setFechaNotificacion($fechaNotificacion);
                 $comparendoNew->setGradoAlchoholemia($comparendo[15]);
+                $comparendoNew->setFotomulta(0);
                 $comparendoNew->setEstado(true);
                 //Relación llaves foraneas
                 $comparendoNew->setMunicipio($municipio);
@@ -343,53 +344,7 @@ class ComparendoController extends Controller
             'code' => 200,
             'msj' => "Registro creado con exito", 
         );
-
-
-    /**
-     * Busca comparendo por número.
-     *
-     * @Route("/search", name="comparendo_search")
-     * @Method("POST")
-     */
-    public function searchAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-
-        if ($authCheck == true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-            $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneBy(
-                array('numeroOrden' => $params->numeroOrden)
-            );
-
-            if ($comparendo != null) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Número de comparendo ya existe", 
-                    'data'=> $comparendo,
-            );
-            }else{
-                 $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Número de orden no encontrada en la base de datos", 
-                );
-            }
-
-            
-        }else{
-            $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
-        }
         return $helpers->json($response);
-    }
+}
+    
 }
