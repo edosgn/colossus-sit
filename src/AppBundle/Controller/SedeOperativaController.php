@@ -85,13 +85,13 @@ class SedeOperativaController extends Controller
         return $helpers->json($response);
     }
 
-    /**
-     * Finds and displays a sedeOperativa entity.
+   /**
+     * Finds and displays a agenteTransito entity.
      *
      * @Route("/{id}/show", name="sedeoperativa_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(SedeOperativa $sedeOperativa)
+     public function showAction(Request $request, SedeOperativa $sedeOperativa)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -233,7 +233,7 @@ class SedeOperativaController extends Controller
     );
       foreach ($sedesOperativas as $key => $sedeOperativa) {
         $consecutive = substr($sedeOperativa->getCodigoDivipo(), 0, 12);
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $sedeOperativa->getId(),
             'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
             'consecutive' => $consecutive
