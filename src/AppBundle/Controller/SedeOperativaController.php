@@ -217,4 +217,26 @@ class SedeOperativaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Datos para select 2
+     *
+     * @Route("/select", name="sedeoperativa_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($sedesOperativas as $key => $sedeOperativa) {
+        $responce[$key] = array(
+            'value' => $sedeOperativa->getId(),
+            'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }
