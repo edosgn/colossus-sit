@@ -289,4 +289,61 @@ class ComparendoController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * Deletes a comparendo entity.
+     *
+     * @Route("/{polca}/archivo", name="comparendo_delete")
+     * @Method("POST")
+     */
+    public function uploadFileAction(Request $request, $polca)
+    {   
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        
+        foreach ($params as $key => $comparendo) {
+                $municipio = $em->getRepository('AppBundle:Municipio')->findOneByCodigoDian($comparendo[0]);
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($comparendo[1]);
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByNumeroIdentificacion($comparendo[2]);
+                $agenteTransito = $em->getRepository('AppBundle:AgenteTransito')->findOneByPlaca($comparendo[3]);
+                $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->findOneByNumeroOficio($comparendo[4]);
+
+
+                $comparendoNew = new Comparendo();
+                $comparendoNew->setNumeroOrden($comparendo[5]);
+                $fechaDiligenciamiento = new \DateTime($comparendo[6]);
+                $comparendoNew->setFechaDiligenciamiento($fechaDiligenciamiento);
+                $comparendoNew->setLugarInfraccion($comparendo[7]);
+                $comparendoNew->setBarrioInfraccion($comparendo[8]);
+                $comparendoNew->setObservacionesAgente($comparendo[9]);
+                $comparendoNew->setTipoInfractor($comparendo[10]);
+                $comparendoNew->setTarjetaOperacionInfractor($comparendo[11]);
+                $comparendoNew->setFuga($comparendo[12]);
+                $comparendoNew->setAccidente($comparendo[13]);
+                $comparendoNew->setPolca($polca);
+                $fechaNotificacion = new \DateTime($comparendo[14]);
+                $comparendoNew->setFechaNotificacion($fechaNotificacion);
+                $comparendoNew->setGradoAlchoholemia($comparendo[15]);
+                $comparendoNew->setEstado(true);
+                //Relación llaves foraneas
+                $comparendoNew->setMunicipio($municipio);
+                $comparendoNew->setVehiculo($vehiculo);
+                $comparendoNew->setCuidadano($ciudadano);
+                $comparendoNew->setAgenteTransito($agenteTransito);
+                $comparendoNew->setSeguimientoEntrega($seguimientoEntrega);
+
+                $em->persist($comparendoNew);
+                $em->flush();
+        }
+        
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Registro creado con exito", 
+        );
+
+        return $helpers->json($response);
+    }
 }
