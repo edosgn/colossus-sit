@@ -61,7 +61,6 @@ class Inmovilizacion
      **/
     protected $comparendo;
 
-   
 
     /**
      * Get id

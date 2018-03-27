@@ -1,3 +1,7 @@
+app_inmovilizacion:
+    resource: "@AppBundle/Controller/InmovilizacionController.php"
+    type:     annotation
+
 app_seguimiento_entrega:
     resource: "@AppBundle/Controller/SeguimientoEntregaController.php"
     type:     annotation
