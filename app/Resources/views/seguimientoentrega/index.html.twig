@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Seguimientoentregas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numeroregistros</th>
+                <th>Numerooficio</th>
+                <th>Fechacargue</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for seguimientoEntrega in seguimientoEntregas %}
+            <tr>
+                <td><a href="{{ path('seguimientoentrega_show', { 'id': seguimientoEntrega.id }) }}">{{ seguimientoEntrega.id }}</a></td>
+                <td>{{ seguimientoEntrega.numeroRegistros }}</td>
+                <td>{{ seguimientoEntrega.numeroOficio }}</td>
+                <td>{% if seguimientoEntrega.fechaCargue %}{{ seguimientoEntrega.fechaCargue|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('seguimientoentrega_show', { 'id': seguimientoEntrega.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('seguimientoentrega_edit', { 'id': seguimientoEntrega.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('seguimientoentrega_new') }}">Create a new seguimientoEntrega</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -31,16 +31,30 @@ class Ciudadano
     /**
      * @var string
      *
-     * @ORM\Column(name="nombres", type="string", length=255)
+     * @ORM\Column(name="primer_nombre", type="string", length=255)
      */
-    private $nombres;
+    private $primerNombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos", type="string", length=255)
+     * @ORM\Column(name="segundo_nombre", type="string", length=255)
      */
-    private $apellidos;
+    private $segundoNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="primer_apellido", type="string", length=255)
+     */
+    private $primerApellido;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="segundo_apellido", type="string", length=255)
+     */
+    private $segundoApellido;
 
     /**
      * @var string
@@ -159,51 +173,99 @@ class Ciudadano
     }
 
     /**
-     * Set nombres
+     * Set primerNombre
      *
-     * @param string $nombres
+     * @param string $primerNombre
      *
      * @return Ciudadano
      */
-    public function setNombres($nombres)
+    public function setPrimerNombre($primerNombre)
     {
-        $this->nombres = $nombres;
+        $this->primerNombre = $primerNombre;
 
         return $this;
     }
 
     /**
-     * Get nombres
+     * Get primerNombre
      *
      * @return string
      */
-    public function getNombres()
+    public function getPrimerNombre()
     {
-        return $this->nombres;
+        return $this->primerNombre;
     }
 
     /**
-     * Set apellidos
+     * Set segundoNombre
      *
-     * @param string $apellidos
+     * @param string $segundoNombre
      *
      * @return Ciudadano
      */
-    public function setApellidos($apellidos)
+    public function setSegundoNombre($segundoNombre)
     {
-        $this->apellidos = $apellidos;
+        $this->segundoNombre = $segundoNombre;
 
         return $this;
     }
 
     /**
-     * Get apellidos
+     * Get segundoNombre
      *
      * @return string
      */
-    public function getApellidos()
+    public function getSegundoNombre()
     {
-        return $this->apellidos;
+        return $this->segundoNombre;
+    }
+
+    /**
+     * Set primerApellido
+     *
+     * @param string $primerApellido
+     *
+     * @return Ciudadano
+     */
+    public function setPrimerApellido($primerApellido)
+    {
+        $this->primerApellido = $primerApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get primerApellido
+     *
+     * @return string
+     */
+    public function getPrimerApellido()
+    {
+        return $this->primerApellido;
+    }
+
+    /**
+     * Set segundoApellido
+     *
+     * @param string $segundoApellido
+     *
+     * @return Ciudadano
+     */
+    public function setSegundoApellido($segundoApellido)
+    {
+        $this->segundoApellido = $segundoApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get segundoApellido
+     *
+     * @return string
+     */
+    public function getSegundoApellido()
+    {
+        return $this->segundoApellido;
     }
 
     /**

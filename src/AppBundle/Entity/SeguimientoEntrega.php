@@ -42,6 +42,13 @@ class SeguimientoEntrega
      */
     private $fechaCargue;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
 
     /**
      * Get id
@@ -123,5 +130,29 @@ class SeguimientoEntrega
     public function getFechaCargue()
     {
         return $this->fechaCargue;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return SeguimientoEntrega
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

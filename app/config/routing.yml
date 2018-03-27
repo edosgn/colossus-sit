@@ -1,3 +1,7 @@
+app_seguimiento_entrega:
+    resource: "@AppBundle/Controller/SeguimientoEntregaController.php"
+    type:     annotation
+
 app_comparendo:
     resource: "@AppBundle/Controller/ComparendoController.php"
     type:     annotation
