@@ -302,7 +302,6 @@ class ComparendoController extends Controller
         $helpers = $this->get("app.helpers");
         $json = $request->get("json",null);
         $params = json_decode($json);
-        
         foreach ($params as $key => $comparendo) {
                 $municipio = $em->getRepository('AppBundle:Municipio')->findOneByCodigoDian($comparendo[0]);
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($comparendo[1]);
@@ -326,7 +325,7 @@ class ComparendoController extends Controller
                 $fechaNotificacion = new \DateTime($comparendo[14]);
                 $comparendoNew->setFechaNotificacion($fechaNotificacion);
                 $comparendoNew->setGradoAlchoholemia($comparendo[15]);
-                $comparendoNew->setFotomulta(0);
+                $comparendoNew->setFotomulta($comparendo[16]);
                 $comparendoNew->setEstado(true);
                 //Relación llaves foraneas
                 $comparendoNew->setMunicipio($municipio);
