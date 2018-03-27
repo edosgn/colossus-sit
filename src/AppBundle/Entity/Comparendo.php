@@ -92,6 +92,13 @@ class Comparendo
     private $polca;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="fotomulta", type="boolean")
+     */
+    private $fotomulta;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechaNotificacion", type="date")
@@ -386,6 +393,30 @@ class Comparendo
     public function getPolca()
     {
         return $this->polca;
+    }
+
+    /**
+     * Set fotomulta
+     *
+     * @param boolean $fotomulta
+     *
+     * @return Comparendo
+     */
+    public function setFotomulta($fotomulta)
+    {
+        $this->fotomulta = $fotomulta;
+
+        return $this;
+    }
+
+    /**
+     * Get fotomulta
+     *
+     * @return boolean
+     */
+    public function getFotomulta()
+    {
+        return $this->fotomulta;
     }
 
     /**
