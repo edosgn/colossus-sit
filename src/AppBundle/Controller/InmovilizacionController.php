@@ -2,46 +2,44 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\AgenteTransito;
+use AppBundle\Entity\Inmovilizacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Agentetransito controller.
+ * Inmovilizacion controller.
  *
- * @Route("agentetransito")
+ * @Route("inmovilizacion")
  */
-class AgenteTransitoController extends Controller
+class InmovilizacionController extends Controller
 {
     /**
-     * Lists all agenteTransito entities.
+     * Lists all inmovilizacion entities.
      *
-     * @Route("/", name="agentetransito_index")
+     * @Route("/", name="inmovilizacion_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $agentes = $em->getRepository('AppBundle:AgenteTransito')->findBy(
-            array('estado' => 1)
-        );
+        $inmovilizaciones = $em->getRepository('AppBundle:Inmovilizacion')->findAll();
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de agentes",
-            'data' => $agentes, 
+            'msj' => "lista de inmovilizaciones",
+            'data' => $inmovilizaciones, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new agenteTransito entity.
+     * Creates a new inmovilizacion entity.
      *
-     * @Route("/new", name="agentetransito_new")
+     * @Route("/new", name="inmovilizacion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -59,18 +57,24 @@ class AgenteTransitoController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{
-                $placa = $params->placa;
-                $ciudadanoId = $params->ciudadanoId;
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                $numeroPatio = $params->numeroPatio;
+                $numeroGrua = $params->numeroGrua;
+                $numeroConsecutivo = $params->numeroConsecutivo;
+                $direccionPatio = $params->direccionPatio;
+                $placaGrua = $params->placaGrua;
+                $comparendo = $params->comparendo;
 
-                $agenteTransito = new Agentetransito();
+                $inmovilizacion = new Inmovilizacion();
 
-                $agenteTransito->setPlaca($placa);
-                $agenteTransito->setCiudadano($ciudadano);
-                $agenteTransito->setEstado(true);
+                $inmovilizacion->setNumeroPatio($numeroPatio);
+                $inmovilizacion->setNumeroGrua($numeroGrua);
+                $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
+                $inmovilizacion->setDireccionPatio($direccionPatio);
+                $inmovilizacion->setPlacaGrua($placaGrua);
+                $inmovilizacion->setComparendo($comparendo);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($inmovilizacion);
                 $em->flush();
 
                 $response = array(
@@ -90,12 +94,12 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Finds and displays a agenteTransito entity.
+     * Finds and displays a inmovilizacion entity.
      *
-     * @Route("/{id}/show", name="agentetransito_show")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/show", name="inmovilizacion_show")
+     * @Method("GET")
      */
-    public function showAction(Request $request, AgenteTransito $agenteTransito)
+    public function showAction(Inmovilizacion $inmovilizacion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -107,7 +111,7 @@ class AgenteTransitoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $agenteTransito,
+                    'data'=> $inmovilizacion,
             );
         }else{
             $response = array(
@@ -120,14 +124,13 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing agenteTransito entity.
+     * Displays a form to edit an existing inmovilizacion entity.
      *
-     * @Route("/{id}/edit", name="agentetransito_edit")
+     * @Route("/{id}/edit", name="inmovilizacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, AgenteTransito $agenteTransito)
+    public function editAction(Request $request, Inmovilizacion $inmovilizacion)
     {
-        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -136,23 +139,32 @@ class AgenteTransitoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $id = $params->id;
-            $placa = $params->placa;
+            $numeroPatio = $params->numeroPatio;
+            $numeroGrua = $params->numeroGrua;
+            $numeroConsecutivo = $params->numeroConsecutivo;
+            $direccionPatio = $params->direccionPatio;
+            $placaGrua = $params->placaGrua;
+            $comparendo = $params->comparendo;
 
-            $ciudadanoId = $params->ciudadanoId;
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-            if ($agenteTransito!=null) {
-                $agenteTransito->setPlaca($placa);
-                $agenteTransito->setCiudadano($ciudadano);
+            $em = $this->getDoctrine()->getManager();
+
+            if ($inmovilizacion!=null) {
+                $inmovilizacion->setNumeroPatio($numeroPatio);
+                $inmovilizacion->setNumeroGrua($numeroGrua);
+                $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
+                $inmovilizacion->setDireccionPatio($direccionPatio);
+                $inmovilizacion->setPlacaGrua($placaGrua);
+                $inmovilizacion->setComparendo($comparendo);
+
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($inmovilizacion);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $agenteTransito,
+                        'data'=> $inmovilizacion,
                 );
             }else{
                 $response = array(
@@ -165,7 +177,7 @@ class AgenteTransitoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar agente de transito", 
+                    'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
@@ -173,12 +185,12 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Deletes a agenteTransito entity.
+     * Deletes a inmovilizacion entity.
      *
-     * @Route("/{id}/delete", name="agentetransito_delete")
+     * @Route("/{id}/delete", name="inmovilizacion_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, AgenteTransito $agenteTransito)
+    public function deleteAction(Request $request, Inmovilizacion $inmovilizacion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -186,15 +198,16 @@ class AgenteTransitoController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $agenteTransito->setEstado(false);
+            $inmovilizacion->setEstado(false);
+            
             $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro eliminado con exito", 
-                );
+            $em->persist($inmovilizacion);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro eliminado con exito", 
+            );
         }else{
             $response = array(
                     'status' => 'error',
@@ -206,40 +219,18 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Creates a form to delete a agenteTransito entity.
+     * Creates a form to delete a inmovilizacion entity.
      *
-     * @param AgenteTransito $agenteTransito The agenteTransito entity
+     * @param Inmovilizacion $inmovilizacion The inmovilizacion entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(AgenteTransito $agenteTransito)
+    private function createDeleteForm(Inmovilizacion $inmovilizacion)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('agentetransito_delete', array('id' => $agenteTransito->getId())))
+            ->setAction($this->generateUrl('inmovilizacion_delete', array('id' => $inmovilizacion->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="agenteTransito_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $agenteTransitos = $em->getRepository('AppBundle:AgenteTransito')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($agenteTransitos as $key => $agenteTransito) {
-        $response[$key] = array(
-            'value' => $agenteTransito->getId(),
-            'label' => $agenteTransito->getPlaca()."_".$agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
-            'agenteNombres' => $agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
-            );
-      }
-       return $helpers->json($response);
     }
 }

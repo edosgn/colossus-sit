@@ -2,46 +2,43 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\AgenteTransito;
+use AppBundle\Entity\SedeOperativa;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Agentetransito controller.
+ * Sedeoperativa controller.
  *
- * @Route("agentetransito")
+ * @Route("sedeoperativa")
  */
-class AgenteTransitoController extends Controller
+class SedeOperativaController extends Controller
 {
     /**
-     * Lists all agenteTransito entities.
+     * Lists all sedeOperativa entities.
      *
-     * @Route("/", name="agentetransito_index")
+     * @Route("/", name="sedeoperativa_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $agentes = $em->getRepository('AppBundle:AgenteTransito')->findBy(
-            array('estado' => 1)
-        );
+        $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findAll();
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de agentes",
-            'data' => $agentes, 
+            'msj' => "lista de sedesOperativas",
+            'data' => $sedesOperativas, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new agenteTransito entity.
+     * Creates a new sedeOperativa entity.
      *
-     * @Route("/new", name="agentetransito_new")
+     * @Route("/new", name="sedeoperativa_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -59,18 +56,17 @@ class AgenteTransitoController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{
-                $placa = $params->placa;
-                $ciudadanoId = $params->ciudadanoId;
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                $nombre = $params->nombre;
+                $codigoDivipo = $params->codigoDivipo;
 
-                $agenteTransito = new Agentetransito();
+                $sedeOperativa = new Sedeoperativa();
 
-                $agenteTransito->setPlaca($placa);
-                $agenteTransito->setCiudadano($ciudadano);
-                $agenteTransito->setEstado(true);
+                $sedeOperativa->setNombre($numeroPatio);
+                $sedeOperativa->setCodigoDivipo($codigoDivipo);
+                $sedeOperativa->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($inmovilizacion);
                 $em->flush();
 
                 $response = array(
@@ -89,13 +85,13 @@ class AgenteTransitoController extends Controller
         return $helpers->json($response);
     }
 
-    /**
+   /**
      * Finds and displays a agenteTransito entity.
      *
-     * @Route("/{id}/show", name="agentetransito_show")
+     * @Route("/{id}/show", name="sedeoperativa_show")
      * @Method({"GET", "POST"})
      */
-    public function showAction(Request $request, AgenteTransito $agenteTransito)
+     public function showAction(Request $request, SedeOperativa $sedeOperativa)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -107,7 +103,7 @@ class AgenteTransitoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $agenteTransito,
+                    'data'=> $sedeOperativa,
             );
         }else{
             $response = array(
@@ -120,14 +116,13 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing agenteTransito entity.
+     * Displays a form to edit an existing sedeOperativa entity.
      *
-     * @Route("/{id}/edit", name="agentetransito_edit")
+     * @Route("/{id}/edit", name="sedeoperativa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, AgenteTransito $agenteTransito)
+    public function editAction(Request $request, SedeOperativa $sedeOperativa)
     {
-        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -136,23 +131,24 @@ class AgenteTransitoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $id = $params->id;
-            $placa = $params->placa;
+            $nombre = $params->nombre;
+            $codigoDivipo = $params->codigoDivipo;
 
-            $ciudadanoId = $params->ciudadanoId;
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-            if ($agenteTransito!=null) {
-                $agenteTransito->setPlaca($placa);
-                $agenteTransito->setCiudadano($ciudadano);
+            $em = $this->getDoctrine()->getManager();
+
+            if ($sedeOperativa!=null) {
+                $sedeOperativa->setNombre($numeroPatio);
+                $sedeOperativa->setCodigoDivipo($codigoDivipo);
+
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($sedeOperativa);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $agenteTransito,
+                        'data'=> $sedeOperativa,
                 );
             }else{
                 $response = array(
@@ -165,7 +161,7 @@ class AgenteTransitoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar agente de transito", 
+                    'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
@@ -173,12 +169,12 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Deletes a agenteTransito entity.
+     * Deletes a sedeOperativa entity.
      *
-     * @Route("/{id}/delete", name="agentetransito_delete")
-     * @Method("POST")
+     * @Route("/{id}", name="sedeoperativa_delete")
+     * @Method("DELETE")
      */
-    public function deleteAction(Request $request, AgenteTransito $agenteTransito)
+    public function deleteAction(Request $request, SedeOperativa $sedeOperativa)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -186,15 +182,16 @@ class AgenteTransitoController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $agenteTransito->setEstado(false);
+            $sedeOperativa->setEstado(false);
+            
             $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro eliminado con exito", 
-                );
+            $em->persist($sedeOperativa);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro eliminado con exito", 
+            );
         }else{
             $response = array(
                     'status' => 'error',
@@ -206,40 +203,43 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Creates a form to delete a agenteTransito entity.
+     * Creates a form to delete a sedeOperativa entity.
      *
-     * @param AgenteTransito $agenteTransito The agenteTransito entity
+     * @param SedeOperativa $sedeOperativa The sedeOperativa entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(AgenteTransito $agenteTransito)
+    private function createDeleteForm(SedeOperativa $sedeOperativa)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('agentetransito_delete', array('id' => $agenteTransito->getId())))
+            ->setAction($this->generateUrl('sedeoperativa_delete', array('id' => $sedeOperativa->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
+
     /**
-     * datos para select 2
+     * Datos para select 2
      *
-     * @Route("/select", name="agenteTransito_select")
+     * @Route("/select", name="sedeoperativa_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
+
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
-    $agenteTransitos = $em->getRepository('AppBundle:AgenteTransito')->findBy(
+    $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findBy(
         array('estado' => 1)
     );
-      foreach ($agenteTransitos as $key => $agenteTransito) {
-        $response[$key] = array(
-            'value' => $agenteTransito->getId(),
-            'label' => $agenteTransito->getPlaca()."_".$agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
-            'agenteNombres' => $agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
+        foreach ($sedesOperativas as $key => $sedeOperativa) {
+            $consecutive = substr($sedeOperativa->getCodigoDivipo(), 0, 12);
+            $response[$key] = array(
+                'value' => $sedeOperativa->getId(),
+                'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
+                'consecutive' => $consecutive
             );
-      }
-       return $helpers->json($response);
+        }
+        return $helpers->json($response);
     }
 }

@@ -2,46 +2,43 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\AgenteTransito;
+use AppBundle\Entity\Infraccion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Agentetransito controller.
+ * Infraccion controller.
  *
- * @Route("agentetransito")
+ * @Route("infraccion")
  */
-class AgenteTransitoController extends Controller
+class InfraccionController extends Controller
 {
     /**
-     * Lists all agenteTransito entities.
+     * Lists all infraccion entities.
      *
-     * @Route("/", name="agentetransito_index")
+     * @Route("/", name="infraccion_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $agentes = $em->getRepository('AppBundle:AgenteTransito')->findBy(
-            array('estado' => 1)
-        );
+        $infracciones = $em->getRepository('AppBundle:Infraccion')->findAll();
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de agentes",
-            'data' => $agentes, 
+            'msj' => "Lista de infracciones",
+            'data' => $infracciones, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new agenteTransito entity.
+     * Creates a new infraccion entity.
      *
-     * @Route("/new", name="agentetransito_new")
+     * @Route("/new", name="infraccion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -59,18 +56,18 @@ class AgenteTransitoController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{
-                $placa = $params->placa;
-                $ciudadanoId = $params->ciudadanoId;
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                $codigoInfraccion = $params->codigoInfraccion;
+                $descripcionInfraccion = $params->descripcionInfraccion;
+                $valorInfraccion = $params->valorInfraccion;
 
-                $agenteTransito = new Agentetransito();
+                $infraccion = new Infraccion();
 
-                $agenteTransito->setPlaca($placa);
-                $agenteTransito->setCiudadano($ciudadano);
-                $agenteTransito->setEstado(true);
+                $infraccion->setCodigoInfraccion($codigoInfraccion);
+                $infraccion->setDescripcionInfraccion($descripcionInfraccion);
+                $infraccion->setValorInfraccion($valorInfraccion);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($infraccion);
                 $em->flush();
 
                 $response = array(
@@ -90,12 +87,12 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Finds and displays a agenteTransito entity.
+     * Finds and displays a infraccion entity.
      *
-     * @Route("/{id}/show", name="agentetransito_show")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/show", name="infraccion_show")
+     * @Method("GET")
      */
-    public function showAction(Request $request, AgenteTransito $agenteTransito)
+    public function showAction(Infraccion $infraccion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -107,7 +104,7 @@ class AgenteTransitoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $agenteTransito,
+                    'data'=> $infraccion,
             );
         }else{
             $response = array(
@@ -120,14 +117,13 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing agenteTransito entity.
+     * Displays a form to edit an existing infraccion entity.
      *
-     * @Route("/{id}/edit", name="agentetransito_edit")
+     * @Route("/{id}/edit", name="infraccion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, AgenteTransito $agenteTransito)
+    public function editAction(Request $request, Infraccion $infraccion)
     {
-        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -136,23 +132,26 @@ class AgenteTransitoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $id = $params->id;
-            $placa = $params->placa;
+            $codigoInfraccion = $params->codigoInfraccion;
+            $descripcionInfraccion = $params->descripcionInfraccion;
+            $valorInfraccion = $params->valorInfraccion;
 
-            $ciudadanoId = $params->ciudadanoId;
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-            if ($agenteTransito!=null) {
-                $agenteTransito->setPlaca($placa);
-                $agenteTransito->setCiudadano($ciudadano);
+            $em = $this->getDoctrine()->getManager();
+
+            if ($infraccion) {
+                $infraccion->setCodigoInfraccion($codigoInfraccion);
+                $infraccion->setDescripcionInfraccion($descripcionInfraccion);
+                $infraccion->setValorInfraccion($valorInfraccion);
+
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($infraccion);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $agenteTransito,
+                        'data'=> $infraccion,
                 );
             }else{
                 $response = array(
@@ -165,7 +164,7 @@ class AgenteTransitoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar agente de transito", 
+                    'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
@@ -173,12 +172,12 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Deletes a agenteTransito entity.
+     * Deletes a infraccion entity.
      *
-     * @Route("/{id}/delete", name="agentetransito_delete")
+     * @Route("/{id}/delete", name="infraccion_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, AgenteTransito $agenteTransito)
+    public function deleteAction(Request $request, Infraccion $infraccion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -186,9 +185,9 @@ class AgenteTransitoController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $agenteTransito->setEstado(false);
+            $infraccion->setEstado(false);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($agenteTransito);
+                $em->persist($infraccion);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -206,40 +205,18 @@ class AgenteTransitoController extends Controller
     }
 
     /**
-     * Creates a form to delete a agenteTransito entity.
+     * Creates a form to delete a infraccion entity.
      *
-     * @param AgenteTransito $agenteTransito The agenteTransito entity
+     * @param Infraccion $infraccion The infraccion entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(AgenteTransito $agenteTransito)
+    private function createDeleteForm(Infraccion $infraccion)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('agentetransito_delete', array('id' => $agenteTransito->getId())))
+            ->setAction($this->generateUrl('infraccion_delete', array('id' => $infraccion->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="agenteTransito_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $agenteTransitos = $em->getRepository('AppBundle:AgenteTransito')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($agenteTransitos as $key => $agenteTransito) {
-        $response[$key] = array(
-            'value' => $agenteTransito->getId(),
-            'label' => $agenteTransito->getPlaca()."_".$agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
-            'agenteNombres' => $agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
-            );
-      }
-       return $helpers->json($response);
     }
 }

@@ -61,8 +61,10 @@ class CiudadanoController extends Controller
                 );
             }else{
                         $numeroIdentificacion = $params->numeroIdentificacion;
-                        $nombres = $params->nombres;
-                        $apellidos = $params->apellidos;
+                        $primerNombre = $params->primerNombre;
+                        $segundoNombre = $params->segundoNombre;
+                        $primerApellido = $params->primerApellido;
+                        $segundoApellido = $params->segundoApellido;
                         $direccion = (isset($params->direccion)) ? $params->direccion : null;
                         $telefono = (isset($params->telefono)) ? $params->telefono : null;
                         $correo = (isset($params->correo)) ? $params->correo : null;
@@ -92,8 +94,10 @@ class CiudadanoController extends Controller
                             $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
                             $ciudadano->setMunicipioNacimiento($municipioNacimiento);
                             $ciudadano->setMunicipioResidencia($municipioResidencia);
-                            $ciudadano->setNombres($nombres);
-                            $ciudadano->setApellidos($apellidos);
+                            $ciudadano->setPrimerNombre($primerNombre);
+                            $ciudadano->setSegundoNombre($segundoNombre);
+                            $ciudadano->setPrimerApellido($primerApellido);
+                            $ciudadano->setSegundoApellido($segundoApellido);
                             $ciudadano->setDireccion($direccion);
                             $ciudadano->setTelefono($telefono);
                             $ciudadano->setCorreo($correo);
@@ -227,8 +231,10 @@ class CiudadanoController extends Controller
             $params = json_decode($json);
 
             $numeroIdentificacion = $params->numeroIdentificacion;
-            $nombres = $params->nombres;
-            $apellidos = $params->apellidos;
+            $primerNombre = $params->primerNombre;
+            $segundoNombre = $params->segundoNombre;
+            $primerApellido = $params->primerApellido;
+            $segundoApellido = $params->segundoApellido;
             $direccion = (isset($params->direccion)) ? $params->direccion : null;
             $telefono = (isset($params->telefono)) ? $params->telefono : null;
             $correo = (isset($params->correo)) ? $params->correo : null;
@@ -257,8 +263,10 @@ class CiudadanoController extends Controller
                 $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
                 $ciudadano->setMunicipioNacimiento($municipioNacimiento);
                 $ciudadano->setMunicipioResidencia($municipioResidencia);
-                $ciudadano->setNombres($nombres);
-                $ciudadano->setApellidos($apellidos);
+                $ciudadano->setPrimerNombre($primerNombre);
+                $ciudadano->setSegundoNombre($segundoNombre);
+                $ciudadano->setPrimerApellido($primerApellido);
+                $ciudadano->setSegundoApellido($segundoApellido);
                 $ciudadano->setDireccion($direccion);
                 $ciudadano->setTelefono($telefono);
                 $ciudadano->setCorreo($correo);

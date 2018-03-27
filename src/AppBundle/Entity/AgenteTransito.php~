@@ -35,8 +35,14 @@ class AgenteTransito
      */
     private $estado;
 
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="agentesTransito") */
     private $ciudadano; 
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="agentesTransito") */
+    private $empresa; 
+
+
 
 
     /**
@@ -96,29 +102,4 @@ class AgenteTransito
     {
         return $this->estado;
     }
-
-    /**
-     * Set ciudadano
-     *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
-     *
-     * @return AgenteTransito
-     */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
-    {
-        $this->ciudadano = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadano
-     *
-     * @return \AppBundle\Entity\Ciudadano
-     */
-    public function getCiudadano()
-    {
-        return $this->ciudadano;
-    }
-   
 }
