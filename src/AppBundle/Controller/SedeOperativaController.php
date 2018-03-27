@@ -232,10 +232,12 @@ class SedeOperativaController extends Controller
         array('estado' => 1)
     );
       foreach ($sedesOperativas as $key => $sedeOperativa) {
+        $consecutive = substr($sedeOperativa->getCodigoDivipo(), 0, 12);
         $responce[$key] = array(
             'value' => $sedeOperativa->getId(),
             'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
-            );
+            'consecutive' => $consecutive
+        );
       }
        return $helpers->json($response);
     }
