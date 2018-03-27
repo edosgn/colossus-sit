@@ -226,29 +226,15 @@ class SedeOperativaController extends Controller
      */
     public function selectAction()
     {
-<<<<<<< HEAD
+
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
     $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findBy(
         array('estado' => 1)
     );
-      foreach ($sedesOperativas as $key => $sedeOperativa) {
-        $consecutive = substr($sedeOperativa->getCodigoDivipo(), 0, 12);
-        $response[$key] = array(
-            'value' => $sedeOperativa->getId(),
-            'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
-            'consecutive' => $consecutive
-=======
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findBy(
-            array('estado' => 1)
->>>>>>> 66440a8032ff26ef9e859195425000d76d38158e
-        );
-        
         foreach ($sedesOperativas as $key => $sedeOperativa) {
             $consecutive = substr($sedeOperativa->getCodigoDivipo(), 0, 12);
-            $responce[$key] = array(
+            $response[$key] = array(
                 'value' => $sedeOperativa->getId(),
                 'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
                 'consecutive' => $consecutive
