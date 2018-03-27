@@ -1,3 +1,11 @@
+app_sede_operativa:
+    resource: "@AppBundle/Controller/SedeOperativaController.php"
+    type:     annotation
+
+app_infraccion:
+    resource: "@AppBundle/Controller/InfraccionController.php"
+    type:     annotation
+
 app_inmovilizacion:
     resource: "@AppBundle/Controller/InmovilizacionController.php"
     type:     annotation

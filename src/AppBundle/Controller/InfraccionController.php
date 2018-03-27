@@ -2,44 +2,43 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Inmovilizacion;
+use AppBundle\Entity\Infraccion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Inmovilizacion controller.
+ * Infraccion controller.
  *
- * @Route("inmovilizacion")
+ * @Route("infraccion")
  */
-class InmovilizacionController extends Controller
+class InfraccionController extends Controller
 {
     /**
-     * Lists all inmovilizacion entities.
+     * Lists all infraccion entities.
      *
-     * @Route("/", name="inmovilizacion_index")
+     * @Route("/", name="infraccion_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $inmovilizaciones = $em->getRepository('AppBundle:Inmovilizacion')->findAll();
+        $infracciones = $em->getRepository('AppBundle:Infraccion')->findAll();
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de inmovilizaciones",
-            'data' => $inmovilizaciones, 
+            'msj' => "Lista de infracciones",
+            'data' => $infracciones, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new inmovilizacion entity.
+     * Creates a new infraccion entity.
      *
-     * @Route("/new", name="inmovilizacion_new")
+     * @Route("/new", name="infraccion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,24 +56,18 @@ class InmovilizacionController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{
-                $numeroPatio = $params->numeroPatio;
-                $numeroGrua = $params->numeroGrua;
-                $numeroConsecutivo = $params->numeroConsecutivo;
-                $direccionPatio = $params->direccionPatio;
-                $placaGrua = $params->placaGrua;
-                $comparendo = $params->comparendo;
+                $codigoInfraccion = $params->codigoInfraccion;
+                $descripcionInfraccion = $params->descripcionInfraccion;
+                $valorInfraccion = $params->valorInfraccion;
 
-                $inmovilizacion = new Inmovilizacion();
+                $infraccion = new Infraccion();
 
-                $inmovilizacion->setNumeroPatio($numeroPatio);
-                $inmovilizacion->setNumeroGrua($numeroGrua);
-                $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
-                $inmovilizacion->setDireccionPatio($direccionPatio);
-                $inmovilizacion->setPlacaGrua($placaGrua);
-                $inmovilizacion->setComparendo($comparendo);
+                $infraccion->setCodigoInfraccion($codigoInfraccion);
+                $infraccion->setDescripcionInfraccion($descripcionInfraccion);
+                $infraccion->setValorInfraccion($valorInfraccion);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($inmovilizacion);
+                $em->persist($infraccion);
                 $em->flush();
 
                 $response = array(
@@ -94,12 +87,12 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Finds and displays a inmovilizacion entity.
+     * Finds and displays a infraccion entity.
      *
-     * @Route("/{id}/show", name="inmovilizacion_show")
+     * @Route("/{id}/show", name="infraccion_show")
      * @Method("GET")
      */
-    public function showAction(Inmovilizacion $inmovilizacion)
+    public function showAction(Infraccion $infraccion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -111,7 +104,7 @@ class InmovilizacionController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $inmovilizacion,
+                    'data'=> $infraccion,
             );
         }else{
             $response = array(
@@ -124,12 +117,12 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing inmovilizacion entity.
+     * Displays a form to edit an existing infraccion entity.
      *
-     * @Route("/{id}/edit", name="inmovilizacion_edit")
+     * @Route("/{id}/edit", name="infraccion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Inmovilizacion $inmovilizacion)
+    public function editAction(Request $request, Infraccion $infraccion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -139,32 +132,26 @@ class InmovilizacionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $numeroPatio = $params->numeroPatio;
-            $numeroGrua = $params->numeroGrua;
-            $numeroConsecutivo = $params->numeroConsecutivo;
-            $direccionPatio = $params->direccionPatio;
-            $placaGrua = $params->placaGrua;
-            $comparendo = $params->comparendo;
+            $codigoInfraccion = $params->codigoInfraccion;
+            $descripcionInfraccion = $params->descripcionInfraccion;
+            $valorInfraccion = $params->valorInfraccion;
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($inmovilizacion!=null) {
-                $inmovilizacion->setNumeroPatio($numeroPatio);
-                $inmovilizacion->setNumeroGrua($numeroGrua);
-                $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
-                $inmovilizacion->setDireccionPatio($direccionPatio);
-                $inmovilizacion->setPlacaGrua($placaGrua);
-                $inmovilizacion->setComparendo($comparendo);
+            if ($infraccion) {
+                $infraccion->setCodigoInfraccion($codigoInfraccion);
+                $infraccion->setDescripcionInfraccion($descripcionInfraccion);
+                $infraccion->setValorInfraccion($valorInfraccion);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($inmovilizacion);
+                $em->persist($infraccion);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $inmovilizacion,
+                        'data'=> $infraccion,
                 );
             }else{
                 $response = array(
@@ -185,12 +172,12 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Deletes a inmovilizacion entity.
+     * Deletes a infraccion entity.
      *
-     * @Route("/{id}/delete", name="inmovilizacion_delete")
+     * @Route("/{id}/delete", name="infraccion_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, Inmovilizacion $inmovilizacion)
+    public function deleteAction(Request $request, Infraccion $infraccion)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -198,16 +185,15 @@ class InmovilizacionController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $inmovilizacion->setEstado(false);
-            
+            $infraccion->setEstado(false);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($inmovilizacion);
-            $em->flush();
-            $response = array(
-                'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro eliminado con exito", 
-            );
+                $em->persist($infraccion);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro eliminado con exito", 
+                );
         }else{
             $response = array(
                     'status' => 'error',
@@ -219,16 +205,16 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Creates a form to delete a inmovilizacion entity.
+     * Creates a form to delete a infraccion entity.
      *
-     * @param Inmovilizacion $inmovilizacion The inmovilizacion entity
+     * @param Infraccion $infraccion The infraccion entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Inmovilizacion $inmovilizacion)
+    private function createDeleteForm(Infraccion $infraccion)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inmovilizacion_delete', array('id' => $inmovilizacion->getId())))
+            ->setAction($this->generateUrl('infraccion_delete', array('id' => $infraccion->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

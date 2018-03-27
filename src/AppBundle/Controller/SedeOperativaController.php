@@ -2,44 +2,43 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Inmovilizacion;
+use AppBundle\Entity\SedeOperativa;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Inmovilizacion controller.
+ * Sedeoperativa controller.
  *
- * @Route("inmovilizacion")
+ * @Route("sedeoperativa")
  */
-class InmovilizacionController extends Controller
+class SedeOperativaController extends Controller
 {
     /**
-     * Lists all inmovilizacion entities.
+     * Lists all sedeOperativa entities.
      *
-     * @Route("/", name="inmovilizacion_index")
+     * @Route("/", name="sedeoperativa_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $inmovilizaciones = $em->getRepository('AppBundle:Inmovilizacion')->findAll();
+        $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findAll();
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de inmovilizaciones",
-            'data' => $inmovilizaciones, 
+            'msj' => "lista de sedesOperativas",
+            'data' => $sedesOperativas, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new inmovilizacion entity.
+     * Creates a new sedeOperativa entity.
      *
-     * @Route("/new", name="inmovilizacion_new")
+     * @Route("/new", name="sedeoperativa_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,21 +56,14 @@ class InmovilizacionController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{
-                $numeroPatio = $params->numeroPatio;
-                $numeroGrua = $params->numeroGrua;
-                $numeroConsecutivo = $params->numeroConsecutivo;
-                $direccionPatio = $params->direccionPatio;
-                $placaGrua = $params->placaGrua;
-                $comparendo = $params->comparendo;
+                $nombre = $params->nombre;
+                $codigoDivipo = $params->codigoDivipo;
 
-                $inmovilizacion = new Inmovilizacion();
+                $sedeOperativa = new Sedeoperativa();
 
-                $inmovilizacion->setNumeroPatio($numeroPatio);
-                $inmovilizacion->setNumeroGrua($numeroGrua);
-                $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
-                $inmovilizacion->setDireccionPatio($direccionPatio);
-                $inmovilizacion->setPlacaGrua($placaGrua);
-                $inmovilizacion->setComparendo($comparendo);
+                $sedeOperativa->setNombre($numeroPatio);
+                $sedeOperativa->setCodigoDivipo($codigoDivipo);
+                $sedeOperativa->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($inmovilizacion);
@@ -94,12 +86,12 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Finds and displays a inmovilizacion entity.
+     * Finds and displays a sedeOperativa entity.
      *
-     * @Route("/{id}/show", name="inmovilizacion_show")
+     * @Route("/{id}/show", name="sedeoperativa_show")
      * @Method("GET")
      */
-    public function showAction(Inmovilizacion $inmovilizacion)
+    public function showAction(SedeOperativa $sedeOperativa)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -111,7 +103,7 @@ class InmovilizacionController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $inmovilizacion,
+                    'data'=> $sedeOperativa,
             );
         }else{
             $response = array(
@@ -124,12 +116,12 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing inmovilizacion entity.
+     * Displays a form to edit an existing sedeOperativa entity.
      *
-     * @Route("/{id}/edit", name="inmovilizacion_edit")
+     * @Route("/{id}/edit", name="sedeoperativa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Inmovilizacion $inmovilizacion)
+    public function editAction(Request $request, SedeOperativa $sedeOperativa)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -139,32 +131,24 @@ class InmovilizacionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $numeroPatio = $params->numeroPatio;
-            $numeroGrua = $params->numeroGrua;
-            $numeroConsecutivo = $params->numeroConsecutivo;
-            $direccionPatio = $params->direccionPatio;
-            $placaGrua = $params->placaGrua;
-            $comparendo = $params->comparendo;
+            $nombre = $params->nombre;
+            $codigoDivipo = $params->codigoDivipo;
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($inmovilizacion!=null) {
-                $inmovilizacion->setNumeroPatio($numeroPatio);
-                $inmovilizacion->setNumeroGrua($numeroGrua);
-                $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
-                $inmovilizacion->setDireccionPatio($direccionPatio);
-                $inmovilizacion->setPlacaGrua($placaGrua);
-                $inmovilizacion->setComparendo($comparendo);
+            if ($sedeOperativa!=null) {
+                $sedeOperativa->setNombre($numeroPatio);
+                $sedeOperativa->setCodigoDivipo($codigoDivipo);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($inmovilizacion);
+                $em->persist($sedeOperativa);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $inmovilizacion,
+                        'data'=> $sedeOperativa,
                 );
             }else{
                 $response = array(
@@ -185,12 +169,12 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Deletes a inmovilizacion entity.
+     * Deletes a sedeOperativa entity.
      *
-     * @Route("/{id}/delete", name="inmovilizacion_delete")
-     * @Method("POST")
+     * @Route("/{id}", name="sedeoperativa_delete")
+     * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Inmovilizacion $inmovilizacion)
+    public function deleteAction(Request $request, SedeOperativa $sedeOperativa)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -198,10 +182,10 @@ class InmovilizacionController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $inmovilizacion->setEstado(false);
+            $sedeOperativa->setEstado(false);
             
             $em = $this->getDoctrine()->getManager();
-            $em->persist($inmovilizacion);
+            $em->persist($sedeOperativa);
             $em->flush();
             $response = array(
                 'status' => 'success',
@@ -219,16 +203,16 @@ class InmovilizacionController extends Controller
     }
 
     /**
-     * Creates a form to delete a inmovilizacion entity.
+     * Creates a form to delete a sedeOperativa entity.
      *
-     * @param Inmovilizacion $inmovilizacion The inmovilizacion entity
+     * @param SedeOperativa $sedeOperativa The sedeOperativa entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Inmovilizacion $inmovilizacion)
+    private function createDeleteForm(SedeOperativa $sedeOperativa)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('inmovilizacion_delete', array('id' => $inmovilizacion->getId())))
+            ->setAction($this->generateUrl('sedeoperativa_delete', array('id' => $sedeOperativa->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
