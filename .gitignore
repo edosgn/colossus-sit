@@ -21,3 +21,5 @@ angular/app/components/ciudadanoVehiculo/new.ciudadanoVehiculo.component.js.map
 angular/app/components/tipoTramite/tramiteCuerpo/index.tramiteCuerpo.component.js.map
 angular/npm-debug.log
 angular/app/components/subirCarpeta/index.subirCarpeta.component.js.map
+composer.lock
+composer.lock
