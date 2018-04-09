@@ -207,6 +207,7 @@ class ComparendoController extends Controller
             $lugarInfraccion = $params->lugarInfraccion;
             $barrioInfraccion = $params->barrioInfraccion;
             $observacionesAgente = $params->observacionesAgente;
+            $observacionesDigitador = $params->observacionesDigitador;
             $tipoInfractor = $params->tipoInfractor;
             $tarjetaOperacionInfractor = $params->tarjetaOperacionInfractor;
             $fuga = $params->fuga;
@@ -237,6 +238,7 @@ class ComparendoController extends Controller
                 $comparendo->setPolca($polca);
                 $comparendo->setFechaNotificacion($fechaNotificacionDateTime);
                 $comparendo->setGradoAlchoholemia($gradoAlchoholemia);
+                $comparendo->setObservacionesDigitador($observacionesDigitador);
                 //Relación llaves foraneas
                 $comparendo->setMunicipio($municipio);
                 $comparendo->setVehiculo($vehiculo);
