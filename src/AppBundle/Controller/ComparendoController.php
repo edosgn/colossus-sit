@@ -112,6 +112,7 @@ class ComparendoController extends Controller
                 $comparendo->setVehiculo($vehiculo);
                 $comparendo->setCuidadano($ciudadano);
                 $comparendo->setAgenteTransito($agenteTransito);
+                $comparendo->setTipoInfractor($tipoInfractor);
                 $comparendo->setSeguimientoEntrega($seguimientoEntrega);
 
                 $em->persist($comparendo);
