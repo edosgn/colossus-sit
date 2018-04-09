@@ -59,6 +59,13 @@ class Comparendo
     /**
      * @var string
      *
+     * @ORM\Column(name="observacionesDigitador", type="text")
+     */
+    private $observacionesDigitador;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="tipoInfractor", type="string", length=45)
      */
     private $tipoInfractor;
@@ -97,6 +104,13 @@ class Comparendo
      * @ORM\Column(name="fotomulta", type="boolean")
      */
     private $fotomulta;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="retencionLicencia", type="boolean")
+     */
+    private $retencionLicencia;
 
     /**
      * @var \DateTime
@@ -143,12 +157,14 @@ class Comparendo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SeguimientoEntrega", inversedBy="comparendos")
      **/
     protected $seguimientoEntrega;
+    
 
+    
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -276,6 +292,30 @@ class Comparendo
     }
 
     /**
+     * Set observacionesDigitador
+     *
+     * @param string $observacionesDigitador
+     *
+     * @return Comparendo
+     */
+    public function setObservacionesDigitador($observacionesDigitador)
+    {
+        $this->observacionesDigitador = $observacionesDigitador;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionesDigitador
+     *
+     * @return string
+     */
+    public function getObservacionesDigitador()
+    {
+        return $this->observacionesDigitador;
+    }
+
+    /**
      * Set tipoInfractor
      *
      * @param string $tipoInfractor
@@ -316,7 +356,7 @@ class Comparendo
     /**
      * Get tarjetaOperacionInfractor
      *
-     * @return int
+     * @return integer
      */
     public function getTarjetaOperacionInfractor()
     {
@@ -388,7 +428,7 @@ class Comparendo
     /**
      * Get polca
      *
-     * @return bool
+     * @return boolean
      */
     public function getPolca()
     {
@@ -417,6 +457,30 @@ class Comparendo
     public function getFotomulta()
     {
         return $this->fotomulta;
+    }
+
+    /**
+     * Set retencionLicencia
+     *
+     * @param boolean $retencionLicencia
+     *
+     * @return Comparendo
+     */
+    public function setRetencionLicencia($retencionLicencia)
+    {
+        $this->retencionLicencia = $retencionLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get retencionLicencia
+     *
+     * @return boolean
+     */
+    public function getRetencionLicencia()
+    {
+        return $this->retencionLicencia;
     }
 
     /**
@@ -460,7 +524,7 @@ class Comparendo
     /**
      * Get gradoAlchoholemia
      *
-     * @return int
+     * @return integer
      */
     public function getGradoAlchoholemia()
     {

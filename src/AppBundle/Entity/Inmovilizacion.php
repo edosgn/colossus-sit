@@ -57,9 +57,18 @@ class Inmovilizacion
     private $placaGrua;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaIngreso", type="datetime")
+     */
+    private $fechaIngreso;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="inmovilizaciones")
      **/
     protected $comparendo;
+
+    
 
 
     /**
@@ -190,6 +199,30 @@ class Inmovilizacion
     public function getPlacaGrua()
     {
         return $this->placaGrua;
+    }
+
+    /**
+     * Set fechaIngreso
+     *
+     * @param \DateTime $fechaIngreso
+     *
+     * @return Inmovilizacion
+     */
+    public function setFechaIngreso($fechaIngreso)
+    {
+        $this->fechaIngreso = $fechaIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIngreso
+     *
+     * @return \DateTime
+     */
+    public function getFechaIngreso()
+    {
+        return $this->fechaIngreso;
     }
 
     /**
