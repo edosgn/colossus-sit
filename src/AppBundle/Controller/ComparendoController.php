@@ -108,7 +108,7 @@ class ComparendoController extends Controller
                 //Relación llaves foraneas
                 $comparendo->setMunicipio($municipio);
                 $comparendo->setVehiculo($vehiculo);
-                $comparendo->setCiudadano($ciudadano);
+                $comparendo->setCuidadano($ciudadano);
                 $comparendo->setAgenteTransito($agenteTransito);
                 $comparendo->setSeguimientoEntrega($seguimientoEntrega);
 
