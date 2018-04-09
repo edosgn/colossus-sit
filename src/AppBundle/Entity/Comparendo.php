@@ -127,6 +127,13 @@ class Comparendo
     private $gradoAlchoholemia;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="urlDocumento", type="string", nullable=true)
+     */
+    private $urlDocumento;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
@@ -673,5 +680,29 @@ class Comparendo
     public function getSeguimientoEntrega()
     {
         return $this->seguimientoEntrega;
+    }
+
+    /**
+     * Set urlDocumento
+     *
+     * @param string $urlDocumento
+     *
+     * @return Comparendo
+     */
+    public function setUrlDocumento($urlDocumento)
+    {
+        $this->urlDocumento = $urlDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get urlDocumento
+     *
+     * @return string
+     */
+    public function getUrlDocumento()
+    {
+        return $this->urlDocumento;
     }
 }

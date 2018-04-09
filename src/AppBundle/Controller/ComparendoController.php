@@ -60,6 +60,7 @@ class ComparendoController extends Controller
                 );
             }else{*/
                 $numeroOrden = $params->numeroOrden;
+                $urlDocumento = (isset($params->urlDocumento)) ? $params->urlDocumento : null;
                 $fechaDiligenciamiento = (isset($params->fechaDiligenciamiento)) ? $params->fechaDiligenciamiento : null;
                 $fechaDiligenciamientoDateTime = new \DateTime($fechaDiligenciamiento);
                 $lugarInfraccion = $params->lugarInfraccion;
@@ -101,6 +102,7 @@ class ComparendoController extends Controller
                 $comparendo->setFechaNotificacion($fechaNotificacionDateTime);
                 $comparendo->setGradoAlchoholemia($gradoAlchoholemia);
                 $comparendo->setEstado(true);
+                $comparendo->setUrlDocumento($urlDocumento);
                 //Relación llaves foraneas
                 $comparendo->setMunicipio($municipio);
                 $comparendo->setVehiculo($vehiculo);
