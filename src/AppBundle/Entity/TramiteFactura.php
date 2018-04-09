@@ -22,9 +22,9 @@ class TramiteFactura
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramiteSistema", inversedBy="tramitesFacturas")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesFacturas")
      **/
-    protected $tramiteSistema;
+    protected $tramite;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="tramitesFacturas")
@@ -43,27 +43,27 @@ class TramiteFactura
     }
 
     /**
-     * Set tramiteSistema
+     * Set tramite
      *
-     * @param \AppBundle\Entity\TramiteSistema $tramiteSistema
+     * @param \AppBundle\Entity\Tramite $tramite
      *
      * @return TramiteFactura
      */
-    public function setTramiteSistema(\AppBundle\Entity\TramiteSistema $tramiteSistema = null)
+    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
     {
-        $this->tramiteSistema = $tramiteSistema;
+        $this->tramite = $tramite;
 
         return $this;
     }
 
     /**
-     * Get tramiteSistema
+     * Get tramite
      *
-     * @return \AppBundle\Entity\TramiteSistema
+     * @return \AppBundle\Entity\Tramite
      */
-    public function getTramiteSistema()
+    public function getTramite()
     {
-        return $this->tramiteSistema;
+        return $this->tramite;
     }
 
     /**

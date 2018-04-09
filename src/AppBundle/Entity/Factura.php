@@ -24,16 +24,16 @@ class Factura
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroFactura", type="string", length=45)
+     * @ORM\Column(name="numero", type="string", length=45)
      */
-    private $numeroFactura;
+    private $numero;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="estadoFactura", type="string", length=45)
+     * @ORM\Column(name="estado", type="boolean")
      */
-    private $estadoFactura;
+    private $estado;
 
     /**
      * @var \DateTime
@@ -45,9 +45,9 @@ class Factura
     /**
      * @var string
      *
-     * @ORM\Column(name="observacionesFactura", type="text")
+     * @ORM\Column(name="observacion", type="text", nullable=true)
      */
-    private $observacionesFactura;
+    private $observacion;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
@@ -64,10 +64,6 @@ class Factura
      **/
     protected $vehiculo;
 
-
-
-
-
     /**
      * Get id
      *
@@ -79,51 +75,51 @@ class Factura
     }
 
     /**
-     * Set numeroFactura
+     * Set numero
      *
-     * @param string $numeroFactura
+     * @param string $numero
      *
      * @return Factura
      */
-    public function setNumeroFactura($numeroFactura)
+    public function setNumero($numero)
     {
-        $this->numeroFactura = $numeroFactura;
+        $this->numero = $numero;
 
         return $this;
     }
 
     /**
-     * Get numeroFactura
+     * Get numero
      *
      * @return string
      */
-    public function getNumeroFactura()
+    public function getNumero()
     {
-        return $this->numeroFactura;
+        return $this->numero;
     }
 
     /**
-     * Set estadoFactura
+     * Set estado
      *
-     * @param string $estadoFactura
+     * @param boolean $estado
      *
      * @return Factura
      */
-    public function setEstadoFactura($estadoFactura)
+    public function setEstado($estado)
     {
-        $this->estadoFactura = $estadoFactura;
+        $this->estado = $estado;
 
         return $this;
     }
 
     /**
-     * Get estadoFactura
+     * Get estado
      *
-     * @return string
+     * @return boolean
      */
-    public function getEstadoFactura()
+    public function getEstado()
     {
-        return $this->estadoFactura;
+        return $this->estado;
     }
 
     /**
@@ -151,27 +147,27 @@ class Factura
     }
 
     /**
-     * Set observacionesFactura
+     * Set observacion
      *
-     * @param string $observacionesFactura
+     * @param string $observacion
      *
      * @return Factura
      */
-    public function setObservacionesFactura($observacionesFactura)
+    public function setObservacion($observacion)
     {
-        $this->observacionesFactura = $observacionesFactura;
+        $this->observacion = $observacion;
 
         return $this;
     }
 
     /**
-     * Get observacionesFactura
+     * Get observacion
      *
      * @return string
      */
-    public function getObservacionesFactura()
+    public function getObservacion()
     {
-        return $this->observacionesFactura;
+        return $this->observacion;
     }
 
     /**

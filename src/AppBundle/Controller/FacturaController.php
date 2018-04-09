@@ -2,43 +2,44 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Infraccion;
+use AppBundle\Entity\Factura;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Infraccion controller.
+ * Factura controller.
  *
- * @Route("infraccion")
+ * @Route("factura")
  */
-class InfraccionController extends Controller
+class FacturaController extends Controller
 {
     /**
-     * Lists all infraccion entities.
+     * Lists all factura entities.
      *
-     * @Route("/", name="infraccion_index")
+     * @Route("/", name="factura_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $infracciones = $em->getRepository('AppBundle:Infraccion')->findByEstado(true);
+        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "Lista de infracciones",
-            'data' => $infracciones, 
+            'msj' => "Lista de facturas",
+            'data' => $facturas, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new infraccion entity.
+     * Creates a new factura entity.
      *
-     * @Route("/new", name="infraccion_new")
+     * @Route("/new", name="factura_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -46,6 +47,7 @@ class InfraccionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -57,23 +59,32 @@ class InfraccionController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{*/
-                $codigo = $params->codigo;
-                $descripcion = $params->descripcion;
-                $valor = $params->valor;
-                $inmovilizacion = (isset($params->inmovilizacion)) ? $params->inmovilizacion : 0;
-                $suspensionLicencia = (isset($params->suspensionLicencia)) ? $params->suspensionLicencia : 0;
-
-                $infraccion = new Infraccion();
-
-                $infraccion->setCodigo($codigo);
-                $infraccion->setDescripcion($descripcion);
-                $infraccion->setValor($valor);
-                $infraccion->setEstado(true);
-                $infraccion->setInmovilizacion($inmovilizacion);
-                $infraccion->setSuspensionLicencia($suspensionLicencia);
+                $numero = $params->numero;
+                $observacion = (isset($params->observacion)) ? $params->observacion : null;
+                $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
+                //Captura llaves foraneas
+                $solicitanteId = $params->solicitanteId;
+                $apoderadoId = $params->apoderadoId;
+                $vehiculoId = $params->vehiculoId;
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($infraccion);
+                $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
+                $apoderado = $em->getRepository('AppBundle:Apoderado')->find($apoderadoId);
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+
+                $factura = new Factura();
+
+                $factura->setNumero($numero);
+                $factura->setObservacion($descripcion);
+                $factura->setFechaCreacion($fechaCreacionDateTime);
+                $factura->setEstado(false);
+                //Inserta llaves foraneas
+                $factura->setSolicitante($solicitante);
+                $factura->setApoderado($apoderado);
+                $factura->setVehiculo($vehiculo);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($factura);
                 $em->flush();
 
                 $response = array(
@@ -93,12 +104,12 @@ class InfraccionController extends Controller
     }
 
     /**
-     * Finds and displays a infraccion entity.
+     * Finds and displays a factura entity.
      *
-     * @Route("/{id}/show", name="infraccion_show")
+     * @Route("/{id}/show", name="factura_show")
      * @Method("GET")
      */
-    public function showAction(Infraccion $infraccion)
+    public function showAction(Factura $factura, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -106,11 +117,12 @@ class InfraccionController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+            $factura = $em->getRepository('AppBundle:Factura')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $infraccion,
+                    'msj' => "factura con numero"." ".$factura->getNumero(), 
+                    'data'=> $factura,
             );
         }else{
             $response = array(
@@ -123,13 +135,14 @@ class InfraccionController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing infraccion entity.
+     * Displays a form to edit an existing factura entity.
      *
-     * @Route("/edit", name="infraccion_edit")
+     * @Route("/edit", name="factura_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -139,31 +152,40 @@ class InfraccionController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $infraccion = $em->getRepository("AppBundle:Infraccion")->find($params->id);
+            $factura = $em->getRepository("AppBundle:Factura")->find($params->id);
 
-            $codigo = $params->codigo;
-            $descripcion = $params->descripcion;
-            $valor = $params->valor;
-            $inmovilizacion = (isset($params->inmovilizacion)) ? $params->inmovilizacion : 0;
-            $suspensionLicencia = (isset($params->suspensionLicencia)) ? $params->suspensionLicencia : 0;
+            $numero = $params->numero;
+            $observacion = (isset($params->observacion)) ? $params->observacion : null;
+            $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
+            //Captura llaves foraneas
+            $solicitanteId = $params->solicitanteId;
+            $apoderadoId = $params->apoderadoId;
+            $vehiculoId = $params->vehiculoId;
 
-            if ($infraccion) {
-                $infraccion->setCodigo($codigo);
-                $infraccion->setDescripcion($descripcion);
-                $infraccion->setValor($valor);
-                $infraccion->setInmovilizacion($inmovilizacion);
-                $infraccion->setSuspensionLicencia($suspensionLicencia);
+            $em = $this->getDoctrine()->getManager();
+            $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
+            $apoderado = $em->getRepository('AppBundle:Apoderado')->find($apoderadoId);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+
+            if ($factura!=null) {
+                $factura->setNumero($numero);
+                $factura->setObservacion($descripcion);
+                $factura->setFechaCreacion($fechaCreacionDateTime);
+                $factura->setEstado(false);
+                //Inserta llaves foraneas
+                $factura->setSolicitante($solicitante);
+                $factura->setApoderado($apoderado);
+                $factura->setVehiculo($vehiculo);
 
                 $em = $this->getDoctrine()->getManager();
-                
-                $em->persist($infraccion);
+                $em->persist($factura);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $infraccion,
+                        'data'=> $factura,
                 );
             }else{
                 $response = array(
@@ -176,7 +198,7 @@ class InfraccionController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'msj' => "Autorizacion no valida para editar", 
                 );
         }
 
@@ -184,23 +206,23 @@ class InfraccionController extends Controller
     }
 
     /**
-     * Deletes a infraccion entity.
+     * Deletes a factura entity.
      *
-     * @Route("/{id}/delete", name="infraccion_delete")
+     * @Route("/{id}/delete", name="factura_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, Infraccion $infraccion)
+    public function deleteAction(Request $request, Factura $factura)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $infraccion->setEstado(false);
-            
+            $factura->setEstado(false);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($infraccion);
+                $em->persist($factura);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -218,40 +240,18 @@ class InfraccionController extends Controller
     }
 
     /**
-     * Creates a form to delete a infraccion entity.
+     * Creates a form to delete a factura entity.
      *
-     * @param Infraccion $infraccion The infraccion entity
+     * @param Factura $factura The factura entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Infraccion $infraccion)
+    private function createDeleteForm(Factura $factura)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('infraccion_delete', array('id' => $infraccion->getId())))
+            ->setAction($this->generateUrl('factura_delete', array('id' => $factura->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="infraccion_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $infracciones = $em->getRepository('AppBundle:Infraccion')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($infracciones as $key => $infraccion) {
-        $response[$key] = array(
-            'value' => $infraccion->getId(),
-            'label' => $infraccion->getCodigo()."_".$infraccion->getDescripcion(),
-            );
-      }
-       return $helpers->json($response);
     }
 }
