@@ -59,13 +59,13 @@ class AlmacenController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            if (count($params)==0) {
+            /*if (count($params)==0) {
                 $responce = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $rangoInicio = $params->rangoInicio;
                 $rangoFin = $params->rangoFin;
                 $lote = $params->lote;
@@ -94,8 +94,7 @@ class AlmacenController extends Controller
                     'code' => 200,
                     'msj' => "Almacen creado con exito", 
                 );
-            }
-
+            //}
          }else{
                 $responce = array(
                     'status' => 'error',

@@ -53,19 +53,23 @@ class ModuloController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
+
+            /*if (count($params)==0) {
                 $responce = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $nombre = $params->nombre;
                 $abreviatura = $params->abreviatura;
+                $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
+
                 $modulo = new Modulo();
 
                 $modulo->setNombre($nombre);
                 $modulo->setAbreviatura($abreviatura);
+                $modulo->setDescripcion($descripcion);
                 $modulo->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
@@ -78,7 +82,7 @@ class ModuloController extends Controller
                     'msj' => "Modulo creado con exito", 
                 );
                        
-                }
+            //}
         }else{
             $responce = array(
                 'status' => 'error',
@@ -141,10 +145,13 @@ class ModuloController extends Controller
             if ($modulo!=null) {
                 $nombre = $params->nombre;
                 $abreviatura = $params->abreviatura;
+                $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
 
                 $modulo->setNombre($nombre);
                 $modulo->setAbreviatura($abreviatura);
+                $modulo->setDescripcion($descripcion);
                 $modulo->setEstado(true);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($modulo);
                 $em->flush();

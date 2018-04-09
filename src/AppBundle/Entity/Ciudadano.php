@@ -38,7 +38,7 @@ class Ciudadano
     /**
      * @var string
      *
-     * @ORM\Column(name="segundo_nombre", type="string", length=255)
+     * @ORM\Column(name="segundo_nombre", type="string", length=255, nullable=true)
      */
     private $segundoNombre;
 
@@ -52,7 +52,7 @@ class Ciudadano
     /**
      * @var string
      *
-     * @ORM\Column(name="segundo_apellido", type="string", length=255)
+     * @ORM\Column(name="segundo_apellido", type="string", length=255, nullable=true)
      */
     private $segundoApellido;
 
@@ -91,21 +91,6 @@ class Ciudadano
      */
     private $edad;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="genero", type="string", length=255)
-     */
-    private $genero;
-
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="grupo_sanguineo", type="string", length=255)
-     */
-    private $grupoSanguineo;
-
-
      /**
      * @var string
      *
@@ -130,6 +115,11 @@ class Ciudadano
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
     private $municipioResidencia;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Genero", inversedBy="ciudadanos") */
+    private $genero;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\GrupoSanguineo", inversedBy="ciudadanos") */
+    private $grupoSanguineo;
    
 
     public function __toString()
@@ -437,54 +427,6 @@ class Ciudadano
     }
 
     /**
-     * Set genero
-     *
-     * @param string $genero
-     *
-     * @return Ciudadano
-     */
-    public function setGenero($genero)
-    {
-        $this->genero = $genero;
-
-        return $this;
-    }
-
-    /**
-     * Get genero
-     *
-     * @return string
-     */
-    public function getGenero()
-    {
-        return $this->genero;
-    }
-
-    /**
-     * Set grupoSanguineo
-     *
-     * @param string $grupoSanguineo
-     *
-     * @return Ciudadano
-     */
-    public function setGrupoSanguineo($grupoSanguineo)
-    {
-        $this->grupoSanguineo = $grupoSanguineo;
-
-        return $this;
-    }
-
-    /**
-     * Get grupoSanguineo
-     *
-     * @return string
-     */
-    public function getGrupoSanguineo()
-    {
-        return $this->grupoSanguineo;
-    }
-
-    /**
      * Set direccionTrabajo
      *
      * @param string $direccionTrabajo
@@ -554,5 +496,53 @@ class Ciudadano
     public function getMunicipioResidencia()
     {
         return $this->municipioResidencia;
+    }
+
+    /**
+     * Set genero
+     *
+     * @param \AppBundle\Entity\Genero $genero
+     *
+     * @return Ciudadano
+     */
+    public function setGenero(\AppBundle\Entity\Genero $genero = null)
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
+    /**
+     * Get genero
+     *
+     * @return \AppBundle\Entity\Genero
+     */
+    public function getGenero()
+    {
+        return $this->genero;
+    }
+
+    /**
+     * Set grupoSanguineo
+     *
+     * @param \AppBundle\Entity\GrupoSanguineo $grupoSanguineo
+     *
+     * @return Ciudadano
+     */
+    public function setGrupoSanguineo(\AppBundle\Entity\GrupoSanguineo $grupoSanguineo = null)
+    {
+        $this->grupoSanguineo = $grupoSanguineo;
+
+        return $this;
+    }
+
+    /**
+     * Get grupoSanguineo
+     *
+     * @return \AppBundle\Entity\GrupoSanguineo
+     */
+    public function getGrupoSanguineo()
+    {
+        return $this->grupoSanguineo;
     }
 }

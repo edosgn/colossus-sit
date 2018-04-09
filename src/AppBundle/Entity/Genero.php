@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TipoIdentificacion
+ * Genero
  *
- * @ORM\Table(name="tipo_identificacion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoIdentificacionRepository")
+ * @ORM\Table(name="genero")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GeneroRepository")
  */
-class TipoIdentificacion
+class Genero
 {
     /**
      * @var int
@@ -31,30 +31,22 @@ class TipoIdentificacion
     /**
      * @var string
      *
-     * @ORM\Column(name="sigla", type="string", length=3)
+     * @ORM\Column(name="sigla", type="string", length=1)
      */
     private $sigla;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
 
 
-
-    public function __toString()
-    {
-        return $this->getNombre();
-    }
-
-
-
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -66,7 +58,7 @@ class TipoIdentificacion
      *
      * @param string $nombre
      *
-     * @return TipoIdentificacion
+     * @return Genero
      */
     public function setNombre($nombre)
     {
@@ -90,7 +82,7 @@ class TipoIdentificacion
      *
      * @param string $sigla
      *
-     * @return TipoIdentificacion
+     * @return Genero
      */
     public function setSigla($sigla)
     {
@@ -114,7 +106,7 @@ class TipoIdentificacion
      *
      * @param boolean $estado
      *
-     * @return TipoIdentificacion
+     * @return Genero
      */
     public function setEstado($estado)
     {
@@ -126,10 +118,11 @@ class TipoIdentificacion
     /**
      * Get estado
      *
-     * @return boolean
+     * @return bool
      */
     public function getEstado()
     {
         return $this->estado;
     }
 }
+

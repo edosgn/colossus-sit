@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TipoIdentificacion
+ * GrupoSanguineo
  *
- * @ORM\Table(name="tipo_identificacion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoIdentificacionRepository")
+ * @ORM\Table(name="grupo_sanguineo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GrupoSanguineoRepository")
  */
-class TipoIdentificacion
+class GrupoSanguineo
 {
     /**
      * @var int
@@ -36,25 +36,17 @@ class TipoIdentificacion
     private $sigla;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
 
 
-
-    public function __toString()
-    {
-        return $this->getNombre();
-    }
-
-
-
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -66,7 +58,7 @@ class TipoIdentificacion
      *
      * @param string $nombre
      *
-     * @return TipoIdentificacion
+     * @return GrupoSanguineo
      */
     public function setNombre($nombre)
     {
@@ -90,7 +82,7 @@ class TipoIdentificacion
      *
      * @param string $sigla
      *
-     * @return TipoIdentificacion
+     * @return GrupoSanguineo
      */
     public function setSigla($sigla)
     {
@@ -114,7 +106,7 @@ class TipoIdentificacion
      *
      * @param boolean $estado
      *
-     * @return TipoIdentificacion
+     * @return GrupoSanguineo
      */
     public function setEstado($estado)
     {
@@ -126,10 +118,11 @@ class TipoIdentificacion
     /**
      * Get estado
      *
-     * @return boolean
+     * @return bool
      */
     public function getEstado()
     {
         return $this->estado;
     }
 }
+

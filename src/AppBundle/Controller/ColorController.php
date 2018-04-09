@@ -29,14 +29,14 @@ class ColorController extends Controller
         $colores = $em->getRepository('AppBundle:Color')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado colores", 
                     'data'=> $colores,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,14 +54,13 @@ class ColorController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-
-            if (count($params)==0) {
-                $responce = array(
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $nombre = $params->nombre;
                 $color = new Color();
 
@@ -72,20 +71,20 @@ class ColorController extends Controller
                 $em->persist($color);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Color creado con exito", 
                 );
-                }
+            //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -103,20 +102,20 @@ class ColorController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $color = $em->getRepository('AppBundle:Color')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "color encontrado", 
                     'data'=> $color,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -148,27 +147,27 @@ class ColorController extends Controller
                 $em->persist($color);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "color editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La color no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -190,19 +189,19 @@ class ColorController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($color);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "color eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -236,11 +235,11 @@ class ColorController extends Controller
     );
     
     foreach ($colors as $key => $color) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $color->getId(),
             'label' => $color->getNombre(),
         );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

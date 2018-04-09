@@ -26,3 +26,6 @@ composer.lock
 .vscode/settings.json
 composer.lock
 composer.lock
+src/AppBundle/Entity/AgenteTransito.php~
+composer.lock
+bin/symfony_requirements

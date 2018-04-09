@@ -1,3 +1,11 @@
+app_grupo_sanguineo:
+    resource: "@AppBundle/Controller/GrupoSanguineoController.php"
+    type:     annotation
+
+app_genero:
+    resource: "@AppBundle/Controller/GeneroController.php"
+    type:     annotation
+
 app_sede_operativa:
     resource: "@AppBundle/Controller/SedeOperativaController.php"
     type:     annotation

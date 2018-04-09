@@ -35,6 +35,13 @@ class Modulo
      */
     private $abreviatura;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
+     */
+    private $descripcion;
+
      /**
      * @var boolean
      *
@@ -107,6 +114,30 @@ class Modulo
     public function getAbreviatura()
     {
         return $this->abreviatura;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Modulo
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**

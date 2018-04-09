@@ -2,47 +2,47 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\Genero;
+use AppBundle\Form\GeneroType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\Clase;
-use AppBundle\Form\ClaseType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Clase controller.
+ * Genero controller.
  *
- * @Route("/clase")
+ * @Route("genero")
  */
-class ClaseController extends Controller
+class GeneroController extends Controller
 {
     /**
-     * Lists all Clase entities.
+     * Lists all genero entities.
      *
-     * @Route("/", name="clase_index")
+     * @Route("/", name="genero_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $clase = $em->getRepository('AppBundle:Clase')->findBy(
+        $generos = $em->getRepository('AppBundle:Genero')->findBy(
             array('estado' => 1)
         );
+
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado clase", 
-                    'data'=> $clase,
-            );
-         
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de generos",
+            'data' => $generos, 
+        );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new Clase entity.
+     * Creates a new genero entity.
      *
-     * @Route("/new", name="clase_new")
+     * @Route("/new", name="genero_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -58,36 +58,24 @@ class ClaseController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{*/
-                $nombre = $params->nombre;
-                $codigoMt = $params->codigoMt;
-                $em = $this->getDoctrine()->getManager();
-                $clase = $em->getRepository('AppBundle:Clase')->findBy(
-                    array('codigoMt' => $codigoMt)
-                );
+                $genero = new Genero();
 
-                if ($clase==null) {
-                    $clase = new Clase();
-                    $clase->setNombre($nombre);
-                    $clase->setEstado(true);
-                    $clase->setCodigoMt($codigoMt);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($clase);
-                    $em->flush();
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Clase creada con exito", 
-                    );
-                }else{
-                     $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "Codigo de ministerio de transporte debe ser unico",
-                    ); 
-                }
+                $genero->setNombre($params->nombre);
+                $genero->setSigla($params->sigla);
+                $genero->setEstado(true);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($genero);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito", 
+                );
             //}
         }else{
             $response = array(
@@ -95,17 +83,17 @@ class ClaseController extends Controller
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-            } 
+        } 
         return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a Clase entity.
+     * Finds and displays a genero entity.
      *
-     * @Route("/show/{id}", name="clase_show")
-     * @Method("POST")
+     * @Route("/{id}/show", name="genero_show")
+     * @Method("GET")
      */
-    public function showAction(Request  $request, $id)
+    public function showAction(Genero $genero)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -113,12 +101,11 @@ class ClaseController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $clase = $em->getRepository('AppBundle:Clase')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "clase encontrado", 
-                    'data'=> $clase,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $genero,
             );
         }else{
             $response = array(
@@ -131,13 +118,14 @@ class ClaseController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Clase entity.
+     * Displays a form to edit an existing genero entity.
      *
-     * @Route("/edit", name="clase_edit")
+     * @Route("/edit", name="genero_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -146,37 +134,38 @@ class ClaseController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigoMt = $params->codigoMt;
             $em = $this->getDoctrine()->getManager();
-            $clase = $em->getRepository('AppBundle:Clase')->find($params->id);
-            if ($clase!=null) {
+            $genero = $em->getRepository("AppBundle:Genero")->find($params->id);
 
-                $clase->setNombre($nombre);
-                $clase->setEstado(true);
-                $clase->setCodigoMt($codigoMt);
+            $nombre = $params->nombre;
+            $sigla = $params->sigla;
+
+            if ($genero!=null) {
+                $genero->setNombre($nombre);
+                $genero->setSigla($sigla);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($clase);
+                $em->persist($genero);
                 $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Clase editada con exito", 
+                 $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro actualizado con exito", 
+                        'data'=> $genero,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La clase no se encuentra en la base de datos", 
+                    'msj' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'msj' => "Autorizacion no valida para editar", 
                 );
         }
 
@@ -184,28 +173,27 @@ class ClaseController extends Controller
     }
 
     /**
-     * Deletes a Clase entity.
+     * Deletes a genero entity.
      *
-     * @Route("/{id}/delete", name="clase_delete")
+     * @Route("/{id}/delete", name="genero_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, Genero $genero)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $clase = $em->getRepository('AppBundle:Clase')->find($id);
 
-            $clase->setEstado(0);
+            $genero->setEstado(false);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($clase);
+                $em->persist($genero);
                 $em->flush();
-            $response = array(
+                $response = array(
                     'status' => 'success',
                         'code' => 200,
-                        'msj' => "lase eliminado con exito", 
+                        'msj' => "Registro eliminado con exito", 
                 );
         }else{
             $response = array(
@@ -218,16 +206,16 @@ class ClaseController extends Controller
     }
 
     /**
-     * Creates a form to delete a Clase entity.
+     * Creates a form to delete a genero entity.
      *
-     * @param Clase $clase The Clase entity
+     * @param Genero $genero The genero entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Clase $clase)
+    private function createDeleteForm(Genero $genero)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('clase_delete', array('id' => $clase->getId())))
+            ->setAction($this->generateUrl('genero_delete', array('id' => $genero->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -236,20 +224,20 @@ class ClaseController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="clase_select")
+     * @Route("/select", name="genero_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
-    $clases = $em->getRepository('AppBundle:Clase')->findBy(
+    $generos = $em->getRepository('AppBundle:Genero')->findBy(
         array('estado' => 1)
     );
-      foreach ($clases as $key => $clase) {
+      foreach ($generos as $key => $genero) {
         $response[$key] = array(
-            'value' => $clase->getId(),
-            'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
+            'value' => $genero->getId(),
+            'label' => $genero->getSigla()."_".$genero->getNombre(),
             );
       }
        return $helpers->json($response);

@@ -29,14 +29,14 @@ class CombustibleController extends Controller
         $combustibles = $em->getRepository('AppBundle:Combustible')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado combustibles", 
                     'data'=> $combustibles,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,50 +54,50 @@ class CombustibleController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-
-            if (count($params)==0) {
-                $responce = array(
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $nombre = $params->nombre;
                 $codigoMt = $params->codigoMt;
                 $em = $this->getDoctrine()->getManager();
                 $combustible = $em->getRepository('AppBundle:Combustible')->findBy(
                     array('codigoMt' => $codigoMt)
                 );
-                    if ($combustible==null) {
-                        $combustible = new Combustible();
-                        $combustible->setNombre($nombre);
-                        $combustible->setEstado(true);
-                        $combustible->setCodigoMt($codigoMt);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($combustible);
-                        $em->flush();
-                        $responce = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Combustible creada con exito", 
-                        );
-                    }else{
-                         $responce = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'msj' => "Codigo de ministerio de transporte debe ser unico",
-                        ); 
-                    }
+
+                if ($combustible==null) {
+                    $combustible = new Combustible();
+                    $combustible->setNombre($nombre);
+                    $combustible->setEstado(true);
+                    $combustible->setCodigoMt($codigoMt);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($combustible);
+                    $em->flush();
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Combustible creada con exito", 
+                    );
+                }else{
+                     $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "Codigo de ministerio de transporte debe ser unico",
+                    ); 
                 }
+            //}
                 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -115,20 +115,20 @@ class CombustibleController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $combustible = $em->getRepository('AppBundle:Combustible')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "combustible encontrado", 
                     'data'=> $combustible,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -161,27 +161,27 @@ class CombustibleController extends Controller
                 $em->persist($combustible);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "combustible editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La combustible no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -203,19 +203,19 @@ class CombustibleController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($combustible);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "Combustible eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -248,11 +248,11 @@ class CombustibleController extends Controller
         array('estado' => 1)
     );
       foreach ($combustibles as $key => $combustible) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $combustible->getId(),
             'label' => $combustible->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

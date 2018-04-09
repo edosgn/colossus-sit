@@ -36,9 +36,9 @@ class Tramite
     private $valor;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="redondeo", type="string", length=255)
+     * @ORM\Column(name="redondeo", type="boolean")
      */
     private $redondeo;
 
@@ -139,7 +139,7 @@ class Tramite
     /**
      * Set redondeo
      *
-     * @param string $redondeo
+     * @param boolean $redondeo
      *
      * @return Tramite
      */
@@ -153,7 +153,7 @@ class Tramite
     /**
      * Get redondeo
      *
-     * @return string
+     * @return boolean
      */
     public function getRedondeo()
     {

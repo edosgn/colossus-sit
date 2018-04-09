@@ -51,31 +51,34 @@ class ComparendoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
+            
+            /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $numeroOrden = $params->numeroOrden;
-                $fechaDiligenciamiento = (isset($params->fechaDiligenciamiento)) ? $params->fechaNacimiento : null;
+                $fechaDiligenciamiento = (isset($params->fechaDiligenciamiento)) ? $params->fechaDiligenciamiento : null;
                 $fechaDiligenciamientoDateTime = new \DateTime($fechaDiligenciamiento);
                 $lugarInfraccion = $params->lugarInfraccion;
                 $barrioInfraccion = $params->barrioInfraccion;
                 $observacionesAgente = $params->observacionesAgente;
-                $tipoInfractor = $params->tipoInfractor;
-                $tarjetaOperacionInfractor = $params->tarjetaOperacionInfractor;
-                $fuga = $params->fuga;
-                $accidente = $params->accidente;
-                $polca = $params->polca;
-                $fechaNotificacion = (isset($params->fechaNotificacion)) ? $params->fechaNacimiento : null;
+                $tipoInfractor = 'infractor';
+                $tarjetaOperacionInfractor = '52001000';
+                $fuga = (isset($params->fuga)) ? $params->fuga : false;
+                $accidente = (isset($params->accidente)) ? $params->accidente : false;
+                $polca = (isset($params->polca)) ? $params->polca : false;
+                $fotoMulta = (isset($params->fotoMulta)) ? $params->fotoMulta : false;
+                $fechaNotificacion = (isset($params->fechaNotificacion)) ? $params->fechaNotificacion : null;
                 $fechaNotificacionDateTime = new \DateTime($fechaNotificacion);
                 $gradoAlchoholemia = $params->gradoAlchoholemia;
 
-                $tipoIdentificacionId = $params->tipoIdentificacionId;
-                $municipioNacimientoId = $params->municipioNacimientoId;
-                $municipioResidenciaId = $params->municipioResidenciaId;
+                $municipioId = $params->municipioId;
+                $vehiculoId = $params->vehiculoId;
+                $ciudadanoId = $params->ciudadanoId;
+                $agenteTransitoId = $params->agenteTransitoId;
                 
                 $em = $this->getDoctrine()->getManager();
 
@@ -83,8 +86,7 @@ class ComparendoController extends Controller
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
                 $agenteTransito = $em->getRepository('AppBundle:AgenteTransito')->find($agenteTransitoId);
-                $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->find($seguimientoEntregaId);
-
+                $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->find(1);
 
                 $comparendo = new Comparendo();
                 $comparendo->setNumeroOrden($numeroOrden);
@@ -114,7 +116,7 @@ class ComparendoController extends Controller
                     'code' => 200,
                     'msj' => "Registro creado con exito", 
                 );
-            }
+            //}
         }else{
             $response = array(
                 'status' => 'error',
@@ -308,8 +310,6 @@ class ComparendoController extends Controller
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByNumeroIdentificacion($comparendo[2]);
                 $agenteTransito = $em->getRepository('AppBundle:AgenteTransito')->findOneByPlaca($comparendo[3]);
                 $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->findOneByNumeroOficio($comparendo[4]);
-
-
                 $comparendoNew = new Comparendo();
                 $comparendoNew->setNumeroOrden($comparendo[5]);
                 $fechaDiligenciamiento = new \DateTime($comparendo[6]);

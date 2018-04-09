@@ -29,14 +29,14 @@ class CarroceriaController extends Controller
         $carrocerias = $em->getRepository('AppBundle:Carroceria')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado carrocerias", 
                     'data'=> $carrocerias,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -53,13 +53,14 @@ class CarroceriaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
+            
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $nombre = $params->nombre;
                 $codigoMt = $params->codigoMt;
                 $claseId = $params->claseId;
@@ -80,13 +81,13 @@ class CarroceriaController extends Controller
                         $em->persist($carroceria);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "Carroceria creado con exito", 
                         );
                     }else{
-                        $responce = array(
+                        $response = array(
                         'status' => 'error',
                         'code' => 400,
                         'msj' => "no se encuentra la clase", 
@@ -94,21 +95,21 @@ class CarroceriaController extends Controller
                     }
                         
                 }else{
-                        $responce = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "Codigo de ministerio de transporte debe ser unico", 
-                        );
-                    }
+                    $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Codigo de ministerio de transporte debe ser unico", 
+                    );
                 }
+            //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-            } 
-        return $helpers->json($responce);
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -126,20 +127,20 @@ class CarroceriaController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Carroceria con nombre"." ".$carroceria->getNombre(), 
                     'data'=> $carroceria,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -175,7 +176,7 @@ class CarroceriaController extends Controller
                 $em->persist($carroceria);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Carroceria editada con exito", 
@@ -183,21 +184,21 @@ class CarroceriaController extends Controller
                         
                         
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "carroceria no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);;
+        return $helpers->json($response);;
     }
 
     /**
@@ -219,19 +220,19 @@ class CarroceriaController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($carroceria);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "Carroceria eliminada con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -272,14 +273,14 @@ class CarroceriaController extends Controller
             );
 
             if ($carrocerias != null) {
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Carroceria encontrada", 
                     'data'=> $carrocerias,
                  );
             }else{
-                 $responce = array(
+                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "no existen carrocerias para esta clase", 
@@ -287,13 +288,13 @@ class CarroceriaController extends Controller
             }
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
 
@@ -311,11 +312,11 @@ class CarroceriaController extends Controller
         array('estado' => 1)
     );
       foreach ($carrocerias as $key => $carroceria) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $carroceria->getId(),
             'label' => $carroceria->getCodigoMt()."_".$carroceria->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

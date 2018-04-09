@@ -24,7 +24,7 @@ class InfraccionController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $infracciones = $em->getRepository('AppBundle:Infraccion')->findAll();
+        $infracciones = $em->getRepository('AppBundle:Infraccion')->findByEstado(true);
 
         $response = array(
             'status' => 'success',
@@ -49,22 +49,28 @@ class InfraccionController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
+
+            /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Los campos no pueden estar vacios", 
                 );
-            }else{
-                $codigoInfraccion = $params->codigoInfraccion;
-                $descripcionInfraccion = $params->descripcionInfraccion;
-                $valorInfraccion = $params->valorInfraccion;
+            }else{*/
+                $codigo = $params->codigo;
+                $descripcion = $params->descripcion;
+                $valor = $params->valor;
+                $inmovilizacion = (isset($params->inmovilizacion)) ? $params->inmovilizacion : 0;
+                $suspensionLicencia = (isset($params->suspensionLicencia)) ? $params->suspensionLicencia : 0;
 
                 $infraccion = new Infraccion();
 
-                $infraccion->setCodigoInfraccion($codigoInfraccion);
-                $infraccion->setDescripcionInfraccion($descripcionInfraccion);
-                $infraccion->setValorInfraccion($valorInfraccion);
+                $infraccion->setCodigo($codigo);
+                $infraccion->setDescripcion($descripcion);
+                $infraccion->setValor($valor);
+                $infraccion->setEstado(true);
+                $infraccion->setInmovilizacion($inmovilizacion);
+                $infraccion->setSuspensionLicencia($suspensionLicencia);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($infraccion);
@@ -75,7 +81,7 @@ class InfraccionController extends Controller
                     'code' => 200,
                     'msj' => "Registro creado con exito", 
                 );
-            }
+            //}
         }else{
             $response = array(
                 'status' => 'error',
@@ -119,10 +125,10 @@ class InfraccionController extends Controller
     /**
      * Displays a form to edit an existing infraccion entity.
      *
-     * @Route("/{id}/edit", name="infraccion_edit")
+     * @Route("/edit", name="infraccion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Infraccion $infraccion)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -132,18 +138,24 @@ class InfraccionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $codigoInfraccion = $params->codigoInfraccion;
-            $descripcionInfraccion = $params->descripcionInfraccion;
-            $valorInfraccion = $params->valorInfraccion;
-
             $em = $this->getDoctrine()->getManager();
+            $infraccion = $em->getRepository("AppBundle:Infraccion")->find($params->id);
+
+            $codigo = $params->codigo;
+            $descripcion = $params->descripcion;
+            $valor = $params->valor;
+            $inmovilizacion = (isset($params->inmovilizacion)) ? $params->inmovilizacion : 0;
+            $suspensionLicencia = (isset($params->suspensionLicencia)) ? $params->suspensionLicencia : 0;
 
             if ($infraccion) {
-                $infraccion->setCodigoInfraccion($codigoInfraccion);
-                $infraccion->setDescripcionInfraccion($descripcionInfraccion);
-                $infraccion->setValorInfraccion($valorInfraccion);
+                $infraccion->setCodigo($codigo);
+                $infraccion->setDescripcion($descripcion);
+                $infraccion->setValor($valor);
+                $infraccion->setInmovilizacion($inmovilizacion);
+                $infraccion->setSuspensionLicencia($suspensionLicencia);
 
                 $em = $this->getDoctrine()->getManager();
+                
                 $em->persist($infraccion);
                 $em->flush();
 
@@ -186,6 +198,7 @@ class InfraccionController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $infraccion->setEstado(false);
+            
             $em = $this->getDoctrine()->getManager();
                 $em->persist($infraccion);
                 $em->flush();
@@ -218,5 +231,27 @@ class InfraccionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="infraccion_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $infracciones = $em->getRepository('AppBundle:Infraccion')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($infracciones as $key => $infraccion) {
+        $response[$key] = array(
+            'value' => $infraccion->getId(),
+            'label' => $infraccion->getCodigo()."_".$infraccion->getDescripcion(),
+            );
+      }
+       return $helpers->json($response);
     }
 }

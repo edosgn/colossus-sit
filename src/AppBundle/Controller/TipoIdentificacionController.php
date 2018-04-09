@@ -29,14 +29,15 @@ class TipoIdentificacionController extends Controller
         $tipoIdentificaiones = $em->getRepository('AppBundle:TipoIdentificacion')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado Tipos de identificaion", 
+                    'msj' => "Lista de tipos de identificaion", 
                     'data'=> $tipoIdentificaiones,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -53,38 +54,38 @@ class TipoIdentificacionController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
+
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
-                        $nombre = $params->nombre;
-                        $tipoIdentificacion = new TipoIdentificacion();
+            }else{*/
+                $tipoIdentificacion = new TipoIdentificacion();
 
-                        $tipoIdentificacion->setNombre($nombre);
-                        $tipoIdentificacion->setEstado(true);
+                $tipoIdentificacion->setNombre($params->nombre);
+                $tipoIdentificacion->setSigla($params->sigla);
+                $tipoIdentificacion->setEstado(true);
 
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($tipoIdentificacion);
-                        $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tipoIdentificacion);
+                $em->flush();
 
-                        $responce = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Tipo identificaion creado con exito", 
-                        );
-                       
-                    }
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito",  
+                );
+            //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-            } 
-        return $helpers->json($responce);
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -102,20 +103,20 @@ class TipoIdentificacionController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tipoIdentificacion con nombre"." ".$tipoIdentificacion->getNombre(), 
                     'data'=> $tipoIdentificacion,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -136,38 +137,41 @@ class TipoIdentificacionController extends Controller
 
             
             $nombre = $params->nombre;
+            $sigla = $params->sigla;
 
             $em = $this->getDoctrine()->getManager();
             $tipoIdentificacion = $em->getRepository("AppBundle:TipoIdentificacion")->find($params->id);
 
             if ($tipoIdentificacion!=null) {
                 $tipoIdentificacion->setNombre($nombre);
+                $tipoIdentificacion->setSigla($sigla);
+                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tipoIdentificacion);
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "tipoIdentificacion actualizado con exito", 
+                        'msj' => "Registro actualizado con exito", 
                         'data'=> $tipoIdentificacion,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El tipoIdentificacion no se encuentra en la base de datos", 
+                    'msj' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar tipoIdentificacion", 
+                    'msj' => "Autorizacion no valida para editar", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -189,19 +193,19 @@ class TipoIdentificacionController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($tipoIdentificacion);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
-                        'msj' => "tipoIdentificacion eliminado con exito", 
+                        'msj' => "Registro eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -234,11 +238,11 @@ class TipoIdentificacionController extends Controller
         array('estado' => 1)
     );
       foreach ($tipoIdentificacions as $key => $tipoIdentificacion) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $tipoIdentificacion->getId(),
-            'label' => $tipoIdentificacion->getNombre(),
+            'label' => $tipoIdentificacion->getSigla()."_".$tipoIdentificacion->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

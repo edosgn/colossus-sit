@@ -29,14 +29,14 @@ class BancoController extends Controller
         $bancos = $em->getRepository('AppBundle:Banco')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado bancos", 
                     'data'=> $bancos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -53,38 +53,39 @@ class BancoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
+
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
-                        $nombre = $params->nombre;
-                        $banco = new Banco();
+            }else{*/
+                $nombre = $params->nombre;
+                $banco = new Banco();
 
-                        $banco->setNombre($nombre);
-                        $banco->setEstado(true);
+                $banco->setNombre($nombre);
+                $banco->setEstado(true);
 
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($banco);
-                        $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($banco);
+                $em->flush();
 
-                        $responce = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Banco creado con exito", 
-                        );
-                       
-                    }
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Banco creado con exito", 
+                );
+               
+            //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -102,20 +103,20 @@ class BancoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $banco = $em->getRepository('AppBundle:Banco')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Banco con nombre"." ".$banco->getNombre(), 
                     'data'=> $banco,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -146,28 +147,28 @@ class BancoController extends Controller
                 $em->persist($banco);
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Banco actualizado con exito", 
                         'data'=> $banco,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El banco no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -189,19 +190,19 @@ class BancoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($banco);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "Banco eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -234,11 +235,11 @@ class BancoController extends Controller
         array('estado' => 1)
     );
       foreach ($bancos as $key => $banco) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $banco->getId(),
             'label' => $banco->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

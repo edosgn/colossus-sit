@@ -29,14 +29,14 @@ class TramiteController extends Controller
         $tramites = $em->getRepository('AppBundle:Tramite')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado tramites", 
+                    'msj' => "Lista de tramites", 
                     'data'=> $tramites,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -53,47 +53,50 @@ class TramiteController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
+
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
-                        $nombre = $params->nombre;
-                        $valor = $params->valor;
-                        $redondeo = $params->redondeo;
-                        $unidad = $params->unidad;
-                        $afectacion = $params->afectacion;
-                        $moduloId = $params->moduloId;
-                        $em = $this->getDoctrine()->getManager();
-                        $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
-                        $tramite = new Tramite();
-                        $tramite->setNombre($nombre);
-                        $tramite->setValor($valor);
-                        $tramite->setRedondeo($redondeo);
-                        $tramite->setUnidad($unidad);
-                        $tramite->setAfectacion($afectacion);
-                        $tramite->setModulo($modulo);
-                        $tramite->setEstado(true);
-                        $em->persist($tramite);
-                        $em->flush();
+            }else{*/
+                $nombre = $params->nombre;
+                $valor = $params->valor;
+                $unidad = $params->unidad;
+                $redondeo = (isset($params->redondeo)) ? $params->redondeo : false;
+                $afectacion = (isset($params->afectacion)) ? $params->afectacion : false;
+                $moduloId = $params->moduloId;
 
-                        $responce = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "tramite creado con exito", 
-                        );
-                       
-                    }
+                $em = $this->getDoctrine()->getManager();
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+
+                $tramite = new Tramite();
+                $tramite->setNombre($nombre);
+                $tramite->setValor($valor);
+                $tramite->setRedondeo($redondeo);
+                $tramite->setUnidad($unidad);
+                $tramite->setAfectacion($afectacion);
+                $tramite->setModulo($modulo);
+                $tramite->setEstado(true);
+                $em->persist($tramite);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "tramite creado con exito", 
+                );
+               
+            //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -111,20 +114,20 @@ class TramiteController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tramite = $em->getRepository('AppBundle:Tramite')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramite con nombre"." ".$tramite->getNombre(), 
                     'data'=> $tramite,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -145,10 +148,11 @@ class TramiteController extends Controller
 
             $nombre = $params->nombre;
             $valor = $params->valor;
-            $redondeo = $params->redondeo;
             $unidad = $params->unidad;
-            $afectacion = $params->afectacion;
+            $redondeo = (isset($params->redondeo)) ? $params->redondeo : false;
+            $afectacion = (isset($params->afectacion)) ? $params->afectacion : false;
             $moduloId = $params->moduloId;
+
             $em = $this->getDoctrine()->getManager();
             $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
             $tramite = $em->getRepository("AppBundle:Tramite")->find($params->id);
@@ -164,27 +168,27 @@ class TramiteController extends Controller
                 $em->persist($tramite);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramite editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El tramite no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -206,19 +210,19 @@ class TramiteController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($tramite);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "tramite eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -256,14 +260,14 @@ class TramiteController extends Controller
             );
 
             if ($tramites != null) {
-               $responce = array(
+               $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "Tramites encontrados", 
                         'data' => $tramites, 
                 );
             }else{
-                $responce = array( 
+                $response = array( 
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Aun no hay tramites", 
@@ -272,12 +276,12 @@ class TramiteController extends Controller
 
             
         }else{
-            $responce = array( 
+            $response = array( 
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 }

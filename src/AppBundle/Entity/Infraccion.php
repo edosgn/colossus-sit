@@ -24,23 +24,44 @@ class Infraccion
     /**
      * @var string
      *
-     * @ORM\Column(name="codigoInfraccion", type="string", length=45)
+     * @ORM\Column(name="codigo", type="string", length=45)
      */
-    private $codigoInfraccion;
+    private $codigo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcionInfraccion", type="string", length=255)
+     * @ORM\Column(name="descripcion", type="text")
      */
-    private $descripcionInfraccion;
+    private $descripcion;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valorInfraccion", type="float")
+     * @ORM\Column(name="valor", type="float")
      */
-    private $valorInfraccion;
+    private $valor;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="inmovilizacion", type="boolean")
+     */
+    private $inmovilizacion;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="suspensionLicencia", type="boolean")
+     */
+    private $suspensionLicencia;
 
 
     /**
@@ -54,74 +75,146 @@ class Infraccion
     }
 
     /**
-     * Set codigoInfraccion
+     * Set codigo
      *
-     * @param string $codigoInfraccion
+     * @param string $codigo
      *
      * @return Infraccion
      */
-    public function setCodigoInfraccion($codigoInfraccion)
+    public function setCodigo($codigo)
     {
-        $this->codigoInfraccion = $codigoInfraccion;
+        $this->codigo = $codigo;
 
         return $this;
     }
 
     /**
-     * Get codigoInfraccion
+     * Get codigo
      *
      * @return string
      */
-    public function getCodigoInfraccion()
+    public function getCodigo()
     {
-        return $this->codigoInfraccion;
+        return $this->codigo;
     }
 
     /**
-     * Set descripcionInfraccion
+     * Set descripcion
      *
-     * @param string $descripcionInfraccion
+     * @param string $descripcion
      *
      * @return Infraccion
      */
-    public function setDescripcionInfraccion($descripcionInfraccion)
+    public function setDescripcion($descripcion)
     {
-        $this->descripcionInfraccion = $descripcionInfraccion;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
 
     /**
-     * Get descripcionInfraccion
+     * Get descripcion
      *
      * @return string
      */
-    public function getDescripcionInfraccion()
+    public function getDescripcion()
     {
-        return $this->descripcionInfraccion;
+        return $this->descripcion;
     }
 
     /**
-     * Set valorInfraccion
+     * Set valor
      *
-     * @param float $valorInfraccion
+     * @param float $valor
      *
      * @return Infraccion
      */
-    public function setValorInfraccion($valorInfraccion)
+    public function setValor($valor)
     {
-        $this->valorInfraccion = $valorInfraccion;
+        $this->valor = $valor;
 
         return $this;
     }
 
     /**
-     * Get valorInfraccion
+     * Get valor
      *
      * @return float
      */
-    public function getValorInfraccion()
+    public function getValor()
     {
-        return $this->valorInfraccion;
+        return $this->valor;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Infraccion
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set inmovilizacion
+     *
+     * @param boolean $inmovilizacion
+     *
+     * @return Infraccion
+     */
+    public function setInmovilizacion($inmovilizacion)
+    {
+        $this->inmovilizacion = $inmovilizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get inmovilizacion
+     *
+     * @return boolean
+     */
+    public function getInmovilizacion()
+    {
+        return $this->inmovilizacion;
+    }
+
+    /**
+     * Set suspensionLicencia
+     *
+     * @param boolean $suspensionLicencia
+     *
+     * @return Infraccion
+     */
+    public function setSuspensionLicencia($suspensionLicencia)
+    {
+        $this->suspensionLicencia = $suspensionLicencia;
+
+        return $this;
+    }
+
+    /**
+     * Get suspensionLicencia
+     *
+     * @return boolean
+     */
+    public function getSuspensionLicencia()
+    {
+        return $this->suspensionLicencia;
     }
 }

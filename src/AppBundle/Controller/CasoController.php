@@ -29,14 +29,14 @@ class CasoController extends Controller
         $casos = $em->getRepository('AppBundle:Caso')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado casos", 
                     'data'=> $casos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,51 +54,50 @@ class CasoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-
-            if (count($params)==0) {
-                $responce = array(
+            /*if (count($params)==0) {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
                 );
-            }else{
-                        $nombre = $params->nombre;
-                        $tramiteId = $params->tramiteId;
-                        $em = $this->getDoctrine()->getManager();
-                        $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+            }else{*/
+                $nombre = $params->nombre;
+                $tramiteId = $params->tramiteId;
+                $em = $this->getDoctrine()->getManager();
+                $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
 
-                        if ($tramite==null) {
-                            $responce = array(
-                                'status' => 'error',
-                                'code' => 400,
-                                'msj' => "no existe el tramite", 
-                            );
-                        }else{
-                            $caso = new Caso();
+                if ($tramite==null) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "no existe el tramite", 
+                    );
+                }else{
+                    $caso = new Caso();
 
-                            $caso->setNombre($nombre);
-                            $caso->setEstado(true);
-                            $caso->setTramite($tramite);
+                    $caso->setNombre($nombre);
+                    $caso->setEstado(true);
+                    $caso->setTramite($tramite);
 
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($caso);
-                            $em->flush();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($caso);
+                    $em->flush();
 
-                            $responce = array(
-                                'status' => 'success',
-                                'code' => 200,
-                                'msj' => "Caso creado con exito", 
-                            );
-                        }
-                    }
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Caso creado con exito", 
+                    );
+                }
+            //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-            } 
-        return $helpers->json($responce);
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -116,20 +115,20 @@ class CasoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $caso = $em->getRepository('AppBundle:Caso')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "caso encontrado", 
                     'data'=> $caso,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -163,27 +162,27 @@ class CasoController extends Controller
                 $em->persist($caso);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Caso editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El caso no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -205,19 +204,19 @@ class CasoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($caso);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "caso eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -255,14 +254,14 @@ class CasoController extends Controller
             );
 
             if ($casos==null) {
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "No hay casos asigandos a este tramite", 
                 );
             }
             else{
-               $responce = array(
+               $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "casos encontrado", 
@@ -271,12 +270,12 @@ class CasoController extends Controller
             }
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 }

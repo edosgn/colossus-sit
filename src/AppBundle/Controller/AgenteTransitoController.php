@@ -32,7 +32,7 @@ class AgenteTransitoController extends Controller
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de agentes",
+            'msj' => "Lista de agentes",
             'data' => $agentes, 
         );
         return $helpers->json($response);
@@ -52,13 +52,14 @@ class AgenteTransitoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
+
+            /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Los campos no pueden estar vacios", 
                 );
-            }else{
+            }else{*/
                 $placa = $params->placa;
                 $ciudadanoId = $params->ciudadanoId;
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
@@ -78,7 +79,7 @@ class AgenteTransitoController extends Controller
                     'code' => 200,
                     'msj' => "Registro creado con exito", 
                 );
-            }
+            //}
         }else{
             $response = array(
                 'status' => 'error',
@@ -165,7 +166,7 @@ class AgenteTransitoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar agente de transito", 
+                    'msj' => "Autorizacion no valida para editar", 
                 );
         }
 
