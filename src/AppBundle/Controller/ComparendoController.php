@@ -326,6 +326,8 @@ class ComparendoController extends Controller
                 $comparendoNew->setFechaNotificacion($fechaNotificacion);
                 $comparendoNew->setGradoAlchoholemia($comparendo[15]);
                 $comparendoNew->setFotomulta($comparendo[16]);
+                $comparendoNew->setObservacionesDigitador($comparendo[17]);
+                $comparendoNew->setRetencionLicencia($comparendo[18]);
                 $comparendoNew->setEstado(true);
                 //Relación llaves foraneas
                 $comparendoNew->setMunicipio($municipio);
