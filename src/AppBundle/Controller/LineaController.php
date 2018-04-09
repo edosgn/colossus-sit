@@ -55,13 +55,13 @@ class LineaController extends Controller
             $params = json_decode($json);
 
 
-            if (count($params)==0) {
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $responce = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "los campos no pueden estar vacios", 
+            //     );
+            // }else{
                 $nombre = $params->nombre;
                 $codigoMt = $params->codigoMt;
                 $marcaId = $params->marcaId;
@@ -93,7 +93,7 @@ class LineaController extends Controller
                             'msj' => "Codigo de ministerio de transporte debe ser unico",
                         ); 
                     }
-                }
+                // }
                 
         }else{
             $responce = array(

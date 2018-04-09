@@ -51,13 +51,13 @@ class ModuloSistemaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $responce = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "los campos no pueden estar vacios", 
+            //     );
+            // }else{
                 $nombre = $params->nombre;
                 $moduloSistema = new ModuloSistema();
 
@@ -73,7 +73,7 @@ class ModuloSistemaController extends Controller
                     'msj' => "ModuloSistema creado con exito", 
                 );
                        
-                }
+                // }
         }else{
             $responce = array(
                 'status' => 'error',

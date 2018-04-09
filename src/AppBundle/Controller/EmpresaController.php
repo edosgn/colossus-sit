@@ -53,13 +53,13 @@ class EmpresaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $responce = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "los campos no pueden estar vacios", 
+            //     );
+            // }else{
                         $nit = $params->nit;
                         $nombre = $params->nombre;
                         $telefono = $params->telefono;
@@ -112,7 +112,7 @@ class EmpresaController extends Controller
 
                         
                        
-                    }
+                    // }
         }else{
             $responce = array(
                 'status' => 'error',

@@ -50,13 +50,13 @@ class InmovilizacionController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $response = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "Los campos no pueden estar vacios", 
+            //     );
+            // }else{
                 $numeroPatio = $params->numeroPatio;
                 $numeroGrua = $params->numeroGrua;
                 $numeroConsecutivo = $params->numeroConsecutivo;
@@ -82,7 +82,7 @@ class InmovilizacionController extends Controller
                     'code' => 200,
                     'msj' => "Registro creado con exito", 
                 );
-            }
+            // }
         }else{
             $response = array(
                 'status' => 'error',

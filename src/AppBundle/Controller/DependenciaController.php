@@ -59,13 +59,13 @@ class DependenciaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            if (count($params)==0) {
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $responce = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "los campos no pueden estar vacios", 
+            //     );
+            // }else{
                 $nombre = $params->nombre;
                
                 $em = $this->getDoctrine()->getManager();
@@ -94,7 +94,7 @@ class DependenciaController extends Controller
                             'msj' => "La dependencia ya se encuentra registrada en la base de datos", 
                         );
                     }
-                }
+                // }
 
         }else{
             $responce = array(

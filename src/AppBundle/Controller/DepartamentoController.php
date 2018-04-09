@@ -60,13 +60,13 @@ class DepartamentoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            if (count($params)==0) {
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $responce = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "los campos no pueden estar vacios", 
+            //     );
+            // }else{
                 $nombre = $params->nombre;
                 $codigoDian = $params->codigoDian;
                 $em = $this->getDoctrine()->getManager();
@@ -98,7 +98,7 @@ class DepartamentoController extends Controller
                             'msj' => "El codigo Dian ya esta registrado", 
                         );
                     }
-                }
+                // }
 
         }else{
             $responce = array(

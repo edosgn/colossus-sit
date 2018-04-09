@@ -49,13 +49,13 @@ class SedeOperativaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $response = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "Los campos no pueden estar vacios", 
+            //     );
+            // }else{
                 $nombre = $params->nombre;
                 $codigoDivipo = $params->codigoDivipo;
 
@@ -74,7 +74,7 @@ class SedeOperativaController extends Controller
                     'code' => 200,
                     'msj' => "Registro creado con exito", 
                 );
-            }
+            // }
         }else{
             $response = array(
                 'status' => 'error',

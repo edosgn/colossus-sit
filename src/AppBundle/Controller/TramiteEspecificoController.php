@@ -76,13 +76,13 @@ class TramiteEspecificoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{
+            // if (count($params)==0) {
+            //     $responce = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "los campos no pueden estar vacios", 
+            //     );
+            // }else{
                         $valor = (isset($params->valor)) ? $params->valor : null;
                         $tramiteId = (isset($params->tramiteId)) ? $params->tramiteId : null;
                         $varianteId = (isset($params->varianteId)) ? $params->varianteId : null;
@@ -117,7 +117,7 @@ class TramiteEspecificoController extends Controller
                             'msj' => $tramiteGeneral, 
                         );
                        
-                    }
+                    // }
         }else{
             $responce = array(
                 'status' => 'error',
