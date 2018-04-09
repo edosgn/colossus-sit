@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comparendo;
+use AppBundle\Entity\Inmovilizacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -60,6 +61,7 @@ class ComparendoController extends Controller
                 );
             }else{*/
                 $numeroOrden = $params->numeroOrden;
+                $inmovilizacion = $params->inmovilizacion;
                 $urlDocumento = (isset($params->urlDocumento)) ? $params->urlDocumento : null;
                 $fechaDiligenciamiento = (isset($params->fechaDiligenciamiento)) ? $params->fechaDiligenciamiento : null;
                 $fechaDiligenciamientoDateTime = new \DateTime($fechaDiligenciamiento);
@@ -112,6 +114,30 @@ class ComparendoController extends Controller
 
                 $em->persist($comparendo);
                 $em->flush();
+
+                if ($inmovilizacion == 1) {
+                    $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
+                    $fechaIngresoDateTime = new \DateTime($fechaIngreso);
+
+                    $numeroPatio = $params->numeroPatio;
+                    $numeroGrua = $params->numeroGrua;
+                    $numeroConsecutivo = $params->numeroConsecutivo;
+                    $direccionPatio = $params->direccionPatio;
+                    $placaGrua = $params->placaGrua;
+
+                    $inmovilizacion = new Inmovilizacion();
+
+                    $inmovilizacion->setNumeroPatio($numeroPatio);
+                    $inmovilizacion->setNumeroGrua($numeroGrua);
+                    $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
+                    $inmovilizacion->setDireccionPatio($direccionPatio);
+                    $inmovilizacion->setPlacaGrua($placaGrua);
+                    $inmovilizacion->setComparendo($comparendo);
+                    $inmovilizacion->setFechaIngreso($fechaIngresoDateTime);
+
+                    $em->persist($inmovilizacion);
+                    $em->flush();
+                }
 
                 $response = array(
                     'status' => 'success',
