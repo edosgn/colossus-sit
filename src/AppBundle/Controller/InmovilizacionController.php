@@ -57,6 +57,9 @@ class InmovilizacionController extends Controller
             //         'msj' => "Los campos no pueden estar vacios", 
             //     );
             // }else{
+                $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
+                $fechaIngresoDateTime = new \DateTime($fechaIngreso);
+
                 $numeroPatio = $params->numeroPatio;
                 $numeroGrua = $params->numeroGrua;
                 $numeroConsecutivo = $params->numeroConsecutivo;
@@ -72,6 +75,7 @@ class InmovilizacionController extends Controller
                 $inmovilizacion->setDireccionPatio($direccionPatio);
                 $inmovilizacion->setPlacaGrua($placaGrua);
                 $inmovilizacion->setComparendo($comparendo);
+                $inmovilizacion->setFechaIngreso($fechaIngresoDateTime);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($inmovilizacion);
