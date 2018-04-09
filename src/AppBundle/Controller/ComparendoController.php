@@ -61,6 +61,7 @@ class ComparendoController extends Controller
                 );
             }else{*/
                 $numeroOrden = $params->numeroOrden;
+                $fotomulta = $params->fotomulta;
                 $inmovilizacion = $params->inmovilizacion;
                 $observacionesDigitador = $params->observacionesDigitador;
                 $urlDocumento = (isset($params->urlDocumento)) ? $params->urlDocumento : null;
@@ -107,6 +108,7 @@ class ComparendoController extends Controller
                 $comparendo->setEstado(true);
                 $comparendo->setUrlDocumento($urlDocumento);
                 $comparendo->setObservacionesDigitador($observacionesDigitador);
+                $comparendo->setFotomulta($fotomulta);
                 //Relación llaves foraneas
                 $comparendo->setMunicipio($municipio);
                 $comparendo->setVehiculo($vehiculo);
