@@ -61,7 +61,6 @@ class ComparendoController extends Controller
                 );
             }else{*/
                 $numeroOrden = $params->numeroOrden;
-                $fotomulta = $params->fotomulta;
                 $inmovilizacion = $params->inmovilizacion;
                 $observacionesDigitador = $params->observacionesDigitador;
                 $urlDocumento = (isset($params->urlDocumento)) ? $params->urlDocumento : null;
@@ -75,7 +74,8 @@ class ComparendoController extends Controller
                 $fuga = (isset($params->fuga)) ? $params->fuga : false;
                 $accidente = (isset($params->accidente)) ? $params->accidente : false;
                 $polca = (isset($params->polca)) ? $params->polca : false;
-                $fotoMulta = (isset($params->fotoMulta)) ? $params->fotoMulta : false;
+                $fotomulta = (isset($params->fotomulta)) ? $params->fotomulta : false;
+                $retencionLicencia = (isset($params->retencionLicencia)) ? $params->retencionLicencia : false;
                 $fechaNotificacion = (isset($params->fechaNotificacion)) ? $params->fechaNotificacion : null;
                 $fechaNotificacionDateTime = new \DateTime($fechaNotificacion);
                 $gradoAlchoholemia = $params->gradoAlchoholemia;
@@ -109,6 +109,7 @@ class ComparendoController extends Controller
                 $comparendo->setUrlDocumento($urlDocumento);
                 $comparendo->setObservacionesDigitador($observacionesDigitador);
                 $comparendo->setFotomulta($fotomulta);
+                $comparendo->setRetencionLicencia($retencionLicencia);
                 //Relación llaves foraneas
                 $comparendo->setMunicipio($municipio);
                 $comparendo->setVehiculo($vehiculo);
