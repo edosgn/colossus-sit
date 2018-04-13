@@ -366,4 +366,26 @@ class CiudadanoController extends Controller
         ;
     }
 
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="ciudadano_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($ciudadanos as $key => $ciudadano) {
+        $responce[$key] = array(
+            'value' => $ciudadano->getId(),
+            'label' => $ciudadano->getNumeroIdentificacion(),
+            );
+      }
+       return $helpers->json($responce);
+    }
+
 }

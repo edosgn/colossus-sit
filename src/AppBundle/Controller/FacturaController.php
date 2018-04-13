@@ -69,15 +69,15 @@ class FacturaController extends Controller
 
                 $em = $this->getDoctrine()->getManager();
                 $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
-                $apoderado = $em->getRepository('AppBundle:Apoderado')->find($apoderadoId);
+                $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
                 $factura = new Factura();
 
                 $factura->setNumero($numero);
-                $factura->setObservacion($descripcion);
+                $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setEstado(false);
+                $factura->setEstado(true);
                 //Inserta llaves foraneas
                 $factura->setSolicitante($solicitante);
                 $factura->setApoderado($apoderado);
@@ -164,14 +164,14 @@ class FacturaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
-            $apoderado = $em->getRepository('AppBundle:Apoderado')->find($apoderadoId);
+            $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
             if ($factura!=null) {
                 $factura->setNumero($numero);
-                $factura->setObservacion($descripcion);
+                $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setEstado(false);
+                $factura->setEstado(true);
                 //Inserta llaves foraneas
                 $factura->setSolicitante($solicitante);
                 $factura->setApoderado($apoderado);

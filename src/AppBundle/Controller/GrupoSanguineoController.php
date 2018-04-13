@@ -238,6 +238,7 @@ class GrupoSanguineoController extends Controller
             'label' => $grupoSanguineo->getSigla()."_".$grupoSanguineo->getNombre(),
             );
       }
+      $response = null;
        return $helpers->json($response);
     }
 }

@@ -235,12 +235,13 @@ class GeneroController extends Controller
     $generos = $em->getRepository('AppBundle:Genero')->findBy(
         array('estado' => 1)
     );
-      foreach ($generos as $key => $genero) {
+    foreach ($generos as $key => $genero) {
         $response[$key] = array(
             'value' => $genero->getId(),
             'label' => $genero->getSigla()."_".$genero->getNombre(),
-            );
-      }
+        );
+    }
+    $response = null;
        return $helpers->json($response);
     }
 }

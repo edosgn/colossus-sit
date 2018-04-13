@@ -387,4 +387,26 @@ class VehiculoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="vehiculo_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($vehiculos as $key => $vehiculo) {
+        $responce[$key] = array(
+            'value' => $vehiculo->getId(),
+            'label' => $vehiculo->getPlaca(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
