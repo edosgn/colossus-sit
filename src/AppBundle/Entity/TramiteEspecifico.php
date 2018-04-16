@@ -22,13 +22,6 @@ class TramiteEspecifico
     private $id;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="valor", type="integer", nullable = true)
-     */
-    private $valor;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="datos", type="array")
@@ -43,13 +36,9 @@ class TramiteEspecifico
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesEspecifico")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramiteSolicitud", inversedBy="tramitesEspecifico")
      **/
-    protected $tramite;
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramiteGeneral", inversedBy="tramitesEspecifico")
-     **/
-    protected $tramiteGeneral;
+    protected $tramiteSolicitud;
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Variante", inversedBy="tramitesEspecifico")
      **/
@@ -59,9 +48,6 @@ class TramiteEspecifico
      **/
     protected $caso;
 
-
-  
-
     /**
      * Get id
      *
@@ -70,30 +56,6 @@ class TramiteEspecifico
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param integer $valor
-     *
-     * @return TramiteEspecifico
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return integer
-     */
-    public function getValor()
-    {
-        return $this->valor;
     }
 
     /**
@@ -145,51 +107,27 @@ class TramiteEspecifico
     }
 
     /**
-     * Set tramite
+     * Set tramiteSolicitud
      *
-     * @param \AppBundle\Entity\Tramite $tramite
+     * @param \AppBundle\Entity\TramiteSolicitud $tramiteSolicitud
      *
      * @return TramiteEspecifico
      */
-    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
+    public function setTramiteSolicitud(\AppBundle\Entity\TramiteSolicitud $tramiteSolicitud = null)
     {
-        $this->tramite = $tramite;
+        $this->tramiteSolicitud = $tramiteSolicitud;
 
         return $this;
     }
 
     /**
-     * Get tramite
+     * Get tramiteSolicitud
      *
-     * @return \AppBundle\Entity\Tramite
+     * @return \AppBundle\Entity\TramiteSolicitud
      */
-    public function getTramite()
+    public function getTramiteSolicitud()
     {
-        return $this->tramite;
-    }
-
-    /**
-     * Set tramiteGeneral
-     *
-     * @param \AppBundle\Entity\TramiteGeneral $tramiteGeneral
-     *
-     * @return TramiteEspecifico
-     */
-    public function setTramiteGeneral(\AppBundle\Entity\TramiteGeneral $tramiteGeneral = null)
-    {
-        $this->tramiteGeneral = $tramiteGeneral;
-
-        return $this;
-    }
-
-    /**
-     * Get tramiteGeneral
-     *
-     * @return \AppBundle\Entity\TramiteGeneral
-     */
-    public function getTramiteGeneral()
-    {
-        return $this->tramiteGeneral;
+        return $this->tramiteSolicitud;
     }
 
     /**

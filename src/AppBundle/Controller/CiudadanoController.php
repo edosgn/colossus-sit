@@ -382,7 +382,7 @@ class CiudadanoController extends Controller
       foreach ($ciudadanos as $key => $ciudadano) {
         $responce[$key] = array(
             'value' => $ciudadano->getId(),
-            'label' => $ciudadano->getNumeroIdentificacion(),
+            'label' => $ciudadano->getNumeroIdentificacion()."_".$ciudadano->getPrimerNombre()." ".$ciudadano->getPrimerApellido(),
             );
       }
        return $helpers->json($responce);

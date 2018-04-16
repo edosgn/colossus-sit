@@ -24,35 +24,47 @@ class TramiteSolicitud
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaSolicitud", type="datetime")
+     * @ORM\Column(name="fecha", type="datetime")
      */
-    private $fechaSolicitud;
+    private $fecha;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Observacion", type="text", nullable=true)
+     * @ORM\Column(name="observacion", type="text", nullable=true)
      */
     private $observacion;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="documentacionCompleta", type="boolean")
+     * @ORM\Column(name="documentacion", type="boolean")
      */
-    private $documentacionCompleta;
+    private $documentacion = false;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
+    private $estado = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="tramitesSolicitud")
+     * @var array
+     *
+     * @ORM\Column(name="datos", type="array")
+     */
+    private $datos;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramiteFactura", inversedBy="tramitesSolicitud")
      **/
-    protected $factura;
+    protected $tramiteFactura;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tramitesSolicitud")
+     **/
+    protected $vehiculo;
 
 
     /**
@@ -66,27 +78,27 @@ class TramiteSolicitud
     }
 
     /**
-     * Set fechaSolicitud
+     * Set fecha
      *
-     * @param \DateTime $fechaSolicitud
+     * @param \DateTime $fecha
      *
      * @return TramiteSolicitud
      */
-    public function setFechaSolicitud($fechaSolicitud)
+    public function setFecha($fecha)
     {
-        $this->fechaSolicitud = $fechaSolicitud;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get fechaSolicitud
+     * Get fecha
      *
      * @return \DateTime
      */
-    public function getFechaSolicitud()
+    public function getFecha()
     {
-        return $this->fechaSolicitud;
+        return $this->fecha;
     }
 
     /**
@@ -114,27 +126,27 @@ class TramiteSolicitud
     }
 
     /**
-     * Set documentacionCompleta
+     * Set documentacion
      *
-     * @param boolean $documentacionCompleta
+     * @param boolean $documentacion
      *
      * @return TramiteSolicitud
      */
-    public function setDocumentacionCompleta($documentacionCompleta)
+    public function setDocumentacion($documentacion)
     {
-        $this->documentacionCompleta = $documentacionCompleta;
+        $this->documentacion = $documentacion;
 
         return $this;
     }
 
     /**
-     * Get documentacionCompleta
+     * Get documentacion
      *
      * @return boolean
      */
-    public function getDocumentacionCompleta()
+    public function getDocumentacion()
     {
-        return $this->documentacionCompleta;
+        return $this->documentacion;
     }
 
     /**
@@ -162,26 +174,74 @@ class TramiteSolicitud
     }
 
     /**
-     * Set factura
+     * Set datos
      *
-     * @param \AppBundle\Entity\Factura $factura
+     * @param array $datos
      *
      * @return TramiteSolicitud
      */
-    public function setFactura(\AppBundle\Entity\Factura $factura = null)
+    public function setDatos($datos)
     {
-        $this->factura = $factura;
+        $this->datos = $datos;
 
         return $this;
     }
 
     /**
-     * Get factura
+     * Get datos
      *
-     * @return \AppBundle\Entity\Factura
+     * @return array
      */
-    public function getFactura()
+    public function getDatos()
     {
-        return $this->factura;
+        return $this->datos;
+    }
+
+    /**
+     * Set tramiteFactura
+     *
+     * @param \AppBundle\Entity\TramiteFactura $tramiteFactura
+     *
+     * @return TramiteSolicitud
+     */
+    public function setTramiteFactura(\AppBundle\Entity\TramiteFactura $tramiteFactura = null)
+    {
+        $this->tramiteFactura = $tramiteFactura;
+
+        return $this;
+    }
+
+    /**
+     * Get tramiteFactura
+     *
+     * @return \AppBundle\Entity\TramiteFactura
+     */
+    public function getTramiteFactura()
+    {
+        return $this->tramiteFactura;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return TramiteSolicitud
+     */
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \AppBundle\Entity\Vehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

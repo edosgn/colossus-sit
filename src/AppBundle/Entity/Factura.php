@@ -50,6 +50,27 @@ class Factura
     private $observacion;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="valorBruto", type="float")
+     */
+    private $valorBruto;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valorImpuesto", type="float")
+     */
+    private $valorImpuesto;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valorNeto", type="float")
+     */
+    private $valorNeto;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
      **/
     protected $solicitante;
@@ -63,6 +84,12 @@ class Factura
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
      **/
     protected $vehiculo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
+     **/
+    protected $sedeOperativa;
+
 
     /**
      * Get id
@@ -171,6 +198,78 @@ class Factura
     }
 
     /**
+     * Set valorBruto
+     *
+     * @param float $valorBruto
+     *
+     * @return Factura
+     */
+    public function setValorBruto($valorBruto)
+    {
+        $this->valorBruto = $valorBruto;
+
+        return $this;
+    }
+
+    /**
+     * Get valorBruto
+     *
+     * @return float
+     */
+    public function getValorBruto()
+    {
+        return $this->valorBruto;
+    }
+
+    /**
+     * Set valorImpuesto
+     *
+     * @param float $valorImpuesto
+     *
+     * @return Factura
+     */
+    public function setValorImpuesto($valorImpuesto)
+    {
+        $this->valorImpuesto = $valorImpuesto;
+
+        return $this;
+    }
+
+    /**
+     * Get valorImpuesto
+     *
+     * @return float
+     */
+    public function getValorImpuesto()
+    {
+        return $this->valorImpuesto;
+    }
+
+    /**
+     * Set valorNeto
+     *
+     * @param float $valorNeto
+     *
+     * @return Factura
+     */
+    public function setValorNeto($valorNeto)
+    {
+        $this->valorNeto = $valorNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get valorNeto
+     *
+     * @return float
+     */
+    public function getValorNeto()
+    {
+        return $this->valorNeto;
+    }
+
+    /**
      * Set solicitante
      *
      * @param \AppBundle\Entity\Ciudadano $solicitante
@@ -240,5 +339,29 @@ class Factura
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     *
+     * @return Factura
+     */
+    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
     }
 }

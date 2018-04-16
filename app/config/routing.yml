@@ -1,3 +1,7 @@
+app_tramite_factura:
+    resource: "@AppBundle/Controller/TramiteFacturaController.php"
+    type:     annotation
+
 app_tramite_solicitud:
     resource: "@AppBundle/Controller/TramiteSolicitudController.php"
     type:     annotation

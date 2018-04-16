@@ -29,13 +29,6 @@ class Tramite
     private $nombre;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="valor", type="integer")
-     */
-    private $valor;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="redondeo", type="boolean")
@@ -68,7 +61,6 @@ class Tramite
      **/
     protected $modulo;
 
-  
 
      public function __toString()
     {
@@ -110,30 +102,6 @@ class Tramite
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param integer $valor
-     *
-     * @return Tramite
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return integer
-     */
-    public function getValor()
-    {
-        return $this->valor;
     }
 
     /**

@@ -61,21 +61,24 @@ class TramiteSolicitudController extends Controller
             }else{*/
                 $observacion = (isset($params->observacion)) ? $params->observacion : null;
                 $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
-                $fechaSolicitudDateTime = new \DateTime(date('Y-m-d'));
+                $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 //Captura llaves foraneas
-                $facturaId = $params->facturaId;
+                $vehiculoId = $params->vehiculoId;
+                $tramiteFacturaId = $params->tramiteFacturaId;
 
                 $em = $this->getDoctrine()->getManager();
-                $factura = $em->getRepository('AppBundle:Vehiculo')->find($facturaId);
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
 
                 $tramiteSolicitud = new TramiteSolicitud();
 
-                $tramiteSolicitud->setObservacion($descripcion);
-                $tramiteSolicitud->setDocumentacionCompleta($documentacionCompleta);
-                $tramiteSolicitud->setFechaSolicitud($fechaSolicitudDateTime);
+                $tramiteSolicitud->setObservacion($observacion);
+                $tramiteSolicitud->setDocumentacion($documentacionCompleta);
+                $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
                 $tramiteSolicitud->setEstado(true);
                 //Inserta llaves foraneas
-                $tramiteSolicitud->setFactura($factura);
+                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                $tramiteSolicitud->setVehiculo($vehiculo);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteSolicitud);

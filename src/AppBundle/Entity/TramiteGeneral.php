@@ -49,7 +49,6 @@ class TramiteGeneral
      */
     private $estado;
 
-
     /**
      * @var int
      *
@@ -83,15 +82,14 @@ class TramiteGeneral
      **/
     protected $vehiculo;
 
-     /**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="apoderado", type="boolean")
      */
     private $apoderado;
 
-
-     /**
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="tramitesGeneral")
      **/
     protected $ciudadano;
