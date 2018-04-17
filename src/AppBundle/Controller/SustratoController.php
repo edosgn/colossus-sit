@@ -43,38 +43,93 @@ class SustratoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $sustrato = new Sustrato();
-        $form = $this->createForm('AppBundle\Form\SustratoType', $sustrato);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($sustrato);
-            $em->flush();
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('sustrato_show', array('id' => $sustrato->getId()));
-        }
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $estado = $params->estado;
+                $desde = $params->desde;
+                $hasta = $params->hasta;
+                //Captura llaves foraneas
+                $sedeOperativaId = $params->sedeOperativaId;
+                $moduloId = $params->moduloId;
 
-        return $this->render('sustrato/new.html.twig', array(
-            'sustrato' => $sustrato,
-            'form' => $form->createView(),
-        ));
+                $em = $this->getDoctrine()->getManager();
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+
+                while ($desde <= $hasta) {
+                    $sustrato = new Sustrato();
+
+                    $sustrato->setEstado($estado);
+                    $sustrato->setConsecutivo($desde);
+                    //Inserta llaves foraneas
+                    $sustrato->setSedeOperativa($sedeOperativa);
+                    $sustrato->setModulo($modulo);
+
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($sustrato);
+                    $em->flush();
+                    $desde++;
+                }
+
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito", 
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a sustrato entity.
      *
-     * @Route("/{id}", name="sustrato_show")
+     * @Route("/{id}/show", name="sustrato_show")
      * @Method("GET")
      */
-    public function showAction(Sustrato $sustrato)
+    public function showAction($id)
     {
-        $deleteForm = $this->createDeleteForm($sustrato);
+        helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('sustrato/show.html.twig', array(
-            'sustrato' => $sustrato,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $sustrato = $em->getRepository('AppBundle:Sustrato')->find($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "sustrato con numero"." ".$sustrato->getNumero(), 
+                    'data'=> $sustrato,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -85,21 +140,67 @@ class SustratoController extends Controller
      */
     public function editAction(Request $request, Sustrato $sustrato)
     {
-        $deleteForm = $this->createDeleteForm($sustrato);
-        $editForm = $this->createForm('AppBundle\Form\SustratoType', $sustrato);
-        $editForm->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('sustrato_edit', array('id' => $sustrato->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $factura = $em->getRepository("AppBundle:Factura")->find($params->id);
+
+            $numero = $params->numero;
+            $observacion = (isset($params->observacion)) ? $params->observacion : null;
+            $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
+            //Captura llaves foraneas
+            $solicitanteId = $params->solicitanteId;
+            $apoderadoId = $params->apoderadoId;
+            $vehiculoId = $params->vehiculoId;
+
+            $em = $this->getDoctrine()->getManager();
+            $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
+            $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+
+            if ($factura!=null) {
+                $factura->setNumero($numero);
+                $factura->setObservacion($observacion);
+                $factura->setFechaCreacion($fechaCreacionDateTime);
+                $factura->setEstado(true);
+                //Inserta llaves foraneas
+                $factura->setSolicitante($solicitante);
+                $factura->setApoderado($apoderado);
+                $factura->setVehiculo($vehiculo);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($factura);
+                $em->flush();
+
+                 $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro actualizado con exito", 
+                        'data'=> $factura,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('sustrato/edit.html.twig', array(
-            'sustrato' => $sustrato,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

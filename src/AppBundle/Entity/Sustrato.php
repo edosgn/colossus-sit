@@ -29,18 +29,11 @@ class Sustrato
     private $estado;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="desde", type="string", length=10)
+     * @ORM\Column(name="consecutivo", type="bigint")
      */
-    private $desde;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hasta", type="string", length=10)
-     */
-    private $hasta;
+    private $consecutivo;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sustratos")
@@ -88,51 +81,27 @@ class Sustrato
     }
 
     /**
-     * Set desde
+     * Set consecutivo
      *
-     * @param string $desde
+     * @param integer $consecutivo
      *
      * @return Sustrato
      */
-    public function setDesde($desde)
+    public function setConsecutivo($consecutivo)
     {
-        $this->desde = $desde;
+        $this->consecutivo = $consecutivo;
 
         return $this;
     }
 
     /**
-     * Get desde
+     * Get consecutivo
      *
-     * @return string
+     * @return integer
      */
-    public function getDesde()
+    public function getConsecutivo()
     {
-        return $this->desde;
-    }
-
-    /**
-     * Set hasta
-     *
-     * @param string $hasta
-     *
-     * @return Sustrato
-     */
-    public function setHasta($hasta)
-    {
-        $this->hasta = $hasta;
-
-        return $this;
-    }
-
-    /**
-     * Get hasta
-     *
-     * @return string
-     */
-    public function getHasta()
-    {
-        return $this->hasta;
+        return $this->consecutivo;
     }
 
     /**
