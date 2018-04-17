@@ -84,7 +84,7 @@ class VehiculoController extends Controller
                         $colorId = $params->colorId;
                         $combustibleId = $params->combustibleId;
                         $carroceriaId = $params->carroceriaId;
-                        $organismoTransitoId = $params->organismoTransitoId;
+                        $sedeOperativaId = $params->organismoTransitoId;
                         $claseId = $params->claseId;
                         $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
                         $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
@@ -95,7 +95,7 @@ class VehiculoController extends Controller
                         $color = $em->getRepository('AppBundle:Color')->find($colorId);
                         $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
                         $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-                        $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($organismoTransitoId);
+                        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
                         $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                         $vehiculo = new Vehiculo();
                         $vehiculo->setPlaca($placa);
@@ -123,7 +123,7 @@ class VehiculoController extends Controller
                         $vehiculo->setColor($color);
                         $vehiculo->setCombustible($combustible);
                         $vehiculo->setCarroceria($carroceria);
-                        $vehiculo->setOrganismoTransito($organismoTransito);
+                        $vehiculo->setSedeOperativa($sedeOperativa);
                         $vehiculo->setClase($clase);
                         $vehiculo->setPignorado($pignorado);
                         $vehiculo->setCancelado($cancelado);
@@ -266,7 +266,7 @@ class VehiculoController extends Controller
             $colorId = $params->colorId;
             $combustibleId = $params->combustibleId;
             $carroceriaId = $params->carroceriaId;
-            $organismoTransitoId = $params->organismoTransitoId;
+            $sedeOperativaId = $params->organismoTransitoId;
             $claseId = $params->claseId;
             $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
@@ -277,7 +277,7 @@ class VehiculoController extends Controller
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-            $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($organismoTransitoId);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
@@ -307,7 +307,7 @@ class VehiculoController extends Controller
                 $vehiculo->setColor($color);
                 $vehiculo->setCombustible($combustible);
                 $vehiculo->setCarroceria($carroceria);
-                $vehiculo->setOrganismoTransito($organismoTransito);
+                $vehiculo->setSedeOperativa($sedeOperativa);
                 $vehiculo->setClase($clase);
                 $vehiculo->setPignorado($pignorado);
                 $vehiculo->setCancelado($cancelado);
@@ -408,5 +408,98 @@ class VehiculoController extends Controller
             );
       }
        return $helpers->json($responce);
+    }
+
+
+
+    /**
+     * Filtra los vehiculos por los parametros estado clase y sede operativa.
+     *
+     * @Route("/fin/by/parameters", name="vehiculo_find_by_parameters")
+     * @Method({"GET", "POST"})
+     */
+    public function findByParametersAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $estado = $params->estado;
+            $claseId = $params->claseId;
+            $sedeOperativaId = $params->sedeOperativaId;
+            $pignorado = 0;
+            $cancelado = 0;
+
+            if ($estado == 1) {
+                $pignorado = 1;
+            }elseif ($estado == 2) {
+                $cancelado = 1;
+            }
+
+            if ($claseId == 0 and $sedeOperativaId == 0 ) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'estado' => 1,
+                    )
+                );  
+            }elseif ($claseId == 0 and $sedeOperativaId != 0 ) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'sedeOperativa' => $sedeOperativaId,
+                        'estado' => 1,
+                    )
+                ); 
+            }elseif ($claseId != 0 and $sedeOperativaId == 0) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'clase' => $claseId,
+                        'estado' => 1,
+                    )
+                ); 
+            }elseif ($claseId != 0 and $sedeOperativaId != 0) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'clase' => $claseId,
+                        'sedeOperativa' => $sedeOperativaId,
+                        'estado' => 1,
+                    )
+                );
+            }
+
+            if (count($vehiculos) > 0) {
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 500,
+                    'data' => $vehiculos, 
+                ); 
+            }else{
+                $responce = array(
+                    'status' => 'notFound',
+                    'code' => 600,
+                    'msj' => "No se encontraron registros con los parametros seleccionados", 
+                );
+            }
+
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );  
+        }
+        
+        return $helpers->json($responce);
     }
 }
