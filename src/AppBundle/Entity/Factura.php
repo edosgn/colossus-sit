@@ -33,7 +33,7 @@ class Factura
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
+    private $estado = false;
 
     /**
      * @var \DateTime
@@ -54,21 +54,21 @@ class Factura
      *
      * @ORM\Column(name="valorBruto", type="float")
      */
-    private $valorBruto;
+    private $valorBruto = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="valorImpuesto", type="float")
      */
-    private $valorImpuesto;
+    private $valorImpuesto = 0;
 
     /**
      * @var float
      *
      * @ORM\Column(name="valorNeto", type="float")
      */
-    private $valorNeto;
+    private $valorNeto = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")

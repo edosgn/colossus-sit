@@ -80,7 +80,7 @@ class FacturaController extends Controller
                 $factura->setNumero($numero);
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setEstado($estado);
+                $factura->setEstado(true);
                 //Inserta llaves foraneas
                 $factura->setSolicitante($solicitante);
                 $factura->setApoderado($apoderado);
