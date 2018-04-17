@@ -62,12 +62,6 @@ class TramiteSolicitud
     protected $tramiteFactura;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tramitesSolicitud")
-     **/
-    protected $vehiculo;
-
-
-    /**
      * Get id
      *
      * @return int
@@ -219,29 +213,5 @@ class TramiteSolicitud
     public function getTramiteFactura()
     {
         return $this->tramiteFactura;
-    }
-
-    /**
-     * Set vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return TramiteSolicitud
-     */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \AppBundle\Entity\Vehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
     }
 }

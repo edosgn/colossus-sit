@@ -258,4 +258,50 @@ class FacturaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * busca vehiculos por numero.
+     *
+     * @Route("/show/numero", name="factura_numero")
+     * @Method("POST")
+     */
+    public function showByNumero(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $factura = $em->getRepository('AppBundle:Factura')->findOneBy(
+                array('numero' => $params->numeroFactura)
+            );
+
+            if ($factura!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Factura", 
+                    'data'=> $factura,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Factura no encontrada", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }

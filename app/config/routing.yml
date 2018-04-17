@@ -1,3 +1,7 @@
+app_sustrato:
+    resource: "@AppBundle/Controller/SustratoController.php"
+    type:     annotation
+
 app_tramite_factura:
     resource: "@AppBundle/Controller/TramiteFacturaController.php"
     type:     annotation
