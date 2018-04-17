@@ -1,0 +1,72 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * TramiteSolicitud
+ *
+ * @ORM\Table(name="tramite_solicitud")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TramiteSolicitudRepository")
+ */
+class TramiteSolicitud
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="datetime")
+     */
+    private $fecha;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="documentacion", type="boolean")
+     */
+    private $documentacion = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado = true;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="datos", type="array")
+     */
+    private $datos;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramiteFactura", inversedBy="tramitesSolicitud")
+     **/
+    protected $tramiteFactura;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="tramitesSolicitud")
+     **/
+    protected $solicitante;
+
+    
+
+    
+}

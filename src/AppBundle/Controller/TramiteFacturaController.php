@@ -92,21 +92,22 @@ class TramiteFacturaController extends Controller
      * Finds and displays a infraccion entity.
      *
      * @Route("/{id}/show", name="tramitefactura_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(TramiteFactura $infraccion)
+    public function showAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+            $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $infraccion,
+                    'data'=> $tramiteFactura->getTramite(),
             );
         }else{
             $response = array(
@@ -229,6 +230,8 @@ class TramiteFacturaController extends Controller
         ;
     }
 
+    
+
     /**
      * datos para select 2
      *
@@ -240,7 +243,7 @@ class TramiteFacturaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $factura = $em->getRepository('AppBundle:Factura')->findOneByNumero($idFactura);
-        
+        $response = [];
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
             array('realizado' => false, 'factura' => $factura->getId())
         );
