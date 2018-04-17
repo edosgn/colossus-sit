@@ -429,8 +429,8 @@ class VehiculoController extends Controller
             $params = json_decode($json);
 
             $estado = $params->estado;
-            $claseId = $params->claseId;
-            $sedeOperativaId = $params->sedeOperativaId;
+            $claseId = (isset($params->claseId)) ? $params->claseId : 0;
+            $sedeOperativaId = (isset($params->sedeOperativaId)) ? $params->sedeOperativaId : 0;
             $pignorado = 0;
             $cancelado = 0;
 
