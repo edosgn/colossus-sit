@@ -238,4 +238,26 @@ class SustratoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="sustrato_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $sustratos = $em->getRepository('AppBundle:Sustrato')->findBy(
+        array('estado' => 'Disponible')
+    );
+      foreach ($sustratos as $key => $sustrato) {
+        $response[$key] = array(
+            'value' => $sustrato->getId(),
+            'label' => $sustrato->getModulo()->getNombre()."_".$sustrato->getConsecutivo(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }
