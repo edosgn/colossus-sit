@@ -56,16 +56,21 @@ class TramiteFacturaController extends Controller
             $params = json_decode($json);
 
             $factura = $em->getRepository('AppBundle:Factura')->find($params->factura);
-
+            $valorBruto = 0;
             foreach ($params->tramites as $key => $tramiteId) {
                 $tramiteFactura = new TramiteFactura();
                 $tramiteFactura->setEstado(true);
+                $tramiteFactura->setRealizado(false);
                 $tramiteFactura->setFactura($factura);
                 $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                $valorBruto = $valorBruto + $tramite->getValor();
                 $tramiteFactura->setTramite($tramite);
                 $em->persist($tramiteFactura);
                 $em->flush();
             }
+            $factura->setValorBruto($valorBruto);
+            $em->persist($factura);
+            $em->flush();
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -227,14 +232,18 @@ class TramiteFacturaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="tramitefactura_select")
+     * @Route("/{idFactura}/select", name="tramitefactura_select")
      * @Method({"GET", "POST"})
      */
-    public function selectAction()
+    public function selectAction($idFactura)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findAll();
+        $factura = $em->getRepository('AppBundle:Factura')->findOneByNumero($idFactura);
+        
+        $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
+            array('realizado' => false, 'factura' => $factura->getId())
+        );
         foreach ($tramitesFactura as $key => $tramiteFactura) {
             $response[$key] = array(
                 'value' => $tramiteFactura->getId(),

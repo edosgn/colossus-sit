@@ -29,6 +29,13 @@ class TramiteFactura
     private $estado;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="realizado", type="boolean")
+     */
+    private $realizado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesFacturas")
      **/
     protected $tramite;
@@ -37,7 +44,6 @@ class TramiteFactura
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="tramitesFacturas")
      **/
     protected $factura;
-
 
 
     /**
@@ -72,6 +78,30 @@ class TramiteFactura
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set realizado
+     *
+     * @param boolean $realizado
+     *
+     * @return TramiteFactura
+     */
+    public function setRealizado($realizado)
+    {
+        $this->realizado = $realizado;
+
+        return $this;
+    }
+
+    /**
+     * Get realizado
+     *
+     * @return boolean
+     */
+    public function getRealizado()
+    {
+        return $this->realizado;
     }
 
     /**

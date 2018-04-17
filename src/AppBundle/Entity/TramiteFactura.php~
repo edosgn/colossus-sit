@@ -29,6 +29,13 @@ class TramiteFactura
     private $estado;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="realizado", type="boolean")
+     */
+    private $realizado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesFacturas")
      **/
     protected $tramite;
@@ -37,6 +44,5 @@ class TramiteFactura
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="tramitesFacturas")
      **/
     protected $factura;
-
 
 }
