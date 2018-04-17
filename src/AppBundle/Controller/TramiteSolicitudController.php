@@ -67,7 +67,7 @@ class TramiteSolicitudController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
                 $solicitanteId = $params->solicitanteId;
-                $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
+                $solicitante = $em->getRepository('AppBundle:PropietarioVehiculo')->find($solicitanteId);
 
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
 

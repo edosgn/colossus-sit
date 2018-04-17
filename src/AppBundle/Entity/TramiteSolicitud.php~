@@ -62,11 +62,11 @@ class TramiteSolicitud
     protected $tramiteFactura;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="tramitesSolicitud")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PropietarioVehiculo", inversedBy="tramitesSolicitud")
      **/
     protected $solicitante;
 
     
 
-    
+  
 }
