@@ -22,6 +22,13 @@ class TramiteFactura
     private $id;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesFacturas")
      **/
     protected $tramite;
@@ -32,14 +39,39 @@ class TramiteFactura
     protected $factura;
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return TramiteFactura
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

@@ -56,19 +56,20 @@ class Tramite
      */
     private $estado;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="valor", type="string")
+     */
+    private $valor;
+
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="Tramites")
      **/
     protected $modulo;
 
 
-     public function __toString()
-    {
-        return $this->getNombre();
-    }
-
-
-   
+    
 
     /**
      * Get id
@@ -198,6 +199,30 @@ class Tramite
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param string $valor
+     *
+     * @return Tramite
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return string
+     */
+    public function getValor()
+    {
+        return $this->valor;
     }
 
     /**
