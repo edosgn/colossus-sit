@@ -409,4 +409,97 @@ class VehiculoController extends Controller
       }
        return $helpers->json($responce);
     }
+
+
+
+    /**
+     * Filtra los vehiculos por los parametros estado clase y sede operativa.
+     *
+     * @Route("/fin/by/parameters", name="vehiculo_find_by_parameters")
+     * @Method({"GET", "POST"})
+     */
+    public function findByParametersAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $estado = $params->estado;
+            $claseId = $params->claseId;
+            $sedeOperativaId = $params->sedeOperativaId;
+            $pignorado = 0;
+            $cancelado = 0;
+
+            if ($estado == 1) {
+                $pignorado = 1;
+            }elseif ($estado == 2) {
+                $cancelado = 1;
+            }
+
+            if ($claseId == 0 and $sedeOperativaId == 0 ) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'estado' => 1,
+                    )
+                );  
+            }elseif ($claseId == 0 and $sedeOperativaId != 0 ) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'sedeOperativa' => $sedeOperativaId,
+                        'estado' => 1,
+                    )
+                ); 
+            }elseif ($claseId != 0 and $sedeOperativaId == 0) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'clase' => $claseId,
+                        'estado' => 1,
+                    )
+                ); 
+            }elseif ($claseId != 0 and $sedeOperativaId != 0) {
+                $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+                    array(
+                        'pignorado' => $pignorado,
+                        'cancelado' => $cancelado,
+                        'clase' => $claseId,
+                        'sedeOperativa' => $sedeOperativaId,
+                        'estado' => 1,
+                    )
+                );
+            }
+
+            if (count($vehiculos) > 0) {
+                $responce = array(
+                    'status' => 'success',
+                    'code' => 500,
+                    'data' => $vehiculos, 
+                ); 
+            }else{
+                $responce = array(
+                    'status' => 'notFound',
+                    'code' => 600,
+                    'msj' => "No se encontraron registros con los parametros seleccionados", 
+                );
+            }
+
+        }else{
+            $responce = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );  
+        }
+        
+        return $helpers->json($responce);
+    }
 }
