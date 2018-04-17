@@ -64,9 +64,11 @@ class TramiteSolicitudController extends Controller
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 $datos = $params->datos;
                 //Captura llaves foraneas
-                $tramiteFacturaId = $params->tramiteFacturaId;
-
                 $em = $this->getDoctrine()->getManager();
+                $tramiteFacturaId = $params->tramiteFacturaId;
+                $solicitanteId = $params->solicitanteId;
+                $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
+
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
 
                 $tramiteSolicitud = new TramiteSolicitud();
@@ -75,6 +77,7 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setDocumentacion($documentacionCompleta);
                 $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
                 $tramiteSolicitud->setEstado(true);
+                $tramiteSolicitud->setSolicitante($solicitante);
                 $tramiteSolicitud->setDatos($datos);
                 //Inserta llaves foraneas
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
