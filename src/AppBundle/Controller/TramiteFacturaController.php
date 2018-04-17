@@ -25,8 +25,10 @@ class TramiteFacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $factura = $em->getRepository('AppBundle:Factura')->find($idFactura);
-        $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findByFactura($factura->getId());
+        $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
+            array('factura'=>$idFactura,
+                  'estado'=> 1)
+        );
 
         $response = array(
             'status' => 'success',
@@ -45,6 +47,7 @@ class TramiteFacturaController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -52,37 +55,23 @@ class TramiteFacturaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $codigo = $params->codigo;
-                $descripcion = $params->descripcion;
-                $valor = $params->valor;
-                $inmovilizacion = (isset($params->inmovilizacion)) ? $params->inmovilizacion : 0;
-                $suspensionLicencia = (isset($params->suspensionLicencia)) ? $params->suspensionLicencia : 0;
+            $factura = $em->getRepository('AppBundle:Factura')->find($params->factura);
 
-                $infraccion = new TramiteFactura();
-
-                $infraccion->setCodigo($codigo);
-                $infraccion->setDescripcion($descripcion);
-                $infraccion->setValor($valor);
-                $infraccion->setEstado(true);
-                $infraccion->setInmovilizacion($inmovilizacion);
-                $infraccion->setSuspensionLicencia($suspensionLicencia);
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($infraccion);
+            foreach ($params->tramites as $key => $tramiteId) {
+                $tramiteFactura = new TramiteFactura();
+                $tramiteFactura->setEstado(true);
+                $tramiteFactura->setFactura($factura);
+                $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                $tramiteFactura->setTramite($tramite);
+                $em->persist($tramiteFactura);
                 $em->flush();
+            }
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito", 
+            );
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
             //}
         }else{
             $response = array(

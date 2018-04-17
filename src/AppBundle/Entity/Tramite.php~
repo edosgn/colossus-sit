@@ -1,0 +1,73 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Tramite
+ *
+ * @ORM\Table(name="tramite")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TramiteRepository")
+ */
+class Tramite
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=255)
+     */
+    private $nombre;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="redondeo", type="boolean")
+     */
+    private $redondeo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="unidad", type="string", length=255)
+     */
+    private $unidad;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="afectacion", type="boolean")
+     */
+    private $afectacion;
+
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="valor", type="string")
+     */
+    private $valor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="Tramites")
+     **/
+    protected $modulo;
+
+
+    
+}
