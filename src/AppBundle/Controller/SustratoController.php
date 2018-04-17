@@ -109,7 +109,7 @@ class SustratoController extends Controller
      */
     public function showAction($id)
     {
-        helpers = $this->get("app.helpers");
+        $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
