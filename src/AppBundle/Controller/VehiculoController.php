@@ -84,7 +84,7 @@ class VehiculoController extends Controller
                         $colorId = $params->colorId;
                         $combustibleId = $params->combustibleId;
                         $carroceriaId = $params->carroceriaId;
-                        $organismoTransitoId = $params->organismoTransitoId;
+                        $sedeOperativaId = $params->organismoTransitoId;
                         $claseId = $params->claseId;
                         $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
                         $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
@@ -95,7 +95,7 @@ class VehiculoController extends Controller
                         $color = $em->getRepository('AppBundle:Color')->find($colorId);
                         $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
                         $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-                        $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($organismoTransitoId);
+                        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
                         $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                         $vehiculo = new Vehiculo();
                         $vehiculo->setPlaca($placa);
@@ -123,7 +123,7 @@ class VehiculoController extends Controller
                         $vehiculo->setColor($color);
                         $vehiculo->setCombustible($combustible);
                         $vehiculo->setCarroceria($carroceria);
-                        $vehiculo->setOrganismoTransito($organismoTransito);
+                        $vehiculo->setSedeOperativa($sedeOperativa);
                         $vehiculo->setClase($clase);
                         $vehiculo->setPignorado($pignorado);
                         $vehiculo->setCancelado($cancelado);
@@ -266,7 +266,7 @@ class VehiculoController extends Controller
             $colorId = $params->colorId;
             $combustibleId = $params->combustibleId;
             $carroceriaId = $params->carroceriaId;
-            $organismoTransitoId = $params->organismoTransitoId;
+            $sedeOperativaId = $params->organismoTransitoId;
             $claseId = $params->claseId;
             $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
@@ -277,7 +277,7 @@ class VehiculoController extends Controller
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-            $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($organismoTransitoId);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
@@ -307,7 +307,7 @@ class VehiculoController extends Controller
                 $vehiculo->setColor($color);
                 $vehiculo->setCombustible($combustible);
                 $vehiculo->setCarroceria($carroceria);
-                $vehiculo->setOrganismoTransito($organismoTransito);
+                $vehiculo->setSedeOperativa($sedeOperativa);
                 $vehiculo->setClase($clase);
                 $vehiculo->setPignorado($pignorado);
                 $vehiculo->setCancelado($cancelado);

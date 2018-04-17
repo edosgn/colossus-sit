@@ -878,28 +878,4 @@ class Vehiculo
     {
         return $this->transportePasajeros;
     }
-
-    /**
-     * Set sedeOperativa
-     *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
-     *
-     * @return Vehiculo
-     */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
-    {
-        $this->sedeOperativa = $sedeOperativa;
-
-        return $this;
-    }
-
-    /**
-     * Get sedeOperativa
-     *
-     * @return \AppBundle\Entity\SedeOperativa
-     */
-    public function getSedeOperativa()
-    {
-        return $this->sedeOperativa;
-    }
 }
