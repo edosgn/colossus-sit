@@ -84,7 +84,7 @@ class VehiculoController extends Controller
                         $colorId = $params->colorId;
                         $combustibleId = $params->combustibleId;
                         $carroceriaId = $params->carroceriaId;
-                        $sedeOperativaId = $params->organismoTransitoId;
+                        $sedeOperativaId = $params->sedeOperativaId;
                         $claseId = $params->claseId;
                         $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
                         $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
@@ -266,7 +266,7 @@ class VehiculoController extends Controller
             $colorId = $params->colorId;
             $combustibleId = $params->combustibleId;
             $carroceriaId = $params->carroceriaId;
-            $sedeOperativaId = $params->organismoTransitoId;
+            $sedeOperativaId = $params->sedeOperativaId;
             $claseId = $params->claseId;
             $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
