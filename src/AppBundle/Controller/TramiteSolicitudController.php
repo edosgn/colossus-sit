@@ -102,21 +102,7 @@ class TramiteSolicitudController extends Controller
         return $helpers->json($response);
     }
 
-    /**
-     * Finds and displays a tramiteSolicitud entity.
-     *
-     * @Route("/{id}", name="tramitesolicitud_show")
-     * @Method("GET")
-     */
-    public function showAction(TramiteSolicitud $tramiteSolicitud)
-    {
-        $deleteForm = $this->createDeleteForm($tramiteSolicitud);
-
-        return $this->render('tramitesolicitud/show.html.twig', array(
-            'tramiteSolicitud' => $tramiteSolicitud,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
+    
 
     /**
      * Displays a form to edit an existing tramiteSolicitud entity.
