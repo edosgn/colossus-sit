@@ -10,4 +10,22 @@ namespace AppBundle\Repository;
  */
 class VehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la lista de Usuario disponibles para vincular en la Campaña
+    public function getVehiculoCampo($campo)
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM AppBundle:Vehiculo v
+            WHERE (v.placa = :campo) 
+            OR (v.motor = :campo)
+            OR (v.vin = :campo)
+            OR (v.chasis = :campo)
+            OR (v.serie = :campo)
+            ";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'campo' => $campo,
+        ));
+        return $consulta->getOneOrNullResult();
+    }
 }

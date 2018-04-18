@@ -66,8 +66,10 @@ class TramiteSolicitud
      **/
     protected $solicitante;
 
-    
-
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
+     **/
+    protected $vehiculo;
   
 
     /**
@@ -246,5 +248,29 @@ class TramiteSolicitud
     public function getSolicitante()
     {
         return $this->solicitante;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return TramiteSolicitud
+     */
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \AppBundle\Entity\Vehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

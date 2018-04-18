@@ -356,26 +356,36 @@ class PropietarioVehiculoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
-            array('vehiculo' => $id,
-                    'estado' => 1,
-                    'estadoPropiedad' => '1'
-                )
-            );
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
 
-            if ($propietarioVehiculo!=null) {
-                $responce = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "propietario para vehiculo", 
-                    'data'=> $propietarioVehiculo,
-                );
-            }else{
+            if($vehiculo==null){
                 $responce = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "este vehiculo no tiene propietarios asignados", 
+                    'msj' => "este vehículo no se encuentra registrado en el sistema", 
                 );
+            }else{
+                $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                array('vehiculo' => $vehiculo->getId(),
+                        'estado' => 1,
+                        'estadoPropiedad' => '1'
+                    )
+                );
+
+                if ($propietarioVehiculo!=null) {
+                    $responce = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "propietario para vehiculo", 
+                        'data'=> $propietarioVehiculo,
+                    );
+                }else{
+                    $responce = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "este vehiculo no tiene propietarios asignados", 
+                    );
+                }
             }
             
         }else{

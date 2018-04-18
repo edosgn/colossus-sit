@@ -1,0 +1,90 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Factura
+ *
+ * @ORM\Table(name="factura")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FacturaRepository")
+ */
+class Factura
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero", type="string", length=45)
+     */
+    private $numero;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado = false;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaCreacion", type="date")
+     */
+    private $fechaCreacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valorBruto", type="float")
+     */
+    private $valorBruto = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valorImpuesto", type="float")
+     */
+    private $valorImpuesto = 0;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valorNeto", type="float")
+     */
+    private $valorNeto = 0;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
+     **/
+    protected $solicitante;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
+     **/
+    protected $apoderado;
+
+   
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
+     **/
+    protected $sedeOperativa;
+
+}

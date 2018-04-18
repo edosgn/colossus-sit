@@ -65,14 +65,12 @@ class FacturaController extends Controller
                 //Captura llaves foraneas
                 $solicitanteId = $params->solicitanteId;
                 $apoderadoId = $params->apoderadoId;
-                $vehiculoId = $params->vehiculoId;
                 $sedeOperativaId = $params->sedeOperativaId;
                 $estado = $params->estado;
 
                 $em = $this->getDoctrine()->getManager();
                 $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
                 $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
                 $factura = new Factura();
@@ -84,7 +82,6 @@ class FacturaController extends Controller
                 //Inserta llaves foraneas
                 $factura->setSolicitante($solicitante);
                 $factura->setApoderado($apoderado);
-                $factura->setVehiculo($vehiculo);
                 $factura->setSedeOperativa($sedeOperativa);
 
                 $em = $this->getDoctrine()->getManager();
@@ -169,7 +166,6 @@ class FacturaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
             $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
             if ($factura!=null) {
                 $factura->setNumero($numero);
@@ -179,7 +175,6 @@ class FacturaController extends Controller
                 //Inserta llaves foraneas
                 $factura->setSolicitante($solicitante);
                 $factura->setApoderado($apoderado);
-                $factura->setVehiculo($vehiculo);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);

@@ -66,7 +66,9 @@ class TramiteSolicitud
      **/
     protected $solicitante;
 
-    
-
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
+     **/
+    protected $vehiculo;
   
 }

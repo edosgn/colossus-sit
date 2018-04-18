@@ -80,10 +80,7 @@ class Factura
      **/
     protected $apoderado;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
-     **/
-    protected $vehiculo;
+   
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
@@ -94,7 +91,7 @@ class Factura
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -170,7 +167,7 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion->format('Y-m-d');;
+        return $this->fechaCreacion->format("Y-m-d");
     }
 
     /**
@@ -315,30 +312,6 @@ class Factura
     public function getApoderado()
     {
         return $this->apoderado;
-    }
-
-    /**
-     * Set vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return Factura
-     */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \AppBundle\Entity\Vehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
     }
 
     /**
