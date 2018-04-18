@@ -98,6 +98,9 @@ class VehiculoController extends Controller
                         $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
                         $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                         $vehiculo = new Vehiculo();
+                        $fechaFactura=new \DateTime($fechaFactura);
+                        $fechaManifiesto=new \DateTime($fechaManifiesto);
+                     
                         $vehiculo->setPlaca($placa);
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);

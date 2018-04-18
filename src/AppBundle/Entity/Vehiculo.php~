@@ -71,9 +71,9 @@ class Vehiculo
     private $cilindraje;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="modelo", type="date")
+     * @ORM\Column(name="modelo", type="integer")
      */
     private $modelo;
 
@@ -185,6 +185,7 @@ class Vehiculo
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
+
 
 
 

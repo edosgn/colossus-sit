@@ -361,7 +361,7 @@ class PropietarioVehiculoController extends Controller
             if($vehiculo==null){
                 $responce = array(
                     'status' => 'error',
-                    'code' => 400,
+                    'code' => 401,
                     'msj' => "este vehículo no se encuentra registrado en el sistema", 
                 );
             }else{
