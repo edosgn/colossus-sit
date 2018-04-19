@@ -232,7 +232,7 @@ class TramiteFacturaController extends Controller
 
     
 
-    /**
+     /**
      * datos para select 2
      *
      * @Route("/{idFactura}/select", name="tramitefactura_select")
@@ -251,6 +251,7 @@ class TramiteFacturaController extends Controller
             $response[$key] = array(
                 'value' => $tramiteFactura->getId(),
                 'label' => $tramiteFactura->getTramite()->getNombre(),
+                'tramiteId' => $tramiteFactura->getTramite()->getId(),
             );
         }
        

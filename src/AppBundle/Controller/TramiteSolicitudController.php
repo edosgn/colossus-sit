@@ -18,7 +18,7 @@ class TramiteSolicitudController extends Controller
     /**
      * Lists all tramiteSolicitud entities.
      *
-     * @Route("/", name="tramitesolicitud_index")
+     * @Route("/index", name="tramitesolicitud_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -67,9 +67,16 @@ class TramiteSolicitudController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
                 $solicitanteId = $params->solicitanteId;
-                $solicitante = $em->getRepository('AppBundle:PropietarioVehiculo')->find($solicitanteId);
+                if ($solicitanteId) {
+                    $solicitante = $em->getRepository('AppBundle:PropietarioVehiculo')->find($solicitanteId);
+                    $tramiteSolicitud->setSolicitante($solicitante);
+                }
 
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
+
+                $tramiteFactura->setRealizado(true);
+                $em->persist($tramiteFactura);
+                $em->flush();
 
                 $tramiteSolicitud = new TramiteSolicitud();
 
@@ -77,7 +84,6 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setDocumentacion($documentacionCompleta);
                 $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
                 $tramiteSolicitud->setEstado(true);
-                $tramiteSolicitud->setSolicitante($solicitante);
                 $tramiteSolicitud->setDatos($datos);
                 //Inserta llaves foraneas
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
@@ -132,7 +138,7 @@ class TramiteSolicitudController extends Controller
     /**
      * Deletes a tramiteSolicitud entity.
      *
-     * @Route("/{id}", name="tramitesolicitud_delete")
+     * @Route("/{id}/delete", name="tramitesolicitud_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, TramiteSolicitud $tramiteSolicitud)
