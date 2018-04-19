@@ -61,8 +61,13 @@ class GrupoSanguineoController extends Controller
             }else{*/
                 $grupoSanguineo = new Gruposanguineo();
 
+                $sigla = "'".$params->sigla."'";
+
+                var_dump($sigla);
+                die();
+
                 $grupoSanguineo->setNombre($params->nombre);
-                $grupoSanguineo->setSigla($params->sigla);
+                $grupoSanguineo->setSigla($sigla);
                 $grupoSanguineo->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
@@ -227,18 +232,18 @@ class GrupoSanguineoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $gruposSanguineos = $em->getRepository('AppBundle:GrupoSanguineo')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($gruposSanguineos as $key => $grupoSanguineo) {
-        $response[$key] = array(
-            'value' => $grupoSanguineo->getId(),
-            'label' => $grupoSanguineo->getSigla()."_".$grupoSanguineo->getNombre(),
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $gruposSanguineos = $em->getRepository('AppBundle:GrupoSanguineo')->findBy(
+            array('estado' => 1)
+        );
+        foreach ($gruposSanguineos as $key => $grupoSanguineo) {
+            $response[$key] = array(
+                'value' => $grupoSanguineo->getId(),
+                'label' => $grupoSanguineo->getSigla()."_".$grupoSanguineo->getNombre(),
             );
-      }
-      $response = null;
-       return $helpers->json($response);
+        }
+        return $helpers->json($response);
     }
 }

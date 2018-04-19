@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Ciudadano;
+use Repository\UsuarioBundle\Entity\Usuario;
 use AppBundle\Form\CiudadanoType;
  
 /**
@@ -47,6 +48,7 @@ class CiudadanoController extends Controller
      */
     public function newAction(Request $request) 
     {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -61,35 +63,34 @@ class CiudadanoController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $numeroIdentificacion = $params->numeroIdentificacion;
-                $primerNombre = $params->primerNombre;
-                $segundoNombre = $params->segundoNombre;
-                $primerApellido = $params->primerApellido;
-                $segundoApellido = $params->segundoApellido;
+                $numeroIdentificacion = $params->numeroIdentificacionUsuario;
+                $primerNombre = $params->primerNombreUsuario;
+                $segundoNombre = $params->segundoNombreUsuario;
+                $primerApellido = $params->primerApellidoUsuario;
+                $segundoApellido = $params->segundoApellidoUsuario;
                 $direccion = (isset($params->direccion)) ? $params->direccion : null;
-                $telefono = (isset($params->telefono)) ? $params->telefono : null;
-                $correo = (isset($params->correo)) ? $params->correo : null;
+                $telefonoUsuario = (isset($params->telefonoUsuario)) ? $params->telefonoUsuario : null;
+                $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
 
                 $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
                 $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
                 $edad = (isset($params->edad)) ? $params->edad : null;
                 
                 $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
-                $em = $this->getDoctrine()->getManager();
-                $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
-                    array('numeroIdentificacion' => $numeroIdentificacion)
+               
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findBy(
+                    array('identificacion' => $numeroIdentificacion)
                 ); 
+ 
+                if (!$usuario) {
+                    $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
+                    $generoId = (isset($params->generoId)) ? $params->generoId : null;
+                    $grupoSanguineoId = (isset($params->grupoSanguineoId)) ? $params->grupoSanguineoId : null;
+                    $municipioNacimientoId = (isset($params->municipioNacimientoId)) ? $params->municipioNacimientoId : null;
+                    $municipioResidenciaId = (isset($params->municipioResidenciaId)) ? $params->municipioResidenciaId : null;
 
-                if (!$ciudadanos) {
-                    $tipoIdentificacionId = $params->tipoIdentificacionId;
-                    $generoId = $params->generoId;
-                    $grupoSanguineoId = $params->grupoSanguineoId;
-                    $municipioNacimientoId = $params->municipioNacimientoId;
-                    $municipioResidenciaId = $params->municipioResidenciaId;
-
-                    $em = $this->getDoctrine()->getManager();
                     $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
-                        $tipoIdentificacionId
+                        $tipoIdentificacionUsuarioId
                     );
                     $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
                     $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
@@ -97,28 +98,43 @@ class CiudadanoController extends Controller
                     $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
 
                     $ciudadano = new Ciudadano();
-
-                    $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
                     $ciudadano->setMunicipioNacimiento($municipioNacimiento);
                     $ciudadano->setMunicipioResidencia($municipioResidencia);
-                    $ciudadano->setPrimerNombre($primerNombre);
-                    $ciudadano->setSegundoNombre($segundoNombre);
-                    $ciudadano->setPrimerApellido($primerApellido);
-                    $ciudadano->setSegundoApellido($segundoApellido);
                     $ciudadano->setDireccion($direccion);
-                    $ciudadano->setTelefono($telefono);
-                    $ciudadano->setCorreo($correo);
                     $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
                     $ciudadano->setEdad($edad);
                     $ciudadano->setGenero($genero);
                     $ciudadano->setGrupoSanguineo($grupoSanguineo);
                     $ciudadano->setDireccionTrabajo($direccionTrabajo);
-                    $ciudadano->setTipoIdentificacion($tipoIdentificacion);
                     $ciudadano->setEstado(true);
-
-                    $em = $this->getDoctrine()->getManager();
                     $em->persist($ciudadano);
                     $em->flush();
+
+
+                    $usuario = new Usuario();
+                    $usuario->setPrimerNombre($primerNombre);
+                    $usuario->setSegundoNombre($segundoNombre);
+                    $usuario->setPrimerApellido($primerApellido);
+                    $usuario->setSegundoApellido($segundoApellido);
+                    $usuario->setTipoIdentificacion($tipoIdentificacion);
+                    $usuario->setIdentificacion($numeroIdentificacion);
+                    $usuario->setTelefono($telefonoUsuario);
+                    $usuario->setCorreo($correoUsuario);
+                    $usuario->setEstado("Activo");
+                    $usuario->setRole("ROLE_USER");
+                    $usuario->setCreatedAt();
+                    $usuario->setUpdatedAt();
+
+                    $pwd = hash('sha256', $numeroIdentificacion);
+                    $usuario->setPassword($pwd);
+
+                    $em->persist($usuario);
+                    $em->flush();
+                    
+                    $usuario->setCiudadano($ciudadano);
+                    $ciudadano->setUsuario($usuario);
+                    $em->flush();
+                    
 
                     $responce = array(
                         'status' => 'success',
@@ -229,7 +245,8 @@ class CiudadanoController extends Controller
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
-    {
+    {   
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -238,59 +255,75 @@ class CiudadanoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $numeroIdentificacion = $params->numeroIdentificacion;
-            $primerNombre = $params->primerNombre;
-            $segundoNombre = $params->segundoNombre;
-            $primerApellido = $params->primerApellido;
-            $segundoApellido = $params->segundoApellido;
-            $direccion = (isset($params->direccion)) ? $params->direccion : null;
-            $telefono = (isset($params->telefono)) ? $params->telefono : null;
-            $correo = (isset($params->correo)) ? $params->correo : null;
+            $numeroIdentificacion = $params->numeroIdentificacionUsuario;
+                $primerNombre = $params->primerNombreUsuario;
+                $segundoNombre = $params->segundoNombreUsuario;
+                $primerApellido = $params->primerApellidoUsuario;
+                $segundoApellido = $params->segundoApellidoUsuario;
+                $direccion = (isset($params->direccion)) ? $params->direccion : null;
+                $telefonoUsuario = (isset($params->telefonoUsuario)) ? $params->telefonoUsuario : null;
+                $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
 
-            $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
-            $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
-            $edad = (isset($params->edad)) ? $params->edad : null;
-            
-            $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
+                $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
+                $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
+                $edad = (isset($params->edad)) ? $params->edad : null;
+                
+                $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
+               
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->id);
+                
+ 
+                if ($ciudadano) {
 
-            $tipoIdentificacionId = $params->tipoIdentificacionId;
-            $generoId = $params->generoId;
-            $grupoSanguineoId = $params->grupoSanguineoId;
-            $municipioNacimientoId = $params->municipioNacimientoId;
-            $municipioResidenciaId = $params->municipioResidenciaId;
-            
-            $em = $this->getDoctrine()->getManager();
-            $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
-            $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
-            $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
-            $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
-            $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
+                    $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
+                    $generoId = (isset($params->generoId)) ? $params->generoId : null;
+                    $grupoSanguineoId = (isset($params->grupoSanguineoId)) ? $params->grupoSanguineoId : null;
+                    $municipioNacimientoId = (isset($params->municipioNacimientoId)) ? $params->municipioNacimientoId : null;
+                    $municipioResidenciaId = (isset($params->municipioResidenciaId)) ? $params->municipioResidenciaId : null;
 
+                    $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                        $tipoIdentificacionUsuarioId
+                    );
+                    $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
+                    $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
+                    $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
+                    $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
 
-            $ciudadano = $em->getRepository("AppBundle:Ciudadano")->find($params->id);
+                    
 
-            if ($ciudadano!=null) {
-                $ciudadano->setNumeroIdentificacion($numeroIdentificacion);
-                $ciudadano->setMunicipioNacimiento($municipioNacimiento);
-                $ciudadano->setMunicipioResidencia($municipioResidencia);
-                $ciudadano->setPrimerNombre($primerNombre);
-                $ciudadano->setSegundoNombre($segundoNombre);
-                $ciudadano->setPrimerApellido($primerApellido);
-                $ciudadano->setSegundoApellido($segundoApellido);
-                $ciudadano->setDireccion($direccion);
-                $ciudadano->setTelefono($telefono);
-                $ciudadano->setCorreo($correo);
-                $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
-                $ciudadano->setEdad($edad);
-                $ciudadano->setGenero($genero);
-                $ciudadano->setGrupoSanguineo($grupoSanguineo);
-                $ciudadano->setDireccionTrabajo($direccionTrabajo);
-                $ciudadano->setTipoIdentificacion($tipoIdentificacion);
-                $ciudadano->setEstado(true);
+                    $ciudadano->setMunicipioNacimiento($municipioNacimiento);
+                    $ciudadano->setMunicipioResidencia($municipioResidencia);
+                    $ciudadano->setDireccion($direccion);
+                    $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
+                    $ciudadano->setEdad($edad);
+                    $ciudadano->setGenero($genero);
+                    $ciudadano->setGrupoSanguineo($grupoSanguineo);
+                    $ciudadano->setDireccionTrabajo($direccionTrabajo);
+                    $ciudadano->setEstado(true);
+                    $em->flush();
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($ciudadano);
-                $em->flush();
+                    $usuario = $ciudadano->getUsuario();
+
+                    $usuario->setPrimerNombre($primerNombre);
+                    $usuario->setSegundoNombre($segundoNombre);
+                    $usuario->setPrimerApellido($primerApellido);
+                    $usuario->setSegundoApellido($segundoApellido);
+                    $usuario->setTipoIdentificacion($tipoIdentificacion);
+                    $usuario->setIdentificacion($numeroIdentificacion);
+                    $usuario->setTelefono($telefonoUsuario);
+                    $usuario->setCorreo($correoUsuario);
+                    $usuario->setEstado("Activo");
+                    $usuario->setRole("ROLE_USER");
+                    $usuario->setUpdatedAt();
+
+                    $pwd = hash('sha256', $numeroIdentificacion);
+                    $usuario->setPassword($pwd);
+
+                    $em->flush();
+                    
+                    $usuario->setCiudadano($ciudadano);
+                    $ciudadano->setUsuario($usuario);
+                    $em->flush();
 
                  $responce = array(
                         'status' => 'success',

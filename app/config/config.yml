@@ -59,6 +59,9 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
+        resolve_target_entities:
+            UsuarioBundle\Entity\Usuario: Repository\UsuarioBundle\Entity\Usuario
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"

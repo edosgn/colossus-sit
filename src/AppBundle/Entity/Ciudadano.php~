@@ -141,7 +141,7 @@ class Ciudadano
      */
     public function getFechaExpedicionDocumento()
     {
-        return $this->fechaExpedicionDocumento->format("Y-m-d");
+        return $this->fechaExpedicionDocumento;
     }
 
     /**
@@ -314,28 +314,4 @@ class Ciudadano
     }
 
     
-
-    /**
-     * Set usuario
-     *
-     * @param \Repository\UsuarioBundle\Entity\Usuario $usuario
-     *
-     * @return Ciudadano
-     */
-    public function setUsuario(\Repository\UsuarioBundle\Entity\Usuario $usuario = null)
-    {
-        $this->usuario = $usuario;
-
-        return $this;
-    }
-
-    /**
-     * Get usuario
-     *
-     * @return \Repository\UsuarioBundle\Entity\Usuario
-     */
-    public function getUsuario()
-    {
-        return $this->usuario;
-    }
 }

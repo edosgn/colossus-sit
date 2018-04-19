@@ -230,6 +230,7 @@ class GeneroController extends Controller
      */
     public function selectAction()
     {
+    $response = null;
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
     $generos = $em->getRepository('AppBundle:Genero')->findBy(
@@ -241,7 +242,6 @@ class GeneroController extends Controller
             'label' => $genero->getSigla()."_".$genero->getNombre(),
         );
     }
-    $response = null;
        return $helpers->json($response);
     }
 }
