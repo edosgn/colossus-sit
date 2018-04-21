@@ -42,20 +42,20 @@ class Modulo
      */
     private $descripcion;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="siglaSustrato", type="string", length=10)
+     */
+    private $siglaSustrato;
+
      /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
-
   
-
-    public function __toString()
-    {
-        return $this->getNombre();
-    }
-
 
 
     /**
@@ -138,6 +138,30 @@ class Modulo
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+
+    /**
+     * Set siglaSustrato
+     *
+     * @param string $siglaSustrato
+     *
+     * @return Modulo
+     */
+    public function setSiglaSustrato($siglaSustrato)
+    {
+        $this->siglaSustrato = $siglaSustrato;
+
+        return $this;
+    }
+
+    /**
+     * Get siglaSustrato
+     *
+     * @return string
+     */
+    public function getSiglaSustrato()
+    {
+        return $this->siglaSustrato;
     }
 
     /**

@@ -57,6 +57,13 @@ class Tramite
     private $estado;
 
      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sustrato", type="boolean")
+     */
+    private $sustrato;
+
+     /**
      * @var string
      *
      * @ORM\Column(name="valor", type="string")
@@ -68,6 +75,4 @@ class Tramite
      **/
     protected $modulo;
 
-
-    
 }

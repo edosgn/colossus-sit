@@ -57,6 +57,13 @@ class Tramite
     private $estado;
 
      /**
+     * @var boolean
+     *
+     * @ORM\Column(name="sustrato", type="boolean")
+     */
+    private $sustrato;
+
+     /**
      * @var string
      *
      * @ORM\Column(name="valor", type="string")
@@ -68,8 +75,6 @@ class Tramite
      **/
     protected $modulo;
 
-
-    
 
     /**
      * Get id
@@ -199,6 +204,30 @@ class Tramite
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set sustrato
+     *
+     * @param boolean $sustrato
+     *
+     * @return Tramite
+     */
+    public function setSustrato($sustrato)
+    {
+        $this->sustrato = $sustrato;
+
+        return $this;
+    }
+
+    /**
+     * Get sustrato
+     *
+     * @return boolean
+     */
+    public function getSustrato()
+    {
+        return $this->sustrato;
     }
 
     /**
