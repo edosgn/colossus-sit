@@ -269,7 +269,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura;
+        return $this->fechaFactura->format('Y-m-d');
     }
 
     /**
@@ -341,7 +341,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto;
+        return $this->fechaManifiesto->format('Y-m-d');
     }
 
     /**

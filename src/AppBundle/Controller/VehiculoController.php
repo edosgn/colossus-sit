@@ -279,11 +279,14 @@ class VehiculoController extends Controller
             $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
+            
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            $fechaFactura=new \DateTime($fechaFactura);
+            $fechaManifiesto=new \DateTime($fechaManifiesto);
             if ($vehiculo!=null) {
                 $vehiculo->setPlaca($placa);
                 $vehiculo->setNumeroFactura($numeroFactura);
@@ -340,6 +343,8 @@ class VehiculoController extends Controller
 
         return $helpers->json($responce);
     }
+
+    
 
     /**
      * Deletes a Vehiculo entity.
