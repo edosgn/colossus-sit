@@ -38,8 +38,10 @@ class JwtAuth
 			$token = array(
 				"sub" => $user->getId(),
 				"correo" => $user->getCorreo(),
-				"nombres" => $user->getNombres(),
-				"apellidos" => $user->getApellidos(),
+				"primerNombre" => $user->getPrimerNombre(),
+				"segundoNombre" => $user->getSegundoNombre(),
+				"primerApellido" => $user->getPrimerApellido(),
+				"segundoApellido" => $user->getSegundoApellido(),
 				"identificacion" => $user->getIdentificacion(),
 				"foto" => $user->getFoto(),
 				"telefono" => $user->getTelefono(),
