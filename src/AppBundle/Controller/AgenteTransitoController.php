@@ -237,8 +237,7 @@ class AgenteTransitoController extends Controller
       foreach ($agenteTransitos as $key => $agenteTransito) {
         $response[$key] = array(
             'value' => $agenteTransito->getId(),
-            'label' => $agenteTransito->getPlaca()."_".$agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
-            'agenteNombres' => $agenteTransito->getCiudadano()->getNumeroIdentificacion()."_".$agenteTransito->getCiudadano()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getPrimerApellido(),
+            'label' => $agenteTransito->getPlaca()."_".$agenteTransito->getCiudadano()->getUsuario()->getIdentificacion()."_".$agenteTransito->getCiudadano()->getUsuario()->getPrimerNombre()."_".$agenteTransito->getCiudadano()->getUsuario()->getPrimerApellido(),
             );
       }
        return $helpers->json($response);

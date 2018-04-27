@@ -208,16 +208,16 @@ class CiudadanoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
-                array('numeroIdentificacion' => $params->numeroIdentificacion)
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                array('identificacion' => $params->numeroIdentificacion)
             );
 
-            if ($ciudadano!=null) {
+            if ($usuario!=null) {
                 $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "cuidadano", 
-                    'data'=> $ciudadano,
+                    'data'=> $usuario,
             );
             }else{
                  $responce = array(
@@ -415,7 +415,7 @@ class CiudadanoController extends Controller
       foreach ($ciudadanos as $key => $ciudadano) {
         $responce[$key] = array(
             'value' => $ciudadano->getId(),
-            'label' => $ciudadano->getNumeroIdentificacion()."_".$ciudadano->getPrimerNombre()." ".$ciudadano->getPrimerApellido(),
+            'label' => $ciudadano->getUsuario()->getIdentificacion()."_".$ciudadano->getUsuario()->getPrimerNombre()." ".$ciudadano->getUsuario()->getPrimerApellido(),
             );
       }
        return $helpers->json($responce);
