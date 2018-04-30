@@ -187,6 +187,5 @@ class Vehiculo
     private $clase;
 
 
-
-
+   
 }

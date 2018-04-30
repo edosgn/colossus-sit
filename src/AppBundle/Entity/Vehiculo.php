@@ -187,8 +187,7 @@ class Vehiculo
     private $clase;
 
 
-
-
+   
 
     /**
      * Get id

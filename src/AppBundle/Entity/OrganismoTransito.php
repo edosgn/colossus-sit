@@ -36,16 +36,10 @@ class OrganismoTransito
      */
     private $estado;
 
-   
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
+    private $sedeOperativa;
 
-     public function __toString()
-    {
-        return $this->getNombre();
-    }
-        
-      
-
-
+    
 
     /**
      * Get id
@@ -103,5 +97,29 @@ class OrganismoTransito
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     *
+     * @return OrganismoTransito
+     */
+    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
     }
 }

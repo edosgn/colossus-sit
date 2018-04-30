@@ -42,11 +42,15 @@ class SedeOperativa
      */
     private $estado;
 
+    
+
+
+
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -118,11 +122,10 @@ class SedeOperativa
     /**
      * Get estado
      *
-     * @return bool
+     * @return boolean
      */
     public function getEstado()
     {
         return $this->estado;
     }
 }
-
