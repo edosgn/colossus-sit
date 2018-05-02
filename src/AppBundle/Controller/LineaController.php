@@ -245,25 +245,22 @@ class LineaController extends Controller
      /**
      *busca las lineas de una marca.
      *
-     * @Route("/lin/mar", name="linea_mar")
+     * @Route("/lin/mar/{marcaId}", name="linea_mar")
      * @Method("POST")
      */
-    public function LineaMarcaAction(Request $request)
+    public function LineaMarcaAction($marcaId,Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        $json = $request->get("json",null);
-        $params = json_decode($json);
+        
+        
 
-        $marcaId = $params->marcaId;
-
-        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $Lineas = $em->getRepository('AppBundle:Linea')->findBy(
                 array('marca' => $marcaId)
             );
-
+            $lineasArray[] = null;
             foreach ($Lineas as $key => $linea) {
             $lineasArray[$key] = array(
                 'value' => $linea->getId(),
@@ -271,19 +268,16 @@ class LineaController extends Controller
                 );
             }
 
+         
             $responce = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Lineas encontradas", 
                     'data'=> $lineasArray,
             );
-        }else{
-            $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
-        }
+           
+
+        
         return $helpers->json($responce);
     }
 
