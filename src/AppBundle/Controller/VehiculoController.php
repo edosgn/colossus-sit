@@ -79,6 +79,7 @@ class VehiculoController extends Controller
                         $vin = $params->vin;
                         $numeroPasajeros = $params->numeroPasajeros;
                         $municipioId = $params->municipioId;
+                        $marcaId = $params->marcaId;
                         $lineaId = $params->lineaId;
                         $servicioId = $params->servicioId;
                         $colorId = $params->colorId;
@@ -90,6 +91,7 @@ class VehiculoController extends Controller
                         $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
                         $em = $this->getDoctrine()->getManager();
                         $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+                        $marca = $em->getRepository('AppBundle:Marca')->find($marcaId);
                         $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
                         $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
                         $color = $em->getRepository('AppBundle:Color')->find($colorId);
@@ -121,6 +123,7 @@ class VehiculoController extends Controller
                         $vehiculo->setVin($vin);
                         $vehiculo->setNumeroPasajeros($numeroPasajeros);
                         $vehiculo->setMunicipio($municipio);
+                        $vehiculo->setMarca($marca);
                         $vehiculo->setLinea($linea);
                         $vehiculo->setServicio($servicio);
                         $vehiculo->setColor($color);
@@ -264,6 +267,7 @@ class VehiculoController extends Controller
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
             $municipioId = $params->municipioId;
+            $marcaId = $params->marcaId;
             $lineaId = $params->lineaId;
             $servicioId = $params->servicioId;
             $colorId = $params->colorId;
@@ -279,6 +283,7 @@ class VehiculoController extends Controller
             $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
+            $marca = $em->getRepository('AppBundle:Marca')->find($marcaId);
             
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
@@ -308,6 +313,7 @@ class VehiculoController extends Controller
                 $vehiculo->setVin($vin);
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
                 $vehiculo->setMunicipio($municipio);
+                $vehiculo->setMarca($marca);
                 $vehiculo->setLinea($linea);
                 $vehiculo->setServicio($servicio);
                 $vehiculo->setColor($color);

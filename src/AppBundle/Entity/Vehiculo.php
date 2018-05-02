@@ -186,8 +186,9 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="vehiculos") */
+    private $marca;
 
-   
 
     /**
      * Get id
@@ -869,5 +870,29 @@ class Vehiculo
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param \AppBundle\Entity\Marca $marca
+     *
+     * @return Vehiculo
+     */
+    public function setMarca(\AppBundle\Entity\Marca $marca = null)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return \AppBundle\Entity\Marca
+     */
+    public function getMarca()
+    {
+        return $this->marca;
     }
 }

@@ -186,6 +186,9 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="vehiculos") */
+    private $marca;
+
 
    
 }
