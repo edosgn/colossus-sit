@@ -264,7 +264,7 @@ class LineaController extends Controller
             foreach ($Lineas as $key => $linea) {
             $lineasArray[$key] = array(
                 'value' => $linea->getId(),
-                'label' => $linea->getNombre(),
+                'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
                 );
             }
 
