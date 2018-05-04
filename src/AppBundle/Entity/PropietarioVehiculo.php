@@ -28,6 +28,13 @@ class PropietarioVehiculo
      */
     private $licenciaTransito;
 
+       /**
+     * @var string
+     *
+     * @ORM\Column(name="apoderado", type="string", length=255)
+     */
+    private $apoderado;
+
     /**
      * @var \DateTime
      *
@@ -69,6 +76,8 @@ class PropietarioVehiculo
 
    
 
+   
+
     /**
      * Get id
      *
@@ -104,6 +113,30 @@ class PropietarioVehiculo
     }
 
     /**
+     * Set apoderado
+     *
+     * @param string $apoderado
+     *
+     * @return PropietarioVehiculo
+     */
+    public function setApoderado($apoderado)
+    {
+        $this->apoderado = $apoderado;
+
+        return $this;
+    }
+
+    /**
+     * Get apoderado
+     *
+     * @return string
+     */
+    public function getApoderado()
+    {
+        return $this->apoderado;
+    }
+
+    /**
      * Set fechaPropiedadInicial
      *
      * @param \DateTime $fechaPropiedadInicial
@@ -112,7 +145,7 @@ class PropietarioVehiculo
      */
     public function setFechaPropiedadInicial($fechaPropiedadInicial)
     {
-        $this->fechaPropiedadInicial = new \DateTime($fechaPropiedadInicial);
+        $this->fechaPropiedadInicial = $fechaPropiedadInicial;
 
         return $this;
     }
@@ -124,7 +157,7 @@ class PropietarioVehiculo
      */
     public function getFechaPropiedadInicial()
     {
-        return $this->fechaPropiedadInicial->format("Y-m-d");
+        return $this->fechaPropiedadInicial;
     }
 
     /**
@@ -136,7 +169,7 @@ class PropietarioVehiculo
      */
     public function setFechaPropiedadFinal($fechaPropiedadFinal)
     {
-        $this->fechaPropiedadFinal = new \DateTime($fechaPropiedadFinal);
+        $this->fechaPropiedadFinal = $fechaPropiedadFinal;
 
         return $this;
     }
@@ -148,7 +181,7 @@ class PropietarioVehiculo
      */
     public function getFechaPropiedadFinal()
     {
-        return $this->fechaPropiedadFinal->format("Y-m-d");;
+        return $this->fechaPropiedadFinal;
     }
 
     /**

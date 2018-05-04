@@ -1,0 +1,80 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * CiudadanoVehiculo
+ *
+ * @ORM\Table(name="propietario_vehiculo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PropietarioVehiculoRepository")
+ */
+class PropietarioVehiculo
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="licencia_transito", type="string", length=255)
+     */
+    private $licenciaTransito;
+
+       /**
+     * @var string
+     *
+     * @ORM\Column(name="apoderado", type="string", length=255)
+     */
+    private $apoderado;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_propiedad_inicial", type="datetime")
+     */
+    private $fechaPropiedadInicial;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_propiedad_final", type="datetime")
+     */
+    private $fechaPropiedadFinal;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado_propiedad", type="string", length=255)
+     */
+    private $estadoPropiedad;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="propietariosVehiculo") */
+    private $ciudadano; 
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
+    private $vehiculo;
+
+     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="propietariosVehiculo") */
+    private $empresa;
+
+
+
+   
+
+   
+}
