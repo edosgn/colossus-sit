@@ -74,7 +74,7 @@ class FacturaController extends Controller
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
                 $factura = new Factura();
-
+                
                 $factura->setNumero($numero);
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
@@ -83,7 +83,7 @@ class FacturaController extends Controller
                 $factura->setSolicitante($solicitante);
                 $factura->setApoderado($apoderado);
                 $factura->setSedeOperativa($sedeOperativa);
-
+                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);
                 $em->flush();

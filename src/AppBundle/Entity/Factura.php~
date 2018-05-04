@@ -70,21 +70,20 @@ class Factura
      */
     private $valorNeto = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
-     **/
-    protected $solicitante;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
-     **/
-    protected $apoderado;
-
-   
+     * @var string
+     *
+     * @ORM\Column(name="numeroLicenciaTrancito", type="string", length=45)
+     */
+    private $numeroLicenciaTrancito;
+    
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
      **/
     protected $sedeOperativa;
 
+
+    
 }

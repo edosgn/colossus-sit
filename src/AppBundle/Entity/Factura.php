@@ -70,23 +70,22 @@ class Factura
      */
     private $valorNeto = 0;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
-     **/
-    protected $solicitante;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
-     **/
-    protected $apoderado;
-
-   
+     * @var string
+     *
+     * @ORM\Column(name="numeroLicenciaTrancito", type="string", length=45)
+     */
+    private $numeroLicenciaTrancito;
+    
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
      **/
     protected $sedeOperativa;
 
+
+    
 
     /**
      * Get id
@@ -167,7 +166,7 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion->format("Y-m-d");
+        return $this->fechaCreacion->format('Y-m-d');
     }
 
     /**
@@ -267,51 +266,27 @@ class Factura
     }
 
     /**
-     * Set solicitante
+     * Set numeroLicenciaTrancito
      *
-     * @param \AppBundle\Entity\Ciudadano $solicitante
+     * @param string $numeroLicenciaTrancito
      *
      * @return Factura
      */
-    public function setSolicitante(\AppBundle\Entity\Ciudadano $solicitante = null)
+    public function setNumeroLicenciaTrancito($numeroLicenciaTrancito)
     {
-        $this->solicitante = $solicitante;
+        $this->numeroLicenciaTrancito = $numeroLicenciaTrancito;
 
         return $this;
     }
 
     /**
-     * Get solicitante
+     * Get numeroLicenciaTrancito
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return string
      */
-    public function getSolicitante()
+    public function getNumeroLicenciaTrancito()
     {
-        return $this->solicitante;
-    }
-
-    /**
-     * Set apoderado
-     *
-     * @param \AppBundle\Entity\Ciudadano $apoderado
-     *
-     * @return Factura
-     */
-    public function setApoderado(\AppBundle\Entity\Ciudadano $apoderado = null)
-    {
-        $this->apoderado = $apoderado;
-
-        return $this;
-    }
-
-    /**
-     * Get apoderado
-     *
-     * @return \AppBundle\Entity\Ciudadano
-     */
-    public function getApoderado()
-    {
-        return $this->apoderado;
+        return $this->numeroLicenciaTrancito;
     }
 
     /**
