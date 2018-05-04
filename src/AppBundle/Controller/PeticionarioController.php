@@ -12,7 +12,7 @@ use AppBundle\Form\PeticionarioType;
 /**
  * Peticionario controller.
  *
- * @Route("/peticionario")
+ * @Route("/peticionario") 
  */ 
 class PeticionarioController extends Controller 
 {
@@ -285,7 +285,7 @@ class PeticionarioController extends Controller
       foreach ($peticionarios as $key => $peticionario) {
         $response[$key] = array(
             'value' => $peticionario->getId(),
-            'label' => $peticionario->getIdentificacionPeticionario()."_".$peticionario->getIdentificacionPeticionario(),
+            'label' => $peticionario->getIdentificacionPeticionario()."_".$peticionario->getPrimerNombrePeticionario()."_".$peticionario->getPrimerApellidoPeticionario(),
             );
       }
        return $helpers->json($response);
