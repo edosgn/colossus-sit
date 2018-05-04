@@ -35,10 +35,10 @@ class PropietarioVehiculo
      */
     private $apoderado;
 
-       /**
-     * @var string
+    /**
+     * @var boolean
      *
-     * @ORM\Column(name="permisoTramite", type="string", length=255)
+     * @ORM\Column(name="permisoTramite", type="boolean")
      */
     private $permisoTramite;
 
@@ -85,9 +85,11 @@ class PropietarioVehiculo
 
    
 
-    
+
     
 
+
+    
 
     /**
      * Get id
@@ -150,7 +152,7 @@ class PropietarioVehiculo
     /**
      * Set permisoTramite
      *
-     * @param string $permisoTramite
+     * @param boolean $permisoTramite
      *
      * @return PropietarioVehiculo
      */
@@ -164,7 +166,7 @@ class PropietarioVehiculo
     /**
      * Get permisoTramite
      *
-     * @return string
+     * @return boolean
      */
     public function getPermisoTramite()
     {

@@ -35,10 +35,10 @@ class PropietarioVehiculo
      */
     private $apoderado;
 
-       /**
-     * @var string
+    /**
+     * @var boolean
      *
-     * @ORM\Column(name="permisoTramite", type="string", length=255)
+     * @ORM\Column(name="permisoTramite", type="boolean")
      */
     private $permisoTramite;
 
@@ -85,7 +85,9 @@ class PropietarioVehiculo
 
    
 
-    
+
     
 
+
+    
 }
