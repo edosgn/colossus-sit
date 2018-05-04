@@ -35,6 +35,13 @@ class PropietarioVehiculo
      */
     private $apoderado;
 
+       /**
+     * @var string
+     *
+     * @ORM\Column(name="permisoTramite", type="string", length=255)
+     */
+    private $permisoTramite;
+
     /**
      * @var \DateTime
      *
@@ -77,6 +84,10 @@ class PropietarioVehiculo
    
 
    
+
+    
+    
+
 
     /**
      * Get id
@@ -134,6 +145,30 @@ class PropietarioVehiculo
     public function getApoderado()
     {
         return $this->apoderado;
+    }
+
+    /**
+     * Set permisoTramite
+     *
+     * @param string $permisoTramite
+     *
+     * @return PropietarioVehiculo
+     */
+    public function setPermisoTramite($permisoTramite)
+    {
+        $this->permisoTramite = $permisoTramite;
+
+        return $this;
+    }
+
+    /**
+     * Get permisoTramite
+     *
+     * @return string
+     */
+    public function getPermisoTramite()
+    {
+        return $this->permisoTramite;
     }
 
     /**
