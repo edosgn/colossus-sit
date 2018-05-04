@@ -286,28 +286,4 @@ class Peticionario
     {
         return $this->registroDocumento;
     }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return Peticionario
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
 }

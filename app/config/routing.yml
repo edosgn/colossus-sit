@@ -1,3 +1,15 @@
+app_tipo_documento:
+    resource: "@AppBundle/Controller/TipoDocumentoController.php"
+    type:     annotation
+
+app_registro_documento:
+    resource: "@AppBundle/Controller/RegistroDocumentoController.php"
+    type:     annotation
+
+app_peticionario:
+    resource: "@AppBundle/Controller/PeticionarioController.php"
+    type:     annotation
+
 app_sustrato:
     resource: "@AppBundle/Controller/SustratoController.php"
     type:     annotation

@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Peticionario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ peticionario.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombrepeticionario</th>
+                <td>{{ peticionario.nombrePeticionario }}</td>
+            </tr>
+            <tr>
+                <th>Identificacionpeticionario</th>
+                <td>{{ peticionario.identificacionPeticionario }}</td>
+            </tr>
+            <tr>
+                <th>Direccionpeticionario</th>
+                <td>{{ peticionario.direccionPeticionario }}</td>
+            </tr>
+            <tr>
+                <th>Telefonopeticionario</th>
+                <td>{{ peticionario.telefonoPeticionario }}</td>
+            </tr>
+            <tr>
+                <th>Correoelectronico</th>
+                <td>{{ peticionario.correoElectronico }}</td>
+            </tr>
+            <tr>
+                <th>Numerooficio</th>
+                <td>{{ peticionario.numeroOficio }}</td>
+            </tr>
+            <tr>
+                <th>Tipopeticionario</th>
+                <td>{{ peticionario.tipoPeticionario }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('peticionario_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('peticionario_edit', { 'id': peticionario.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
