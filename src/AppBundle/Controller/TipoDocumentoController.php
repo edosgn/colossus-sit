@@ -57,13 +57,14 @@ class TipoDocumentoController extends Controller
             $params = json_decode($json);
            
                 $nombreTipo = $params->nombreTipo;
-                $diasDuraccionTramite = $params->diasDuraccionTramite;
+
+                $diasDuracionTramite = $params->diasDuracionTramite;
                 $codigoDocumento = $params->codigoDocumento;
                 $estado = true;
 
                 $tipoDocumento = new TipoDocumento();
                 $tipoDocumento->setNombreTipo($nombreTipo);
-                $tipoDocumento->setDiasDuraccionTramite($diasDuraccionTramite);
+                $tipoDocumento->setDiasDuracionTramite($diasDuraccionTramite);
                 $tipoDocumento->setCodigoDocumento($codigoDocumento);
                 $tipoDocumento->setEstado($estado);
                 
@@ -115,14 +116,15 @@ class TipoDocumentoController extends Controller
         return $helpers->json($response);
     }
 
-    /**
-     * Displays a form to edit an existing TipoDocumento entity.
+   /**
+     * Displays a form to edit an existing Tipo Documento entity.
      *
-     * @Route("/{id}/edit", name="tipodocumento_edit")
+     * @Route("/edit", name="tipo_documento_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, TipoDocumento $tipoDocumento)
+    public function editAction(Request $request)
     {
+       
        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -133,14 +135,21 @@ class TipoDocumentoController extends Controller
             $params = json_decode($json);
 
                 $nombreTipo = $params->nombreTipo;
-                $diasDuraccionTramite = $params->diasDuraccionTramite;
+                $diasDuracionTramite = $params->diasDuracionTramite;
                 $codigoDocumento = $params->codigoDocumento;
+                $tipoDocumentoId = $params->id;
                 $estado = true;
+                $tipoDocumento = $em->getRepository('AppBundle:TipoDocumento')->findOneBy(
+                    array(
+                        'estado' => 1,
+                        'id' => $tipoDocumentoId
+                    )
+                );
 
             if ($tipoDocumento!=null) {
 
-               $tipoDocumento->setNombreTipo($nombreTipo);
-                $tipoDocumento->setDiasDuraccionTramite($diasDuraccionTramite);
+                $tipoDocumento->setNombreTipo($nombreTipo);
+                $tipoDocumento->setDiasDuracionTramite($diasDuracionTramite);
                 $tipoDocumento->setCodigoDocumento($codigoDocumento);
                 $tipoDocumento->setEstado($estado);
                 
@@ -154,7 +163,7 @@ class TipoDocumentoController extends Controller
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $peticionario,
+                        'data'=> $tipoDocumento,
                 );
             }else{
                 $response = array(

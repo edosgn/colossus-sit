@@ -31,9 +31,9 @@ class TipoDocumento
     /**
      * @var int
      *
-     * @ORM\Column(name="diasDuraccionTramite", type="integer")
+     * @ORM\Column(name="diasDuracionTramite", type="integer")
      */
-    private $diasDuraccionTramite;
+    private $diasDuracionTramite;
 
     /**
      * @var string
@@ -85,27 +85,27 @@ class TipoDocumento
     }
 
     /**
-     * Set diasDuraccionTramite
+     * Set diasDuracionTramite
      *
-     * @param integer $diasDuraccionTramite
+     * @param integer $diasDuracionTramite
      *
      * @return TipoDocumento
      */
-    public function setDiasDuraccionTramite($diasDuraccionTramite)
+    public function setDiasDuracionTramite($diasDuracionTramite)
     {
-        $this->diasDuraccionTramite = $diasDuraccionTramite;
+        $this->diasDuracionTramite = $diasDuracionTramite;
 
         return $this;
     }
 
     /**
-     * Get diasDuraccionTramite
+     * Get diasDuracionTramite
      *
      * @return int
      */
-    public function getDiasDuraccionTramite()
+    public function getDiasDuracionTramite()
     {
-        return $this->diasDuraccionTramite;
+        return $this->diasDuracionTramite;
     }
 
     /**
