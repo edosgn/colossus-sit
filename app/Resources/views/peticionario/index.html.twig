@@ -14,6 +14,7 @@
                 <th>Correoelectronico</th>
                 <th>Numerooficio</th>
                 <th>Tipopeticionario</th>
+                <th>Estado</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,6 +29,7 @@
                 <td>{{ peticionario.correoElectronico }}</td>
                 <td>{{ peticionario.numeroOficio }}</td>
                 <td>{{ peticionario.tipoPeticionario }}</td>
+                <td>{% if peticionario.estado %}Yes{% else %}No{% endif %}</td>
                 <td>
                     <ul>
                         <li>

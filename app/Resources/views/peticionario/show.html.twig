@@ -37,6 +37,10 @@
                 <th>Tipopeticionario</th>
                 <td>{{ peticionario.tipoPeticionario }}</td>
             </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if peticionario.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
         </tbody>
     </table>
 
