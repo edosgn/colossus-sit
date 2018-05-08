@@ -46,7 +46,7 @@ class Ciudadano
      /**
      * @var string
      *
-     * @ORM\Column(name="direccion_trabajo", type="string", length=255)
+     * @ORM\Column(name="direccion_trabajo", type="string", length=255, nullable=true)
      */
     private $direccionTrabajo;
 

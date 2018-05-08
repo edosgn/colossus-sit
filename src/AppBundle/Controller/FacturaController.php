@@ -63,14 +63,12 @@ class FacturaController extends Controller
                 $observacion = (isset($params->observacion)) ? $params->observacion : null;
                 $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
                 //Captura llaves foraneas
-                $solicitanteId = $params->solicitanteId;
-                $apoderadoId = $params->apoderadoId;
                 $sedeOperativaId = $params->sedeOperativaId;
+                $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
+                
                 $estado = $params->estado;
 
                 $em = $this->getDoctrine()->getManager();
-                $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
-                $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
                 $factura = new Factura();
@@ -78,10 +76,9 @@ class FacturaController extends Controller
                 $factura->setNumero($numero);
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
+                $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
                 $factura->setEstado(true);
                 //Inserta llaves foraneas
-                $factura->setSolicitante($solicitante);
-                $factura->setApoderado($apoderado);
                 $factura->setSedeOperativa($sedeOperativa);
                 
                 $em = $this->getDoctrine()->getManager();
@@ -158,23 +155,21 @@ class FacturaController extends Controller
             $numero = $params->numero;
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
-            //Captura llaves foraneas
-            $solicitanteId = $params->solicitanteId;
-            $apoderadoId = $params->apoderadoId;
-            $vehiculoId = $params->vehiculoId;
+            $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
+            $sedeOperativaId = $params->sedeOperativaId;
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
             $em = $this->getDoctrine()->getManager();
-            $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
-            $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
+        
 
             if ($factura!=null) {
                 $factura->setNumero($numero);
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
                 $factura->setEstado(true);
-                //Inserta llaves foraneas
-                $factura->setSolicitante($solicitante);
-                $factura->setApoderado($apoderado);
+                $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
+                $factura->setSedeOperativa($sedeOperativa);
+                
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);

@@ -63,9 +63,6 @@ class GrupoSanguineoController extends Controller
 
                 $sigla = "'".$params->sigla."'";
 
-                var_dump($sigla);
-                die();
-
                 $grupoSanguineo->setNombre($params->nombre);
                 $grupoSanguineo->setSigla($sigla);
                 $grupoSanguineo->setEstado(true);
