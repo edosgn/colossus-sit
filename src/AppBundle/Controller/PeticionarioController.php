@@ -278,4 +278,70 @@ class PeticionarioController extends Controller
         );
         return $helpers->json($response);
     }
+
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/buscar/peticionario/", name="buscar_peticionario")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarPeticionarioAction(Request $request)
+    {
+      
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $peticionarios = null;
+
+        if ($authCheck == true) {
+
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $tipoPeticionario = $params->tipoPeticionario;
+
+            if ($tipoPeticionario == "Persona") {
+                $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
+                    array(
+                        'estado' => 1,
+                        'identificacionPeticionario' => $params->identificacionPeticionario
+                    )
+                );
+            }else{
+                $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
+                    array(
+                        'estado' => 1,
+                        'nombrePeticionario' => $params->nombrePeticionario,
+                        'numeroOficio' => $params->numeroOficio
+                    )
+                );
+            }
+
+            if ($peticionarios == null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $peticionarios,
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
