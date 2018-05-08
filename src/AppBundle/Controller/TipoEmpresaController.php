@@ -219,4 +219,27 @@ class TipoEmpresaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="tipoEmpresa_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+
+    $tipoEmpresas = $em->getRepository('AppBundle:TipoEmpresa')->findBy(
+        array('estado' => 1)
+    );
+      foreach ($tipoEmpresas as $key => $tipoEmpresa) {
+        $responce[$key] = array(
+            'value' => $tipoEmpresa->getId(),
+            'label' => $tipoEmpresa->getNombre(),
+            );
+      }
+       return $helpers->json($responce);
+    }
 }
