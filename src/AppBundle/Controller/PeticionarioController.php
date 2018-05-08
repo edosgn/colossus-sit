@@ -12,7 +12,7 @@ use AppBundle\Form\PeticionarioType;
 /**
  * Peticionario controller.
  *
- * @Route("/peticionario") 
+ * @Route("/peticionario")
  */ 
 class PeticionarioController extends Controller 
 {
@@ -104,9 +104,9 @@ class PeticionarioController extends Controller
     }
 
     /**
-     * Finds and displays a peticionario entity.
+     * Finds and displays a agenteTransito entity.
      *
-     * @Route("/{id}/show", name="peticionario_show")
+     * @Route("/{id}/show", name="agentetransito_show")
      * @Method({"GET", "POST"})
      */
     public function showAction(Request $request, Peticionario $peticionario)
@@ -136,7 +136,7 @@ class PeticionarioController extends Controller
      /**
      * Displays a form to edit an existing agenteTransito entity.
      *
-     * @Route("/{id}/edit", name="peticionario_edit")
+     * @Route("/{id}/edit", name="agentetransito_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Peticionario $peticionario)
@@ -208,49 +208,35 @@ class PeticionarioController extends Controller
 
 
     /**
-     * Deletes a peticionario entity.
+     * Deletes a agenteTransito entity.
      *
-     * @Route("/{id}/delete", name="almacen_delete")
+     * @Route("/{id}/delete", name="agentetransito_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, Peticionario $peticionario)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck==true) {
-
             $em = $this->getDoctrine()->getManager();
-            $peticionario = $em->getRepository('AppBundle:Peticionario')->find($id);
 
-            if ($peticionario!=null) {
-
-                $peticionario->setEstado(0);
-                $em->persist($peticionario);
+            $peticionario->setEstado(false);
+            $em = $this->getDoctrine()->getManager();
                 $em->flush();
-
-                $responce = array(
-                        'status' => 'success',
+                $response = array(
+                    'status' => 'success',
                         'code' => 200,
-                        'msj' => "Peticionario eliminado con exito", 
+                        'msj' => "Registro eliminado con exito", 
                 );
-            }else{
-                $responce = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "El Peticionario no se encuentra en la base de datos", 
-                );
-            }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -269,25 +255,27 @@ class PeticionarioController extends Controller
         ;
     }
 
-    /**
-     * datos para select 2 
+
+     /**
+     * Lists all Peticionario entities.
      *
-     * @Route("/select", name="peticionario_select")
-     * @Method({"GET", "POST"})
+     * @Route("/listar/peticionario", name="listar_peticionario")
+     * @Method("GET")
      */
-    public function selectAction()
+    public function listarPeticionarioAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($peticionarios as $key => $peticionario) {
-        $response[$key] = array(
-            'value' => $peticionario->getId(),
-            'label' => $peticionario->getIdentificacionPeticionario()."_".$peticionario->getPrimerNombrePeticionario()."_".$peticionario->getPrimerApellidoPeticionario(),
-            );
-      }
-       return $helpers->json($response);
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
+            array('estado' => 1)
+        );
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de peticionarios",
+            'data' => $peticionarios, 
+        );
+        return $helpers->json($response);
     }
 }
