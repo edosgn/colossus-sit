@@ -27,12 +27,12 @@ class TipoEmpresaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->findBy(
-            array('estado' => 1)
+            array('estado' => true)
         );
         $responce = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado tipoEmpresa", 
+                    'msj' => "Listado Tipo Empresa", 
                     'data'=> $tipoEmpresa,
             );
          
@@ -232,7 +232,7 @@ class TipoEmpresaController extends Controller
     $em = $this->getDoctrine()->getManager();
 
     $tipoEmpresas = $em->getRepository('AppBundle:TipoEmpresa')->findBy(
-        array('estado' => 1)
+        array('estado' => true)
     );
       foreach ($tipoEmpresas as $key => $tipoEmpresa) {
         $responce[$key] = array(

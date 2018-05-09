@@ -2,47 +2,46 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Genero;
-use AppBundle\Form\GeneroType;
+use AppBundle\Entity\TipoSociedad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Genero controller.
+ * Tiposociedad controller.
  *
- * @Route("genero")
+ * @Route("tiposociedad")
  */
-class GeneroController extends Controller
+class TipoSociedadController extends Controller
 {
     /**
-     * Lists all genero entities.
+     * Lists all tipoSociedad entities.
      *
-     * @Route("/", name="genero_index")
+     * @Route("/", name="tiposociedad_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $generos = $em->getRepository('AppBundle:Genero')->findBy(
-            array('estado' => 1)
+        $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->findBy(
+            array('estado' => true)
         );
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "Lista de generos",
-            'data' => $generos, 
+            'msj' => "Lista de tipoSociedad",
+            'data' => $tipoSociedad, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new genero entity.
+     * Creates a new tipoSociedad entity.
      *
-     * @Route("/new", name="genero_new")
+     * @Route("/new", name="tiposociedad_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -62,14 +61,13 @@ class GeneroController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{*/
-                $genero = new Genero();
+                $tipoSociedad = new TipoSociedad();
 
-                $genero->setNombre($params->nombre);
-                $genero->setSigla($params->sigla);
-                $genero->setEstado(true);
+                $tipoSociedad->setNombre($params->nombre);
+                $tipoSociedad->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($genero);
+                $em->persist($tipoSociedad);
                 $em->flush();
 
                 $response = array(
@@ -89,12 +87,12 @@ class GeneroController extends Controller
     }
 
     /**
-     * Finds and displays a genero entity.
+     * Finds and displays a tipoSociedad entity.
      *
-     * @Route("/{id}/show", name="genero_show")
+     * @Route("/{id}/show", name="tiposociedad_show")
      * @Method("GET")
      */
-    public function showAction(Genero $genero)
+    public function showAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -102,26 +100,28 @@ class GeneroController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+            $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($id);
+
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $genero,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro encontrado", 
+                'data'=> $tiposociedad,
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }
 
     /**
-     * Displays a form to edit an existing genero entity.
+     * Displays a form to edit an existing tipoSociedad entity.
      *
-     * @Route("/edit", name="genero_edit")
+     * @Route("/edit", name="tiposociedad_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -136,24 +136,22 @@ class GeneroController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $genero = $em->getRepository("AppBundle:Genero")->find($params->id);
+            $tipoSociedad = $em->getRepository("AppBundle:TipoSociedad")->find($params->id);
 
             $nombre = $params->nombre;
-            $sigla = $params->sigla;
 
-            if ($genero!=null) {
-                $genero->setNombre($nombre);
-                $genero->setSigla($sigla);
+            if ($tipoSociedad!=null) {
+                $tipoSociedad->setNombre($nombre);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($genero);
+                $em->persist($tipoSociedad);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $genero,
+                        'data'=> $tipoSociedad,
                 );
             }else{
                 $response = array(
@@ -174,22 +172,23 @@ class GeneroController extends Controller
     }
 
     /**
-     * Deletes a genero entity.
+     * Deletes a tipoSociedad entity.
      *
-     * @Route("/{id}/delete", name="genero_delete")
+     * @Route("/{id}/delete", name="tiposociedad_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, Genero $genero)
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
+            $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($id);
 
-            $genero->setEstado(false);
+            $tipoSociedad->setEstado(false);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($genero);
+                $em->persist($tipoSociedad);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -207,16 +206,16 @@ class GeneroController extends Controller
     }
 
     /**
-     * Creates a form to delete a genero entity.
+     * Creates a form to delete a tipoSociedad entity.
      *
-     * @param Genero $genero The genero entity
+     * @param TipoSociedad $tipoSociedad The tipoSociedad entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Genero $genero)
+    private function createDeleteForm(TipoSociedad $tipoSociedad)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('genero_delete', array('id' => $genero->getId())))
+            ->setAction($this->generateUrl('tiposociedad_delete', array('id' => $tipoSociedad->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -233,13 +232,13 @@ class GeneroController extends Controller
         $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $generos = $em->getRepository('AppBundle:Genero')->findBy(
-            array('estado' => 1)
+        $tiposSociedad = $em->getRepository('AppBundle:TipoSociedad')->findBy(
+            array('estado' => true)
         );
-        foreach ($generos as $key => $genero) {
+        foreach ($tiposSociedad as $key => $tipoSociedad) {
             $response[$key] = array(
-                'value' => $genero->getId(),
-                'label' => $genero->getSigla()."_".$genero->getNombre(),
+                'value' => $tipoSociedad->getId(),
+                'label' => $tipoSociedad->getNombre(),
             );
         }
        return $helpers->json($response);

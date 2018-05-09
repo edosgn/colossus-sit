@@ -1,3 +1,7 @@
+app_tipo_sociedad:
+    resource: "@AppBundle/Controller/TipoSociedadController.php"
+    type:     annotation
+
 app_tipo_documento:
     resource: "@AppBundle/Controller/TipoDocumentoController.php"
     type:     annotation

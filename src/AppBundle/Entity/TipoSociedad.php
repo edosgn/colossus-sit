@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TipoEmpresa
+ * TipoSociedad
  *
- * @ORM\Table(name="tipo_empresa")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoEmpresaRepository")
+ * @ORM\Table(name="tipo_sociedad")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoSociedadRepository")
  */
-class TipoEmpresa
+class TipoSociedad
 {
     /**
      * @var int
@@ -33,13 +33,13 @@ class TipoEmpresa
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado = true;
-   
+    private $estado;
+
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -51,7 +51,7 @@ class TipoEmpresa
      *
      * @param string $nombre
      *
-     * @return TipoEmpresa
+     * @return TipoSociedad
      */
     public function setNombre($nombre)
     {
@@ -75,7 +75,7 @@ class TipoEmpresa
      *
      * @param boolean $estado
      *
-     * @return TipoEmpresa
+     * @return TipoSociedad
      */
     public function setEstado($estado)
     {
@@ -87,10 +87,11 @@ class TipoEmpresa
     /**
      * Get estado
      *
-     * @return boolean
+     * @return bool
      */
     public function getEstado()
     {
         return $this->estado;
     }
 }
+
