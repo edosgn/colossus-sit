@@ -46,44 +46,42 @@ class PropietarioVehiculoController extends Controller
     /**
      * Creates a new CiudadanoVehiculo entity.
      *
-     * @Route("/new/{idTramite}", name="propietariovehiculo_new")
+     * @Route("/new/{tipoTraspaso}", name="propietariovehiculo_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request,$idTramite)
+    public function newAction(Request $request,$tipoTraspaso)
     {
         
-        $helpers = $this->get("app.helpers"); 
-        $hash = $request->get("authorization", null);
-        $data = $request->get("datos",null);
-        $pibote= json_decode($data);
-
-        $dataTramite = array(
-            'datosLeasing' => (isset($pibote->datosGenerales)) ? $pibote->datosGenerales : null, 
-        );
-
         
-
-
-        $casosVariantes = $request->get("casosVariantes",null);
-        $entradas = json_decode($casosVariantes);
-
-        $caso = (isset($entradas->caso)) ? $entradas->caso : null;
-        $variante = (isset($entradas->variante)) ? $entradas->variante : null;
-        $em = $this->getDoctrine()->getManager();
-
-
-        $casoBd = $em->getRepository('AppBundle:Caso')->findOneBy(
-            array('estado' => 1,'id' => $caso)
-        );
-
-        $varianteBd = $em->getRepository('AppBundle:Variante')->findOneBy(
-            array('estado' => 1,'id' => $variante)
-        );
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+ 
+        // $varianteBd = $em->getRepository('AppBundle:Variante')->findOneBy(
+        //     array('estado' => 1,'id' => $variante)
+        // );
 
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
             $json = $request->get("json",null);
+            $em = $this->getDoctrine()->getManager();    
             $params = json_decode($json);
+            $params = (object)$params;
+            // $datos = $params->datos;
+            
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($params->vehiculo);
+            var_dump($vehiculo->getPlaca());
+
+            foreach ($params->propietariosEmpresas as $key => $empresa) {
+                var_dump($empresa);
+            }
+
+            foreach ($params->propietariosCiudadanos as $key => $ciudadano) {
+                var_dump($ciudadano);
+            }
+
+
+            die();
 
            // if (count($params)==0) {
            //      $responce = array(
