@@ -28,13 +28,6 @@ class PropietarioVehiculo
      */
     private $licenciaTransito;
 
-       /**
-     * @var string
-     *
-     * @ORM\Column(name="apoderado", type="string", length=255)
-     */
-    private $apoderado;
-
     /**
      * @var boolean
      *
@@ -52,16 +45,17 @@ class PropietarioVehiculo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_propiedad_final", type="datetime")
+     * @ORM\Column(name="fecha_propiedad_final", type="datetime", nullable= true)
      */
     private $fechaPropiedadFinal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estado_propiedad", type="string", length=255)
+     * @ORM\Column(name="estado_propiedad", type="boolean")
      */
     private $estadoPropiedad;
+
 
     /**
      * @var boolean
@@ -72,6 +66,9 @@ class PropietarioVehiculo
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="propietariosVehiculo") */
     private $ciudadano; 
+    
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="propietariosVehiculo") */
+    private $apoderado; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
     private $vehiculo;
@@ -79,17 +76,8 @@ class PropietarioVehiculo
      /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="propietariosVehiculo") */
     private $empresa;
 
-
-
-   
-
-   
-
-
     
 
-
-    
 
     /**
      * Get id
@@ -123,30 +111,6 @@ class PropietarioVehiculo
     public function getLicenciaTransito()
     {
         return $this->licenciaTransito;
-    }
-
-    /**
-     * Set apoderado
-     *
-     * @param string $apoderado
-     *
-     * @return PropietarioVehiculo
-     */
-    public function setApoderado($apoderado)
-    {
-        $this->apoderado = $apoderado;
-
-        return $this;
-    }
-
-    /**
-     * Get apoderado
-     *
-     * @return string
-     */
-    public function getApoderado()
-    {
-        return $this->apoderado;
     }
 
     /**
@@ -224,7 +188,7 @@ class PropietarioVehiculo
     /**
      * Set estadoPropiedad
      *
-     * @param string $estadoPropiedad
+     * @param boolean $estadoPropiedad
      *
      * @return PropietarioVehiculo
      */
@@ -238,7 +202,7 @@ class PropietarioVehiculo
     /**
      * Get estadoPropiedad
      *
-     * @return string
+     * @return boolean
      */
     public function getEstadoPropiedad()
     {
@@ -291,6 +255,30 @@ class PropietarioVehiculo
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set apoderado
+     *
+     * @param \AppBundle\Entity\Ciudadano $apoderado
+     *
+     * @return PropietarioVehiculo
+     */
+    public function setApoderado(\AppBundle\Entity\Ciudadano $apoderado = null)
+    {
+        $this->apoderado = $apoderado;
+
+        return $this;
+    }
+
+    /**
+     * Get apoderado
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getApoderado()
+    {
+        return $this->apoderado;
     }
 
     /**

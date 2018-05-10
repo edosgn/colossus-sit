@@ -70,110 +70,74 @@ class PropietarioVehiculoController extends Controller
             // $datos = $params->datos;
             
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($params->vehiculo);
-            var_dump($vehiculo->getPlaca());
+
+            $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                array('vehiculo' => $vehiculo->getId(),
+                        'estado' => 1,
+                        'estadoPropiedad' => '1'
+                    )
+                );
+
+            $fechaActual = new \DateTime(date('Y-m-d'));
+            foreach ($propietariosVehiculo as $key => $propietarioActual) {
+
+                $propietarioActual->setFechaPropiedadFinal($fechaActual);
+                $propietarioActual->setEstadoPropiedad(false);
+                $propietarioActual->setPermisoTramite(false);
+                $em->persist($propietarioActual);
+                $em->flush();
+
+            }
+
 
             foreach ($params->propietariosEmpresas as $key => $empresa) {
-                var_dump($empresa);
+                $empresaNueva = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                    array(
+                            'estado' => 1,
+                            'nit' => $empresa->nit
+                        )
+                    );
+                    
+                    $propietarioVehiculo = new PropietarioVehiculo();
+                    $propietarioVehiculo->setLicenciaTransito($params->numeroLicencia);
+                    $propietarioVehiculo->setFechaPropiedadInicial($fechaActual);
+                    $propietarioVehiculo->setEstadoPropiedad(true);
+                    $propietarioVehiculo->setPermisoTramite($empresa->permisoTramite);
+                    $propietarioVehiculo->setEmpresa($empresaNueva);
+                    $propietarioVehiculo->setVehiculo($vehiculo);
+                    $propietarioVehiculo->setEstado(true);
+                    $em->persist($propietarioVehiculo);
+                    $em->flush();
             }
 
             foreach ($params->propietariosCiudadanos as $key => $ciudadano) {
-                var_dump($ciudadano);
+
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                array(
+                        'estado' => 'Activo',
+                        'identificacion' => $ciudadano->identificacion
+                    )
+                );
+                
+                $propietarioVehiculo = new PropietarioVehiculo();
+                $propietarioVehiculo->setLicenciaTransito($params->numeroLicencia);
+                $propietarioVehiculo->setFechaPropiedadInicial($fechaActual);
+                $propietarioVehiculo->setEstadoPropiedad(true);
+                $propietarioVehiculo->setPermisoTramite($ciudadano->permisoTramite);
+                $propietarioVehiculo->setCiudadano($usuario->getCiudadano());
+                $propietarioVehiculo->setVehiculo($vehiculo);
+                $propietarioVehiculo->setEstado(true);
+                $em->persist($propietarioVehiculo);
+                $em->flush();
             }
+           
 
-
-            die();
-
-           // if (count($params)==0) {
-           //      $responce = array(
-           //          'status' => 'error',
-           //          'code' => 400,
-           //          'msj' => "los campos no pueden estar vacios", 
-           //      );
-           //  }else{
-                        $licenciaTransito = (isset($params->licenciaTransito)) ? $params->licenciaTransito : null;
-                        $fechaPropiedadInicial = $params->fechaPropiedadInicial; 
-                        $fechaPropiedadFinal = $params->fechaPropiedadFinal;
-                        $estadoPropiedad = $params->estadoPropiedad;
-                        $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
-                        $vehiculoId = $params->vehiculoId;
-                        $empresaId = (isset($params->empresaId)) ? $params->empresaId : null;
-                        $em = $this->getDoctrine()->getManager();
-                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
-                            array('numeroIdentificacion' => $ciudadanoId)
-                        );
-                        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
-                            array('placa' => $vehiculoId)
-                        );
-
-                        $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
-                            array('nit' => $empresaId)
-                        );
-
-                        $propietarioVehiculo = new PropietarioVehiculo();
-                        $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
-                        $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
-                        $propietarioVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
-                        $propietarioVehiculo->setEstadoPropiedad($estadoPropiedad);
-                        $propietarioVehiculo->setCiudadano($ciudadano);
-                        $propietarioVehiculo->setEmpresa($empresa);
-                        $propietarioVehiculo->setVehiculo($vehiculo);
-                        $propietarioVehiculo->setEstado(true);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($propietarioVehiculo);
-                        
-                        $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
-                            array('estado' => 1,'numeroLicencia' => $licenciaTransito)
-                        );
-
-                          if( $tramiteGeneral == null || $idTramite == 36){
-                            $tramiteGeneral = new TramiteGeneral();
-                            $tramiteGeneral->setVehiculo($vehiculo);
-                            $tramiteGeneral->setValor(0);
-                            $tramiteGeneral->setNumeroQpl(0);
-                            $tramiteGeneral->setFechaInicial($fechaPropiedadInicial);
-                            $tramiteGeneral->setFechaFinal($fechaPropiedadFinal);
-                            $tramiteGeneral->setNumeroLicencia($licenciaTransito);
-                            $tramiteGeneral->setNumeroSustrato(0);
-                            $tramiteGeneral->setEstadoTramite(2);
-                            $tramiteGeneral->setCiudadano($ciudadano);
-                            $tramiteGeneral->setEmpresa($empresa);
-                            $tramiteGeneral->setApoderado(false);
-                            $tramiteGeneral->setEstado(1);
-                            $em->persist($tramiteGeneral);
-                            $em->flush();
-                            
-                            $tramiteEspecifico = new TramiteEspecifico();
-
-                            $tramite = $em->getRepository('AppBundle:Tramite')->findOneBy(
-                                array('estado' => 1,'id' => $idTramite)
-                            );
-
-                            $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findOneBy(
-                                array('estado' => 1,'numeroLicencia' => $licenciaTransito)
-                            );
-
-                            $tramiteEspecifico->setDatos($dataTramite);
-                            $tramiteEspecifico->setTramite($tramite);
-                            $tramiteEspecifico->setTramiteGeneral($tramiteGeneral);
-                            $tramiteEspecifico->setCaso($casoBd);
-                            $tramiteEspecifico->setVariante($varianteBd);
-                            $tramiteEspecifico->setValor(0);
-                            $tramiteEspecifico->setEstado(1);
-
-                            $em->persist($tramiteEspecifico);
-                        }
-
-                        
-                        $em->flush();
-
-
-                        $responce = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Proìetario Vehiculo creado con exito: "+ $licenciaTransito, 
-                        );
-                       
-                    // }
+            $responce = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Proìetario Vehiculo creado con exito", 
+            );
+                    
         }else{
             $responce = array(
                 'status' => 'error',
@@ -366,7 +330,8 @@ class PropietarioVehiculoController extends Controller
                 $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
                 array('vehiculo' => $vehiculo->getId(),
                         'estado' => 1,
-                        'estadoPropiedad' => '1'
+                        'estadoPropiedad' => '1',
+                        'permisoTramite' => '1'
                     )
                 );
 
