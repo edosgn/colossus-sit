@@ -28,13 +28,6 @@ class PropietarioVehiculo
      */
     private $licenciaTransito;
 
-       /**
-     * @var string
-     *
-     * @ORM\Column(name="apoderado", type="string", length=255)
-     */
-    private $apoderado;
-
     /**
      * @var boolean
      *
@@ -52,16 +45,17 @@ class PropietarioVehiculo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_propiedad_final", type="datetime")
+     * @ORM\Column(name="fecha_propiedad_final", type="datetime", nullable= true)
      */
     private $fechaPropiedadFinal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estado_propiedad", type="string", length=255)
+     * @ORM\Column(name="estado_propiedad", type="boolean")
      */
     private $estadoPropiedad;
+
 
     /**
      * @var boolean
@@ -72,6 +66,9 @@ class PropietarioVehiculo
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="propietariosVehiculo") */
     private $ciudadano; 
+    
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="propietariosVehiculo") */
+    private $apoderado; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
     private $vehiculo;
@@ -79,15 +76,6 @@ class PropietarioVehiculo
      /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="propietariosVehiculo") */
     private $empresa;
 
-
-
-   
-
-   
-
-
     
 
-
-    
 }

@@ -150,6 +150,13 @@ class Vehiculo
     /**
      * @var boolean
      *
+     * @ORM\Column(name="leasing", type="boolean", nullable=true)
+     */
+    private $leasing;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="pignorado", type="boolean")
      */
     private $pignorado;
@@ -187,7 +194,6 @@ class Vehiculo
     private $clase;
 
 
-   
 
     /**
      * Get id
@@ -629,6 +635,30 @@ class Vehiculo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set leasing
+     *
+     * @param boolean $leasing
+     *
+     * @return Vehiculo
+     */
+    public function setLeasing($leasing)
+    {
+        $this->leasing = $leasing;
+
+        return $this;
+    }
+
+    /**
+     * Get leasing
+     *
+     * @return boolean
+     */
+    public function getLeasing()
+    {
+        return $this->leasing;
     }
 
     /**

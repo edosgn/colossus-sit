@@ -24,7 +24,7 @@ class Vehiculo
     /**
      * @var string
      *
-     * @ORM\Column(name="placa", type="string", length=255)
+     * @ORM\Column(name="placa", type="string", length=255, nullable= true)
      */
     private $placa;
 
@@ -150,6 +150,13 @@ class Vehiculo
     /**
      * @var boolean
      *
+     * @ORM\Column(name="leasing", type="boolean")
+     */
+    private $leasing;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="pignorado", type="boolean")
      */
     private $pignorado;
@@ -187,5 +194,4 @@ class Vehiculo
     private $clase;
 
 
-   
 }

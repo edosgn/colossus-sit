@@ -62,7 +62,7 @@ class TramiteSolicitudController extends Controller
                 $observacion = (isset($params->observacion)) ? $params->observacion : null;
                 $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
-                $datos = $params->datos;
+                $datos = $params->datos; 
                 //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
