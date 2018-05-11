@@ -284,4 +284,27 @@ class TramiteController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="tramite_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $tramites = $em->getRepository('AppBundle:Tramite')->findBy(
+            array('estado' => true)
+        );
+        foreach ($tramites as $key => $tramite) {
+            $response[$key] = array(
+                'value' => $tramite->getId(),
+                'label' => $tramite->getNombre(),
+            );
+        }
+       return $helpers->json($response);
+    }
 }

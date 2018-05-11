@@ -53,6 +53,7 @@ class PropietarioVehiculoController extends Controller
     {
         
         
+        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -70,6 +71,12 @@ class PropietarioVehiculoController extends Controller
             // $datos = $params->datos;
             
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($params->vehiculo);
+
+            if ($tipoTraspaso == 1) {
+                $vehiculo->setLeasing(true);
+                $em->persist($vehiculo);
+                $em->flush();
+            }
 
             $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
                 array('vehiculo' => $vehiculo->getId(),

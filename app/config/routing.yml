@@ -1,3 +1,7 @@
+app_tramite_precio:
+    resource: "@AppBundle/Controller/TramitePrecioController.php"
+    type:     annotation
+
 app_tipo_sociedad:
     resource: "@AppBundle/Controller/TipoSociedadController.php"
     type:     annotation

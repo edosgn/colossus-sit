@@ -37,7 +37,7 @@ class TramiteGeneralController extends Controller
             );
          
         return $helpers->json($responce);
-    }
+    } 
 
     /**
      * Creates a new TramiteGeneral entity.
@@ -112,7 +112,7 @@ class TramiteGeneralController extends Controller
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($responce); 
     }
 
     /**
