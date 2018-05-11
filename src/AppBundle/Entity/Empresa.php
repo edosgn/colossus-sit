@@ -42,6 +42,20 @@ class Empresa
      */
     private $telefono;
 
+     /**
+     * @var int
+     *
+     * @ORM\Column(name="celular", type="integer")
+     */
+    private $celular;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="fax", type="integer")
+     */
+    private $fax;
+
     /**
      * @var string
      *
@@ -57,31 +71,82 @@ class Empresa
     private $correo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="sigla", type="string", length=255)
+     */
+    private $sigla;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="capital_pagado", type="string", length=255)
+     */
+    private $capitalPagado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="capital_liquido", type="string", length=255)
+     */
+    private $capitalLiquido;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_entidad", type="string", length=255)
+     */
+    private $tipoEntidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="certificado_existencia", type="string", length=255)
+     */
+    private $certificadoExistencia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255)
+     */
+    private $nroRegistroMercantil;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
-    
 
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="empresa_prestadora", type="boolean")
+     */
+    private $empresaPrestadora;
+
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_vencimiento_registro_mercantil", type="datetime")
+     */
+    private $fechaVencimientoRegistroMercantil;
+
+    
+    
+    
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="empresas") */
     private $municipio;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoEmpresa", inversedBy="empresas") */
-    private $tipoEmpresa;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoSociedad", inversedBy="empresas") */
+    private $tipoSocidad;
 
-      /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
     private $ciudadano;
 
-  
+    
 
-    public function __toString()
-    {
-        return $this->getNombre();
-    }
-
-
-  
 
     /**
      * Get id
@@ -166,6 +231,54 @@ class Empresa
     }
 
     /**
+     * Set celular
+     *
+     * @param integer $celular
+     *
+     * @return Empresa
+     */
+    public function setCelular($celular)
+    {
+        $this->celular = $celular;
+
+        return $this;
+    }
+
+    /**
+     * Get celular
+     *
+     * @return integer
+     */
+    public function getCelular()
+    {
+        return $this->celular;
+    }
+
+    /**
+     * Set fax
+     *
+     * @param integer $fax
+     *
+     * @return Empresa
+     */
+    public function setFax($fax)
+    {
+        $this->fax = $fax;
+
+        return $this;
+    }
+
+    /**
+     * Get fax
+     *
+     * @return integer
+     */
+    public function getFax()
+    {
+        return $this->fax;
+    }
+
+    /**
      * Set direccion
      *
      * @param string $direccion
@@ -214,6 +327,150 @@ class Empresa
     }
 
     /**
+     * Set sigla
+     *
+     * @param string $sigla
+     *
+     * @return Empresa
+     */
+    public function setSigla($sigla)
+    {
+        $this->sigla = $sigla;
+
+        return $this;
+    }
+
+    /**
+     * Get sigla
+     *
+     * @return string
+     */
+    public function getSigla()
+    {
+        return $this->sigla;
+    }
+
+    /**
+     * Set capitalPagado
+     *
+     * @param string $capitalPagado
+     *
+     * @return Empresa
+     */
+    public function setCapitalPagado($capitalPagado)
+    {
+        $this->capitalPagado = $capitalPagado;
+
+        return $this;
+    }
+
+    /**
+     * Get capitalPagado
+     *
+     * @return string
+     */
+    public function getCapitalPagado()
+    {
+        return $this->capitalPagado;
+    }
+
+    /**
+     * Set capitalLiquido
+     *
+     * @param string $capitalLiquido
+     *
+     * @return Empresa
+     */
+    public function setCapitalLiquido($capitalLiquido)
+    {
+        $this->capitalLiquido = $capitalLiquido;
+
+        return $this;
+    }
+
+    /**
+     * Get capitalLiquido
+     *
+     * @return string
+     */
+    public function getCapitalLiquido()
+    {
+        return $this->capitalLiquido;
+    }
+
+    /**
+     * Set tipoEntidad
+     *
+     * @param string $tipoEntidad
+     *
+     * @return Empresa
+     */
+    public function setTipoEntidad($tipoEntidad)
+    {
+        $this->tipoEntidad = $tipoEntidad;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoEntidad
+     *
+     * @return string
+     */
+    public function getTipoEntidad()
+    {
+        return $this->tipoEntidad;
+    }
+
+    /**
+     * Set certificadoExistencia
+     *
+     * @param string $certificadoExistencia
+     *
+     * @return Empresa
+     */
+    public function setCertificadoExistencia($certificadoExistencia)
+    {
+        $this->certificadoExistencia = $certificadoExistencia;
+
+        return $this;
+    }
+
+    /**
+     * Get certificadoExistencia
+     *
+     * @return string
+     */
+    public function getCertificadoExistencia()
+    {
+        return $this->certificadoExistencia;
+    }
+
+    /**
+     * Set nroRegistroMercantil
+     *
+     * @param string $nroRegistroMercantil
+     *
+     * @return Empresa
+     */
+    public function setNroRegistroMercantil($nroRegistroMercantil)
+    {
+        $this->nroRegistroMercantil = $nroRegistroMercantil;
+
+        return $this;
+    }
+
+    /**
+     * Get nroRegistroMercantil
+     *
+     * @return string
+     */
+    public function getNroRegistroMercantil()
+    {
+        return $this->nroRegistroMercantil;
+    }
+
+    /**
      * Set estado
      *
      * @param boolean $estado
@@ -235,6 +492,54 @@ class Empresa
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set empresaPrestadora
+     *
+     * @param boolean $empresaPrestadora
+     *
+     * @return Empresa
+     */
+    public function setEmpresaPrestadora($empresaPrestadora)
+    {
+        $this->empresaPrestadora = $empresaPrestadora;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaPrestadora
+     *
+     * @return boolean
+     */
+    public function getEmpresaPrestadora()
+    {
+        return $this->empresaPrestadora;
+    }
+
+    /**
+     * Set fechaVencimientoRegistroMercantil
+     *
+     * @param \DateTime $fechaVencimientoRegistroMercantil
+     *
+     * @return Empresa
+     */
+    public function setFechaVencimientoRegistroMercantil($fechaVencimientoRegistroMercantil)
+    {
+        $this->fechaVencimientoRegistroMercantil = $fechaVencimientoRegistroMercantil;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimientoRegistroMercantil
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimientoRegistroMercantil()
+    {
+        return $this->fechaVencimientoRegistroMercantil;
     }
 
     /**
@@ -262,27 +567,27 @@ class Empresa
     }
 
     /**
-     * Set tipoEmpresa
+     * Set tipoSocidad
      *
-     * @param \AppBundle\Entity\TipoEmpresa $tipoEmpresa
+     * @param \AppBundle\Entity\TipoSociedad $tipoSocidad
      *
      * @return Empresa
      */
-    public function setTipoEmpresa(\AppBundle\Entity\TipoEmpresa $tipoEmpresa = null)
+    public function setTipoSocidad(\AppBundle\Entity\TipoSociedad $tipoSocidad = null)
     {
-        $this->tipoEmpresa = $tipoEmpresa;
+        $this->tipoSocidad = $tipoSocidad;
 
         return $this;
     }
 
     /**
-     * Get tipoEmpresa
+     * Get tipoSocidad
      *
-     * @return \AppBundle\Entity\TipoEmpresa
+     * @return \AppBundle\Entity\TipoSociedad
      */
-    public function getTipoEmpresa()
+    public function getTipoSocidad()
     {
-        return $this->tipoEmpresa;
+        return $this->tipoSocidad;
     }
 
     /**

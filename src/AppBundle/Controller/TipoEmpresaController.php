@@ -12,7 +12,7 @@ use AppBundle\Form\TipoEmpresaType;
 /**
  * TipoEmpresa controller.
  *
- * @Route("/tipoempresa")
+ * @Route("/tipoEmpresa")
  */
 class TipoEmpresaController extends Controller
 {

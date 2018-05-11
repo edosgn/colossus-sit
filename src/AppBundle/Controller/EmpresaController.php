@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Empresa;
+use AppBundle\Entity\TipoSociedad;
 use AppBundle\Form\EmpresaType;
 
 /**
@@ -60,40 +61,64 @@ class EmpresaController extends Controller
             //         'msj' => "los campos no pueden estar vacios", 
             //     );
             // }else{
-                        $nit = $params->nit;
+                        
                         $nombre = $params->nombre;
-                        $telefono = $params->telefono;
+                        $sigla = $params->sigla;
+                        $nit = $params->nit;
+                        $capitalPagado = $params->capitalPagado;
+                        $patrimonioLiquido = $params->patrimonioLiquido;
+                        $empresaPrestadora = $params->empresaPrestadora;
+                        $certificadoExistencial = $params->certificadoExistencial;
+                        $tipoSociedadId = $params->tipoSociedadId;
+                        $tipoEntidad = $params->tipoEntidad;
+                        $municipioId = $params->municipioId;
+                        $nroRegistro = $params->nroRegistro;
+                        $fechaDeVencimiento = $params->fechaDeVencimiento;
                         $direccion = $params->direccion;
+                        $telefono = $params->telefono;
+                        $celular = $params->celular;
                         $correo = $params->correo;
-                        $em = $this->getDoctrine()->getManager();
-                        $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
-                            array('correo' => $correo)
-                        );
-                        if ($empresas==null) {
-                            $municipioId = $params->municipioId;
-                            $tipoEmpresaId = $params->tipoEmpresaId;
-                            $ciudadanoId = $params->ciudadanoId;
+                        $fax = $params->fax;
+                        $ciudadanoId = $params->ciudadanoId;
 
-                            $em = $this->getDoctrine()->getManager();
-                            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-                            $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($tipoEmpresaId);
-                            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
-                                array('numeroIdentificacion' => $ciudadanoId)
-                            );
+                        $fechaDeVencimiento=new \DateTime($fechaDeVencimiento);
+
+                        
+                //    var_dump($ciudadanoId);
+                //             die();
+                        $em = $this->getDoctrine()->getManager();                                                 
+                        $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
+                        $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                
+
+                        $em = $this->getDoctrine()->getManager();                       
+                           
                             $empresa = new Empresa();
 
-                            $empresa->setNit($nit);
                             $empresa->setNombre($nombre);
+                            $empresa->setSigla($sigla);
+                            $empresa->setNit($nit);
+                            $empresa->setCapitalPagado($capitalPagado);
+                            $empresa->setCapitalLiquido($patrimonioLiquido);
+                            $empresa->setEmpresaPrestadora($empresaPrestadora);
+                            $empresa->setCertificadoExistencia($certificadoExistencial);
+                            $empresa->setTipoSocidad($tipoSociedad);
+                            $empresa->setTipoEntidad($tipoEntidad);
+                            $empresa->setMunicipio($municipio);
+                            $empresa->setNroRegistroMercantil($nroRegistro);
+                            $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
                             $empresa->setTelefono($telefono);
                             $empresa->setDireccion($direccion);
                             $empresa->setCorreo($correo);
-                            $empresa->setMunicipio($municipio);
-                            $empresa->setTipoEmpresa($tipoEmpresa);
-                            $empresa->setCiudadano($ciudadano);
-
-
+                            $empresa->setTelefono($telefono);
+                            $empresa->setCelular($celular);
+                            $empresa->setCorreo($correo);
+                            $empresa->setFax($fax);
+                            $empresa->setCiudadano($ciudadano); 
                             $empresa->setEstado(true);
                             $em = $this->getDoctrine()->getManager();
+                            
                             $em->persist($empresa);
                             $em->flush();
 
@@ -102,13 +127,7 @@ class EmpresaController extends Controller
                                 'code' => 200,
                                 'msj' => "Empresa creado con exito", 
                             );
-                        }else{
-                           $responce = array(
-                                'status' => 'error',
-                                'code' => 400,
-                                'msj' => " Correo repetido en la base de datos", 
-                            ); 
-                        }
+                     
 
                         
                        
@@ -183,11 +202,11 @@ class EmpresaController extends Controller
                 $direccion = $params->direccion;
                 $correo = $params->correo;
                 $municipioId = $params->municipioId;
-                $tipoEmpresaId = $params->tipoEmpresaId;
+                $tipoSociedadId = $params->tipoSociedadId;
                 $ciudadanoId = $params->ciudadanoId;
                 $em = $this->getDoctrine()->getManager();
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-                $tipoEmpresa = $em->getRepository('AppBundle:TipoEmpresa')->find($tipoEmpresaId);
+                $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
 
                 $empresa->setNit($nit);
@@ -196,7 +215,7 @@ class EmpresaController extends Controller
                 $empresa->setDireccion($direccion);
                 $empresa->setCorreo($correo);
                 $empresa->setMunicipio($municipio);
-                $empresa->setTipoEmpresa($tipoEmpresa);
+                $empresa->setTipoSociedad($tipoSociedad);
                 $empresa->setCiudadano($ciudadano);
 
 

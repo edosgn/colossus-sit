@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Tiposociedad controller.
  *
- * @Route("tiposociedad")
+ * @Route("tipoSociedad")
  */
 class TipoSociedadController extends Controller
 {
     /**
      * Lists all tipoSociedad entities.
      *
-     * @Route("/", name="tiposociedad_index")
+     * @Route("/", name="tipoSociedad_index")
      * @Method("GET")
      */
     public function indexAction()
