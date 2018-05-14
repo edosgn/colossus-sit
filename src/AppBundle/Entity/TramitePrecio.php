@@ -31,9 +31,9 @@ class TramitePrecio
     /**
      * @var string
      *
-     * @ORM\Column(name="ano", type="string", length=255)
+     * @ORM\Column(name="anio", type="string", length=255)
      */
-    private $ano;
+    private $anio;
 
     /**
      * @var boolean
@@ -89,27 +89,27 @@ class TramitePrecio
     }
 
     /**
-     * Set ano
+     * Set anio
      *
-     * @param string $ano
+     * @param string $anio
      *
      * @return TramitePrecio
      */
-    public function setAno($ano)
+    public function setAnio($anio)
     {
-        $this->ano = $ano;
+        $this->anio = $anio;
 
         return $this;
     }
 
     /**
-     * Get ano
+     * Get anio
      *
      * @return string
      */
-    public function getAno()
+    public function getAnio()
     {
-        return $this->ano;
+        return $this->anio;
     }
 
     /**

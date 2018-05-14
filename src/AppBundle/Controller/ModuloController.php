@@ -63,12 +63,14 @@ class ModuloController extends Controller
             }else{*/
                 $nombre = $params->nombre;
                 $abreviatura = $params->abreviatura;
+                $siglaSustrato = $params->siglaSustrato;
                 $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
 
                 $modulo = new Modulo();
 
                 $modulo->setNombre($nombre);
                 $modulo->setAbreviatura($abreviatura);
+                $modulo->setSiglaSustrato($siglaSustrato);
                 $modulo->setDescripcion($descripcion);
                 $modulo->setEstado(true);
 
@@ -145,10 +147,12 @@ class ModuloController extends Controller
             if ($modulo!=null) {
                 $nombre = $params->nombre;
                 $abreviatura = $params->abreviatura;
+                $siglaSustrato = $params->siglaSustrato;
                 $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
 
                 $modulo->setNombre($nombre);
                 $modulo->setAbreviatura($abreviatura);
+                $modulo->setSiglaSustrato($siglaSustrato);
                 $modulo->setDescripcion($descripcion);
                 $modulo->setEstado(true);
 

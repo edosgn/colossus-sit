@@ -55,7 +55,7 @@ class TramitePrecioController extends Controller
             $params = json_decode($json);
 
                 $valor = $params->valor;
-                $ano = $params->ano;
+                $anio = $params->anio;
                 $tipo = $params->tipo;
                 $tramiteId = $params->tramiteId;
 
@@ -66,7 +66,7 @@ class TramitePrecioController extends Controller
                   
                 $tramitePrecio = new TramitePrecio();
                 $tramitePrecio->setValor($valor);
-                $tramitePrecio->setAno($ano);
+                $tramitePrecio->setAnio($anio);
                 $tramitePrecio->setTipo($tipo);
                 $tramitePrecio->setTramite($tramite);
                 $tramitePrecio->setEstado(true);
@@ -137,7 +137,7 @@ class TramitePrecioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $valor = $params->valor;
-            $ano = $params->ano;
+            $anio = $params->anio;
             $tipo = $params->tipo;
             $tramiteId = $params->tramiteId;
 
@@ -147,7 +147,7 @@ class TramitePrecioController extends Controller
             if ($tramitePrecio!=null) {
 
                 $tramitePrecio->setValor($valor);
-                $tramitePrecio->setAno($ano);
+                $tramitePrecio->setAnio($anio);
                 $tramitePrecio->setTipo($tipo);
                 $tramitePrecio->setTramite($tramite);
                 $tramitePrecio->setEstado(true);

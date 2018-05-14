@@ -45,6 +45,11 @@ class Sustrato
      **/
     protected $modulo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="sustratos")
+     **/
+    protected $clase;
+
 
     /**
      * Get id
@@ -150,5 +155,29 @@ class Sustrato
     public function getModulo()
     {
         return $this->modulo;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return Sustrato
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
     }
 }
