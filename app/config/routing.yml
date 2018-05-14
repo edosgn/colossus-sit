@@ -1,3 +1,7 @@
+app_tipo_recaudo:
+    resource: "@AppBundle/Controller/TipoRecaudoController.php"
+    type:     annotation
+
 app_tipo_vehiculo:
     resource: "@AppBundle/Controller/TipoVehiculoController.php"
     type:     annotation

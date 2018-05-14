@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pais
+ * TipoRecaudo
  *
- * @ORM\Table(name="pais")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PaisRepository")
+ * @ORM\Table(name="tipo_recaudo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoRecaudoRepository")
  */
-class Pais
+class TipoRecaudo
 {
     /**
      * @var int
@@ -24,12 +24,12 @@ class Pais
     /**
      * @var string
      *
-     * @ORM\Column(name="nombrePais", type="string", length=45)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $nombrePais;
+    private $nombre;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="estado", type="boolean")
      */
@@ -47,27 +47,27 @@ class Pais
     }
 
     /**
-     * Set nombrePais
+     * Set nombre
      *
-     * @param string $nombrePais
+     * @param string $nombre
      *
-     * @return Pais
+     * @return TipoRecaudo
      */
-    public function setNombrePais($nombrePais)
+    public function setNombre($nombre)
     {
-        $this->nombrePais = $nombrePais;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombrePais
+     * Get nombre
      *
      * @return string
      */
-    public function getNombrePais()
+    public function getNombre()
     {
-        return $this->nombrePais;
+        return $this->nombre;
     }
 
     /**
@@ -75,7 +75,7 @@ class Pais
      *
      * @param boolean $estado
      *
-     * @return Pais
+     * @return TipoRecaudo
      */
     public function setEstado($estado)
     {
@@ -87,10 +87,11 @@ class Pais
     /**
      * Get estado
      *
-     * @return boolean
+     * @return bool
      */
     public function getEstado()
     {
         return $this->estado;
     }
 }
+

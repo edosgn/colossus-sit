@@ -59,6 +59,11 @@ class FacturaController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{*/
+                $em = $this->getDoctrine()->getManager();
+                $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
+                $consecutivo = count($facturas)."-".date('y');
+
+
                 $numero = $params->numero;
                 $observacion = (isset($params->observacion)) ? $params->observacion : null;
                 $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
@@ -67,17 +72,15 @@ class FacturaController extends Controller
                 $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
                 
                 $estado = $params->estado;
-
-                $em = $this->getDoctrine()->getManager();
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
                 $factura = new Factura();
                 
-                $factura->setNumero($numero);
+                $factura->setNumero($consecutivo);
+                $factura->setAnio(date('y'));
+                $factura->setConsecutivo($consecutivo);
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
-                $factura->setEstado(true);
                 //Inserta llaves foraneas
                 $factura->setSedeOperativa($sedeOperativa);
                 
