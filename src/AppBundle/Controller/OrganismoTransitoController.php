@@ -29,14 +29,14 @@ class OrganismoTransitoController extends Controller
         $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado organismoTransito", 
                     'data'=> $organismoTransito,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,7 +54,7 @@ class OrganismoTransitoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -70,7 +70,7 @@ class OrganismoTransitoController extends Controller
                         $em->persist($organismoTransito);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "organismoTransito creado con exito", 
@@ -78,13 +78,13 @@ class OrganismoTransitoController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -102,20 +102,20 @@ class OrganismoTransitoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "organismoTransito con nombre"." ".$organismoTransito->getNombre(), 
                     'data'=> $organismoTransito,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -146,28 +146,28 @@ class OrganismoTransitoController extends Controller
                 $em->persist($organismoTransito);
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "organismoTransito actualizado con exito", 
                         'data'=> $organismoTransito,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El organismoTransito no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar organismoTransito", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -189,19 +189,19 @@ class OrganismoTransitoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($organismoTransito);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "organismoTransito eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -234,11 +234,11 @@ class OrganismoTransitoController extends Controller
         array('estado' => 1)
     );
       foreach ($organismoTransitos as $key => $organismoTransito) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $organismoTransito->getId(),
             'label' => $organismoTransito->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

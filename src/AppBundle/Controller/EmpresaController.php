@@ -30,14 +30,14 @@ class EmpresaController extends Controller
         $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado empresas", 
                     'data'=> $empresas,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -55,7 +55,7 @@ class EmpresaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -129,7 +129,7 @@ class EmpresaController extends Controller
                             $em->persist($empresa);
                             $em->flush();
 
-                            $responce = array(
+                            $response = array(
                                 'status' => 'success',
                                 'code' => 200,
                                 'msj' => "Empresa creado con exito", 
@@ -140,13 +140,13 @@ class EmpresaController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -164,20 +164,20 @@ class EmpresaController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "empresa con nombre"." ".$empresa->getNombre(), 
                     'data'=> $empresa,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -233,28 +233,28 @@ class EmpresaController extends Controller
                 $em->persist($empresa);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Empresa editada con exito", 
                 );
 
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La empresa no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -276,19 +276,19 @@ class EmpresaController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($empresa);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "empresa eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -329,14 +329,14 @@ class EmpresaController extends Controller
             'estado' => 1)
             );
             if ($empresa!=null) {
-               $responce = array(
+               $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "empresa encontrada", 
                     'data'=> $empresa,
             );
             }else{
-                 $responce = array(
+                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Empresa no Encontrada", 
@@ -344,13 +344,13 @@ class EmpresaController extends Controller
             }
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
 
@@ -368,14 +368,14 @@ class EmpresaController extends Controller
         array('estado' => 1)
     );
     if ($empresas == null) {
-       $responce = null;
+       $response = null;
     }
       foreach ($empresas as $key => $empresa) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $empresa->getId(),
             'label' => $empresa->getNit()."_".$empresa->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

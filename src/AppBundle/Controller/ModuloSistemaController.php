@@ -27,14 +27,14 @@ class ModuloSistemaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $modulosSistema = $em->getRepository('AppBundle:ModuloSistema')->findAll();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado modulosSistema", 
                     'data'=> $modulosSistema,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -52,7 +52,7 @@ class ModuloSistemaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -67,7 +67,7 @@ class ModuloSistemaController extends Controller
                 $em->persist($moduloSistema);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "ModuloSistema creado con exito", 
@@ -75,13 +75,13 @@ class ModuloSistemaController extends Controller
                        
                 // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -99,20 +99,20 @@ class ModuloSistemaController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $moduloSistema = $em->getRepository('AppBundle:ModuloSistema')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "moduloSistema con nombre"." ".$moduloSistema->getNombre(), 
                     'data'=> $moduloSistema,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
      /**
@@ -140,27 +140,27 @@ class ModuloSistemaController extends Controller
                 
                 $em->persist($moduloSistema);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "ModuloSistema editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El moduloSistema no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -213,14 +213,14 @@ class ModuloSistemaController extends Controller
     $moduloSistemas = $em->getRepository('AppBundle:ModuloSistema')->findAll();
         
     if ($moduloSistemas == null) {
-       $responce = null;
+       $response = null;
     }
       foreach ($moduloSistemas as $key => $moduloSistema) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $moduloSistema->getId(),
             'label' => $moduloSistema->getNombreModulo(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

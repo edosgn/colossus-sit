@@ -2,46 +2,45 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Pais;
+use AppBundle\Entity\CondicionIngreso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Pai controller.
+ * Condicioningreso controller.
  *
- * @Route("pais")
+ * @Route("condicioningreso")
  */
-class PaisController extends Controller
+class CondicionIngresoController extends Controller
 {
     /**
-     * Lists all pai entities.
+     * Lists all condicionIngreso entities.
      *
-     * @Route("/", name="pais_index")
+     * @Route("/", name="condicioningreso_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $paises = $em->getRepository('AppBundle:Pais')->findBy(
+        $condicionesIngreso = $em->getRepository('AppBundle:CondicionIngreso')->findBy(
             array('estado' => true)
         );
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "Listado de paises", 
-            'data'=> $paises,
+            'msj' => "Listado de condiciones de ingreso", 
+            'data'=> $condicionesIngreso,
         );
          
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new pai entity.
+     * Creates a new condicionIngreso entity.
      *
-     * @Route("/new", name="pais_new")
+     * @Route("/new", name="condicioningreso_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,14 +59,13 @@ class PaisController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{*/
-                $pais = new Pais();
+                $condicionIngreso = new CondicionIngreso();
 
-                $pais->setNombre($params->nombre);
-                $pais->setCodigo($params->codigo);
-                $pais->setEstado(true);
+                $condicionIngreso->setNombre($params->nombre);
+                $condicionIngreso->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($pais);
+                $em->persist($condicionIngreso);
                 $em->flush();
 
                 $response = array(
@@ -87,9 +85,9 @@ class PaisController extends Controller
     }
 
     /**
-     * Finds and displays a pai entity.
+     * Finds and displays a condicionIngreso entity.
      *
-     * @Route("/{id}/show", name="pais_show")
+     * @Route("/{id}/show", name="condicioningreso_show")
      * @Method("POST")
      */
     public function showAction($id)
@@ -100,12 +98,12 @@ class PaisController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $pais = $em->getRepository('AppBundle:Pais')->find($id);
+            $condicionIngreso = $em->getRepository('AppBundle:CondicionIngreso')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado: ".$pais->getNombre(), 
-                    'data'=> $pais,
+                    'msj' => "Registro encontrado: ".$condicionIngreso->getNombre(), 
+                    'data'=> $condicionIngreso,
             );
         }else{
             $response = array(
@@ -118,9 +116,9 @@ class PaisController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing pai entity.
+     * Displays a form to edit an existing condicionIngreso entity.
      *
-     * @Route("/{id}/edit", name="pais_edit")
+     * @Route("/{id}/edit", name="condicioningreso_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -135,24 +133,22 @@ class PaisController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $pais = $em->getRepository("AppBundle:Pais")->find($params->id);
+            $condicionIngreso = $em->getRepository("AppBundle:CondicionIngreso")->find($params->id);
 
             $nombre = $params->nombre;
-            $codigo = $params->codigo;
 
-            if ($pais!=null) {
-                $pais->setNombre($nombre);
-                $pais->setCodigo($codigo);
+            if ($condicionIngreso!=null) {
+                $condicionIngreso->setNombre($nombre);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($pais);
+                $em->persist($condicionIngreso);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $pais,
+                        'data'=> $condicionIngreso,
                 );
             }else{
                 $response = array(
@@ -163,19 +159,19 @@ class PaisController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar", 
+            );
         }
 
         return $helpers->json($response);
     }
 
     /**
-     * Deletes a pai entity.
+     * Deletes a condicionIngreso entity.
      *
-     * @Route("/{id}/delete", name="pais_delete")
+     * @Route("/{id}/delete", name="condicioningreso_delete")
      * @Method("POST")
      */
     public function deleteAction($id)
@@ -186,11 +182,10 @@ class PaisController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $pais = $em->getRepository("AppBundle:Pais")->find($params->id);
+            $condicionIngreso = $em->getRepository("AppBundle:CondicionIngreso")->find($params->id);
+            $condicionIngreso->setEstado(false);
 
-            $pais->setEstado(false);
-
-            $em->persist($pais);
+            $em->persist($condicionIngreso);
             $em->flush();
             $response = array(
                 'status' => 'success',
@@ -208,16 +203,16 @@ class PaisController extends Controller
     }
 
     /**
-     * Creates a form to delete a pai entity.
+     * Creates a form to delete a condicionIngreso entity.
      *
-     * @param Pais $pai The pai entity
+     * @param CondicionIngreso $condicionIngreso The condicionIngreso entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Pais $pai)
+    private function createDeleteForm(CondicionIngreso $condicionIngreso)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('pais_delete', array('id' => $pai->getId())))
+            ->setAction($this->generateUrl('condicioningreso_delete', array('id' => $condicionIngreso->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -226,7 +221,7 @@ class PaisController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="pais_select")
+     * @Route("/select", name="condicioningreso_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -234,13 +229,13 @@ class PaisController extends Controller
         $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $paises = $em->getRepository('AppBundle:Pais')->findBy(
+        $condicionesIngreso = $em->getRepository('AppBundle:CondicionIngreso')->findBy(
             array('estado' => 1)
         );
-        foreach ($paises as $key => $pais) {
+        foreach ($condicionesIngreso as $key => $condicionIngreso) {
             $response[$key] = array(
-                'value' => $pais->getId(),
-                'label' => $pais->getCodigo()."_".$pais->getNombre(),
+                'value' => $condicionIngreso->getId(),
+                'label' => $condicionIngreso->getNombre(),
             );
         }
         return $helpers->json($response);

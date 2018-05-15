@@ -29,14 +29,14 @@ class TramiteEspecificoController extends Controller
         $tramiteEspecifico = $em->getRepository('AppBundle:TramiteEspecifico')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado tramiteEspecifico", 
                     'data'=> $tramiteEspecifico,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -77,7 +77,7 @@ class TramiteEspecificoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -111,7 +111,7 @@ class TramiteEspecificoController extends Controller
                         $em->persist($tramiteEspecifico);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => $tramiteGeneral, 
@@ -119,13 +119,13 @@ class TramiteEspecificoController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -143,20 +143,20 @@ class TramiteEspecificoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tramiteEspecifico = $em->getRepository('AppBundle:TramiteEspecifico')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteEspecifico", 
                     'data'=> $tramiteEspecifico,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -199,27 +199,27 @@ class TramiteEspecificoController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteEspecifico);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteEspecifico editado con exito", 
                 );   
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El banco no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -241,19 +241,19 @@ class TramiteEspecificoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteEspecifico);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "tramiteEspecifico eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -290,14 +290,14 @@ class TramiteEspecificoController extends Controller
             array('estado' => 1,'tramiteGeneral' => $id)
             );
             if ($tramiteEspecificos!=null) {
-               $responce = array(
+               $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteEspecificos", 
                     'data'=> $tramiteEspecificos,
             );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "No existen tramites generales para este tramite especifico", 
@@ -305,12 +305,12 @@ class TramiteEspecificoController extends Controller
             }
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 }

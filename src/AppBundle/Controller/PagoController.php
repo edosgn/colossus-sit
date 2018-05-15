@@ -29,14 +29,14 @@ class PagoController extends Controller
         $pagos = $em->getRepository('AppBundle:Pago')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado pagos", 
                     'data'=> $pagos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,7 +54,7 @@ class PagoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -81,7 +81,7 @@ class PagoController extends Controller
                         $em->persist($pago);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "pago creado con exito", 
@@ -89,13 +89,13 @@ class PagoController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -114,20 +114,20 @@ class PagoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $pago = $em->getRepository('AppBundle:Pago')->find($id);
            
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "pago", 
                     'data'=> $pago,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -168,27 +168,27 @@ class PagoController extends Controller
                 $em->persist($pago);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "pago editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El pago no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -210,19 +210,19 @@ class PagoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($pago);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "pago eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -255,14 +255,14 @@ class PagoController extends Controller
     $pagos = $em->getRepository('AppBundle:Pago')->findAll();
         
     if ($pagos == null) {
-       $responce = null;
+       $response = null;
     }
       foreach ($pagos as $key => $pago) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $pago->getId(),
             'label' => $pago->getTramite()->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

@@ -33,14 +33,14 @@ class PropietarioVehiculoController extends Controller
         $propietarioVehiculos = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado propietarioVehiculos", 
                     'data'=> $propietarioVehiculos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -139,20 +139,20 @@ class PropietarioVehiculoController extends Controller
             }
            
 
-            $responce = array(
+            $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'msj' => "Proìetario Vehiculo creado con exito", 
             );
                     
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -170,20 +170,20 @@ class PropietarioVehiculoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "propietarioVehiculo con nombre"." ".$propietarioVehiculo->getLicenciaTransito(), 
                     'data'=> $propietarioVehiculo,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -238,27 +238,27 @@ class PropietarioVehiculoController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($propietarioVehiculo);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "CiudadanoVehiculo actualizado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El propietarioVehiculo no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar propietarioVehiculo", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -280,19 +280,19 @@ class PropietarioVehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($propietarioVehiculo);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "propietarioVehiculo eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -328,7 +328,7 @@ class PropietarioVehiculoController extends Controller
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
 
             if($vehiculo==null){
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 401,
                     'msj' => "este vehículo no se encuentra registrado en el sistema", 
@@ -343,14 +343,14 @@ class PropietarioVehiculoController extends Controller
                 );
 
                 if ($propietarioVehiculo!=null) {
-                    $responce = array(
+                    $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "propietario para vehiculo", 
                         'data'=> $propietarioVehiculo,
                     );
                 }else{
-                    $responce = array(
+                    $response = array(
                         'status' => 'error',
                         'code' => 400,
                         'msj' => "este vehiculo no tiene propietarios asignados", 
@@ -359,13 +359,13 @@ class PropietarioVehiculoController extends Controller
             }
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -417,21 +417,21 @@ class PropietarioVehiculoController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($propietarioVehiculo);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "CiudadanoVehiculo creado con exito", 
                 );
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar propietarioVehiculo", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
    

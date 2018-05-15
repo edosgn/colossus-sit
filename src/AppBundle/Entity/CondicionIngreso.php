@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pais
+ * CondicionIngreso
  *
- * @ORM\Table(name="pais")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\PaisRepository")
+ * @ORM\Table(name="condicion_ingreso")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CondicionIngresoRepository")
  */
-class Pais
+class CondicionIngreso
 {
     /**
      * @var int
@@ -24,19 +24,12 @@ class Pais
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=45)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="codigo", type="integer")
-     */
-    private $codigo;
-
-    /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="estado", type="boolean")
      */
@@ -58,7 +51,7 @@ class Pais
      *
      * @param string $nombre
      *
-     * @return Pais
+     * @return CondicionIngreso
      */
     public function setNombre($nombre)
     {
@@ -78,35 +71,11 @@ class Pais
     }
 
     /**
-     * Set codigo
-     *
-     * @param integer $codigo
-     *
-     * @return Pais
-     */
-    public function setCodigo($codigo)
-    {
-        $this->codigo = $codigo;
-
-        return $this;
-    }
-
-    /**
-     * Get codigo
-     *
-     * @return integer
-     */
-    public function getCodigo()
-    {
-        return $this->codigo;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
      *
-     * @return Pais
+     * @return CondicionIngreso
      */
     public function setEstado($estado)
     {
@@ -118,10 +87,11 @@ class Pais
     /**
      * Get estado
      *
-     * @return boolean
+     * @return bool
      */
     public function getEstado()
     {
         return $this->estado;
     }
 }
+

@@ -30,13 +30,13 @@ class MunicipioController extends Controller
             array('estado' => 1)
         );
 
-       $responce = array(
+       $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "lista de municipios",
                     'data' => $municipios, 
         );
-        return $helpers->json($responce);       
+        return $helpers->json($response);       
     }
 
     /**
@@ -59,7 +59,7 @@ class MunicipioController extends Controller
             $params = json_decode($json);
 
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -86,13 +86,13 @@ class MunicipioController extends Controller
                     $em->persist($municipio);
                     $em->flush();
 
-                    $responce = array(
+                    $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Municipio creado con exito", 
                     );
                 }else{
-                    $responce = array(
+                    $response = array(
                         'status' => 'error',
                         'code' => 400,
                         'msj' => "El codigo Dian ya esta registrado", 
@@ -101,13 +101,13 @@ class MunicipioController extends Controller
             // }
 
          }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -126,20 +126,20 @@ class MunicipioController extends Controller
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($id);
 
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Municipio con nombre"." ".$municipio->getNombre(), 
                     'data'=> $municipio,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -178,28 +178,28 @@ class MunicipioController extends Controller
                 $em->persist($municipio);
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Municipio actualizado con exito", 
                         'data'=> $municipio,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El municipio no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -225,27 +225,27 @@ class MunicipioController extends Controller
                 $em->persist($municipio);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Municipio eliminado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El Municipio no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
         
     }
 
@@ -278,20 +278,20 @@ class MunicipioController extends Controller
                 );
             }
 
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "municipio encontrado", 
                     'data'=> $municipioArray,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
     
 
@@ -326,12 +326,12 @@ class MunicipioController extends Controller
         array('estado' => 1)
     );
       foreach ($municipios as $key => $municipio) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $municipio->getId(),
             'label' => $municipio->getCodigoDane()."_".$municipio->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 
 }

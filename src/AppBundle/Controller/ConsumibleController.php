@@ -29,14 +29,14 @@ class ConsumibleController extends Controller
         $consumibles = $em->getRepository('AppBundle:Consumible')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado consumibles", 
                     'data'=> $consumibles,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,7 +54,7 @@ class ConsumibleController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -70,7 +70,7 @@ class ConsumibleController extends Controller
                         $em->persist($consumible);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "consumible creado con exito", 
@@ -78,13 +78,13 @@ class ConsumibleController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -102,20 +102,20 @@ class ConsumibleController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $consumible = $em->getRepository('AppBundle:Consumible')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "consumible encontrado", 
                     'data'=> $consumible,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -146,28 +146,28 @@ class ConsumibleController extends Controller
                 $em->persist($consumible);
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "consumible actualizado con exito", 
                         'data'=> $consumible,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El consumible no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar consumible", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -189,19 +189,19 @@ class ConsumibleController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($consumible);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "consumible eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -235,11 +235,11 @@ class ConsumibleController extends Controller
         array('estado' => 1)
     );
       foreach ($consumibles as $key => $consumible) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $consumible->getId(),
             'label' => $consumible->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

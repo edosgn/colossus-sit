@@ -33,14 +33,14 @@ class DepartamentoController extends Controller
             array('estado' => 1)
         );
 
-         $responce = array(
+         $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado departamentos", 
                     'data'=> $departamentos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -61,7 +61,7 @@ class DepartamentoController extends Controller
             $params = json_decode($json);
 
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -85,14 +85,14 @@ class DepartamentoController extends Controller
                         $em->persist($departamento);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "Departamento creado con exito", 
                         );
                         }else{
 
-                            $responce = array(
+                            $response = array(
                             'status' => 'error',
                             'code' => 400,
                             'msj' => "El codigo Dian ya esta registrado", 
@@ -101,13 +101,13 @@ class DepartamentoController extends Controller
                 // }
 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -126,20 +126,20 @@ class DepartamentoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $departamento = $em->getRepository('AppBundle:Departamento')->find($id);
 
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Departamento con nombre"." ".$departamento->getNombre(), 
                     'data'=> $departamento,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -174,28 +174,28 @@ class DepartamentoController extends Controller
                 $em->persist($departamento);
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Departamento actualizado con exito", 
                         'data'=> $departamento,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El departamento no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar departamento", 
                 );  
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
 
         
     }
@@ -224,14 +224,14 @@ class DepartamentoController extends Controller
                 $em->persist($departamento);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Departamento eliminado con exito",
                         'warning'=>"el departamento contiene municipios", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El departamento no se encuentra en la base de datos", 
@@ -244,13 +244,13 @@ class DepartamentoController extends Controller
                 $em->persist($departamento);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Departamento eliminado con exito",
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El departamento no se encuentra en la base de datos", 
@@ -260,14 +260,14 @@ class DepartamentoController extends Controller
 
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
         
     }
 
@@ -302,11 +302,11 @@ class DepartamentoController extends Controller
         array('estado' => 1)
     );
       foreach ($departamentos as $key => $departamento) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $departamento->getId(),
             'label' => $departamento->getCodigoDane()."_".$departamento->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

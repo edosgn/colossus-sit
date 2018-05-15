@@ -29,14 +29,14 @@ class VarianteController extends Controller
         $variantes = $em->getRepository('AppBundle:Variante')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado variantes", 
                     'data'=> $variantes,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,7 +54,7 @@ class VarianteController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -72,7 +72,7 @@ class VarianteController extends Controller
                         $em->persist($variante);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "variante creado con exito", 
@@ -80,13 +80,13 @@ class VarianteController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -104,20 +104,20 @@ class VarianteController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $variante = $em->getRepository('AppBundle:Variante')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "variante con nombre"." ".$variante->getNombre(), 
                     'data'=> $variante,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -151,27 +151,27 @@ class VarianteController extends Controller
                 $em->persist($variante);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "variante editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El variante no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar variante", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
     /**
      * Deletes a Variante entity.
@@ -192,19 +192,19 @@ class VarianteController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($variante);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "variante eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -242,13 +242,13 @@ class VarianteController extends Controller
             );
 
             if ($variantes==null) {
-               $responce = array(
+               $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "no hay variantes no valida", 
                 ); 
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "variantes encontrado", 
@@ -259,6 +259,6 @@ class VarianteController extends Controller
         }else{
             
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 }

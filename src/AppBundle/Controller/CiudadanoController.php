@@ -30,14 +30,14 @@ class CiudadanoController extends Controller
         $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado ciudadanos", 
                     'data'=> $ciudadanos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -57,7 +57,7 @@ class CiudadanoController extends Controller
             $params = json_decode($json);
 
             /*if (count($params)==0) {
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
@@ -136,13 +136,13 @@ class CiudadanoController extends Controller
                     $em->flush();
                     
 
-                    $responce = array(
+                    $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "ciudadano creado con exito", 
                     );
                 }else{
-                   $responce = array(
+                   $response = array(
                         'status' => 'error',
                         'code' => 400,
                         'msj' => "Identificacion ya esta registrada en la base de datos", 
@@ -150,13 +150,13 @@ class CiudadanoController extends Controller
                 }
             //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -174,20 +174,20 @@ class CiudadanoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "ciudadano con nombre"." ".$ciudadano->getNombres(), 
                     'data'=> $ciudadano,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -213,14 +213,14 @@ class CiudadanoController extends Controller
             );
 
             if ($usuario!=null) {
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "cuidadano", 
                     'data'=> $usuario,
             );
             }else{
-                 $responce = array(
+                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Identificacion no encontrada en la base de datos", 
@@ -229,13 +229,13 @@ class CiudadanoController extends Controller
 
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -325,28 +325,28 @@ class CiudadanoController extends Controller
                     $ciudadano->setUsuario($usuario);
                     $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
                         'data'=> $ciudadano,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar ciudadano", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -368,19 +368,19 @@ class CiudadanoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($ciudadano);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "ciudadano eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -413,12 +413,12 @@ class CiudadanoController extends Controller
         array('estado' => 1)
     );
       foreach ($ciudadanos as $key => $ciudadano) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $ciudadano->getId(),
             'label' => $ciudadano->getUsuario()->getIdentificacion()."_".$ciudadano->getUsuario()->getPrimerNombre()." ".$ciudadano->getUsuario()->getPrimerApellido(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 
 }

@@ -29,14 +29,14 @@ class ModalidadController extends Controller
         $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado modalidad", 
                     'data'=> $modalidad,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -56,7 +56,7 @@ class ModalidadController extends Controller
 
 
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -76,13 +76,13 @@ class ModalidadController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($modalidad);
                         $em->flush();
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "modalidad creada con exito", 
                         );
                     }else{
-                         $responce = array(
+                         $response = array(
                             'status' => 'error',
                             'code' => 400,
                             'msj' => "Codigo de ministerio de transporte debe ser unico",
@@ -91,13 +91,13 @@ class ModalidadController extends Controller
                 // }
                 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -115,20 +115,20 @@ class ModalidadController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $modalidad = $em->getRepository('AppBundle:Modalidad')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "modalidad encontrado", 
                     'data'=> $modalidad,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -161,27 +161,27 @@ class ModalidadController extends Controller
                 $em->persist($modalidad);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "modalidad editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La modalidad no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -203,19 +203,19 @@ class ModalidadController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($modalidad);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "lase eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -248,14 +248,14 @@ class ModalidadController extends Controller
         array('estado' => 1)
     );
     if ($modalidads == null) {
-       $responce = null;
+       $response = null;
     }
       foreach ($modalidads as $key => $modalidad) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $modalidad->getId(),
             'label' => $modalidad->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

@@ -206,27 +206,27 @@ class TipoDocumentoController extends Controller
                 $em->persist($tipoDocumento);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "TipoDocumento eliminado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El TipoDocumento no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**

@@ -29,14 +29,14 @@ class ModuloController extends Controller
         $modulo = $em->getRepository('AppBundle:Modulo')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado modulo", 
                     'data'=> $modulo,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -55,7 +55,7 @@ class ModuloController extends Controller
             $params = json_decode($json);
 
             /*if (count($params)==0) {
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
@@ -78,7 +78,7 @@ class ModuloController extends Controller
                 $em->persist($modulo);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Modulo creado con exito", 
@@ -86,13 +86,13 @@ class ModuloController extends Controller
                        
             //}
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -110,20 +110,20 @@ class ModuloController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $modulo = $em->getRepository('AppBundle:Modulo')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "modulo con nombre"." ".$modulo->getNombre(), 
                     'data'=> $modulo,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -159,27 +159,27 @@ class ModuloController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($modulo);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Modulo editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El modulo no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -201,19 +201,19 @@ class ModuloController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($modulo);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "modulo eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -246,14 +246,14 @@ class ModuloController extends Controller
         array('estado' => 1)
     );
     if ($modulos == null) {
-       $responce = null;
+       $response = null;
     }
       foreach ($modulos as $key => $modulo) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $modulo->getId(),
             'label' => $modulo->getAbreviatura()."_".$modulo->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

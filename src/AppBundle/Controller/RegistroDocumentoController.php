@@ -218,27 +218,27 @@ class RegistroDocumentoController extends Controller
                 $em->persist($registroDocumento);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "RegistroDocumento eliminado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El RegistroDocumento no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         } 
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**

@@ -1,3 +1,11 @@
+app_radio_accion:
+    resource: "@AppBundle/Controller/RadioAccionController.php"
+    type:     annotation
+
+app_condicion_ingreso:
+    resource: "@AppBundle/Controller/CondicionIngresoController.php"
+    type:     annotation
+
 app_origen_registro:
     resource: "@AppBundle/Controller/OrigenRegistroController.php"
     type:     annotation

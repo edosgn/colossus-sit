@@ -29,14 +29,14 @@ class TramitePrecioController extends Controller
         $tramitePrecios = $em->getRepository('AppBundle:TramitePrecio')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado tramitePrecios", 
                     'data'=> $tramitePrecios,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -75,19 +75,19 @@ class TramitePrecioController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramitePrecio);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "precio creada con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -105,20 +105,20 @@ class TramitePrecioController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramitePrecio encontrada", 
                     'data'=> $tramitePrecio,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -157,27 +157,27 @@ class TramitePrecioController extends Controller
                 $em->persist($tramitePrecio);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "precio editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La precio no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
