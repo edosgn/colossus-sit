@@ -123,7 +123,7 @@ class ColorController extends Controller
      *
      * @Route("/edit", name="color_edit")
      * @Method({"GET", "POST"})
-     */
+     */ 
     public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");

@@ -30,13 +30,13 @@ class AlmacenController extends Controller
             array('estado' => 1)
         );
 
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "lista de almacenes",
                     'data' => $almacenes, 
         );
-        return $helpers->json($responce);
+        return $helpers->json($response);
         
     }
 
@@ -60,7 +60,7 @@ class AlmacenController extends Controller
             $params = json_decode($json);
 
             /*if (count($params)==0) {
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "los campos no pueden estar vacios", 
@@ -89,20 +89,20 @@ class AlmacenController extends Controller
                 $em->persist($almacen);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Almacen creado con exito", 
                 );
             //}
          }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
     
 
@@ -122,20 +122,20 @@ class AlmacenController extends Controller
             $em = $this->getDoctrine()->getManager();
             $almacen = $em->getRepository('AppBundle:Almacen')->find($id);
 
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Almacen con id"." ".$almacen->getId(), 
                     'data'=> $almacen,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -179,27 +179,27 @@ class AlmacenController extends Controller
                     $em->persist($almacen);
                     $em->flush();
 
-                    $responce = array(
+                    $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Almacen editado con exito", 
                     );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El Almacen no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -225,27 +225,27 @@ class AlmacenController extends Controller
                 $em->persist($almacen);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Almacen eliminado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El Almacen no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**

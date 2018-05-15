@@ -29,16 +29,30 @@ class Factura
     private $numero;
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="consecutivo", type="string", length=5)
      */
-    private $estado = false;
+    private $consecutivo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="anio", type="integer")
+     */
+    private $anio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=100)
+     */
+    private $estado = 'Emitida';
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaCreacion", type="date")
+     * @ORM\Column(name="fechaCreacion", type="datetime")
      */
     private $fechaCreacion;
 
@@ -70,22 +84,10 @@ class Factura
      */
     private $valorNeto = 0;
 
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroLicenciaTrancito", type="string", length=45)
-     */
-    private $numeroLicenciaTrancito;
-    
-
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
      **/
     protected $sedeOperativa;
-
-
-    
 
     /**
      * Get id
@@ -122,9 +124,57 @@ class Factura
     }
 
     /**
+     * Set consecutivo
+     *
+     * @param string $consecutivo
+     *
+     * @return Factura
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return string
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set anio
+     *
+     * @param integer $anio
+     *
+     * @return Factura
+     */
+    public function setAnio($anio)
+    {
+        $this->anio = $anio;
+
+        return $this;
+    }
+
+    /**
+     * Get anio
+     *
+     * @return integer
+     */
+    public function getAnio()
+    {
+        return $this->anio;
+    }
+
+    /**
      * Set estado
      *
-     * @param boolean $estado
+     * @param string $estado
      *
      * @return Factura
      */
@@ -138,7 +188,7 @@ class Factura
     /**
      * Get estado
      *
-     * @return boolean
+     * @return string
      */
     public function getEstado()
     {
@@ -166,7 +216,7 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion->format('Y-m-d');
+        return $this->fechaCreacion;
     }
 
     /**
@@ -263,30 +313,6 @@ class Factura
     public function getValorNeto()
     {
         return $this->valorNeto;
-    }
-
-    /**
-     * Set numeroLicenciaTrancito
-     *
-     * @param string $numeroLicenciaTrancito
-     *
-     * @return Factura
-     */
-    public function setNumeroLicenciaTrancito($numeroLicenciaTrancito)
-    {
-        $this->numeroLicenciaTrancito = $numeroLicenciaTrancito;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroLicenciaTrancito
-     *
-     * @return string
-     */
-    public function getNumeroLicenciaTrancito()
-    {
-        return $this->numeroLicenciaTrancito;
     }
 
     /**

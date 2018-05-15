@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SedeOperativa
+ * Pais
  *
- * @ORM\Table(name="sede_operativa")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\SedeOperativaRepository")
+ * @ORM\Table(name="pais")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PaisRepository")
  */
-class SedeOperativa
+class Pais
 {
     /**
      * @var int
@@ -24,26 +24,32 @@ class SedeOperativa
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=45)
      */
     private $nombre;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="codigo_divipo", type="string", length=50)
+     * @ORM\Column(name="codigo", type="integer")
      */
-    private $codigoDivipo;
+    private $codigo;
 
     /**
-     * @var bool
+     * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
 
-    
 
-
-
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 }

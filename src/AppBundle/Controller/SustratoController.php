@@ -64,6 +64,7 @@ class SustratoController extends Controller
                 //Captura llaves foraneas
                 $sedeOperativaId = $params->sedeOperativaId;
                 $moduloId = $params->moduloId;
+                $claseId = (isset($params->claseId)) ? $params->claseId : null;
 
                 $em = $this->getDoctrine()->getManager();
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
@@ -77,6 +78,10 @@ class SustratoController extends Controller
                     //Inserta llaves foraneas
                     $sustrato->setSedeOperativa($sedeOperativa);
                     $sustrato->setModulo($modulo);
+                    if ($claseId) {
+                        $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+                        $sustrato->setClase($clase);
+                    }
 
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($sustrato);
@@ -119,7 +124,7 @@ class SustratoController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "sustrato con numero"." ".$sustrato->getNumero(), 
+                    'msj' => "ustrato con numero"." ".$sustrato->getNumero(), 
                     'data'=> $sustrato,
             );
         }else{

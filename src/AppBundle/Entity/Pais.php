@@ -24,9 +24,23 @@ class Pais
     /**
      * @var string
      *
-     * @ORM\Column(name="nombrePais", type="string", length=45)
+     * @ORM\Column(name="nombre", type="string", length=45)
      */
-    private $nombrePais;
+    private $nombre;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer")
+     */
+    private $codigo;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
 
 
     /**
@@ -40,26 +54,74 @@ class Pais
     }
 
     /**
-     * Set nombrePais
+     * Set nombre
      *
-     * @param string $nombrePais
+     * @param string $nombre
      *
      * @return Pais
      */
-    public function setNombrePais($nombrePais)
+    public function setNombre($nombre)
     {
-        $this->nombrePais = $nombrePais;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombrePais
+     * Get nombre
      *
      * @return string
      */
-    public function getNombrePais()
+    public function getNombre()
     {
-        return $this->nombrePais;
+        return $this->nombre;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return Pais
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return Pais
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }

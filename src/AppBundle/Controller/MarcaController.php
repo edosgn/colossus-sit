@@ -29,14 +29,14 @@ class MarcaController extends Controller
         $marcas = $em->getRepository('AppBundle:Marca')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado marcas", 
                     'data'=> $marcas,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -56,7 +56,7 @@ class MarcaController extends Controller
 
 
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -76,13 +76,13 @@ class MarcaController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($marca);
                         $em->flush();
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "marca creada con exito", 
                         );
                     }else{
-                         $responce = array(
+                         $response = array(
                             'status' => 'error',
                             'code' => 400,
                             'msj' => "Codigo de ministerio de transporte debe ser unico",
@@ -91,13 +91,13 @@ class MarcaController extends Controller
                 // }
                 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -115,20 +115,20 @@ class MarcaController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $marca = $em->getRepository('AppBundle:Marca')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "marca encontrado", 
                     'data'=> $marca,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -161,27 +161,27 @@ class MarcaController extends Controller
                 $em->persist($marca);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "marca editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La marca no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -203,19 +203,19 @@ class MarcaController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($marca);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "lase eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -249,11 +249,11 @@ class MarcaController extends Controller
     );
      
       foreach ($marcas as $key => $marca) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $marca->getId(),
             'label' => $marca->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

@@ -29,14 +29,14 @@ class LineaController extends Controller
         $lineas = $em->getRepository('AppBundle:Linea')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado lineas", 
                     'data'=> $lineas,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -56,7 +56,7 @@ class LineaController extends Controller
 
 
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -81,13 +81,13 @@ class LineaController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($linea);
                         $em->flush();
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "linea creada con exito", 
                         );
                     }else{
-                         $responce = array(
+                         $response = array(
                             'status' => 'error',
                             'code' => 400,
                             'msj' => "Codigo de ministerio de transporte debe ser unico",
@@ -96,13 +96,13 @@ class LineaController extends Controller
                 // }
                 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-            } 
-        return $helpers->json($responce);
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -120,20 +120,20 @@ class LineaController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $linea = $em->getRepository('AppBundle:Linea')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "linea encontrada", 
                     'data'=> $linea,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -169,27 +169,27 @@ class LineaController extends Controller
                 $em->persist($linea);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "linea editada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La linea no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -211,19 +211,19 @@ class LineaController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($linea);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "linea eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -269,7 +269,7 @@ class LineaController extends Controller
             }
 
          
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Lineas encontradas", 
@@ -278,7 +278,7 @@ class LineaController extends Controller
            
 
         
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
 
@@ -296,11 +296,11 @@ class LineaController extends Controller
         array('estado' => 1)
     );
       foreach ($lineas as $key => $linea) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $linea->getId(),
             'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

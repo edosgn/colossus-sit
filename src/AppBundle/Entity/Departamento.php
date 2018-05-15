@@ -38,19 +38,19 @@ class Departamento
     /**
      * @var string
      *
-     * @ORM\Column(name="codigo_dian", type="string", length=255)
+     * @ORM\Column(name="codigoDane", type="string", length=255)
      */
-    private $codigoDian;
+    private $codigoDane;
 
-
- 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pais", inversedBy="departamentos")
+     */
+    private $pais;
 
     public function __toString()
     {
         return $this->getNombre();
     }
-
-   
 
     /**
      * Get id
@@ -111,26 +111,50 @@ class Departamento
     }
 
     /**
-     * Set codigoDian
+     * Set codigoDane
      *
-     * @param string $codigoDian
+     * @param string $codigoDane
      *
      * @return Departamento
      */
-    public function setCodigoDian($codigoDian)
+    public function setCodigoDane($codigoDane)
     {
-        $this->codigoDian = $codigoDian;
+        $this->codigoDane = $codigoDane;
 
         return $this;
     }
 
     /**
-     * Get codigoDian
+     * Get codigoDane
      *
      * @return string
      */
-    public function getCodigoDian()
+    public function getCodigoDane()
     {
-        return $this->codigoDian;
+        return $this->codigoDane;
+    }
+
+    /**
+     * Set pais
+     *
+     * @param \AppBundle\Entity\Pais $pais
+     *
+     * @return Departamento
+     */
+    public function setPais(\AppBundle\Entity\Pais $pais = null)
+    {
+        $this->pais = $pais;
+
+        return $this;
+    }
+
+    /**
+     * Get pais
+     *
+     * @return \AppBundle\Entity\Pais
+     */
+    public function getPais()
+    {
+        return $this->pais;
     }
 }

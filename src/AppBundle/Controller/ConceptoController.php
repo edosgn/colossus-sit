@@ -29,14 +29,14 @@ class ConceptoController extends Controller
         $conceptos = $em->getRepository('AppBundle:Concepto')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado conceptos", 
                     'data'=> $conceptos,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,7 +54,7 @@ class ConceptoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -79,7 +79,7 @@ class ConceptoController extends Controller
                         $em->persist($concepto);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "concepto creado con exito", 
@@ -87,13 +87,13 @@ class ConceptoController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -111,20 +111,20 @@ class ConceptoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $concepto = $em->getRepository('AppBundle:Concepto')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "concepto encontrado", 
                     'data'=> $concepto,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -166,27 +166,27 @@ class ConceptoController extends Controller
                         $em->persist($concepto);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "concepto editado con exito", 
                         );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El concepto no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar concepto", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -208,19 +208,19 @@ class ConceptoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($concepto);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "concepto eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**

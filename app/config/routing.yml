@@ -1,3 +1,31 @@
+app_radio_accion:
+    resource: "@AppBundle/Controller/RadioAccionController.php"
+    type:     annotation
+
+app_condicion_ingreso:
+    resource: "@AppBundle/Controller/CondicionIngresoController.php"
+    type:     annotation
+
+app_origen_registro:
+    resource: "@AppBundle/Controller/OrigenRegistroController.php"
+    type:     annotation
+
+app_pais:
+    resource: "@AppBundle/Controller/PaisController.php"
+    type:     annotation
+
+app_tipo_recaudo:
+    resource: "@AppBundle/Controller/TipoRecaudoController.php"
+    type:     annotation
+
+app_tipo_vehiculo:
+    resource: "@AppBundle/Controller/TipoVehiculoController.php"
+    type:     annotation
+
+app_tramite_precio:
+    resource: "@AppBundle/Controller/TramitePrecioController.php"
+    type:     annotation
+
 app_tipo_sociedad:
     resource: "@AppBundle/Controller/TipoSociedadController.php"
     type:     annotation

@@ -24,19 +24,55 @@ class VehiculoController extends Controller
      */
     public function indexAction()
     {
+        // $pdf = $this->container->get("white_october.tcpdf")->create(
+        //     'LANDSCAPE',
+        //     PDF_UNIT,
+        //     PDF_PAGE_FORMAT,
+        //     true,
+        //     'UTF-8',
+        //     false
+        // );
+        // $pdf->SetAuthor('qweqwe');
+        // $pdf->SetTitle('Prueba TCPDF');
+        // $pdf->SetSubject('Your client');
+        // $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        // $pdf->setFontSubsetting(true);
+
+        // $pdf->SetFont('helvetica', '', 11, '', true);
+        // $pdf->AddPage();
+
+        // $html = '<h1>Working on Symfony</h1>';
+
+        // $pdf->writeHTMLCell(
+        //     $w = 0,
+        //     $h = 0,
+        //     $x = '',
+        //     $y = '',
+        //     $html,
+        //     $border = 0,
+        //     $ln = 1,
+        //     $fill = 0,
+        //     $reseth = true,
+        //     $align = '',
+        //     $autopadding = true
+        // );
+
+        // $pdf->Output("example.pdf", 'I');
+        // die();
+        
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado vehiculo", 
                     'data'=> $vehiculo,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
 
     }
 
@@ -55,7 +91,7 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -137,7 +173,7 @@ class VehiculoController extends Controller
                         $em->persist($vehiculo);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "Vehiculo creado con exito", 
@@ -145,13 +181,13 @@ class VehiculoController extends Controller
                        
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -169,20 +205,20 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "vehiculo", 
                     'data'=> $vehiculo,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -207,27 +243,27 @@ class VehiculoController extends Controller
             );
 
             if ($vehiculo!=null) {
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "vehiculo", 
                     'data'=> $vehiculo,
             );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Vehiculo no encotrado", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
     
 
@@ -322,27 +358,27 @@ class VehiculoController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Vehiculo editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El vehiculo no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar vehiculo", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     
@@ -366,19 +402,19 @@ class VehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "vehiculo eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -411,12 +447,12 @@ class VehiculoController extends Controller
         array('estado' => 1)
     );
       foreach ($vehiculos as $key => $vehiculo) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $vehiculo->getId(),
             'label' => $vehiculo->getPlaca(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 
 
@@ -488,13 +524,13 @@ class VehiculoController extends Controller
             }
 
             if (count($vehiculos) > 0) {
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 500,
                     'data' => $vehiculos, 
                 ); 
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'notFound',
                     'code' => 600,
                     'msj' => "No se encontraron registros con los parametros seleccionados", 
@@ -502,13 +538,13 @@ class VehiculoController extends Controller
             }
 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );  
         }
         
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 }

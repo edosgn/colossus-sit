@@ -29,14 +29,14 @@ class DependenciaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $dependencias = $em->getRepository('AppBundle:Dependencia')->findByEstado(1);
 
-         $responce = array(
+         $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado dependencias", 
                     'data'=> $dependencias,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -60,7 +60,7 @@ class DependenciaController extends Controller
             $params = json_decode($json);
 
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -81,14 +81,14 @@ class DependenciaController extends Controller
                         $em->persist($dependencia);
                         $em->flush();
 
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "Dependencia creada con exito", 
                         );
                         }else{
 
-                            $responce = array(
+                            $response = array(
                             'status' => 'error',
                             'code' => 400,
                             'msj' => "La dependencia ya se encuentra registrada en la base de datos", 
@@ -97,13 +97,13 @@ class DependenciaController extends Controller
                 // }
 
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -122,20 +122,20 @@ class DependenciaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $dependencia = $em->getRepository('AppBundle:Dependencia')->find($id);
 
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Dependencia con nombre"." ".$dependencia->getNombre(), 
                     'data'=> $dependencia,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -164,28 +164,28 @@ class DependenciaController extends Controller
 
                 $em->flush();
 
-                 $responce = array(
+                 $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Dependencia actualizado con exito", 
                         'data'=> $dependencia,
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El dependencia no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar dependencia", 
                 );  
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -208,7 +208,7 @@ class DependenciaController extends Controller
             $departamento->setEstado(0);
             $em->flush();
 
-            $responce = array(
+            $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'msj' => "Dependencia Eliminada con Exito"
@@ -216,7 +216,7 @@ class DependenciaController extends Controller
             );
 
         }else{
-        $responce = array(
+        $response = array(
             'status' => 'error',
             'code' => 400,
             'msj' => "Autorizacion no valida", 
@@ -224,7 +224,7 @@ class DependenciaController extends Controller
         }
        
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -257,11 +257,11 @@ class DependenciaController extends Controller
         array('estado' => 1)
     );
       foreach ($dependencias as $key => $dependencia) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $dependencia->getId(),
             'label' => $dependencia->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

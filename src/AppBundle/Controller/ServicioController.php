@@ -29,14 +29,14 @@ class ServicioController extends Controller
         $servicios = $em->getRepository('AppBundle:Servicio')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado servicios", 
                     'data'=> $servicios,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -53,52 +53,52 @@ class ServicioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            if (count($params)==0) {
-            //     $responce = array(
-            //         'status' => 'error',
-            //         'code' => 400,
-            //         'msj' => "los campos no pueden estar vacios", 
-            //     );
-            // }else{
-                        $nombre = $params->nombre;
-                        $codigo = $params->codigo;
-                        $em = $this->getDoctrine()->getManager();
-                       
-                        $servicio = $em->getRepository('AppBundle:Servicio')->findBy(
-                            array('codigo' => $codigo)
-                        );
-                        if ($servicio==null) {
-                            $servicio = new Servicio();
-                            $servicio->setNombre($nombre);
-                            $servicio->setCodigo($codigo);
-                            $servicio->setEstado(true);
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($servicio);
-                            $em->flush();
 
-                            $responce = array(
-                                'status' => 'success',
-                                'code' => 200,
-                                'msj' => "servicio creado con exito", 
-                            ); 
-                        }else{
-                            $responce = array(
-                                'status' => 'error',
-                                'code' => 400,
-                                'msj' => "codigo no puede ser repetido", 
-                            );
-                        }
-                        
-                       
-                    }
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $nombre = $params->nombre;
+                $codigo = $params->codigo;
+
+                $em = $this->getDoctrine()->getManager();
+                $servicio = $em->getRepository('AppBundle:Servicio')->findBy(
+                    array('codigo' => $codigo)
+                );
+                if ($servicio==null) {
+                    $servicio = new Servicio();
+                    $servicio->setNombre($nombre);
+                    $servicio->setCodigo($codigo);
+                    $servicio->setEstado(true);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($servicio);
+                    $em->flush();
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "servicio creado con exito", 
+                    ); 
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "codigo no puede ser repetido", 
+                    );
+                }
+            //}
+                
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -116,20 +116,20 @@ class ServicioController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $servicio = $em->getRepository('AppBundle:Servicio')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "servicio con nombre"." ".$servicio->getNombre(), 
                     'data'=> $servicio,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -163,27 +163,27 @@ class ServicioController extends Controller
                 $em->persist($servicio);
                 $em->flush();
 
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "servicio editado con exito", 
                 ); 
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El servicio no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -205,19 +205,19 @@ class ServicioController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($servicio);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "servicio eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -251,11 +251,11 @@ class ServicioController extends Controller
         array('estado' => 1)
     );
       foreach ($servicios as $key => $servicio) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $servicio->getId(),
             'label' => $servicio->getCodigo()."_".$servicio->getNombre(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

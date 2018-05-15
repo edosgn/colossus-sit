@@ -29,15 +29,15 @@ class TramiteGeneralController extends Controller
         $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado tramiteGeneral", 
                     'data'=> $tramiteGeneral,
             );
          
-        return $helpers->json($responce);
-    }
+        return $helpers->json($response);
+    } 
 
     /**
      * Creates a new TramiteGeneral entity.
@@ -55,7 +55,7 @@ class TramiteGeneralController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -99,20 +99,20 @@ class TramiteGeneralController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($tramiteGeneral);
                         $em->flush();
-                        $responce = array(
+                        $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'msj' => "tramiteGeneral creado con exito", 
                         );
                     // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response); 
     }
 
     /**
@@ -130,20 +130,20 @@ class TramiteGeneralController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tramiteGeneral = $em->getRepository('AppBundle:TramiteGeneral')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteGeneral", 
                     'data'=> $tramiteGeneral,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -202,27 +202,27 @@ class TramiteGeneralController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteGeneral);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteGeneral editado con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "El banco no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -245,19 +245,19 @@ class TramiteGeneralController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteGeneral);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "tramiteGeneral eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -297,14 +297,14 @@ class TramiteGeneralController extends Controller
             );
 
             if ($tramitesGenerales!=null) {
-               $responce = array(
+               $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "tramiteGeneral", 
                     'data'=> $tramitesGenerales,
             ); 
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "No existen tramites generales asociados", 
@@ -312,13 +312,13 @@ class TramiteGeneralController extends Controller
             }
             
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
 

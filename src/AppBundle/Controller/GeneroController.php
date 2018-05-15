@@ -242,6 +242,6 @@ class GeneroController extends Controller
                 'label' => $genero->getSigla()."_".$genero->getNombre(),
             );
         }
-       return $helpers->json($response);
+        return $helpers->json($response);
     }
 }

@@ -29,14 +29,14 @@ class CuentaController extends Controller
         $cuentas = $em->getRepository('AppBundle:Cuenta')->findBy(
             array('estado' => 1)
         );
-        $responce = array(
+        $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado cuentas", 
                     'data'=> $cuentas,
             );
          
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -54,7 +54,7 @@ class CuentaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             // if (count($params)==0) {
-            //     $responce = array(
+            //     $response = array(
             //         'status' => 'error',
             //         'code' => 400,
             //         'msj' => "los campos no pueden estar vacios", 
@@ -74,20 +74,20 @@ class CuentaController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($cuenta);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "cuenta creado con exito", 
                 );
                 // }
         }else{
-            $responce = array(
+            $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
             } 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -105,20 +105,20 @@ class CuentaController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $cuenta = $em->getRepository('AppBundle:Cuenta')->find($id);
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "cuenta encontrada", 
                     'data'=> $cuenta,
             );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -154,27 +154,27 @@ class CuentaController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($cuenta);
                 $em->flush();
-                $responce = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "cuenta actualizada con exito", 
                 );
             }else{
-                $responce = array(
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "La cuenta no se encuentra en la base de datos", 
                 );
             }
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida para editar banco", 
                 );
         }
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -196,19 +196,19 @@ class CuentaController extends Controller
             $em = $this->getDoctrine()->getManager();
                 $em->persist($cuenta);
                 $em->flush();
-            $responce = array(
+            $response = array(
                     'status' => 'success',
                         'code' => 200,
                         'msj' => "cuenta eliminado con exito", 
                 );
         }else{
-            $responce = array(
+            $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
         }
-        return $helpers->json($responce);
+        return $helpers->json($response);
     }
 
     /**
@@ -241,11 +241,11 @@ class CuentaController extends Controller
         array('estado' => 1)
     );
       foreach ($cuentas as $key => $cuenta) {
-        $responce[$key] = array(
+        $response[$key] = array(
             'value' => $cuenta->getId(),
             'label' => $cuenta->getBanco()->getNombre()."_".$cuenta->getNumero(),
             );
       }
-       return $helpers->json($responce);
+       return $helpers->json($response);
     }
 }

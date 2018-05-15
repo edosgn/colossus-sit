@@ -27,6 +27,13 @@ class Empresa
      * @ORM\Column(name="nit", type="integer")
      */
     private $nit;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dv", type="integer")
+     */
+    private $dv;
  
     /**
      * @var string
@@ -132,9 +139,6 @@ class Empresa
      * @ORM\Column(name="fecha_vencimiento_registro_mercantil", type="datetime")
      */
     private $fechaVencimientoRegistroMercantil;
-
-    
-    
     
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="empresas") */
     private $municipio;
@@ -145,8 +149,9 @@ class Empresa
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
     private $ciudadano;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="empresas") */
+    private $tipoIdentificacion;
     
-
 
     /**
      * Get id
@@ -204,6 +209,30 @@ class Empresa
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set dv
+     *
+     * @param integer $dv
+     *
+     * @return Empresa
+     */
+    public function setDv($dv)
+    {
+        $this->dv = $dv;
+
+        return $this;
+    }
+
+    /**
+     * Get dv
+     *
+     * @return integer
+     */
+    public function getDv()
+    {
+        return $this->dv;
     }
 
     /**
@@ -612,5 +641,29 @@ class Empresa
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set tipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
+     *
+     * @return Empresa
+     */
+    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
     }
 }
