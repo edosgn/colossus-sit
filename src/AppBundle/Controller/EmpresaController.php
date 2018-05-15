@@ -71,6 +71,7 @@ class EmpresaController extends Controller
                         $empresaPrestadora = $params->empresaPrestadora;
                         $certificadoExistencial = $params->certificadoExistencial;
                         $tipoSociedadId = $params->tipoSociedadId;
+                        $tipoIdentificacionId = $params->tipoIdentificacionId;
                         $tipoEntidad = $params->tipoEntidad;
                         $municipioId = $params->municipioId;
                         $nroRegistro = $params->nroRegistro;
@@ -89,6 +90,9 @@ class EmpresaController extends Controller
                 //             die();
                         $em = $this->getDoctrine()->getManager();                                                 
                         $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
+                        $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                            $tipoIdentificacionId
+                        );
                         $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
                 
@@ -106,6 +110,7 @@ class EmpresaController extends Controller
                             $empresa->setEmpresaPrestadora($empresaPrestadora);
                             $empresa->setCertificadoExistencia($certificadoExistencial);
                             $empresa->setTipoSocidad($tipoSociedad);
+                            $empresa->setTipoIdentificacion($tipoIdentificacion);
                             $empresa->setTipoEntidad($tipoEntidad);
                             $empresa->setMunicipio($municipio);
                             $empresa->setNroRegistroMercantil($nroRegistro);
