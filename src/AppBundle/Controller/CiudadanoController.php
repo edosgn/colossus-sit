@@ -71,6 +71,8 @@ class CiudadanoController extends Controller
                 $direccion = (isset($params->direccion)) ? $params->direccion : null;
                 $telefonoUsuario = (isset($params->telefonoUsuario)) ? $params->telefonoUsuario : null;
                 $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
+                $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
+                $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
 
                 $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
                 $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
@@ -119,6 +121,7 @@ class CiudadanoController extends Controller
                     $usuario->setTipoIdentificacion($tipoIdentificacion);
                     $usuario->setIdentificacion($numeroIdentificacion);
                     $usuario->setTelefono($telefonoUsuario);
+                    $usuario->setFechaNacimiento($fechaNacimientoDateTime);
                     $usuario->setCorreo($correoUsuario);
                     $usuario->setEstado("Activo");
                     $usuario->setRole("ROLE_USER");

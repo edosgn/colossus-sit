@@ -222,13 +222,14 @@ class GeneroController extends Controller
         ;
     }
 
+
     /**
      * datos para select 2
      *
-     * @Route("/select", name="genero_select")
-     * @Method({"GET", "POST"})
+     * @Route("/select/genero/ciudadano", name="genero_select_ciudadano")
+     * @Method("GET")
      */
-    public function selectAction()
+    public function selectGeneroCiudadanoAction()
     {
         $response = null;
         $helpers = $this->get("app.helpers");

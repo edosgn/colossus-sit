@@ -226,10 +226,10 @@ class PaisController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="pais_select")
+     * @Route("/select/pais", name="pais_select")
      * @Method({"GET", "POST"})
      */
-    public function selectAction()
+    public function selectPaisAction()
     {
         $response = null;
         $helpers = $this->get("app.helpers");

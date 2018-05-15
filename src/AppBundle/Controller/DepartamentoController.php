@@ -309,4 +309,30 @@ class DepartamentoController extends Controller
       }
        return $helpers->json($response);
     }
+
+
+    /**
+     * datos para select 2 por pais
+     *
+     * @Route("/{id}/select/departamentos/por/pais", name="departamento_select_por_pais")
+     * @Method({"GET", "POST"})
+     */
+    public function selectDepartamentoPorPaisAction($id)
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
+        array(
+            'pais' => $id,
+            'estado' => 1
+        )
+    );
+      foreach ($departamentos as $key => $departamento) {
+        $response[$key] = array(
+            'value' => $departamento->getId(),
+            'label' => $departamento->getCodigoDane()."_".$departamento->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }
