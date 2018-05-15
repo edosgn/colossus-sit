@@ -274,7 +274,7 @@ class MunicipioController extends Controller
             foreach ($municipios as $key => $municipio) {
             $municipioArray[$key] = array(
                 'value' => $municipio->getId(),
-                'label' => $municipio->getCodigoDian()."_".$municipio->getNombre(),
+                'label' => $municipio->getCodigoDane()."_".$municipio->getNombre(),
                 );
             }
 
@@ -328,7 +328,7 @@ class MunicipioController extends Controller
       foreach ($municipios as $key => $municipio) {
         $responce[$key] = array(
             'value' => $municipio->getId(),
-            'label' => $municipio->getCodigoDian()."_".$municipio->getNombre(),
+            'label' => $municipio->getCodigoDane()."_".$municipio->getNombre(),
             );
       }
        return $helpers->json($responce);

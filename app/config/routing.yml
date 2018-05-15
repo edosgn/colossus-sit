@@ -1,3 +1,7 @@
+app_pais:
+    resource: "@AppBundle/Controller/PaisController.php"
+    type:     annotation
+
 app_tipo_recaudo:
     resource: "@AppBundle/Controller/TipoRecaudoController.php"
     type:     annotation

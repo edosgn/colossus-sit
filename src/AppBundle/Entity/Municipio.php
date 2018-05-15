@@ -32,9 +32,9 @@ class Municipio
     /**
      * @var string
      *
-     * @ORM\Column(name="codigo_dian", type="string", length=255)
+     * @ORM\Column(name="codigoDane", type="string", length=255)
      */
-    private $codigoDian;
+    private $codigoDane;
 
     /**
      * @var boolean
@@ -43,9 +43,9 @@ class Municipio
      */
     private $estado;
 
-     /**
-      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Departamento", inversedBy="municipios")
-      */
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Departamento", inversedBy="municipios")
+     */
     private $departamento;
 
 
@@ -53,7 +53,6 @@ class Municipio
     {
         return $this->getNombre();
     }
-
 
     /**
      * Get id
@@ -90,53 +89,28 @@ class Municipio
     }
 
     /**
-     * Set codigoDian
+     * Set codigoDane
      *
-     * @param string $codigoDian
+     * @param string $codigoDane
      *
      * @return Municipio
      */
-    public function setCodigoDian($codigoDian)
+    public function setCodigoDane($codigoDane)
     {
-        $this->codigoDian = $codigoDian;
+        $this->codigoDane = $codigoDane;
 
         return $this;
     }
 
     /**
-     * Get codigoDian
+     * Get codigoDane
      *
      * @return string
      */
-    public function getCodigoDian()
+    public function getCodigoDane()
     {
-        return $this->codigoDian;
+        return $this->codigoDane;
     }
-
-    /**
-     * Set departamento
-     *
-     * @param \AppBundle\Entity\Departamento $departamento
-     *
-     * @return Municipio
-     */
-    public function setDepartamento(\AppBundle\Entity\Departamento $departamento = null)
-    {
-        $this->departamento = $departamento;
-        return $this;
-    }
-
-    /**
-     * Get departamento
-     *
-     * @return \AppBundle\Entity\Departamento
-     */
-    public function getDepartamento()
-    {
-        return $this->departamento;
-    }
-
-   
 
     /**
      * Set estado
@@ -160,5 +134,29 @@ class Municipio
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set departamento
+     *
+     * @param \AppBundle\Entity\Departamento $departamento
+     *
+     * @return Municipio
+     */
+    public function setDepartamento(\AppBundle\Entity\Departamento $departamento = null)
+    {
+        $this->departamento = $departamento;
+
+        return $this;
+    }
+
+    /**
+     * Get departamento
+     *
+     * @return \AppBundle\Entity\Departamento
+     */
+    public function getDepartamento()
+    {
+        return $this->departamento;
     }
 }

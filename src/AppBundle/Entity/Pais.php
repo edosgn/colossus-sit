@@ -24,9 +24,9 @@ class Pais
     /**
      * @var string
      *
-     * @ORM\Column(name="nombrePais", type="string", length=45)
+     * @ORM\Column(name="nombre", type="string", length=45)
      */
-    private $nombrePais;
+    private $nombre;
 
     /**
      * @var boolean
@@ -47,27 +47,27 @@ class Pais
     }
 
     /**
-     * Set nombrePais
+     * Set nombre
      *
-     * @param string $nombrePais
+     * @param string $nombre
      *
      * @return Pais
      */
-    public function setNombrePais($nombrePais)
+    public function setNombre($nombre)
     {
-        $this->nombrePais = $nombrePais;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombrePais
+     * Get nombre
      *
      * @return string
      */
-    public function getNombrePais()
+    public function getNombre()
     {
-        return $this->nombrePais;
+        return $this->nombre;
     }
 
     /**

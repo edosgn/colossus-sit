@@ -304,7 +304,7 @@ class DepartamentoController extends Controller
       foreach ($departamentos as $key => $departamento) {
         $responce[$key] = array(
             'value' => $departamento->getId(),
-            'label' => $departamento->getCodigoDian()."_".$departamento->getNombre(),
+            'label' => $departamento->getCodigoDane()."_".$departamento->getNombre(),
             );
       }
        return $helpers->json($responce);

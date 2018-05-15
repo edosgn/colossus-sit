@@ -65,6 +65,7 @@ class EmpresaController extends Controller
                         $nombre = $params->nombre;
                         $sigla = $params->sigla;
                         $nit = $params->nit;
+                        $dv = $params->dv;
                         $capitalPagado = $params->capitalPagado;
                         $patrimonioLiquido = $params->patrimonioLiquido;
                         $empresaPrestadora = $params->empresaPrestadora;
@@ -99,6 +100,7 @@ class EmpresaController extends Controller
                             $empresa->setNombre($nombre);
                             $empresa->setSigla($sigla);
                             $empresa->setNit($nit);
+                            $empresa->setDv($dv);
                             $empresa->setCapitalPagado($capitalPagado);
                             $empresa->setCapitalLiquido($patrimonioLiquido);
                             $empresa->setEmpresaPrestadora($empresaPrestadora);
@@ -197,6 +199,7 @@ class EmpresaController extends Controller
 
             if ($empresa!=null) {
                 $nit = $params->nit;
+                $dv = $params->dv;
                 $nombre = $params->nombre;
                 $telefono = $params->telefono;
                 $direccion = $params->direccion;
@@ -210,6 +213,7 @@ class EmpresaController extends Controller
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
 
                 $empresa->setNit($nit);
+                $empresa->setDv($dv);
                 $empresa->setNombre($nombre);
                 $empresa->setTelefono($telefono);
                 $empresa->setDireccion($direccion);
