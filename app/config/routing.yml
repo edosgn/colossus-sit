@@ -1,3 +1,7 @@
+app_origen_registro:
+    resource: "@AppBundle/Controller/OrigenRegistroController.php"
+    type:     annotation
+
 app_pais:
     resource: "@AppBundle/Controller/PaisController.php"
     type:     annotation
