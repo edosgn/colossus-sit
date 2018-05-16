@@ -64,7 +64,7 @@ class TipoDocumentoController extends Controller
 
                 $tipoDocumento = new TipoDocumento();
                 $tipoDocumento->setNombreTipo($nombreTipo);
-                $tipoDocumento->setDiasDuracionTramite($diasDuraccionTramite);
+                $tipoDocumento->setDiasDuracionTramite($diasDuracionTramite);
                 $tipoDocumento->setCodigoDocumento($codigoDocumento);
                 $tipoDocumento->setEstado($estado);
                 
