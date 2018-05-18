@@ -1,3 +1,7 @@
+app_sucursal:
+    resource: "@AppBundle/Controller/SucursalController.php"
+    type:     annotation
+
 app_radio_accion:
     resource: "@AppBundle/Controller/RadioAccionController.php"
     type:     annotation
