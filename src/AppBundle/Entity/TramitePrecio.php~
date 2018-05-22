@@ -35,6 +35,21 @@ class TramitePrecio
      */
     private $anio;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="smldv", type="string", length=255)
+     */
+    private $smldv;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_estampilla", type="string", length=255)
+     */
+    private $valorEstampilla;
+
     /**
      * @var boolean
      *
@@ -42,121 +57,13 @@ class TramitePrecio
      */
     private $estado;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tipo", type="string", length=255)
-     */
-    private $tipo;
+
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="vehiculos") */
     private $tramite;
 
+     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="vehiculos") */
+     private $tipoVehiculo;
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param string $valor
-     *
-     * @return TramitePrecio
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return string
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return TramitePrecio
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
-
-    /**
-     * Set tipo
-     *
-     * @param string $tipo
-     *
-     * @return TramitePrecio
-     */
-    public function setTipo($tipo)
-    {
-        $this->tipo = $tipo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipo
-     *
-     * @return string
-     */
-    public function getTipo()
-    {
-        return $this->tipo;
-    }
-
-    /**
-     * Set tramite
-     *
-     * @param \AppBundle\Entity\Tramite $tramite
-     *
-     * @return TramitePrecio
-     */
-    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
-    {
-        $this->tramite = $tramite;
-
-        return $this;
-    }
-
-    /**
-     * Get tramite
-     *
-     * @return \AppBundle\Entity\Tramite
-     */
-    public function getTramite()
-    {
-        return $this->tramite;
-    }
 }

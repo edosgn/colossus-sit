@@ -1,0 +1,47 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * FacturaSustrato
+ *
+ * @ORM\Table(name="factura_sustrato")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\FacturaSustratoRepository")
+ */
+class FacturaSustrato
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=1000)
+     */
+    private $descripcion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="inmovilizaciones")
+     **/
+    protected $factura;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="inmovilizaciones")
+     **/
+    protected $ciudadano;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Sustrato", inversedBy="inmovilizaciones")
+     **/
+    protected $sustrato;
+
+
+}

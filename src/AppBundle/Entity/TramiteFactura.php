@@ -36,6 +36,13 @@ class TramiteFactura
     private $realizado;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
+     */
+    private $cantidad;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesFacturas")
      **/
     protected $tramite;
@@ -102,6 +109,30 @@ class TramiteFactura
     public function getRealizado()
     {
         return $this->realizado;
+    }
+
+    /**
+     * Set cantidad
+     *
+     * @param integer $cantidad
+     *
+     * @return TramiteFactura
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
     }
 
     /**

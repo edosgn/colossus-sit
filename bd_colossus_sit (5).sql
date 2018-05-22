@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-04-2018 a las 11:33:58
--- Versión del servidor: 10.1.10-MariaDB
--- Versión de PHP: 5.6.19
+-- Tiempo de generación: 22-05-2018 a las 11:25:33
+-- Versión del servidor: 10.1.16-MariaDB
+-- Versión de PHP: 5.6.24
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -38,7 +38,7 @@ CREATE TABLE `agente_transito` (
 --
 
 INSERT INTO `agente_transito` (`id`, `placa`, `estado`, `ciudadano_id`) VALUES
-(1, 'mmm001', 1, 1);
+(1, 'abc123', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -64,8 +64,7 @@ CREATE TABLE `almacen` (
 --
 
 INSERT INTO `almacen` (`id`, `servicio_id`, `organismo_transito_id`, `consumible_id`, `clase_id`, `rango_inicio`, `rango_fin`, `lote`, `disponibles`, `estado`) VALUES
-(1, 1, 1, 1, 5, 0, 0, 1, 'N;', 1),
-(2, 2, 1, 1, 3, 1, 1000, 2, 'N;', 1);
+(1, 1, 1, 1, 5, 0, 0, 1, 'N;', 1);
 
 -- --------------------------------------------------------
 
@@ -88,9 +87,7 @@ INSERT INTO `banco` (`id`, `nombre`, `estado`) VALUES
 (2, 'bancolombia', 1),
 (3, 'mkjgh', 0),
 (4, 'banco de bogota', 0),
-(5, 'losd', 1),
-(6, 'banco nuevo', 0),
-(7, 'bogota', 1);
+(5, 'losd', 1);
 
 -- --------------------------------------------------------
 
@@ -220,7 +217,8 @@ INSERT INTO `carroceria` (`id`, `clase_id`, `nombre`, `codigo_mt`, `estado`) VAL
 (171, 17, 'CISTERNA SILO EN V', 252, 1),
 (172, 17, 'CISTERNA SILO CILINDRICO', 253, 1),
 (173, 19, 'CISTERNA TERMICO', 254, 1),
-(174, 19, 'VOLCO GRANELERO', 255, 1);
+(174, 19, 'VOLCO GRANELERO', 255, 1),
+(175, 1, 'carroceriaNewEdit', 8797, 1);
 
 -- --------------------------------------------------------
 
@@ -243,32 +241,25 @@ CREATE TABLE `caso` (
 
 CREATE TABLE `ciudadano` (
   `id` int(11) NOT NULL,
-  `tipo_identificacion_id` int(11) DEFAULT NULL,
-  `numero_identificacion` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
   `direccion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `telefono` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `correo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `estado` tinyint(1) NOT NULL,
-  `fecha_expedicion_documento` datetime NOT NULL,
-  `edad` int(11) NOT NULL,
-  `genero` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `grupo_sanguineo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `direccion_trabajo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `municipio_nacimiento_id` int(11) DEFAULT NULL,
   `municipio_residencia_id` int(11) DEFAULT NULL,
-  `primer_nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `segundo_nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `primer_apellido` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `segundo_apellido` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `fecha_expedicion_documento` datetime NOT NULL,
+  `edad` int(11) NOT NULL,
+  `direccion_trabajo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `genero_id` int(11) DEFAULT NULL,
+  `grupo_sanguineo_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `ciudadano`
 --
 
-INSERT INTO `ciudadano` (`id`, `tipo_identificacion_id`, `numero_identificacion`, `direccion`, `telefono`, `correo`, `estado`, `fecha_expedicion_documento`, `edad`, `genero`, `grupo_sanguineo`, `direccion_trabajo`, `municipio_nacimiento_id`, `municipio_residencia_id`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`) VALUES
-(1, 1, 1085311410, 'manzana c casa 6 ', '3183913046', 'daniel.perezluna94@gmail.com1', 1, '2018-03-15 00:00:00', 20, 'M', '0-', 'm13 c 9 tamasagra', 766, 766, 'edgar', 'david', 'perezz', 'lunaa'),
-(13, 2, 11111, 'm13', '314555', 'daniel@daniel.com', 1, '2018-03-14 00:00:00', 25, 'M', '0-', 'm13', 2, 4, 'Daniel', 'Fernando', 'Perez ', 'Luna');
+INSERT INTO `ciudadano` (`id`, `usuario_id`, `direccion`, `estado`, `municipio_nacimiento_id`, `municipio_residencia_id`, `fecha_expedicion_documento`, `edad`, `direccion_trabajo`, `genero_id`, `grupo_sanguineo_id`) VALUES
+(1, 1, 'manzana c casa 6 ', 1, 6, 17, '0000-00-00 00:00:00', 28, 'direccion', 1, 1),
+(2, 3, 'adasd', 1, 2, 1, '2018-05-08 00:00:00', 24, NULL, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -278,8 +269,8 @@ INSERT INTO `ciudadano` (`id`, `tipo_identificacion_id`, `numero_identificacion`
 
 CREATE TABLE `ciudad_extranjera` (
   `id` int(11) NOT NULL,
-  `nombreCiudadExtranjera` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `pais_id` int(11) DEFAULT NULL
+  `pais_id` int(11) DEFAULT NULL,
+  `nombreCiudadExtranjera` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -318,7 +309,8 @@ INSERT INTO `clase` (`id`, `nombre`, `codigo_mt`, `estado`) VALUES
 (16, 'CUATRIMOTO', 19, 1),
 (17, 'REMOLQUE', 24, 1),
 (18, 'SEMIREMOLQUE', 41, 1),
-(19, 'VOLQUETA', 42, 1);
+(19, 'VOLQUETA', 42, 1),
+(20, 'zxczxc', 789, 0);
 
 -- --------------------------------------------------------
 
@@ -1353,7 +1345,8 @@ INSERT INTO `combustible` (`id`, `nombre`, `codigo_mt`, `estado`) VALUES
 (1, 'GASOLINA', 1, 1),
 (2, 'A.C.P.M', 2, 1),
 (3, 'GAS NATURAL VEHICULAR', 3, 2),
-(4, 'GAS-GASOLINA', 4, 1);
+(4, 'GAS-GASOLINA', 4, 1),
+(5, 'nuevoE', 81, 0);
 
 -- --------------------------------------------------------
 
@@ -1363,6 +1356,11 @@ INSERT INTO `combustible` (`id`, `nombre`, `codigo_mt`, `estado`) VALUES
 
 CREATE TABLE `comparendo` (
   `id` int(11) NOT NULL,
+  `municipio_id` int(11) DEFAULT NULL,
+  `vehiculo_id` int(11) DEFAULT NULL,
+  `cuidadano_id` int(11) DEFAULT NULL,
+  `agente_transito_id` int(11) DEFAULT NULL,
+  `seguimiento_entrega_id` int(11) DEFAULT NULL,
   `numeroOrden` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `fechaDiligenciamiento` datetime NOT NULL,
   `lugarInfraccion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -1375,28 +1373,19 @@ CREATE TABLE `comparendo` (
   `polca` tinyint(1) NOT NULL,
   `fechaNotificacion` date NOT NULL,
   `gradoAlchoholemia` int(11) NOT NULL,
-  `municipio_id` int(11) DEFAULT NULL,
-  `vehiculo_id` int(11) DEFAULT NULL,
-  `cuidadano_id` int(11) DEFAULT NULL,
-  `agente_transito_id` int(11) DEFAULT NULL,
-  `seguimiento_entrega_id` int(11) DEFAULT NULL,
   `estado` tinyint(1) NOT NULL,
-  `fotomulta` tinyint(1) NOT NULL
+  `fotomulta` tinyint(1) NOT NULL,
+  `observacionesDigitador` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `retencionLicencia` tinyint(1) NOT NULL,
+  `urlDocumento` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `comparendo`
 --
 
-INSERT INTO `comparendo` (`id`, `numeroOrden`, `fechaDiligenciamiento`, `lugarInfraccion`, `barrioInfraccion`, `observacionesAgente`, `tipoInfractor`, `tarjetaOperacionInfractor`, `fuga`, `accidente`, `polca`, `fechaNotificacion`, `gradoAlchoholemia`, `municipio_id`, `vehiculo_id`, `cuidadano_id`, `agente_transito_id`, `seguimiento_entrega_id`, `estado`, `fotomulta`) VALUES
-(3, '52400001000003456', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(4, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(5, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(6, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(7, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(8, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(9, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0),
-(10, '321321', '2017-12-14 00:00:00', 'CARRERA 9 NO. 3-28', 'BARRIO PANAMERICANO', 'el conductor manejava en estado de embriaguez ', 'infractor', 52001000, 1, 1, 0, '2017-12-14', 11, 766, 1, NULL, 1, 1, 1, 0);
+INSERT INTO `comparendo` (`id`, `municipio_id`, `vehiculo_id`, `cuidadano_id`, `agente_transito_id`, `seguimiento_entrega_id`, `numeroOrden`, `fechaDiligenciamiento`, `lugarInfraccion`, `barrioInfraccion`, `observacionesAgente`, `tipoInfractor`, `tarjetaOperacionInfractor`, `fuga`, `accidente`, `polca`, `fechaNotificacion`, `gradoAlchoholemia`, `estado`, `fotomulta`, `observacionesDigitador`, `retencionLicencia`, `urlDocumento`) VALUES
+(13, 1, 1, 1, 1, 1, '123123', '2018-04-09 10:07:08', 'direccion', 'localidad', 'observacion', 'infractor', 52001000, 0, 1, 0, '2018-04-18', 8, 1, 1, 'observacion', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1428,6 +1417,31 @@ CREATE TABLE `concepto` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `concepto_parametro`
+--
+
+CREATE TABLE `concepto_parametro` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `valor` int(11) NOT NULL,
+  `parametro_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `condicion_ingreso`
+--
+
+CREATE TABLE `condicion_ingreso` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `consumibles`
 --
 
@@ -1442,7 +1456,8 @@ CREATE TABLE `consumibles` (
 --
 
 INSERT INTO `consumibles` (`id`, `nombre`, `estado`) VALUES
-(1, 'consumible de pruebaedit', 1);
+(1, 'consumible de prueba', 1),
+(2, 'uno nuevo', 0);
 
 -- --------------------------------------------------------
 
@@ -1452,11 +1467,11 @@ INSERT INTO `consumibles` (`id`, `nombre`, `estado`) VALUES
 
 CREATE TABLE `correspondencia_documento` (
   `id` int(11) NOT NULL,
+  `registro_documento_id` int(11) DEFAULT NULL,
   `tipoActuacion` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `nombreEmpresaEnvio` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `fechaEnvio` date NOT NULL,
-  `numeroGuia` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `registro_documento_id` int(11) DEFAULT NULL
+  `numeroGuia` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1478,8 +1493,7 @@ CREATE TABLE `cuenta` (
 --
 
 INSERT INTO `cuenta` (`id`, `banco_id`, `numero`, `observacion`, `estado`) VALUES
-(1, 2, 1234567, 'observacion', 1),
-(2, 7, 1232345, 'cuenta para el banco de bogota', 1);
+(1, 5, 21324, 'edit', 1);
 
 -- --------------------------------------------------------
 
@@ -1491,46 +1505,47 @@ CREATE TABLE `departamento` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `estado` tinyint(1) NOT NULL,
-  `codigo_dian` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `codigoDane` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `pais_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `departamento`
 --
 
-INSERT INTO `departamento` (`id`, `nombre`, `estado`, `codigo_dian`) VALUES
-(1, 'AMAZONAS', 1, '91'),
-(2, 'ANTIOQUIA', 1, '5'),
-(3, 'ARAUCA', 1, '81'),
-(4, 'ATLANTICO', 1, '8'),
-(5, 'BOLIVAR', 1, '13'),
-(6, 'BOYACA', 1, '15'),
-(7, 'CALDAS', 1, '17'),
-(8, 'CAQUETA', 1, '18'),
-(9, 'CASANARE', 1, '85'),
-(10, 'CAUCA', 1, '19'),
-(11, 'CESAR', 1, '20'),
-(12, 'CHOCO', 1, '27'),
-(13, 'CORDOBA', 1, '23'),
-(14, 'CUNDINAMARCA', 1, '25'),
-(15, 'GUAINIA', 1, '94'),
-(16, 'GUAJIRA', 1, '44'),
-(17, 'GUAVIARE', 1, '95'),
-(18, 'HUILA', 1, '41'),
-(19, 'MAGDALENA', 1, '47'),
-(20, 'META', 1, '50'),
-(21, 'NARIÑO', 1, '52'),
-(22, 'NORTE DE SANTANDER', 1, '54'),
-(23, 'PUTUMAYO', 1, '86'),
-(24, 'QUINDIO', 1, '63'),
-(25, 'RISARALDA', 1, '66'),
-(26, 'SAN ANDRES', 1, '88'),
-(27, 'SANTANDER', 1, '68'),
-(28, 'SUCRE', 1, '70'),
-(29, 'TOLIMA', 1, '73'),
-(30, 'VALLE DEL CAUCA', 1, '76'),
-(31, 'VAUPES', 1, '97'),
-(32, 'VICHADA', 1, '99');
+INSERT INTO `departamento` (`id`, `nombre`, `estado`, `codigoDane`, `pais_id`) VALUES
+(1, 'AMAZONAS', 1, '91', NULL),
+(2, 'ANTIOQUIA', 1, '5', NULL),
+(3, 'ARAUCA', 1, '81', NULL),
+(4, 'ATLANTICO', 1, '8', NULL),
+(5, 'BOLIVAR', 1, '13', NULL),
+(6, 'BOYACA', 1, '15', NULL),
+(7, 'CALDAS', 1, '17', NULL),
+(8, 'CAQUETA', 1, '18', NULL),
+(9, 'CASANARE', 1, '85', NULL),
+(10, 'CAUCA', 1, '19', NULL),
+(11, 'CESAR', 1, '20', NULL),
+(12, 'CHOCO', 1, '27', NULL),
+(13, 'CORDOBA', 1, '23', NULL),
+(14, 'CUNDINAMARCA', 1, '25', NULL),
+(15, 'GUAINIA', 1, '94', NULL),
+(16, 'GUAJIRA', 1, '44', NULL),
+(17, 'GUAVIARE', 1, '95', NULL),
+(18, 'HUILA', 1, '41', NULL),
+(19, 'MAGDALENA', 1, '47', NULL),
+(20, 'META', 1, '50', NULL),
+(21, 'NARIÑO', 1, '52', NULL),
+(22, 'NORTE DE SANTANDER', 1, '54', NULL),
+(23, 'PUTUMAYO', 1, '86', NULL),
+(24, 'QUINDIO', 1, '63', NULL),
+(25, 'RISARALDA', 1, '66', NULL),
+(26, 'SAN ANDRES', 1, '88', NULL),
+(27, 'SANTANDER', 1, '68', NULL),
+(28, 'SUCRE', 1, '70', NULL),
+(29, 'TOLIMA', 1, '73', NULL),
+(30, 'VALLE DEL CAUCA', 1, '76', NULL),
+(31, 'VAUPES', 1, '97', NULL),
+(32, 'VICHADA', 1, '99', NULL);
 
 -- --------------------------------------------------------
 
@@ -1544,15 +1559,6 @@ CREATE TABLE `dependencia` (
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `dependencia`
---
-
-INSERT INTO `dependencia` (`id`, `nombre`, `estado`) VALUES
-(1, 'dependencia 1', 1),
-(2, 'dependencia 2', 1),
-(3, 'dependencia 3', 1);
-
 -- --------------------------------------------------------
 
 --
@@ -1561,9 +1567,9 @@ INSERT INTO `dependencia` (`id`, `nombre`, `estado`) VALUES
 
 CREATE TABLE `dependencia_ciudadano` (
   `id` int(11) NOT NULL,
-  `cargo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `dependencia_id` int(11) DEFAULT NULL,
-  `ciudadano_id` int(11) DEFAULT NULL
+  `ciudadano_id` int(11) DEFAULT NULL,
+  `cargo` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1575,15 +1581,34 @@ CREATE TABLE `dependencia_ciudadano` (
 CREATE TABLE `empresa` (
   `id` int(11) NOT NULL,
   `municipio_id` int(11) DEFAULT NULL,
-  `tipo_empresa_id` int(11) DEFAULT NULL,
+  `tipo_socidad_id` int(11) DEFAULT NULL,
   `ciudadano_id` int(11) DEFAULT NULL,
   `nit` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `telefono` int(11) NOT NULL,
   `direccion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `correo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `tipo_identificacion_id` int(11) DEFAULT NULL,
+  `dv` int(11) NOT NULL,
+  `celular` int(11) NOT NULL,
+  `fax` int(11) NOT NULL,
+  `sigla` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `capital_pagado` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `capital_liquido` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `tipo_entidad` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `certificado_existencia` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `nro_registro_mercantil` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `empresa_prestadora` tinyint(1) NOT NULL,
+  `fecha_vencimiento_registro_mercantil` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `empresa`
+--
+
+INSERT INTO `empresa` (`id`, `municipio_id`, `tipo_socidad_id`, `ciudadano_id`, `nit`, `nombre`, `telefono`, `direccion`, `correo`, `estado`, `tipo_identificacion_id`, `dv`, `celular`, `fax`, `sigla`, `capital_pagado`, `capital_liquido`, `tipo_entidad`, `certificado_existencia`, `nro_registro_mercantil`, `empresa_prestadora`, `fecha_vencimiento_registro_mercantil`) VALUES
+(1, 1, 1, 1, 123, 'empresa', 12312, 'asd', 'corerpgmail.com', 1, 1, 0, 0, 0, '', '', '', '', '', '', 0, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -1593,13 +1618,45 @@ CREATE TABLE `empresa` (
 
 CREATE TABLE `factura` (
   `id` int(11) NOT NULL,
-  `numeroFactura` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `estadoFactura` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `fechaCreacion` date NOT NULL,
-  `observacionesFactura` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `solicitante_id` int(11) DEFAULT NULL,
-  `apoderado_id` int(11) DEFAULT NULL,
-  `vehiculo_id` int(11) DEFAULT NULL
+  `fechaCreacion` datetime NOT NULL,
+  `numero` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `observacion` longtext COLLATE utf8_unicode_ci,
+  `sede_operativa_id` int(11) DEFAULT NULL,
+  `valorBruto` double NOT NULL,
+  `valorImpuesto` double NOT NULL,
+  `valorNeto` double NOT NULL,
+  `consecutivo` varchar(5) COLLATE utf8_unicode_ci NOT NULL,
+  `anio` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `factura`
+--
+
+INSERT INTO `factura` (`id`, `fechaCreacion`, `numero`, `estado`, `observacion`, `sede_operativa_id`, `valorBruto`, `valorImpuesto`, `valorNeto`, `consecutivo`, `anio`) VALUES
+(1, '2018-04-13 00:00:00', '1234', '1', 'asdasdasd', NULL, 64000, 0, 0, '', 0),
+(3, '2018-04-13 00:00:00', '345345', '1', 'sdfsdfEdit', NULL, 256000, 0, 0, '', 0),
+(4, '2018-05-04 00:00:00', '45', '1', NULL, 1, 0, 0, 0, '', 0),
+(5, '2018-05-04 00:00:00', '67', '1', NULL, 2, 0, 0, 0, '', 0),
+(6, '2018-05-08 00:00:00', '45', '1', NULL, 2, 0, 0, 0, '', 0),
+(7, '2018-05-07 00:00:00', '1111', '1', NULL, 1, 3511000, 0, 0, '', 0),
+(8, '2018-05-08 00:00:00', '123', '1', NULL, 1, 64000, 0, 0, '', 0),
+(9, '2018-05-08 00:00:00', '21231', '1', NULL, 2, 0, 0, 0, '', 0),
+(10, '2018-05-15 00:00:00', '8-18', 'Emitida', NULL, 1, 0, 0, 0, '8-18', 18);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `factura_sustrato`
+--
+
+CREATE TABLE `factura_sustrato` (
+  `id` int(11) NOT NULL,
+  `factura_id` int(11) DEFAULT NULL,
+  `ciudadano_id` int(11) DEFAULT NULL,
+  `sustrato_id` int(11) DEFAULT NULL,
+  `descripcion` varchar(1000) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1610,13 +1667,69 @@ CREATE TABLE `factura` (
 
 CREATE TABLE `fases_documento` (
   `id` int(11) NOT NULL,
+  `funcionario_responzable_id` int(11) DEFAULT NULL,
+  `registro_documento_id` int(11) DEFAULT NULL,
   `nombreFase` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `fechaFinFase` date NOT NULL,
   `fechaInicioFase` date NOT NULL,
   `actuacionFase` longtext COLLATE utf8_unicode_ci NOT NULL,
-  `urlDocumentoGenerado` varchar(145) COLLATE utf8_unicode_ci NOT NULL,
-  `funcionario_responzable_id` int(11) DEFAULT NULL,
-  `registro_documento_id` int(11) DEFAULT NULL
+  `urlDocumentoGenerado` varchar(145) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `genero`
+--
+
+CREATE TABLE `genero` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sigla` varchar(1) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `genero`
+--
+
+INSERT INTO `genero` (`id`, `nombre`, `sigla`, `estado`) VALUES
+(1, 'masculino', 'M', 1),
+(4, 'Femenino', 'F', 1),
+(5, 'asdf', 'h', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `grupo_sanguineo`
+--
+
+CREATE TABLE `grupo_sanguineo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sigla` varchar(3) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `grupo_sanguineo`
+--
+
+INSERT INTO `grupo_sanguineo` (`id`, `nombre`, `sigla`, `estado`) VALUES
+(1, 'o+', '+', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `historial_precio`
+--
+
+CREATE TABLE `historial_precio` (
+  `id` int(11) NOT NULL,
+  `tramite_id` int(11) DEFAULT NULL,
+  `anio` int(11) NOT NULL,
+  `valor` double NOT NULL,
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1627,9 +1740,12 @@ CREATE TABLE `fases_documento` (
 
 CREATE TABLE `infraccion` (
   `id` int(11) NOT NULL,
-  `codigoInfraccion` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `descripcionInfraccion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `valorInfraccion` double NOT NULL
+  `codigo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `valor` double NOT NULL,
+  `descripcion` longtext COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL,
+  `inmovilizacion` tinyint(1) NOT NULL,
+  `suspensionLicencia` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1640,12 +1756,13 @@ CREATE TABLE `infraccion` (
 
 CREATE TABLE `inmovilizacion` (
   `id` int(11) NOT NULL,
+  `comparendo_id` int(11) DEFAULT NULL,
   `numeroPatio` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `numeroGrua` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `numeroConsecutivo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `direccionPatio` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `placaGrua` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `comparendo_id` int(11) DEFAULT NULL
+  `fechaIngreso` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2674,10 +2791,7 @@ INSERT INTO `linea` (`id`, `marca_id`, `nombre`, `codigo_mt`, `estado`) VALUES
 (1005, 79, '353', 1005, 1),
 (1006, 53, 'Mini', 1006, 1),
 (1007, 53, 'Countryman', 1007, 1),
-(1008, 53, 'Paceman', 1008, 1),
-(1009, 1, 'asd', 6438, 0),
-(1010, 57, 'linea de prueba ', 12345, 1),
-(1011, 80, 'prueba dos de linea', 467567, 0);
+(1008, 53, 'Paceman', 1008, 0);
 
 -- --------------------------------------------------------
 
@@ -2791,7 +2905,7 @@ INSERT INTO `marca` (`id`, `nombre`, `codigo_mt`, `estado`) VALUES
 (77, 'Volkswagen', '77', 1),
 (78, 'Volvo', '78', 1),
 (79, 'Wartburg', '79', 1),
-(80, 'marcanueva', '1234346', 0);
+(86, 'asd1d', '05', 0);
 
 -- --------------------------------------------------------
 
@@ -2801,13 +2915,13 @@ INSERT INTO `marca` (`id`, `nombre`, `codigo_mt`, `estado`) VALUES
 
 CREATE TABLE `medida_cautelar` (
   `id` int(11) NOT NULL,
+  `registro_documento_id` int(11) DEFAULT NULL,
   `numeroOficio` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `quienOrdena` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `fechaInicio` date NOT NULL,
   `fechaFin` date NOT NULL,
   `identificacionImplicado` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `delito` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `registro_documento_id` int(11) DEFAULT NULL
+  `delito` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -2823,13 +2937,6 @@ CREATE TABLE `modalidad` (
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
---
--- Volcado de datos para la tabla `modalidad`
---
-
-INSERT INTO `modalidad` (`id`, `nombre`, `codigo_mt`, `estado`) VALUES
-(1, 'modalidad2', 1, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -2840,18 +2947,19 @@ CREATE TABLE `modulo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `abreviatura` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `descripcion` longtext COLLATE utf8_unicode_ci,
+  `siglaSustrato` varchar(10) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `modulo`
 --
 
-INSERT INTO `modulo` (`id`, `nombre`, `abreviatura`, `estado`) VALUES
-(1, 'Registro Nacional de Automotores', 'R.N.A', 1),
-(2, 'Registro Nacional de Empresas de Transporte', 'RNET', 1),
-(3, 'Registro Nacional de Maquinaria Agricola y Conduccion Autopropulsada', 'RNMA', 1),
-(4, 'asd', 'asd', 0);
+INSERT INTO `modulo` (`id`, `nombre`, `abreviatura`, `estado`, `descripcion`, `siglaSustrato`) VALUES
+(1, 'Registro Nacional de Automotores', 'R.N.A', 1, NULL, ''),
+(2, 'Registro Nacional de Empresas de Transporte', 'RNET', 1, NULL, ''),
+(3, 'Registro Nacional de Maquinaria Agricola y Conduccion Autopropulsada', 'RNMA', 1, NULL, '');
 
 -- --------------------------------------------------------
 
@@ -2874,7 +2982,7 @@ CREATE TABLE `municipio` (
   `id` int(11) NOT NULL,
   `departamento_id` int(11) DEFAULT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `codigo_dian` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `codigoDane` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -2882,7 +2990,7 @@ CREATE TABLE `municipio` (
 -- Volcado de datos para la tabla `municipio`
 --
 
-INSERT INTO `municipio` (`id`, `departamento_id`, `nombre`, `codigo_dian`, `estado`) VALUES
+INSERT INTO `municipio` (`id`, `departamento_id`, `nombre`, `codigoDane`, `estado`) VALUES
 (1, 1, 'LETICIA', '91001', 1),
 (2, 1, 'EL ENCANTO', '91263', 1),
 (3, 1, 'LA CHORRERA', '91405', 1),
@@ -4004,8 +4112,7 @@ INSERT INTO `municipio` (`id`, `departamento_id`, `nombre`, `codigo_dian`, `esta
 (1119, 32, 'PUERTO CARREÑO', '99001', 1),
 (1120, 32, 'LA PRIMAVERA', '99524', 1),
 (1121, 32, 'SANTA ROSALIA', '99624', 1),
-(1122, 32, 'CUMARIBO', '99773', 1),
-(1123, 1, 'asd', '41350', 0);
+(1122, 32, 'CUMARIBO', '99773', 1);
 
 -- --------------------------------------------------------
 
@@ -4016,244 +4123,256 @@ INSERT INTO `municipio` (`id`, `departamento_id`, `nombre`, `codigo_dian`, `esta
 CREATE TABLE `organismo_transito` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `sede_operativa_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `organismo_transito`
 --
 
-INSERT INTO `organismo_transito` (`id`, `nombre`, `estado`) VALUES
-(1, 'SECRETARIA DE TRANSPORTES Y TRANSITO DE MEDELLIN', 1),
-(2, 'INSPECCION DE TRANSITO Y TRANSPORTE DE ANDES', 1),
-(3, 'SECRETARIA DE TTE. Y TTO MUNICIPAL DE SANTA FE DE ANTIOQUIA', 1),
-(4, 'SECRETARIA MPAL. DE TRANSPORTE Y TRANSITO DE APARTADO', 1),
-(5, 'DIRECCION DE TRANSORTE  Y TTO. MPAL. DE BARBOSA', 1),
-(6, 'SECRETARIA DE TRANSPORTES Y TRANSITO DE BELLO', 1),
-(7, 'INSPECCION MUNICIPAL DE TRANSITO DE CIUDAD BOLIVAR', 1),
-(8, 'INSPECCION DE TRANSITO MUNICIPAL DE CALDAS', 1),
-(9, 'DIRECCION DE TRANSITO Y TRANSPORTE  DE CAREPA', 1),
-(10, 'INSPECCION DE TRANSITO DE CAUCASIA', 1),
-(11, 'SECRETARIA DE TRANSPORTES Y TRANSITO DE COPACABANA', 1),
-(12, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE ENVIGADO', 1),
-(13, 'SRIA DE TRANSPORTE Y TTO DEL MUNICIPIO DE FRONTINO', 1),
-(14, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE GIRARDOTA', 1),
-(15, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE ITAGUI', 1),
-(16, 'INSPECCION DE TRANSITO MUNICIPAL DE LA CEJA', 1),
-(17, 'DIRECCION DPTAL. DE TRANSITO Y TTE DE ANTIOQUIA', 1),
-(18, 'DIRECCION DPTAL DE TRANSITO Y TRANSPORTE DE ANTIOQUIA -SEDE LA ESTRELLA', 1),
-(19, 'SECRETARIA DE TRANSITO Y TTE MCPAL DE LA UNION', 1),
-(20, 'INSPECCION DE TRANSPORTE Y TTO MPAL DE MARINILLA', 1),
-(21, 'INSPECCION DE TRANSITO DE PUERTO BERRIO', 1),
-(22, 'SRIA DE TRANSITO Y TRANSPORTE DE RIONEGRO', 1),
-(23, 'SRIA DE TRANSITO Y TRANSPORTE MPAL DE SABANETA', 1),
-(24, 'SECRETARIA DE TRANSITO MPALDE SANTA ROSA DE OSOS', 1),
-(25, 'INSPECCION DE TRANSITO Y TTE MPAL. DE SONSON', 1),
-(26, 'INSPECCION MUNICIPAL DE TRANSITO DE TURBO', 1),
-(27, 'SECRETARIA DE TRANSITO Y TTE MPAL DE URRAO', 1),
-(28, 'SECRETARIA DE TRANSPORTES Y TRANSITO DEL MPIO. DE YARUMAL', 1),
-(29, 'DIRECCION DE TRANSPORTES Y TRANSITO DPTAL. DEL CHOCO', 1),
-(30, 'INSPECCION DE TRANSPORTES Y TRANSITO DE QUIBDO', 1),
-(31, 'DIRECCION DE TRANSPORTES Y TRANSITO DPTAL DE  ISTMINA', 1),
-(33, 'INSTITUTO DPTAL. DE TTE Y TTO  DEL ATLANTICO', 1),
-(34, 'EMPRESA DE TRANSITO Y TRANSPORTE METROPOLITANO DE BARRANQUILLA S.A "METROTRANSITO"', 1),
-(35, 'INSTITUTO DPTAL. DE TTE. Y TTO.  DE GALAPA', 1),
-(36, 'INSTIT. DEPTAL. DE TTE. Y TTO. DEL ATLANTICO', 1),
-(37, 'INSTITUTO MUNICIPAL DE TRANSITO Y TRANSPORTE DE SOLEDAD ', 1),
-(39, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL. BOLIVAR', 1),
-(40, 'DPTO ADTVO. TRANSITO Y TRANSPORTE DISTRITAL DE CARTAGENA', 1),
-(41, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL. BOLIVAR', 1),
-(42, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL.  BOLIVAR', 1),
-(43, 'INSPEC. MPAL. DE TTE Y TRANSITO DE CARMEN DE BOLIVAR', 1),
-(44, 'FONDO MPAL. DE TTO. Y TTE. TERRESTRE DE MAGANGUE', 1),
-(45, 'INSPECCION DE TRANSITO DE MOMPOX', 1),
-(46, 'FONDO DE TTE. Y TTO DPTAL. DE BOLIVAR SAN JUAN NEPOMUCENO', 1),
-(47, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL. BOLIVAR', 1),
-(48, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE TURBACO', 1),
-(49, 'DIRECCION DPTAL DE TTO Y TTE DE SAN ANDRES ISLAS', 1),
-(51, 'INSTITUTO DE TRANSITO DE BOYACA"ITBOY"', 1),
-(52, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE TUNJA ', 1),
-(53, 'SECRETARIA MCPAL DE TRANSITO Y TRANSPORTE DE CHIQUINQUIRµ', 1),
-(54, 'ITBOY - ''DISTRITO DE TRANSITO No.1 COMBITA', 1),
-(55, 'SECRETARIA MUNICIPAL DE TRANSITO Y TRANSPORTE DE DUITAMA', 1),
-(56, 'ITBOY - DISTRITO DE TRANSITO No.6 - GUATEQUE', 1),
-(57, 'ITBOY - DISTRITO DE TRANSITO No.10 - VILLA DE  LEYVA', 1),
-(58, 'ITBOY -DISTRITO DE TRANSITO No.9-MIRAFLORES', 1),
-(59, 'ITBOY - ''DISTRITO DE TRANSITO No.5  MONIQUIRA', 1),
-(60, 'ITBOY - ''DISTRITO DE TRANSITO No. 2.  NOBSA', 1),
-(61, 'SECRETARÖA DE TRANSITO Y TRANSPORTE MUNICIPAL DE PAIPA', 1),
-(62, 'INSPECCION DE TRANSITO Y TRANSPORTE MCPAL DE PUERTO BOYACA', 1),
-(63, 'ITBOY - DISTRITO DE TRANSITO No.11 - RAMIRIQUI', 1),
-(64, 'ITBOY - DISTRITO DE TRANSITO No. 4  SABOYA', 1),
-(65, 'ITBOY - DISTRITO DE TRANSITO   SANTA ROSA DE VITERBO', 1),
-(66, 'ITBOY - ''DISTRITO DE TRANSTO No. 7 SOATA', 1),
-(67, 'INSTITUTO DE TRANSITO Y TRANSPORTE MUNICIPAL  DE SOGAMOSO', 1),
-(68, 'DIRECCION DPTAL. DE TRANSITO Y TRANSPORTE DE CASANARE', 1),
-(69, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE YOPAL', 1),
-(71, 'SECRETARIA DE TRANSPORTES Y TTO MCPAL DE MANIZALES', 1),
-(72, 'INSPECCION DE TRANSITO Y TRANSPORTE DE AGUADAS ', 1),
-(73, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE ANSERMA', 1),
-(74, 'UNIDAD DE TRANSITO DE CALDAS', 1),
-(75, 'SECRETARIA MCPAL. DE TRANSITO Y TTE DE CHINCHINA', 1),
-(76, 'INSPECCION DE TRANSITO Y TRANSPORTE DE LA DORADA', 1),
-(77, 'DIRECCION MIPAL. DE TRANSITO Y TRANSPORTE DE MANZANARES', 1),
-(78, 'INSPECCION DE TRANSITO Y TRANSPORTE DE RIOSUCIO', 1),
-(79, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE SALAMINA', 1),
-(80, 'UNIDAD DE TRANSITO DE  CALDAS', 1),
-(82, 'INSPECCION MCPAL. DE TRANSITO Y TTE DE POPAYAN', 1),
-(83, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE BOLIVAR', 1),
-(84, 'SECRETARIA DE TRANSITO Y TTE MPAL DE MIRANDA', 1),
-(85, 'SECRETARIA DE TRANSITO MUNICIPAL DE PATIA', 1),
-(86, 'SECRETARIA DE TRANSITO MPAL DE PUERTO TEJADA ', 1),
-(87, 'SRIA. DE TTO. Y TTE. MCPAL DE SANTANDER DE QUILICHAO', 1),
-(88, 'SECRETARIA DE TRASNITO Y TRANSPORTE MUNCIPAL DE TIMBIO', 1),
-(90, 'INSTITUTO MPAL DE TRANSITO Y TRANSPORTE DE VALLEDUPAR', 1),
-(91, 'INSTITUTO MUNICIPAL DE TRANSITO Y TRANSPORTE DE AGUACHICA', 1),
-(92, 'SECRETARIA DE TTES Y TTO MCPAL AGUSTIN CODAZZI ', 1),
-(93, 'SECRETARIA MUNICIPAL DE TRANSITO Y TRANSPORTE DE BOSCONIA ', 1),
-(94, 'SECRETARÖA DE TRANSITO Y TRANSPORTE MUNICIPAL DE LA PAZ ', 1),
-(96, 'SECRETARIA DE TRANSITO Y TRANSPORTE DPTAL DE CORDOBA', 1),
-(97, 'SECRETARIA MUNICIPAL DE TRANSPORTE Y TRANSITO DE MONTERIA', 1),
-(98, 'INSTITUTO MUNICIPAL DE TRANSPORTE Y TRANSITO DE CERETE', 1),
-(99, 'SRIA.  DPTAL TT O  Y TE DE CORDOBA SEDE CHINU ', 1),
-(100, 'INSPECCION DE TRANSITO Y TRANSPORTE DE LORICA', 1),
-(101, 'SRIA. DPTAL. DE TTO. Y TTE. DE CORDOBA  PLANETA RICA', 1),
-(102, 'INSPECCION DE TRANSITO Y TTE MPAL DE SAHAGUN', 1),
-(103, 'SRIA MUNICIPAL DE TRANSPORTES Y TTO DE SINCELEJO', 1),
-(104, 'INSPECCION DE TRANSITO Y TRANSPORTE DE COROZAL', 1),
-(105, 'DIRECCION DPTAL. DE TRANSITO Y TTE DE SUCRE', 1),
-(107, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE BOGOTA', 1),
-(108, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(109, 'INSPECCION DE TRANSITO Y TRANSPORTE DE CAQUEZA', 1),
-(110, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE CHIA', 1),
-(111, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(112, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(113, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(114, 'SECRETARIO DE TRANSITO MUNICIPAL DE FACATATIVA', 1),
-(115, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE FUSAGASUGA', 1),
-(116, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL. DE GIRARDOT', 1),
-(117, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(118, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(119, 'SECRETARIA DE TRANSTO Y TRANSPORTE MCPAL DE PACHO', 1),
-(120, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(121, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(122, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(123, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(124, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1),
-(125, 'INSPECCION MCPAL DE TRANSITO Y REGULACION VIAL DE LETICIA', 1),
-(127, 'INSTITUTO DPTAL DE TRANSITO DE LA GUAJIRA - INTRADEGUA', 1),
-(128, 'INSPECCION DE TRANSITO Y TRANSPORTE DE MAICAO', 1),
-(130, 'SECRETARIA DE INFRAEST. DE TTO Y TTE MUNICIPAL DE NEIVA', 1),
-(131, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1),
-(132, 'SECRETARIA MCPAL DE TRANSITO Y TTE DE GARZON', 1),
-(133, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE LA PLATA ', 1),
-(134, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1),
-(135, 'DIRECCION ADMINISTRATIVA DE PITALITO', 1),
-(136, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1),
-(137, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1),
-(138, 'INSTITUTO DPTAL DE TTO Y TRASPORTE DEL CAQUETA', 1),
-(139, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE FLORENCIA ', 1),
-(140, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL CAQUETA', 1),
-(141, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL CAQUETA', 1),
-(142, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL CAQUETA', 1),
-(144, 'SECRETARIA DE GOBIERNO DISTRITAL DE SANTA MARTA', 1),
-(145, 'INSTITUTO DPTAL.  DE TTE Y TTO DEL MAGDALENA', 1),
-(146, 'INSTITUTO DPTAL.  DE TRANSPORTE Y TRANSITO DEL MAGDALENA', 1),
-(147, 'INSTITUTO DE TRANSITO Y TTE MPAL.  DE CIENAGA', 1),
-(148, 'INSTITUTO   MCPAL DE TTO Y TTE DE FUNDACION ', 1),
-(149, 'SECRETARIA DEL INTERIOR, TTES Y TTO MCPAL. EL BANCO', 1),
-(150, 'INSPECCION DE TRANSITO DE PLATO', 1),
-(152, 'INSTITUTO DE TRANSITO Y TRANSPORTE DEL META ', 1),
-(153, 'INSPECCION MCPAL DE TRANSITO DE VILLAVICENCIO', 1),
-(154, 'INSTITUTO DE TRANSITO Y TRANSPORTE DE ACACIAS - META', 1),
-(155, 'SECRETARIA MCPAL. DE TRANSITO DE GRANADA', 1),
-(156, 'INSTITUTO DPTAL DE TTO Y TTE  DEL META - SEDE OPERATIVA GUAMAL', 1),
-(157, 'INSTITUTO DE TRANSIITO Y TRANSPORTE DEL META', 1),
-(158, 'SECRETARIA DE OBRAS PUBLICAS Y TTE. DEPARTAMENTAL DE GUAINIA', 1),
-(159, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICAL DE INIRIDA', 1),
-(160, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL  GUAVIARE', 1),
-(161, 'FONDO DPTAL. DE TRANSITO DEL VICHADA', 1),
-(163, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(164, 'DEPARTAMENTO ADMINISTRATIVO DE TRANSITO Y TRANSPORTE MCPAL DE PASTO', 1),
-(165, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(166, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(167, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(168, 'INSTITUTO DPTAL DE TRANSITO Y TRNASPORTE DE NARI¥O', 1),
-(169, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE IPIALES', 1),
-(170, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(171, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(172, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(173, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(174, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1),
-(175, 'SRIA. DE TRANSPORTE Y TRANSITO DEL MUNICIPIO DE TUMACO', 1),
-(176, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL. DE TUQUERRES', 1),
-(177, 'DPTO. ADTVO. DE TRANSITO Y TRANSPORTE DE  PUTUMAYO', 1),
-(178, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE MOCOA', 1),
-(179, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE ORITO', 1),
-(180, 'INSPECCION DE TRANSITO DE PUERTO ASIS', 1),
-(182, 'DEPARTAMENTO ADMINISTRATIVO DE TRANSITO Y TRANSPORTE MCPAL DE CUCUTA', 1),
-(183, 'INSPECCION   DE TRANSITO Y TRANSPORTE DE CONVENCION ', 1),
-(184, 'DIRECCION OPERATIVA DE TRANSITO DEPARTAMENTAL DE  NORTE DE SANTANDER', 1),
-(185, 'DPTO. ADTIVO DE TRANSITO Y TRANSPORTE MPAL. DE LOS PATIOS ', 1),
-(186, 'INSPECCION MCPAL DE TRANSITO Y TTE DE OCA¥A', 1),
-(187, 'INSPECCION MCPAL DE TRANSITO Y TRANSPORTE DE PAMPLONA', 1),
-(188, 'DPTO ADM. DE  TRANSPORTES Y TRANSITO DE VILLA DEL ROSARIO "DATRANS"', 1),
-(189, 'INSTITUTO DE TRANSITO Y TRANSPORTE DE ARAUCA', 1),
-(190, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE SARAVENA ', 1),
-(192, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE ARMENIA', 1),
-(193, 'INSPECCION DE TRANSITO Y TRANSPORTE DE CALARCA', 1),
-(194, 'INSTITUTO DEPARTAMENTAL DE TRANSITO DEL QUINDIO', 1),
-(195, 'SRIA. DE TRANSITO Y TRANSPORTE MUNICIPAL DE LA TEBAIDA', 1),
-(196, 'INSPECCION DE TRANSITO Y TRANSPORTE DE QUIMBAYA', 1),
-(198, 'INSTITUTO MUNICIPAL DE TRANSITO Y TRANSPORTE DE PEREIRA', 1),
-(199, 'SECRETARIA MCPAL DE TTO Y TTE.  DE DOSQUEBRADAS', 1),
-(200, 'SECRETARIA MUNICIPAL DE TRANSITO Y TRANSPORTE DE LA VIRGINIA', 1),
-(201, 'SECRETARIA DE TRANSITO Y GOBIERNO MUNICIPAL DE SANTA ROSA DE CABAL', 1),
-(203, 'DIRECCION DE TRANSITO Y TRANSPORTE DE BUCARAMANGA', 1),
-(204, 'INSPECCION MUNICIPAL DE TRANSITO Y TRANSPORTE DE BARBOSA', 1),
-(205, 'INSPECCION DE TRANSITO Y TRANSPORTE DE BARRANCABERMEJA', 1),
-(206, 'INSTITUTO DE TRANSITO Y TRANSPORTE DE CHARALA  ', 1),
-(207, 'DIRECCION DE TRANSITO Y TRANSPORTE DE FLORIDABLANCA', 1),
-(208, 'SECRETARIA MCPAL DE TRANSITO Y TRANSPORTE DE GIRON', 1),
-(209, 'SECRETARIA DE TTO. Y TTE   MCPAL DE MALAGA', 1),
-(210, 'INSPECCION DE TRANSITO Y TRANSPORTE DE PIEDECUESTA', 1),
-(211, 'INSPECCION MCPAL DE TRANSITO Y TRANSPORTE DE SAN GIL', 1),
-(212, 'INSPECCION MPAL DE TTO Y TTE DE SAN VICENTE CHUCURI', 1),
-(213, 'INSPECCION MCPAL DE TRANSITO Y TRANSPORTE  DEL SOCORRO', 1),
-(214, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE VELEZ', 1),
-(216, 'SECRETARIA MPAL DE TTO Y TRANSPORTE DE IBAGUE', 1),
-(217, 'DEPARTAMENTO ADMS.  DE TRANSITO Y TTE . DEL TOLIMA', 1),
-(218, 'DPTO. ADTVO. DE TRANSITO Y TRANSPORTE DEL TOLIMA', 1),
-(219, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE DE GUAYABAL', 1),
-(220, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE CHAPARRAL', 1),
-(221, 'SECRETARIA MCPAL DE TRANSITO Y TRANSPORTE ESPINAL', 1),
-(222, 'SECRETARIA DE TRANSITO Y TTE MPAL DE FRESNO', 1),
-(223, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE GUAMO', 1),
-(224, 'SECRETARIA MUNICIPAL DE TRANSITO Y TTE DE HONDA ', 1),
-(225, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNCIPAL DE LIBANO', 1),
-(226, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE DE MARIQUITA', 1),
-(227, 'SECRETARIA DE GOBIERNO TRANSITO  Y TRANSPORTE DE MELGAR', 1),
-(228, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE PURIFICACIàN', 1),
-(230, 'SECRETARIA MUNICIPAL DE TRANSITO CALI', 1),
-(231, 'SECRETARIA DE TRANSITO Y TRANSPORTE ANDALUCIA', 1),
-(232, 'SUBSECRETARIA DE REGULACION Y CONTROL DE TTO Y TTE DE BUENAVENTURA', 1),
-(233, 'INSPECCION DE TRANSITO Y TRANSPORTE DE GUADALAJARA DE BUGA', 1),
-(234, 'SECRETARIA MCPAL DE TRANSITO Y TTE DE CAICEDONIA', 1),
-(235, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE CANDELARIA', 1),
-(236, 'DISTRITO MCPAL DE TRANSITO Y TTE DE CARTAGO', 1),
-(237, 'SECRETARIA MCPAL DE TRANSITO Y TTE EL CERRITO', 1),
-(238, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE FLORIDA', 1),
-(239, 'SECRETARIA DE TRANSITO Y TTE MPAL DE GUACARI', 1),
-(240, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL. DE JAMUNDI', 1),
-(241, 'SECRETARIA DE TRANSITO MCPAL DE LA UNION', 1),
-(242, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE PALMIRA', 1),
-(243, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICPAL DE PRADERA', 1),
-(244, 'INSPECCION DE TRANSITO Y TRANSPORTE DE ROLDANILLO', 1),
-(245, 'SECRETARIA DE TRANMSITO Y TRANSPORTE DE SEVILLA', 1),
-(246, 'SECRETARIA DE TRANSITO MUNICIPAL DE TULUA', 1),
-(247, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE YUMBO', 1),
-(248, 'INSPECCION DE TRANSITO Y TRANSPORTE DE ZARZAL', 1),
-(249, 'asdafasd', 0);
+INSERT INTO `organismo_transito` (`id`, `nombre`, `estado`, `sede_operativa_id`) VALUES
+(1, 'SECRETARIA DE TRANSPORTES Y TRANSITO DE MEDELLIN', 1, NULL),
+(2, 'INSPECCION DE TRANSITO Y TRANSPORTE DE ANDES', 1, NULL),
+(3, 'SECRETARIA DE TTE. Y TTO MUNICIPAL DE SANTA FE DE ANTIOQUIA', 1, NULL),
+(4, 'SECRETARIA MPAL. DE TRANSPORTE Y TRANSITO DE APARTADO', 1, NULL),
+(5, 'DIRECCION DE TRANSORTE  Y TTO. MPAL. DE BARBOSA', 1, NULL),
+(6, 'SECRETARIA DE TRANSPORTES Y TRANSITO DE BELLO', 1, NULL),
+(7, 'INSPECCION MUNICIPAL DE TRANSITO DE CIUDAD BOLIVAR', 1, NULL),
+(8, 'INSPECCION DE TRANSITO MUNICIPAL DE CALDAS', 1, NULL),
+(9, 'DIRECCION DE TRANSITO Y TRANSPORTE  DE CAREPA', 1, NULL),
+(10, 'INSPECCION DE TRANSITO DE CAUCASIA', 1, NULL),
+(11, 'SECRETARIA DE TRANSPORTES Y TRANSITO DE COPACABANA', 1, NULL),
+(12, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE ENVIGADO', 1, NULL),
+(13, 'SRIA DE TRANSPORTE Y TTO DEL MUNICIPIO DE FRONTINO', 1, NULL),
+(14, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE GIRARDOTA', 1, NULL),
+(15, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE ITAGUI', 1, NULL),
+(16, 'INSPECCION DE TRANSITO MUNICIPAL DE LA CEJA', 1, NULL),
+(17, 'DIRECCION DPTAL. DE TRANSITO Y TTE DE ANTIOQUIA', 1, NULL),
+(18, 'DIRECCION DPTAL DE TRANSITO Y TRANSPORTE DE ANTIOQUIA -SEDE LA ESTRELLA', 1, NULL),
+(19, 'SECRETARIA DE TRANSITO Y TTE MCPAL DE LA UNION', 1, NULL),
+(20, 'INSPECCION DE TRANSPORTE Y TTO MPAL DE MARINILLA', 1, NULL),
+(21, 'INSPECCION DE TRANSITO DE PUERTO BERRIO', 1, NULL),
+(22, 'SRIA DE TRANSITO Y TRANSPORTE DE RIONEGRO', 1, NULL),
+(23, 'SRIA DE TRANSITO Y TRANSPORTE MPAL DE SABANETA', 1, NULL),
+(24, 'SECRETARIA DE TRANSITO MPALDE SANTA ROSA DE OSOS', 1, NULL),
+(25, 'INSPECCION DE TRANSITO Y TTE MPAL. DE SONSON', 1, NULL),
+(26, 'INSPECCION MUNICIPAL DE TRANSITO DE TURBO', 1, NULL),
+(27, 'SECRETARIA DE TRANSITO Y TTE MPAL DE URRAO', 1, NULL),
+(28, 'SECRETARIA DE TRANSPORTES Y TRANSITO DEL MPIO. DE YARUMAL', 1, NULL),
+(29, 'DIRECCION DE TRANSPORTES Y TRANSITO DPTAL. DEL CHOCO', 1, NULL),
+(30, 'INSPECCION DE TRANSPORTES Y TRANSITO DE QUIBDO', 1, NULL),
+(31, 'DIRECCION DE TRANSPORTES Y TRANSITO DPTAL DE  ISTMINA', 1, NULL),
+(33, 'INSTITUTO DPTAL. DE TTE Y TTO  DEL ATLANTICO', 1, NULL),
+(34, 'EMPRESA DE TRANSITO Y TRANSPORTE METROPOLITANO DE BARRANQUILLA S.A "METROTRANSITO"', 1, NULL),
+(35, 'INSTITUTO DPTAL. DE TTE. Y TTO.  DE GALAPA', 1, NULL),
+(36, 'INSTIT. DEPTAL. DE TTE. Y TTO. DEL ATLANTICO', 1, NULL),
+(37, 'INSTITUTO MUNICIPAL DE TRANSITO Y TRANSPORTE DE SOLEDAD ', 1, NULL),
+(39, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL. BOLIVAR', 1, NULL),
+(40, 'DPTO ADTVO. TRANSITO Y TRANSPORTE DISTRITAL DE CARTAGENA', 1, NULL),
+(41, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL. BOLIVAR', 1, NULL),
+(42, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL.  BOLIVAR', 1, NULL),
+(43, 'INSPEC. MPAL. DE TTE Y TRANSITO DE CARMEN DE BOLIVAR', 1, NULL),
+(44, 'FONDO MPAL. DE TTO. Y TTE. TERRESTRE DE MAGANGUE', 1, NULL),
+(45, 'INSPECCION DE TRANSITO DE MOMPOX', 1, NULL),
+(46, 'FONDO DE TTE. Y TTO DPTAL. DE BOLIVAR SAN JUAN NEPOMUCENO', 1, NULL),
+(47, 'FONDO DE TRANSPORTE Y TRANSITO DPTAL. BOLIVAR', 1, NULL),
+(48, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE TURBACO', 1, NULL),
+(49, 'DIRECCION DPTAL DE TTO Y TTE DE SAN ANDRES ISLAS', 1, NULL),
+(51, 'INSTITUTO DE TRANSITO DE BOYACA"ITBOY"', 1, NULL),
+(52, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE TUNJA ', 1, NULL),
+(53, 'SECRETARIA MCPAL DE TRANSITO Y TRANSPORTE DE CHIQUINQUIRµ', 1, NULL),
+(54, 'ITBOY - ''DISTRITO DE TRANSITO No.1 COMBITA', 1, NULL),
+(55, 'SECRETARIA MUNICIPAL DE TRANSITO Y TRANSPORTE DE DUITAMA', 1, NULL),
+(56, 'ITBOY - DISTRITO DE TRANSITO No.6 - GUATEQUE', 1, NULL),
+(57, 'ITBOY - DISTRITO DE TRANSITO No.10 - VILLA DE  LEYVA', 1, NULL),
+(58, 'ITBOY -DISTRITO DE TRANSITO No.9-MIRAFLORES', 1, NULL),
+(59, 'ITBOY - ''DISTRITO DE TRANSITO No.5  MONIQUIRA', 1, NULL),
+(60, 'ITBOY - ''DISTRITO DE TRANSITO No. 2.  NOBSA', 1, NULL),
+(61, 'SECRETARÖA DE TRANSITO Y TRANSPORTE MUNICIPAL DE PAIPA', 1, NULL),
+(62, 'INSPECCION DE TRANSITO Y TRANSPORTE MCPAL DE PUERTO BOYACA', 1, NULL),
+(63, 'ITBOY - DISTRITO DE TRANSITO No.11 - RAMIRIQUI', 1, NULL),
+(64, 'ITBOY - DISTRITO DE TRANSITO No. 4  SABOYA', 1, NULL),
+(65, 'ITBOY - DISTRITO DE TRANSITO   SANTA ROSA DE VITERBO', 1, NULL),
+(66, 'ITBOY - ''DISTRITO DE TRANSTO No. 7 SOATA', 1, NULL),
+(67, 'INSTITUTO DE TRANSITO Y TRANSPORTE MUNICIPAL  DE SOGAMOSO', 1, NULL),
+(68, 'DIRECCION DPTAL. DE TRANSITO Y TRANSPORTE DE CASANARE', 1, NULL),
+(69, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE YOPAL', 1, NULL),
+(71, 'SECRETARIA DE TRANSPORTES Y TTO MCPAL DE MANIZALES', 1, NULL),
+(72, 'INSPECCION DE TRANSITO Y TRANSPORTE DE AGUADAS ', 1, NULL),
+(73, 'SECRETARIA DE TRANSPORTE Y TRANSITO DE ANSERMA', 1, NULL),
+(74, 'UNIDAD DE TRANSITO DE CALDAS', 1, NULL),
+(75, 'SECRETARIA MCPAL. DE TRANSITO Y TTE DE CHINCHINA', 1, NULL),
+(76, 'INSPECCION DE TRANSITO Y TRANSPORTE DE LA DORADA', 1, NULL),
+(77, 'DIRECCION MIPAL. DE TRANSITO Y TRANSPORTE DE MANZANARES', 1, NULL),
+(78, 'INSPECCION DE TRANSITO Y TRANSPORTE DE RIOSUCIO', 1, NULL),
+(79, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE SALAMINA', 1, NULL),
+(80, 'UNIDAD DE TRANSITO DE  CALDAS', 1, NULL),
+(82, 'INSPECCION MCPAL. DE TRANSITO Y TTE DE POPAYAN', 1, NULL),
+(83, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE BOLIVAR', 1, NULL),
+(84, 'SECRETARIA DE TRANSITO Y TTE MPAL DE MIRANDA', 1, NULL),
+(85, 'SECRETARIA DE TRANSITO MUNICIPAL DE PATIA', 1, NULL),
+(86, 'SECRETARIA DE TRANSITO MPAL DE PUERTO TEJADA ', 1, NULL),
+(87, 'SRIA. DE TTO. Y TTE. MCPAL DE SANTANDER DE QUILICHAO', 1, NULL),
+(88, 'SECRETARIA DE TRASNITO Y TRANSPORTE MUNCIPAL DE TIMBIO', 1, NULL),
+(90, 'INSTITUTO MPAL DE TRANSITO Y TRANSPORTE DE VALLEDUPAR', 1, NULL),
+(91, 'INSTITUTO MUNICIPAL DE TRANSITO Y TRANSPORTE DE AGUACHICA', 1, NULL),
+(92, 'SECRETARIA DE TTES Y TTO MCPAL AGUSTIN CODAZZI ', 1, NULL),
+(93, 'SECRETARIA MUNICIPAL DE TRANSITO Y TRANSPORTE DE BOSCONIA ', 1, NULL),
+(94, 'SECRETARÖA DE TRANSITO Y TRANSPORTE MUNICIPAL DE LA PAZ ', 1, NULL),
+(96, 'SECRETARIA DE TRANSITO Y TRANSPORTE DPTAL DE CORDOBA', 1, NULL),
+(97, 'SECRETARIA MUNICIPAL DE TRANSPORTE Y TRANSITO DE MONTERIA', 1, NULL),
+(98, 'INSTITUTO MUNICIPAL DE TRANSPORTE Y TRANSITO DE CERETE', 1, NULL),
+(99, 'SRIA.  DPTAL TT O  Y TE DE CORDOBA SEDE CHINU ', 1, NULL),
+(100, 'INSPECCION DE TRANSITO Y TRANSPORTE DE LORICA', 1, NULL),
+(101, 'SRIA. DPTAL. DE TTO. Y TTE. DE CORDOBA  PLANETA RICA', 1, NULL),
+(102, 'INSPECCION DE TRANSITO Y TTE MPAL DE SAHAGUN', 1, NULL),
+(103, 'SRIA MUNICIPAL DE TRANSPORTES Y TTO DE SINCELEJO', 1, NULL),
+(104, 'INSPECCION DE TRANSITO Y TRANSPORTE DE COROZAL', 1, NULL),
+(105, 'DIRECCION DPTAL. DE TRANSITO Y TTE DE SUCRE', 1, NULL),
+(107, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE BOGOTA', 1, NULL),
+(108, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(109, 'INSPECCION DE TRANSITO Y TRANSPORTE DE CAQUEZA', 1, NULL),
+(110, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE CHIA', 1, NULL),
+(111, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(112, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(113, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(114, 'SECRETARIO DE TRANSITO MUNICIPAL DE FACATATIVA', 1, NULL),
+(115, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE FUSAGASUGA', 1, NULL),
+(116, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL. DE GIRARDOT', 1, NULL),
+(117, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(118, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(119, 'SECRETARIA DE TRANSTO Y TRANSPORTE MCPAL DE PACHO', 1, NULL),
+(120, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(121, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(122, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(123, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(124, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE C/MARCA', 1, NULL),
+(125, 'INSPECCION MCPAL DE TRANSITO Y REGULACION VIAL DE LETICIA', 1, NULL),
+(127, 'INSTITUTO DPTAL DE TRANSITO DE LA GUAJIRA - INTRADEGUA', 1, NULL),
+(128, 'INSPECCION DE TRANSITO Y TRANSPORTE DE MAICAO', 1, NULL),
+(130, 'SECRETARIA DE INFRAEST. DE TTO Y TTE MUNICIPAL DE NEIVA', 1, NULL),
+(131, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1, NULL),
+(132, 'SECRETARIA MCPAL DE TRANSITO Y TTE DE GARZON', 1, NULL),
+(133, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE LA PLATA ', 1, NULL),
+(134, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1, NULL),
+(135, 'DIRECCION ADMINISTRATIVA DE PITALITO', 1, NULL),
+(136, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1, NULL),
+(137, 'INSTITUTO DE TRANSITO Y TRANSPORTE DPTAL DEL HUILA', 1, NULL),
+(138, 'INSTITUTO DPTAL DE TTO Y TRASPORTE DEL CAQUETA', 1, NULL),
+(139, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE FLORENCIA ', 1, NULL),
+(140, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL CAQUETA', 1, NULL),
+(141, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL CAQUETA', 1, NULL),
+(142, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL CAQUETA', 1, NULL),
+(144, 'SECRETARIA DE GOBIERNO DISTRITAL DE SANTA MARTA', 1, NULL),
+(145, 'INSTITUTO DPTAL.  DE TTE Y TTO DEL MAGDALENA', 1, NULL),
+(146, 'INSTITUTO DPTAL.  DE TRANSPORTE Y TRANSITO DEL MAGDALENA', 1, NULL),
+(147, 'INSTITUTO DE TRANSITO Y TTE MPAL.  DE CIENAGA', 1, NULL),
+(148, 'INSTITUTO   MCPAL DE TTO Y TTE DE FUNDACION ', 1, NULL),
+(149, 'SECRETARIA DEL INTERIOR, TTES Y TTO MCPAL. EL BANCO', 1, NULL),
+(150, 'INSPECCION DE TRANSITO DE PLATO', 1, NULL),
+(152, 'INSTITUTO DE TRANSITO Y TRANSPORTE DEL META ', 1, NULL),
+(153, 'INSPECCION MCPAL DE TRANSITO DE VILLAVICENCIO', 1, NULL),
+(154, 'INSTITUTO DE TRANSITO Y TRANSPORTE DE ACACIAS - META', 1, NULL),
+(155, 'SECRETARIA MCPAL. DE TRANSITO DE GRANADA', 1, NULL),
+(156, 'INSTITUTO DPTAL DE TTO Y TTE  DEL META - SEDE OPERATIVA GUAMAL', 1, NULL),
+(157, 'INSTITUTO DE TRANSIITO Y TRANSPORTE DEL META', 1, NULL),
+(158, 'SECRETARIA DE OBRAS PUBLICAS Y TTE. DEPARTAMENTAL DE GUAINIA', 1, NULL),
+(159, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICAL DE INIRIDA', 1, NULL),
+(160, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DEL  GUAVIARE', 1, NULL),
+(161, 'FONDO DPTAL. DE TRANSITO DEL VICHADA', 1, NULL),
+(163, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(164, 'DEPARTAMENTO ADMINISTRATIVO DE TRANSITO Y TRANSPORTE MCPAL DE PASTO', 1, NULL),
+(165, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(166, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(167, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(168, 'INSTITUTO DPTAL DE TRANSITO Y TRNASPORTE DE NARI¥O', 1, NULL),
+(169, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE IPIALES', 1, NULL),
+(170, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(171, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(172, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(173, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(174, 'INSTITUTO DPTAL DE TRANSITO Y TRANSPORTE DE NARI¥O', 1, NULL),
+(175, 'SRIA. DE TRANSPORTE Y TRANSITO DEL MUNICIPIO DE TUMACO', 1, NULL),
+(176, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL. DE TUQUERRES', 1, NULL),
+(177, 'DPTO. ADTVO. DE TRANSITO Y TRANSPORTE DE  PUTUMAYO', 1, NULL),
+(178, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE MOCOA', 1, NULL),
+(179, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICIPAL DE ORITO', 1, NULL),
+(180, 'INSPECCION DE TRANSITO DE PUERTO ASIS', 1, NULL),
+(182, 'DEPARTAMENTO ADMINISTRATIVO DE TRANSITO Y TRANSPORTE MCPAL DE CUCUTA', 1, NULL),
+(183, 'INSPECCION   DE TRANSITO Y TRANSPORTE DE CONVENCION ', 1, NULL),
+(184, 'DIRECCION OPERATIVA DE TRANSITO DEPARTAMENTAL DE  NORTE DE SANTANDER', 1, NULL),
+(185, 'DPTO. ADTIVO DE TRANSITO Y TRANSPORTE MPAL. DE LOS PATIOS ', 1, NULL),
+(186, 'INSPECCION MCPAL DE TRANSITO Y TTE DE OCA¥A', 1, NULL),
+(187, 'INSPECCION MCPAL DE TRANSITO Y TRANSPORTE DE PAMPLONA', 1, NULL),
+(188, 'DPTO ADM. DE  TRANSPORTES Y TRANSITO DE VILLA DEL ROSARIO "DATRANS"', 1, NULL),
+(189, 'INSTITUTO DE TRANSITO Y TRANSPORTE DE ARAUCA', 1, NULL),
+(190, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE SARAVENA ', 1, NULL),
+(192, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE ARMENIA', 1, NULL),
+(193, 'INSPECCION DE TRANSITO Y TRANSPORTE DE CALARCA', 1, NULL),
+(194, 'INSTITUTO DEPARTAMENTAL DE TRANSITO DEL QUINDIO', 1, NULL),
+(195, 'SRIA. DE TRANSITO Y TRANSPORTE MUNICIPAL DE LA TEBAIDA', 1, NULL),
+(196, 'INSPECCION DE TRANSITO Y TRANSPORTE DE QUIMBAYA', 1, NULL),
+(198, 'INSTITUTO MUNICIPAL DE TRANSITO Y TRANSPORTE DE PEREIRA', 1, NULL),
+(199, 'SECRETARIA MCPAL DE TTO Y TTE.  DE DOSQUEBRADAS', 1, NULL),
+(200, 'SECRETARIA MUNICIPAL DE TRANSITO Y TRANSPORTE DE LA VIRGINIA', 1, NULL),
+(201, 'SECRETARIA DE TRANSITO Y GOBIERNO MUNICIPAL DE SANTA ROSA DE CABAL', 1, NULL),
+(203, 'DIRECCION DE TRANSITO Y TRANSPORTE DE BUCARAMANGA', 1, NULL),
+(204, 'INSPECCION MUNICIPAL DE TRANSITO Y TRANSPORTE DE BARBOSA', 1, NULL),
+(205, 'INSPECCION DE TRANSITO Y TRANSPORTE DE BARRANCABERMEJA', 1, NULL),
+(206, 'INSTITUTO DE TRANSITO Y TRANSPORTE DE CHARALA  ', 1, NULL),
+(207, 'DIRECCION DE TRANSITO Y TRANSPORTE DE FLORIDABLANCA', 1, NULL),
+(208, 'SECRETARIA MCPAL DE TRANSITO Y TRANSPORTE DE GIRON', 1, NULL),
+(209, 'SECRETARIA DE TTO. Y TTE   MCPAL DE MALAGA', 1, NULL),
+(210, 'INSPECCION DE TRANSITO Y TRANSPORTE DE PIEDECUESTA', 1, NULL),
+(211, 'INSPECCION MCPAL DE TRANSITO Y TRANSPORTE DE SAN GIL', 1, NULL),
+(212, 'INSPECCION MPAL DE TTO Y TTE DE SAN VICENTE CHUCURI', 1, NULL),
+(213, 'INSPECCION MCPAL DE TRANSITO Y TRANSPORTE  DEL SOCORRO', 1, NULL),
+(214, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE VELEZ', 1, NULL),
+(216, 'SECRETARIA MPAL DE TTO Y TRANSPORTE DE IBAGUE', 1, NULL),
+(217, 'DEPARTAMENTO ADMS.  DE TRANSITO Y TTE . DEL TOLIMA', 1, NULL),
+(218, 'DPTO. ADTVO. DE TRANSITO Y TRANSPORTE DEL TOLIMA', 1, NULL),
+(219, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE DE GUAYABAL', 1, NULL),
+(220, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE CHAPARRAL', 1, NULL),
+(221, 'SECRETARIA MCPAL DE TRANSITO Y TRANSPORTE ESPINAL', 1, NULL),
+(222, 'SECRETARIA DE TRANSITO Y TTE MPAL DE FRESNO', 1, NULL),
+(223, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE GUAMO', 1, NULL),
+(224, 'SECRETARIA MUNICIPAL DE TRANSITO Y TTE DE HONDA ', 1, NULL),
+(225, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNCIPAL DE LIBANO', 1, NULL),
+(226, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE DE MARIQUITA', 1, NULL),
+(227, 'SECRETARIA DE GOBIERNO TRANSITO  Y TRANSPORTE DE MELGAR', 1, NULL),
+(228, 'UNIDAD REGIONAL DE TRANSITO Y TRANSPORTE PURIFICACIàN', 1, NULL),
+(230, 'SECRETARIA MUNICIPAL DE TRANSITO CALI', 1, NULL),
+(231, 'SECRETARIA DE TRANSITO Y TRANSPORTE ANDALUCIA', 1, NULL),
+(232, 'SUBSECRETARIA DE REGULACION Y CONTROL DE TTO Y TTE DE BUENAVENTURA', 1, NULL),
+(233, 'INSPECCION DE TRANSITO Y TRANSPORTE DE GUADALAJARA DE BUGA', 1, NULL),
+(234, 'SECRETARIA MCPAL DE TRANSITO Y TTE DE CAICEDONIA', 1, NULL),
+(235, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL DE CANDELARIA', 1, NULL),
+(236, 'DISTRITO MCPAL DE TRANSITO Y TTE DE CARTAGO', 1, NULL),
+(237, 'SECRETARIA MCPAL DE TRANSITO Y TTE EL CERRITO', 1, NULL),
+(238, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE FLORIDA', 1, NULL),
+(239, 'SECRETARIA DE TRANSITO Y TTE MPAL DE GUACARI', 1, NULL),
+(240, 'SECRETARIA DE TRANSITO Y TRANSPORTE MCPAL. DE JAMUNDI', 1, NULL),
+(241, 'SECRETARIA DE TRANSITO MCPAL DE LA UNION', 1, NULL),
+(242, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE PALMIRA', 1, NULL),
+(243, 'SECRETARIA DE TRANSITO Y TRANSPORTE MUNICPAL DE PRADERA', 1, NULL),
+(244, 'INSPECCION DE TRANSITO Y TRANSPORTE DE ROLDANILLO', 1, NULL),
+(245, 'SECRETARIA DE TRANMSITO Y TRANSPORTE DE SEVILLA', 1, NULL),
+(246, 'SECRETARIA DE TRANSITO MUNICIPAL DE TULUA', 1, NULL),
+(247, 'SECRETARIA DE TRANSITO Y TRANSPORTE DE YUMBO', 1, NULL),
+(248, 'INSPECCION DE TRANSITO Y TRANSPORTE DE ZARZAL', 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `origen_registro`
+--
+
+CREATE TABLE `origen_registro` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -4279,8 +4398,32 @@ CREATE TABLE `pago` (
 
 CREATE TABLE `pais` (
   `id` int(11) NOT NULL,
-  `nombrePais` varchar(45) COLLATE utf8_unicode_ci NOT NULL
+  `nombre` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `codigo` int(11) NOT NULL,
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `parametro`
+--
+
+CREATE TABLE `parametro` (
+  `id` int(11) NOT NULL,
+  `anio` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `valor` int(11) DEFAULT NULL,
+  `tipo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `porcentaje` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `parametro`
+--
+
+INSERT INTO `parametro` (`id`, `anio`, `valor`, `tipo`, `porcentaje`, `estado`) VALUES
+(5, '2018', 1000, 'SMLMV', '0.088', 1);
 
 -- --------------------------------------------------------
 
@@ -4290,6 +4433,7 @@ CREATE TABLE `pais` (
 
 CREATE TABLE `peticionario` (
   `id` int(11) NOT NULL,
+  `registro_documento_id` int(11) DEFAULT NULL,
   `nombrePeticionario` varchar(80) COLLATE utf8_unicode_ci NOT NULL,
   `identificacionPeticionario` varchar(15) COLLATE utf8_unicode_ci NOT NULL,
   `direccionPeticionario` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
@@ -4297,7 +4441,7 @@ CREATE TABLE `peticionario` (
   `correoElectronico` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `numeroOficio` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `tipoPeticionario` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `registro_documento_id` int(11) DEFAULT NULL
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -4313,17 +4457,36 @@ CREATE TABLE `propietario_vehiculo` (
   `empresa_id` int(11) DEFAULT NULL,
   `licencia_transito` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fecha_propiedad_inicial` datetime NOT NULL,
-  `fecha_propiedad_final` datetime NOT NULL,
-  `estado_propiedad` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `fecha_propiedad_final` datetime DEFAULT NULL,
+  `estado_propiedad` tinyint(1) NOT NULL,
+  `estado` tinyint(1) NOT NULL,
+  `permisoTramite` tinyint(1) NOT NULL,
+  `apoderado_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `propietario_vehiculo`
 --
 
-INSERT INTO `propietario_vehiculo` (`id`, `ciudadano_id`, `vehiculo_id`, `empresa_id`, `licencia_transito`, `fecha_propiedad_inicial`, `fecha_propiedad_final`, `estado_propiedad`, `estado`) VALUES
-(1, 1, 1, NULL, '10000000', '2018-04-03 00:00:00', '2018-04-05 00:00:00', '1', 1);
+INSERT INTO `propietario_vehiculo` (`id`, `ciudadano_id`, `vehiculo_id`, `empresa_id`, `licencia_transito`, `fecha_propiedad_inicial`, `fecha_propiedad_final`, `estado_propiedad`, `estado`, `permisoTramite`, `apoderado_id`) VALUES
+(1, 1, 1, NULL, '345345', '2018-02-01 00:00:00', '2018-05-10 00:00:00', 0, 1, 0, NULL),
+(14, NULL, 1, 1, '321324', '2018-05-10 00:00:00', '2018-05-10 00:00:00', 0, 1, 0, NULL),
+(15, 1, 1, NULL, '321324', '2018-05-10 00:00:00', '2018-05-10 00:00:00', 0, 1, 0, NULL),
+(16, 1, 1, NULL, '321324', '2018-05-10 00:00:00', '2018-05-10 00:00:00', 0, 1, 0, NULL),
+(17, NULL, 1, 1, '321324', '2018-05-10 00:00:00', '2018-05-11 00:00:00', 0, 1, 0, NULL),
+(18, 1, 1, NULL, '321324', '2018-05-11 00:00:00', NULL, 1, 1, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `radio_accion`
+--
+
+CREATE TABLE `radio_accion` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -4333,6 +4496,7 @@ INSERT INTO `propietario_vehiculo` (`id`, `ciudadano_id`, `vehiculo_id`, `empres
 
 CREATE TABLE `registro_documento` (
   `id` int(11) NOT NULL,
+  `tipo_documento_id` int(11) DEFAULT NULL,
   `codigoRadicado` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `tiempoRadicacion` datetime NOT NULL,
   `asuntoDocumento` longtext COLLATE utf8_unicode_ci NOT NULL,
@@ -4340,7 +4504,7 @@ CREATE TABLE `registro_documento` (
   `urlDocumentoEscaneado` varchar(145) COLLATE utf8_unicode_ci NOT NULL,
   `tiempoTranscurrido` int(11) NOT NULL,
   `numeroFolios` int(11) NOT NULL,
-  `tipo_documento_id` int(11) DEFAULT NULL
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -4361,8 +4525,8 @@ CREATE TABLE `sede_operativa` (
 --
 
 INSERT INTO `sede_operativa` (`id`, `nombre`, `codigo_divipo`, `estado`) VALUES
-(1, 'Sede Operativa Tangua', '52400001000003456', 1),
-(2, 'Sede Operativa Pasto', '52400001000004569', 1);
+(1, 'sede1', '123123', 1),
+(2, 'sede2', '1234', 1);
 
 -- --------------------------------------------------------
 
@@ -4372,9 +4536,9 @@ INSERT INTO `sede_operativa` (`id`, `nombre`, `codigo_divipo`, `estado`) VALUES
 
 CREATE TABLE `seguimiento_entrega` (
   `id` int(11) NOT NULL,
-  `fechaCargue` date NOT NULL,
   `numeroRegistros` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `numeroOficio` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `fechaCargue` date NOT NULL,
   `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -4382,8 +4546,8 @@ CREATE TABLE `seguimiento_entrega` (
 -- Volcado de datos para la tabla `seguimiento_entrega`
 --
 
-INSERT INTO `seguimiento_entrega` (`id`, `fechaCargue`, `numeroRegistros`, `numeroOficio`, `estado`) VALUES
-(1, '2018-03-14', '345', '23', 1);
+INSERT INTO `seguimiento_entrega` (`id`, `numeroRegistros`, `numeroOficio`, `fechaCargue`, `estado`) VALUES
+(1, '1000', '654654', '2018-03-08', 1);
 
 -- --------------------------------------------------------
 
@@ -4406,8 +4570,128 @@ INSERT INTO `servicio` (`id`, `nombre`, `codigo`, `estado`) VALUES
 (1, 'OFICIAL', 1, 1),
 (2, 'PUBLICO', 2, 1),
 (3, 'PARTICULAR', 3, 1),
-(4, 'DIPLOMATICO', 5, 1),
-(5, 'asd', 7894, 0);
+(4, 'DIPLOMATICO', 5, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `sustrato`
+--
+
+CREATE TABLE `sustrato` (
+  `id` int(11) NOT NULL,
+  `sede_operativa_id` int(11) DEFAULT NULL,
+  `modulo_id` int(11) DEFAULT NULL,
+  `estado` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `consecutivo` bigint(20) NOT NULL,
+  `clase_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `sustrato`
+--
+
+INSERT INTO `sustrato` (`id`, `sede_operativa_id`, `modulo_id`, `estado`, `consecutivo`, `clase_id`) VALUES
+(1, 1, 1, 'Disponible', 1, NULL),
+(2, 1, 1, 'Disponible', 2, NULL),
+(3, 1, 1, 'Disponible', 3, NULL),
+(4, 1, 1, 'Disponible', 4, NULL),
+(5, 1, 1, 'Disponible', 5, NULL),
+(6, 1, 1, 'Disponible', 6, NULL),
+(7, 1, 1, 'Disponible', 7, NULL),
+(8, 1, 1, 'Disponible', 8, NULL),
+(9, 1, 1, 'Disponible', 9, NULL),
+(10, 1, 1, 'Disponible', 10, NULL),
+(11, 1, 1, 'Disponible', 11, NULL),
+(12, 1, 1, 'Disponible', 12, NULL),
+(13, 1, 1, 'Disponible', 13, NULL),
+(14, 1, 1, 'Disponible', 14, NULL),
+(15, 1, 1, 'Disponible', 15, NULL),
+(16, 1, 1, 'Disponible', 16, NULL),
+(17, 1, 1, 'Disponible', 17, NULL),
+(18, 1, 1, 'Disponible', 18, NULL),
+(19, 1, 1, 'Disponible', 19, NULL),
+(20, 1, 1, 'Disponible', 20, NULL),
+(21, 1, 1, 'Disponible', 21, NULL),
+(22, 1, 1, 'Disponible', 22, NULL),
+(23, 1, 1, 'Disponible', 23, NULL),
+(24, 1, 1, 'Disponible', 24, NULL),
+(25, 1, 1, 'Disponible', 25, NULL),
+(26, 1, 1, 'Disponible', 26, NULL),
+(27, 1, 1, 'Disponible', 27, NULL),
+(28, 1, 1, 'Disponible', 28, NULL),
+(29, 1, 1, 'Disponible', 29, NULL),
+(30, 1, 1, 'Disponible', 30, NULL),
+(31, 1, 1, 'Disponible', 31, NULL),
+(32, 1, 1, 'Disponible', 32, NULL),
+(33, 1, 1, 'Disponible', 33, NULL),
+(34, 1, 1, 'Disponible', 34, NULL),
+(35, 1, 1, 'Disponible', 35, NULL),
+(36, 1, 1, 'Disponible', 36, NULL),
+(37, 1, 1, 'Disponible', 37, NULL),
+(38, 1, 1, 'Disponible', 38, NULL),
+(39, 1, 1, 'Disponible', 39, NULL),
+(40, 1, 1, 'Disponible', 40, NULL),
+(41, 1, 1, 'Disponible', 41, NULL),
+(42, 1, 1, 'Disponible', 42, NULL),
+(43, 1, 1, 'Disponible', 43, NULL),
+(44, 1, 1, 'Disponible', 44, NULL),
+(45, 1, 1, 'Disponible', 45, NULL),
+(46, 1, 1, 'Disponible', 46, NULL),
+(47, 1, 1, 'Disponible', 47, NULL),
+(48, 1, 1, 'Disponible', 48, NULL),
+(49, 1, 1, 'Disponible', 49, NULL),
+(50, 1, 1, 'Disponible', 50, NULL),
+(51, 1, 1, 'Disponible', 51, NULL),
+(52, 1, 1, 'Disponible', 52, NULL),
+(53, 1, 1, 'Disponible', 53, NULL),
+(54, 1, 1, 'Disponible', 54, NULL),
+(55, 1, 1, 'Disponible', 55, NULL),
+(56, 1, 1, 'Disponible', 56, NULL),
+(57, 1, 1, 'Disponible', 57, NULL),
+(58, 1, 1, 'Disponible', 58, NULL),
+(59, 1, 1, 'Disponible', 59, NULL),
+(60, 1, 1, 'Disponible', 60, NULL),
+(61, 1, 1, 'Disponible', 61, NULL),
+(62, 1, 1, 'Disponible', 62, NULL),
+(63, 1, 1, 'Disponible', 63, NULL),
+(64, 1, 1, 'Disponible', 64, NULL),
+(65, 1, 1, 'Disponible', 65, NULL),
+(66, 1, 1, 'Disponible', 66, NULL),
+(67, 1, 1, 'Disponible', 67, NULL),
+(68, 1, 1, 'Disponible', 68, NULL),
+(69, 1, 1, 'Disponible', 69, NULL),
+(70, 1, 1, 'Disponible', 70, NULL),
+(71, 1, 1, 'Disponible', 71, NULL),
+(72, 1, 1, 'Disponible', 72, NULL),
+(73, 1, 1, 'Disponible', 73, NULL),
+(74, 1, 1, 'Disponible', 74, NULL),
+(75, 1, 1, 'Disponible', 75, NULL),
+(76, 1, 1, 'Disponible', 76, NULL),
+(77, 1, 1, 'Disponible', 77, NULL),
+(78, 1, 1, 'Disponible', 78, NULL),
+(79, 1, 1, 'Disponible', 79, NULL),
+(80, 1, 1, 'Disponible', 80, NULL),
+(81, 1, 1, 'Disponible', 81, NULL),
+(82, 1, 1, 'Disponible', 82, NULL),
+(83, 1, 1, 'Disponible', 83, NULL),
+(84, 1, 1, 'Disponible', 84, NULL),
+(85, 1, 1, 'Disponible', 85, NULL),
+(86, 1, 1, 'Disponible', 86, NULL),
+(87, 1, 1, 'Disponible', 87, NULL),
+(88, 1, 1, 'Disponible', 88, NULL),
+(89, 1, 1, 'Disponible', 89, NULL),
+(90, 1, 1, 'Disponible', 90, NULL),
+(91, 1, 1, 'Disponible', 91, NULL),
+(92, 1, 1, 'Disponible', 92, NULL),
+(93, 1, 1, 'Disponible', 93, NULL),
+(94, 1, 1, 'Disponible', 94, NULL),
+(95, 1, 1, 'Disponible', 95, NULL),
+(96, 1, 1, 'Disponible', 96, NULL),
+(97, 1, 1, 'Disponible', 97, NULL),
+(98, 1, 1, 'Disponible', 98, NULL),
+(99, 1, 1, 'Disponible', 99, NULL),
+(100, 1, 1, 'Disponible', 100, NULL);
 
 -- --------------------------------------------------------
 
@@ -4430,8 +4714,9 @@ CREATE TABLE `testigo_comparendo` (
 CREATE TABLE `tipo_documento` (
   `id` int(11) NOT NULL,
   `nombreTipo` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `diasDuraccionTramite` int(11) NOT NULL,
-  `codigoDocumento` varchar(45) COLLATE utf8_unicode_ci NOT NULL
+  `diasDuracionTramite` int(11) NOT NULL,
+  `codigoDocumento` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -4443,8 +4728,15 @@ CREATE TABLE `tipo_documento` (
 CREATE TABLE `tipo_empresa` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `estado` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `estado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_empresa`
+--
+
+INSERT INTO `tipo_empresa` (`id`, `nombre`, `estado`) VALUES
+(1, 'tipo empresa', 1);
 
 -- --------------------------------------------------------
 
@@ -4455,22 +4747,73 @@ CREATE TABLE `tipo_empresa` (
 CREATE TABLE `tipo_identificacion` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `sigla` varchar(3) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `tipo_identificacion`
 --
 
-INSERT INTO `tipo_identificacion` (`id`, `nombre`, `estado`) VALUES
-(1, 'CEDULA DE CIUDADANIA', 1),
-(2, 'CEDULA DE EXTRANJERIA', 1),
-(3, 'PASAPORTE', 1),
-(4, 'NIT', 1),
-(5, 'CARNET DIPLOMATICO', 1),
-(6, 'REGISTRO CIVIL', 1),
-(7, 'TRAJETA DE IDENTIDAD', 1),
-(8, 'tipo', 0);
+INSERT INTO `tipo_identificacion` (`id`, `nombre`, `estado`, `sigla`) VALUES
+(1, 'CEDULA DE CIUDADANIA', 1, ''),
+(2, 'CEDULA DE EXTRANJERIA', 1, ''),
+(3, 'PASAPORTE', 1, ''),
+(4, 'NIT', 1, ''),
+(5, 'CARNET DIPLOMATICO', 1, ''),
+(6, 'REGISTRO CIVIL', 1, ''),
+(7, 'TRAJETA DE IDENTIDAD', 1, ''),
+(8, 'tipo', 0, '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_recaudo`
+--
+
+CREATE TABLE `tipo_recaudo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_sociedad`
+--
+
+CREATE TABLE `tipo_sociedad` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_sociedad`
+--
+
+INSERT INTO `tipo_sociedad` (`id`, `nombre`, `estado`) VALUES
+(1, 'sociedad', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipo_vehiculo`
+--
+
+CREATE TABLE `tipo_vehiculo` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `estado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tipo_vehiculo`
+--
+
+INSERT INTO `tipo_vehiculo` (`id`, `nombre`, `estado`) VALUES
+(1, 'Carro', 1);
 
 -- --------------------------------------------------------
 
@@ -4482,73 +4825,76 @@ CREATE TABLE `tramite` (
   `id` int(11) NOT NULL,
   `modulo_id` int(11) DEFAULT NULL,
   `nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `valor` int(11) NOT NULL,
-  `redondeo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `redondeo` tinyint(1) NOT NULL,
   `unidad` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `afectacion` tinyint(1) NOT NULL,
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `valor` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sustrato` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `tramite`
 --
 
-INSERT INTO `tramite` (`id`, `modulo_id`, `nombre`, `valor`, `redondeo`, `unidad`, `afectacion`, `estado`) VALUES
-(1, 1, 'MATRICULA INICIAL', 63300, 'encima', '12', 0, 1),
-(2, 1, 'TRASPASO', 62300, 'encima', '10', 0, 1),
-(3, 1, 'TRASLADO DE CUENTA - NO GENERA E.V.', 63300, 'encima', '10', 0, 1),
-(4, 1, 'RADICADO DE CUENTA', 63300, 'encima', '10', 0, 1),
-(5, 1, 'CAMBIO DE COLOR', 62300, 'encima', '10', 0, 1),
-(6, 1, 'CAMBIO DE SERVICIO', 93300, 'encima', '10', 0, 1),
-(7, 1, 'REGRABAR MOTOR', 61800, 'encima', '10', 0, 1),
-(8, 1, 'REGRABAR CHASIS', 61800, 'encima', '10', 0, 1),
-(9, 1, 'REGRABAR SERIE', 61800, 'encima', '10', 0, 1),
-(10, NULL, 'TRANSFORMACION', 63800, 'encima', '10', 0, 1),
-(11, NULL, 'REAFORO', 44100, 'encima', '10', 0, 1),
-(12, 1, 'DUPLICADO LICENCIA', 44100, 'encima', '10', 0, 1),
-(13, NULL, 'INSCRIPCION DE ALERTA', 63300, 'encima', '10', 0, 1),
-(14, NULL, 'LEVANTAMIENTO DE ALERTA', 63300, 'encima', '10', 0, 1),
-(15, 1, 'CANCELACION MATRICULA - NO GENERA E.V.', 62300, 'debajo', '10', 0, 1),
-(16, 1, 'CAMBIO DE PLACAS', 63300, 'debajo', '10', 0, 1),
-(17, NULL, 'REVISION - NO GENERA E.V.', 63300, 'debajo', '10', 0, 1),
-(18, NULL, 'EXPEDICION', 62300, 'debajo', '10', 0, 1),
-(19, NULL, 'REFREDACION', 93300, 'debajo', '10', 0, 1),
-(20, NULL, 'RECATEGORIZACION', 61800, 'debajo', '10', 0, 1),
-(21, NULL, 'DUPLICADO PLACAS', 61800, 'debajo', '10', 0, 1),
-(22, NULL, 'CAMBIO LICENCIA POR CAMBIO DE DOCUMENTO', 61800, 'debajo', '10', 0, 1),
-(23, NULL, 'CAMBIO SERV. PUBLICO', 63800, 'debajo', '10', 0, 1),
-(24, 1, 'CAMBIO MOTOR', 44100, 'debajo', '10', 0, 1),
-(25, NULL, 'REPOTENCIACION', 44100, 'debajo', '10', 0, 1),
-(26, 1, 'AUTORIZACION A BLINDADO', 63300, 'debajo', '10', 0, 1),
-(27, NULL, 'CAMBIO NIVEL DE SERVICIO', 63300, 'debajo', '10', 0, 1),
-(28, NULL, 'DENUNCIO ROBO VEHICULOS', 62300, 'debajo', '10', 0, 1),
-(29, 2, 'VEHICULO RECUPERADO', 63300, 'debajo', '10', 0, 1),
-(30, 1, 'CAMBIO MODALIDAD SERVICIO', 63300, 'debajo', '10', 0, 1),
-(31, 1, 'CAMBIO TIPO COMBUSTIBLE', 62300, 'encima', '10', 0, 1),
-(32, 1, 'CAMBIO CARROCERIA', 93300, 'encima', '10', 0, 1),
-(33, 2, 'MEDIDA CAUTELAR', 61800, 'encima', '10', 0, 1),
-(34, NULL, 'ENTREGA PROVISIONAL', 61800, 'encima', '10', 0, 1),
-(35, NULL, 'EXTINSION DE DOMINIO', 61800, 'encima', '10', 0, 1),
-(36, 1, 'REMATRICULA', 63800, 'encima', '10', 0, 1),
-(37, NULL, 'CORRECION DE CHASIS', 44100, 'debajo', '10', 0, 1),
-(38, NULL, 'CORRECION DE MOTOR', 44100, 'debajo', '10', 0, 1),
-(39, NULL, 'REPOSICION PLACA', 63300, 'debajo', '10', 0, 1),
-(40, NULL, 'ANULADA', 63300, 'debajo', '10', 0, 1),
-(41, NULL, 'SUCESIONES', 62300, 'debajo', '10', 0, 1),
-(42, NULL, 'LEVANTAMIENTO DE EMBARGO', 63300, 'debajo', '10', 0, 1),
-(43, NULL, 'EMBARGO', 63300, 'debajo', '10', 0, 1),
-(44, NULL, 'EXTRAVIO', 62300, 'debajo', '10', 0, 1),
-(45, 1, 'LEVANTAMIENTO DE PRENDA', 93300, 'encima', '10', 0, 1),
-(46, 1, 'PRENDA', 61800, 'encima', '10', 0, 1),
-(47, 1, 'CAMBIO CAPACIDAD', 61800, 'encima', '10', 0, 1),
-(48, NULL, 'MATRICULAR INICIAL DONACION', 61800, 'encima', '10', 0, 1),
-(49, NULL, 'MATRICULA INICIAL REMATADO', 63800, 'encima', '10', 0, 1),
-(50, NULL, 'MATRICULA INICIAL MODELO ANTERIOR', 44100, 'encima', '10', 0, 1),
-(51, NULL, 'CLASIFICACION ANTIGUO', 44100, 'debajo', '10', 0, 1),
-(52, NULL, 'CLASIFICACION CLASICO', 63300, 'debajo', '10', 0, 1),
-(53, NULL, 'CANCELACION O DEVOLUCION TRASLADO', 63300, 'debajo', '10', 0, 1),
-(54, 1, 'CAMBIO PRENDARIO', 15000, 'encima', '10', 10, 1),
-(55, 2, 'asd', 221, 'asd', 'asd', 0, 0);
+INSERT INTO `tramite` (`id`, `modulo_id`, `nombre`, `redondeo`, `unidad`, `afectacion`, `estado`, `valor`, `sustrato`) VALUES
+(1, 1, 'MATRICULA INICIAL', 0, '12', 0, 1, '64000', 1),
+(2, 1, 'TRASPASO', 0, '10', 0, 1, '64000', 1),
+(3, 1, 'TRASLADO DE CUENTA - NO GENERA E.V.', 0, '10', 0, 1, '64000', 0),
+(4, 1, 'RADICADO DE CUENTA', 0, '10', 0, 1, '64000', 0),
+(5, 1, 'CAMBIO DE COLOR', 0, '10', 0, 1, '64000', 1),
+(6, 1, 'CAMBIO DE SERVICIO', 0, '10', 0, 1, '64000', 0),
+(7, 1, 'REGRABAR MOTOR', 0, '10', 0, 1, '64000', 0),
+(8, 1, 'REGRABAR CHASIS', 0, '10', 0, 1, '64000', 0),
+(9, 1, 'REGRABAR SERIE', 0, '10', 0, 1, '64000', 0),
+(10, NULL, 'TRANSFORMACION', 0, '10', 0, 1, '64000', 0),
+(11, NULL, 'REAFORO', 0, '10', 0, 1, '64000', 0),
+(12, 1, 'DUPLICADO LICENCIA DE TRANSITO', 0, '10', 0, 1, '64000', 1),
+(13, NULL, 'INSCRIPCION DE ALERTA', 0, '10', 0, 1, '64000', 0),
+(14, NULL, 'LEVANTAMIENTO DE ALERTA', 0, '10', 0, 1, '64000', 0),
+(15, 1, 'CANCELACION MATRICULA - NO GENERA E.V.', 0, '10', 0, 1, '64000', 0),
+(16, 1, 'CAMBIO DE PLACAS', 0, '10', 0, 1, '64000', 1),
+(17, NULL, 'REVISION - NO GENERA E.V.', 0, '10', 0, 1, '64000', 0),
+(18, NULL, 'EXPEDICION', 0, '10', 0, 1, '64000', 0),
+(19, NULL, 'REFREDACION', 0, '10', 0, 1, '64000', 0),
+(20, NULL, 'RECATEGORIZACION', 0, '10', 0, 1, '64000', 0),
+(21, 1, 'DUPLICADO PLACAS', 0, '10', 0, 1, '64000', 0),
+(22, NULL, 'CAMBIO LICENCIA POR CAMBIO DE DOCUMENTO', 0, '10', 0, 1, '64000', 0),
+(23, NULL, 'CAMBIO SERV. PUBLICO', 0, '10', 0, 1, '64000', 0),
+(24, 1, 'CAMBIO MOTOR', 0, '10', 0, 1, '64000', 0),
+(25, NULL, 'REPOTENCIACION', 0, '10', 0, 1, '64000', 0),
+(26, 1, 'AUTORIZACION A BLINDADO', 0, '10', 0, 1, '64000', 0),
+(27, NULL, 'CAMBIO NIVEL DE SERVICIO', 0, '10', 0, 1, '64000', 0),
+(28, NULL, 'DENUNCIO ROBO VEHICULOS', 0, '10', 0, 1, '64000', 0),
+(29, 2, 'VEHICULO RECUPERADO', 0, '10', 0, 1, '64000', 0),
+(30, 1, 'CAMBIO MODALIDAD SERVICIO', 0, '10', 0, 1, '64000', 0),
+(31, 1, 'CAMBIO TIPO COMBUSTIBLE', 0, '10', 0, 1, '64000', 0),
+(32, 1, 'CAMBIO CARROCERIA', 0, '10', 0, 1, '64000', 0),
+(33, 2, 'MEDIDA CAUTELAR', 0, '10', 0, 1, '64000', 0),
+(34, NULL, 'ENTREGA PROVISIONAL', 0, '10', 0, 1, '64000', 0),
+(35, NULL, 'EXTINSION DE DOMINIO', 0, '10', 0, 1, '64000', 0),
+(36, 1, 'REMATRICULA', 0, '10', 0, 1, '64000', 0),
+(37, NULL, 'CORRECION DE CHASIS', 0, '10', 0, 1, '64000', 0),
+(38, NULL, 'CORRECION DE MOTOR', 0, '10', 0, 1, '64000', 0),
+(39, NULL, 'REPOSICION PLACA', 0, '10', 0, 1, '64000', 0),
+(40, NULL, 'ANULADA', 0, '10', 0, 1, '64000', 0),
+(41, NULL, 'SUCESIONES', 0, '10', 0, 1, '64000', 0),
+(42, NULL, 'LEVANTAMIENTO DE EMBARGO', 0, '10', 0, 1, '64000', 0),
+(43, NULL, 'EMBARGO', 0, '10', 0, 1, '64000', 0),
+(44, NULL, 'EXTRAVIO', 0, '10', 0, 1, '64000', 0),
+(45, 1, 'LEVANTAMIENTO DE PRENDA', 0, '10', 0, 1, '64000', 0),
+(46, 1, 'PRENDA', 0, '10', 0, 1, '64000', 0),
+(47, 1, 'CAMBIO CAPACIDAD', 0, '10', 0, 1, '64000', 0),
+(48, NULL, 'MATRICULAR INICIAL DONACION', 0, '10', 0, 1, '64000', 0),
+(49, NULL, 'MATRICULA INICIAL REMATADO', 0, '10', 0, 1, '64000', 0),
+(50, NULL, 'MATRICULA INICIAL MODELO ANTERIOR', 0, '10', 0, 1, '64000', 0),
+(51, NULL, 'CLASIFICACION ANTIGUO', 0, '10', 0, 1, '64000', 0),
+(52, NULL, 'CLASIFICACION CLASICO', 0, '10', 0, 1, '64000', 0),
+(53, NULL, 'CANCELACION O DEVOLUCION TRASLADO', 0, '10', 0, 1, '64000', 0),
+(54, 1, 'CAMBIO PRENDARIO', 0, '10', 10, 1, '64000', 0),
+(55, 2, 'asd', 0, 'asd', 0, 0, '64000', 0),
+(56, 1, 'PREASIGNACION VEHICULO', 1, '1', 1, 1, '50000', 0),
+(57, 1, 'REGRABAR VIN', 0, '1', 1, 1, '5000', 0);
 
 -- --------------------------------------------------------
 
@@ -4558,13 +4904,11 @@ INSERT INTO `tramite` (`id`, `modulo_id`, `nombre`, `valor`, `redondeo`, `unidad
 
 CREATE TABLE `tramite_especifico` (
   `id` int(11) NOT NULL,
-  `tramite_id` int(11) DEFAULT NULL,
-  `tramite_general_id` int(11) DEFAULT NULL,
   `variante_id` int(11) DEFAULT NULL,
   `caso_id` int(11) DEFAULT NULL,
-  `valor` int(11) DEFAULT NULL,
   `datos` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '(DC2Type:array)',
-  `estado` tinyint(1) NOT NULL
+  `estado` tinyint(1) NOT NULL,
+  `tramite_solicitud_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
@@ -4575,9 +4919,86 @@ CREATE TABLE `tramite_especifico` (
 
 CREATE TABLE `tramite_factura` (
   `id` int(11) NOT NULL,
-  `tramite_sistema_id` int(11) DEFAULT NULL,
-  `factura_id` int(11) DEFAULT NULL
+  `tramite_id` int(11) DEFAULT NULL,
+  `factura_id` int(11) DEFAULT NULL,
+  `estado` tinyint(1) NOT NULL,
+  `realizado` tinyint(1) NOT NULL,
+  `cantidad` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tramite_factura`
+--
+
+INSERT INTO `tramite_factura` (`id`, `tramite_id`, `factura_id`, `estado`, `realizado`, `cantidad`) VALUES
+(18, 2, 1, 1, 0, NULL),
+(19, 1, 1, 1, 1, NULL),
+(20, 12, 1, 1, 0, NULL),
+(21, 16, 1, 1, 1, NULL),
+(22, 21, 1, 1, 0, NULL),
+(23, 24, 1, 1, 1, NULL),
+(24, 12, 1, 1, 0, 2),
+(25, 1, 7, 1, 0, NULL),
+(26, 2, 7, 1, 0, NULL),
+(27, 3, 7, 1, 0, NULL),
+(28, 4, 7, 1, 0, NULL),
+(29, 5, 7, 1, 1, NULL),
+(30, 6, 7, 1, 0, NULL),
+(31, 7, 7, 1, 0, NULL),
+(32, 8, 7, 1, 0, NULL),
+(33, 9, 7, 1, 0, NULL),
+(34, 10, 7, 1, 0, NULL),
+(35, 11, 7, 1, 0, NULL),
+(36, 12, 7, 1, 0, NULL),
+(37, 13, 7, 1, 0, NULL),
+(38, 14, 7, 1, 0, NULL),
+(39, 15, 7, 1, 0, NULL),
+(40, 16, 7, 1, 1, NULL),
+(41, 17, 7, 1, 0, NULL),
+(42, 18, 7, 1, 0, NULL),
+(43, 19, 7, 1, 0, NULL),
+(44, 20, 7, 1, 0, NULL),
+(45, 21, 7, 1, 0, NULL),
+(46, 22, 7, 1, 0, NULL),
+(47, 23, 7, 1, 0, NULL),
+(48, 24, 7, 1, 0, NULL),
+(49, 25, 7, 1, 0, NULL),
+(50, 26, 7, 1, 0, NULL),
+(51, 27, 7, 1, 0, NULL),
+(52, 28, 7, 1, 0, NULL),
+(53, 29, 7, 1, 0, NULL),
+(54, 30, 7, 1, 0, NULL),
+(55, 31, 7, 1, 0, NULL),
+(56, 32, 7, 1, 0, NULL),
+(57, 33, 7, 1, 0, NULL),
+(58, 34, 7, 1, 0, NULL),
+(59, 35, 7, 1, 0, NULL),
+(60, 36, 7, 1, 0, NULL),
+(61, 37, 7, 1, 0, NULL),
+(62, 38, 7, 1, 0, NULL),
+(63, 39, 7, 1, 0, NULL),
+(64, 40, 7, 1, 0, NULL),
+(65, 41, 7, 1, 0, NULL),
+(66, 42, 7, 1, 0, NULL),
+(67, 43, 7, 1, 0, NULL),
+(68, 44, 7, 1, 0, NULL),
+(69, 45, 7, 1, 0, NULL),
+(70, 46, 7, 1, 0, NULL),
+(71, 47, 7, 1, 0, NULL),
+(72, 48, 7, 1, 0, NULL),
+(73, 49, 7, 1, 0, NULL),
+(74, 50, 7, 1, 0, NULL),
+(75, 51, 7, 1, 0, NULL),
+(76, 52, 7, 1, 0, NULL),
+(77, 53, 7, 1, 0, NULL),
+(78, 54, 7, 1, 0, NULL),
+(79, 56, 7, 1, 0, NULL),
+(80, 57, 7, 1, 0, NULL),
+(81, 24, 8, 1, 0, NULL),
+(82, 36, 8, 1, 0, NULL),
+(83, 1, 8, 1, 1, NULL),
+(84, 21, 1, 1, 0, NULL),
+(85, 6, 1, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -4604,16 +5025,94 @@ CREATE TABLE `tramite_general` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tramite_precio`
+--
+
+CREATE TABLE `tramite_precio` (
+  `id` int(11) NOT NULL,
+  `tramite_id` int(11) DEFAULT NULL,
+  `valor` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `estado` tinyint(1) NOT NULL,
+  `smldv` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `valor_estampilla` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `anio` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `tipo_vehiculo_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tramite_precio`
+--
+
+INSERT INTO `tramite_precio` (`id`, `tramite_id`, `valor`, `estado`, `smldv`, `valor_estampilla`, `anio`, `tipo_vehiculo_id`) VALUES
+(5, 2, '132.62', 1, '45.21', '5222', '2018', 1),
+(6, 1, '7.51', 1, '2.56', '8555', '2018', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tramite_sistema`
 --
 
 CREATE TABLE `tramite_sistema` (
   `id` int(11) NOT NULL,
+  `modulo_sistema_id` int(11) DEFAULT NULL,
   `codigoTramiteSistema` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
   `descripcionTramiteSistema` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `rutaComponente` varchar(45) COLLATE utf8_unicode_ci NOT NULL,
-  `modulo_sistema_id` int(11) DEFAULT NULL
+  `rutaComponente` varchar(45) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tramite_solicitud`
+--
+
+CREATE TABLE `tramite_solicitud` (
+  `id` int(11) NOT NULL,
+  `tramite_factura_id` int(11) DEFAULT NULL,
+  `fecha` datetime NOT NULL,
+  `Observacion` longtext COLLATE utf8_unicode_ci,
+  `documentacion` tinyint(1) NOT NULL,
+  `estado` tinyint(1) NOT NULL,
+  `datos` longtext COLLATE utf8_unicode_ci NOT NULL COMMENT '(DC2Type:array)',
+  `solicitante_id` int(11) DEFAULT NULL,
+  `vehiculo_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `tramite_solicitud`
+--
+
+INSERT INTO `tramite_solicitud` (`id`, `tramite_factura_id`, `fecha`, `Observacion`, `documentacion`, `estado`, `datos`, `solicitante_id`, `vehiculo_id`) VALUES
+(3, 21, '2018-04-17 05:52:10', NULL, 0, 1, 'O:8:"stdClass":3:{s:10:"tipoCambio";s:7:"Clasico";s:10:"numeroRunt";s:9:"234234234";s:10:"nuevaPlaca";s:6:"ivx70d";}', 1, NULL),
+(5, 18, '2018-04-19 10:39:56', NULL, 0, 1, 'O:8:"stdClass":1:{s:11:"numeroMotor";s:6:"234234";}', NULL, NULL),
+(6, 18, '2018-04-19 10:42:54', NULL, 0, 1, 'O:8:"stdClass":1:{s:11:"numeroMotor";s:5:"34534";}', NULL, NULL),
+(7, 19, '2018-04-20 08:34:55', NULL, 0, 1, 'O:8:"stdClass":11:{s:7:"entidad";s:5:"SIJIN";s:10:"numeroActa";s:6:"123123";s:9:"fechaActa";s:10:"2018-04-10";s:13:"municipioActa";i:2;s:10:"numeroRunt";s:8:"12631231";s:12:"fechaEntrega";s:10:"2018-04-20";s:16:"municipioEntrega";i:2;s:25:"tipoIdentificacionEntrega";i:2;s:27:"numeroIdentificacionEntrega";s:6:"123123";s:13:"nombreEntrega";s:6:"daniel";s:6:"estado";s:9:"automotor";}', NULL, NULL),
+(8, 21, '2018-04-21 10:28:27', NULL, 0, 1, 'O:8:"stdClass":5:{s:10:"tipoCambio";s:7:"Clasico";s:10:"numeroRunt";s:6:"231321";s:10:"nuevaPlaca";s:6:"IVX70J";s:13:"documentacion";b:1;s:8:"sustrato";b:1;}', 1, NULL),
+(9, 18, '2018-04-23 11:06:42', NULL, 0, 1, 'O:8:"stdClass":3:{s:7:"newData";i:4;s:7:"oldData";s:7:"A.C.P.M";s:8:"sustrato";N;}', 1, NULL),
+(11, 18, '2018-04-23 02:20:36', NULL, 0, 1, 'O:8:"stdClass":3:{s:7:"newData";s:12:"GAS-GASOLINA";s:7:"oldData";s:7:"A.C.P.M";s:8:"sustrato";N;}', 1, NULL),
+(12, 18, '2018-04-24 02:38:45', NULL, 0, 1, 'O:8:"stdClass":3:{s:7:"newData";s:13:"STATION WAGON";s:7:"oldData";s:16:"PICK UP CABINADA";s:8:"sustrato";N;}', 1, NULL),
+(13, 18, '2018-04-24 03:01:37', NULL, 0, 1, 'O:8:"stdClass":3:{s:7:"newData";s:11:"DIPLOMATICO";s:7:"oldData";s:11:"DIPLOMATICO";s:8:"sustrato";N;}', 1, NULL),
+(14, 18, '2018-04-25 09:26:23', NULL, 0, 1, 'O:8:"stdClass":6:{s:15:"tipoRegrabacion";N;s:6:"motivo";s:9:"Deterioro";s:11:"nuevoNumero";s:8:"79846123";s:10:"numeroRunt";s:9:"654654654";s:9:"entregada";b:0;s:8:"sustrato";i:1;}', 1, NULL),
+(15, 18, '2018-04-25 09:32:34', NULL, 0, 1, 'O:8:"stdClass":6:{s:15:"tipoRegrabacion";N;s:6:"motivo";s:18:"Improntas ilegales";s:11:"nuevoNumero";s:6:"456789";s:10:"numeroRunt";s:10:"1231234234";s:9:"entregada";b:0;s:8:"sustrato";i:2;}', 1, NULL),
+(16, 18, '2018-04-25 09:47:23', NULL, 0, 1, 'O:8:"stdClass":6:{s:15:"tipoRegrabacion";N;s:6:"motivo";s:18:"Improntas ilegales";s:11:"nuevoNumero";s:6:"000000";s:10:"numeroRunt";s:6:"654564";s:9:"entregada";b:0;s:8:"sustrato";i:1;}', 1, NULL),
+(17, 18, '2018-04-25 09:59:03', NULL, 0, 1, 'O:8:"stdClass":6:{s:15:"tipoRegrabacion";N;s:6:"motivo";s:19:"Improntas ilegibles";s:11:"nuevoNumero";s:6:"333333";s:10:"numeroRunt";s:6:"544544";s:9:"entregada";b:0;s:8:"sustrato";i:3;}', 1, NULL),
+(18, 18, '2018-04-25 03:49:07', NULL, 0, 1, 'O:8:"stdClass":5:{s:12:"tipoBlindaje";s:24:"Blindaje de un vehículo";s:13:"nivelBlindaje";s:3:"DOS";s:17:"empresaBlindadora";s:3:"N/A";s:10:"numeroRunt";N;s:8:"sustrato";N;}', 1, NULL),
+(20, 18, '2018-04-30 04:30:40', NULL, 0, 1, 'O:8:"stdClass":4:{s:7:"newData";s:5:"sede1";s:7:"oldData";s:5:"sede2";s:10:"numeroRunt";s:6:"578567";s:8:"sustrato";N;}', 1, 1),
+(21, 29, '2018-05-07 05:32:12', NULL, 0, 1, 'O:8:"stdClass":2:{s:7:"oldData";N;s:8:"sustrato";N;}', 1, 1),
+(22, 29, '2018-05-07 05:34:42', NULL, 0, 1, 'O:8:"stdClass":3:{s:7:"newData";i:2;s:7:"oldData";N;s:8:"sustrato";N;}', 1, 1),
+(23, 29, '2018-05-07 05:40:48', NULL, 0, 1, 'O:8:"stdClass":3:{s:7:"newData";i:2;s:7:"oldData";N;s:8:"sustrato";b:1;}', 1, 1),
+(24, 40, '2018-05-07 06:16:57', '445454545455454', 0, 1, 'O:8:"stdClass":5:{s:10:"tipoCambio";s:7:"Clasico";s:10:"numeroRunt";s:7:"1212121";s:10:"nuevaPlaca";s:6:"ivx70j";s:13:"documentacion";b:0;s:8:"sustrato";b:1;}', 1, 1),
+(25, 83, '2018-05-08 08:25:06', NULL, 0, 1, 'O:8:"stdClass":12:{s:7:"entidad";s:5:"SIJIN";s:10:"numeroActa";s:6:"122335";s:9:"fechaActa";s:10:"2018-05-22";s:13:"municipioActa";i:5;s:10:"numeroRunt";s:6:"123456";s:12:"fechaEntrega";s:10:"2014-12-15";s:16:"municipioEntrega";i:1;s:25:"tipoIdentificacionEntrega";i:1;s:27:"numeroIdentificacionEntrega";s:6:"123456";s:13:"nombreEntrega";s:4:"juan";s:6:"estado";s:14:"45454545454545";s:8:"sustrato";N;}', NULL, NULL),
+(26, 18, '2018-05-09 02:37:41', NULL, 0, 1, 'O:8:"stdClass":4:{s:20:"propietariosEmpresas";a:0:{}s:22:"propietariosCiudadanos";a:1:{i:0;O:8:"stdClass":4:{s:14:"identificacion";i:2222;s:6:"nombre";s:5:" null";s:14:"permisoTramite";b:0;s:19:"propietarioPresente";b:0;}}s:9:"solidario";b:0;s:8:"sustrato";N;}', 1, 1),
+(27, 18, '2018-05-09 02:38:26', NULL, 0, 1, 'O:8:"stdClass":4:{s:20:"propietariosEmpresas";a:0:{}s:22:"propietariosCiudadanos";a:1:{i:0;O:8:"stdClass":4:{s:14:"identificacion";i:2222;s:6:"nombre";s:5:" null";s:14:"permisoTramite";b:0;s:19:"propietarioPresente";b:0;}}s:9:"solidario";b:0;s:8:"sustrato";N;}', 1, 1),
+(28, 18, '2018-05-09 02:38:57', NULL, 0, 1, 'O:8:"stdClass":4:{s:20:"propietariosEmpresas";a:0:{}s:22:"propietariosCiudadanos";a:1:{i:0;O:8:"stdClass":4:{s:14:"identificacion";i:2222;s:6:"nombre";s:5:" null";s:14:"permisoTramite";b:0;s:19:"propietarioPresente";b:0;}}s:9:"solidario";b:0;s:8:"sustrato";N;}', 1, 1),
+(29, 18, '2018-05-10 10:58:23', NULL, 0, 1, 'O:8:"stdClass":6:{s:20:"propietariosEmpresas";a:1:{i:0;O:8:"stdClass":5:{s:3:"nit";i:123;s:6:"nombre";s:7:"empresa";s:14:"permisoTramite";b:1;s:23:"identificacionApoderado";i:2222;s:15:"nombreApoderado";s:5:" null";}}s:22:"propietariosCiudadanos";a:0:{}s:9:"solidario";b:1;s:8:"vehiculo";s:6:"ivx70D";s:8:"sustrato";N;s:14:"numeroLicencia";s:6:"321324";}', 1, 1),
+(32, 18, '2018-05-10 11:10:31', NULL, 0, 1, 'O:8:"stdClass":6:{s:20:"propietariosEmpresas";a:1:{i:0;O:8:"stdClass":3:{s:3:"nit";i:123;s:6:"nombre";s:7:"empresa";s:14:"permisoTramite";b:1;}}s:22:"propietariosCiudadanos";a:0:{}s:9:"solidario";b:1;s:8:"vehiculo";s:6:"ivx70D";s:8:"sustrato";N;s:14:"numeroLicencia";s:6:"321324";}', 1, 1),
+(33, 18, '2018-05-10 11:14:22', NULL, 0, 1, 'O:8:"stdClass":6:{s:20:"propietariosEmpresas";a:0:{}s:22:"propietariosCiudadanos";a:1:{i:0;O:8:"stdClass":4:{s:14:"identificacion";i:1085311410;s:6:"nombre";s:11:"david edgar";s:14:"permisoTramite";b:0;s:19:"propietarioPresente";b:0;}}s:9:"solidario";b:0;s:8:"vehiculo";s:6:"ivx70D";s:8:"sustrato";N;s:14:"numeroLicencia";s:6:"321324";}', 14, 1),
+(34, 18, '2018-05-10 11:16:04', NULL, 0, 1, 'O:8:"stdClass":6:{s:20:"propietariosEmpresas";a:0:{}s:22:"propietariosCiudadanos";a:1:{i:0;O:8:"stdClass":4:{s:14:"identificacion";i:1085311410;s:6:"nombre";s:11:"david edgar";s:14:"permisoTramite";b:1;s:19:"propietarioPresente";b:0;}}s:9:"solidario";b:1;s:8:"vehiculo";s:6:"ivx70D";s:8:"sustrato";N;s:14:"numeroLicencia";s:6:"321324";}', 15, 1),
+(35, 18, '2018-05-10 11:21:36', NULL, 0, 1, 'O:8:"stdClass":6:{s:20:"propietariosEmpresas";a:1:{i:0;O:8:"stdClass":3:{s:3:"nit";i:123;s:6:"nombre";s:7:"empresa";s:14:"permisoTramite";b:1;}}s:22:"propietariosCiudadanos";a:0:{}s:9:"solidario";b:1;s:8:"vehiculo";s:6:"ivx70D";s:8:"sustrato";N;s:14:"numeroLicencia";s:6:"321324";}', 16, 1),
+(36, 18, '2018-05-11 03:40:47', NULL, 0, 1, 'O:8:"stdClass":6:{s:20:"propietariosEmpresas";a:0:{}s:22:"propietariosCiudadanos";a:1:{i:0;O:8:"stdClass":3:{s:14:"identificacion";i:1085311410;s:6:"nombre";s:11:"david edgar";s:14:"permisoTramite";b:1;}}s:9:"solidario";b:0;s:8:"vehiculo";s:6:"ivx70D";s:8:"sustrato";N;s:14:"numeroLicencia";s:6:"321324";}', 17, 1);
 
 -- --------------------------------------------------------
 
@@ -4623,8 +5122,6 @@ CREATE TABLE `tramite_sistema` (
 
 CREATE TABLE `usuario` (
   `id` int(11) NOT NULL,
-  `nombres` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `apellidos` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `identificacion` int(11) NOT NULL,
   `correo` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `foto` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -4634,16 +5131,23 @@ CREATE TABLE `usuario` (
   `role` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL,
+  `ciudadano_id` int(11) DEFAULT NULL,
+  `tipo_identificacion_id` int(11) DEFAULT NULL,
+  `primer_nombre` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `segundo_nombre` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `primer_apellido` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `segundo_apellido` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `nombres`, `apellidos`, `identificacion`, `correo`, `foto`, `telefono`, `fecha_nacimiento`, `estado`, `role`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'Edgar David 1', 'Perez Luna', 1085287129, 'david.perez.udenar@gmail.com', '', '3178954373', '1994-09-01', 'Activo', 'ROLE_USER', '6798f17d54fce33d3cbe2dcc60db7313a0add56d5945172a2ce48314b604b355', '2018-03-09 10:57:01', '2018-03-09 10:57:01'),
-(2, 'edgar', 'david', 2222, 'david@david.com', '', '123', '2016-11-17', 'Activo', 'ROLE_ADMIN', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '2016-11-15 14:28:37', '2016-11-15 14:28:37');
+INSERT INTO `usuario` (`id`, `identificacion`, `correo`, `foto`, `telefono`, `fecha_nacimiento`, `estado`, `role`, `password`, `created_at`, `updated_at`, `ciudadano_id`, `tipo_identificacion_id`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`) VALUES
+(1, 1085311410, 'david.perez.udenar@gmail.com', '', '3178954373', '1994-09-01', 'Activo', 'ROLE_USER', 'de50ba0d760db194db3c8a04b8404f9d37461c1443aebc33a4f80c625823d62f', '2016-11-12 17:46:44', '2016-11-12 17:46:44', 1, 1, 'david', 'edgar', 'perez', 'botina'),
+(2, 2222, 'david@david.com', '', '123', '2016-11-17', 'Activo', 'ROLE_ADMIN', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '2016-11-15 14:28:37', '2016-11-15 14:28:37', NULL, 1, '', NULL, '', NULL),
+(3, 78978, 'daniel.perezluna94gmail.com', NULL, '564654', NULL, 'Activo', 'ROLE_USER', 'a972ff0ee81c2464f49381036bf58348b57db7e5700a04d943a3cef3394345ad', '2018-05-08 09:39:03', '2018-05-08 09:39:03', 2, 1, 'daniel', NULL, 'perez', NULL);
 
 -- --------------------------------------------------------
 
@@ -4672,20 +5176,20 @@ CREATE TABLE `vehiculo` (
   `color_id` int(11) DEFAULT NULL,
   `combustible_id` int(11) DEFAULT NULL,
   `carroceria_id` int(11) DEFAULT NULL,
-  `organismo_transito_id` int(11) DEFAULT NULL,
+  `sede_operativa_id` int(11) DEFAULT NULL,
   `clase_id` int(11) DEFAULT NULL,
-  `placa` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `placa` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `numero_factura` int(11) NOT NULL,
   `fecha_factura` datetime NOT NULL,
   `valor` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `numero_manifiesto` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fecha_manifiesto` datetime NOT NULL,
   `cilindraje` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `modelo` date NOT NULL,
-  `motor` bigint(20) NOT NULL,
-  `chasis` bigint(20) NOT NULL,
+  `modelo` int(11) NOT NULL,
+  `motor` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `chasis` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `serie` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `vin` bigint(20) NOT NULL,
+  `vin` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `numero_pasajeros` int(11) NOT NULL,
   `estado` tinyint(1) NOT NULL,
   `pignorado` tinyint(1) NOT NULL,
@@ -4693,19 +5197,19 @@ CREATE TABLE `vehiculo` (
   `tipo_vehiculo` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `radio_accion` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `modalidad_transporte` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `transporte_pasajeros` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `transporte_pasajeros` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `leasing` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `vehiculo`
 --
 
-INSERT INTO `vehiculo` (`id`, `municipio_id`, `linea_id`, `servicio_id`, `color_id`, `combustible_id`, `carroceria_id`, `organismo_transito_id`, `clase_id`, `placa`, `numero_factura`, `fecha_factura`, `valor`, `numero_manifiesto`, `fecha_manifiesto`, `cilindraje`, `modelo`, `motor`, `chasis`, `serie`, `vin`, `numero_pasajeros`, `estado`, `pignorado`, `cancelado`, `tipo_vehiculo`, `radio_accion`, `modalidad_transporte`, `transporte_pasajeros`) VALUES
-(1, 766, 37, 4, 884, 2, 81, 231, 6, 'ivx70d', 654321231, '0021-03-21 00:00:00', '321354', '5432132', '2017-04-06 00:00:00', '2000', '2018-03-07', 123134, 5132454, '54654', 654654, 4, 1, 0, 0, 'vehiculo', 'radioAccion', 'modalidadTransoporte', 'pasajeros'),
-(2, 766, 30, 2, 15, 1, 84, 15, 8, 'ivx70c', 1324534, '2005-03-03 00:00:00', '1321131', '1213', '2111-03-04 00:00:00', '3000', '2018-01-31', 121324, 3213211, '1321321', 21321321, 4, 1, 0, 0, 'vehiculo', 'radioAccion', 'modalidadTransoporte', 'pasajeros'),
-(3, 766, 45, 4, 13, 2, 81, 18, 6, 'ivx70i', 321321, '2545-01-01 00:00:00', '321321', '21321', '1994-12-12 00:00:00', '5000', '2018-02-14', 321321, 2121, '21321', 21213, 32131, 1, 0, 0, 'vehiculo', 'radioAccion', 'modalidadTransoporte', 'pasajeros'),
-(4, 766, 125, 1, 501, 1, 1, 1, 1, 'abc123', 1, '2018-02-15 00:00:00', '0', '0', '2018-02-15 00:00:00', '25000', '2018-02-15', 0, 0, '000000', 0, 5, 1, 0, 0, 'vehiculo', 'radioAccion', 'modalidadTransoporte', 'pasajeros'),
-(5, 1, 4, 3, 5, 1, 5, 164, 4, '567ert', 123123, '2018-03-10 00:00:00', '123123', '123456', '2018-03-09 00:00:00', '1300', '2018-03-22', 1600, 123123123, '21323', 123123, 5, 1, 0, 0, 'vehiculo', '123', 'modalida', 'pasajeros');
+INSERT INTO `vehiculo` (`id`, `municipio_id`, `linea_id`, `servicio_id`, `color_id`, `combustible_id`, `carroceria_id`, `sede_operativa_id`, `clase_id`, `placa`, `numero_factura`, `fecha_factura`, `valor`, `numero_manifiesto`, `fecha_manifiesto`, `cilindraje`, `modelo`, `motor`, `chasis`, `serie`, `vin`, `numero_pasajeros`, `estado`, `pignorado`, `cancelado`, `tipo_vehiculo`, `radio_accion`, `modalidad_transporte`, `transporte_pasajeros`, `leasing`) VALUES
+(1, 766, 660, 4, 2, 4, 81, 1, 6, 'ivx70D', 654321231, '0021-03-21 00:00:00', '321354', '5432132', '2017-04-06 00:00:00', '2000', 20180406, '79846123', '000000', '456789', '333333', 4, 1, 0, 0, 'Carro', 'Radio', 'Modalidad', 'Transporte', 1),
+(4, 766, 125, 1, 501, 1, 1, 1, 1, 'abc123', 1, '2018-02-15 00:00:00', '0', '0', '2018-02-15 00:00:00', '25000', 20180215, '0', '0', '000000', '0', 5, 1, 0, 0, '', '', '', '', 0),
+(10, 2, 2, 3, 2, 1, 2, 1, 2, 'qwe123', 345, '2018-04-19 00:00:00', '345345', '345345', '2018-04-19 00:00:00', '345345', 345, '34534', '345', '345', '345', 4, 1, 0, 0, '345', '345', '345345', '345345', 0),
+(11, 2, 8, 2, 2, 2, 2, 2, 1, NULL, 1325, '2018-05-08 00:00:00', '98754', '564354', '2018-05-08 00:00:00', '32121', 2015, '654324', '21321', '324534', '51354', 4, 1, 0, 0, 'Carro', '55', 'Publico', '5', 0);
 
 -- --------------------------------------------------------
 
@@ -4785,9 +5289,11 @@ ALTER TABLE `caso`
 --
 ALTER TABLE `ciudadano`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_1E0605C165478DC6` (`tipo_identificacion_id`),
+  ADD UNIQUE KEY `UNIQ_1E0605C1DB38439E` (`usuario_id`),
   ADD KEY `IDX_1E0605C1C5947016` (`municipio_nacimiento_id`),
-  ADD KEY `IDX_1E0605C17BE350B3` (`municipio_residencia_id`);
+  ADD KEY `IDX_1E0605C17BE350B3` (`municipio_residencia_id`),
+  ADD KEY `IDX_1E0605C1BCE7B795` (`genero_id`),
+  ADD KEY `IDX_1E0605C1D0F30705` (`grupo_sanguineo_id`);
 
 --
 -- Indices de la tabla `ciudad_extranjera`
@@ -4844,6 +5350,19 @@ ALTER TABLE `concepto`
   ADD KEY `IDX_648388D09AEFF118` (`cuenta_id`);
 
 --
+-- Indices de la tabla `concepto_parametro`
+--
+ALTER TABLE `concepto_parametro`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_215F1F93CE51F06` (`parametro_id`);
+
+--
+-- Indices de la tabla `condicion_ingreso`
+--
+ALTER TABLE `condicion_ingreso`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `consumibles`
 --
 ALTER TABLE `consumibles`
@@ -4867,7 +5386,8 @@ ALTER TABLE `cuenta`
 -- Indices de la tabla `departamento`
 --
 ALTER TABLE `departamento`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_40E497EBC604D5C6` (`pais_id`);
 
 --
 -- Indices de la tabla `dependencia`
@@ -4889,17 +5409,25 @@ ALTER TABLE `dependencia_ciudadano`
 ALTER TABLE `empresa`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_B8D75A5058BC1BE0` (`municipio_id`),
-  ADD KEY `IDX_B8D75A50C3981BB9` (`tipo_empresa_id`),
-  ADD KEY `IDX_B8D75A5062386829` (`ciudadano_id`);
+  ADD KEY `IDX_B8D75A5062386829` (`ciudadano_id`),
+  ADD KEY `IDX_B8D75A50B691DB19` (`tipo_socidad_id`),
+  ADD KEY `IDX_B8D75A5065478DC6` (`tipo_identificacion_id`);
 
 --
 -- Indices de la tabla `factura`
 --
 ALTER TABLE `factura`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_F9EBA009C680A87` (`solicitante_id`),
-  ADD KEY `IDX_F9EBA009A1C0A276` (`apoderado_id`),
-  ADD KEY `IDX_F9EBA00925F7D575` (`vehiculo_id`);
+  ADD KEY `IDX_F9EBA00959F50112` (`sede_operativa_id`);
+
+--
+-- Indices de la tabla `factura_sustrato`
+--
+ALTER TABLE `factura_sustrato`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_7D202846F04F795F` (`factura_id`),
+  ADD KEY `IDX_7D20284662386829` (`ciudadano_id`),
+  ADD KEY `IDX_7D202846B35B0B3D` (`sustrato_id`);
 
 --
 -- Indices de la tabla `fases_documento`
@@ -4908,6 +5436,25 @@ ALTER TABLE `fases_documento`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_6E6D24A57A9F7152` (`funcionario_responzable_id`),
   ADD KEY `IDX_6E6D24A5EFFC8E2E` (`registro_documento_id`);
+
+--
+-- Indices de la tabla `genero`
+--
+ALTER TABLE `genero`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `grupo_sanguineo`
+--
+ALTER TABLE `grupo_sanguineo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `historial_precio`
+--
+ALTER TABLE `historial_precio`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_11366520820C2849` (`tramite_id`);
 
 --
 -- Indices de la tabla `infraccion`
@@ -4977,6 +5524,13 @@ ALTER TABLE `municipio`
 -- Indices de la tabla `organismo_transito`
 --
 ALTER TABLE `organismo_transito`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_6C7C311B59F50112` (`sede_operativa_id`);
+
+--
+-- Indices de la tabla `origen_registro`
+--
+ALTER TABLE `origen_registro`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -4993,6 +5547,12 @@ ALTER TABLE `pais`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `parametro`
+--
+ALTER TABLE `parametro`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `peticionario`
 --
 ALTER TABLE `peticionario`
@@ -5006,7 +5566,14 @@ ALTER TABLE `propietario_vehiculo`
   ADD PRIMARY KEY (`id`),
   ADD KEY `IDX_CE7F2D6B62386829` (`ciudadano_id`),
   ADD KEY `IDX_CE7F2D6B25F7D575` (`vehiculo_id`),
-  ADD KEY `IDX_CE7F2D6B521E1991` (`empresa_id`);
+  ADD KEY `IDX_CE7F2D6B521E1991` (`empresa_id`),
+  ADD KEY `IDX_CE7F2D6BA1C0A276` (`apoderado_id`);
+
+--
+-- Indices de la tabla `radio_accion`
+--
+ALTER TABLE `radio_accion`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `registro_documento`
@@ -5035,6 +5602,15 @@ ALTER TABLE `servicio`
   ADD UNIQUE KEY `UNIQ_CB86F22A20332D99` (`codigo`);
 
 --
+-- Indices de la tabla `sustrato`
+--
+ALTER TABLE `sustrato`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_663486CD59F50112` (`sede_operativa_id`),
+  ADD KEY `IDX_663486CDC07F55F5` (`modulo_id`),
+  ADD KEY `IDX_663486CD9F720353` (`clase_id`);
+
+--
 -- Indices de la tabla `testigo_comparendo`
 --
 ALTER TABLE `testigo_comparendo`
@@ -5061,6 +5637,24 @@ ALTER TABLE `tipo_identificacion`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `tipo_recaudo`
+--
+ALTER TABLE `tipo_recaudo`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `tipo_sociedad`
+--
+ALTER TABLE `tipo_sociedad`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `tipo_vehiculo`
+--
+ALTER TABLE `tipo_vehiculo`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `tramite`
 --
 ALTER TABLE `tramite`
@@ -5072,18 +5666,17 @@ ALTER TABLE `tramite`
 --
 ALTER TABLE `tramite_especifico`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_64D11B2C820C2849` (`tramite_id`),
-  ADD KEY `IDX_64D11B2CC530148` (`tramite_general_id`),
   ADD KEY `IDX_64D11B2CD45162B6` (`variante_id`),
-  ADD KEY `IDX_64D11B2CA0AD3491` (`caso_id`);
+  ADD KEY `IDX_64D11B2CA0AD3491` (`caso_id`),
+  ADD KEY `IDX_64D11B2CC2B0299B` (`tramite_solicitud_id`);
 
 --
 -- Indices de la tabla `tramite_factura`
 --
 ALTER TABLE `tramite_factura`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_1F247254CB7C67B1` (`tramite_sistema_id`),
-  ADD KEY `IDX_1F247254F04F795F` (`factura_id`);
+  ADD KEY `IDX_1F247254F04F795F` (`factura_id`),
+  ADD KEY `IDX_1F247254820C2849` (`tramite_id`);
 
 --
 -- Indices de la tabla `tramite_general`
@@ -5095,6 +5688,14 @@ ALTER TABLE `tramite_general`
   ADD KEY `IDX_28E6E417521E1991` (`empresa_id`);
 
 --
+-- Indices de la tabla `tramite_precio`
+--
+ALTER TABLE `tramite_precio`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_BA279DED820C2849` (`tramite_id`),
+  ADD KEY `IDX_BA279DED10D3FB8D` (`tipo_vehiculo_id`);
+
+--
 -- Indices de la tabla `tramite_sistema`
 --
 ALTER TABLE `tramite_sistema`
@@ -5102,10 +5703,21 @@ ALTER TABLE `tramite_sistema`
   ADD KEY `IDX_770D793C681F61F4` (`modulo_sistema_id`);
 
 --
+-- Indices de la tabla `tramite_solicitud`
+--
+ALTER TABLE `tramite_solicitud`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `IDX_F11A0AEE2CFEBCE6` (`tramite_factura_id`),
+  ADD KEY `IDX_F11A0AEEC680A87` (`solicitante_id`),
+  ADD KEY `IDX_F11A0AEE25F7D575` (`vehiculo_id`);
+
+--
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQ_2265B05D62386829` (`ciudadano_id`),
+  ADD KEY `IDX_2265B05D65478DC6` (`tipo_identificacion_id`);
 
 --
 -- Indices de la tabla `variante`
@@ -5125,8 +5737,8 @@ ALTER TABLE `vehiculo`
   ADD KEY `IDX_C9FA16037ADA1FB5` (`color_id`),
   ADD KEY `IDX_C9FA1603D5BD96DF` (`combustible_id`),
   ADD KEY `IDX_C9FA1603972AD13F` (`carroceria_id`),
-  ADD KEY `IDX_C9FA1603E9DCB368` (`organismo_transito_id`),
-  ADD KEY `IDX_C9FA16039F720353` (`clase_id`);
+  ADD KEY `IDX_C9FA16039F720353` (`clase_id`),
+  ADD KEY `IDX_C9FA160359F50112` (`sede_operativa_id`);
 
 --
 -- Indices de la tabla `vehiculo_medida_cautelar`
@@ -5158,17 +5770,17 @@ ALTER TABLE `agente_transito`
 -- AUTO_INCREMENT de la tabla `almacen`
 --
 ALTER TABLE `almacen`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `banco`
 --
 ALTER TABLE `banco`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `carroceria`
 --
 ALTER TABLE `carroceria`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
 --
 -- AUTO_INCREMENT de la tabla `caso`
 --
@@ -5178,7 +5790,7 @@ ALTER TABLE `caso`
 -- AUTO_INCREMENT de la tabla `ciudadano`
 --
 ALTER TABLE `ciudadano`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `ciudad_extranjera`
 --
@@ -5188,7 +5800,7 @@ ALTER TABLE `ciudad_extranjera`
 -- AUTO_INCREMENT de la tabla `clase`
 --
 ALTER TABLE `clase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT de la tabla `color`
 --
@@ -5198,12 +5810,12 @@ ALTER TABLE `color`
 -- AUTO_INCREMENT de la tabla `combustible`
 --
 ALTER TABLE `combustible`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT de la tabla `comparendo`
 --
 ALTER TABLE `comparendo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT de la tabla `comparendo_infraccion`
 --
@@ -5215,10 +5827,20 @@ ALTER TABLE `comparendo_infraccion`
 ALTER TABLE `concepto`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `concepto_parametro`
+--
+ALTER TABLE `concepto_parametro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `condicion_ingreso`
+--
+ALTER TABLE `condicion_ingreso`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT de la tabla `consumibles`
 --
 ALTER TABLE `consumibles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT de la tabla `correspondencia_documento`
 --
@@ -5228,7 +5850,7 @@ ALTER TABLE `correspondencia_documento`
 -- AUTO_INCREMENT de la tabla `cuenta`
 --
 ALTER TABLE `cuenta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `departamento`
 --
@@ -5238,7 +5860,7 @@ ALTER TABLE `departamento`
 -- AUTO_INCREMENT de la tabla `dependencia`
 --
 ALTER TABLE `dependencia`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `dependencia_ciudadano`
 --
@@ -5248,16 +5870,36 @@ ALTER TABLE `dependencia_ciudadano`
 -- AUTO_INCREMENT de la tabla `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `factura`
 --
 ALTER TABLE `factura`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+--
+-- AUTO_INCREMENT de la tabla `factura_sustrato`
+--
+ALTER TABLE `factura_sustrato`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `fases_documento`
 --
 ALTER TABLE `fases_documento`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `genero`
+--
+ALTER TABLE `genero`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT de la tabla `grupo_sanguineo`
+--
+ALTER TABLE `grupo_sanguineo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `historial_precio`
+--
+ALTER TABLE `historial_precio`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `infraccion`
@@ -5273,7 +5915,7 @@ ALTER TABLE `inmovilizacion`
 -- AUTO_INCREMENT de la tabla `linea`
 --
 ALTER TABLE `linea`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1012;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1009;
 --
 -- AUTO_INCREMENT de la tabla `liquidacion_comparendo`
 --
@@ -5283,7 +5925,7 @@ ALTER TABLE `liquidacion_comparendo`
 -- AUTO_INCREMENT de la tabla `marca`
 --
 ALTER TABLE `marca`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 --
 -- AUTO_INCREMENT de la tabla `medida_cautelar`
 --
@@ -5293,12 +5935,12 @@ ALTER TABLE `medida_cautelar`
 -- AUTO_INCREMENT de la tabla `modalidad`
 --
 ALTER TABLE `modalidad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `modulo`
 --
 ALTER TABLE `modulo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `modulo_sistema`
 --
@@ -5308,12 +5950,17 @@ ALTER TABLE `modulo_sistema`
 -- AUTO_INCREMENT de la tabla `municipio`
 --
 ALTER TABLE `municipio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1124;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1123;
 --
 -- AUTO_INCREMENT de la tabla `organismo_transito`
 --
 ALTER TABLE `organismo_transito`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
+--
+-- AUTO_INCREMENT de la tabla `origen_registro`
+--
+ALTER TABLE `origen_registro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `pago`
 --
@@ -5325,6 +5972,11 @@ ALTER TABLE `pago`
 ALTER TABLE `pais`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `parametro`
+--
+ALTER TABLE `parametro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
 -- AUTO_INCREMENT de la tabla `peticionario`
 --
 ALTER TABLE `peticionario`
@@ -5333,7 +5985,12 @@ ALTER TABLE `peticionario`
 -- AUTO_INCREMENT de la tabla `propietario_vehiculo`
 --
 ALTER TABLE `propietario_vehiculo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+--
+-- AUTO_INCREMENT de la tabla `radio_accion`
+--
+ALTER TABLE `radio_accion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `registro_documento`
 --
@@ -5353,7 +6010,12 @@ ALTER TABLE `seguimiento_entrega`
 -- AUTO_INCREMENT de la tabla `servicio`
 --
 ALTER TABLE `servicio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT de la tabla `sustrato`
+--
+ALTER TABLE `sustrato`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT de la tabla `testigo_comparendo`
 --
@@ -5368,17 +6030,32 @@ ALTER TABLE `tipo_documento`
 -- AUTO_INCREMENT de la tabla `tipo_empresa`
 --
 ALTER TABLE `tipo_empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT de la tabla `tipo_identificacion`
 --
 ALTER TABLE `tipo_identificacion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
+-- AUTO_INCREMENT de la tabla `tipo_recaudo`
+--
+ALTER TABLE `tipo_recaudo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `tipo_sociedad`
+--
+ALTER TABLE `tipo_sociedad`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT de la tabla `tipo_vehiculo`
+--
+ALTER TABLE `tipo_vehiculo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT de la tabla `tramite`
 --
 ALTER TABLE `tramite`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 --
 -- AUTO_INCREMENT de la tabla `tramite_especifico`
 --
@@ -5388,22 +6065,32 @@ ALTER TABLE `tramite_especifico`
 -- AUTO_INCREMENT de la tabla `tramite_factura`
 --
 ALTER TABLE `tramite_factura`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 --
 -- AUTO_INCREMENT de la tabla `tramite_general`
 --
 ALTER TABLE `tramite_general`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `tramite_precio`
+--
+ALTER TABLE `tramite_precio`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+--
 -- AUTO_INCREMENT de la tabla `tramite_sistema`
 --
 ALTER TABLE `tramite_sistema`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT de la tabla `tramite_solicitud`
+--
+ALTER TABLE `tramite_solicitud`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+--
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT de la tabla `variante`
 --
@@ -5413,7 +6100,7 @@ ALTER TABLE `variante`
 -- AUTO_INCREMENT de la tabla `vehiculo`
 --
 ALTER TABLE `vehiculo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `vehiculo_medida_cautelar`
 --
@@ -5459,9 +6146,11 @@ ALTER TABLE `caso`
 -- Filtros para la tabla `ciudadano`
 --
 ALTER TABLE `ciudadano`
-  ADD CONSTRAINT `FK_1E0605C165478DC6` FOREIGN KEY (`tipo_identificacion_id`) REFERENCES `tipo_identificacion` (`id`),
   ADD CONSTRAINT `FK_1E0605C17BE350B3` FOREIGN KEY (`municipio_residencia_id`) REFERENCES `municipio` (`id`),
-  ADD CONSTRAINT `FK_1E0605C1C5947016` FOREIGN KEY (`municipio_nacimiento_id`) REFERENCES `municipio` (`id`);
+  ADD CONSTRAINT `FK_1E0605C1BCE7B795` FOREIGN KEY (`genero_id`) REFERENCES `genero` (`id`),
+  ADD CONSTRAINT `FK_1E0605C1C5947016` FOREIGN KEY (`municipio_nacimiento_id`) REFERENCES `municipio` (`id`),
+  ADD CONSTRAINT `FK_1E0605C1D0F30705` FOREIGN KEY (`grupo_sanguineo_id`) REFERENCES `grupo_sanguineo` (`id`),
+  ADD CONSTRAINT `FK_1E0605C1DB38439E` FOREIGN KEY (`usuario_id`) REFERENCES `usuario` (`id`);
 
 --
 -- Filtros para la tabla `ciudad_extranjera`
@@ -5494,6 +6183,12 @@ ALTER TABLE `concepto`
   ADD CONSTRAINT `FK_648388D09AEFF118` FOREIGN KEY (`cuenta_id`) REFERENCES `cuenta` (`id`);
 
 --
+-- Filtros para la tabla `concepto_parametro`
+--
+ALTER TABLE `concepto_parametro`
+  ADD CONSTRAINT `FK_215F1F93CE51F06` FOREIGN KEY (`parametro_id`) REFERENCES `parametro` (`id`);
+
+--
 -- Filtros para la tabla `correspondencia_documento`
 --
 ALTER TABLE `correspondencia_documento`
@@ -5504,6 +6199,12 @@ ALTER TABLE `correspondencia_documento`
 --
 ALTER TABLE `cuenta`
   ADD CONSTRAINT `FK_31C7BFCFCC04A73E` FOREIGN KEY (`banco_id`) REFERENCES `banco` (`id`);
+
+--
+-- Filtros para la tabla `departamento`
+--
+ALTER TABLE `departamento`
+  ADD CONSTRAINT `FK_40E497EBC604D5C6` FOREIGN KEY (`pais_id`) REFERENCES `pais` (`id`);
 
 --
 -- Filtros para la tabla `dependencia_ciudadano`
@@ -5518,15 +6219,22 @@ ALTER TABLE `dependencia_ciudadano`
 ALTER TABLE `empresa`
   ADD CONSTRAINT `FK_B8D75A5058BC1BE0` FOREIGN KEY (`municipio_id`) REFERENCES `municipio` (`id`),
   ADD CONSTRAINT `FK_B8D75A5062386829` FOREIGN KEY (`ciudadano_id`) REFERENCES `ciudadano` (`id`),
-  ADD CONSTRAINT `FK_B8D75A50C3981BB9` FOREIGN KEY (`tipo_empresa_id`) REFERENCES `tipo_empresa` (`id`);
+  ADD CONSTRAINT `FK_B8D75A5065478DC6` FOREIGN KEY (`tipo_identificacion_id`) REFERENCES `tipo_identificacion` (`id`),
+  ADD CONSTRAINT `FK_B8D75A50B691DB19` FOREIGN KEY (`tipo_socidad_id`) REFERENCES `tipo_sociedad` (`id`);
 
 --
 -- Filtros para la tabla `factura`
 --
 ALTER TABLE `factura`
-  ADD CONSTRAINT `FK_F9EBA00925F7D575` FOREIGN KEY (`vehiculo_id`) REFERENCES `vehiculo` (`id`),
-  ADD CONSTRAINT `FK_F9EBA009A1C0A276` FOREIGN KEY (`apoderado_id`) REFERENCES `ciudadano` (`id`),
-  ADD CONSTRAINT `FK_F9EBA009C680A87` FOREIGN KEY (`solicitante_id`) REFERENCES `ciudadano` (`id`);
+  ADD CONSTRAINT `FK_F9EBA00959F50112` FOREIGN KEY (`sede_operativa_id`) REFERENCES `sede_operativa` (`id`);
+
+--
+-- Filtros para la tabla `factura_sustrato`
+--
+ALTER TABLE `factura_sustrato`
+  ADD CONSTRAINT `FK_7D20284662386829` FOREIGN KEY (`ciudadano_id`) REFERENCES `ciudadano` (`id`),
+  ADD CONSTRAINT `FK_7D202846B35B0B3D` FOREIGN KEY (`sustrato_id`) REFERENCES `sustrato` (`id`),
+  ADD CONSTRAINT `FK_7D202846F04F795F` FOREIGN KEY (`factura_id`) REFERENCES `factura` (`id`);
 
 --
 -- Filtros para la tabla `fases_documento`
@@ -5534,6 +6242,12 @@ ALTER TABLE `factura`
 ALTER TABLE `fases_documento`
   ADD CONSTRAINT `FK_6E6D24A57A9F7152` FOREIGN KEY (`funcionario_responzable_id`) REFERENCES `ciudadano` (`id`),
   ADD CONSTRAINT `FK_6E6D24A5EFFC8E2E` FOREIGN KEY (`registro_documento_id`) REFERENCES `registro_documento` (`id`);
+
+--
+-- Filtros para la tabla `historial_precio`
+--
+ALTER TABLE `historial_precio`
+  ADD CONSTRAINT `FK_11366520820C2849` FOREIGN KEY (`tramite_id`) REFERENCES `tramite` (`id`);
 
 --
 -- Filtros para la tabla `inmovilizacion`
@@ -5560,6 +6274,12 @@ ALTER TABLE `municipio`
   ADD CONSTRAINT `FK_FE98F5E05A91C08D` FOREIGN KEY (`departamento_id`) REFERENCES `departamento` (`id`);
 
 --
+-- Filtros para la tabla `organismo_transito`
+--
+ALTER TABLE `organismo_transito`
+  ADD CONSTRAINT `FK_6C7C311B59F50112` FOREIGN KEY (`sede_operativa_id`) REFERENCES `sede_operativa` (`id`);
+
+--
 -- Filtros para la tabla `pago`
 --
 ALTER TABLE `pago`
@@ -5577,13 +6297,22 @@ ALTER TABLE `peticionario`
 ALTER TABLE `propietario_vehiculo`
   ADD CONSTRAINT `FK_CE7F2D6B25F7D575` FOREIGN KEY (`vehiculo_id`) REFERENCES `vehiculo` (`id`),
   ADD CONSTRAINT `FK_CE7F2D6B521E1991` FOREIGN KEY (`empresa_id`) REFERENCES `empresa` (`id`),
-  ADD CONSTRAINT `FK_CE7F2D6B62386829` FOREIGN KEY (`ciudadano_id`) REFERENCES `ciudadano` (`id`);
+  ADD CONSTRAINT `FK_CE7F2D6B62386829` FOREIGN KEY (`ciudadano_id`) REFERENCES `ciudadano` (`id`),
+  ADD CONSTRAINT `FK_CE7F2D6BA1C0A276` FOREIGN KEY (`apoderado_id`) REFERENCES `ciudadano` (`id`);
 
 --
 -- Filtros para la tabla `registro_documento`
 --
 ALTER TABLE `registro_documento`
   ADD CONSTRAINT `FK_23A1B6CFF6939175` FOREIGN KEY (`tipo_documento_id`) REFERENCES `tipo_documento` (`id`);
+
+--
+-- Filtros para la tabla `sustrato`
+--
+ALTER TABLE `sustrato`
+  ADD CONSTRAINT `FK_663486CD59F50112` FOREIGN KEY (`sede_operativa_id`) REFERENCES `sede_operativa` (`id`),
+  ADD CONSTRAINT `FK_663486CD9F720353` FOREIGN KEY (`clase_id`) REFERENCES `clase` (`id`),
+  ADD CONSTRAINT `FK_663486CDC07F55F5` FOREIGN KEY (`modulo_id`) REFERENCES `modulo` (`id`);
 
 --
 -- Filtros para la tabla `testigo_comparendo`
@@ -5602,16 +6331,15 @@ ALTER TABLE `tramite`
 -- Filtros para la tabla `tramite_especifico`
 --
 ALTER TABLE `tramite_especifico`
-  ADD CONSTRAINT `FK_64D11B2C820C2849` FOREIGN KEY (`tramite_id`) REFERENCES `tramite` (`id`),
   ADD CONSTRAINT `FK_64D11B2CA0AD3491` FOREIGN KEY (`caso_id`) REFERENCES `caso` (`id`),
-  ADD CONSTRAINT `FK_64D11B2CC530148` FOREIGN KEY (`tramite_general_id`) REFERENCES `tramite_general` (`id`),
+  ADD CONSTRAINT `FK_64D11B2CC2B0299B` FOREIGN KEY (`tramite_solicitud_id`) REFERENCES `tramite_solicitud` (`id`),
   ADD CONSTRAINT `FK_64D11B2CD45162B6` FOREIGN KEY (`variante_id`) REFERENCES `variante` (`id`);
 
 --
 -- Filtros para la tabla `tramite_factura`
 --
 ALTER TABLE `tramite_factura`
-  ADD CONSTRAINT `FK_1F247254CB7C67B1` FOREIGN KEY (`tramite_sistema_id`) REFERENCES `tramite_sistema` (`id`),
+  ADD CONSTRAINT `FK_1F247254820C2849` FOREIGN KEY (`tramite_id`) REFERENCES `tramite` (`id`),
   ADD CONSTRAINT `FK_1F247254F04F795F` FOREIGN KEY (`factura_id`) REFERENCES `factura` (`id`);
 
 --
@@ -5623,10 +6351,32 @@ ALTER TABLE `tramite_general`
   ADD CONSTRAINT `FK_28E6E41762386829` FOREIGN KEY (`ciudadano_id`) REFERENCES `ciudadano` (`id`);
 
 --
+-- Filtros para la tabla `tramite_precio`
+--
+ALTER TABLE `tramite_precio`
+  ADD CONSTRAINT `FK_BA279DED10D3FB8D` FOREIGN KEY (`tipo_vehiculo_id`) REFERENCES `tipo_vehiculo` (`id`),
+  ADD CONSTRAINT `FK_BA279DED820C2849` FOREIGN KEY (`tramite_id`) REFERENCES `tramite` (`id`);
+
+--
 -- Filtros para la tabla `tramite_sistema`
 --
 ALTER TABLE `tramite_sistema`
   ADD CONSTRAINT `FK_770D793C681F61F4` FOREIGN KEY (`modulo_sistema_id`) REFERENCES `modulo_sistema` (`id`);
+
+--
+-- Filtros para la tabla `tramite_solicitud`
+--
+ALTER TABLE `tramite_solicitud`
+  ADD CONSTRAINT `FK_F11A0AEE25F7D575` FOREIGN KEY (`vehiculo_id`) REFERENCES `vehiculo` (`id`),
+  ADD CONSTRAINT `FK_F11A0AEE2CFEBCE6` FOREIGN KEY (`tramite_factura_id`) REFERENCES `tramite_factura` (`id`),
+  ADD CONSTRAINT `FK_F11A0AEEC680A87` FOREIGN KEY (`solicitante_id`) REFERENCES `propietario_vehiculo` (`id`);
+
+--
+-- Filtros para la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  ADD CONSTRAINT `FK_2265B05D62386829` FOREIGN KEY (`ciudadano_id`) REFERENCES `ciudadano` (`id`),
+  ADD CONSTRAINT `FK_2265B05D65478DC6` FOREIGN KEY (`tipo_identificacion_id`) REFERENCES `tipo_identificacion` (`id`);
 
 --
 -- Filtros para la tabla `variante`
@@ -5639,13 +6389,13 @@ ALTER TABLE `variante`
 --
 ALTER TABLE `vehiculo`
   ADD CONSTRAINT `FK_C9FA160358BC1BE0` FOREIGN KEY (`municipio_id`) REFERENCES `municipio` (`id`),
+  ADD CONSTRAINT `FK_C9FA160359F50112` FOREIGN KEY (`sede_operativa_id`) REFERENCES `sede_operativa` (`id`),
   ADD CONSTRAINT `FK_C9FA160371CAA3E7` FOREIGN KEY (`servicio_id`) REFERENCES `servicio` (`id`),
   ADD CONSTRAINT `FK_C9FA16037ADA1FB5` FOREIGN KEY (`color_id`) REFERENCES `color` (`id`),
   ADD CONSTRAINT `FK_C9FA160385FE79F8` FOREIGN KEY (`linea_id`) REFERENCES `linea` (`id`),
   ADD CONSTRAINT `FK_C9FA1603972AD13F` FOREIGN KEY (`carroceria_id`) REFERENCES `carroceria` (`id`),
   ADD CONSTRAINT `FK_C9FA16039F720353` FOREIGN KEY (`clase_id`) REFERENCES `clase` (`id`),
-  ADD CONSTRAINT `FK_C9FA1603D5BD96DF` FOREIGN KEY (`combustible_id`) REFERENCES `combustible` (`id`),
-  ADD CONSTRAINT `FK_C9FA1603E9DCB368` FOREIGN KEY (`organismo_transito_id`) REFERENCES `organismo_transito` (`id`);
+  ADD CONSTRAINT `FK_C9FA1603D5BD96DF` FOREIGN KEY (`combustible_id`) REFERENCES `combustible` (`id`);
 
 --
 -- Filtros para la tabla `vehiculo_medida_cautelar`

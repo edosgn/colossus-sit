@@ -2,46 +2,46 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Pais;
+use AppBundle\Entity\Parametro;
+use AppBundle\Entity\ConceptoParametro;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Pai controller.
+ * Parametro controller.
  *
- * @Route("pais")
+ * @Route("parametro")
  */
-class PaisController extends Controller
+class ParametroController extends Controller
 {
     /**
-     * Lists all pai entities.
+     * Lists all parametro entities.
      *
-     * @Route("/", name="pais_index")
+     * @Route("/", name="parametro_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $paises = $em->getRepository('AppBundle:Pais')->findBy(
+        $parametros = $em->getRepository('AppBundle:Parametro')->findBy(
             array('estado' => true)
         );
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "Listado de paises", 
-            'data'=> $paises,
+            'msj' => "Listado de parametros", 
+            'data'=> $parametros,
         );
          
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new pai entity.
+     * Creates a new parametro entity.
      *
-     * @Route("/new", name="pais_new")
+     * @Route("/new", name="parametro_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -50,19 +50,41 @@ class PaisController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $pais = new Pais();
+            $parametro = new Parametro();
+           
 
-            $pais->setNombre($params->nombre);
-            $pais->setCodigo($params->codigo);
-            $pais->setEstado(true);
+            $parametro->setAnio($params->parametro->anio);
+            $parametro->setValor($params->parametro->valor);
+            $parametro->setTipo($params->parametro->tipo);
+            $parametro->setPorcentaje($params->parametro->porcentaje);
+            $parametro->setEstado(true);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($pais);
+            $em->persist($parametro);
             $em->flush();
 
+            foreach ($params->listaPrecios as $key => $listaPrecio) {
+                $valor = $listaPrecio[4];
+                $listraPrecioId = $listaPrecio[6];
+                $listaPrecioBd = $em->getRepository('AppBundle:TramitePrecio')->find($listraPrecioId);
+                $listaPrecioBd->setValor($valor);
+                $em->persist($listaPrecioBd);
+                $em->flush();
+            }
+
+            foreach ($params->conceptos as $key => $concepto) {
+                $conceptoParametro = new ConceptoParametro();
+                $conceptoParametro->setNombre($concepto->nombre);
+                $conceptoParametro->setValor($concepto->valor);
+                $conceptoParametro->setParametro($parametro);
+                $em->persist($conceptoParametro);
+                $em->flush();
+                var_dump($concepto->nombre);
+               
+            }
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -81,7 +103,7 @@ class PaisController extends Controller
     /**
      * Finds and displays a pai entity.
      *
-     * @Route("/{id}/show", name="pais_show")
+     * @Route("/{id}/show", name="parametro_show")
      * @Method("POST")
      */
     public function showAction($id)
@@ -92,12 +114,12 @@ class PaisController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $pais = $em->getRepository('AppBundle:Pais')->find($id);
+            $parametro = $em->getRepository('AppBundle:Parametro')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado: ".$pais->getNombre(), 
-                    'data'=> $pais,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $parametro,
             );
         }else{
             $response = array(
@@ -110,9 +132,9 @@ class PaisController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing pai entity.
+     * Displays a form to edit an existing parametro entity.
      *
-     * @Route("/{id}/edit", name="pais_edit")
+     * @Route("/{id}/edit", name="parametro_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -127,24 +149,26 @@ class PaisController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $pais = $em->getRepository("AppBundle:Pais")->find($params->id);
+            $parametro = $em->getRepository("AppBundle:Parametro")->find($params->id);
 
             $nombre = $params->nombre;
             $codigo = $params->codigo;
 
-            if ($pais!=null) {
-                $pais->setNombre($nombre);
-                $pais->setCodigo($codigo);
+            if ($parametro!=null) {
+                $parametro->setAnio($params->anio);
+                $parametro->setValor($params->valor);
+                $parametro->setTipo($params->tipo);
+                $parametro->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($pais);
+                $em->persist($parametro);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $pais,
+                        'data'=> $parametro,
                 );
             }else{
                 $response = array(
@@ -165,76 +189,38 @@ class PaisController extends Controller
     }
 
     /**
-     * Deletes a pai entity.
+     * Deletes a parametro entity.
      *
-     * @Route("/{id}/delete", name="pais_delete")
-     * @Method("POST")
+     * @Route("/{id}", name="parametro_delete")
+     * @Method("DELETE")
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, Parametro $parametro)
     {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
+        $form = $this->createDeleteForm($parametro);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $pais = $em->getRepository("AppBundle:Pais")->find($params->id);
-
-            $pais->setEstado(false);
-
-            $em->persist($pais);
+            $em->remove($parametro);
             $em->flush();
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Registro eliminado con exito", 
-            );
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorizacion no valida", 
-            );
         }
-        return $helpers->json($response);
+
+        return $this->redirectToRoute('parametro_index');
     }
 
     /**
-     * Creates a form to delete a pai entity.
+     * Creates a form to delete a parametro entity.
      *
-     * @param Pais $pai The pai entity
+     * @param Parametro $parametro The parametro entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Pais $pai)
+    private function createDeleteForm(Parametro $parametro)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('pais_delete', array('id' => $pai->getId())))
+            ->setAction($this->generateUrl('parametro_delete', array('id' => $parametro->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="pais_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-        $response = null;
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $paises = $em->getRepository('AppBundle:Pais')->findBy(
-            array('estado' => 1)
-        );
-        foreach ($paises as $key => $pais) {
-            $response[$key] = array(
-                'value' => $pais->getId(),
-                'label' => $pais->getCodigo()."_".$pais->getNombre(),
-            );
-        }
-        return $helpers->json($response);
     }
 }

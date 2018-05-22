@@ -1,3 +1,11 @@
+app_parametro:
+    resource: "@AppBundle/Controller/ParametroController.php"
+    type:     annotation
+
+app_factura_sustrato:
+    resource: "@AppBundle/Controller/FacturaSustratoController.php"
+    type:     annotation
+
 app_radio_accion:
     resource: "@AppBundle/Controller/RadioAccionController.php"
     type:     annotation

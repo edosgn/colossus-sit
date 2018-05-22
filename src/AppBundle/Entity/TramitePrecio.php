@@ -24,7 +24,7 @@ class TramitePrecio
     /**
      * @var string
      *
-     * @ORM\Column(name="valor", type="string", length=255)
+     * @ORM\Column(name="valor", type="string", length=255, nullable = true)
      */
     private $valor;
 
@@ -35,6 +35,21 @@ class TramitePrecio
      */
     private $anio;
 
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="smldv", type="string", length=255)
+     */
+    private $smldv;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_estampilla", type="string", length=255)
+     */
+    private $valorEstampilla;
+
     /**
      * @var boolean
      *
@@ -42,15 +57,13 @@ class TramitePrecio
      */
     private $estado;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tipo", type="string", length=255)
-     */
-    private $tipo;
+
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="vehiculos") */
     private $tramite;
+
+     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="vehiculos") */
+     private $tipoVehiculo;
 
 
 
@@ -113,6 +126,54 @@ class TramitePrecio
     }
 
     /**
+     * Set smldv
+     *
+     * @param string $smldv
+     *
+     * @return TramitePrecio
+     */
+    public function setSmldv($smldv)
+    {
+        $this->smldv = $smldv;
+
+        return $this;
+    }
+
+    /**
+     * Get smldv
+     *
+     * @return string
+     */
+    public function getSmldv()
+    {
+        return $this->smldv;
+    }
+
+    /**
+     * Set valorEstampilla
+     *
+     * @param string $valorEstampilla
+     *
+     * @return TramitePrecio
+     */
+    public function setValorEstampilla($valorEstampilla)
+    {
+        $this->valorEstampilla = $valorEstampilla;
+
+        return $this;
+    }
+
+    /**
+     * Get valorEstampilla
+     *
+     * @return string
+     */
+    public function getValorEstampilla()
+    {
+        return $this->valorEstampilla;
+    }
+
+    /**
      * Set estado
      *
      * @param boolean $estado
@@ -137,30 +198,6 @@ class TramitePrecio
     }
 
     /**
-     * Set tipo
-     *
-     * @param string $tipo
-     *
-     * @return TramitePrecio
-     */
-    public function setTipo($tipo)
-    {
-        $this->tipo = $tipo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipo
-     *
-     * @return string
-     */
-    public function getTipo()
-    {
-        return $this->tipo;
-    }
-
-    /**
      * Set tramite
      *
      * @param \AppBundle\Entity\Tramite $tramite
@@ -182,5 +219,29 @@ class TramitePrecio
     public function getTramite()
     {
         return $this->tramite;
+    }
+
+    /**
+     * Set tipoVehiculo
+     *
+     * @param \AppBundle\Entity\TipoVehiculo $tipoVehiculo
+     *
+     * @return TramitePrecio
+     */
+    public function setTipoVehiculo(\AppBundle\Entity\TipoVehiculo $tipoVehiculo = null)
+    {
+        $this->tipoVehiculo = $tipoVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVehiculo
+     *
+     * @return \AppBundle\Entity\TipoVehiculo
+     */
+    public function getTipoVehiculo()
+    {
+        return $this->tipoVehiculo;
     }
 }

@@ -252,6 +252,8 @@ class TramiteFacturaController extends Controller
                 'value' => $tramiteFactura->getId(),
                 'label' => $tramiteFactura->getTramite()->getNombre(),
                 'tramiteId' => $tramiteFactura->getTramite()->getId(),
+                'tramite' => $tramiteFactura->getTramite(),
+                'cantidad' => $tramiteFactura->getCantidad(),
             );
         }
        
