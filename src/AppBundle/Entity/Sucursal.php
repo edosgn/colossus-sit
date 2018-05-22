@@ -70,9 +70,7 @@ class Sucursal
      */
     private $fax;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="sucursals") */
-    private $municipio;
-
+    
     /**
      * @var boolean
      *
@@ -80,6 +78,11 @@ class Sucursal
      */
     private $estado;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="sucursals") */
+    private $municipio;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="sucursals") */
+    private $empresa;
 
 
 
@@ -308,5 +311,29 @@ class Sucursal
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Sucursal
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }
