@@ -108,9 +108,9 @@ class Empresa
     /**
      * @var string
      *
-     * @ORM\Column(name="certificado_existencia", type="string", length=255)
+     * @ORM\Column(name="certificado_existencial", type="string", length=255)
      */
-    private $certificadoExistencia;
+    private $certificadoExistencial;
 
     /**
      * @var string
@@ -144,7 +144,7 @@ class Empresa
     private $municipio;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoSociedad", inversedBy="empresas") */
-    private $tipoSocidad;
+    private $tipoSociedad;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
     private $ciudadano;
@@ -152,6 +152,7 @@ class Empresa
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="empresas") */
     private $tipoIdentificacion;
     
+
 
     /**
      * Get id
@@ -188,30 +189,6 @@ class Empresa
     }
 
     /**
-     * Set nombre
-     *
-     * @param string $nombre
-     *
-     * @return Empresa
-     */
-    public function setNombre($nombre)
-    {
-        $this->nombre = $nombre;
-
-        return $this;
-    }
-
-    /**
-     * Get nombre
-     *
-     * @return string
-     */
-    public function getNombre()
-    {
-        return $this->nombre;
-    }
-
-    /**
      * Set dv
      *
      * @param integer $dv
@@ -233,6 +210,30 @@ class Empresa
     public function getDv()
     {
         return $this->dv;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return Empresa
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
     }
 
     /**
@@ -452,27 +453,27 @@ class Empresa
     }
 
     /**
-     * Set certificadoExistencia
+     * Set certificadoExistencial
      *
-     * @param string $certificadoExistencia
+     * @param string $certificadoExistencial
      *
      * @return Empresa
      */
-    public function setCertificadoExistencia($certificadoExistencia)
+    public function setCertificadoExistencial($certificadoExistencial)
     {
-        $this->certificadoExistencia = $certificadoExistencia;
+        $this->certificadoExistencial = $certificadoExistencial;
 
         return $this;
     }
 
     /**
-     * Get certificadoExistencia
+     * Get certificadoExistencial
      *
      * @return string
      */
-    public function getCertificadoExistencia()
+    public function getCertificadoExistencial()
     {
-        return $this->certificadoExistencia;
+        return $this->certificadoExistencial;
     }
 
     /**
@@ -568,7 +569,7 @@ class Empresa
      */
     public function getFechaVencimientoRegistroMercantil()
     {
-        return $this->fechaVencimientoRegistroMercantil;
+        return $this->fechaVencimientoRegistroMercantil->format('Y-m-d');
     }
 
     /**
@@ -596,27 +597,27 @@ class Empresa
     }
 
     /**
-     * Set tipoSocidad
+     * Set tipoSociedad
      *
-     * @param \AppBundle\Entity\TipoSociedad $tipoSocidad
+     * @param \AppBundle\Entity\TipoSociedad $tipoSociedad
      *
      * @return Empresa
      */
-    public function setTipoSocidad(\AppBundle\Entity\TipoSociedad $tipoSocidad = null)
+    public function setTipoSociedad(\AppBundle\Entity\TipoSociedad $tipoSociedad = null)
     {
-        $this->tipoSocidad = $tipoSocidad;
+        $this->tipoSociedad = $tipoSociedad;
 
         return $this;
     }
 
     /**
-     * Get tipoSocidad
+     * Get tipoSociedad
      *
      * @return \AppBundle\Entity\TipoSociedad
      */
-    public function getTipoSocidad()
+    public function getTipoSociedad()
     {
-        return $this->tipoSocidad;
+        return $this->tipoSociedad;
     }
 
     /**

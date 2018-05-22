@@ -334,4 +334,31 @@ class MunicipioController extends Controller
        return $helpers->json($response);
     }
 
+
+    /**
+     * datos para select 2 por departamento
+     *
+     * @Route("/{id}/select/municipios/por/departamento", name="departamento_select_por_departamento")
+     * @Method({"GET", "POST"})
+     */
+    public function selectDepartamentoPorPaisAction($id)
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
+        array(
+            'departamento' => $id,
+            'estado' => 1
+        )
+    );
+      foreach ($municipios as $key => $municipio) {
+        $response[$key] = array(
+            'value' => $municipio->getId(),
+            'label' => $municipio->getCodigoDane()."_".$municipio->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
+
+    
 }

@@ -2,47 +2,46 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Genero;
-use AppBundle\Form\GeneroType;
+use AppBundle\Entity\Sucursal;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Genero controller.
+ * Sucursal controller.
  *
- * @Route("genero")
+ * @Route("sucursal")
  */
-class GeneroController extends Controller
+class SucursalController extends Controller
 {
     /**
-     * Lists all genero entities.
+     * Lists all sucursal entities.
      *
-     * @Route("/", name="genero_index")
-     * @Method("GET")
+     * @Route("/", name="sucursal_index")
+     * @Method("GET") 
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $generos = $em->getRepository('AppBundle:Genero')->findBy(
+        $sucursales = $em->getRepository('AppBundle:Sucursal')->findBy(
             array('estado' => 1)
         );
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "Lista de generos",
-            'data' => $generos, 
+            'msj' => "Lista de sucursales",
+            'data' => $sucursales, 
         );
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new genero entity.
+     * Creates a new sucursal entity.
      *
-     * @Route("/new", name="genero_new")
+     * @Route("/new", name="sucursal_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -50,26 +49,36 @@ class GeneroController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $genero = new Genero();
+                $nombre = $params->nombre;
+                $sigla = $params->sigla;
+                $direccion = $params->direccion;
+                $telefono = $params->telefono;
+                $celular = $params->celular;
+                $correo = $params->correo;
+                $fax = $params->fax;
 
-                $genero->setNombre($params->nombre);
-                $genero->setSigla($params->sigla);
-                $genero->setEstado(true);
+                $municipioId = $params->municipioId;
+                $municipio = $em->getRepository('AppBundle:Sucursal')->find($municipioId);
+
+                $sucursal = new Sucursal();
+
+                $sucursal->setPlaca($nombre);
+                $sucursal->setPlaca($sigla);
+                $sucursal->setPlaca($direccion);
+                $sucursal->setPlaca($telefono);
+                $sucursal->setPlaca($celular);
+                $sucursal->setPlaca($correo);
+                $sucursal->setPlaca($fax);
+
+                $sucursal->setSucursal($municipio);
+                $sucursal->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($genero);
+                $em->persist($sucursal);
                 $em->flush();
 
                 $response = array(
@@ -84,17 +93,35 @@ class GeneroController extends Controller
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-        } 
+            } 
         return $helpers->json($response);
+
+
+        // $sucursal = new Sucursal();
+        // $form = $this->createForm('AppBundle\Form\SucursalType', $sucursal);
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $em = $this->getDoctrine()->getManager();
+        //     $em->persist($sucursal);
+        //     $em->flush();
+
+        //     return $this->redirectToRoute('sucursal_show', array('id' => $sucursal->getId()));
+        // }
+
+        // return $this->render('sucursal/new.html.twig', array(
+        //     'sucursal' => $sucursal,
+        //     'form' => $form->createView(),
+        // ));
     }
 
     /**
-     * Finds and displays a genero entity.
+     * Finds and displays a sucursal entity.
      *
-     * @Route("/{id}/show", name="genero_show")
-     * @Method("GET")
+     * @Route("/{id}/show", name="sucursal_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(Genero $genero)
+    public function showAction(Request $request, Sucursal $sucursal)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -106,7 +133,7 @@ class GeneroController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Registro encontrado", 
-                    'data'=> $genero,
+                    'data'=> $sucursal,
             );
         }else{
             $response = array(
@@ -119,10 +146,10 @@ class GeneroController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing genero entity.
+     * Displays a form to edit an existing sucursal entity.
      *
-     * @Route("/edit", name="genero_edit")
-     * @Method({"GET", "POST"})
+     * @Route("/{id}/edit", name="sucursal_edit")
+     * @Method({"POST", "POST"})
      */
     public function editAction(Request $request)
     {
@@ -135,25 +162,29 @@ class GeneroController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $em = $this->getDoctrine()->getManager();
-            $genero = $em->getRepository("AppBundle:Genero")->find($params->id);
-
+            $id = $params->id;
             $nombre = $params->nombre;
             $sigla = $params->sigla;
+            $direccion = $params->direccion;
+            $telefono = $params->telefono;
+            $celular = $params->celular;
+            $correo = $params->correo;
+            $fax = $params->fax;
 
-            if ($genero!=null) {
-                $genero->setNombre($nombre);
-                $genero->setSigla($sigla);
-
+            $municipioId = $params->municipioId;
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            if ($sucursal!=null) {
+                $sucursal->setPlaca($placa);
+                $sucursal->setMunicipio($municipio);
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($genero);
+                $em->persist($sucursal);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $genero,
+                        'data'=> $sucursal,
                 );
             }else{
                 $response = array(
@@ -174,12 +205,12 @@ class GeneroController extends Controller
     }
 
     /**
-     * Deletes a genero entity.
+     * Deletes a sucursal entity.
      *
-     * @Route("/{id}/delete", name="genero_delete")
-     * @Method("POST")
+     * @Route("/{id}", name="sucursal_delete")
+     * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Genero $genero)
+    public function deleteAction(Request $request, Sucursal $sucursal)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -187,9 +218,9 @@ class GeneroController extends Controller
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
 
-            $genero->setEstado(false);
+            $sucursal->setEstado(false);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($genero);
+                $em->persist($sucursal);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -207,42 +238,24 @@ class GeneroController extends Controller
     }
 
     /**
-     * Creates a form to delete a genero entity.
+     * Creates a form to delete a sucursal entity.
      *
-     * @param Genero $genero The genero entity
+     * @param Sucursal $sucursal The sucursal entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Genero $genero)
+    private function createDeleteForm(Sucursal $sucursal)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('genero_delete', array('id' => $genero->getId())))
+            ->setAction($this->generateUrl('sucursal_delete', array('id' => $sucursal->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
 
+    
 
-    /**
-     * datos para select 2
-     *
-     * @Route("/select/genero/ciudadano", name="genero_select_ciudadano")
-     * @Method("GET")
-     */
-    public function selectGeneroCiudadanoAction()
-    {
-        $response = null;
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $generos = $em->getRepository('AppBundle:Genero')->findBy(
-            array('estado' => 1)
-        );
-        foreach ($generos as $key => $genero) {
-            $response[$key] = array(
-                'value' => $genero->getId(),
-                'label' => $genero->getSigla()."_".$genero->getNombre(),
-            );
-        }
-        return $helpers->json($response);
-    }
+
+
+
 }

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Empresa;
 use AppBundle\Entity\TipoSociedad;
+use AppBundle\Entity\TipoIdentificacion;
 use AppBundle\Form\EmpresaType;
 
 /**
@@ -67,15 +68,15 @@ class EmpresaController extends Controller
                         $nit = $params->nit;
                         $dv = $params->dv;
                         $capitalPagado = $params->capitalPagado;
-                        $patrimonioLiquido = $params->patrimonioLiquido;
+                        $capitalLiquido = $params->capitalLiquido;
                         $empresaPrestadora = $params->empresaPrestadora;
                         $certificadoExistencial = $params->certificadoExistencial;
                         $tipoSociedadId = $params->tipoSociedadId;
                         $tipoIdentificacionId = $params->tipoIdentificacionId;
                         $tipoEntidad = $params->tipoEntidad;
                         $municipioId = $params->municipioId;
-                        $nroRegistro = $params->nroRegistro;
-                        $fechaDeVencimiento = $params->fechaDeVencimiento;
+                        $nroRegistroMercantil = $params->nroRegistroMercantil;
+                        $fechaDeVencimiento = $params->fechaVencimientoRegistroMercantil;
                         $direccion = $params->direccion;
                         $telefono = $params->telefono;
                         $celular = $params->celular;
@@ -106,14 +107,14 @@ class EmpresaController extends Controller
                             $empresa->setNit($nit);
                             $empresa->setDv($dv);
                             $empresa->setCapitalPagado($capitalPagado);
-                            $empresa->setCapitalLiquido($patrimonioLiquido);
+                            $empresa->setCapitalLiquido($capitalLiquido);
                             $empresa->setEmpresaPrestadora($empresaPrestadora);
-                            $empresa->setCertificadoExistencia($certificadoExistencial);
-                            $empresa->setTipoSocidad($tipoSociedad);
+                            $empresa->setCertificadoExistencial($certificadoExistencial);
+                            $empresa->setTipoSociedad($tipoSociedad);
                             $empresa->setTipoIdentificacion($tipoIdentificacion);
                             $empresa->setTipoEntidad($tipoEntidad);
                             $empresa->setMunicipio($municipio);
-                            $empresa->setNroRegistroMercantil($nroRegistro);
+                            $empresa->setNroRegistroMercantil($nroRegistroMercantil);
                             $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
                             $empresa->setTelefono($telefono);
                             $empresa->setDireccion($direccion);
@@ -124,8 +125,8 @@ class EmpresaController extends Controller
                             $empresa->setFax($fax);
                             $empresa->setCiudadano($ciudadano); 
                             $empresa->setEstado(true);
-                            $em = $this->getDoctrine()->getManager();
-                            
+
+                            $em = $this->getDoctrine()->getManager();                            
                             $em->persist($empresa);
                             $em->flush();
 
@@ -203,32 +204,60 @@ class EmpresaController extends Controller
             $empresa = $em->getRepository("AppBundle:Empresa")->find($params->id);
 
             if ($empresa!=null) {
+
+                $nombre = $params->nombre;
+                $sigla = $params->sigla;
                 $nit = $params->nit;
                 $dv = $params->dv;
-                $nombre = $params->nombre;
-                $telefono = $params->telefono;
-                $direccion = $params->direccion;
-                $correo = $params->correo;
-                $municipioId = $params->municipioId;
+                $capitalPagado = $params->capitalPagado;
+                $capitalLiquido = $params->capitalLiquido;
+                $empresaPrestadora = $params->empresaPrestadora;
+                $certificadoExistencial = $params->certificadoExistencial;
                 $tipoSociedadId = $params->tipoSociedadId;
+                $tipoIdentificacionId = $params->tipoIdentificacionId;
+                $tipoEntidad = $params->tipoEntidad;
+                $municipioId = $params->municipioId;
+                $nroRegistroMercantil = $params->nroRegistroMercantil;
+                $fechaVencimientoRegistroMercantil = $params->fechaVencimientoRegistroMercantil;
+                $direccion = $params->direccion;
+                $telefono = $params->telefono;
+                $celular = $params->celular;
+                $correo = $params->correo;
+                $fax = $params->fax;
                 $ciudadanoId = $params->ciudadanoId;
+
+                $fechaVencimientoRegistroMercantil=new \DateTime($fechaVencimientoRegistroMercantil);
+
                 $em = $this->getDoctrine()->getManager();
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                 $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
 
+                $empresa->setNombre($nombre);
+                $empresa->setSigla($sigla);
                 $empresa->setNit($nit);
                 $empresa->setDv($dv);
-                $empresa->setNombre($nombre);
+                $empresa->setCapitalPagado($capitalPagado);
+                $empresa->setCapitalLiquido($capitalLiquido);
+                $empresa->setEmpresaPrestadora($empresaPrestadora);
+                $empresa->setCertificadoExistencial($certificadoExistencial);
+                $empresa->setTipoSociedad($tipoSociedad);
+                $empresa->setTipoIdentificacion($tipoIdentificacion);
+                $empresa->setTipoEntidad($tipoEntidad);
+                $empresa->setMunicipio($municipio);
+                $empresa->setNroRegistroMercantil($nroRegistroMercantil);
+                $empresa->setFechaVencimientoRegistroMercantil($fechaVencimientoRegistroMercantil);
                 $empresa->setTelefono($telefono);
                 $empresa->setDireccion($direccion);
                 $empresa->setCorreo($correo);
-                $empresa->setMunicipio($municipio);
-                $empresa->setTipoSociedad($tipoSociedad);
-                $empresa->setCiudadano($ciudadano);
-
-
+                $empresa->setTelefono($telefono);
+                $empresa->setCelular($celular);
+                $empresa->setCorreo($correo);
+                $empresa->setFax($fax);
+                $empresa->setCiudadano($ciudadano); 
                 $empresa->setEstado(true);
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($empresa);
                 $em->flush();
