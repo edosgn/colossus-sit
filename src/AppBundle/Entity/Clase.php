@@ -35,22 +35,19 @@ class Clase
      */
     private $codigoMt;
 
-    /**
+    /** 
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
 
-   
-
-     public function __toString()
-    {
-        return $this->getNombre();
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="inmovilizaciones")
+     **/
+    protected $modulo;
 
 
-   
 
     /**
      * Get id
@@ -132,5 +129,29 @@ class Clase
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set modulo
+     *
+     * @param \AppBundle\Entity\Modulo $modulo
+     *
+     * @return Clase
+     */
+    public function setModulo(\AppBundle\Entity\Modulo $modulo = null)
+    {
+        $this->modulo = $modulo;
+
+        return $this;
+    }
+
+    /**
+     * Get modulo
+     *
+     * @return \AppBundle\Entity\Modulo
+     */
+    public function getModulo()
+    {
+        return $this->modulo;
     }
 }

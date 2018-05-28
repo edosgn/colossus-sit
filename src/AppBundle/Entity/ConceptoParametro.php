@@ -35,8 +35,8 @@ class ConceptoParametro
      */
     private $valor;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Parametro", inversedBy="empresas") */
-    private $parametro;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramitePrecio", inversedBy="empresas") */
+    private $tramitePrecio;
 
 
 
@@ -99,26 +99,26 @@ class ConceptoParametro
     }
 
     /**
-     * Set parametro
+     * Set tramitePrecio
      *
-     * @param \AppBundle\Entity\Parametro $parametro
+     * @param \AppBundle\Entity\TramitePrecio $tramitePrecio
      *
      * @return ConceptoParametro
      */
-    public function setParametro(\AppBundle\Entity\Parametro $parametro = null)
+    public function setTramitePrecio(\AppBundle\Entity\TramitePrecio $tramitePrecio = null)
     {
-        $this->parametro = $parametro;
+        $this->tramitePrecio = $tramitePrecio;
 
         return $this;
     }
 
     /**
-     * Get parametro
+     * Get tramitePrecio
      *
-     * @return \AppBundle\Entity\Parametro
+     * @return \AppBundle\Entity\TramitePrecio
      */
-    public function getParametro()
+    public function getTramitePrecio()
     {
-        return $this->parametro;
+        return $this->tramitePrecio;
     }
 }

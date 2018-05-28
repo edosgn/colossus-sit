@@ -307,4 +307,30 @@ class TramiteController extends Controller
         }
        return $helpers->json($response);
     }
+
+    /**
+     * datos para select 2 por modulo
+     *
+     * @Route("/{id}/select/tramites/por/modulo", name="modulo_select_por_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectDepartamentoPorPaisAction($id)
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    
+    $tramites = $em->getRepository('AppBundle:Tramite')->findBy(
+        array(
+            'modulo' => $id,
+            'estado' => 1
+        )
+    );
+      foreach ($tramites as $key => $tramite) {
+        $response[$key] = array(
+            'value' => $tramite->getId(),
+            'label' => $tramite->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }

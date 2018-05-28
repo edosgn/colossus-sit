@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\TramitePrecio;
+use AppBundle\Entity\Modulo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -58,23 +59,24 @@ class TramitePrecioController extends Controller
                 $valor = $params->valor;
                 $anio = $params->anio;
                 $smldv = $params->smldv;
-                $valorEstampilla = $params->valorEstampilla;
+                $moduloId = $params->moduloId;
                 $tramiteId = $params->tramiteId;
-                $tipoVehiculoId = $params->tipoVehiculoId;
+                $claseId = $params->claseId;
 
 
                 $em = $this->getDoctrine()->getManager();
                 $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
-                $tipoVehiculo = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculoId);
+                $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
                 
                   
                 $tramitePrecio = new TramitePrecio();
                 $tramitePrecio->setValor($valor);
                 $tramitePrecio->setAnio($anio);
-                $tramitePrecio->setValorEstampilla($valorEstampilla);
+                $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setSmldv($smldv);
                 $tramitePrecio->setTramite($tramite);
-                $tramitePrecio->setTipoVehiculo($tipoVehiculo);
+                $tramitePrecio->setClase($clase);
                 $tramitePrecio->setEstado(true);
 
 
@@ -146,24 +148,25 @@ class TramitePrecioController extends Controller
             $valor = $params->valor;
             $anio = $params->anio;
             $smldv = $params->smldv;
-            $valorEstampilla = $params->valorEstampilla;
+            $moduloId = $params->moduloId;
             $tramiteId = $params->tramiteId;
-            $tipoVehiculoId = $params->tipoVehiculoId;
+            $claseId = $params->claseId;
 
 
             $em = $this->getDoctrine()->getManager();
             $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
-            $tipoVehiculo = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculoId);
+            $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $tramitePrecio = $em->getRepository("AppBundle:TramitePrecio")->find($params->id);
+            $modulo = $em->getRepository("AppBundle:Modulo")->find($moduloId);
 
             if ($tramitePrecio!=null) {
 
                 $tramitePrecio->setValor($valor);
                 $tramitePrecio->setAnio($anio);
-                $tramitePrecio->setValorEstampilla($valorEstampilla);
+                $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setSmldv($smldv);
                 $tramitePrecio->setTramite($tramite);
-                $tramitePrecio->setTipoVehiculo($tipoVehiculo);
+                $tramitePrecio->setClase($clase);
                 $tramitePrecio->setEstado(true);
 
 

@@ -43,13 +43,7 @@ class TramitePrecio
      */
     private $smldv;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="valor_estampilla", type="string", length=255)
-     */
-    private $valorEstampilla;
-
+    
     /**
      * @var boolean
      *
@@ -62,8 +56,11 @@ class TramitePrecio
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="vehiculos") */
     private $tramite;
 
-     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="vehiculos") */
-     private $tipoVehiculo;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
+    private $clase;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="vehiculos") */
+    private $modulo;
 
 
 
@@ -150,30 +147,6 @@ class TramitePrecio
     }
 
     /**
-     * Set valorEstampilla
-     *
-     * @param string $valorEstampilla
-     *
-     * @return TramitePrecio
-     */
-    public function setValorEstampilla($valorEstampilla)
-    {
-        $this->valorEstampilla = $valorEstampilla;
-
-        return $this;
-    }
-
-    /**
-     * Get valorEstampilla
-     *
-     * @return string
-     */
-    public function getValorEstampilla()
-    {
-        return $this->valorEstampilla;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -222,26 +195,50 @@ class TramitePrecio
     }
 
     /**
-     * Set tipoVehiculo
+     * Set clase
      *
-     * @param \AppBundle\Entity\TipoVehiculo $tipoVehiculo
+     * @param \AppBundle\Entity\Clase $clase
      *
      * @return TramitePrecio
      */
-    public function setTipoVehiculo(\AppBundle\Entity\TipoVehiculo $tipoVehiculo = null)
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
     {
-        $this->tipoVehiculo = $tipoVehiculo;
+        $this->clase = $clase;
 
         return $this;
     }
 
     /**
-     * Get tipoVehiculo
+     * Get clase
      *
-     * @return \AppBundle\Entity\TipoVehiculo
+     * @return \AppBundle\Entity\Clase
      */
-    public function getTipoVehiculo()
+    public function getClase()
     {
-        return $this->tipoVehiculo;
+        return $this->clase;
+    }
+
+    /**
+     * Set modulo
+     *
+     * @param \AppBundle\Entity\Modulo $modulo
+     *
+     * @return TramitePrecio
+     */
+    public function setModulo(\AppBundle\Entity\Modulo $modulo = null)
+    {
+        $this->modulo = $modulo;
+
+        return $this;
+    }
+
+    /**
+     * Get modulo
+     *
+     * @return \AppBundle\Entity\Modulo
+     */
+    public function getModulo()
+    {
+        return $this->modulo;
     }
 }

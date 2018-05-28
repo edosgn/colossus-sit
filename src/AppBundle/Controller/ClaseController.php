@@ -63,15 +63,19 @@ class ClaseController extends Controller
             }else{*/
                 $nombre = $params->nombre;
                 $codigoMt = $params->codigoMt;
+                $moduloId = $params->moduloId;
                 $em = $this->getDoctrine()->getManager();
                 $clase = $em->getRepository('AppBundle:Clase')->findBy(
                     array('codigoMt' => $codigoMt)
                 );
 
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+                
                 if ($clase==null) {
                     $clase = new Clase();
                     $clase->setNombre($nombre);
                     $clase->setEstado(true);
+                    $clase->setModulo($modulo);
                     $clase->setCodigoMt($codigoMt);
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($clase);
@@ -148,13 +152,16 @@ class ClaseController extends Controller
 
             $nombre = $params->nombre;
             $codigoMt = $params->codigoMt;
+            $moduloId = $params->moduloId;
             $em = $this->getDoctrine()->getManager();
             $clase = $em->getRepository('AppBundle:Clase')->find($params->id);
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
             if ($clase!=null) {
 
                 $clase->setNombre($nombre);
                 $clase->setEstado(true);
                 $clase->setCodigoMt($codigoMt);
+                $clase->setModulo($modulo);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($clase);
@@ -250,6 +257,31 @@ class ClaseController extends Controller
         $response[$key] = array(
             'value' => $clase->getId(),
             'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2 por modulo
+     *
+     * @Route("/{id}/select/clases/por/modulo", name="select_clases_por_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectClasePorModuloAction($id)
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $clases = $em->getRepository('AppBundle:Clase')->findBy(
+        array(
+            'modulo' => $id,
+            'estado' => 1
+        )
+    );
+      foreach ($clases as $key => $clase) {
+        $response[$key] = array(
+            'value' => $clase->getId(),
+            'label' => $clase->getNombre(),
             );
       }
        return $helpers->json($response);
