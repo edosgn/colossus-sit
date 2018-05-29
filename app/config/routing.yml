@@ -1,3 +1,11 @@
+app_concepto_parametro:
+    resource: "@AppBundle/Controller/ConceptoParametroController.php"
+    type:     annotation
+
+app_concepto_parametro_tramite:
+    resource: "@AppBundle/Controller/ConceptoParametroTramiteController.php"
+    type:     annotation
+
 app_parametro:
     resource: "@AppBundle/Controller/ParametroController.php"
     type:     annotation

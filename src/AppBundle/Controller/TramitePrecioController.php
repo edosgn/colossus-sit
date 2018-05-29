@@ -62,21 +62,19 @@ class TramitePrecioController extends Controller
                 $moduloId = $params->moduloId;
                 $tramiteId = $params->tramiteId;
                 $claseId = $params->claseId;
-
-
                 $em = $this->getDoctrine()->getManager();
-                $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
-                $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
-                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
-                
-                  
                 $tramitePrecio = new TramitePrecio();
+                $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+                if ($claseId != NULL) {
+                    $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+                    $tramitePrecio->setClase($clase);
+                }
                 $tramitePrecio->setValor($valor);
                 $tramitePrecio->setAnio($anio);
                 $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setSmldv($smldv);
                 $tramitePrecio->setTramite($tramite);
-                $tramitePrecio->setClase($clase);
                 $tramitePrecio->setEstado(true);
 
 
@@ -150,12 +148,17 @@ class TramitePrecioController extends Controller
             $smldv = $params->smldv;
             $moduloId = $params->moduloId;
             $tramiteId = $params->tramiteId;
-            $claseId = $params->claseId;
+            
+            if ($params->claseId) {
+                $claseId = $params->claseId;
+                $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+                $tramitePrecio->setClase($clase);
+            }
+
 
 
             $em = $this->getDoctrine()->getManager();
             $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
-            $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $tramitePrecio = $em->getRepository("AppBundle:TramitePrecio")->find($params->id);
             $modulo = $em->getRepository("AppBundle:Modulo")->find($moduloId);
 
@@ -166,7 +169,6 @@ class TramitePrecioController extends Controller
                 $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setSmldv($smldv);
                 $tramitePrecio->setTramite($tramite);
-                $tramitePrecio->setClase($clase);
                 $tramitePrecio->setEstado(true);
 
 

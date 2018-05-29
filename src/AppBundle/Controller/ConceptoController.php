@@ -32,7 +32,7 @@ class ConceptoController extends Controller
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado conceptos", 
+                    'msj' => "listado conceptos",  
                     'data'=> $conceptos,
             );
          

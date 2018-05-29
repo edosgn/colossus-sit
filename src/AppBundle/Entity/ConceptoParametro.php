@@ -35,8 +35,12 @@ class ConceptoParametro
      */
     private $valor;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramitePrecio", inversedBy="empresas") */
-    private $tramitePrecio;
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
 
 
 
@@ -99,26 +103,26 @@ class ConceptoParametro
     }
 
     /**
-     * Set tramitePrecio
+     * Set estado
      *
-     * @param \AppBundle\Entity\TramitePrecio $tramitePrecio
+     * @param boolean $estado
      *
      * @return ConceptoParametro
      */
-    public function setTramitePrecio(\AppBundle\Entity\TramitePrecio $tramitePrecio = null)
+    public function setEstado($estado)
     {
-        $this->tramitePrecio = $tramitePrecio;
+        $this->estado = $estado;
 
         return $this;
     }
 
     /**
-     * Get tramitePrecio
+     * Get estado
      *
-     * @return \AppBundle\Entity\TramitePrecio
+     * @return boolean
      */
-    public function getTramitePrecio()
+    public function getEstado()
     {
-        return $this->tramitePrecio;
+        return $this->estado;
     }
 }
