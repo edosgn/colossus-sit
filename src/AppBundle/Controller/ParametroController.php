@@ -60,7 +60,7 @@ class ParametroController extends Controller
             $parametro->setAnio($params->parametro->anio);
             $parametro->setValor($params->parametro->valor);
             $parametro->setTipo($params->parametro->tipo);
-            $parametro->setPorcentaje($params->parametro->porcentaje);
+            $parametro->setPorcentaje($params->parametro->porcentaje); 
             $parametro->setEstado(true);
 
             $em->persist($parametro);

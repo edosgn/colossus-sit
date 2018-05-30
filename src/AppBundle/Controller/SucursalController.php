@@ -53,31 +53,34 @@ class SucursalController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-                $nombre = $params->nombre;
-                $sigla = $params->sigla;
-                $direccion = $params->direccion;
-                $telefono = $params->telefono;
-                $celular = $params->celular;
-                $correo = $params->correo;
-                $fax = $params->fax;
+       
+            $nombre = $params->nombre;
+            $sigla = $params->sigla;
+            $direccion = $params->direccion;
+            $telefono = $params->telefono;
+            $celular = $params->celular;
+            $correo = $params->correo;
+            $fax = $params->fax;
+            $empresaId = $params->empresaId;
+            $municipioId = $params->municipioId;
 
-                $municipioId = $params->municipioId;
-                $municipio = $em->getRepository('AppBundle:Sucursal')->find($municipioId);
+             $em = $this->getDoctrine()->getManager();
+                $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+                $empresa = $em->getRepository('AppBundle:Empresa')->find($empresaId);
 
                 $sucursal = new Sucursal();
 
-                $sucursal->setPlaca($nombre);
-                $sucursal->setPlaca($sigla);
-                $sucursal->setPlaca($direccion);
-                $sucursal->setPlaca($telefono);
-                $sucursal->setPlaca($celular);
-                $sucursal->setPlaca($correo);
-                $sucursal->setPlaca($fax);
-
-                $sucursal->setSucursal($municipio);
+                $sucursal->setNombre($nombre);
+                $sucursal->setSigla($sigla);
+                $sucursal->setDireccion($direccion);
+                $sucursal->setTelefono($telefono);
+                $sucursal->setCelular($celular);
+                $sucursal->setCorreo($correo);
+                $sucursal->setFax($fax);
+                $sucursal->setMunicipio($municipio);
+                $sucursal->setEmpresa($empresa);
                 $sucursal->setEstado(true);
-
-                $em = $this->getDoctrine()->getManager();
+               
                 $em->persist($sucursal);
                 $em->flush();
 
@@ -97,6 +100,7 @@ class SucursalController extends Controller
         return $helpers->json($response);
 
 
+        
         // $sucursal = new Sucursal();
         // $form = $this->createForm('AppBundle\Form\SucursalType', $sucursal);
         // $form->handleRequest($request);
@@ -162,20 +166,32 @@ class SucursalController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $id = $params->id;
-            $nombre = $params->nombre;
-            $sigla = $params->sigla;
-            $direccion = $params->direccion;
-            $telefono = $params->telefono;
-            $celular = $params->celular;
-            $correo = $params->correo;
-            $fax = $params->fax;
+           
+            $nombre = $params->sucursal->nombre;
+            $sigla = $params->sucursal->sigla;
+            $direccion = $params->sucursal->direccion;
+            $telefono = $params->sucursal->telefono;
+            $celular = $params->sucursal->celular;
+            $correo = $params->sucursal->correo;
+            $fax = $params->sucursal->fax;
+            $empresaId = $params->empresaId;
+            $municipioId = $params->sucursal->municipioId;
 
-            $municipioId = $params->municipioId;
+            
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($empresaId);
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            
             if ($sucursal!=null) {
-                $sucursal->setPlaca($placa);
-                $sucursal->setMunicipio($municipio);
+                $sucursal->setNombre($nombre);
+                $sucursal->setSigla($sigla);
+                $sucursal->setDireccion($direccion);
+                $sucursal->setTelefono($telefono);
+                $sucursal->setCelular($celular);
+                $sucursal->setCorreo($correo);
+                $sucursal->setFax($fax);
+                $sucursal->setMuniciopio($municipio);
+                $sucursal->setMuniciopio($municipio);
+                $sucursal->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sucursal);
                 $em->flush();
@@ -207,18 +223,19 @@ class SucursalController extends Controller
     /**
      * Deletes a sucursal entity.
      *
-     * @Route("/{id}", name="sucursal_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="sucursal_delete")
+     * @Method("POSt")
      */
-    public function deleteAction(Request $request, Sucursal $sucursal)
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
+            $sucursal = $em->getRepository('AppBundle:Sucursal')->find($id);
 
-            $sucursal->setEstado(false);
+            $sucursal->setEstado(0);
             $em = $this->getDoctrine()->getManager();
                 $em->persist($sucursal);
                 $em->flush();
@@ -251,6 +268,43 @@ class SucursalController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+
+     /**
+     * datos para select 2 por departamento
+     *
+     * @Route("/{id}/sucursales/por/empresa", name="sucursales_por_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function sucursalesPorEmpresaAction($id)
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $sucursales = $em->getRepository('AppBundle:Sucursal')->findBy(
+        array(
+            'empresa' => $id,
+            'estado' => 1
+        )
+    );
+
+    if ($sucursales!=null) {
+        $response = array(
+        'status' => 'success',
+        'code' => 200,
+        'msj' => "Registros encontrados con exito", 
+        'data'=> $sucursales,
+        );
+    }else{
+        $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "No se han encontrado sucursales en la base de datos", 
+        );
+    }
+
+     
+       return $helpers->json($response);
     }
 
     

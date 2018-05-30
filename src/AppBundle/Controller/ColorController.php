@@ -182,7 +182,7 @@ class ColorController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();            
             $color = $em->getRepository('AppBundle:Color')->find($id);
 
             $color->setEstado(0);
