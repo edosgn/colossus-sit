@@ -58,7 +58,6 @@ class TramitePrecioController extends Controller
 
                 $valor = $params->valor;
                 $anio = $params->anio;
-                $smldv = $params->smldv;
                 $moduloId = $params->moduloId;
                 $tramiteId = $params->tramiteId;
                 $claseId = $params->claseId;
@@ -70,10 +69,11 @@ class TramitePrecioController extends Controller
                     $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                     $tramitePrecio->setClase($clase);
                 }
+                $nombre = $tramite->getNombre() . ' ' . $clase->getNombre();
+                $tramitePrecio->setNombre($nombre);
                 $tramitePrecio->setValor($valor);
                 $tramitePrecio->setAnio($anio);
                 $tramitePrecio->setModulo($modulo);
-                $tramitePrecio->setSmldv($smldv);
                 $tramitePrecio->setTramite($tramite);
                 $tramitePrecio->setEstado(true);
 
@@ -145,7 +145,6 @@ class TramitePrecioController extends Controller
             
             $valor = $params->valor;
             $anio = $params->anio;
-            $smldv = $params->smldv;
             $moduloId = $params->moduloId;
             $tramiteId = $params->tramiteId;
             
@@ -167,7 +166,6 @@ class TramitePrecioController extends Controller
                 $tramitePrecio->setValor($valor);
                 $tramitePrecio->setAnio($anio);
                 $tramitePrecio->setModulo($modulo);
-                $tramitePrecio->setSmldv($smldv);
                 $tramitePrecio->setTramite($tramite);
                 $tramitePrecio->setEstado(true);
 
@@ -200,23 +198,39 @@ class TramitePrecioController extends Controller
     }
 
     /**
-     * Deletes a tramitePrecio entity.
+     * datos para select 2 por modulo
      *
-     * @Route("/{id}", name="tramiteprecio_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete/tramite/precio", name="eliminar_tramite_precio")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, TramitePrecio $tramitePrecio)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($tramitePrecio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tramitePrecio);
+            $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find($id);
+            
+            $tramitePrecio->setEstado(false);
+            $em->persist($tramitePrecio);
             $em->flush();
-        }
 
-        return $this->redirectToRoute('tramiteprecio_index');
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "registro eliminado", 
+            );
+
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**

@@ -34,14 +34,13 @@ class TramitePrecio
      * @ORM\Column(name="anio", type="string", length=255)
      */
     private $anio;
-
-
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="smldv", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $smldv;
+    private $nombre;
 
     
     /**
@@ -123,27 +122,27 @@ class TramitePrecio
     }
 
     /**
-     * Set smldv
+     * Set nombre
      *
-     * @param string $smldv
+     * @param string $nombre
      *
      * @return TramitePrecio
      */
-    public function setSmldv($smldv)
+    public function setNombre($nombre)
     {
-        $this->smldv = $smldv;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get smldv
+     * Get nombre
      *
      * @return string
      */
-    public function getSmldv()
+    public function getNombre()
     {
-        return $this->smldv;
+        return $this->nombre;
     }
 
     /**

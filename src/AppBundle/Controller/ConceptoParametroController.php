@@ -210,7 +210,7 @@ class ConceptoParametroController extends Controller
      /**
      * datos para select 2
      *
-     * @Route("/select", name="conceptoParametro_select")
+     * @Route("/select/concepto", name="conceptoParametro_select_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()

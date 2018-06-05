@@ -47,6 +47,7 @@ class ConceptoParametroTramiteController extends Controller
     public function newAction(Request $request)
     {
 
+
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -54,20 +55,21 @@ class ConceptoParametroTramiteController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $anio = $params->anio;
-            $tramitePrecioId = $params->tramitePrecioId;
-
+            
             $em = $this->getDoctrine()->getManager();
-            $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find($tramitePrecioId);
+            foreach ($params->trmites as $key => $tramitePrecioNombre) {
+                $conceptoParametroTramite = new ConceptoParametroTramite;
+                
+                $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneByNombre($tramitePrecioNombre);
+                $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($params->concepto);
+                $conceptoParametroTramite->setTramitePrecio($tramitePrecio);
+                $conceptoParametroTramite->setConceptoParametro($conceptoParametro);
+                $conceptoParametroTramite->setEstado(true);
 
-            $conceptoParametroTramite = new Conceptoparametrotramite();
-            $conceptoParametroTramite->setAnio($anio);
-            $conceptoParametroTramite->setEstado(true);
-            $conceptoParametroTramite->setTramitePrecio($tramitePrecio);
+                $em->persist($conceptoParametroTramite);
+                $em->flush();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($conceptoParametroTramite);
-            $em->flush();
+            }
 
             $response = array(
                 'status' => 'success',
@@ -127,23 +129,37 @@ class ConceptoParametroTramiteController extends Controller
     }
 
     /**
-     * Deletes a conceptoParametroTramite entity.
+     * Deletes a Concepto entity.
      *
-     * @Route("/{id}", name="conceptoparametrotramite_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="conceptoParametroTramite_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, ConceptoParametroTramite $conceptoParametroTramite)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($conceptoParametroTramite);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($conceptoParametroTramite);
-            $em->flush();
-        }
+            $conceptoParametroTramite = $em->getRepository('AppBundle:ConceptoParametroTramite')->find($id);
 
-        return $this->redirectToRoute('conceptoparametrotramite_index');
+            $conceptoParametroTramite->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($conceptoParametroTramite);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "conceptoParametroTramite eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**

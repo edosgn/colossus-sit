@@ -21,12 +21,6 @@ class ConceptoParametroTramite
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="anio", type="string", length=255)
-     */
-    private $anio;
 
     /**
      * @var bool
@@ -38,6 +32,8 @@ class ConceptoParametroTramite
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramitePrecio", inversedBy="empresas") */
     private $tramitePrecio;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\ConceptoParametro", inversedBy="empresas") */
+    private $conceptoParametro;
 
 
     /**
@@ -48,30 +44,6 @@ class ConceptoParametroTramite
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param string $anio
-     *
-     * @return ConceptoParametroTramite
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return string
-     */
-    public function getAnio()
-    {
-        return $this->anio;
     }
 
     /**
@@ -120,5 +92,29 @@ class ConceptoParametroTramite
     public function getTramitePrecio()
     {
         return $this->tramitePrecio;
+    }
+
+    /**
+     * Set conceptoParametro
+     *
+     * @param \AppBundle\Entity\ConceptoParametro $conceptoParametro
+     *
+     * @return ConceptoParametroTramite
+     */
+    public function setConceptoParametro(\AppBundle\Entity\ConceptoParametro $conceptoParametro = null)
+    {
+        $this->conceptoParametro = $conceptoParametro;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptoParametro
+     *
+     * @return \AppBundle\Entity\ConceptoParametro
+     */
+    public function getConceptoParametro()
+    {
+        return $this->conceptoParametro;
     }
 }
