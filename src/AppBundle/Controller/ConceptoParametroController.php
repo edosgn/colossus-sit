@@ -256,7 +256,7 @@ class ConceptoParametroController extends Controller
     $conceptoParametros = $em->getRepository('AppBundle:ConceptoParametro')->findBy(
         array('estado' => 1)
     );
-    
+    $response = null;
     foreach ($conceptoParametros as $key => $conceptoParametro) {
         $response[$key] = array(
             'value' => $conceptoParametro->getId(),

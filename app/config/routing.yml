@@ -1,3 +1,7 @@
+app_representante_empresa:
+    resource: "@AppBundle/Controller/RepresentanteEmpresaController.php"
+    type:     annotation
+
 app_concepto_parametro:
     resource: "@AppBundle/Controller/ConceptoParametroController.php"
     type:     annotation

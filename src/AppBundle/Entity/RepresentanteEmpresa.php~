@@ -1,0 +1,54 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * RepresentanteEmpresa
+ *
+ * @ORM\Table(name="representante_empresa")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\RepresentanteEmpresaRepository")
+ */
+class RepresentanteEmpresa
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaInicial", type="date")
+     */
+    private $fechaInicial;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaFinal", type="date")
+     */
+    private $fechaFinal;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="representanteEmpresa") */
+    private $empresa;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="representanteEmpresa") */
+    private $ciudadano;
+
+
+}
+

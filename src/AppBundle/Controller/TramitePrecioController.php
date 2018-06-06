@@ -148,6 +148,8 @@ class TramitePrecioController extends Controller
             $moduloId = $params->moduloId;
             $tramiteId = $params->tramiteId;
             
+            $em = $this->getDoctrine()->getManager();
+            $tramitePrecio = $em->getRepository("AppBundle:TramitePrecio")->find($params->id);
             if ($params->claseId) {
                 $claseId = $params->claseId;
                 $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
@@ -156,9 +158,7 @@ class TramitePrecioController extends Controller
 
 
 
-            $em = $this->getDoctrine()->getManager();
             $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
-            $tramitePrecio = $em->getRepository("AppBundle:TramitePrecio")->find($params->id);
             $modulo = $em->getRepository("AppBundle:Modulo")->find($moduloId);
 
             if ($tramitePrecio!=null) {
