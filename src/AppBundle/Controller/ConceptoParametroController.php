@@ -101,6 +101,7 @@ class ConceptoParametroController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($id);
+            
             $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -113,6 +114,41 @@ class ConceptoParametroController extends Controller
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
+        }
+        return $helpers->json($response);
+    }
+
+     /**
+     * Displays a form to edit an existing facturaSustrato entity.
+     *
+     * @Route("/{id}/tramitePrecio/concepto", name="concepto_por_tramitePrecio")
+     * @Method({"GET", "POST"})
+     */
+    public function showConceptoAction(Request $request,$id)
+    {
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $em = $this->getDoctrine()->getManager();
+
+        if ($authCheck==true) {
+            $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametroTramite')->findBy(
+                array('estado' => 1,
+                'tramitePrecio'=> $id)
+            );
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "conceptoParametro encontrado", 
+                'data'=> $conceptoParametro,
+            );
+        }else{
+        $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco", 
+            );
         }
         return $helpers->json($response);
     }
