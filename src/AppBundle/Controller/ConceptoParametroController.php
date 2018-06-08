@@ -56,6 +56,19 @@ class ConceptoParametroController extends Controller
 
             $nombre = $params->nombre;
             $valor = $params->valor;
+
+            // $conceptoParametros = $em->getRepository('AppBundle:ConceptoParametro')->findBy(
+            //     array('estado' => 1,'nombre'=> $nombre)
+            // );
+    
+            // if ($conceptoParametros != null) {
+            //     $response = array(
+            //             'status' => 'error',
+            //             'code' => 400,
+            //             'msj' => "registro", 
+            //     );
+            //     return $helpers->json($response);
+            // }
          
 
             $em = $this->getDoctrine()->getManager();

@@ -27,15 +27,34 @@ class TramitePrecioController extends Controller
 
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $tramitePrecios = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+
+        $tramitePreciosTotal = $em->getRepository('AppBundle:TramitePrecio')->findBy(
             array('estado' => 1)
         );
+
         
+        
+        $fechaActual = new \DateTime("now");
+        $fechaActualCompare = $fechaActual->format("Y-m-d");
+        
+        foreach ($tramitePreciosTotal as $key => $tramitePrecio) {
+            $fechainicioCompare = $tramitePrecio->getFechaInicio();
+            if($fechainicioCompare<=$fechaActualCompare){
+                $tramitePrecio->setActivo(true);
+                $em->persist($tramitePrecio);
+                $em->flush();
+            }
+        }
+        
+        $tramitePreciosActivos = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+            array('estado' => 1,'activo'=>1)
+        );
+
         $response = array(
-                    'status' => 'success',
+            'status' => 'success',
                     'code' => 200,
                     'msj' => "listado tramitePrecios", 
-                    'data'=> $tramitePrecios,
+                    'data'=> $tramitePreciosActivos,
             );
          
         return $helpers->json($response);
@@ -57,7 +76,7 @@ class TramitePrecioController extends Controller
             $params = json_decode($json);
 
                 $valor = $params->valor;
-                $anio = $params->anio;
+                $fechaInicio = $params->fechaInicio;
                 $moduloId = $params->moduloId;
                 $tramiteId = $params->tramiteId;
                 $claseId = $params->claseId;
@@ -65,6 +84,7 @@ class TramitePrecioController extends Controller
                 $tramitePrecio = new TramitePrecio();
                 $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
                 $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+                $fechaInicio = new \DateTime($fechaInicio);
                 if ($claseId != NULL) {
                     $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                     $tramitePrecio->setClase($clase);
@@ -72,15 +92,93 @@ class TramitePrecioController extends Controller
                 $nombre = $tramite->getNombre() . ' ' . $clase->getNombre();
                 $tramitePrecio->setNombre($nombre);
                 $tramitePrecio->setValor($valor);
-                $tramitePrecio->setAnio($anio);
+                $tramitePrecio->setFechaInicio($fechaInicio);
                 $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setTramite($tramite);
                 $tramitePrecio->setEstado(true);
+
+                $fechaActual = new \DateTime("now");
+                $fechaActualCompare = $fechaActual->format("Y-m-d");
+                $fechainicioCompare = $fechaInicio->format("Y-m-d");
+                
+                if($fechainicioCompare==$fechaActualCompare){
+                    $tramitePrecio->setActivo(true);
+
+                }else{
+                    $tramitePrecio->setActivo(false);
+                }
+                
 
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramitePrecio);
                 $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "precio creada con exito", 
+                );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new tramitePrecio entity.
+     *
+     * @Route("/new/tramites/precios", name="tramiteprecio_tramites")
+     * @Method({"GET", "POST"})
+     */
+    public function newTramitesPreciosAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) { 
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            foreach ($params as $key => $tramitePrecio) {
+                $tramitePrecioBD = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
+                    array('nombre' => $tramitePrecio->nombre,'estado' => 1)
+                );
+                $tramitePrecioBD->setEstado(false);
+                $em->persist($tramitePrecioBD);
+                $em->flush();
+
+                $tramitePrecioNew = new TramitePrecio();
+                $fechaInicio = new \DateTime($tramitePrecio->fechaInicio);
+
+                $tramitePrecioNew->setNombre($tramitePrecio->nombre);
+                $tramitePrecioNew->setValor($tramitePrecio->valorNuevo);
+                $tramitePrecioNew->setValorTotal($tramitePrecio->valorTotal);
+                $tramitePrecioNew->setFechaInicio($fechaInicio);
+                $tramitePrecioNew->setModulo($tramitePrecioBD->getModulo());
+                $tramitePrecioNew->setTramite($tramitePrecioBD->getTramite());
+                $tramitePrecioNew->setClase($tramitePrecioBD->getClase());
+                $tramitePrecioNew->setEstado(true);
+    
+                $fechaActual = new \DateTime("now");
+                $fechaActualCompare = $fechaActual->format("Y-m-d");
+                $fechainicioCompare = $fechaInicio->format("Y-m-d");
+                
+                if($fechainicioCompare==$fechaActualCompare){
+                    $tramitePrecioNew->setActivo(true);
+    
+                }else{
+                    $tramitePrecioNew->setActivo(false);
+                }
+    
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tramitePrecioNew);
+                $em->flush();
+            }
+               
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -144,9 +242,10 @@ class TramitePrecioController extends Controller
             $params = json_decode($json);
             
             $valor = $params->valor;
-            $anio = $params->anio;
+            $fechaInicio = $params->fechaInicio;
             $moduloId = $params->moduloId;
             $tramiteId = $params->tramiteId;
+            $fechaInicio = new \DateTime($fechaInicio);
             
             $em = $this->getDoctrine()->getManager();
             $tramitePrecio = $em->getRepository("AppBundle:TramitePrecio")->find($params->id);
@@ -164,7 +263,7 @@ class TramitePrecioController extends Controller
             if ($tramitePrecio!=null) {
 
                 $tramitePrecio->setValor($valor);
-                $tramitePrecio->setAnio($anio);
+                $tramitePrecio->setFechaInicio($fechaInicio);
                 $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setTramite($tramite);
                 $tramitePrecio->setEstado(true);

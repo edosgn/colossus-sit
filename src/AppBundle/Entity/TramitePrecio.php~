@@ -29,11 +29,13 @@ class TramitePrecio
     private $valor;
 
     /**
-     * @var string
+     * @var \Date
      *
-     * @ORM\Column(name="anio", type="string", length=255)
+     * @ORM\Column(name="fecha_inicio", type="date")
      */
-    private $anio;
+    private $fechaInicio;
+
+    
     
     /**
      * @var string
@@ -50,6 +52,20 @@ class TramitePrecio
      */
     private $estado;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valorTotal", type="text", nullable=true)
+     */
+    private $valorTotal;
+
 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="vehiculos") */
@@ -62,4 +78,6 @@ class TramitePrecio
     private $modulo;
 
 
+
+    
 }

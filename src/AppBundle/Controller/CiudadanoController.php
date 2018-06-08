@@ -73,6 +73,8 @@ class CiudadanoController extends Controller
                 $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
                 $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
                 $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
+                $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
+                
 
                 $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
                 $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
@@ -81,11 +83,10 @@ class CiudadanoController extends Controller
                 $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
                
                 $usuario = $em->getRepository('UsuarioBundle:Usuario')->findBy(
-                    array('identificacion' => $numeroIdentificacion)
+                    array('identificacion' => $numeroIdentificacion,'tipoIdentificacion'=>$tipoIdentificacionUsuarioId)
                 ); 
  
                 if (!$usuario) {
-                    $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
                     $generoId = (isset($params->generoId)) ? $params->generoId : null;
                     $grupoSanguineoId = (isset($params->grupoSanguineoId)) ? $params->grupoSanguineoId : null;
                     $municipioNacimientoId = (isset($params->municipioNacimientoId)) ? $params->municipioNacimientoId : null;

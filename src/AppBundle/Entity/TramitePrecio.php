@@ -29,11 +29,13 @@ class TramitePrecio
     private $valor;
 
     /**
-     * @var string
+     * @var \Date
      *
-     * @ORM\Column(name="anio", type="string", length=255)
+     * @ORM\Column(name="fecha_inicio", type="date")
      */
-    private $anio;
+    private $fechaInicio;
+
+    
     
     /**
      * @var string
@@ -50,6 +52,20 @@ class TramitePrecio
      */
     private $estado;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valorTotal", type="text", nullable=true)
+     */
+    private $valorTotal;
+
 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="vehiculos") */
@@ -62,6 +78,8 @@ class TramitePrecio
     private $modulo;
 
 
+
+    
 
     /**
      * Get id
@@ -98,27 +116,27 @@ class TramitePrecio
     }
 
     /**
-     * Set anio
+     * Set fechaInicio
      *
-     * @param string $anio
+     * @param \DateTime $fechaInicio
      *
      * @return TramitePrecio
      */
-    public function setAnio($anio)
+    public function setFechaInicio($fechaInicio)
     {
-        $this->anio = $anio;
+        $this->fechaInicio = $fechaInicio;
 
         return $this;
     }
 
     /**
-     * Get anio
+     * Get fechaInicio
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getAnio()
+    public function getFechaInicio()
     {
-        return $this->anio;
+        return $this->fechaInicio->format('Y-m-d');
     }
 
     /**
@@ -167,6 +185,54 @@ class TramitePrecio
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return TramitePrecio
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set valorTotal
+     *
+     * @param string $valorTotal
+     *
+     * @return TramitePrecio
+     */
+    public function setValorTotal($valorTotal)
+    {
+        $this->valorTotal = $valorTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get valorTotal
+     *
+     * @return string
+     */
+    public function getValorTotal()
+    {
+        return $this->valorTotal;
     }
 
     /**
