@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Empresa;
 use AppBundle\Entity\Sucursal;
+use AppBundle\Entity\RepresentanteEmpresa;
 use AppBundle\Entity\TipoSociedad;
 use AppBundle\Entity\TipoIdentificacion;
 use AppBundle\Form\EmpresaType;
@@ -77,6 +78,8 @@ class EmpresaController extends Controller
                         $municipioId = $params->empresa->municipioId;
                         $nroRegistroMercantil = $params->empresa->nroRegistroMercantil;
                         $fechaDeVencimiento = $params->empresa->fechaVencimientoRegistroMercantil;
+                        $fechaInicial = $params->empresa->fechaInicial;
+
                         $direccion = $params->empresa->direccion;
                         $telefono = $params->empresa->telefono;
                         $celular = $params->empresa->celular;
@@ -85,10 +88,11 @@ class EmpresaController extends Controller
                         $ciudadanoId = $params->empresa->ciudadanoId;
 
                         $fechaDeVencimiento=new \DateTime($fechaDeVencimiento);
+                        $fechaInicial=new \DateTime($fechaInicial);
 
                         
-                //    var_dump($ciudadanoId);
-                //             die();
+                    //    var_dump($fechaInicial);
+                    //         die();
                         $em = $this->getDoctrine()->getManager();                                                 
                         $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
                         $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
@@ -128,26 +132,16 @@ class EmpresaController extends Controller
                             $em->persist($empresa);
                             $em->flush();
 
-                            foreach ($params->sucursales as $key => $sucursal) {
+                            $representanteEmpresa = new RepresentanteEmpresa();
 
-                                $sucursalNew = new Sucursal();
+                            $representanteEmpresa->setEmpresa($empresa);
+                            $representanteEmpresa->setCiudadano($ciudadano);
+                            $representanteEmpresa->setFechaInicial($fechaInicial);
+                            
+                            $representanteEmpresa->setEstado(true);
 
-                                $municipioSucursal = $em->getRepository('AppBundle:Municipio')->find($sucursal->municipioId);
-                                $sucursalNew->setNombre($sucursal->nombre);
-                                $sucursalNew->setSigla($sucursal->sigla);
-                                $sucursalNew->setDireccion($sucursal->direccion);
-                                $sucursalNew->setTelefono($sucursal->telefono);
-                                $sucursalNew->setCelular($sucursal->celular);
-                                $sucursalNew->setCorreo($sucursal->correo);
-                                $sucursalNew->setFax($sucursal->fax);
-                                $sucursalNew->setEmpresa($empresa);
-                                $sucursalNew->setEstado(true);
-
-                                $em->persist($sucursalNew);
-                                $em->flush();
-                             
-                               
-                            }
+                            $em->persist($representanteEmpresa);
+                            $em->flush();                     
 
                            
 

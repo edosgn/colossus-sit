@@ -56,20 +56,45 @@ class RepresentanteEmpresaController extends Controller
         ));
     }
 
+   
     /**
-     * Finds and displays a representanteEmpresa entity.
+     * Finds and displays a sucursal entity.
      *
-     * @Route("/{id}", name="representanteempresa_show")
-     * @Method("GET")
+     * @Route("/{empresaId}/show", name="representanteEmpresaDato")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(RepresentanteEmpresa $representanteEmpresa)
+    public function showAction(Request $request,$empresaId)
     {
-        $deleteForm = $this->createDeleteForm($representanteEmpresa);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('representanteempresa/show.html.twig', array(
-            'representanteEmpresa' => $representanteEmpresa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            
+            $em = $this->getDoctrine()->getManager();
+            
+
+            $representantes = $em->getRepository('AppBundle:RepresentanteEmpresa')->findBy(
+                array('empresa'=>$empresaId,'estado'=>0)
+            );
+            $representanteVigente = $em->getRepository('AppBundle:RepresentanteEmpresa')->findOneBy(
+                array('empresa'=>$empresaId,'estado'=>1)
+            );
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'representantes'=> $representantes,
+                    'representanteVigente'=> $representanteVigente,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
