@@ -259,4 +259,21 @@ class TramiteFacturaController extends Controller
        
         return $helpers->json($response);
     }
+
+     /**
+     * datos para factura
+     *
+     * @Route("/{idFactura}/show/factura", name="tramitefactura_whow_factura")
+     * @Method({"GET", "POST"})
+     */
+    public function selectFacturaAction($idFactura)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
+            array('factura' => $idFactura)
+        );
+       
+        return $helpers->json($tramitesFactura);
+    }
 }

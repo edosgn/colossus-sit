@@ -253,9 +253,9 @@ class FacturaController extends Controller
     }
 
     /**
-     * busca vehiculos por numero.
+     * busca vehiculos por id.
      *
-     * @Route("/show/numero", name="factura_numero")
+     * @Route("/show/id", name="factura_id")
      * @Method("POST")
      */
     public function showByNumero(Request $request)
@@ -271,7 +271,7 @@ class FacturaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $factura = $em->getRepository('AppBundle:Factura')->findOneBy(
-                array('numero' => $params->numeroFactura)
+                array('id' => $params->id)
             );
 
             if ($factura!=null) {
@@ -286,6 +286,61 @@ class FacturaController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Factura no encontrada", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca factura por nvehiculoumero.
+     *
+     * @Route("/show/factura/vehiculo", name="factura_vehiculo")
+     * @Method("POST")
+     */
+    public function showByVehiculo(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+
+            $facturas = $em->getRepository('AppBundle:Factura')->findBy(
+                array('vehiculo' => $params->vehiculo)
+            );
+
+            foreach ($facturas as $key => $factura) {
+                $selectFactura[$key] = array(
+                    'value' => $factura->getId(),
+                    'label' => $factura->getNumero(),
+                );
+              }
+
+            if ($factura!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Factura", 
+                    'data'=> $selectFactura,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "no hay facturas para el vehiculo", 
                 );
             }
         }else{
