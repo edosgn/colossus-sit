@@ -90,6 +90,13 @@ class Factura
     protected $sedeOperativa;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
+     **/
+    protected $vehiculo;
+
+  
+
+    /**
      * Get id
      *
      * @return integer
@@ -337,5 +344,29 @@ class Factura
     public function getSedeOperativa()
     {
         return $this->sedeOperativa;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \AppBundle\Entity\vehiculo $vehiculo
+     *
+     * @return Factura
+     */
+    public function setVehiculo(\AppBundle\Entity\vehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \AppBundle\Entity\vehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }
