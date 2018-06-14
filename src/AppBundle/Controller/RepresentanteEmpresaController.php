@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\RepresentanteEmpresa;
+use AppBundle\Entity\Ciudadano;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Representanteempresa controller.
@@ -38,22 +40,66 @@ class RepresentanteEmpresaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $representanteEmpresa = new Representanteempresa();
-        $form = $this->createForm('AppBundle\Form\RepresentanteEmpresaType', $representanteEmpresa);
-        $form->handleRequest($request);
+       
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            // if (count($params)==0) {
+            //     $response = array(
+            //         'status' => 'error',
+            //         'code' => 400,
+            //         'msj' => "Los campos no pueden estar vacios", 
+            //     );
+            // }else{
+                $empresaId = $params->empresa->id;
+                $ciudadanoId = $params->ciudadanoId;
+                $fechaFinal = $params->fechaFinal;
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($representanteEmpresa);
-            $em->flush();
+                $fechaFinal=new \DateTime($fechaFinal);
 
-            return $this->redirectToRoute('representanteempresa_show', array('id' => $representanteEmpresa->getId()));
-        }
+                
+                $em = $this->getDoctrine()->getManager();
 
-        return $this->render('representanteempresa/new.html.twig', array(
-            'representanteEmpresa' => $representanteEmpresa,
-            'form' => $form->createView(),
-        ));
+                $empresa = $em->getRepository('AppBundle:Empresa')->find($empresaId);
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+
+
+                $representanteVigente = $em->getRepository('AppBundle:RepresentanteEmpresa')->findOneBy(
+                    array('empresa'=>$empresaId,'estado'=>1)
+                );
+            
+                $representanteVigente->setEstado(0);    
+                $representanteVigente->setfechaFinal($fechaFinal);    
+                $em->persist($representanteVigente);
+                $em->flush();
+
+                $representanteEmpresa = new RepresentanteEmpresa();
+                $representanteEmpresa->setCiudadano($ciudadano);
+                $representanteEmpresa->setEmpresa($empresa);
+                $representanteEmpresa->setFechaInicial($fechaFinal);
+                $representanteEmpresa->setEstado(true);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($representanteEmpresa);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito", 
+                );
+            // }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
     }
 
    

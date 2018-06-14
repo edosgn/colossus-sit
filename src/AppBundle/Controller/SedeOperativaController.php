@@ -61,7 +61,7 @@ class SedeOperativaController extends Controller
 
                 $sedeOperativa = new Sedeoperativa();
 
-                $sedeOperativa->setNombre($numeroPatio);
+                $sedeOperativa->setNombre($ciudadanoSelected);
                 $sedeOperativa->setCodigoDivipo($codigoDivipo);
                 $sedeOperativa->setEstado(true);
 
