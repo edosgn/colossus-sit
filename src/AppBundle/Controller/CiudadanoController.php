@@ -186,7 +186,6 @@ class CiudadanoController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "ciudadano con nombre"." ".$ciudadano->getNombres(), 
                     'data'=> $ciudadano,
             );
         }else{
