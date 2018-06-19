@@ -68,8 +68,8 @@ class TramitePrecio
 
 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="vehiculos") */
-    private $tramite;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramitePrecio", inversedBy="vehiculos") */
+    private $tramitePrecio;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
@@ -79,5 +79,5 @@ class TramitePrecio
 
 
 
-    
+  
 }

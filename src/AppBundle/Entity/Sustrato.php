@@ -36,6 +36,20 @@ class Sustrato
     private $consecutivo;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="impresion", type="boolean", nullable=true)
+     */
+    private $impresion;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="entregado", type="boolean", nullable=true)
+     */
+    private $entregado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sustratos")
      **/
     protected $sedeOperativa;
@@ -50,11 +64,17 @@ class Sustrato
      **/
     protected $clase;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sustratos")
+     **/
+    protected $ciudadano;
+
+
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -107,6 +127,54 @@ class Sustrato
     public function getConsecutivo()
     {
         return $this->consecutivo;
+    }
+
+    /**
+     * Set impresion
+     *
+     * @param boolean $impresion
+     *
+     * @return Sustrato
+     */
+    public function setImpresion($impresion)
+    {
+        $this->impresion = $impresion;
+
+        return $this;
+    }
+
+    /**
+     * Get impresion
+     *
+     * @return boolean
+     */
+    public function getImpresion()
+    {
+        return $this->impresion;
+    }
+
+    /**
+     * Set entregado
+     *
+     * @param boolean $entregado
+     *
+     * @return Sustrato
+     */
+    public function setEntregado($entregado)
+    {
+        $this->entregado = $entregado;
+
+        return $this;
+    }
+
+    /**
+     * Get entregado
+     *
+     * @return boolean
+     */
+    public function getEntregado()
+    {
+        return $this->entregado;
     }
 
     /**
@@ -179,5 +247,29 @@ class Sustrato
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     *
+     * @return Sustrato
+     */
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
     }
 }

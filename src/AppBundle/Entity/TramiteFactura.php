@@ -43,15 +43,17 @@ class TramiteFactura
     private $cantidad;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="tramitesFacturas")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramitePrecio", inversedBy="tramitesFacturas")
      **/
-    protected $tramite;
+    protected $tramitePrecio;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="tramitesFacturas")
      **/
     protected $factura;
 
+
+   
 
     /**
      * Get id
@@ -136,27 +138,27 @@ class TramiteFactura
     }
 
     /**
-     * Set tramite
+     * Set tramitePrecio
      *
-     * @param \AppBundle\Entity\Tramite $tramite
+     * @param \AppBundle\Entity\TramitePrecio $tramitePrecio
      *
      * @return TramiteFactura
      */
-    public function setTramite(\AppBundle\Entity\Tramite $tramite = null)
+    public function setTramitePrecio(\AppBundle\Entity\TramitePrecio $tramitePrecio = null)
     {
-        $this->tramite = $tramite;
+        $this->tramitePrecio = $tramitePrecio;
 
         return $this;
     }
 
     /**
-     * Get tramite
+     * Get tramitePrecio
      *
-     * @return \AppBundle\Entity\Tramite
+     * @return \AppBundle\Entity\TramitePrecio
      */
-    public function getTramite()
+    public function getTramitePrecio()
     {
-        return $this->tramite;
+        return $this->tramitePrecio;
     }
 
     /**
