@@ -56,6 +56,7 @@ class ConceptoParametroController extends Controller
 
             $nombre = $params->nombre;
             $valor = $params->valor;
+            $cuenta = $params->cuenta;
 
             // $conceptoParametros = $em->getRepository('AppBundle:ConceptoParametro')->findBy(
             //     array('estado' => 1,'nombre'=> $nombre)
@@ -76,6 +77,7 @@ class ConceptoParametroController extends Controller
             $conceptoParametro = new Conceptoparametro();
 
             $conceptoParametro->setNombre($nombre);
+            $conceptoParametro->setCuenta($cuenta);
             $conceptoParametro->setValor($valor);
             $conceptoParametro->setEstado(true);
 
@@ -184,11 +186,13 @@ class ConceptoParametroController extends Controller
 
             $nombre = $params->nombre;
             $valor = $params->valor;
+            $cuenta = $params->cuenta;
             $em = $this->getDoctrine()->getManager();
             $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($params->id);
             if ($conceptoParametro!=null) {
 
                 $conceptoParametro->setNombre($nombre);
+                $conceptoParametro->setCuenta($cuenta);
                 $conceptoParametro->setValor($valor);
                 $conceptoParametro->setEstado(true);
                

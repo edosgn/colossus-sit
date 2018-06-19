@@ -36,6 +36,13 @@ class ConceptoParametro
     private $valor;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cuenta", type="string", length=255)
+     */
+    private $cuenta;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
@@ -43,4 +50,86 @@ class ConceptoParametro
     private $estado;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     *
+     * @return ConceptoParametro
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param integer $valor
+     *
+     * @return ConceptoParametro
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return integer
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return ConceptoParametro
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
 }

@@ -55,6 +55,10 @@ class CiudadanoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+            
+            
+            
+            
 
             /*if (count($params)==0) {
                 $response = array(
@@ -64,6 +68,7 @@ class CiudadanoController extends Controller
                 );
             }else{*/
                 $numeroIdentificacion = $params->numeroIdentificacionUsuario;
+                $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
                 $primerNombre = $params->primerNombreUsuario;
                 $segundoNombre = $params->segundoNombreUsuario;
                 $primerApellido = $params->primerApellidoUsuario;
@@ -73,7 +78,6 @@ class CiudadanoController extends Controller
                 $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
                 $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
                 $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
-                $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
                 
 
                 $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
@@ -95,6 +99,7 @@ class CiudadanoController extends Controller
                     $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
                         $tipoIdentificacionUsuarioId
                     );
+                    
                     $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
                     $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
                     $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
@@ -423,6 +428,52 @@ class CiudadanoController extends Controller
             );
       }
        return $helpers->json($response);
+    }
+
+
+    /**
+     * Deletes a Ciudadano entity.
+     *
+     * @Route("/isCiudadano/tipoIde/Ide", name="ciudadano_tipo_ide")
+     * @Method("POST")
+     */
+    public function isCiudadanoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $numeroIdentificacion = $params->identificacion;
+            $tipoIdentificacionUsuarioId = $params->tipoIdentificacion;
+            $em = $this->getDoctrine()->getManager();
+            // var_dump($numeroIdentificacion);
+            // die();
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findBy(
+                array('identificacion' => $numeroIdentificacion,'tipoIdentificacion'=>$tipoIdentificacionUsuarioId)
+            ); 
+            if ($usuario) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Identificacion ya esta registrada en la base de datos", 
+                );
+                return $helpers->json($response);
+            }else{
+
+                $response = array(
+                        'status' => 'success',
+                    );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
 }

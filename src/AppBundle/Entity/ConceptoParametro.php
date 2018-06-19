@@ -36,6 +36,13 @@ class ConceptoParametro
     private $valor;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="cuenta", type="string", length=255)
+     */
+    private $cuenta;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
@@ -124,5 +131,29 @@ class ConceptoParametro
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set cuenta
+     *
+     * @param string $cuenta
+     *
+     * @return ConceptoParametro
+     */
+    public function setCuenta($cuenta)
+    {
+        $this->cuenta = $cuenta;
+
+        return $this;
+    }
+
+    /**
+     * Get cuenta
+     *
+     * @return string
+     */
+    public function getCuenta()
+    {
+        return $this->cuenta;
     }
 }
