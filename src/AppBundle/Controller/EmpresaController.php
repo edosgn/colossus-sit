@@ -209,7 +209,6 @@ class EmpresaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            
             $nombre = $params->nombre;
 
             $em = $this->getDoctrine()->getManager();
@@ -226,7 +225,7 @@ class EmpresaController extends Controller
                 $empresaPrestadora = $params->empresaPrestadora;
                 $certificadoExistencial = $params->certificadoExistencial;
                 $tipoSociedadId = $params->tipoSociedadId;
-                $tipoIdentificacionId = $params->tipoIdentificacionId;
+                // $tipoIdentificacionId = $params->tipoIdentificacionId;
                 $tipoEntidad = $params->tipoEntidad;
                 $municipioId = $params->municipioId;
                 $nroRegistroMercantil = $params->nroRegistroMercantil;
@@ -244,7 +243,7 @@ class EmpresaController extends Controller
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                 $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
+                // $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
 
                 $empresa->setNombre($nombre);
                 $empresa->setSigla($sigla);
@@ -255,7 +254,7 @@ class EmpresaController extends Controller
                 $empresa->setEmpresaPrestadora($empresaPrestadora);
                 $empresa->setCertificadoExistencial($certificadoExistencial);
                 $empresa->setTipoSociedad($tipoSociedad);
-                $empresa->setTipoIdentificacion($tipoIdentificacion);
+                // $empresa->setTipoIdentificacion($tipoIdentificacion);
                 $empresa->setTipoEntidad($tipoEntidad);
                 $empresa->setMunicipio($municipio);
                 $empresa->setNroRegistroMercantil($nroRegistroMercantil);
@@ -309,10 +308,10 @@ class EmpresaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
             $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
-
             $empresa->setEstado(0);
             $em = $this->getDoctrine()->getManager();
                 $em->persist($empresa);
@@ -369,6 +368,7 @@ class EmpresaController extends Controller
             array('nit' => $nit,
             'estado' => 1)
             );
+
             if ($empresa!=null) {
                $response = array(
                     'status' => 'success',

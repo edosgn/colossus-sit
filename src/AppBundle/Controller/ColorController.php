@@ -62,20 +62,31 @@ class ColorController extends Controller
                 );
             }else{*/
                 $nombre = $params->nombre;
-                $color = new Color();
-
-                $color->setNombre($nombre);
-                $color->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($color);
-                $em->flush();
+                $color = $em->getRepository('AppBundle:Color')->findOneByNombre($params->nombre);
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Color creado con exito", 
-                );
+                if ($color==null) {
+                    $color = new Color();
+    
+                    $color->setNombre($nombre);
+                    $color->setEstado(true);
+    
+                    $em->persist($color);
+                    $em->flush();
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Color creado con exito", 
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "El nombre del color ya se encuentra registrado", 
+                    );
+                }
+
             //}
         }else{
             $response = array(

@@ -1,0 +1,73 @@
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Sustrato
+ *
+ * @ORM\Table(name="sustrato")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\SustratoRepository")
+ */
+class Sustrato
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=100)
+     */
+    private $estado;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="bigint")
+     */
+    private $consecutivo;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="impresion", type="boolean", nullable=true)
+     */
+    private $impresion;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="entregado", type="boolean", nullable=true)
+     */
+    private $entregado;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sustratos")
+     **/
+    protected $sedeOperativa;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="sustratos")
+     **/
+    protected $modulo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="sustratos")
+     **/
+    protected $clase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sustratos")
+     **/
+    protected $ciudadano;
+
+
+}

@@ -6,7 +6,8 @@ use AppBundle\Entity\TramitePrecio;
 use AppBundle\Entity\Modulo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Tramiteprecio controller.
@@ -24,15 +25,12 @@ class TramitePrecioController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
         $tramitePreciosTotal = $em->getRepository('AppBundle:TramitePrecio')->findBy(
             array('estado' => 1)
         );
-
-        
         
         $fechaActual = new \DateTime("now");
         $fechaActualCompare = $fechaActual->format("Y-m-d");
@@ -46,6 +44,23 @@ class TramitePrecioController extends Controller
             }
         }
         
+        
+
+        // lista de trmaites proximos
+        // $tramiteProximos = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+        //     array('estado' => 0, 'activo'=>0)
+        // );
+        
+        // $responsex = array(
+        //     'status' => 'success',
+        //             'code' => 200,
+        //             'msj' => "listado tramitePrecios", 
+        //             'data'=> $tramiteProximos,
+        //     );
+        // return $helpers->json($responsex);
+        // // fin de tramires proximos       
+        
+        // lsita de tramites activos
         $tramitePreciosActivos = $em->getRepository('AppBundle:TramitePrecio')->findBy(
             array('estado' => 1,'activo'=>1)
         );
