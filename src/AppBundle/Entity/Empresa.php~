@@ -45,21 +45,21 @@ class Empresa
     /**
      * @var int
      *
-     * @ORM\Column(name="telefono", type="integer")
+     * @ORM\Column(name="telefono", type="bigint", length=20)
      */
     private $telefono;
 
      /**
      * @var int
      *
-     * @ORM\Column(name="celular", type="integer")
+     * @ORM\Column(name="celular", type="bigint", length=20)
      */
     private $celular;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="fax", type="integer")
+     * @ORM\Column(name="fax", type="bigint", length=20)
      */
     private $fax;
 

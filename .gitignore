@@ -29,3 +29,5 @@ composer.lock
 src/AppBundle/Entity/AgenteTransito.php~
 composer.lock
 bin/symfony_requirements
+src/AppBundle/Entity/Empresa.php~
+npm-debug.log
