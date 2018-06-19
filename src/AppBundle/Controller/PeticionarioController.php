@@ -27,7 +27,7 @@ class PeticionarioController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
-            array('estado' => 1)
+            array('estado' => true)
         );
 
         $response = array(
@@ -53,46 +53,34 @@ class PeticionarioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-           
-                $primerNombrePeticionario = $params->primerNombrePeticionario;
-                $segundoNombrePeticionario = $params->segundoNombrePeticionario;
-                $primerApellidoPeticionario = $params->primerApellidoPeticionario;
-                $segundoApellidoPeticionario = $params->segundoApellidoPeticionario;
-                $identificacionPericionario = $params->identificacionPericionario;
-                $direccionPeticionario = $params->direccionPeticionario;
-                $telefonoPeticionario = $params->telefonoPeticionario;
-                $correoElectronico = $params->correoElectronico;
-                $numeroOficio = $params->numeroOficio;
-                $tipoPeticionario = $params->tipoPeticionario;
-                $estado = true;
-                $registroDocumentoId = $params->registroDocumentoId;
-                $registroDocumento = $em->getRepository('AppBundle:RegistroDocumento')->find($registroDocumentoId);
 
-                $peticionario = new Peticionario();
+            $registroDocumentoId = $params->registroDocumentoId;
+            $registroDocumento = $em->getRepository('AppBundle:RegistroDocumento')->find($registroDocumentoId);
 
+            $peticionario = new Peticionario();
 
-                $peticionario->setPrimerNombrePeticionario($primerNombrePeticionario);
-                $peticionario->setSegundoNombrePeticionario($segundoNombrePeticionario);
-                $peticionario->setPrimerApellidoPeticionario($primerApellidoPeticionario);
-                $peticionario->setSegundoApellidoPeticionario($segundoApellidoPeticionario);
-                $peticionario->setIdentificacionPeticionario($identificacionPericionario);
-                $peticionario->setDireccionPeticionario($direccionPeticionario);
-                $peticionario->setTelefonoPeticionario($telefonoPeticionario);
-                $peticionario->setCorreoElectronico($correoElectronico);
-                $peticionario->setNumeroOficio($numeroOficio);
-                $peticionario->setTipoPeticionario($tipoPeticionario);
-                $peticionario->setEstado($estado);
-                $peticionario->setRegistroDocumento($registroDocumento);
+            $peticionario->setPrimerNombrePeticionario($params->primerNombre);
+            $peticionario->setSegundoNombrePeticionario($params->segundoNombre);
+            $peticionario->setPrimerApellidoPeticionario($params->primerApellido);
+            $peticionario->setSegundoApellidoPeticionario($params->segundoApellido);
+            $peticionario->setIdentificacionPeticionario($params->identificacion);
+            $peticionario->setDireccionPeticionario($params->direccion);
+            $peticionario->setTelefonoPeticionario($params->telefono);
+            $peticionario->setCorreoElectronico($params->correoElectronico);
+            $peticionario->setNumeroOficio($params->numeroOficio);
+            $peticionario->setTipoPeticionario($params->tipo);
+            $peticionario->setEstado(true);
+            $peticionario->setRegistroDocumento($registroDocumento);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($peticionario);
-                $em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($peticionario);
+            $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito", 
+            );
         }else{
             $response = array(
                 'status' => 'error',
@@ -283,12 +271,11 @@ class PeticionarioController extends Controller
     /**
      * Busca peticionario por cedula o por nombre entidad y numero de oficio.
      *
-     * @Route("/buscar/peticionario/", name="buscar_peticionario")
+     * @Route("/buscar/peticionario", name="buscar_peticionario")
      * @Method({"GET", "POST"})
      */
     public function buscarPeticionarioAction(Request $request)
     {
-      
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -296,24 +283,23 @@ class PeticionarioController extends Controller
         $peticionarios = null;
 
         if ($authCheck == true) {
-
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $tipoPeticionario = $params->tipoPeticionario;
+            $tipoPeticionario = $params->tipo;
 
             if ($tipoPeticionario == "Persona") {
                 $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
                     array(
-                        'estado' => 1,
-                        'identificacionPeticionario' => $params->identificacionPeticionario
+                        'estado' => true,
+                        'identificacion' => $params->identificacion
                     )
                 );
             }else{
                 $peticionarios = $em->getRepository('AppBundle:Peticionario')->findBy(
                     array(
-                        'estado' => 1,
-                        'nombrePeticionario' => $params->nombrePeticionario,
+                        'estado' => true,
+                        'nombre' => $params->nombre,
                         'numeroOficio' => $params->numeroOficio
                     )
                 );

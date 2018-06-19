@@ -112,7 +112,7 @@ class Usuario
      */
     private $ciudadano;
 
-     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="usuarios") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="usuarios") */
     private $tipoIdentificacion;
 
     /**

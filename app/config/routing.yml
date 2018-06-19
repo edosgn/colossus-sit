@@ -1,3 +1,11 @@
+app_festivo:
+    resource: "@AppBundle/Controller/FestivoController.php"
+    type:     annotation
+
+app_tipo_correspondencia:
+    resource: "@AppBundle/Controller/TipoCorrespondenciaController.php"
+    type:     annotation
+
 app_representante_empresa:
     resource: "@AppBundle/Controller/RepresentanteEmpresaController.php"
     type:     annotation

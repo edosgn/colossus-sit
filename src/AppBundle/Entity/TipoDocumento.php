@@ -24,23 +24,23 @@ class TipoDocumento
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreTipo", type="string", length=45)
+     * @ORM\Column(name="nombre", type="string", length=45)
      */
-    private $nombreTipo;
+    private $nombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="diasDuracionTramite", type="integer")
+     * @ORM\Column(name="diasVigencia", type="integer")
      */
-    private $diasDuracionTramite;
+    private $diasVigencia;
 
     /**
      * @var string
      *
      * @ORM\Column(name="codigoDocumento", type="string", length=45)
      */
-    private $codigoDocumento;
+    private $codigo;
 
     /**
      * @var boolean
@@ -48,6 +48,13 @@ class TipoDocumento
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="editable", type="boolean")
+     */
+    private $editable = false;
 
 
     /**
@@ -61,75 +68,75 @@ class TipoDocumento
     }
 
     /**
-     * Set nombreTipo
+     * Set nombre
      *
-     * @param string $nombreTipo
+     * @param string $nombre
      *
      * @return TipoDocumento
      */
-    public function setNombreTipo($nombreTipo)
+    public function setNombre($nombre)
     {
-        $this->nombreTipo = $nombreTipo;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get nombreTipo
+     * Get nombre
      *
      * @return string
      */
-    public function getNombreTipo()
+    public function getNombre()
     {
-        return $this->nombreTipo;
+        return $this->nombre;
     }
 
     /**
-     * Set diasDuracionTramite
+     * Set diasVigencia
      *
-     * @param integer $diasDuracionTramite
+     * @param integer $diasVigencia
      *
      * @return TipoDocumento
      */
-    public function setDiasDuracionTramite($diasDuracionTramite)
+    public function setDiasVigencia($diasVigencia)
     {
-        $this->diasDuracionTramite = $diasDuracionTramite;
+        $this->diasVigencia = $diasVigencia;
 
         return $this;
     }
 
     /**
-     * Get diasDuracionTramite
+     * Get diasVigencia
      *
-     * @return int
+     * @return integer
      */
-    public function getDiasDuracionTramite()
+    public function getDiasVigencia()
     {
-        return $this->diasDuracionTramite;
+        return $this->diasVigencia;
     }
 
     /**
-     * Set codigoDocumento
+     * Set codigo
      *
-     * @param string $codigoDocumento
+     * @param string $codigo
      *
      * @return TipoDocumento
      */
-    public function setCodigoDocumento($codigoDocumento)
+    public function setCodigo($codigo)
     {
-        $this->codigoDocumento = $codigoDocumento;
+        $this->codigo = $codigo;
 
         return $this;
     }
 
     /**
-     * Get codigoDocumento
+     * Get codigo
      *
      * @return string
      */
-    public function getCodigoDocumento()
+    public function getCodigo()
     {
-        return $this->codigoDocumento;
+        return $this->codigo;
     }
 
     /**
@@ -154,5 +161,29 @@ class TipoDocumento
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set editable
+     *
+     * @param boolean $editable
+     *
+     * @return TipoDocumento
+     */
+    public function setEditable($editable)
+    {
+        $this->editable = $editable;
+
+        return $this;
+    }
+
+    /**
+     * Get editable
+     *
+     * @return boolean
+     */
+    public function getEditable()
+    {
+        return $this->editable;
     }
 }

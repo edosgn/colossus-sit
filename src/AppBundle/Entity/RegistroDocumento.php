@@ -83,8 +83,6 @@ class RegistroDocumento
     protected $tipoDocumento;
 
 
-
-
     /**
      * Get id
      *

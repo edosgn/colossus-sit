@@ -55,34 +55,31 @@ class TipoDocumentoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-           
-                $nombreTipo = $params->nombreTipo;
 
-                $diasDuracionTramite = $params->diasDuracionTramite;
-                $codigoDocumento = $params->codigoDocumento;
-                $estado = true;
+            $tipoDocumento = new TipoDocumento();
+            $tipoDocumento->setNombre($params->nombre);
+            $tipoDocumento->setDiasVigencia($params->diasVigencia);
+            $tipoDocumento->setCodigo($params->codigo);
+            if ($params->editable) {
+                $tipoDocumento->setEditable($params->editable);
+            }
+            $tipoDocumento->setEstado(true);
+            
+            $em->persist($tipoDocumento);
+            $em->flush();
 
-                $tipoDocumento = new TipoDocumento();
-                $tipoDocumento->setNombreTipo($nombreTipo);
-                $tipoDocumento->setDiasDuracionTramite($diasDuracionTramite);
-                $tipoDocumento->setCodigoDocumento($codigoDocumento);
-                $tipoDocumento->setEstado($estado);
-                
-                $em->persist($tipoDocumento);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito"
+            );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida"
             );
-            } 
+        } 
         return $helpers->json($response);
     }
 
@@ -133,25 +130,20 @@ class TipoDocumentoController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-                $nombreTipo = $params->nombreTipo;
-                $diasDuracionTramite = $params->diasDuracionTramite;
-                $codigoDocumento = $params->codigoDocumento;
-                $tipoDocumentoId = $params->id;
-                $estado = true;
-                $tipoDocumento = $em->getRepository('AppBundle:TipoDocumento')->findOneBy(
-                    array(
-                        'estado' => 1,
-                        'id' => $tipoDocumentoId
-                    )
-                );
+            $tipoDocumento = $em->getRepository('AppBundle:TipoDocumento')->findOneBy(
+                array(
+                    'estado' => true,
+                    'id' => $params->id
+                )
+            );
 
             if ($tipoDocumento!=null) {
-
-                $tipoDocumento->setNombreTipo($nombreTipo);
-                $tipoDocumento->setDiasDuracionTramite($diasDuracionTramite);
-                $tipoDocumento->setCodigoDocumento($codigoDocumento);
-                $tipoDocumento->setEstado($estado);
+                $tipoDocumento->setCodigo($params->codigo);
+                $tipoDocumento->setNombre($params->nombre);
+                $tipoDocumento->setDiasVigencia($params->diasVigencia);
+                if ($params->editable) {
+                    $tipoDocumento->setEditable($params->editable);
+                }
                 
                 $em->persist($tipoDocumento);
                 $em->flush();
@@ -262,7 +254,7 @@ class TipoDocumentoController extends Controller
       foreach ($tiposDocumento as $key => $tipoDocumento) {
         $response[$key] = array(
             'value' => $tipoDocumento->getId(),
-            'label' => $tipoDocumento->getCodigoDocumento()."_".$tipoDocumento->getNombreTipo(),
+            'label' => $tipoDocumento->getCodigo()."_".$tipoDocumento->getNombre(),
             );
       }
        return $helpers->json($response);

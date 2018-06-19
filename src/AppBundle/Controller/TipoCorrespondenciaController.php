@@ -2,52 +2,51 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Entity\TipoCorrespondencia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\TipoIdentificacion;
-use AppBundle\Form\TipoIdentificacionType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * TipoIdentificacion controller.
+ * Tipocorrespondencium controller.
  *
- * @Route("/tipoidentificacion")
+ * @Route("tipocorrespondencia")
  */
-class TipoIdentificacionController extends Controller
+class TipoCorrespondenciaController extends Controller
 {
     /**
-     * Lists all TipoIdentificacion entities.
+     * Lists all tipoCorrespondencia entities.
      *
-     * @Route("/", name="tipoidentificacion_index")
+     * @Route("/", name="tipocorrespondencia_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $tipoIdentificaiones = $em->getRepository('AppBundle:TipoIdentificacion')->findBy(
+        $tipoCorrespondencias = $em->getRepository('AppBundle:TipoCorrespondencia')->findBy(
             array('estado' => true)
         );
 
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Lista de tipos de identificaion", 
-                    'data'=> $tipoIdentificaiones,
-            );
-         
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tipos de correspondencia", 
+            'data'=> $tipoCorrespondencias,
+        );
+     
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new TipoIdentificacion entity.
+     * Creates a new tipoCorrespondencia entity.
      *
-     * @Route("/new", name="tipoidentificacion_new")
+     * @Route("/new", name="tipocorrespondencia_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
-    { 
+    {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -62,14 +61,13 @@ class TipoIdentificacionController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $tipoIdentificacion = new TipoIdentificacion();
+                $tipoCorrespondencia = new TipoCorrespondencia();
 
-                $tipoIdentificacion->setNombre($params->nombre);
-                $tipoIdentificacion->setSigla($params->sigla);
-                $tipoIdentificacion->setEstado(true);
+                $tipoCorrespondencia->setNombre($params->nombre);
+                $tipoCorrespondencia->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($tipoIdentificacion);
+                $em->persist($tipoCorrespondencia);
                 $em->flush();
 
                 $response = array(
@@ -89,9 +87,9 @@ class TipoIdentificacionController extends Controller
     }
 
     /**
-     * Finds and displays a TipoIdentificacion entity.
+     * Finds and displays a tipoCorrespondencia entity.
      *
-     * @Route("/show/{id}", name="tipoidentificacion_show")
+     * @Route("/show/{id}", name="tipocorrespondencia_show")
      * @Method("POST")
      */
     public function showAction(Request $request, $id)
@@ -102,12 +100,12 @@ class TipoIdentificacionController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($id);
+            $tipoCorrespondencia = $em->getRepository('AppBundle:TipoCorrespondencia')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "tipoIdentificacion con nombre"." ".$tipoIdentificacion->getNombre(), 
-                    'data'=> $tipoIdentificacion,
+                    'msj' => "tipoCorrespondencia con nombre"." ".$tipoCorrespondencia->getNombre(), 
+                    'data'=> $tipoCorrespondencia,
             );
         }else{
             $response = array(
@@ -120,9 +118,9 @@ class TipoIdentificacionController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing TipoIdentificacion entity.
+     * Displays a form to edit an existing tipoCorrespondencia entity.
      *
-     * @Route("/edit", name="tipoidentificacion_edit")
+     * @Route("/edit", name="tipocorrespondencia_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -135,26 +133,21 @@ class TipoIdentificacionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            
-            $nombre = $params->nombre;
-            $sigla = $params->sigla;
-
             $em = $this->getDoctrine()->getManager();
-            $tipoIdentificacion = $em->getRepository("AppBundle:TipoIdentificacion")->find($params->id);
+            $tipoCorrespondencia = $em->getRepository("AppBundle:TipoCorrespondencia")->find($params->id);
 
-            if ($tipoIdentificacion!=null) {
-                $tipoIdentificacion->setNombre($nombre);
-                $tipoIdentificacion->setSigla($sigla);
+            if ($tipoCorrespondencia!=null) {
+                $tipoCorrespondencia->setNombre($params->nombre);
                 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($tipoIdentificacion);
+                $em->persist($tipoCorrespondencia);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $tipoIdentificacion,
+                        'data'=> $tipoCorrespondencia,
                 );
             }else{
                 $response = array(
@@ -175,9 +168,9 @@ class TipoIdentificacionController extends Controller
     }
 
     /**
-     * Deletes a TipoIdentificacion entity.
+     * Deletes a tipoCorrespondencia entity.
      *
-     * @Route("/{id}/delete", name="tipoidentificacion_delete")
+     * @Route("/{id}/delete", name="tipocorrespondencia_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, $id)
@@ -187,11 +180,11 @@ class TipoIdentificacionController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($id);
+            $tipoCorrespondencia = $em->getRepository('AppBundle:TipoCorrespondencia')->find($id);
 
-            $tipoIdentificacion->setEstado(0);
+            $tipoCorrespondencia->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($tipoIdentificacion);
+                $em->persist($tipoCorrespondencia);
                 $em->flush();
             $response = array(
                     'status' => 'success',
@@ -209,16 +202,16 @@ class TipoIdentificacionController extends Controller
     }
 
     /**
-     * Creates a form to delete a TipoIdentificacion entity.
+     * Creates a form to delete a tipoCorrespondencia entity.
      *
-     * @param TipoIdentificacion $tipoIdentificacion The TipoIdentificacion entity
+     * @param TipoCorrespondencia $tipoCorrespondencia The tipoCorrespondencia entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(TipoIdentificacion $tipoIdentificacion)
+    private function createDeleteForm(TipoCorrespondencia $tipoCorrespondencia)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('tipoidentificacion_delete', array('id' => $tipoIdentificacion->getId())))
+            ->setAction($this->generateUrl('tipocorrespondencia_delete', array('id' => $tipoCorrespondencia->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -227,20 +220,20 @@ class TipoIdentificacionController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="tipoIdentificacion_select")
+     * @Route("/select", name="tipocorrespondencia_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
-    $tipoIdentificacions = $em->getRepository('AppBundle:TipoIdentificacion')->findBy(
-        array('estado' => 1)
+    $tipoCorrespondencias = $em->getRepository('AppBundle:TipoCorrespondencia')->findBy(
+        array('estado' => true)
     );
-      foreach ($tipoIdentificacions as $key => $tipoIdentificacion) {
+      foreach ($tipoCorrespondencias as $key => $tipoCorrespondencia) {
         $response[$key] = array(
-            'value' => $tipoIdentificacion->getId(),
-            'label' => $tipoIdentificacion->getSigla()."_".$tipoIdentificacion->getNombre(),
+            'value' => $tipoCorrespondencia->getId(),
+            'label' => $tipoCorrespondencia->getNombre(),
             );
       }
        return $helpers->json($response);

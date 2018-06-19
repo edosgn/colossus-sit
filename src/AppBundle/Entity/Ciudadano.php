@@ -56,9 +56,6 @@ class Ciudadano
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
-    
-
-   
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
     private $municipioNacimiento;

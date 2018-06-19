@@ -22,39 +22,25 @@ class Peticionario
     private $id;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="nombrePeticionario", type="string", length=80)
+     * @ORM\Column(name="fechaRegistro", type="datetime")
      */
-    private $nombrePeticionario;
+    private $fechaRegistro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="identificacionPeticionario", type="string", length=15)
+     * @ORM\Column(name="numeroRadicado", type="string", length=10)
      */
-    private $identificacionPeticionario;
+    private $numeroRadicado;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="direccionPeticionario", type="string", length=45)
+     * @ORM\Column(name="folios", type="integer")
      */
-    private $direccionPeticionario;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="telefonoPeticionario", type="string", length=15)
-     */
-    private $telefonoPeticionario;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="correoElectronico", type="string", length=45)
-     */
-    private $correoElectronico;
+    private $folios;
 
     /**
      * @var string
@@ -66,9 +52,121 @@ class Peticionario
     /**
      * @var string
      *
-     * @ORM\Column(name="tipoPeticionario", type="string", length=45)
+     * @ORM\Column(name="primerNombre", type="string", length=100)
      */
-    private $tipoPeticionario;
+    private $primerNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="segundoNombre", type="string", length=100)
+     */
+    private $segundoNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="primerApellido", type="string", length=100)
+     */
+    private $primerApellido;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="segundoApellido", type="string", length=100)
+     */
+    private $segundoApellido;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identificacion", type="string", length=20)
+     */
+    private $identificacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombreEntidad", type="string", length=255)
+     */
+    private $nombreEntidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="direccion", type="string", length=100)
+     */
+    private $direccion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono", type="string", length=20)
+     */
+    private $telefono;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correoElectronico", type="string", length=100)
+     */
+    private $correoElectronico;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaVencimiento", type="date")
+     */
+    private $fechaVencimiento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="text")
+     */
+    private $descripcion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="urlDocumento", type="string", length=255, nullable=true)
+     */
+    private $urlDocumento;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="correCertificado", type="boolean")
+     */
+    private $correCertificado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombreTransportadora", type="string", length=255, nullable=true)
+     */
+    private $nombreTransportadora;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaEnvio", type="date", nullable=true)
+     */
+    private $fechaEnvio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroGuia", type="string", length=20, nullable=true)
+     */
+    private $numeroGuia;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaSalida", type="datetime")
+     */
+    private $fechaSalida;
 
     /**
      * @var boolean
@@ -77,13 +175,14 @@ class Peticionario
      */
     private $estado;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\RegistroDocumento", inversedBy="peticionarios")
-     **/
-    protected $registroDocumento;
+    /** @ORM\ManyToOne(targetEntity="Repository\UsuarioBundle\Entity\Usuario") */
+    private $usuario;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="peticionarios") */
+    private $tipoIdentificacion;
 
-
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoDocumento", inversedBy="peticionarios") */
+    protected $tipoDocumento;
 
     /**
      * Get id
@@ -96,123 +195,75 @@ class Peticionario
     }
 
     /**
-     * Set nombrePeticionario
+     * Set fechaRegistro
      *
-     * @param string $nombrePeticionario
+     * @param \DateTime $fechaRegistro
      *
      * @return Peticionario
      */
-    public function setNombrePeticionario($nombrePeticionario)
+    public function setFechaRegistro($fechaRegistro)
     {
-        $this->nombrePeticionario = $nombrePeticionario;
+        $this->fechaRegistro = $fechaRegistro;
 
         return $this;
     }
 
     /**
-     * Get nombrePeticionario
+     * Get fechaRegistro
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getNombrePeticionario()
+    public function getFechaRegistro()
     {
-        return $this->nombrePeticionario;
+        return $this->fechaRegistro;
     }
 
     /**
-     * Set identificacionPeticionario
+     * Set numeroRadicado
      *
-     * @param string $identificacionPeticionario
+     * @param string $numeroRadicado
      *
      * @return Peticionario
      */
-    public function setIdentificacionPeticionario($identificacionPeticionario)
+    public function setNumeroRadicado($numeroRadicado)
     {
-        $this->identificacionPeticionario = $identificacionPeticionario;
+        $this->numeroRadicado = $numeroRadicado;
 
         return $this;
     }
 
     /**
-     * Get identificacionPeticionario
+     * Get numeroRadicado
      *
      * @return string
      */
-    public function getIdentificacionPeticionario()
+    public function getNumeroRadicado()
     {
-        return $this->identificacionPeticionario;
+        return $this->numeroRadicado;
     }
 
     /**
-     * Set direccionPeticionario
+     * Set folios
      *
-     * @param string $direccionPeticionario
+     * @param integer $folios
      *
      * @return Peticionario
      */
-    public function setDireccionPeticionario($direccionPeticionario)
+    public function setFolios($folios)
     {
-        $this->direccionPeticionario = $direccionPeticionario;
+        $this->folios = $folios;
 
         return $this;
     }
 
     /**
-     * Get direccionPeticionario
+     * Get folios
      *
-     * @return string
+     * @return integer
      */
-    public function getDireccionPeticionario()
+    public function getFolios()
     {
-        return $this->direccionPeticionario;
-    }
-
-    /**
-     * Set telefonoPeticionario
-     *
-     * @param string $telefonoPeticionario
-     *
-     * @return Peticionario
-     */
-    public function setTelefonoPeticionario($telefonoPeticionario)
-    {
-        $this->telefonoPeticionario = $telefonoPeticionario;
-
-        return $this;
-    }
-
-    /**
-     * Get telefonoPeticionario
-     *
-     * @return string
-     */
-    public function getTelefonoPeticionario()
-    {
-        return $this->telefonoPeticionario;
-    }
-
-    /**
-     * Set correoElectronico
-     *
-     * @param string $correoElectronico
-     *
-     * @return Peticionario
-     */
-    public function setCorreoElectronico($correoElectronico)
-    {
-        $this->correoElectronico = $correoElectronico;
-
-        return $this;
-    }
-
-    /**
-     * Get correoElectronico
-     *
-     * @return string
-     */
-    public function getCorreoElectronico()
-    {
-        return $this->correoElectronico;
+        return $this->folios;
     }
 
     /**
@@ -240,51 +291,411 @@ class Peticionario
     }
 
     /**
-     * Set tipoPeticionario
+     * Set primerNombre
      *
-     * @param string $tipoPeticionario
+     * @param string $primerNombre
      *
      * @return Peticionario
      */
-    public function setTipoPeticionario($tipoPeticionario)
+    public function setPrimerNombre($primerNombre)
     {
-        $this->tipoPeticionario = $tipoPeticionario;
+        $this->primerNombre = $primerNombre;
 
         return $this;
     }
 
     /**
-     * Get tipoPeticionario
+     * Get primerNombre
      *
      * @return string
      */
-    public function getTipoPeticionario()
+    public function getPrimerNombre()
     {
-        return $this->tipoPeticionario;
+        return $this->primerNombre;
     }
 
     /**
-     * Set registroDocumento
+     * Set segundoNombre
      *
-     * @param \AppBundle\Entity\RegistroDocumento $registroDocumento
+     * @param string $segundoNombre
      *
      * @return Peticionario
      */
-    public function setRegistroDocumento(\AppBundle\Entity\RegistroDocumento $registroDocumento = null)
+    public function setSegundoNombre($segundoNombre)
     {
-        $this->registroDocumento = $registroDocumento;
+        $this->segundoNombre = $segundoNombre;
 
         return $this;
     }
 
     /**
-     * Get registroDocumento
+     * Get segundoNombre
      *
-     * @return \AppBundle\Entity\RegistroDocumento
+     * @return string
      */
-    public function getRegistroDocumento()
+    public function getSegundoNombre()
     {
-        return $this->registroDocumento;
+        return $this->segundoNombre;
+    }
+
+    /**
+     * Set primerApellido
+     *
+     * @param string $primerApellido
+     *
+     * @return Peticionario
+     */
+    public function setPrimerApellido($primerApellido)
+    {
+        $this->primerApellido = $primerApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get primerApellido
+     *
+     * @return string
+     */
+    public function getPrimerApellido()
+    {
+        return $this->primerApellido;
+    }
+
+    /**
+     * Set segundoApellido
+     *
+     * @param string $segundoApellido
+     *
+     * @return Peticionario
+     */
+    public function setSegundoApellido($segundoApellido)
+    {
+        $this->segundoApellido = $segundoApellido;
+
+        return $this;
+    }
+
+    /**
+     * Get segundoApellido
+     *
+     * @return string
+     */
+    public function getSegundoApellido()
+    {
+        return $this->segundoApellido;
+    }
+
+    /**
+     * Set identificacion
+     *
+     * @param string $identificacion
+     *
+     * @return Peticionario
+     */
+    public function setIdentificacion($identificacion)
+    {
+        $this->identificacion = $identificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacion
+     *
+     * @return string
+     */
+    public function getIdentificacion()
+    {
+        return $this->identificacion;
+    }
+
+    /**
+     * Set nombreEntidad
+     *
+     * @param string $nombreEntidad
+     *
+     * @return Peticionario
+     */
+    public function setNombreEntidad($nombreEntidad)
+    {
+        $this->nombreEntidad = $nombreEntidad;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreEntidad
+     *
+     * @return string
+     */
+    public function getNombreEntidad()
+    {
+        return $this->nombreEntidad;
+    }
+
+    /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return Peticionario
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return Peticionario
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Set correoElectronico
+     *
+     * @param string $correoElectronico
+     *
+     * @return Peticionario
+     */
+    public function setCorreoElectronico($correoElectronico)
+    {
+        $this->correoElectronico = $correoElectronico;
+
+        return $this;
+    }
+
+    /**
+     * Get correoElectronico
+     *
+     * @return string
+     */
+    public function getCorreoElectronico()
+    {
+        return $this->correoElectronico;
+    }
+
+    /**
+     * Set fechaVencimiento
+     *
+     * @param \DateTime $fechaVencimiento
+     *
+     * @return Peticionario
+     */
+    public function setFechaVencimiento($fechaVencimiento)
+    {
+        $this->fechaVencimiento = $fechaVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimiento()
+    {
+        return $this->fechaVencimiento;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Peticionario
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set urlDocumento
+     *
+     * @param string $urlDocumento
+     *
+     * @return Peticionario
+     */
+    public function setUrlDocumento($urlDocumento)
+    {
+        $this->urlDocumento = $urlDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get urlDocumento
+     *
+     * @return string
+     */
+    public function getUrlDocumento()
+    {
+        return $this->urlDocumento;
+    }
+
+    /**
+     * Set correCertificado
+     *
+     * @param boolean $correCertificado
+     *
+     * @return Peticionario
+     */
+    public function setCorreCertificado($correCertificado)
+    {
+        $this->correCertificado = $correCertificado;
+
+        return $this;
+    }
+
+    /**
+     * Get correCertificado
+     *
+     * @return boolean
+     */
+    public function getCorreCertificado()
+    {
+        return $this->correCertificado;
+    }
+
+    /**
+     * Set nombreTransportadora
+     *
+     * @param string $nombreTransportadora
+     *
+     * @return Peticionario
+     */
+    public function setNombreTransportadora($nombreTransportadora)
+    {
+        $this->nombreTransportadora = $nombreTransportadora;
+
+        return $this;
+    }
+
+    /**
+     * Get nombreTransportadora
+     *
+     * @return string
+     */
+    public function getNombreTransportadora()
+    {
+        return $this->nombreTransportadora;
+    }
+
+    /**
+     * Set fechaEnvio
+     *
+     * @param \DateTime $fechaEnvio
+     *
+     * @return Peticionario
+     */
+    public function setFechaEnvio($fechaEnvio)
+    {
+        $this->fechaEnvio = $fechaEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEnvio
+     *
+     * @return \DateTime
+     */
+    public function getFechaEnvio()
+    {
+        return $this->fechaEnvio;
+    }
+
+    /**
+     * Set numeroGuia
+     *
+     * @param string $numeroGuia
+     *
+     * @return Peticionario
+     */
+    public function setNumeroGuia($numeroGuia)
+    {
+        $this->numeroGuia = $numeroGuia;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroGuia
+     *
+     * @return string
+     */
+    public function getNumeroGuia()
+    {
+        return $this->numeroGuia;
+    }
+
+    /**
+     * Set fechaSalida
+     *
+     * @param \DateTime $fechaSalida
+     *
+     * @return Peticionario
+     */
+    public function setFechaSalida($fechaSalida)
+    {
+        $this->fechaSalida = $fechaSalida;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaSalida
+     *
+     * @return \DateTime
+     */
+    public function getFechaSalida()
+    {
+        return $this->fechaSalida;
     }
 
     /**
@@ -309,5 +720,77 @@ class Peticionario
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \Repository\UsuarioBundle\Entity\Usuario $usuario
+     *
+     * @return Peticionario
+     */
+    public function setUsuario(\Repository\UsuarioBundle\Entity\Usuario $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \Repository\UsuarioBundle\Entity\Usuario
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set tipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
+     *
+     * @return Peticionario
+     */
+    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
+    }
+
+    /**
+     * Set tipoDocumento
+     *
+     * @param \AppBundle\Entity\TipoDocumento $tipoDocumento
+     *
+     * @return Peticionario
+     */
+    public function setTipoDocumento(\AppBundle\Entity\TipoDocumento $tipoDocumento = null)
+    {
+        $this->tipoDocumento = $tipoDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDocumento
+     *
+     * @return \AppBundle\Entity\TipoDocumento
+     */
+    public function getTipoDocumento()
+    {
+        return $this->tipoDocumento;
     }
 }
