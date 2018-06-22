@@ -66,8 +66,9 @@ class TramitePrecioController extends Controller
                     'code' => 200,
                     'msj' => "listado tramitePrecios", 
                     'tramitePreciosActivo'=> $tramitePreciosActivo,
+                    
                     'tramiteProximo'=> $tramiteProximo,
-                    'data'=> $tramitePreciosActivo,
+                    'data'=> $tramitePreciosActivo, 
                     'compa'=> $comprobar,
                 );
          

@@ -207,9 +207,12 @@ class SustratoController extends Controller
             $sustrato = $em->getRepository("AppBundle:Sustrato")->find($sustratoId);
 
             $em = $this->getDoctrine()->getManager();
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion($ciudadanoId);
-            if ($sustrato!=null) {
+            if ($ciudadanoId) {
+                # code...
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion($ciudadanoId);
                 $sustrato->setCiudadano($usuario->getCiudadano());
+            }
+            if ($sustrato!=null) {
                 $sustrato->setDescripcion($descripcion);
                 $sustrato->setImpresion($impresion);
                 $sustrato->setEntregado($entregado);
