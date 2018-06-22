@@ -32,3 +32,5 @@ bin/symfony_requirements
 src/AppBundle/Entity/Empresa.php~
 npm-debug.log
 *.php~
+
+*.php~
