@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mgddocumentos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecharegistro</th>
+                <th>Numeroradicado</th>
+                <th>Folios</th>
+                <th>Numerooficio</th>
+                <th>Fechavencimiento</th>
+                <th>Descripcion</th>
+                <th>Url</th>
+                <th>Correocertificadollegada</th>
+                <th>Nombretransportadorallegada</th>
+                <th>Fechallegada</th>
+                <th>Numeroguiallegada</th>
+                <th>Correocertificadoenvio</th>
+                <th>Nombretransportadoraenvio</th>
+                <th>Fechaenvio</th>
+                <th>Numeroguia</th>
+                <th>Fechasalida</th>
+                <th>Activo</th>
+                <th>Asignado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mgdDocumento in mgdDocumentos %}
+            <tr>
+                <td><a href="{{ path('mgddocumento_show', { 'id': mgdDocumento.id }) }}">{{ mgdDocumento.id }}</a></td>
+                <td>{% if mgdDocumento.fechaRegistro %}{{ mgdDocumento.fechaRegistro|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ mgdDocumento.numeroRadicado }}</td>
+                <td>{{ mgdDocumento.folios }}</td>
+                <td>{{ mgdDocumento.numeroOficio }}</td>
+                <td>{% if mgdDocumento.fechaVencimiento %}{{ mgdDocumento.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ mgdDocumento.descripcion }}</td>
+                <td>{{ mgdDocumento.url }}</td>
+                <td>{% if mgdDocumento.correoCertificadoLlegada %}Yes{% else %}No{% endif %}</td>
+                <td>{{ mgdDocumento.nombreTransportadoraLlegada }}</td>
+                <td>{% if mgdDocumento.fechaLlegada %}{{ mgdDocumento.fechaLlegada|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ mgdDocumento.numeroGuiaLlegada }}</td>
+                <td>{% if mgdDocumento.correoCertificadoEnvio %}Yes{% else %}No{% endif %}</td>
+                <td>{{ mgdDocumento.nombreTransportadoraEnvio }}</td>
+                <td>{% if mgdDocumento.fechaEnvio %}{{ mgdDocumento.fechaEnvio|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ mgdDocumento.numeroGuia }}</td>
+                <td>{% if mgdDocumento.fechaSalida %}{{ mgdDocumento.fechaSalida|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if mgdDocumento.activo %}Yes{% else %}No{% endif %}</td>
+                <td>{% if mgdDocumento.asignado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mgddocumento_show', { 'id': mgdDocumento.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mgddocumento_edit', { 'id': mgdDocumento.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mgddocumento_new') }}">Create a new mgdDocumento</a>
+        </li>
+    </ul>
+{% endblock %}

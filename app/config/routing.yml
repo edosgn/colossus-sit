@@ -1,9 +1,21 @@
-app_festivo:
-    resource: "@AppBundle/Controller/FestivoController.php"
+app_mgd_documento:
+    resource: "@AppBundle/Controller/MgdDocumentoController.php"
     type:     annotation
 
-app_tipo_correspondencia:
-    resource: "@AppBundle/Controller/TipoCorrespondenciaController.php"
+app_mgd_medida_cautelar:
+    resource: "@AppBundle/Controller/MgdMedidaCautelarController.php"
+    type:     annotation
+
+app_mgd_peticionario:
+    resource: "@AppBundle/Controller/MgdPeticionarioController.php"
+    type:     annotation
+
+app_mgd_tipo_correspondencia:
+    resource: "@AppBundle/Controller/MgdTipoCorrespondenciaController.php"
+    type:     annotation
+
+app_festivo:
+    resource: "@AppBundle/Controller/FestivoController.php"
     type:     annotation
 
 app_representante_empresa:
@@ -56,18 +68,6 @@ app_tramite_precio:
 
 app_tipo_sociedad:
     resource: "@AppBundle/Controller/TipoSociedadController.php"
-    type:     annotation
-
-app_tipo_documento:
-    resource: "@AppBundle/Controller/TipoDocumentoController.php"
-    type:     annotation
-
-app_registro_documento:
-    resource: "@AppBundle/Controller/RegistroDocumentoController.php"
-    type:     annotation
-
-app_peticionario:
-    resource: "@AppBundle/Controller/PeticionarioController.php"
     type:     annotation
 
 app_sustrato:

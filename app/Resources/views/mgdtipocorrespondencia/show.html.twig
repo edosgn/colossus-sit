@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mgdtipocorrespondencium</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mgdTipoCorrespondencium.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ mgdTipoCorrespondencium.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Diasvigencia</th>
+                <td>{{ mgdTipoCorrespondencium.diasVigencia }}</td>
+            </tr>
+            <tr>
+                <th>Editable</th>
+                <td>{% if mgdTipoCorrespondencium.editable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Prohibicion</th>
+                <td>{% if mgdTipoCorrespondencium.prohibicion %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if mgdTipoCorrespondencium.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mgdtipocorrespondencia_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('mgdtipocorrespondencia_edit', { 'id': mgdTipoCorrespondencium.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
