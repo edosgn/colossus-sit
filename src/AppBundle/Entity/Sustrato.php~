@@ -29,9 +29,16 @@ class Sustrato
     private $estado;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=900, nullable=true)
+     */
+    private $descripcion;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="consecutivo", type="bigint")
+     * @ORM\Column(name="consecutivo", type="string", length=900)
      */
     private $consecutivo;
 
@@ -68,6 +75,11 @@ class Sustrato
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sustratos")
      **/
     protected $ciudadano;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="sustratos")
+     **/
+    protected $factura;
 
 
 }
