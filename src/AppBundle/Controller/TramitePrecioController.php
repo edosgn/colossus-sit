@@ -66,7 +66,6 @@ class TramitePrecioController extends Controller
                     'code' => 200,
                     'msj' => "listado tramitePrecios", 
                     'tramitePreciosActivo'=> $tramitePreciosActivo,
-                    
                     'tramiteProximo'=> $tramiteProximo,
                     'data'=> $tramitePreciosActivo, 
                     'compa'=> $comprobar,
@@ -192,6 +191,10 @@ class TramitePrecioController extends Controller
                 $em->persist($tramitePrecioBD);
                 $em->flush();
 
+                
+
+
+
                 $tramitePrecioNew = new TramitePrecio();
                 $fechaInicio = new \DateTime($tramitePrecio->fechaInicio);
 
@@ -219,11 +222,21 @@ class TramitePrecioController extends Controller
                 $em->persist($tramitePrecioNew);
                 $em->flush();
             }
+
+            $conceptoParametrosTramites = $em->getRepository('AppBundle:ConceptoParametroTramite')->findBy(
+                array('tramitePrecio' => $tramitePrecioBD->getId(),'estado' => 1)
+            );
+
+            foreach ($conceptoParametrosTramites as $key => $conceptoParametroTramite) {
+                $conceptoParametroTramite->setTramitePrecio($tramitePrecioNew);
+                $em->persist($conceptoParametroTramite);
+                $em->flush();
+            }
                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "precio creada con exito", 
+                    'msj' => "precio creada con éxito", 
                 );
         }else{
             $response = array(

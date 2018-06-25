@@ -25,7 +25,7 @@ class FacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
+        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado('Emitida');
 
         $response = array(
             'status' => 'success',
