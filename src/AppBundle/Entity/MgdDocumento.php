@@ -50,6 +50,13 @@ class MgdDocumento
     private $numeroOficio;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="diasVigencia", type="integer")
+     */
+    private $diasVigencia;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechaVencimiento", type="date")
@@ -127,18 +134,11 @@ class MgdDocumento
     private $numeroGuia;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fechaSalida", type="datetime", nullable=true)
-     */
-    private $fechaSalida;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;
+    private $activo = true;
 
     /**
      * @var boolean
@@ -146,6 +146,41 @@ class MgdDocumento
      * @ORM\Column(name="asignado", type="boolean")
      */
     private $asignado = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="aceptada", type="boolean")
+     */
+    private $aceptada = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=50, nullable=true)
+     */
+    private $estado;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaAsignacion", type="datetime", nullable=true)
+     */
+    private $fechaAsignacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones", type="text", nullable=true)
+     */
+    private $observaciones;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaRespuesta", type="datetime", nullable=true)
+     */
+    private $fechaRespuesta;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdTipoCorrespondencia", inversedBy="documentos")
@@ -158,7 +193,7 @@ class MgdDocumento
     protected $sedeOperativa;
 
     /** @ORM\ManyToOne(targetEntity="Repository\UsuarioBundle\Entity\Usuario", inversedBy="documentos") */
-    protected $usuario;
+    protected $responsable;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdPeticionario", inversedBy="documentos") */
     protected $peticionario;
@@ -268,6 +303,30 @@ class MgdDocumento
     public function getNumeroOficio()
     {
         return $this->numeroOficio;
+    }
+
+    /**
+     * Set diasVigencia
+     *
+     * @param integer $diasVigencia
+     *
+     * @return MgdDocumento
+     */
+    public function setDiasVigencia($diasVigencia)
+    {
+        $this->diasVigencia = $diasVigencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVigencia
+     *
+     * @return integer
+     */
+    public function getDiasVigencia()
+    {
+        return $this->diasVigencia;
     }
 
     /**
@@ -535,30 +594,6 @@ class MgdDocumento
     }
 
     /**
-     * Set fechaSalida
-     *
-     * @param \DateTime $fechaSalida
-     *
-     * @return MgdDocumento
-     */
-    public function setFechaSalida($fechaSalida)
-    {
-        $this->fechaSalida = $fechaSalida;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaSalida
-     *
-     * @return \DateTime
-     */
-    public function getFechaSalida()
-    {
-        return $this->fechaSalida;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
@@ -604,6 +639,126 @@ class MgdDocumento
     public function getAsignado()
     {
         return $this->asignado;
+    }
+
+    /**
+     * Set aceptada
+     *
+     * @param boolean $aceptada
+     *
+     * @return MgdDocumento
+     */
+    public function setAceptada($aceptada)
+    {
+        $this->aceptada = $aceptada;
+
+        return $this;
+    }
+
+    /**
+     * Get aceptada
+     *
+     * @return boolean
+     */
+    public function getAceptada()
+    {
+        return $this->aceptada;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return MgdDocumento
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set fechaAsignacion
+     *
+     * @param \DateTime $fechaAsignacion
+     *
+     * @return MgdDocumento
+     */
+    public function setFechaAsignacion($fechaAsignacion)
+    {
+        $this->fechaAsignacion = $fechaAsignacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaAsignacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaAsignacion()
+    {
+        return $this->fechaAsignacion;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return MgdDocumento
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
+    }
+
+    /**
+     * Set fechaRespuesta
+     *
+     * @param \DateTime $fechaRespuesta
+     *
+     * @return MgdDocumento
+     */
+    public function setFechaRespuesta($fechaRespuesta)
+    {
+        $this->fechaRespuesta = $fechaRespuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRespuesta
+     *
+     * @return \DateTime
+     */
+    public function getFechaRespuesta()
+    {
+        return $this->fechaRespuesta;
     }
 
     /**
@@ -655,27 +810,27 @@ class MgdDocumento
     }
 
     /**
-     * Set usuario
+     * Set responsable
      *
-     * @param \Repository\UsuarioBundle\Entity\Usuario $usuario
+     * @param \Repository\UsuarioBundle\Entity\Usuario $responsable
      *
      * @return MgdDocumento
      */
-    public function setUsuario(\Repository\UsuarioBundle\Entity\Usuario $usuario = null)
+    public function setResponsable(\Repository\UsuarioBundle\Entity\Usuario $responsable = null)
     {
-        $this->usuario = $usuario;
+        $this->responsable = $responsable;
 
         return $this;
     }
 
     /**
-     * Get usuario
+     * Get responsable
      *
      * @return \Repository\UsuarioBundle\Entity\Usuario
      */
-    public function getUsuario()
+    public function getResponsable()
     {
-        return $this->usuario;
+        return $this->responsable;
     }
 
     /**

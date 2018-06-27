@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FestivoType extends AbstractType
+class MparqCostoTrayectoType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('fecha')->add('descripcion')->add('estado');
+        $builder->add('origen')->add('destino')->add('costo')->add('activo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Festivo'
+            'data_class' => 'AppBundle\Entity\MparqCostoTrayecto'
         ));
     }
 
@@ -29,7 +29,7 @@ class FestivoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_festivo';
+        return 'appbundle_mparqcostotrayecto';
     }
 
 

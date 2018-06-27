@@ -38,6 +38,6 @@ class MgdDocumentoRepository extends \Doctrine\ORM\EntityRepository
 	        ));
         }
 
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
 }

@@ -38,16 +38,14 @@ class UsuarioController extends Controller
 
         $usuarios = $em->getRepository('UsuarioBundle:Usuario')->findAll();
     
-        $responce = array(
-
+        $response = array(
             'status' => 'success',
             'code' => 200,
             'usuarios'=> $usuarios,
             'msj'=>'',
-
         );
 
-        return $helpers->json($responce);
+        return $helpers->json($response);
        
     }
 
@@ -334,5 +332,24 @@ class UsuarioController extends Controller
         ;
     }
 
-
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="usuario_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $usuarios = $em->getRepository('UsuarioBundle:Usuario')->findAll();
+    
+    foreach ($usuarios as $key => $usuario) {
+        $response[$key] = array(
+            'value' => $usuario->getId(),
+            'label' => $usuario->getPrimerNombre()." ".$usuario->getPrimerApellido(),
+        );
+      }
+       return $helpers->json($response);
+    }
 }

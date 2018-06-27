@@ -315,4 +315,124 @@ class MgdDocumentoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/assign", name="mgddocumento_assign")
+     * @Method({"GET", "POST"})
+     */
+    public function assignAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('AppBundle:MgdDocumento')->find(
+                $params->documentoId
+            );
+            
+            if ($documento) {
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->find(
+                    $params->usuarioId
+                );
+                $documento->setResponsable($usuario);
+                $documento->setObservaciones($params->observaciones);
+                $documento->setEstado('En proceso');
+                $documento->setFechaAsignacion(new \Datetime(date('Y-m-d h:i:s')));
+                $documento->setAsignado(true);
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Radicado No. ".$documento->getNumeroRadicado()." ".$documento->getEstado(),
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado"
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/process", name="mgddocumento_process")
+     * @Method({"GET", "POST"})
+     */
+    public function processAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('AppBundle:MgdDocumento')->find(
+                $params->documentoId
+            );
+            
+            if ($documento) {
+                if ($params->aceptada == 'true') {
+                    $estado = 'Aceptado';
+                    $documento->setAceptada(true);
+                }else{
+                    $estado = 'Rechazado';
+                }
+                $documento->setObservaciones($params->observaciones);
+                $documento->setEstado($estado);
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Radicado No. ".$documento->getNumeroRadicado()." ".$documento->getEstado(),
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado"
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }

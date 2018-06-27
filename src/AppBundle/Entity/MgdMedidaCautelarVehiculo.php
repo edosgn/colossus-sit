@@ -40,18 +40,17 @@ class MgdMedidaCautelarVehiculo
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="medidasCautelaresVehiculo")
-     **/
-    protected $tipoVehiculo;
+    private $activo = true;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdMedidaCautelar", inversedBy="medidasCautelaresVehiculo")
      **/
     protected $medidaCautelar;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="medidasCautelaresVehiculo")
+     **/
+    protected $clase;
     /**
      * Get id
      *
@@ -135,30 +134,6 @@ class MgdMedidaCautelarVehiculo
     }
 
     /**
-     * Set tipoVehiculo
-     *
-     * @param \AppBundle\Entity\TipoVehiculo $tipoVehiculo
-     *
-     * @return MgdMedidaCautelarVehiculo
-     */
-    public function setTipoVehiculo(\AppBundle\Entity\TipoVehiculo $tipoVehiculo = null)
-    {
-        $this->tipoVehiculo = $tipoVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoVehiculo
-     *
-     * @return \AppBundle\Entity\TipoVehiculo
-     */
-    public function getTipoVehiculo()
-    {
-        return $this->tipoVehiculo;
-    }
-
-    /**
      * Set medidaCautelar
      *
      * @param \AppBundle\Entity\MgdMedidaCautelar $medidaCautelar
@@ -180,5 +155,29 @@ class MgdMedidaCautelarVehiculo
     public function getMedidaCautelar()
     {
         return $this->medidaCautelar;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return MgdMedidaCautelarVehiculo
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
     }
 }

@@ -231,7 +231,7 @@ class ColorController extends Controller
         ;
     }
 
-     /**
+    /**
      * datos para select 2
      *
      * @Route("/select", name="color_select")
