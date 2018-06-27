@@ -31,6 +31,9 @@ class TramitePrecioController extends Controller
         $tramitePreciosTotal = $em->getRepository('AppBundle:TramitePrecio')->findBy(
             array('estado' => 1)
         );
+        $tramiteTotal = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+            array('estado' => 1 , 'activo'=> 1)
+        );
         
         $fechaActual = new \DateTime("now");
         $fechaActualCompare = $fechaActual->format("Y-m-d");
@@ -39,40 +42,57 @@ class TramitePrecioController extends Controller
             $fechainicioCompare = $tramitePrecio->getFechaInicio();
             if($fechainicioCompare<=$fechaActualCompare){
                 $tramitePrecio->setActivo(true);
+                
                 $em->persist($tramitePrecio);
                 $em->flush();
             }
         }
         
-        
-
-        // lista de trmaites proximos
-        // $tramiteProximos = $em->getRepository('AppBundle:TramitePrecio')->findBy(
-        //     array('estado' => 0, 'activo'=>0)
-        // );
-        
-        // $responsex = array(
-        //     'status' => 'success',
-        //             'code' => 200,
-        //             'msj' => "listado tramitePrecios", 
-        //             'data'=> $tramiteProximos,
-        //     );
-        // return $helpers->json($responsex);
-        // // fin de tramires proximos       
-        
-        // lsita de tramites activos
-        $tramitePreciosActivos = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+        // lista de tramites activos y proximos
+        $tramitePreciosActivo = $em->getRepository('AppBundle:TramitePrecio')->findBy(
             array('estado' => 1,'activo'=>1)
-        );
+            );
+
+        $tramiteProximo = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+                array('estado' => 1, 'activo'=>0)
+            );
+
+        $comprobar = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+            array('estado' => 1,'activo'=>1)
+            );
 
         $response = array(
             'status' => 'success',
                     'code' => 200,
                     'msj' => "listado tramitePrecios", 
-                    'data'=> $tramitePreciosActivos,
-            );
+                    'tramitePreciosActivo'=> $tramitePreciosActivo,
+                    'tramiteProximo'=> $tramiteProximo,
+                    'data'=> $tramitePreciosActivo, 
+                    'compa'=> $comprobar,
+                );
          
         return $helpers->json($response);
+        // fin de lista activos
+
+
+
+        foreach ($tramiteTotal as $key1 => $tramitePrecio) {
+
+            foreach ($tramitesAsignados as $key => $tramiteAsigando) {
+                if ($tramiteTotal->getNombre() != $tramiteAsigando->getNombre()) {
+                    $tramitesEnviar[$key1] = $tramiteTotal;
+                }
+            } 
+        }
+
+        $response = array(
+            'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado tramitePrecios", 
+                    'tramitePreciosActivo'=> $tramitesEnviar,
+                   
+            );
+   
     }
 
     /**
@@ -100,11 +120,16 @@ class TramitePrecioController extends Controller
                 $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
                 $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
                 $fechaInicio = new \DateTime($fechaInicio);
+
                 if ($claseId != NULL) {
                     $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                     $tramitePrecio->setClase($clase);
                 }
+                
                 $nombre = $tramite->getNombre() . ' ' . $clase->getNombre();
+
+
+
                 $tramitePrecio->setNombre($nombre);
                 $tramitePrecio->setValor($valor);
                 $tramitePrecio->setFechaInicio($fechaInicio);
@@ -166,6 +191,10 @@ class TramitePrecioController extends Controller
                 $em->persist($tramitePrecioBD);
                 $em->flush();
 
+                
+
+
+
                 $tramitePrecioNew = new TramitePrecio();
                 $fechaInicio = new \DateTime($tramitePrecio->fechaInicio);
 
@@ -193,11 +222,21 @@ class TramitePrecioController extends Controller
                 $em->persist($tramitePrecioNew);
                 $em->flush();
             }
+
+            $conceptoParametrosTramites = $em->getRepository('AppBundle:ConceptoParametroTramite')->findBy(
+                array('tramitePrecio' => $tramitePrecioBD->getId(),'estado' => 1)
+            );
+
+            foreach ($conceptoParametrosTramites as $key => $conceptoParametroTramite) {
+                $conceptoParametroTramite->setTramitePrecio($tramitePrecioNew);
+                $em->persist($conceptoParametroTramite);
+                $em->flush();
+            }
                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "precio creada con exito", 
+                    'msj' => "precio creada con éxito", 
                 );
         }else{
             $response = array(

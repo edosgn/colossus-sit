@@ -25,7 +25,7 @@ class FacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
+        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado('Emitida');
 
         $response = array(
             'status' => 'success',
@@ -69,7 +69,7 @@ class FacturaController extends Controller
                 $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
                 //Captura llaves foraneas
                 $sedeOperativaId = $params->sedeOperativaId;
-                $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
+                // $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
                 
                 $estado = $params->estado;
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
@@ -79,6 +79,7 @@ class FacturaController extends Controller
                 $factura->setNumero($consecutivo);
                 $factura->setAnio(date('y'));
                 $factura->setConsecutivo($consecutivo);
+                $factura->setEstado('Emitida');
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
                 //Inserta llaves foraneas
@@ -156,9 +157,10 @@ class FacturaController extends Controller
             $factura = $em->getRepository("AppBundle:Factura")->find($params->id);
 
             $numero = $params->numero;
+            $estado = $params->estado;
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
-            $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
+            // $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
             $sedeOperativaId = $params->sedeOperativaId;
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
@@ -169,8 +171,8 @@ class FacturaController extends Controller
                 $factura->setNumero($numero);
                 $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setEstado(true);
-                $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
+                $factura->setEstado($estado);
+                // $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
                 $factura->setSedeOperativa($sedeOperativa);
                 
 
@@ -319,7 +321,7 @@ class FacturaController extends Controller
 
 
             $facturas = $em->getRepository('AppBundle:Factura')->findBy(
-                array('vehiculo' => $params->vehiculo)
+                array('vehiculo' => $params->vehiculo, 'estado'=>'Emitida')
             );
 
             foreach ($facturas as $key => $factura) {
@@ -329,7 +331,7 @@ class FacturaController extends Controller
                 );
               }
 
-            if ($factura!=null) {
+            if ($facturas!=null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

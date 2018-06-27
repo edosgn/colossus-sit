@@ -72,9 +72,8 @@ class SustratoController extends Controller
 
                 while ($desde <= $hasta) {
                     $sustrato = new Sustrato();
-
                     $sustrato->setEstado($estado);
-                    $sustrato->setConsecutivo($desde);
+                    $sustrato->setConsecutivo($modulo->getSiglaSustrato().$desde);
                     //Inserta llaves foraneas
                     $sustrato->setSedeOperativa($sedeOperativa);
                     $sustrato->setModulo($modulo);
@@ -138,12 +137,55 @@ class SustratoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing sustrato entity.
+     * Finds and displays a sustrato entity.
      *
-     * @Route("/{id}/edit", name="sustrato_edit")
+     * @Route("/show/consecutivo/{consecutivo}", name="sustrato_show_consecutivo")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Sustrato $sustrato)
+    public function showNumeroAction(Request $request,$consecutivo)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $sustrato = $em->getRepository('AppBundle:Sustrato')->findOneBy(
+                array('consecutivo' => $consecutivo,'estado'=>'Disponible')
+            );
+
+           
+
+            if ($sustrato) {
+                $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'data'=> $sustrato,
+                );
+            }else{
+                $response = array(
+                        'status' => 'error',
+                        'code' => 300,
+                        'msj'=> 'sustrato no encontrado',
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing sustrato entity.
+     *
+     * @Route("/edit", name="sustrato_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
@@ -153,42 +195,36 @@ class SustratoController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+            // var_dump($params);
+            $estado = (isset($params->estado)) ? $params->estado : null;
+            $sustratoId = (isset($params->id)) ? $params->id : null;
+            $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
+            $impresion = (isset($params->impresion)) ? $params->impresion : null;
+            $entregado = (isset($params->entregado)) ? $params->entregado : null;
+            $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
 
             $em = $this->getDoctrine()->getManager();
-            $factura = $em->getRepository("AppBundle:Factura")->find($params->id);
-
-            $numero = $params->numero;
-            $observacion = (isset($params->observacion)) ? $params->observacion : null;
-            $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
-            //Captura llaves foraneas
-            $solicitanteId = $params->solicitanteId;
-            $apoderadoId = $params->apoderadoId;
-            $vehiculoId = $params->vehiculoId;
+            $sustrato = $em->getRepository("AppBundle:Sustrato")->find($sustratoId);
 
             $em = $this->getDoctrine()->getManager();
-            $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($solicitanteId);
-            $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($apoderadoId);
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
-
-            if ($factura!=null) {
-                $factura->setNumero($numero);
-                $factura->setObservacion($observacion);
-                $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setEstado(true);
-                //Inserta llaves foraneas
-                $factura->setSolicitante($solicitante);
-                $factura->setApoderado($apoderado);
-                $factura->setVehiculo($vehiculo);
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($factura);
+            if ($ciudadanoId) {
+                # code...
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion($ciudadanoId);
+                $sustrato->setCiudadano($usuario->getCiudadano());
+            }
+            if ($sustrato!=null) {
+                $sustrato->setDescripcion($descripcion);
+                $sustrato->setImpresion($impresion);
+                $sustrato->setEntregado($entregado);
+                $sustrato->setEstado($estado);
+                $em->persist($sustrato);
                 $em->flush();
 
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'msj' => "Registro actualizado con exito", 
-                        'data'=> $factura,
+                        'data'=> $sustrato,
                 );
             }else{
                 $response = array(

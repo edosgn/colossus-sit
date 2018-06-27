@@ -69,7 +69,7 @@ class ColorController extends Controller
                 if ($color==null) {
                     $color = new Color();
     
-                    $color->setNombre($nombre);
+                    $color->setNombre(strtoupper($nombre));
                     $color->setEstado(true);
     
                     $em->persist($color);

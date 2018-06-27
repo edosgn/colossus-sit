@@ -29,9 +29,16 @@ class Sustrato
     private $estado;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=900, nullable=true)
+     */
+    private $descripcion;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="consecutivo", type="bigint")
+     * @ORM\Column(name="consecutivo", type="string", length=900)
      */
     private $consecutivo;
 
@@ -68,6 +75,11 @@ class Sustrato
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sustratos")
      **/
     protected $ciudadano;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="sustratos")
+     **/
+    protected $factura;
 
 
 
@@ -106,9 +118,33 @@ class Sustrato
     }
 
     /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return Sustrato
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
      * Set consecutivo
      *
-     * @param integer $consecutivo
+     * @param string $consecutivo
      *
      * @return Sustrato
      */
@@ -122,7 +158,7 @@ class Sustrato
     /**
      * Get consecutivo
      *
-     * @return integer
+     * @return string
      */
     public function getConsecutivo()
     {
@@ -271,5 +307,29 @@ class Sustrato
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set factura
+     *
+     * @param \AppBundle\Entity\Factura $factura
+     *
+     * @return Sustrato
+     */
+    public function setFactura(\AppBundle\Entity\Factura $factura = null)
+    {
+        $this->factura = $factura;
+
+        return $this;
+    }
+
+    /**
+     * Get factura
+     *
+     * @return \AppBundle\Entity\Factura
+     */
+    public function getFactura()
+    {
+        return $this->factura;
     }
 }
