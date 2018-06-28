@@ -1,3 +1,15 @@
+app_cfg_auditoria:
+    resource: "@AppBundle/Controller/CfgAuditoriaController.php"
+    type:     annotation
+
+app_mparq_costo_trayecto:
+    resource: "@AppBundle/Controller/MparqCostoTrayectoController.php"
+    type:     annotation
+
+app_cfg_festivo:
+    resource: "@AppBundle/Controller/CfgFestivoController.php"
+    type:     annotation
+
 app_mgd_documento:
     resource: "@AppBundle/Controller/MgdDocumentoController.php"
     type:     annotation
@@ -12,10 +24,6 @@ app_mgd_peticionario:
 
 app_mgd_tipo_correspondencia:
     resource: "@AppBundle/Controller/MgdTipoCorrespondenciaController.php"
-    type:     annotation
-
-app_festivo:
-    resource: "@AppBundle/Controller/FestivoController.php"
     type:     annotation
 
 app_representante_empresa:

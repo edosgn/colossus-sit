@@ -68,12 +68,12 @@ class MgdMedidaCautelar
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;
+    private $activo = true;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=10)
+     * @ORM\Column(name="tipo", type="string", length=10, nullable=true)
      */
     private $tipo;
 
@@ -258,5 +258,53 @@ class MgdMedidaCautelar
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return MgdMedidaCautelar
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set documento
+     *
+     * @param \AppBundle\Entity\MgdDocumento $documento
+     *
+     * @return MgdMedidaCautelar
+     */
+    public function setDocumento(\AppBundle\Entity\MgdDocumento $documento = null)
+    {
+        $this->documento = $documento;
+
+        return $this;
+    }
+
+    /**
+     * Get documento
+     *
+     * @return \AppBundle\Entity\MgdDocumento
+     */
+    public function getDocumento()
+    {
+        return $this->documento;
     }
 }

@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class FestivoType extends AbstractType
+class CfgAuditoriaType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('fecha')->add('descripcion')->add('estado');
+        $builder->add('url')->add('token')->add('fecha')->add('datos')->add('json');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Festivo'
+            'data_class' => 'AppBundle\Entity\CfgAuditoria'
         ));
     }
 
@@ -29,7 +29,7 @@ class FestivoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_festivo';
+        return 'appbundle_cfgauditoria';
     }
 
 

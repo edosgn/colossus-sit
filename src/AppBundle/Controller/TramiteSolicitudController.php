@@ -38,6 +38,42 @@ class TramiteSolicitudController extends Controller
     }
 
     /**
+     * Finds and displays a seguimientoEntrega entity.
+     *
+     * @Route("/{tramiteSolicitudId}/show/tramiteSolicitud", name="tramite_solicitud_tramiteFactura")
+     * @Method({"GET", "POST"})
+     */
+    public function showAction(Request $request,$tramiteSolicitudId)
+    {   $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $tramiteSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findOneByTramiteFactura($tramiteSolicitudId);
+
+        $tramiteSolicitud->setDatos((array)$tramiteSolicitud->getDatos());
+
+        // var_dump($helpers->json((array)$tramiteSolicitud->getDatos()));
+        // die();
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $tramiteSolicitud,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a new tramiteSolicitud entity.
      *
      * @Route("/new", name="tramitesolicitud_new")

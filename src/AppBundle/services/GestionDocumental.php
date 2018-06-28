@@ -31,7 +31,7 @@ class GestionDocumental
 
     $em = $this->em;
 
-    $festivos = $em->getRepository('AppBundle:Festivo')->findByActivo(true);
+    $festivos = $em->getRepository('AppBundle:MgdFestivo')->findByActivo(true);
 
     if ($festivos) {
       foreach ($festivos as $key => $value) {
@@ -63,11 +63,11 @@ class GestionDocumental
     return $diasHabiles; 
   }
 
-  public function fechaVencimiento($fechaInicial, $diasSolicitados)
+  public function getFechaVencimiento($fechaInicial, $diasSolicitados)
   {
     $em = $this->em;
 
-    $festivos = $em->getRepository('JHWEBPqrsfBundle:CfgFestivo')->findByActivo(true);
+    $festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
     $diasHabiles = 0;
 
     if ($festivos) {

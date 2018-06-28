@@ -14,3 +14,8 @@ services:
     app.helpers:
         class: AppBundle\services\Helpers
         arguments: ["@app.jwt_auth"]
+
+    app.gestion.documental:
+        class: AppBundle\services\GestionDocumental
+        autowire: false
+        arguments: ['@doctrine.orm.entity_manager']

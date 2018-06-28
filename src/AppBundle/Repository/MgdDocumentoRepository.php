@@ -38,6 +38,18 @@ class MgdDocumentoRepository extends \Doctrine\ORM\EntityRepository
 	        ));
         }
 
+        return $consulta->getResult();
+    }
+
+    //Obtiene el numero maximo de las solicitudes
+    public function findMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(d.consecutivo) AS maximo
+            FROM AppBundle:MgdDocumento d
+            WHERE YEAR(d.fechaRegistro) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
         return $consulta->getOneOrNullResult();
     }
 }

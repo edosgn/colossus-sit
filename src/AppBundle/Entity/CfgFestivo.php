@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Festivo
+ * CfgFestivo
  *
- * @ORM\Table(name="festivo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\FestivoRepository")
+ * @ORM\Table(name="cfg_festivo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgFestivoRepository")
  */
-class Festivo
+class CfgFestivo
 {
     /**
      * @var int
@@ -38,10 +38,9 @@ class Festivo
     /**
      * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado = true;
-
+    private $activo = true;
 
     /**
      * Get id
@@ -58,7 +57,7 @@ class Festivo
      *
      * @param \DateTime $fecha
      *
-     * @return Festivo
+     * @return CfgFestivo
      */
     public function setFecha($fecha)
     {
@@ -82,7 +81,7 @@ class Festivo
      *
      * @param string $descripcion
      *
-     * @return Festivo
+     * @return CfgFestivo
      */
     public function setDescripcion($descripcion)
     {
@@ -102,27 +101,27 @@ class Festivo
     }
 
     /**
-     * Set estado
+     * Set activo
      *
-     * @param boolean $estado
+     * @param boolean $activo
      *
-     * @return Festivo
+     * @return CfgFestivo
      */
-    public function setEstado($estado)
+    public function setActivo($activo)
     {
-        $this->estado = $estado;
+        $this->activo = $activo;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get activo
      *
      * @return bool
      */
-    public function getEstado()
+    public function getActivo()
     {
-        return $this->estado;
+        return $this->activo;
     }
 }
 
