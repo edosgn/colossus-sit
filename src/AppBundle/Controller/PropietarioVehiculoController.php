@@ -96,6 +96,8 @@ class PropietarioVehiculoController extends Controller
 
             }
 
+            $licenciaTransito = (isset($params->licenciaTransito)) ? $params->licenciaTransito : null;
+            
 
             foreach ($params->propietariosEmpresas as $key => $empresa) {
                 $empresaNueva = $em->getRepository('AppBundle:Empresa')->findOneBy(
@@ -106,7 +108,7 @@ class PropietarioVehiculoController extends Controller
                     );
                     
                     $propietarioVehiculo = new PropietarioVehiculo();
-                    $propietarioVehiculo->setLicenciaTransito($params->numeroLicencia);
+                    $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                     $propietarioVehiculo->setFechaPropiedadInicial($fechaActual);
                     $propietarioVehiculo->setEstadoPropiedad(true);
                     $propietarioVehiculo->setPermisoTramite($empresa->permisoTramite);
@@ -127,7 +129,7 @@ class PropietarioVehiculoController extends Controller
                 );
                 
                 $propietarioVehiculo = new PropietarioVehiculo();
-                $propietarioVehiculo->setLicenciaTransito($params->numeroLicencia);
+                $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                 $propietarioVehiculo->setFechaPropiedadInicial($fechaActual);
                 $propietarioVehiculo->setEstadoPropiedad(true);
                 $propietarioVehiculo->setPermisoTramite($ciudadano->permisoTramite);
@@ -202,7 +204,7 @@ class PropietarioVehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            var_dump($params);
+            
             // die();
 
             $licenciaTransito = $params->licenciaTransito;
@@ -229,6 +231,7 @@ class PropietarioVehiculoController extends Controller
             $propietarioVehiculo = $em->getRepository("AppBundle:PropietarioVehiculo")->find($params->id);
 
             if ($propietarioVehiculo!=null) {
+               
                 $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                 $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
                 $propietarioVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
@@ -390,7 +393,7 @@ class PropietarioVehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $licenciaTransito = $params->licenciaTransito;
+            $licenciaTransito = (isset($params->licenciaTransito)) ? $params->licenciaTransito : null;
             $fechaPropiedadInicial = $params->fechaPropiedadInicial;
             $fechaPropiedadFinal = $params->fechaPropiedadFinal;
             $estadoPropiedad = $params->estadoPropiedad;
@@ -411,6 +414,7 @@ class PropietarioVehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $propietarioVehiculo = new PropietarioVehiculo();
+            
                 $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
                 $propietarioVehiculo->setFechaPropiedadInicial($fechaPropiedadInicial);
                 $propietarioVehiculo->setFechaPropiedadFinal($fechaPropiedadFinal);
