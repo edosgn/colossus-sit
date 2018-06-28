@@ -183,6 +183,27 @@ class MgdDocumento
     private $fechaRespuesta;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="respuesta", type="text", nullable=true)
+     */
+    private $respuesta;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numeroCarpeta", type="integer", nullable=true)
+     */
+    private $numeroCarpeta;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="medioEnvio", type="string", length=50, nullable=true)
+     */
+    private $medioEnvio;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdTipoCorrespondencia", inversedBy="documentos")
      **/
     protected $tipoCorrespondencia;
@@ -855,5 +876,77 @@ class MgdDocumento
     public function getPeticionario()
     {
         return $this->peticionario;
+    }
+
+    /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     *
+     * @return MgdDocumento
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
+    }
+
+    /**
+     * Set numeroCarpeta
+     *
+     * @param integer $numeroCarpeta
+     *
+     * @return MgdDocumento
+     */
+    public function setNumeroCarpeta($numeroCarpeta)
+    {
+        $this->numeroCarpeta = $numeroCarpeta;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCarpeta
+     *
+     * @return integer
+     */
+    public function getNumeroCarpeta()
+    {
+        return $this->numeroCarpeta;
+    }
+
+    /**
+     * Set medioEnvio
+     *
+     * @param string $medioEnvio
+     *
+     * @return MgdDocumento
+     */
+    public function setMedioEnvio($medioEnvio)
+    {
+        $this->medioEnvio = $medioEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get medioEnvio
+     *
+     * @return string
+     */
+    public function getMedioEnvio()
+    {
+        return $this->medioEnvio;
     }
 }
