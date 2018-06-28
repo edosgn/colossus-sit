@@ -22,6 +22,13 @@ class MgdDocumento
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="integer")
+     */
+    private $consecutivo;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechaRegistro", type="datetime")
@@ -228,6 +235,30 @@ class MgdDocumento
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return MgdDocumento
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
@@ -783,6 +814,78 @@ class MgdDocumento
     }
 
     /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     *
+     * @return MgdDocumento
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
+    }
+
+    /**
+     * Set numeroCarpeta
+     *
+     * @param integer $numeroCarpeta
+     *
+     * @return MgdDocumento
+     */
+    public function setNumeroCarpeta($numeroCarpeta)
+    {
+        $this->numeroCarpeta = $numeroCarpeta;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCarpeta
+     *
+     * @return integer
+     */
+    public function getNumeroCarpeta()
+    {
+        return $this->numeroCarpeta;
+    }
+
+    /**
+     * Set medioEnvio
+     *
+     * @param string $medioEnvio
+     *
+     * @return MgdDocumento
+     */
+    public function setMedioEnvio($medioEnvio)
+    {
+        $this->medioEnvio = $medioEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get medioEnvio
+     *
+     * @return string
+     */
+    public function getMedioEnvio()
+    {
+        return $this->medioEnvio;
+    }
+
+    /**
      * Set tipoCorrespondencia
      *
      * @param \AppBundle\Entity\MgdTipoCorrespondencia $tipoCorrespondencia
@@ -876,77 +979,5 @@ class MgdDocumento
     public function getPeticionario()
     {
         return $this->peticionario;
-    }
-
-    /**
-     * Set respuesta
-     *
-     * @param string $respuesta
-     *
-     * @return MgdDocumento
-     */
-    public function setRespuesta($respuesta)
-    {
-        $this->respuesta = $respuesta;
-
-        return $this;
-    }
-
-    /**
-     * Get respuesta
-     *
-     * @return string
-     */
-    public function getRespuesta()
-    {
-        return $this->respuesta;
-    }
-
-    /**
-     * Set numeroCarpeta
-     *
-     * @param integer $numeroCarpeta
-     *
-     * @return MgdDocumento
-     */
-    public function setNumeroCarpeta($numeroCarpeta)
-    {
-        $this->numeroCarpeta = $numeroCarpeta;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroCarpeta
-     *
-     * @return integer
-     */
-    public function getNumeroCarpeta()
-    {
-        return $this->numeroCarpeta;
-    }
-
-    /**
-     * Set medioEnvio
-     *
-     * @param string $medioEnvio
-     *
-     * @return MgdDocumento
-     */
-    public function setMedioEnvio($medioEnvio)
-    {
-        $this->medioEnvio = $medioEnvio;
-
-        return $this;
-    }
-
-    /**
-     * Get medioEnvio
-     *
-     * @return string
-     */
-    public function getMedioEnvio()
-    {
-        return $this->medioEnvio;
     }
 }
