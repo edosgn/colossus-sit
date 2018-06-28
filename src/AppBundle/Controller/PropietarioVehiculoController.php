@@ -330,6 +330,8 @@ class PropietarioVehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
 
+
+
             if($vehiculo==null){
                 $response = array(
                     'status' => 'error',
@@ -357,6 +359,7 @@ class PropietarioVehiculoController extends Controller
                         'status' => 'error',
                         'code' => 400,
                         'msj' => "este vehiculo no tiene propietarios asignados", 
+                        'data' => $vehiculo, 
                     );
                 }
             }
