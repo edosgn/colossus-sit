@@ -1,3 +1,7 @@
+app_cfg_placa:
+    resource: "@AppBundle/Controller/CfgPlacaController.php"
+    type:     annotation
+
 app_mfl_infraccion_categoria:
     resource: "@AppBundle/Controller/MflInfraccionCategoriaController.php"
     type:     annotation
