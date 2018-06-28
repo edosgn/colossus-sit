@@ -63,6 +63,7 @@ class CombustibleController extends Controller
             }else{*/
                 $nombre = $params->nombre;
                 $codigoMt = $params->codigoMt;
+
                 $em = $this->getDoctrine()->getManager();
                 $combustible = $em->getRepository('AppBundle:Combustible')->findBy(
                     array('codigoMt' => $codigoMt)
@@ -157,7 +158,7 @@ class CombustibleController extends Controller
                 $combustible->setEstado(true);
                 $combustible->setCodigoMt($codigoMt);
 
-                $em = $this->getDoctrine()->getManager();
+                
                 $em->persist($combustible);
                 $em->flush();
 

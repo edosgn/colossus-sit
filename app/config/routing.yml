@@ -1,7 +1,3 @@
-app_cfg_auditoria:
-    resource: "@AppBundle/Controller/CfgAuditoriaController.php"
-    type:     annotation
-
 app_mparq_costo_trayecto:
     resource: "@AppBundle/Controller/MparqCostoTrayectoController.php"
     type:     annotation
