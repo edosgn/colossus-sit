@@ -38,14 +38,16 @@ class CfgFestivo
     /**
      * @var bool
      *
-     * @ORM\Column(name="activo", type="boolean")
+     * @ORM\Column(name="estado", type="boolean")
      */
-    private $activo = true;
+    private $estado = true;
+
+   
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -73,7 +75,7 @@ class CfgFestivo
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->fecha->format('Y-m-d');
     }
 
     /**
@@ -101,27 +103,26 @@ class CfgFestivo
     }
 
     /**
-     * Set activo
+     * Set estado
      *
-     * @param boolean $activo
+     * @param boolean $estado
      *
      * @return CfgFestivo
      */
-    public function setActivo($activo)
+    public function setEstado($estado)
     {
-        $this->activo = $activo;
+        $this->estado = $estado;
 
         return $this;
     }
 
     /**
-     * Get activo
+     * Get estado
      *
-     * @return bool
+     * @return boolean
      */
-    public function getActivo()
+    public function getEstado()
     {
-        return $this->activo;
+        return $this->estado;
     }
 }
-

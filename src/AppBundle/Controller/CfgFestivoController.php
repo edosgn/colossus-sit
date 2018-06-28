@@ -7,10 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
+
 /**
  * Cfgfestivo controller.
  *
- * @Route("cfgfestivo")
+ * @Route("cfgFestivo")
  */
 class CfgFestivoController extends Controller
 {
@@ -22,13 +23,18 @@ class CfgFestivoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $cfgFestivos = $em->getRepository('AppBundle:CfgFestivo')->findBy( array('estado' => 1));
 
-        $cfgFestivos = $em->getRepository('AppBundle:CfgFestivo')->findAll();
+        $response = array(
+                    'status' => 'succes',
+                    'code' => 200,
+                    'msj' => "listado festivos",
+                    'data' => $cfgFestivos,
+        );
 
-        return $this->render('cfgfestivo/index.html.twig', array(
-            'cfgFestivos' => $cfgFestivos,
-        ));
+        return $helpers ->json($response);
     }
 
     /**
@@ -39,84 +45,151 @@ class CfgFestivoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgFestivo = new Cfgfestivo();
-        $form = $this->createForm('AppBundle\Form\CfgFestivoType', $cfgFestivo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgFestivo);
-            $em->flush();
-
-            return $this->redirectToRoute('cfgfestivo_show', array('id' => $cfgFestivo->getId()));
+            
+                $festivo = new Cfgfestivo();
+                $festivo->setFecha(new \Datetime($params->fecha));
+                $festivo->setDescripcion($params->descripcion);
+                $festivo->setEstado(true);
+                $em->persist($festivo);
+                $em->flush();
+                $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Festivo creado con éxito",
+                );
+            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no valida",
+            );
         }
-
-        return $this->render('cfgfestivo/new.html.twig', array(
-            'cfgFestivo' => $cfgFestivo,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a cfgFestivo entity.
      *
-     * @Route("/{id}", name="cfgfestivo_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="cfgfestivo_show")
+     * @Method("POST")
      */
-    public function showAction(CfgFestivo $cfgFestivo)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($cfgFestivo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cfgfestivo/show.html.twig', array(
-            'cfgFestivo' => $cfgFestivo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if(authCheck == true ){
+            $em = $this->getDoctrine()->getManager();
+            $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($id);
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Festivo encontrado",
+                'data' => $festivo,
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj'=> "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
      * Displays a form to edit an existing cfgFestivo entity.
      *
-     * @Route("/{id}/edit", name="cfgfestivo_edit")
+     * @Route("/edit", name="cfgfestivo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgFestivo $cfgFestivo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgFestivo);
-        $editForm = $this->createForm('AppBundle\Form\CfgFestivoType', $cfgFestivo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if($authCheck==true){
+           $json = $request->get("json",null);
+           $params = json_decode($json);  
 
-            return $this->redirectToRoute('cfgfestivo_edit', array('id' => $cfgFestivo->getId()));
+           $em = $this->getDoctrine()->getManager();
+           $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($params->id);
+           if($festivo != null){
+               $festivo->setFecha(new \Datetime($params->fecha));
+               $festivo->setDescripcion($params->descripcion);
+               $festivo->setEstado(true);
+
+               $em->persist($festivo);
+               $em->flush();
+
+               $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Festivo editado con éxito.", 
+            );
+           }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "El festivo no se encuentra en la base de datos", 
+            );
+           }
         }
-
-        return $this->render('cfgfestivo/edit.html.twig', array(
-            'cfgFestivo' => $cfgFestivo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+           else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no valida para editar banco", 
+            );
+           }
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a cfgFestivo entity.
      *
-     * @Route("/{id}", name="cfgfestivo_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cfgfestivo_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, CfgFestivo $cfgFestivo)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($cfgFestivo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgFestivo);
+            $festivo = $em->getRepository('AppBundle:CfgFestivo')->find($params);
+            
+            $festivo->setEstado(0);
+            $em->persist($festivo);
             $em->flush();
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Festivo eliminado con éxito", 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no valida", 
+            );
         }
-
-        return $this->redirectToRoute('cfgfestivo_index');
-    }
+        return $helpers->json($response);
+        }
 
     /**
      * Creates a form to delete a cfgFestivo entity.

@@ -16,7 +16,8 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM AppBundle:Vehiculo v
-            WHERE (v.motor = :campo)
+            WHERE (v.placa = :campo) 
+            OR (v.motor = :campo)
             OR (v.vin = :campo)
             OR (v.chasis = :campo)
             OR (v.serie = :campo)
