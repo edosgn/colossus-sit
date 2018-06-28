@@ -56,6 +56,13 @@ class CfgAuditoria
      */
     private $json;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipoPeticion", type="string", length=100)
+     */
+    private $tipoPeticion;
+
 
     /**
      * Get id
@@ -186,5 +193,28 @@ class CfgAuditoria
     {
         return $this->json;
     }
-}
 
+    /**
+     * Set tipoPeticion
+     *
+     * @param string $tipoPeticion
+     *
+     * @return CfgAuditoria
+     */
+    public function setTipoPeticion($tipoPeticion)
+    {
+        $this->tipoPeticion = $tipoPeticion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoPeticion
+     *
+     * @return string
+     */
+    public function getTipoPeticion()
+    {
+        return $this->tipoPeticion;
+    }
+}
