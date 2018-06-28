@@ -47,7 +47,7 @@ class MflInfraccionCategoria
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;
+    private $activo = true;
 
 
     /**
