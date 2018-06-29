@@ -22,10 +22,9 @@ class TramiteSolicitudController extends Controller
      * @Method("GET")
      */
     public function indexAction()
-    {   // listar las tramites solicitud 
+    {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
         $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findAll();
 
         $response = array(

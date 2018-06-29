@@ -202,9 +202,6 @@ class PropietarioVehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            var_dump($params);
-            // die();
-
             $licenciaTransito = $params->licenciaTransito;
             $fechaPropiedadInicial = $params->fechaPropiedadInicial;
             $fechaPropiedadFinal = $params->fechaPropiedadFinal;
@@ -330,8 +327,6 @@ class PropietarioVehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
 
-
-
             if($vehiculo==null){
                 $response = array(
                     'status' => 'error',
@@ -359,7 +354,6 @@ class PropietarioVehiculoController extends Controller
                         'status' => 'error',
                         'code' => 400,
                         'msj' => "este vehiculo no tiene propietarios asignados", 
-                        'data' => $vehiculo, 
                     );
                 }
             }
@@ -437,50 +431,6 @@ class PropietarioVehiculoController extends Controller
                 );
         }
 
-        return $helpers->json($response);
-    }
-
-    /**
-     * Lists all CiudadanoVehiculo entities.
-     *
-     * @Route("/edit/propietario/licencia", name="edit_propietario_licencia")
-     * @Method("POST")
-     */
-    public function editPropietarioLicenciaAction(Request $request)
-    {
-
-
-        $helpers = $this->get("app.helpers");
-        $json = $request->get("json",null);
-        $params = json_decode($json);
-
-        $cedula=$params->cedula;
-        $licenciaTransito=$params->licenciaTransito;
-        $vehiculoId=$params->vehiculoId;
-
-        $em = $this->getDoctrine()->getManager();
-        $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion($cedula);
-        $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findOneBy(
-            array(
-                'ciudadano' => $usuario->getCiudadano()->getId(),
-                'vehiculo' => $vehiculoId,
-            )
-        );
-        var_dump($vehiculoId);
-        var_dump($licenciaTransito);
-        $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
-        // die();
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($propietarioVehiculo);
-        $em->flush();
-
-        $response = array(
-                    'status' => 'success',
-                    'code' => 400,
-                    'msj' => "listado propietarioVehiculos", 
-                    
-            );
-         
         return $helpers->json($response);
     }
 
