@@ -1,4 +1,19 @@
-<<<<<<< HEAD
+app_cfg_smlmv:
+    resource: "@AppBundle/Controller/CfgSmlmvController.php"
+    type:     annotation
+
+app_mfl_infraccion:
+    resource: "@AppBundle/Controller/MflInfraccionController.php"
+    type:     annotation
+
+app_mfl_infraccion_categoria:
+    resource: "@AppBundle/Controller/MflInfraccionCategoriaController.php"
+    type:     annotation
+
+app_cfg_auditoria:
+    resource: "@AppBundle/Controller/CfgAuditoriaController.php"
+    type:     annotation
+
 app_mpersonal_funcionario:
     resource: "@AppBundle/Controller/MpersonalFuncionarioController.php"
     type:     annotation
@@ -10,17 +25,7 @@ app_mpersonal_tipo_contrato:
 app_mpersonal_tipo_contrato:
     resource: "@AppBundle/Controller/MpersonalTipoContratoController.php"
     type:     annotation
-
-app_mfl_infraccion_categoria:
-    resource: "@AppBundle/Controller/MflInfraccionCategoriaController.php"
-    type:     annotation
-
-app_cfg_auditoria:
-    resource: "@AppBundle/Controller/CfgAuditoriaController.php"
-    type:     annotation
-
-=======
->>>>>>> 6567bd61af95c37406f8ee712d5b4179cdef55bd
+    
 app_mparq_costo_trayecto:
     resource: "@AppBundle/Controller/MparqCostoTrayectoController.php"
     type:     annotation
