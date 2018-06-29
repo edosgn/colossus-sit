@@ -49,11 +49,6 @@ class MparqInmovilizacion
      */
     private $observaciones;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="inmovilizaciones")
-     **/
-    protected $comparendo;
-
 
     /**
      * Get id

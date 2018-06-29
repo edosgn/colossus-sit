@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 app_mpersonal_funcionario:
     resource: "@AppBundle/Controller/MpersonalFuncionarioController.php"
     type:     annotation
@@ -18,6 +19,8 @@ app_cfg_auditoria:
     resource: "@AppBundle/Controller/CfgAuditoriaController.php"
     type:     annotation
 
+=======
+>>>>>>> 6567bd61af95c37406f8ee712d5b4179cdef55bd
 app_mparq_costo_trayecto:
     resource: "@AppBundle/Controller/MparqCostoTrayectoController.php"
     type:     annotation

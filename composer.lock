@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca3e8d4ac3a71f442f6e058294536287",
+    "content-hash": "b070ff05fd8691986402053a9a7ed137",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -1190,61 +1190,6 @@
                 "psr-3"
             ],
             "time": "2017-06-19T01:22:40+00:00"
-        },
-        {
-            "name": "oro/doctrine-extensions",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/oroinc/doctrine-extensions.git",
-                "reference": "96e1eae08a6f374098f1bdd83cc5903f496a9086"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/oroinc/doctrine-extensions/zipball/96e1eae08a6f374098f1bdd83cc5903f496a9086",
-                "reference": "96e1eae08a6f374098f1bdd83cc5903f496a9086",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/orm": ">=2.2.3",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "doctrine/data-fixtures": "^1.0",
-                "doctrine/orm": "<2.5.0",
-                "phpunit/phpunit": "4.*",
-                "squizlabs/php_codesniffer": "2.8.*",
-                "symfony/yaml": "2.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Oro\\DBAL": "src/",
-                    "Oro\\ORM": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Oro, Inc",
-                    "homepage": "http://www.orocrm.com"
-                }
-            ],
-            "description": "Doctrine Extensions for MySQL and PostgreSQL.",
-            "homepage": "https://github.com/orocrm/doctrine-extensions/",
-            "keywords": [
-                "database",
-                "doctrine",
-                "dql",
-                "function",
-                "mysql",
-                "postgresql",
-                "type"
-            ],
-            "time": "2017-12-14T15:11:28+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2506,9 +2451,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "oro/doctrine-extensions": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
