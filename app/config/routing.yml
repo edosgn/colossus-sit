@@ -1,3 +1,7 @@
+app_msv_caracterizacion:
+    resource: "@AppBundle/Controller/MsvCaracterizacionController.php"
+    type:     annotation
+
 app_cfg_smlmv:
     resource: "@AppBundle/Controller/CfgSmlmvController.php"
     type:     annotation
