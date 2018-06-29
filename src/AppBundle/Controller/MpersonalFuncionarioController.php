@@ -46,9 +46,6 @@ class MpersonalFuncionarioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            var_dump($params);
-            die();
-
             /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
