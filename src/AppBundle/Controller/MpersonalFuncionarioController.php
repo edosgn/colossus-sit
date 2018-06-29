@@ -39,22 +39,103 @@ class MpersonalFuncionarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $mpersonalFuncionario = new Mpersonalfuncionario();
-        $form = $this->createForm('AppBundle\Form\MpersonalFuncionarioType', $mpersonalFuncionario);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($mpersonalFuncionario);
-            $em->flush();
+            var_dump($params);
+            die();
 
-            return $this->redirectToRoute('mpersonalfuncionario_show', array('id' => $mpersonalFuncionario->getId()));
-        }
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $funcionario = new MpersonalFuncionario();
 
-        return $this->render('mpersonalfuncionario/new.html.twig', array(
-            'mpersonalFuncionario' => $mpersonalFuncionario,
-            'form' => $form->createView(),
-        ));
+                $em = $this->getDoctrine()->getManager();
+
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                    $params->identificacion
+                );
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
+                    $usuario->getId()
+                );
+                $funcionario->setCiudadano($ciudadano);
+
+                $funcionario->setCargo($params->nombre);
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->sedeOperativaId
+                );
+                $funcionario->setSedeOperativa($sedeOperativa);
+
+                $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
+                    $params->tipoContratoId
+                );
+                $funcionario->setTipoContrato($tipoContrato);
+
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+                    $params->ciudadanoId
+                );
+                $funcionario->setCiudadano($ciudadano);
+
+                if ($params->inhabilidad == 'true') {
+                    $funcionario->setActivo(false);
+                    $funcionario->setInhabilidad($params->inhabilidad);
+                }else{
+                    $funcionario->setActivo(true);
+                }
+
+                if ($params->actaPosesion) {
+                    $funcionario->setActaPosesion($params->actaPosesion);
+                }
+
+                if ($params->resolucion) {
+                    $funcionario->setResolucion($params->resolucion);
+                }
+
+                if ($params->tipoNombramiento) {
+                    $funcionario->setTipoNombramiento($params->tipoNombramiento);
+                }
+
+                if ($params->fechaInicio) {
+                    $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
+                }
+
+                if ($params->fechaFin) {
+                    $funcionario->setFechaFin(new \Datetime($params->fechaFin));
+                }
+
+                if ($params->numeroContrato) {
+                    $funcionario->setNumeroContrato($params->numeroContrato);
+                }
+
+                if ($params->numeroPlaca) {
+                    $funcionario->setNumeroPlaca($params->numeroPlaca);
+                }
+
+                $em->persist($funcionario);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito",  
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
