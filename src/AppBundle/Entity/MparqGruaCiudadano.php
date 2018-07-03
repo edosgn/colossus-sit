@@ -24,9 +24,9 @@ class MparqGruaCiudadano
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaIncio", type="date")
+     * @ORM\Column(name="fechaInicio", type="date")
      */
-    private $fechaIncio;
+    private $fechaInicio;
 
     /**
      * @var \DateTime
@@ -45,7 +45,7 @@ class MparqGruaCiudadano
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=10)
+     * @ORM\Column(name="tipo", type="string", length=50)
      */
     private $tipo;
 
@@ -54,10 +54,13 @@ class MparqGruaCiudadano
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;
+    private $activo = true;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="gruaCiudadanos") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="gruas") */
     private $ciudadano;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MparqGrua", inversedBy="ciudadanos") */
+    private $grua;
 
 
     /**
@@ -71,27 +74,27 @@ class MparqGruaCiudadano
     }
 
     /**
-     * Set fechaIncio
+     * Set fechaInicio
      *
-     * @param \DateTime $fechaIncio
+     * @param \DateTime $fechaInicio
      *
      * @return MparqGruaCiudadano
      */
-    public function setFechaIncio($fechaIncio)
+    public function setFechaInicio($fechaInicio)
     {
-        $this->fechaIncio = $fechaIncio;
+        $this->fechaInicio = $fechaInicio;
 
         return $this;
     }
 
     /**
-     * Get fechaIncio
+     * Get fechaInicio
      *
      * @return \DateTime
      */
-    public function getFechaIncio()
+    public function getFechaInicio()
     {
-        return $this->fechaIncio;
+        return $this->fechaInicio->format('d/m/Y');
     }
 
     /**
@@ -115,7 +118,11 @@ class MparqGruaCiudadano
      */
     public function getFechaFin()
     {
-        return $this->fechaFin;
+        if ($this->fechaFin) {
+            return $this->fechaFin->format('d/m/Y');
+        }else{
+            return $this->fechaFin;
+        }
     }
 
     /**
@@ -183,7 +190,7 @@ class MparqGruaCiudadano
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -212,5 +219,29 @@ class MparqGruaCiudadano
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set grua
+     *
+     * @param \AppBundle\Entity\MparqGrua $grua
+     *
+     * @return MparqGruaCiudadano
+     */
+    public function setGrua(\AppBundle\Entity\MparqGrua $grua = null)
+    {
+        $this->grua = $grua;
+
+        return $this;
+    }
+
+    /**
+     * Get grua
+     *
+     * @return \AppBundle\Entity\MparqGrua
+     */
+    public function getGrua()
+    {
+        return $this->grua;
     }
 }

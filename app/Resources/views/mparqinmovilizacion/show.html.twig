@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mparqinmovilizacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mparqInmovilizacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Fechaingreso</th>
+                <td>{% if mparqInmovilizacion.fechaIngreso %}{{ mparqInmovilizacion.fechaIngreso|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechasalida</th>
+                <td>{% if mparqInmovilizacion.fechaSalida %}{{ mparqInmovilizacion.fechaSalida|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horasalida</th>
+                <td>{% if mparqInmovilizacion.horaSalida %}{{ mparqInmovilizacion.horaSalida|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numerosalida</th>
+                <td>{{ mparqInmovilizacion.numeroSalida }}</td>
+            </tr>
+            <tr>
+                <th>Numeroinventario</th>
+                <td>{{ mparqInmovilizacion.numeroInventario }}</td>
+            </tr>
+            <tr>
+                <th>Dias</th>
+                <td>{{ mparqInmovilizacion.dias }}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{ mparqInmovilizacion.observaciones }}</td>
+            </tr>
+            <tr>
+                <th>Hora</th>
+                <td>{% if mparqInmovilizacion.hora %}{{ mparqInmovilizacion.hora|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Lugar</th>
+                <td>{{ mparqInmovilizacion.lugar }}</td>
+            </tr>
+            <tr>
+                <th>Valorparqueadero</th>
+                <td>{{ mparqInmovilizacion.valorParqueadero }}</td>
+            </tr>
+            <tr>
+                <th>Salida</th>
+                <td>{% if mparqInmovilizacion.salida %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if mparqInmovilizacion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mparqinmovilizacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('mparqinmovilizacion_edit', { 'id': mparqInmovilizacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

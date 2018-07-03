@@ -31,7 +31,10 @@ class GestionDocumental
 
     $em = $this->em;
 
-    $festivos = $em->getRepository('AppBundle:MgdFestivo')->findByActivo(true);
+    var_dump('expression');
+    die();
+
+    $festivos = $em->getRepository('AppBundle:CfgFestivo')->findByEstado(true);
 
     if ($festivos) {
       foreach ($festivos as $key => $value) {
@@ -67,7 +70,7 @@ class GestionDocumental
   {
     $em = $this->em;
 
-    $festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
+    $festivos = $em->getRepository('AppBundle:CfgFestivo')->findByEstado(true);
     $diasHabiles = 0;
 
     if ($festivos) {

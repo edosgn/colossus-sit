@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MparqGrua
+ * CfgFormato
  *
- * @ORM\Table(name="mparq_grua")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\MparqGruaRepository")
+ * @ORM\Table(name="cfg_formato")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgFormatoRepository")
  */
-class MparqGrua
+class CfgFormato
 {
     /**
      * @var int
@@ -24,23 +24,24 @@ class MparqGrua
     /**
      * @var string
      *
-     * @ORM\Column(name="placa", type="string", length=10)
+     * @ORM\Column(name="plantilla", type="text")
      */
-    private $placa;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroInterno", type="string", length=10)
-     */
-    private $numeroInterno;
+    private $plantilla;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo = true;
+    private $activo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="version", type="string", length=10)
+     */
+    private $version;
+
 
     /**
      * Get id
@@ -53,27 +54,27 @@ class MparqGrua
     }
 
     /**
-     * Set placa
+     * Set plantilla
      *
-     * @param string $placa
+     * @param string $plantilla
      *
-     * @return MparqGrua
+     * @return CfgFormato
      */
-    public function setPlaca($placa)
+    public function setPlantilla($plantilla)
     {
-        $this->placa = $placa;
+        $this->plantilla = $plantilla;
 
         return $this;
     }
 
     /**
-     * Get placa
+     * Get plantilla
      *
      * @return string
      */
-    public function getPlaca()
+    public function getPlantilla()
     {
-        return $this->placa;
+        return $this->plantilla;
     }
 
     /**
@@ -81,7 +82,7 @@ class MparqGrua
      *
      * @param boolean $activo
      *
-     * @return MparqGrua
+     * @return CfgFormato
      */
     public function setActivo($activo)
     {
@@ -101,26 +102,27 @@ class MparqGrua
     }
 
     /**
-     * Set numeroInterno
+     * Set version
      *
-     * @param string $numeroInterno
+     * @param string $version
      *
-     * @return MparqGrua
+     * @return CfgFormato
      */
-    public function setNumeroInterno($numeroInterno)
+    public function setVersion($version)
     {
-        $this->numeroInterno = $numeroInterno;
+        $this->version = $version;
 
         return $this;
     }
 
     /**
-     * Get numeroInterno
+     * Get version
      *
      * @return string
      */
-    public function getNumeroInterno()
+    public function getVersion()
     {
-        return $this->numeroInterno;
+        return $this->version;
     }
 }
+

@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mparqinmovilizacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechaingreso</th>
+                <th>Fechasalida</th>
+                <th>Horasalida</th>
+                <th>Numerosalida</th>
+                <th>Numeroinventario</th>
+                <th>Dias</th>
+                <th>Observaciones</th>
+                <th>Hora</th>
+                <th>Lugar</th>
+                <th>Valorparqueadero</th>
+                <th>Salida</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mparqInmovilizacion in mparqInmovilizacions %}
+            <tr>
+                <td><a href="{{ path('mparqinmovilizacion_show', { 'id': mparqInmovilizacion.id }) }}">{{ mparqInmovilizacion.id }}</a></td>
+                <td>{% if mparqInmovilizacion.fechaIngreso %}{{ mparqInmovilizacion.fechaIngreso|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if mparqInmovilizacion.fechaSalida %}{{ mparqInmovilizacion.fechaSalida|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if mparqInmovilizacion.horaSalida %}{{ mparqInmovilizacion.horaSalida|date('H:i:s') }}{% endif %}</td>
+                <td>{{ mparqInmovilizacion.numeroSalida }}</td>
+                <td>{{ mparqInmovilizacion.numeroInventario }}</td>
+                <td>{{ mparqInmovilizacion.dias }}</td>
+                <td>{{ mparqInmovilizacion.observaciones }}</td>
+                <td>{% if mparqInmovilizacion.hora %}{{ mparqInmovilizacion.hora|date('H:i:s') }}{% endif %}</td>
+                <td>{{ mparqInmovilizacion.lugar }}</td>
+                <td>{{ mparqInmovilizacion.valorParqueadero }}</td>
+                <td>{% if mparqInmovilizacion.salida %}Yes{% else %}No{% endif %}</td>
+                <td>{% if mparqInmovilizacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mparqinmovilizacion_show', { 'id': mparqInmovilizacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mparqinmovilizacion_edit', { 'id': mparqInmovilizacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mparqinmovilizacion_new') }}">Create a new mparqInmovilizacion</a>
+        </li>
+    </ul>
+{% endblock %}
