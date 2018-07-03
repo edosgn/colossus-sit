@@ -1,3 +1,7 @@
+app_mfl_tipo_recaudo:
+    resource: "@AppBundle/Controller/MflTipoRecaudoController.php"
+    type:     annotation
+
 app_mparq_inmovilizacion:
     resource: "@AppBundle/Controller/MparqInmovilizacionController.php"
     type:     annotation
