@@ -435,4 +435,168 @@ class MgdDocumentoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/response", name="mgddocumento_response")
+     * @Method({"GET", "POST"})
+     */
+    public function responseAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('AppBundle:MgdDocumento')->find(
+                $params->documentoId
+            );
+            
+            if ($documento) {
+                $documento->setRespuesta($params->descripcion);
+                $documento->setEstado('Respuesta Generada');
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Radicado No. ".$documento->getNumeroRadicado()." ".$documento->getEstado(),
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado"
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/print", name="mgddocumento_print")
+     * @Method({"GET", "POST"})
+     */
+    public function printAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('AppBundle:MgdDocumento')->find(
+                $params->documentoId
+            );
+            
+            if ($documento) {
+                if ($params->correoCertificadoEnvio == 'true') {
+                    $documento->setCorreoCertificadoEnvio(true);
+                    $documento->setNombreTransportadoraEnvio($params->nombreTransportadoraEnvio);
+                    $documento->setNumeroGuia($params->numeroGuia);
+                }else{
+                    $documento->setMedioEnvio($params->medioEnvio);
+                }
+                $documento->setFechaEnvio(new \Datetime(date('Y-m-d h:i:s')));
+                $documento->setNumeroCarpeta($params->numeroCarpeta);
+                $documento->setEstado('Finalizado');
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Radicado No. ".$documento->getNumeroRadicado()." ".$documento->getEstado(),
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado"
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/{id}/pdf", name="mgddocumento_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, MgdDocumento $mgdDocumento)
+    {
+        
+        $html = $this->renderView('@App/mgddocumento/pdf.template.html.twig', array(
+            'mgdDocumento'=>$mgdDocumento,
+        ));
+
+        $pdf = $this->container->get("white_october.tcpdf")->create(
+            'LANDSCAPE',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('qweqwe');
+        $pdf->SetTitle('Prueba TCPDF');
+        $pdf->SetSubject('Your client');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->AddPage();
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+
+        $pdf->Output("example.pdf", 'I');
+        die();
+    }
 }

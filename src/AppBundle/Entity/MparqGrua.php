@@ -40,7 +40,7 @@ class MparqGrua
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;
+    private $activo = true;
 
     /**
      * Get id
@@ -99,5 +99,28 @@ class MparqGrua
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set numeroInterno
+     *
+     * @param string $numeroInterno
+     *
+     * @return MparqGrua
+     */
+    public function setNumeroInterno($numeroInterno)
+    {
+        $this->numeroInterno = $numeroInterno;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroInterno
+     *
+     * @return string
+     */
+    public function getNumeroInterno()
+    {
+        return $this->numeroInterno;
+    }
+}

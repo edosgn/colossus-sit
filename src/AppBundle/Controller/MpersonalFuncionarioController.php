@@ -39,22 +39,112 @@ class MpersonalFuncionarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $mpersonalFuncionario = new Mpersonalfuncionario();
-        $form = $this->createForm('AppBundle\Form\MpersonalFuncionarioType', $mpersonalFuncionario);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($mpersonalFuncionario);
-            $em->flush();
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $funcionario = new MpersonalFuncionario();
 
-            return $this->redirectToRoute('mpersonalfuncionario_show', array('id' => $mpersonalFuncionario->getId()));
-        }
+                $em = $this->getDoctrine()->getManager();
 
-        return $this->render('mpersonalfuncionario/new.html.twig', array(
-            'mpersonalFuncionario' => $mpersonalFuncionario,
-            'form' => $form->createView(),
-        ));
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                    $params->identificacion
+                );
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
+                    $usuario->getId()
+                );
+                $funcionario->setCiudadano($ciudadano);
+
+                $funcionario->setCargo($params->cargo);
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->sedeOperativaId
+                );
+                $funcionario->setSedeOperativa($sedeOperativa);
+
+                $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
+                    $params->tipoContratoId
+                );
+                $funcionario->setTipoContrato($tipoContrato);
+
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                    $params->identificacion
+                );
+
+                if ($usuario) {
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
+                        $usuario->getId()
+                    );
+                }
+                $funcionario->setCiudadano($ciudadano); 
+
+                if ($params->inhabilidad == 'true') {
+                    $funcionario->setActivo(false);
+                    $funcionario->setInhabilidad(true);
+                }else{
+                    $funcionario->setActivo(true);
+                    $funcionario->setInhabilidad(false);
+                }
+
+                if ($params->actaPosesion) {
+                    $funcionario->setActaPosesion($params->actaPosesion);
+                }
+
+                if ($params->resolucion) {
+                    $funcionario->setResolucion($params->resolucion);
+                }
+
+                if ($params->tipoNombramiento) {
+                    $funcionario->setTipoNombramiento($params->tipoNombramiento);
+                }
+
+                if ($params->fechaInicio) {
+                    $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
+                }
+
+                if ($params->fechaFin) {
+                    $funcionario->setFechaFin(new \Datetime($params->fechaFin));
+                }
+
+                if ($params->numeroContrato) {
+                    $funcionario->setNumeroContrato($params->numeroContrato);
+                }
+
+                if ($params->numeroPlaca) {
+                    $funcionario->setNumeroPlaca($params->numeroPlaca);
+                }
+
+                if ($params->novedad) {
+                    $funcionario->setNovedad($params->novedad);
+                }
+
+                $em->persist($funcionario);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito", 
+                    'data' => $funcionario
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -135,6 +225,59 @@ class MpersonalFuncionarioController extends Controller
     }
 
     /**
+     * datos para select 2
+     *
+     * @Route("/select", name="mpersonalfuncionario_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+            array('activo' => true)
+        );
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/agentes", name="mpersonalfuncionario_select_agentes")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAgentesAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $response = null;
+        
+        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+            array(
+                'activo' => true,
+                'tipoContrato' => 3,
+            )
+        );
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Lists all mpersonalFuncionario entities.
      *
      * @Route("/search", name="mpersonalfuncionario_search")
@@ -192,7 +335,6 @@ class MpersonalFuncionarioController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        $ciudadano['data'] = array();
 
         if ($authCheck == true) {
             $json = $request->get("json",null);
@@ -201,22 +343,31 @@ class MpersonalFuncionarioController extends Controller
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
             );
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
-                $usuario->getId()
-            );
-                
-            if ($ciudadano == null) {
+
+            if ($usuario) {
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
+                    $usuario->getId()
+                );
+                    
+                if ($ciudadano == null) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "Registro no encontrado", 
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro encontrado", 
+                        'data'=> $ciudadano,
+                    );
+                }
+            }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Registro no encontrado", 
-                );
-            }else{
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $ciudadano,
                 );
             }
 

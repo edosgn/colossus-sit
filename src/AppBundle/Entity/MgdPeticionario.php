@@ -73,21 +73,21 @@ class MgdPeticionario
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion", type="string", length=100)
+     * @ORM\Column(name="direccion", type="string", length=100, nullable=true)
      */
     private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono", type="string", length=20)
+     * @ORM\Column(name="telefono", type="string", length=20, nullable=true)
      */
     private $telefono;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="correoElectronico", type="string", length=100)
+     * @ORM\Column(name="correoElectronico", type="string", length=100, nullable=true)
      */
     private $correoElectronico;
 

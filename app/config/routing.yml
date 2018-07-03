@@ -8,6 +8,38 @@ app_msv_talonario:
 
 app_cfg_placa:
     resource: "@AppBundle/Controller/CfgPlacaController.php"
+app_msv_evaluacion:
+    resource: "@AppBundle/Controller/MsvEvaluacionController.php"
+app_mparq_inmovilizacion:
+    resource: "@AppBundle/Controller/MparqInmovilizacionController.php"
+    type:     annotation
+
+app_mparq_grua_ciudadano:
+    resource: "@AppBundle/Controller/MparqGruaCiudadanoController.php"
+    type:     annotation
+
+app_mparq_grua:
+    resource: "@AppBundle/Controller/MparqGruaController.php"
+    type:     annotation
+
+app_mpersonal_comparendo:
+    resource: "@AppBundle/Controller/MpersonalComparendoController.php"
+    type:     annotation
+
+app_mpersonal_talonario:
+    resource: "@AppBundle/Controller/MpersonalTalonarioController.php"
+    type:     annotation
+
+app_msv_caracterizacion:
+    resource: "@AppBundle/Controller/MsvCaracterizacionController.php"
+    type:     annotation
+
+app_cfg_smlmv:
+    resource: "@AppBundle/Controller/CfgSmlmvController.php"
+    type:     annotation
+
+app_mfl_infraccion:
+    resource: "@AppBundle/Controller/MflInfraccionController.php"
     type:     annotation
 
 app_mfl_infraccion_categoria:
@@ -18,6 +50,18 @@ app_cfg_auditoria:
     resource: "@AppBundle/Controller/CfgAuditoriaController.php"
     type:     annotation
 
+app_mpersonal_funcionario:
+    resource: "@AppBundle/Controller/MpersonalFuncionarioController.php"
+    type:     annotation
+
+app_mpersonal_tipo_contrato:
+    resource: "@AppBundle/Controller/MpersonalTipoContratoController.php"
+    type:     annotation
+
+app_mpersonal_tipo_contrato:
+    resource: "@AppBundle/Controller/MpersonalTipoContratoController.php"
+    type:     annotation
+    
 app_mparq_costo_trayecto:
     resource: "@AppBundle/Controller/MparqCostoTrayectoController.php"
     type:     annotation

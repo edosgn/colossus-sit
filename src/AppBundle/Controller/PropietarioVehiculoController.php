@@ -206,7 +206,7 @@ class PropietarioVehiculoController extends Controller
 
             
             // die();
-
+            
             $licenciaTransito = $params->licenciaTransito;
             $fechaPropiedadInicial = $params->fechaPropiedadInicial;
             $fechaPropiedadFinal = $params->fechaPropiedadFinal;

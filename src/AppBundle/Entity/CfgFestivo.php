@@ -42,8 +42,6 @@ class CfgFestivo
      */
     private $estado = true;
 
-   
-
     /**
      * Get id
      *
