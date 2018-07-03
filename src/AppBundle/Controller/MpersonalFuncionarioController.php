@@ -381,4 +381,54 @@ class MpersonalFuncionarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/activo", name="mpersonalfuncionario_search_activo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchCiudadanoActivoAction(Request $request)
+    {
+        
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearchActivo($params);
+
+            if ($funcionario) {
+               
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $funcionario,
+                );
+                
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    
 }

@@ -1,3 +1,7 @@
+app_mfl_tipo_recaudo:
+    resource: "@AppBundle/Controller/MflTipoRecaudoController.php"
+    type:     annotation
+
 app_msv_t_consecutivo:
     resource: "@AppBundle/Controller/MsvTConsecutivoController.php"
     type:     annotation
