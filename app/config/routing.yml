@@ -1,3 +1,7 @@
+app_msv_evaluacion:
+    resource: "@AppBundle/Controller/MsvEvaluacionController.php"
+    type:     annotation
+
 app_msv_caracterizacion:
     resource: "@AppBundle/Controller/MsvCaracterizacionController.php"
     type:     annotation
