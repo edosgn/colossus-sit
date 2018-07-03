@@ -165,9 +165,6 @@ class Comparendo
      **/
     protected $seguimientoEntrega;
     
-
-    
-
     /**
      * Get id
      *

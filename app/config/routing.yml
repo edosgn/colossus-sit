@@ -1,5 +1,23 @@
 app_msv_evaluacion:
     resource: "@AppBundle/Controller/MsvEvaluacionController.php"
+app_mparq_inmovilizacion:
+    resource: "@AppBundle/Controller/MparqInmovilizacionController.php"
+    type:     annotation
+
+app_mparq_grua_ciudadano:
+    resource: "@AppBundle/Controller/MparqGruaCiudadanoController.php"
+    type:     annotation
+
+app_mparq_grua:
+    resource: "@AppBundle/Controller/MparqGruaController.php"
+    type:     annotation
+
+app_mpersonal_comparendo:
+    resource: "@AppBundle/Controller/MpersonalComparendoController.php"
+    type:     annotation
+
+app_mpersonal_talonario:
+    resource: "@AppBundle/Controller/MpersonalTalonarioController.php"
     type:     annotation
 
 app_msv_caracterizacion:

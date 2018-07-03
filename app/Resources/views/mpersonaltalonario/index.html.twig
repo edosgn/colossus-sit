@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mpersonaltalonarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Inico</th>
+                <th>Fin</th>
+                <th>Rangos</th>
+                <th>Fechaasignacion</th>
+                <th>Numeroresolucion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mpersonalTalonario in mpersonalTalonarios %}
+            <tr>
+                <td><a href="{{ path('mpersonaltalonario_show', { 'id': mpersonalTalonario.id }) }}">{{ mpersonalTalonario.id }}</a></td>
+                <td>{{ mpersonalTalonario.inico }}</td>
+                <td>{{ mpersonalTalonario.fin }}</td>
+                <td>{{ mpersonalTalonario.rangos }}</td>
+                <td>{% if mpersonalTalonario.fechaAsignacion %}{{ mpersonalTalonario.fechaAsignacion|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ mpersonalTalonario.numeroResolucion }}</td>
+                <td>{% if mpersonalTalonario.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mpersonaltalonario_show', { 'id': mpersonalTalonario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mpersonaltalonario_edit', { 'id': mpersonalTalonario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mpersonaltalonario_new') }}">Create a new mpersonalTalonario</a>
+        </li>
+    </ul>
+{% endblock %}

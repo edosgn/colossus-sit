@@ -38,6 +38,13 @@ class MgdDocumento
     /**
      * @var int
      *
+     * @ORM\Column(name="consecutivo", type="integer")
+     */
+    private $consecutivo;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="folios", type="integer")
      */
     private $folios;
@@ -45,28 +52,28 @@ class MgdDocumento
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroOficio", type="string", length=50)
+     * @ORM\Column(name="numeroOficio", type="string", length=50, nullable=true)
      */
     private $numeroOficio;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="diasVigencia", type="integer")
+     * @ORM\Column(name="diasVigencia", type="integer", nullable=true)
      */
     private $diasVigencia;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaVencimiento", type="date")
+     * @ORM\Column(name="fechaVencimiento", type="date", nullable=true)
      */
     private $fechaVencimiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="text")
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
      */
     private $descripcion;
 
@@ -82,7 +89,7 @@ class MgdDocumento
      *
      * @ORM\Column(name="correoCertificadoLlegada", type="boolean", nullable=true)
      */
-    private $correoCertificadoLlegada;
+    private $correoCertificadoLlegada = false;
 
     /**
      * @var string
@@ -129,9 +136,23 @@ class MgdDocumento
     /**
      * @var string
      *
+     * @ORM\Column(name="medioEnvio", type="string", length=255, nullable=true)
+     */
+    private $medioEnvio;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="numeroGuia", type="string", length=20, nullable=true)
      */
     private $numeroGuia;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroCarpeta", type="string", length=10, nullable=true)
+     */
+    private $numeroCarpeta;
 
     /**
      * @var boolean
@@ -181,6 +202,13 @@ class MgdDocumento
      * @ORM\Column(name="fechaRespuesta", type="datetime", nullable=true)
      */
     private $fechaRespuesta;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="respuesta", type="text", nullable=true)
+     */
+    private $respuesta;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdTipoCorrespondencia", inversedBy="documentos")
@@ -855,5 +883,101 @@ class MgdDocumento
     public function getPeticionario()
     {
         return $this->peticionario;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return MgdDocumento
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     *
+     * @return MgdDocumento
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
+    }
+
+    /**
+     * Set medioEnvio
+     *
+     * @param string $medioEnvio
+     *
+     * @return MgdDocumento
+     */
+    public function setMedioEnvio($medioEnvio)
+    {
+        $this->medioEnvio = $medioEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get medioEnvio
+     *
+     * @return string
+     */
+    public function getMedioEnvio()
+    {
+        return $this->medioEnvio;
+    }
+
+    /**
+     * Set numeroCarpeta
+     *
+     * @param string $numeroCarpeta
+     *
+     * @return MgdDocumento
+     */
+    public function setNumeroCarpeta($numeroCarpeta)
+    {
+        $this->numeroCarpeta = $numeroCarpeta;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCarpeta
+     *
+     * @return string
+     */
+    public function getNumeroCarpeta()
+    {
+        return $this->numeroCarpeta;
     }
 }
