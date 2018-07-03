@@ -1,3 +1,11 @@
+app_msv_t_consecutivo:
+    resource: "@AppBundle/Controller/MsvTConsecutivoController.php"
+    type:     annotation
+
+app_msv_talonario:
+    resource: "@AppBundle/Controller/MsvTalonarioController.php"
+    type:     annotation
+
 app_cfg_placa:
     resource: "@AppBundle/Controller/CfgPlacaController.php"
     type:     annotation
