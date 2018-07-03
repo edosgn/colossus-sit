@@ -8,8 +8,12 @@ app_msv_talonario:
 
 app_cfg_placa:
     resource: "@AppBundle/Controller/CfgPlacaController.php"
+    type:     annotation
+
 app_msv_evaluacion:
     resource: "@AppBundle/Controller/MsvEvaluacionController.php"
+    type:     annotation
+
 app_mparq_inmovilizacion:
     resource: "@AppBundle/Controller/MparqInmovilizacionController.php"
     type:     annotation
