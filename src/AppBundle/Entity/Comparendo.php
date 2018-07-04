@@ -31,98 +31,98 @@ class Comparendo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaDiligenciamiento", type="datetime")
+     * @ORM\Column(name="fechaDiligenciamiento", type="datetime", nullable=true)
      */
     private $fechaDiligenciamiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lugarInfraccion", type="string", length=255)
+     * @ORM\Column(name="lugarInfraccion", type="string", length=255, nullable=true)
      */
     private $lugarInfraccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="barrioInfraccion", type="string", length=45)
+     * @ORM\Column(name="barrioInfraccion", type="string", length=45, nullable=true)
      */
     private $barrioInfraccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observacionesAgente", type="text")
+     * @ORM\Column(name="observacionesAgente", type="text", nullable=true)
      */
     private $observacionesAgente;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observacionesDigitador", type="text")
+     * @ORM\Column(name="observacionesDigitador", type="text", nullable=true)
      */
     private $observacionesDigitador;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipoInfractor", type="string", length=45)
+     * @ORM\Column(name="tipoInfractor", type="string", length=45, nullable=true)
      */
     private $tipoInfractor;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="tarjetaOperacionInfractor", type="integer")
+     * @ORM\Column(name="tarjetaOperacionInfractor", type="integer", nullable=true)
      */
     private $tarjetaOperacionInfractor;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="fuga", type="boolean")
+     * @ORM\Column(name="fuga", type="boolean", nullable=true)
      */
     private $fuga;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="accidente", type="boolean")
+     * @ORM\Column(name="accidente", type="boolean", nullable=true)
      */
     private $accidente;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="polca", type="boolean")
+     * @ORM\Column(name="polca", type="boolean", nullable=true)
      */
     private $polca;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="fotomulta", type="boolean")
+     * @ORM\Column(name="fotomulta", type="boolean", nullable=true)
      */
     private $fotomulta;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="retencionLicencia", type="boolean")
+     * @ORM\Column(name="retencionLicencia", type="boolean", nullable=true)
      */
     private $retencionLicencia;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaNotificacion", type="date")
+     * @ORM\Column(name="fechaNotificacion", type="date", nullable=true)
      */
     private $fechaNotificacion;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="gradoAlchoholemia", type="integer")
+     * @ORM\Column(name="gradoAlchoholemia", type="integer", nullable=true)
      */
     private $gradoAlchoholemia;
 
@@ -138,7 +138,7 @@ class Comparendo
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
+    private $estado = true;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")

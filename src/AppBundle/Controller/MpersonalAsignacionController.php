@@ -311,13 +311,20 @@ class MpersonalAsignacionController extends Controller
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
 
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
+            $mpersonalFuncionario->getId()
+        );
+
         $html = $this->renderView('@App/mpersonalasignacion/pdf.template.html.twig', array(
             'mpersonalFuncionario'=>$mpersonalFuncionario,
+            'asignaciones' => $asignaciones,
             'fechaActual' => $fechaActual
         ));
 
         $pdf = $this->container->get("white_october.tcpdf")->create(
-            'LANDSCAPE',
+            'PORTRAIT',
             PDF_UNIT,
             PDF_PAGE_FORMAT,
             true,
@@ -325,12 +332,15 @@ class MpersonalAsignacionController extends Controller
             false
         );
         $pdf->SetAuthor('qweqwe');
-        $pdf->SetTitle('Prueba TCPDF');
+        $pdf->SetTitle('Planilla');
         $pdf->SetSubject('Your client');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
         $pdf->setFontSubsetting(true);
 
         $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->AddPage();
 
         $pdf->writeHTMLCell(

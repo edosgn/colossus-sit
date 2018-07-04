@@ -22,13 +22,24 @@ class MparqEntradaSalidaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $entradasSalidas = $em->getRepository('AppBundle:MparqEntradaSalida')->findBy(
+            array('activo' => true)
+        );
 
-        $mparqEntradaSalidas = $em->getRepository('AppBundle:MparqEntradaSalida')->findAll();
+        $response['data'] = array();
 
-        return $this->render('mparqentradasalida/index.html.twig', array(
-            'mparqEntradaSalidas' => $mparqEntradaSalidas,
-        ));
+        if ($entradasSalidas) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => count($entradasSalidas)." Registros encontrados", 
+                'data'=> $entradasSalidas,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**

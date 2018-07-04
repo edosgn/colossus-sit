@@ -94,3 +94,6 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+
+white_october_tcpdf:
+    class: 'AppBundle\services\PdfTemplate'
