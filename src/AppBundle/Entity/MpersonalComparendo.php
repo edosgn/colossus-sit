@@ -31,7 +31,7 @@ class MpersonalComparendo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaAsignacion", type="date")
+     * @ORM\Column(name="fechaAsignacion", type="date", nullable=true)
      */
     private $fechaAsignacion;
 
@@ -58,6 +58,11 @@ class MpersonalComparendo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
      **/
     protected $funcionario;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalTalonario", inversedBy="comparendos")
+     **/
+    protected $talonario;
 
 
     /**
@@ -188,5 +193,53 @@ class MpersonalComparendo
     public function getConsecutivo()
     {
         return $this->consecutivo;
+    }
+
+    /**
+     * Set fechaAsignacion
+     *
+     * @param \DateTime $fechaAsignacion
+     *
+     * @return MpersonalComparendo
+     */
+    public function setFechaAsignacion($fechaAsignacion)
+    {
+        $this->fechaAsignacion = $fechaAsignacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaAsignacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaAsignacion()
+    {
+        return $this->fechaAsignacion->format('d/m/Y');
+    }
+
+    /**
+     * Set talonario
+     *
+     * @param \AppBundle\Entity\MpersonalTalonario $talonario
+     *
+     * @return MpersonalComparendo
+     */
+    public function setTalonario(\AppBundle\Entity\MpersonalTalonario $talonario = null)
+    {
+        $this->talonario = $talonario;
+
+        return $this;
+    }
+
+    /**
+     * Get talonario
+     *
+     * @return \AppBundle\Entity\MpersonalTalonario
+     */
+    public function getTalonario()
+    {
+        return $this->talonario;
     }
 }

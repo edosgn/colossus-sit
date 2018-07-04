@@ -172,4 +172,53 @@ class MpersonalComparendoController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/funcionario", name="mpersonalcomparendo_record_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function recordFuncionarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $comparendos['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $comparendos = $em->getRepository('AppBundle:MpersonalComparendo')->findByFuncionario(
+                $params->id
+            );
+                
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => count($comparendos)." Registros encontrados",  
+                    'data'=> $comparendos,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Ningún registro encontrado",
+                    'data' => $response['data'] = array(),
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
