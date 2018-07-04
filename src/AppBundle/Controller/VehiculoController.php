@@ -108,7 +108,6 @@ class VehiculoController extends Controller
                         $motor = $params->motor;
                         $chasis = $params->chasis;
                         $serie = $params->serie;
-                        $tipoVehiculo = $params->tipoVehiculo;
                         $radioAccion = $params->radioAccion;
                         $modalidadTransporte = $params->modalidadTransporte;
                         $transportePasajeros = $params->transportePasajeros;
@@ -149,7 +148,6 @@ class VehiculoController extends Controller
                         $vehiculo->setMotor($motor);
                         $vehiculo->setChasis($chasis);
                         $vehiculo->setSerie($serie);
-                        $vehiculo->setTipoVehiculo($tipoVehiculo);
                         $vehiculo->setRadioAccion($radioAccion);
                         $vehiculo->setModalidadTRansporte($modalidadTransporte);
                         $vehiculo->setTransportePasajeros($transportePasajeros);
