@@ -230,4 +230,33 @@ class CfgPlacaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2 por modulo
+     *
+     * @Route("/select/placas/por/sedeOperativa/{id}", name="placas_select_por_sedeOperativa")
+     * @Method({"GET", "POST"})
+     */
+
+    public function SelectPlacaPorSede( $id)
+    {
+        $response = null;
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $placas = $em->getRepository('AppBundle:CfgPlaca')->findBy(
+        array(
+            'sedeOperativa' => $id,
+            'estado' => 1
+            
+        )
+    );
+    foreach ($placas as $key => $placa) {
+        $response[$key] = array(
+            'value' => $placa->getNumero(),
+            'label' => $placa->getNumero(),
+            );
+      }
+       return $helpers->json($response);
+
+    }
 }
