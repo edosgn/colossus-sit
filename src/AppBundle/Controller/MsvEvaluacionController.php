@@ -73,7 +73,7 @@ class MsvEvaluacionController extends Controller
                 }else{
                     $evaluacion->setResponde(true);
                 }
-                $evaluacion->setOservacion($params->observacion);
+                $evaluacion->setObservacion($params->observacion);
                 $evaluacion->setEstado(true);
                 $em->persist($evaluacion);
                 $em->flush();
@@ -107,12 +107,20 @@ class MsvEvaluacionController extends Controller
         if(authCheck == true ){
             $em = $this->getDoctrine()->getManager();
             $evaluacion = $em->getRepository('AppBundle:MsvEvaluacion')->find($id);
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Evaluacion encontrada",
-                'data' => $evaluacion,
-            );
+            if($evaluacion){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Evaluacion encontrada",
+                    'data' => $evaluacion,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 401,
+                    'msj'=> "Evaluación no encontrada",
+                );
+            }
         }else{
             $response = array(
                 'status' => 'error',

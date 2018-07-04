@@ -91,6 +91,11 @@ class MsvEvaluacion
      */
     private $estado;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa")
+     **/
+    protected $empresa;
+
 
     /**
      * Get id
@@ -340,6 +345,30 @@ class MsvEvaluacion
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Clase
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }
 

@@ -1,5 +1,11 @@
 app_msv_evaluacion:
     resource: "@AppBundle/Controller/MsvEvaluacionController.php"
+    type:     annotation
+
+app_msv_revision:
+    resource: "@AppBundle/Controller/MsvRevisionController.php"
+    type:     annotation
+
 app_mparq_inmovilizacion:
     resource: "@AppBundle/Controller/MparqInmovilizacionController.php"
     type:     annotation

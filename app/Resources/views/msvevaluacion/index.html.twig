@@ -39,6 +39,9 @@
                         <li>
                             <a href="{{ path('msvevaluacion_show', { 'id': msvEvaluacion.id }) }}">show</a>
                         </li>
+                        <li>
+                            <a href="{{ path('msvevaluacion_edit', { 'id': msvEvaluacion.id }) }}">edit</a>
+                        </li>
                     </ul>
                 </td>
             </tr>
@@ -46,5 +49,9 @@
         </tbody>
     </table>
 
-    
+    <ul>
+        <li>
+            <a href="{{ path('msvevaluacion_new') }}">Create a new msvEvaluacion</a>
+        </li>
+    </ul>
 {% endblock %}

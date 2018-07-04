@@ -10,4 +10,17 @@ namespace AppBundle\Repository;
  */
 class EmpresaRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    //Obtiene la empresa segun el NIT o Nombre
+    public function findByIdNombre($nitnombre){
+        $em = $this->getEntityManager();
+        $sql = " SELECT e
+        FROM AppBundle:Empresa e
+        WHERE (e.nit = :nitnombre)
+        OR (e.nombre = :nitnombre)";
+        $consulta = $em->createQuery($sql);
+        $consulta->setParameters(array('nitnombre' => $nitnombre,));
+        return $consulta->getOneOrNullRestult();
+    }
+
 }
