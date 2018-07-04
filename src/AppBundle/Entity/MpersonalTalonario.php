@@ -45,7 +45,7 @@ class MpersonalTalonario
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaAsignacion", type="date")
+     * @ORM\Column(name="fechaAsignacion", type="date", nullable=true)
      */
     private $fechaAsignacion;
 

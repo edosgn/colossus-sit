@@ -1,5 +1,13 @@
-app_mparq_inmovilizacion:
-    resource: "@AppBundle/Controller/MparqInmovilizacionController.php"
+app_mpersonal_asignacion:
+    resource: "@AppBundle/Controller/MpersonalAsignacionController.php"
+    type:     annotation
+
+app_mpersonal_horario:
+    resource: "@AppBundle/Controller/MpersonalHorarioController.php"
+    type:     annotation
+
+app_mparq_entrada_salida:
+    resource: "@AppBundle/Controller/MparqEntradaSalidaController.php"
     type:     annotation
 
 app_mparq_grua_ciudadano:

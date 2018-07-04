@@ -66,6 +66,8 @@ class MflInfraccionController extends Controller
             }else{*/
                 $infraccion = new MflInfraccion();
 
+                $em = $this->getDoctrine()->getManager();
+
                 $infraccion->setNombre($params->nombre);
                 $infraccion->setCodigo($params->codigo);
                 $infraccion->setDescripcion($params->descripcion);
@@ -75,7 +77,6 @@ class MflInfraccionController extends Controller
                 );
                 $infraccion->setCategoria($categoria);
 
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($infraccion);
                 $em->flush();
 
@@ -205,7 +206,7 @@ class MflInfraccionController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="mflinfraccioncategoria_select")
+     * @Route("/select", name="mflinfraccion_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()

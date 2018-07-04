@@ -159,8 +159,8 @@ class MflInfraccionCategoriaController extends Controller
     /**
      * Deletes a mflInfraccionCategorium entity.
      *
-     * @Route("/{id}/delete", name="mflinfraccioncategoria_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="mflinfraccioncategoria_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, MflInfraccionCategoria $mflInfraccionCategorium)
     {
@@ -206,6 +206,8 @@ class MflInfraccionCategoriaController extends Controller
         $categorias = $em->getRepository('AppBundle:MflInfraccionCategoria')->findBy(
             array('activo' => true)
         );
+
+        $response = null;
 
         foreach ($categorias as $key => $categoria) {
             $response[$key] = array(
