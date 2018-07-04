@@ -35,7 +35,7 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	        $consulta = $em->createQuery($dql);
 	        $consulta->setParameters(array(
 	            'identificacion' => $params->identificacion,
-	        ));
+	        )); 
         }elseif(isset($params->cargo)){
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f
@@ -69,4 +69,21 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    public function getSearchActivo($params){   
+        $em = $this->getEntityManager(); 
+        $dql = "SELECT f
+            FROM AppBundle:MpersonalFuncionario f, UsuarioBundle:Usuario u, AppBundle:Ciudadano c
+            WHERE u.id = c.usuario
+            AND c.id = f.ciudadano
+            AND u.identificacion = :identificacion
+            AND f.activo = 1";
+
+	        $consulta = $em->createQuery($dql);
+	        $consulta->setParameters(array(
+	            'identificacion' => $params->identificacion,
+            ));
+        return $consulta->getOneOrNullResult();    
+    }
+
 }

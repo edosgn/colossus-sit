@@ -251,8 +251,8 @@ class TramitePrecioController extends Controller
     /**
      * Finds and displays a tramitePrecio entity.
      *
-     * @Route("/{id}", name="tramiteprecio_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="tramiteprecio_show")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request,$id)
     {
@@ -400,5 +400,29 @@ class TramitePrecioController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/modulo/{moduloId}", name="pais_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectPaisAction($moduloId)
+    {
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $tramitesPrecio = $em->getRepository('AppBundle:TramitePrecio')->findBy(
+            array('estado' => 1,'modulo'=>$moduloId)
+        );
+        foreach ($tramitesPrecio as $key => $tramitePrecio) {
+            $response[$key] = array(
+                'value' => $tramitePrecio->getId(),
+                'label' => $tramitePrecio->getNombre(),
+            );
+        }
+        return $helpers->json($response);
     }
 }

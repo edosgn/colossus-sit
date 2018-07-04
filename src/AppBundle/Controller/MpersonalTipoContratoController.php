@@ -160,7 +160,7 @@ class MpersonalTipoContratoController extends Controller
         $tiposContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->findBy(
             array('activo' => true)
         );
-
+        $response= null;
         foreach ($tiposContrato as $key => $tipoContrato) {
             $response[$key] = array(
                 'value' => $tipoContrato->getId(),
