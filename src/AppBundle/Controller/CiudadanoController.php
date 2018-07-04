@@ -449,7 +449,7 @@ class CiudadanoController extends Controller
             $em = $this->getDoctrine()->getManager();
             // var_dump($numeroIdentificacion);
             // die();
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findBy(
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
                 array('identificacion' => $numeroIdentificacion,'tipoIdentificacion'=>$tipoIdentificacionUsuarioId)
             ); 
             if ($usuario) {
@@ -457,6 +457,7 @@ class CiudadanoController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Identificacion ya esta registrada en la base de datos", 
+                    'datos' => $usuario, 
                 );
                 return $helpers->json($response);
             }else{

@@ -224,6 +224,12 @@ class MsvCaracterizacion
      */
     private $propuestaReduccionRiesgo;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado = true;
 
     /**
      * Get id
@@ -929,6 +935,30 @@ class MsvCaracterizacion
     public function getPropuestaReduccionRiesgo()
     {
         return $this->propuestaReduccionRiesgo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
 
