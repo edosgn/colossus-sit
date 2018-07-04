@@ -38,7 +38,7 @@ class Factura
     /**
      * @var int
      *
-     * @ORM\Column(name="anio", type="integer")
+     * @ORM\Column(name="anio", type="integer", nullable=true)
      */
     private $anio;
 
@@ -57,12 +57,13 @@ class Factura
     private $fechaCreacion;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="observacion", type="text", nullable=true)
+     * @ORM\Column(name="fechaVencimiento", type="datetime")
      */
-    private $observacion;
+    private $fechaVencimiento;
 
+    
     /**
      * @var float
      *
@@ -94,7 +95,11 @@ class Factura
      **/
     protected $vehiculo;
 
-  
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
+     **/
+    protected $ciudadano;
+
 
     /**
      * Get id
@@ -227,27 +232,27 @@ class Factura
     }
 
     /**
-     * Set observacion
+     * Set fechaVencimiento
      *
-     * @param string $observacion
+     * @param \DateTime $fechaVencimiento
      *
      * @return Factura
      */
-    public function setObservacion($observacion)
+    public function setFechaVencimiento($fechaVencimiento)
     {
-        $this->observacion = $observacion;
+        $this->fechaVencimiento = $fechaVencimiento;
 
         return $this;
     }
 
     /**
-     * Get observacion
+     * Get fechaVencimiento
      *
-     * @return string
+     * @return \DateTime
      */
-    public function getObservacion()
+    public function getFechaVencimiento()
     {
-        return $this->observacion;
+        return $this->fechaVencimiento;
     }
 
     /**
@@ -349,11 +354,11 @@ class Factura
     /**
      * Set vehiculo
      *
-     * @param \AppBundle\Entity\vehiculo $vehiculo
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
      * @return Factura
      */
-    public function setVehiculo(\AppBundle\Entity\vehiculo $vehiculo = null)
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {
         $this->vehiculo = $vehiculo;
 
@@ -363,10 +368,34 @@ class Factura
     /**
      * Get vehiculo
      *
-     * @return \AppBundle\Entity\vehiculo
+     * @return \AppBundle\Entity\Vehiculo
      */
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     *
+     * @return Factura
+     */
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
     }
 }

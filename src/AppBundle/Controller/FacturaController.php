@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Factura;
+use AppBundle\Entity\TramiteFactura;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -64,30 +65,52 @@ class FacturaController extends Controller
                 $consecutivo = count($facturas)."-".date('y');
 
 
-                $numero = $params->numero;
-                $observacion = (isset($params->observacion)) ? $params->observacion : null;
-                $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
-                //Captura llaves foraneas
-                $sedeOperativaId = $params->sedeOperativaId;
-                // $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
+                $numero = $params->factura->numero;
+                $sedeOperativaId = $params->factura->sedeOperativaId;
+                $fechaCreacion = $params->factura->fechaCreacion;
+                $valorBruto = $params->factura->valorBruto;
+                $vehiculoId = $params->factura->vehiculoId;
+                $ciudadanoId = $params->factura->ciudadanoId;
+                $fechaCreacion = $params->factura->fechaCreacion;
+                $fechaCreacionDateTime = new \DateTime($fechaCreacion);
                 
-                $estado = $params->estado;
+
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
 
                 $factura = new Factura();
                 
-                $factura->setNumero($consecutivo);
-                $factura->setAnio(date('y'));
-                $factura->setConsecutivo($consecutivo);
+                $factura->setNumero($numero);
+                $factura->setConsecutivo(0);
                 $factura->setEstado('Emitida');
-                $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
+                $factura->setFechaVencimiento($fechaCreacionDateTime);
+                $factura->setValorBruto($valorBruto);
                 //Inserta llaves foraneas
                 $factura->setSedeOperativa($sedeOperativa);
+                $factura->setVehiculo($vehiculo);
+                $factura->setCiudadano($ciudadano);
                 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);
                 $em->flush();
+
+                foreach ($params->tramitesValor as $key => $tramiteValor) {
+                    $tramiteFactura = new TramiteFactura();
+
+                    $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
+                        array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
+                    );
+
+                    $tramiteFactura->setFactura($factura);
+                    $tramiteFactura->setTramitePrecio($tramitePrecio);
+                    $tramiteFactura->setEstado(true);
+                    $tramiteFactura->setRealizado(false);
+                    $tramiteFactura->setCantidad(1);
+                    $em->persist($tramiteFactura);
+                    $em->flush();
+                }
 
                 $response = array(
                     'status' => 'success',
