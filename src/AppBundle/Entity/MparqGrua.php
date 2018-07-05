@@ -24,7 +24,7 @@ class MparqGrua
     /**
      * @var string
      *
-     * @ORM\Column(name="placa", type="string", length=10)
+     * @ORM\Column(name="placa", type="string", length=10, nullable=true)
      */
     private $placa;
 

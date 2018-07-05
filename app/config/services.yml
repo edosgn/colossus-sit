@@ -19,3 +19,7 @@ services:
         class: AppBundle\services\GestionDocumental
         autowire: false
         arguments: ['@doctrine.orm.entity_manager']
+
+    app.pdf:
+        class: AppBundle\services\PdfTemplate
+        arguments: ["null"]

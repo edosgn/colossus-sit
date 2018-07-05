@@ -566,7 +566,7 @@ class MgdDocumentoController extends Controller
         ));
 
         $pdf = $this->container->get("white_october.tcpdf")->create(
-            'LANDSCAPE',
+            'PORTRAIT',
             PDF_UNIT,
             PDF_PAGE_FORMAT,
             true,
@@ -578,6 +578,11 @@ class MgdDocumentoController extends Controller
         $pdf->SetSubject('Your client');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
         $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
         $pdf->SetFont('helvetica', '', 11, '', true);
         $pdf->AddPage();
