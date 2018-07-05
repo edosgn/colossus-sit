@@ -22,13 +22,24 @@ class MsvTConsecutivoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $consecutivos = $em->getRepository('AppBundle:MsvTConsecutivo')->findBy(
+            array('activo' => true)
+        );
 
-        $msvTConsecutivos = $em->getRepository('AppBundle:MsvTConsecutivo')->findAll();
+        $response['data'] = array();
 
-        return $this->render('msvtconsecutivo/index.html.twig', array(
-            'msvTConsecutivos' => $msvTConsecutivos,
-        ));
+        if ($consecutivos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => count($consecutivos)." Registros encontrados", 
+                'data'=> $consecutivos,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +50,44 @@ class MsvTConsecutivoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $msvTConsecutivo = new Msvtconsecutivo();
-        $form = $this->createForm('AppBundle\Form\MsvTConsecutivoType', $msvTConsecutivo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+// var_dump($params);
+// die();
+                $consecutivo = new MsvTConsecutivo();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($msvTConsecutivo);
-            $em->flush();
+                $consecutivo->setInicio($params->incio);
+                $consecutivo->setFin($params->fin);
+                $consecutivo->setFechaAsignación(new \Datetime($params->fechaAsignacion));
+                $consecutivo->setNumeroResolucion($params->numeroResolucion);
 
-            return $this->redirectToRoute('msvtconsecutivo_show', array('id' => $msvTConsecutivo->getId()));
-        }
+                $sedeOperativa = $em->getRepository('AppBundle:sedeOperativa')->find(
+                    $params->sedeOperativaId
+                );
+                $consecutivo->setSedeOperativa($sedeOperativa);
 
-        return $this->render('msvtconsecutivo/new.html.twig', array(
-            'msvTConsecutivo' => $msvTConsecutivo,
-            'form' => $form->createView(),
-        ));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($consecutivo);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito",  
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**

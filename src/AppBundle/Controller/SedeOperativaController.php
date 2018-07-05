@@ -24,7 +24,9 @@ class SedeOperativaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findAll();
+        $sedesOperativas = $em->getRepository('AppBundle:SedeOperativa')->findBy(
+            array('estado' => 1)
+        );
 
         $response = array(
             'status' => 'success',
@@ -49,25 +51,23 @@ class SedeOperativaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            // if (count($params)==0) {
-            //     $response = array(
-            //         'status' => 'error',
-            //         'code' => 400,
-            //         'msj' => "Los campos no pueden estar vacios", 
-            //     );
-            // }else{
-                $nombre = $params->nombre;
-                $codigoDivipo = $params->codigoDivipo;
+            // var_dump($params);
+            // die();
+            $municipioId = $params->municipioId;
+            $nombre = $params->nombre;
+            $codigoDivipo = $params->codigoDivipo;
+            $em = $this->getDoctrine()->getManager();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
 
-                $sedeOperativa = new Sedeoperativa();
+            $sedeOperativa = new Sedeoperativa();
 
-                $sedeOperativa->setNombre($ciudadanoSelected);
-                $sedeOperativa->setCodigoDivipo($codigoDivipo);
-                $sedeOperativa->setEstado(true);
+            $sedeOperativa->setNombre($nombre);
+            $sedeOperativa->setCodigoDivipo($codigoDivipo);
+            $sedeOperativa->setMunicipio($municipio);
+            $sedeOperativa->setEstado(true);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($inmovilizacion);
-                $em->flush();
+            $em->persist($sedeOperativa);
+            $em->flush();
 
                 $response = array(
                     'status' => 'success',
@@ -118,10 +118,10 @@ class SedeOperativaController extends Controller
     /**
      * Displays a form to edit an existing sedeOperativa entity.
      *
-     * @Route("/{id}/edit", name="sedeoperativa_edit")
+     * @Route("/edit", name="sedeoperativa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SedeOperativa $sedeOperativa)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -133,13 +133,16 @@ class SedeOperativaController extends Controller
 
             $nombre = $params->nombre;
             $codigoDivipo = $params->codigoDivipo;
-
+            $municipioId = $params->municipioId;
             $em = $this->getDoctrine()->getManager();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->id);
 
             if ($sedeOperativa!=null) {
-                $sedeOperativa->setNombre($numeroPatio);
+                $sedeOperativa->setNombre($nombre);
                 $sedeOperativa->setCodigoDivipo($codigoDivipo);
-
+                $sedeOperativa->setMunicipio($municipio);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sedeOperativa);
                 $em->flush();
@@ -171,8 +174,8 @@ class SedeOperativaController extends Controller
     /**
      * Deletes a sedeOperativa entity.
      *
-     * @Route("/{id}", name="sedeoperativa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="sedeoperativa_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, SedeOperativa $sedeOperativa)
     {
@@ -236,7 +239,7 @@ class SedeOperativaController extends Controller
             $consecutive = substr($sedeOperativa->getCodigoDivipo(), 0, 12);
             $response[$key] = array(
                 'value' => $sedeOperativa->getId(),
-                'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre(),
+                'label' => $sedeOperativa->getCodigoDivipo()."_".$sedeOperativa->getNombre()."  -  ".$sedeOperativa->getMunicipio(),
                 'consecutive' => $consecutive
             );
         }

@@ -1,3 +1,7 @@
+app_msv_tc_asignacion:
+    resource: "@AppBundle/Controller/MsvTCAsignacionController.php"
+    type:     annotation
+
 app_mpersonal_asignacion:
     resource: "@AppBundle/Controller/MpersonalAsignacionController.php"
     type:     annotation

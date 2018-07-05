@@ -36,6 +36,11 @@ class SedeOperativa
     private $codigoDivipo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inmovilizaciones")
+     **/
+    protected $municipio;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="estado", type="boolean")
@@ -43,6 +48,8 @@ class SedeOperativa
     private $estado;
 
     
+
+
 
 
 
@@ -127,5 +134,29 @@ class SedeOperativa
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \AppBundle\Entity\Municipio $municipio
+     *
+     * @return SedeOperativa
+     */
+    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
     }
 }

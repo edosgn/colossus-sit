@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvtcasignacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ msvTCAsignacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Desde</th>
+                <td>{{ msvTCAsignacion.desde }}</td>
+            </tr>
+            <tr>
+                <th>Hasta</th>
+                <td>{{ msvTCAsignacion.hasta }}</td>
+            </tr>
+            <tr>
+                <th>Fechaasignacion</th>
+                <td>{% if msvTCAsignacion.fechaAsignacion %}{{ msvTCAsignacion.fechaAsignacion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Rangos</th>
+                <td>{{ msvTCAsignacion.rangos }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if msvTCAsignacion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvtcasignacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('msvtcasignacion_edit', { 'id': msvTCAsignacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
