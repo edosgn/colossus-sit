@@ -10,4 +10,24 @@ namespace AppBundle\Repository;
  */
 class MpersonalAsignacionRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene la lista de documentos por peticionario
+    public function getFuncionariosByTipoContrato($params, $tipoContrato){   
+        $em = $this->getEntityManager();
+
+    	$dql = "SELECT f
+        FROM AppBundle:MpersonalFuncionario f, UsuarioBundle:Usuario u, AppBundle:Ciudadano c
+        WHERE u.id = c.usuario
+        AND c.id = f.ciudadano
+        AND (u.primerNombre = :parametro OR u.segundoNombre = :parametro OR u.primerApellido = :parametro OR u.segundoApellido = :parametro OR f.numeroPlaca = :parametro)
+        AND f.tipoContrato = :tipoContrato";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'parametro' => $params->parametro,
+            'tipoContrato' => $tipoContrato,
+        ));
+
+
+        return $consulta->getResult();
+    }
 }

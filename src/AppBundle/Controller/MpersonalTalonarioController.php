@@ -84,6 +84,26 @@ class MpersonalTalonarioController extends Controller
                 $em->persist($talonario);
                 $em->flush();
 
+                $divipo = $sedeOperativa->getCodigoDivipo();
+                for ($consecutivo=$talonario->getDesde(); $consecutivo <= $talonario->getHasta(); $consecutivo++) {
+                    $longitud = (20 - (strlen($divipo)+strlen($consecutivo)));
+                    if ($longitud < 20) {
+                        $numeroComparendo = $divipo.str_pad($consecutivo, $longitud, '0', STR_PAD_LEFT);
+                    }else{
+                        $numeroComparendo = $divipo.$consecutivo;
+                    }
+
+                    $comparendo = new MpersonalComparendo();
+
+                    $comparendo->setTalonario($talonario);
+                    $comparendo->setConsecutivo($numeroComparendo);
+                    $comparendo->setSedeOperativa($sedeOperativa);
+                    $comparendo->setEstado('Disponible');
+
+                    $em->persist($comparendo);
+                    $em->flush();
+                }
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

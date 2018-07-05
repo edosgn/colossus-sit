@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\MpersonalAsignacion;
+use AppBundle\Entity\MpersonalFuncionario;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Mpersonalasignacion controller.
@@ -51,22 +53,77 @@ class MpersonalAsignacionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $mpersonalAsignacion = new Mpersonalasignacion();
-        $form = $this->createForm('AppBundle\Form\MpersonalAsignacionType', $mpersonalAsignacion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($mpersonalAsignacion);
-            $em->flush();
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $asignacion = new MpersonalAsignacion();
 
-            return $this->redirectToRoute('mpersonalasignacion_show', array('id' => $mpersonalAsignacion->getId()));
-        }
+                $em = $this->getDoctrine()->getManager();
 
-        return $this->render('mpersonalasignacion/new.html.twig', array(
-            'mpersonalAsignacion' => $mpersonalAsignacion,
-            'form' => $form->createView(),
-        ));
+                $fechaAsignacion = new \Datetime($params->fechaAsignacion);
+
+                $asignacion->setDesde($params->desde);
+                $asignacion->setHasta($params->hasta);
+                $asignacion->setRangos(($params->hasta + 1) - $params->desde);
+                $asignacion->setFechaAsignacion($fechaAsignacion);
+
+                $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
+                    $params->funcionarioId
+                );
+                $asignacion->setFuncionario($funcionario);
+
+                $em->persist($asignacion);
+                $em->flush();
+
+                $divipo = $funcionario->getSedeOperativa()->getCodigoDivipo();
+                for ($consecutivo=$asignacion->getDesde(); $consecutivo <= $asignacion->getHasta(); $consecutivo++) {
+
+                    $longitud = (20 - (strlen($divipo)+strlen($consecutivo)));
+                    if ($longitud < 20) {
+                        $numeroComparendo = $divipo.str_pad($consecutivo, $longitud, '0', STR_PAD_LEFT);
+                    }else{
+                        $numeroComparendo = $divipo.$consecutivo;
+                    }
+                    
+                    $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneByConsecutivo(
+                        $numeroComparendo
+                    );
+
+                    if ($comparendo) {
+                        $comparendo->setFechaAsignacion($fechaAsignacion);
+                        $comparendo->setFuncionario($funcionario);
+                        $comparendo->setEstado('Asignado');
+
+                        $em->flush();
+                    }
+
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito",  
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -144,5 +201,163 @@ class MpersonalAsignacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/funcionario/agente", name="mpersonalasignacion_search_funcionario_agente")
+     * @Method({"GET", "POST"})
+     */
+    public function searchFuncionarioAgenteAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $funcionarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $funcionarios = $em->getRepository('AppBundle:MpersonalAsignacion')->getFuncionariosByTipoContrato(
+                $params, 3
+            );
+                
+            if ($funcionarios == null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Ningún registro encontrado",
+                );
+            }else{
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $funcionarios,
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/funcionario", name="mpersonalasignacion_record_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function recordFuncionarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $asignaciones['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
+                $params->id
+            );
+                
+            if ($asignaciones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => count($asignaciones)." Registros encontrados",  
+                    'data'=> $asignaciones,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Ningún registro encontrado",
+                    'data' => $response['data'] = array(),
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/planilla/{id}/pdf", name="mpersonalasignacion_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, MpersonalFuncionario $mpersonalFuncionario)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
+            $mpersonalFuncionario->getId()
+        );
+
+        $html = $this->renderView('@App/mpersonalasignacion/pdf.template.html.twig', array(
+            'mpersonalFuncionario'=>$mpersonalFuncionario,
+            'asignaciones' => $asignaciones,
+            'fechaActual' => $fechaActual
+        ));
+
+        $pdf = $this->container->get("white_october.tcpdf")->create(
+            'PORTRAIT',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('qweqwe');
+        $pdf->SetTitle('Planilla');
+        $pdf->SetSubject('Your client');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->AddPage();
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+
+        $pdf->Output("example.pdf", 'I');
+        die();
     }
 }

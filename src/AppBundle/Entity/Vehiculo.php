@@ -31,112 +31,105 @@ class Vehiculo
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_factura", type="integer")
+     * @ORM\Column(name="numero_factura", type="integer", nullable= true)
      */
     private $numeroFactura;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_factura", type="datetime")
+     * @ORM\Column(name="fecha_factura", type="datetime", nullable= true)
      */
     private $fechaFactura;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="valor", type="string", length=255)
+     * @ORM\Column(name="valor", type="string", length=255, nullable= true)
      */
     private $valor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_manifiesto", type="string", length=255)
+     * @ORM\Column(name="numero_manifiesto", type="string", length=255, nullable= true)
      */
     private $numeroManifiesto;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_manifiesto", type="datetime")
+     * @ORM\Column(name="fecha_manifiesto", type="datetime", nullable= true)
      */
     private $fechaManifiesto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cilindraje", type="string", length=255)
+     * @ORM\Column(name="cilindraje", type="string", length=255, nullable= true)
      */
     private $cilindraje;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="modelo", type="integer")
+     * @ORM\Column(name="modelo", type="integer", nullable= true)
      */
     private $modelo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="motor",type="string", length=255)
+     * @ORM\Column(name="motor",type="string", length=255, nullable= true)
      */
     private $motor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="chasis", type="string", length=255)
+     * @ORM\Column(name="chasis", type="string", length=255, nullable= true)
      */
     private $chasis;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="serie", type="string", length=255)
+     * @ORM\Column(name="serie", type="string", length=255, nullable= true)
      */
     private $serie;
 
-     /**
+    /**
      * @var string
      *
-     * @ORM\Column(name="tipo_vehiculo", type="string", length=255)
+     * @ORM\Column(name="vin", type="string", length=255, nullable= true)
      */
-    private $tipoVehiculo;
+    private $vin;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="radio_accion", type="string", length=255)
+     * @ORM\Column(name="radio_accion", type="string", length=255, nullable= true)
      */
     private $radioAccion;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="modalidad_transporte", type="string", length=255)
+     * @ORM\Column(name="modalidad_transporte", type="string", length=255, nullable= true)
      */
     private $modalidadTransporte;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="transporte_pasajeros", type="string", length=255)
+     * @ORM\Column(name="transporte_pasajeros", type="string", length=255, nullable= true)
      */
     private $transportePasajeros;
   
     /**
-     * @var string
-     *
-     * @ORM\Column(name="vin", type="string", length=255)
-     */
-    private $vin;
-
-    /**
      * @var int
      *
-     * @ORM\Column(name="numero_pasajeros", type="integer")
+     * @ORM\Column(name="numero_pasajeros", type="integer", nullable= true)
      */
     private $numeroPasajeros;
 
@@ -145,7 +138,7 @@ class Vehiculo
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
+    private $estado = true;
 
     /**
      * @var boolean
@@ -157,14 +150,14 @@ class Vehiculo
     /**
      * @var boolean
      *
-     * @ORM\Column(name="pignorado", type="boolean")
+     * @ORM\Column(name="pignorado", type="boolean", nullable= true)
      */
     private $pignorado;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="cancelado", type="boolean")
+     * @ORM\Column(name="cancelado", type="boolean", nullable= true)
      */
     private $cancelado;
     
@@ -187,12 +180,11 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="vehiculos") */
     private $carroceria;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
-    private $sedeOperativa;
-
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
+    private $sedeOperativa;
 
 
     /**
@@ -274,7 +266,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura->format('Y-m-d');
+        return $this->fechaFactura;
     }
 
     /**
@@ -346,7 +338,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto->format('Y-m-d');
+        return $this->fechaManifiesto;
     }
 
     /**
@@ -470,27 +462,27 @@ class Vehiculo
     }
 
     /**
-     * Set tipoVehiculo
+     * Set vin
      *
-     * @param string $tipoVehiculo
+     * @param string $vin
      *
      * @return Vehiculo
      */
-    public function setTipoVehiculo($tipoVehiculo)
+    public function setVin($vin)
     {
-        $this->tipoVehiculo = $tipoVehiculo;
+        $this->vin = $vin;
 
         return $this;
     }
 
     /**
-     * Get tipoVehiculo
+     * Get vin
      *
      * @return string
      */
-    public function getTipoVehiculo()
+    public function getVin()
     {
-        return $this->tipoVehiculo;
+        return $this->vin;
     }
 
     /**
@@ -563,30 +555,6 @@ class Vehiculo
     public function getTransportePasajeros()
     {
         return $this->transportePasajeros;
-    }
-
-    /**
-     * Set vin
-     *
-     * @param string $vin
-     *
-     * @return Vehiculo
-     */
-    public function setVin($vin)
-    {
-        $this->vin = $vin;
-
-        return $this;
-    }
-
-    /**
-     * Get vin
-     *
-     * @return string
-     */
-    public function getVin()
-    {
-        return $this->vin;
     }
 
     /**
@@ -854,30 +822,6 @@ class Vehiculo
     }
 
     /**
-     * Set sedeOperativa
-     *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
-     *
-     * @return Vehiculo
-     */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
-    {
-        $this->sedeOperativa = $sedeOperativa;
-
-        return $this;
-    }
-
-    /**
-     * Get sedeOperativa
-     *
-     * @return \AppBundle\Entity\SedeOperativa
-     */
-    public function getSedeOperativa()
-    {
-        return $this->sedeOperativa;
-    }
-
-    /**
      * Set clase
      *
      * @param \AppBundle\Entity\Clase $clase
@@ -899,5 +843,29 @@ class Vehiculo
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     *
+     * @return Vehiculo
+     */
+    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
     }
 }
