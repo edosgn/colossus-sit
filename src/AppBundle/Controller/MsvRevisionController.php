@@ -57,6 +57,9 @@ class MsvRevisionController extends Controller
                 $revision->setFechaDevolucion($params->fechaDevolucion);
                 $revision->setFechaOtorgamiento($params->fechaOtorgamiento);
                 $revision->setFuncionario($params->funcionario);
+                $revision->setPersonaContacto($params->personaContacto);
+                $revision->setCargo($params->cargo);
+                $revision->setCorreo($params->correo);
                 $revision->setEstado(true);
                 $em->persist($revision);
                 $em->flush();
@@ -134,6 +137,37 @@ class MsvRevisionController extends Controller
         }
 
         return $this->redirectToRoute('msvrevision_index');
+    }
+
+    /**
+     * Finds and displays a msvRevision entity.
+     *
+     * @Route("/{id}/show", name="msvrevision_showByEmpresa")
+     * @Method("POST")
+     */
+    public function showRevisionByEmpresa(Request $request, $id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+            $em = $this->getDoctrine()->getManager();
+            $revision = $em->getRepository('AppBundle:MsvRevision')->findByEmpresa($id);
+            if($revision){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Revisión encontrada",
+                    'data' => $revision,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 401,
+                    'msj'=> "Revisión no encontrada",
+                );
+            }
+        
+        return $helpers->json($response);
     }
 
     /**
