@@ -58,28 +58,23 @@ class MunicipioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            // if (count($params)==0) {
-            //     $response = array(
-            //         'status' => 'error',
-            //         'code' => 400,
-            //         'msj' => "los campos no pueden estar vacios", 
-            //     );
-            // }else{
+                // var_dump($params);
+                // die();
                 $nombre = $params->nombre;
-                $codigoDian = $params->codigoDian;
+                $codigoDane = $params->codigoDane;
                 $departamentoId = $params->departamentoId;
                 
 
                 $em = $this->getDoctrine()->getManager();
                 $municipios = $em->getRepository('AppBundle:Municipio')->findBy(
-                    array('codigoDian' => $codigoDian)
+                    array('codigoDane' => $codigoDane)
                 );
                 if ($municipios==null) {
                     $em = $this->getDoctrine()->getManager();
                     $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
                     $municipio = new Municipio();
                     $municipio->setNombre($nombre);
-                    $municipio->setCodigoDian($codigoDian);
+                    $municipio->setCodigoDane($codigoDane);
                     $municipio->setDepartamento($departamento);
                     $municipio->setEstado(true);
 
@@ -95,7 +90,7 @@ class MunicipioController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'msj' => "El codigo Dian ya esta registrado", 
+                        'msj' => "El codigo Dane ya esta registrado", 
                     ); 
                 }
             // }
@@ -159,7 +154,7 @@ class MunicipioController extends Controller
             $params = json_decode($json);
 
             $nombre = $params->nombre;
-            $codigoDian = $params->codigoDian;
+            $codigoDane = $params->codigoDane;
             $departamentoId = $params->departamentoId;
 
             $em = $this->getDoctrine()->getManager();
@@ -171,7 +166,7 @@ class MunicipioController extends Controller
 
 
                 $municipio->setNombre($nombre);
-                $municipio->setCodigoDian($codigoDian);
+                $municipio->setCodigoDane($codigoDane);
                 $municipio->setDepartamento($departamento);
 
                 $em = $this->getDoctrine()->getManager();

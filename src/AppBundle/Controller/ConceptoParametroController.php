@@ -70,8 +70,12 @@ class ConceptoParametroController extends Controller
             //     );
             //     return $helpers->json($response);
             // }
-         
+            $em = $this->getDoctrine()->getManager();
+            $nombres = $em->getRepository('AppBundle:ConceptoParametro')->findOneByNombre($params->nombre);
 
+            if ($nombres==null) {
+                
+            
             $em = $this->getDoctrine()->getManager();
 
             $conceptoParametro = new Conceptoparametro();
@@ -90,7 +94,13 @@ class ConceptoParametroController extends Controller
                 'code' => 200,
                 'msj' => "concepto creado con exito", 
             );
-                       
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El nombre de este concepto ya se encuentra registrado", 
+                );
+            }         
         }else{
             $response = array(
                 'status' => 'error',
@@ -180,6 +190,7 @@ class ConceptoParametroController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
+
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -191,6 +202,8 @@ class ConceptoParametroController extends Controller
             $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($params->id);
             if ($conceptoParametro!=null) {
 
+                
+
                 $conceptoParametro->setNombre($nombre);
                 $conceptoParametro->setCuenta($cuenta);
                 $conceptoParametro->setValor($valor);
@@ -200,6 +213,8 @@ class ConceptoParametroController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($conceptoParametro);
                 $em->flush();
+                
+                // 
 
                 $response = array(
                     'status' => 'success',
@@ -227,21 +242,48 @@ class ConceptoParametroController extends Controller
     /**
      * Deletes a conceptoParametro entity.
      *
-     * @Route("/{id}", name="conceptoparametro_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="conceptoparametro_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, ConceptoParametro $conceptoParametro)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($conceptoParametro);
-        $form->handleRequest($request);
+        
+        // $form = $this->createDeleteForm($conceptoParametro);
+        // $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $em = $this->getDoctrine()->getManager();
+        //     $em->remove($conceptoParametro);
+        //     $em->flush();
+        // } 
+
+        // return $this->redirectToRoute('conceptoparametro_index');
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();            
+            $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($id);
+
+            $conceptoParametro->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-            $em->remove($conceptoParametro);
-            $em->flush();
-        } 
+                $em->persist($conceptoParametro);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "color eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
 
-        return $this->redirectToRoute('conceptoparametro_index');
     }
 
     /**
