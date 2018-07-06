@@ -328,11 +328,12 @@ class PropietarioVehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        
+        
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
-
 
 
             if($vehiculo==null){

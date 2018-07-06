@@ -108,6 +108,7 @@ class VehiculoController extends Controller
                         $motor = $params->motor;
                         $chasis = $params->chasis;
                         $serie = $params->serie;
+                        $tipoVehiculo = $params->tipoVehiculo;
                         $radioAccion = $params->radioAccion;
                         $modalidadTransporte = $params->modalidadTransporte;
                         $transportePasajeros = $params->transportePasajeros;
@@ -148,6 +149,7 @@ class VehiculoController extends Controller
                         $vehiculo->setMotor($motor);
                         $vehiculo->setChasis($chasis);
                         $vehiculo->setSerie($serie);
+                        $vehiculo->setTipoVehiculo($tipoVehiculo);
                         $vehiculo->setRadioAccion($radioAccion);
                         $vehiculo->setModalidadTRansporte($modalidadTransporte);
                         $vehiculo->setTransportePasajeros($transportePasajeros);
@@ -539,7 +541,7 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no validaaaaaaa", 
             );  
         }
         
@@ -569,6 +571,10 @@ class VehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();            
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+            //bucar en una tabla x
+            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
+
+
 
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
@@ -576,6 +582,7 @@ class VehiculoController extends Controller
             if ($vehiculo!=null) {
                 $vehiculo->setPlaca($placa);               
                 $vehiculo->setSedeOperativa($sedeOperativa);
+                $CfgPlaca->setEstado('asignado');
                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);
