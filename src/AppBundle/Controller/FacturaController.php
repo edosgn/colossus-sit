@@ -102,7 +102,7 @@ class FacturaController extends Controller
                     $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
                         array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
                     );
-
+                    
                     $tramiteFactura->setFactura($factura);
                     $tramiteFactura->setTramitePrecio($tramitePrecio);
                     $tramiteFactura->setEstado(true);
