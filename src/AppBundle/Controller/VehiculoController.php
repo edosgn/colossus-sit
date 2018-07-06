@@ -137,8 +137,10 @@ class VehiculoController extends Controller
                         
                         $fechaFactura=new \DateTime($fechaFactura);
                         $fechaManifiesto=new \DateTime($fechaManifiesto);
+
+                        $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
                      
-                        $vehiculo->setPlaca($placa);
+                        $vehiculo->setCfgPlaca($CfgPlaca);
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
@@ -323,9 +325,11 @@ class VehiculoController extends Controller
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
             $fechaFactura=new \DateTime($fechaFactura);
             $fechaManifiesto=new \DateTime($fechaManifiesto);
+
+            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             
             if ($vehiculo!=null) {
-                $vehiculo->setPlaca($placa);
+                $vehiculo->setCfgPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
                 $vehiculo->setfechaFactura($fechaFactura);
                 $vehiculo->setValor($valor);
@@ -568,19 +572,18 @@ class VehiculoController extends Controller
 
             $placa = $params->placa;
             $sedeOperativaId = $params->sedeOperativaId;
+          
 
             $em = $this->getDoctrine()->getManager();            
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             //bucar en una tabla x
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
 
-
-
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
            
             if ($vehiculo!=null) {
-                $vehiculo->setPlaca($placa);               
+                $vehiculo->setCfgPlaca($CfgPlaca);               
                 $vehiculo->setSedeOperativa($sedeOperativa);
                 $CfgPlaca->setEstado('asignado');
                
