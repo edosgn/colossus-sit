@@ -1,3 +1,23 @@
+app_msv_calificacion:
+    resource: "@AppBundle/Controller/MsvCalificacionController.php"
+    type:     annotation
+
+app_msv_criterio:
+    resource: "@AppBundle/Controller/MsvCriterioController.php"
+    type:     annotation
+
+app_msv_variable:
+    resource: "@AppBundle/Controller/MsvVariableController.php"
+    type:     annotation
+
+app_msv_parametro:
+    resource: "@AppBundle/Controller/MsvParametroController.php"
+    type:     annotation
+
+app_msv_categoria:
+    resource: "@AppBundle/Controller/MsvCategoriaController.php"
+    type:     annotation
+
 app_msv_tc_asignacion:
     resource: "@AppBundle/Controller/MsvTCAsignacionController.php"
     type:     annotation
