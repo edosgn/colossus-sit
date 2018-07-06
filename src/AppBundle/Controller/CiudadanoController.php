@@ -293,6 +293,7 @@ class CiudadanoController extends Controller
                         $tipoIdentificacionUsuarioId
                     );
                     $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
+                    
                     $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
                     $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
                     $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);
