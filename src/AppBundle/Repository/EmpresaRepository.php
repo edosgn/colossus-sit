@@ -12,15 +12,15 @@ class EmpresaRepository extends \Doctrine\ORM\EntityRepository
 {
 
     //Obtiene la empresa segun el NIT o Nombre
-    public function findByIdNombre($nitnombre){
+    public function findByNitOrNombre($parametro){
         $em = $this->getEntityManager();
         $sql = " SELECT e
         FROM AppBundle:Empresa e
-        WHERE (e.nit = :nitnombre)
-        OR (e.nombre = :nitnombre)";
+        WHERE (e.nit = :parametro)
+        OR (e.nombre = :parametro)";
         $consulta = $em->createQuery($sql);
-        $consulta->setParameters(array('nitnombre' => $nitnombre,));
-        return $consulta->getOneOrNullRestult();
+        $consulta->setParameters(array('parametro' => $parametro));
+        return $consulta->getResult();
     }
 
 }

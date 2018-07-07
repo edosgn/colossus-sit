@@ -278,6 +278,35 @@ class MpersonalFuncionarioController extends Controller
     }
 
     /**
+     * datos para select 2
+     *
+     * @Route("/select/contratistas", name="mpersonalfuncionario_select_contratistas")
+     * @Method({"GET", "POST"})
+     */
+    public function selectContratistasAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $response = null;
+        
+        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+            array(
+                'activo' => true,
+                'tipoContrato' => 2,
+            )
+        );
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Lists all mpersonalFuncionario entities.
      *
      * @Route("/search", name="mpersonalfuncionario_search")

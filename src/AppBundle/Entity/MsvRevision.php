@@ -42,12 +42,26 @@ class MsvRevision
      */
     private $fechaOtorgamiento;
 
-    /**
+     /**
      * @var string
      *
-     * @ORM\Column(name="funcionario", type="string", length=255)
+     * @ORM\Column(name="persona_contacto", type="string", length=255)
      */
-    private $funcionario;
+    private $personaContacto;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="cargo", type="string", length=255)
+     */
+    private $cargo;
+
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="correo", type="string", length=255)
+     */
+    private $correo;
 
     /**
      * @var bool
@@ -61,11 +75,15 @@ class MsvRevision
      **/
     protected $empresa;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario")
+     **/
+    protected $funcionario;
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -93,7 +111,7 @@ class MsvRevision
      */
     public function getFechaRecepcion()
     {
-        return $this->fechaRecepcion;
+        return $this->fechaRecepcion->format('d/m/Y');
     }
 
     /**
@@ -117,7 +135,7 @@ class MsvRevision
      */
     public function getFechaDevolucion()
     {
-        return $this->fechaDevolucion;
+        return $this->fechaDevolucion->format('d/m/Y');
     }
 
     /**
@@ -141,31 +159,79 @@ class MsvRevision
      */
     public function getFechaOtorgamiento()
     {
-        return $this->fechaOtorgamiento;
+        return $this->fechaOtorgamiento->format('d/m/Y');
     }
 
     /**
-     * Set funcionario
+     * Set personaContacto
      *
-     * @param string $funcionario
+     * @param string $personaContacto
      *
      * @return MsvRevision
      */
-    public function setFuncionario($funcionario)
+    public function setPersonaContacto($personaContacto)
     {
-        $this->funcionario = $funcionario;
+        $this->personaContacto = $personaContacto;
 
         return $this;
     }
 
     /**
-     * Get funcionario
+     * Get personaContacto
      *
      * @return string
      */
-    public function getFuncionario()
+    public function getPersonaContacto()
     {
-        return $this->funcionario;
+        return $this->personaContacto;
+    }
+
+    /**
+     * Set cargo
+     *
+     * @param string $cargo
+     *
+     * @return MsvRevision
+     */
+    public function setCargo($cargo)
+    {
+        $this->cargo = $cargo;
+
+        return $this;
+    }
+
+    /**
+     * Get cargo
+     *
+     * @return string
+     */
+    public function getCargo()
+    {
+        return $this->cargo;
+    }
+
+    /**
+     * Set correo
+     *
+     * @param string $correo
+     *
+     * @return MsvRevision
+     */
+    public function setCorreo($correo)
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get correo
+     *
+     * @return string
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
     }
 
     /**
@@ -173,7 +239,7 @@ class MsvRevision
      *
      * @param boolean $estado
      *
-     * @return MsvEvaluacion
+     * @return MsvRevision
      */
     public function setEstado($estado)
     {
@@ -185,7 +251,7 @@ class MsvRevision
     /**
      * Get estado
      *
-     * @return bool
+     * @return boolean
      */
     public function getEstado()
     {
@@ -197,7 +263,7 @@ class MsvRevision
      *
      * @param \AppBundle\Entity\Empresa $empresa
      *
-     * @return Clase
+     * @return MsvRevision
      */
     public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
     {
@@ -215,5 +281,28 @@ class MsvRevision
     {
         return $this->empresa;
     }
-}
 
+    /**
+     * Set funcionario
+     *
+     * @param \AppBundle\Entity\MpersonalFuncionario $funcionario
+     *
+     * @return MsvRevision
+     */
+    public function setFuncionario(\AppBundle\Entity\MpersonalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \AppBundle\Entity\MpersonalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
+    }
+}

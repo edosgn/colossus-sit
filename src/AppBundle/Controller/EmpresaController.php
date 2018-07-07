@@ -399,21 +399,20 @@ class EmpresaController extends Controller
      * Busca empresas por NIT o Nombre.
      *
      * @Route("/show/nitnombre", name="empresa_show")
-     * @Method("POST")
+     * @Method({"GET", "POST"})
      */
-    public function showNitNombreAction(Request $request)
+    public function showNitOrNombreAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         $json = $request->get("json",null);
         $params = json_decode($json);
-        $nit = $params->nit;
-       
+        $em = $this->getDoctrine()->getManager();
         if ($authCheck == true) {
-            $em = $this->getDoctrine()->getManager();
-            $empresa = $em->getRepository('AppBundle:Empresa')->findByIdNombre($nit);
-
+        $empresa = $em->getRepository('AppBundle:Empresa')->findByNitOrNombre($params->parametro);
+        //$empresaId = $empresa
+        //$revision = $em->getRepository('AppBundle:MsvRevision')->findBy($empresa->getId());
             if ($empresa!=null) {
                $response = array(
                     'status' => 'success',
@@ -427,15 +426,14 @@ class EmpresaController extends Controller
                     'code' => 400,
                     'msj' => "Empresa no Encontrada", 
                 );
-            }
-            
+            }  
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
-        }
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no válida",
+            );
+        } 
         return $helpers->json($response);
     }
 

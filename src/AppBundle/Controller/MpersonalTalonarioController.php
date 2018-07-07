@@ -75,7 +75,7 @@ class MpersonalTalonarioController extends Controller
                 $talonario->setRangos(($params->hasta + 1) - $params->desde);
                 $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
                 $talonario->setNumeroResolucion($params->numeroResolucion);
-
+                
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
                     $params->sedeOperativaId
                 );

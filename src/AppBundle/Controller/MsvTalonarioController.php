@@ -3,9 +3,11 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\MsvTalonario;
+use AppBundle\Entity\MsvTConsecutivo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Msvtalonario controller.
@@ -25,14 +27,16 @@ class MsvTalonarioController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $sedes = $em->getRepository('AppBundle:Sede')->findAll();
+        $msvTalonarios = $em->getRepository('AppBundle:MsvTalonario')->findBy(
+            array('estado' => true)
+        );
         $response=null;
-        if ($sedes) {
+        if ($msvTalonarios) {
             $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => 'listado sedes',
-                        'data' => $sedes,
+                        'msj' => 'listado talonarios',
+                        'data' => $msvTalonarios,
             );
         }
         return $helpers->json($response);
@@ -49,18 +53,16 @@ class MsvTalonarioController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        $em = $this->getDoctrine()->getManager();
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
             
+            $em = $this->getDoctrine()->getManager();
             $sedeOperativaId = $params->sedeOperativaId;
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-            $fechaAsignacionDateTime = new \DateTime($params->fechaAsignacion);
-            // $nombre = $params->nombre;
-            // $codigoDivipo = $params->codigoDivipo;
-            
+           
             $msvTalonario = new MsvTalonario();
+            
 
             $talonario = $em->getRepository('AppBundle:MsvTalonario')->findOneBySedeOperativa(
                 $sedeOperativaId
@@ -70,23 +72,38 @@ class MsvTalonarioController extends Controller
                 $talonario->setSedeOperativa($sedeOperativa);
                 $talonario->setrangoini($params->rangoini);
                 $talonario->setrangofin($params->rangofin);
-            // var_dump(talonario);
-            // die();
                 $talonario->setTotal($params->total);
-                $talonario->setFechaAsignacion($fechaAsignacionDateTime);
+                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
                 $talonario->setNResolucion($params->nResolucion);
+                $talonario->setEstado('Disponible');
                 
 
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
+
+                for ($consecutivo=$talonario->getRangoini(); $consecutivo <= $talonario->getRangoFin(); $consecutivo++) { 
+                   $nuevoConsecutivo = $consecutivo;
+                
+
+                $msvTConsecutivo = new MsvTConsecutivo();
+
+                $msvTConsecutivo->setMsvTalonario($talonario);
+                $msvTConsecutivo->setConsecutivo($nuevoConsecutivo);
+                $msvTConsecutivo->setSedeOperativa($sedeOperativa);
+                $msvTConsecutivo->setActivo(true);
+                $msvTConsecutivo->setEstado('Disponible');
+
+                $em->persist($msvTConsecutivo);
+                $em->flush();
+                }
+
+                
             }else{
 
                 
                 $msvTalonario->setSedeOperativa($sedeOperativa);
                 $msvTalonario->setrangoini($params->rangoini);
                 $msvTalonario->setrangofin($params->rangofin);
-                // var_dump($msvTalonario);
-                // die();
                 $msvTalonario->setTotal($params->total);
                 $msvTalonario->setFechaAsignacion($fechaAsignacionDateTime);
                 $msvTalonario->setNResolucion($params->nResolucion);
@@ -95,6 +112,8 @@ class MsvTalonarioController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($msvTalonario);
                 $em->flush();
+
+                
                 
             }
                 $response = array(
@@ -116,7 +135,7 @@ class MsvTalonarioController extends Controller
     /**
      * Finds and displays a msvTalonario entity.
      *
-     * @Route("/show/{id}", name="msvtalonario_show")
+     * @Route("/{id}", name="msvtalonario_show")
      * @Method("POST")
      */
     public function showAction(Request $request, MsvTalonario $msvTalonario)
@@ -213,16 +232,30 @@ class MsvTalonarioController extends Controller
      */
     public function deleteAction(Request $request, MsvTalonario $msvTalonario)
     {
-        $form = $this->createDeleteForm($msvTalonario);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($msvTalonario);
-            $em->flush();
-        }
+            $msvTalonario = $em->getRepository('AppBundle:MsvTalonario')->find($msvTalonario);
+            $msvTalonario->setEstado(0);
 
-        return $this->redirectToRoute('msvtalonario_index');
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($msvTalonario);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "lase eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**

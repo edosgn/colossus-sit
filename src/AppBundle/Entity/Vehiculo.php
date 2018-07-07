@@ -21,14 +21,7 @@ class Vehiculo
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="placa", type="string", length=255, nullable= true)
-     */
-    private $placa;
-
-    /**
+        /**
      * @var int
      *
      * @ORM\Column(name="numero_factura", type="integer", nullable= true)
@@ -183,9 +176,14 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
     private $clase;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgPlaca", inversedBy="vehiculos") */
+    private $cfgPlaca;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
     private $sedeOperativa;
 
+
+    
 
     /**
      * Get id
@@ -195,30 +193,6 @@ class Vehiculo
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set placa
-     *
-     * @param string $placa
-     *
-     * @return Vehiculo
-     */
-    public function setPlaca($placa)
-    {
-        $this->placa = $placa;
-
-        return $this;
-    }
-
-    /**
-     * Get placa
-     *
-     * @return string
-     */
-    public function getPlaca()
-    {
-        return $this->placa;
     }
 
     /**
@@ -266,7 +240,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura;
+        return $this->fechaFactura->format('Y-m-d');
     }
 
     /**
@@ -338,7 +312,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto;
+        return $this->fechaManifiesto ->format('Y-m-d');
     }
 
     /**
@@ -843,6 +817,30 @@ class Vehiculo
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set cfgPlaca
+     *
+     * @param \AppBundle\Entity\CfgPlaca $cfgPlaca
+     *
+     * @return Vehiculo
+     */
+    public function setCfgPlaca(\AppBundle\Entity\CfgPlaca $cfgPlaca = null)
+    {
+        $this->cfgPlaca = $cfgPlaca;
+
+        return $this;
+    }
+
+    /**
+     * Get cfgPlaca
+     *
+     * @return \AppBundle\Entity\CfgPlaca
+     */
+    public function getCfgPlaca()
+    {
+        return $this->cfgPlaca;
     }
 
     /**

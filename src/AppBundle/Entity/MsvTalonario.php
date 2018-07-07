@@ -61,7 +61,14 @@ class MsvTalonario
      */
     private $nResolucion;
 
+    /** 
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
 
+    
 
     /**
      * Get id
@@ -80,7 +87,7 @@ class MsvTalonario
      *
      * @return MsvTalonario
      */
-    public function setrangoini($rangoini)
+    public function setRangoini($rangoini)
     {
         $this->rangoini = $rangoini;
 
@@ -92,7 +99,7 @@ class MsvTalonario
      *
      * @return integer
      */
-    public function getrangoini()
+    public function getRangoini()
     {
         return $this->rangoini;
     }
@@ -104,7 +111,7 @@ class MsvTalonario
      *
      * @return MsvTalonario
      */
-    public function setrangofin($rangofin)
+    public function setRangofin($rangofin)
     {
         $this->rangofin = $rangofin;
 
@@ -116,7 +123,7 @@ class MsvTalonario
      *
      * @return integer
      */
-    public function getrangofin()
+    public function getRangofin()
     {
         return $this->rangofin;
     }
@@ -166,7 +173,7 @@ class MsvTalonario
      */
     public function getFechaAsignacion()
     {
-        return $this->fechaAsignacion->format("Y-m-d");
+        return $this->fechaAsignacion->format('d/m/Y');
     }
 
     /**
@@ -191,6 +198,30 @@ class MsvTalonario
     public function getNResolucion()
     {
         return $this->nResolucion;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return MsvTalonario
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**
