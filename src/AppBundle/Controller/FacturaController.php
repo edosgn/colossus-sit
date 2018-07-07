@@ -183,7 +183,6 @@ class FacturaController extends Controller
             $estado = $params->estado;
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
-            // $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
             $sedeOperativaId = $params->sedeOperativaId;
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
@@ -192,10 +191,8 @@ class FacturaController extends Controller
 
             if ($factura!=null) {
                 $factura->setNumero($numero);
-                $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
                 $factura->setEstado($estado);
-                // $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
                 $factura->setSedeOperativa($sedeOperativa);
                 
 

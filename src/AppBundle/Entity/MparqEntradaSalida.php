@@ -132,7 +132,7 @@ class MparqEntradaSalida
      */
     public function getFechaIngreso()
     {
-        return $this->fechaIngreso;
+        return $this->fechaIngreso->format('d/m/Y');
     }
 
     /**
