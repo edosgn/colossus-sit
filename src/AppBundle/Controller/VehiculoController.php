@@ -108,6 +108,7 @@ class VehiculoController extends Controller
                         $motor = $params->motor;
                         $chasis = $params->chasis;
                         $serie = $params->serie;
+                        $tipoVehiculo = $params->tipoVehiculo;
                         $radioAccion = $params->radioAccion;
                         $modalidadTransporte = $params->modalidadTransporte;
                         $transportePasajeros = $params->transportePasajeros;
@@ -136,8 +137,10 @@ class VehiculoController extends Controller
                         
                         $fechaFactura=new \DateTime($fechaFactura);
                         $fechaManifiesto=new \DateTime($fechaManifiesto);
+
+                        $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
                      
-                        $vehiculo->setPlaca($placa);
+                        $vehiculo->setCfgPlaca($CfgPlaca);
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
@@ -148,6 +151,7 @@ class VehiculoController extends Controller
                         $vehiculo->setMotor($motor);
                         $vehiculo->setChasis($chasis);
                         $vehiculo->setSerie($serie);
+                        $vehiculo->setTipoVehiculo($tipoVehiculo);
                         $vehiculo->setRadioAccion($radioAccion);
                         $vehiculo->setModalidadTRansporte($modalidadTransporte);
                         $vehiculo->setTransportePasajeros($transportePasajeros);
@@ -321,9 +325,11 @@ class VehiculoController extends Controller
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
             $fechaFactura=new \DateTime($fechaFactura);
             $fechaManifiesto=new \DateTime($fechaManifiesto);
+
+            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             
             if ($vehiculo!=null) {
-                $vehiculo->setPlaca($placa);
+                $vehiculo->setCfgPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
                 $vehiculo->setfechaFactura($fechaFactura);
                 $vehiculo->setValor($valor);
@@ -539,7 +545,7 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no validaaaaaaa", 
             );  
         }
         
@@ -566,16 +572,20 @@ class VehiculoController extends Controller
 
             $placa = $params->placa;
             $sedeOperativaId = $params->sedeOperativaId;
+          
 
             $em = $this->getDoctrine()->getManager();            
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+            //bucar en una tabla x
+            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
 
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
            
             if ($vehiculo!=null) {
-                $vehiculo->setPlaca($placa);               
+                $vehiculo->setCfgPlaca($CfgPlaca);               
                 $vehiculo->setSedeOperativa($sedeOperativa);
+                $CfgPlaca->setEstado('asignado');
                
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);

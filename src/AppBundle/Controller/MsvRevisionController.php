@@ -51,15 +51,19 @@ class MsvRevisionController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+
+            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($params->empresaId);
             
                 $revision = new MsvRevision();
-                $revision->setFechaRecepcion($params->fechaRecepcion);
-                $revision->setFechaDevolucion($params->fechaDevolucion);
-                $revision->setFechaOtorgamiento($params->fechaOtorgamiento);
-                $revision->setFuncionario($params->funcionario);
+                $revision->setFechaRecepcion(new \DateTime($params->fechaRecepcion));
+                $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
+                $revision->setFechaOtorgamiento(new \DateTime($params->fechaOtorgamiento));
+                $revision->setFuncionario($funcionario);
                 $revision->setPersonaContacto($params->personaContacto);
                 $revision->setCargo($params->cargo);
                 $revision->setCorreo($params->correo);
+                $revision->setEmpresa($empresa);
                 $revision->setEstado(true);
                 $em->persist($revision);
                 $em->flush();
@@ -143,7 +147,7 @@ class MsvRevisionController extends Controller
      * Finds and displays a msvRevision entity.
      *
      * @Route("/{id}/show", name="msvrevision_showByEmpresa")
-     * @Method("POST")
+     * @Method({"GET", "POST"})
      */
     public function showRevisionByEmpresa(Request $request, $id)
     {

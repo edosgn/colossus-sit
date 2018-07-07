@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvvariables list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvVariable in msvVariables %}
+            <tr>
+                <td><a href="{{ path('msvvariable_show', { 'id': msvVariable.id }) }}">{{ msvVariable.id }}</a></td>
+                <td>{{ msvVariable.nombre }}</td>
+                <td>{% if msvVariable.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvvariable_show', { 'id': msvVariable.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('msvvariable_edit', { 'id': msvVariable.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvvariable_new') }}">Create a new msvVariable</a>
+        </li>
+    </ul>
+{% endblock %}
