@@ -1,3 +1,7 @@
+app_cfg_tipo_alerta:
+    resource: "@AppBundle/Controller/CfgTipoAlertaController.php"
+    type:     annotation
+
 app_msv_tc_asignacion:
     resource: "@AppBundle/Controller/MsvTCAsignacionController.php"
     type:     annotation
