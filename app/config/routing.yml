@@ -1,5 +1,6 @@
 app_cfg_tipo_alerta:
     resource: "@AppBundle/Controller/CfgTipoAlertaController.php"
+    type:     annotation
     
 app_msv_calificacion:
     resource: "@AppBundle/Controller/MsvCalificacionController.php"
@@ -203,10 +204,6 @@ app_seguimiento_entrega:
 
 app_comparendo:
     resource: "@AppBundle/Controller/ComparendoController.php"
-    type:     annotation
-
-app_agente_transito:
-    resource: "@AppBundle/Controller/AgenteTransitoController.php"
     type:     annotation
 
 app_modulo_sistema:

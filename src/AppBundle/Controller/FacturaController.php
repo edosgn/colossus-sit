@@ -65,28 +65,27 @@ class FacturaController extends Controller
                 $consecutivo = count($facturas)."-".date('y');
 
 
-                $numero = $params->factura->numero;
-                $sedeOperativaId = $params->factura->sedeOperativaId;
-                $fechaCreacion = $params->factura->fechaCreacion;
-                $valorBruto = $params->factura->valorBruto;
-                $vehiculoId = $params->factura->vehiculoId;
-                $ciudadanoId = $params->factura->ciudadanoId;
-                $fechaCreacion = $params->factura->fechaCreacion;
-                $fechaCreacionDateTime = new \DateTime($fechaCreacion);
-                
-
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->factura->sedeOperativaId
+                );
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                    $params->factura->vehiculoId
+                );
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+                    $params->factura->ciudadanoId
+                );
 
                 $factura = new Factura();
                 
-                $factura->setNumero($numero);
+                $factura->setNumero($params->factura->numero);
                 $factura->setConsecutivo(0);
                 $factura->setEstado('Emitida');
-                $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setFechaVencimiento($fechaCreacionDateTime);
-                $factura->setValorBruto($valorBruto);
+                $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
+                $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
+                if ($params->factura->valorBruto) {
+                    $factura->setValorBruto($params->factura->valorBruto);
+                }
+                
                 //Inserta llaves foraneas
                 $factura->setSedeOperativa($sedeOperativa);
                 $factura->setVehiculo($vehiculo);

@@ -228,7 +228,7 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion;
+        return $this->fechaCreacion->format('d/m/Y');
     }
 
     /**
