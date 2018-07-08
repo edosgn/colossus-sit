@@ -414,10 +414,10 @@ class MpersonalFuncionarioController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/search/activo", name="mpersonalfuncionario_search_activo")
+     * @Route("/search/login", name="mpersonalfuncionario_search_login")
      * @Method({"GET", "POST"})
      */
-    public function searchCiudadanoActivoAction(Request $request)
+    public function searchLoginAction(Request $request)
     {
         
         $em = $this->getDoctrine()->getManager();
@@ -425,37 +425,61 @@ class MpersonalFuncionarioController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+       // if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+            
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                $params->identificacion
+            );
 
-            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearchActivo($params);
+            if ($usuario) {
+                if ($usuario->getCiudadano()) {
+                    $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(
+                        array(
+                            'ciudadano' => $usuario->getCiudadano()->getId(),
+                            'activo' => true
+                        )
+                    );
+                    if ($funcionario) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Registro encontrado", 
+                            'data'=> $funcionario,
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "El ciudadano no tiene registros de nombramientos vigentes", 
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
+                    );
+                }
 
-            if ($funcionario) {
-               
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $funcionario,
-                );
-                
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'msj' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
                 );
             }
 
+
             
-        }else{
+        /*}else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
-        }
+        }*/
         return $helpers->json($response);
     }
 

@@ -43,7 +43,7 @@ class JwtAuth
 				"primerApellido" => $user->getPrimerApellido(),
 				"segundoApellido" => $user->getSegundoApellido(),
 				"identificacion" => $user->getIdentificacion(),
-				"Ciudadano" => $user->getCiudadano()->getUsuario()->getIdentificacion(),
+				"ciudadano" => $user->getCiudadano()->getUsuario()->getIdentificacion(),
 				"foto" => $user->getFoto(),
 				"telefono" => $user->getTelefono(),
 				"fechanacimiento" => $user->getFechaNacimiento(),
