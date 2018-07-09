@@ -285,9 +285,9 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
+
             $placa = $params->placa;
             $numeroFactura = $params->numeroFactura;
-            $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
             $numeroManifiesto = $params->numeroManifiesto;
             $fechaManifiesto = $params->fechaManifiesto;
@@ -322,8 +322,9 @@ class VehiculoController extends Controller
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
+
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            $fechaFactura=new \DateTime($fechaFactura);
+
             $fechaManifiesto=new \DateTime($fechaManifiesto);
 
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
@@ -331,7 +332,7 @@ class VehiculoController extends Controller
             if ($vehiculo!=null) {
                 $vehiculo->setCfgPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
-                $vehiculo->setfechaFactura($fechaFactura);
+                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
                 $vehiculo->setValor($valor);
                 $vehiculo->setNumeroManifiesto($numeroManifiesto);
                 $vehiculo->setFechaManifiesto($fechaManifiesto);
@@ -360,7 +361,53 @@ class VehiculoController extends Controller
                 $vehiculo->setCancelado($cancelado);
                 $vehiculo->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($vehiculo);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con exito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar vehiculo", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing Vehiculo entity.
+     *
+     * @Route("/edit/sedeOperativa", name="vehiculo_edit_sedeOperativa")
+     * @Method({"GET", "POST"})
+     */
+    public function editSedeOperativaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->sedeOperativaId);
+
+            if ($vehiculo!=null) {
+                $vehiculo->setSedeOperativa($sedeOperativa);
                 $em->flush();
                 $response = array(
                     'status' => 'success',

@@ -50,9 +50,9 @@ class TramiteTraslado
     private $numeroRunt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa")
      **/
-    protected $organismoTransito;
+    protected $sedeOperativa;
 
     /**
      * @var bool
@@ -61,6 +61,8 @@ class TramiteTraslado
      */
     private $estado;
     
+
+   
 
     /**
      * Get id
@@ -169,30 +171,6 @@ class TramiteTraslado
     }
 
     /**
-     * Set organismoTransito
-     *
-     * @param \AppBundle\Entity\OrganismoTransito $organismoTransito
-     *
-     * @return TramiteTraslado
-     */
-    public function setOrganismoTransito(\AppBundle\Entity\OrganismoTransito $organismoTransito = null)
-    {
-        $this->organismoTransito = $organismoTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get organismoTransito
-     *
-     * @return \AppBundle\Entity\OrganismoTransito
-     */
-    public function getOrganismoTransito()
-    {
-        return $this->organismoTransito;
-    }
-
-    /**
      * Set estado
      *
      * @param boolean $estado
@@ -214,5 +192,29 @@ class TramiteTraslado
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     *
+     * @return TramiteTraslado
+     */
+    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
     }
 }
