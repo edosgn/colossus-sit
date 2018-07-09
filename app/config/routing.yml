@@ -1,3 +1,7 @@
+app_vehiculo_acreedor:
+    resource: "@AppBundle/Controller/VehiculoAcreedorController.php"
+    type:     annotation
+
 app_cfg_modalidad_transporte:
     resource: "@AppBundle/Controller/CfgModalidadTransporteController.php"
     type:     annotation
