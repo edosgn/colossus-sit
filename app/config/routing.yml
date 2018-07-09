@@ -1,3 +1,35 @@
+app_cfg_modalidad_transporte:
+    resource: "@AppBundle/Controller/CfgModalidadTransporteController.php"
+    type:     annotation
+
+app_cfg_radio_accion:
+    resource: "@AppBundle/Controller/CfgRadioAccionController.php"
+    type:     annotation
+
+app_cfg_tipo_alerta:
+    resource: "@AppBundle/Controller/CfgTipoAlertaController.php"
+    type:     annotation
+    
+app_msv_calificacion:
+    resource: "@AppBundle/Controller/MsvCalificacionController.php"
+    type:     annotation
+
+app_msv_criterio:
+    resource: "@AppBundle/Controller/MsvCriterioController.php"
+    type:     annotation
+
+app_msv_variable:
+    resource: "@AppBundle/Controller/MsvVariableController.php"
+    type:     annotation
+
+app_msv_parametro:
+    resource: "@AppBundle/Controller/MsvParametroController.php"
+    type:     annotation
+
+app_msv_categoria:
+    resource: "@AppBundle/Controller/MsvCategoriaController.php"
+    type:     annotation
+
 app_msv_tc_asignacion:
     resource: "@AppBundle/Controller/MsvTCAsignacionController.php"
     type:     annotation
@@ -106,10 +138,6 @@ app_factura_sustrato:
     resource: "@AppBundle/Controller/FacturaSustratoController.php"
     type:     annotation
 
-app_radio_accion:
-    resource: "@AppBundle/Controller/RadioAccionController.php"
-    type:     annotation
-
 app_condicion_ingreso:
     resource: "@AppBundle/Controller/CondicionIngresoController.php"
     type:     annotation
@@ -180,10 +208,6 @@ app_seguimiento_entrega:
 
 app_comparendo:
     resource: "@AppBundle/Controller/ComparendoController.php"
-    type:     annotation
-
-app_agente_transito:
-    resource: "@AppBundle/Controller/AgenteTransitoController.php"
     type:     annotation
 
 app_modulo_sistema:

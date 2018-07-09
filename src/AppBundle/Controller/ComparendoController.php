@@ -83,14 +83,15 @@ class ComparendoController extends Controller
                 $municipioId = $params->municipioId;
                 $vehiculoId = $params->vehiculoId;
                 $ciudadanoId = $params->ciudadanoId;
-                $agenteTransitoId = $params->agenteTransitoId;
                 
                 $em = $this->getDoctrine()->getManager();
 
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-                $agenteTransito = $em->getRepository('AppBundle:AgenteTransito')->find($agenteTransitoId);
+                $agenteTransito = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
+                    $params->funcionarioId
+                );
                 $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->find(1);
 
                 $comparendo = new Comparendo();

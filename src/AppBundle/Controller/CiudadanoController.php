@@ -224,7 +224,7 @@ class CiudadanoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "cuidadano", 
+                    'msj' => "Registro encontrado", 
                     'data'=> $usuario,
             );
             }else{

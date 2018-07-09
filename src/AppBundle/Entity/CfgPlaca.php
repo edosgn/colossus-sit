@@ -36,12 +36,12 @@ class CfgPlaca
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="inmovilizaciones")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="placas")
      **/
     protected $clase;
 
      /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="inmovilizaciones")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="placas")
      **/
     protected $sedeOperativa;
 

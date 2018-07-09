@@ -82,7 +82,7 @@ class PaisController extends Controller
      * Finds and displays a pai entity.
      *
      * @Route("/{id}/show", name="pais_show")
-     * @Method("POST")
+     * @Method("GET")
      */
     public function showAction($id)
     {
@@ -112,7 +112,7 @@ class PaisController extends Controller
     /**
      * Displays a form to edit an existing pai entity.
      *
-     * @Route("/{id}/edit", name="pais_edit")
+     * @Route("/edit", name="pais_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -167,10 +167,10 @@ class PaisController extends Controller
     /**
      * Deletes a pai entity.
      *
-     * @Route("/{id}/delete", name="pais_delete")
+     * @Route("/delete", name="pais_delete")
      * @Method("POST")
      */
-    public function deleteAction($id)
+    public function deleteAction()
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -200,39 +200,26 @@ class PaisController extends Controller
     }
 
     /**
-     * Creates a form to delete a pai entity.
-     *
-     * @param Pais $pai The pai entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(Pais $pai)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('pais_delete', array('id' => $pai->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
-
-    /**
      * datos para select 2
      *
-     * @Route("/select/pais", name="pais_select")
+     * @Route("/select", name="mflinfraccioncategoria_select")
      * @Method({"GET", "POST"})
      */
-    public function selectPaisAction()
+    public function selectAction()
     {
-        $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        
         $paises = $em->getRepository('AppBundle:Pais')->findBy(
-            array('estado' => 1)
+            array('estado' => true)
         );
+
+        $response = null;
+
         foreach ($paises as $key => $pais) {
             $response[$key] = array(
                 'value' => $pais->getId(),
-                'label' => $pais->getCodigo()."_".$pais->getNombre(),
+                'label' => $pais->getCodigo()."_".$pais->getNombre()
             );
         }
         return $helpers->json($response);

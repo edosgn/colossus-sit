@@ -233,16 +233,26 @@ class MpersonalFuncionarioController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        
-        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
-            array('activo' => true)
-        );
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+                array('activo' => true)
+            );
 
-        foreach ($funcionarios as $key => $funcionario) {
-            $response[$key] = array(
-                'value' => $funcionario->getId(),
-                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+            foreach ($funcionarios as $key => $funcionario) {
+                $response[$key] = array(
+                    'value' => $funcionario->getId(),
+                    'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
             );
         }
         return $helpers->json($response);
@@ -265,6 +275,35 @@ class MpersonalFuncionarioController extends Controller
             array(
                 'activo' => true,
                 'tipoContrato' => 3,
+            )
+        );
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/contratistas", name="mpersonalfuncionario_select_contratistas")
+     * @Method({"GET", "POST"})
+     */
+    public function selectContratistasAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $response = null;
+        
+        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+            array(
+                'activo' => true,
+                'tipoContrato' => 2,
             )
         );
 
@@ -385,10 +424,10 @@ class MpersonalFuncionarioController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/search/activo", name="mpersonalfuncionario_search_activo")
+     * @Route("/search/login", name="mpersonalfuncionario_search_login")
      * @Method({"GET", "POST"})
      */
-    public function searchCiudadanoActivoAction(Request $request)
+    public function searchLoginAction(Request $request)
     {
         
         $em = $this->getDoctrine()->getManager();
@@ -396,37 +435,61 @@ class MpersonalFuncionarioController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+       // if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+            
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                $params->identificacion
+            );
 
-            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearchActivo($params);
+            if ($usuario) {
+                if ($usuario->getCiudadano()) {
+                    $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(
+                        array(
+                            'ciudadano' => $usuario->getCiudadano()->getId(),
+                            'activo' => true
+                        )
+                    );
+                    if ($funcionario) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'msj' => "Registro encontrado", 
+                            'data'=> $funcionario,
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'msj' => "El ciudadano no tiene registros de nombramientos vigentes", 
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
+                    );
+                }
 
-            if ($funcionario) {
-               
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $funcionario,
-                );
-                
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'msj' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
                 );
             }
 
+
             
-        }else{
+        /*}else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
-        }
+        }*/
         return $helpers->json($response);
     }
 

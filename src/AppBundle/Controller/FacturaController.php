@@ -65,28 +65,27 @@ class FacturaController extends Controller
                 $consecutivo = count($facturas)."-".date('y');
 
 
-                $numero = $params->factura->numero;
-                $sedeOperativaId = $params->factura->sedeOperativaId;
-                $fechaCreacion = $params->factura->fechaCreacion;
-                $valorBruto = $params->factura->valorBruto;
-                $vehiculoId = $params->factura->vehiculoId;
-                $ciudadanoId = $params->factura->ciudadanoId;
-                $fechaCreacion = $params->factura->fechaCreacion;
-                $fechaCreacionDateTime = new \DateTime($fechaCreacion);
-                
-
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->factura->sedeOperativaId
+                );
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                    $params->factura->vehiculoId
+                );
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+                    $params->factura->ciudadanoId
+                );
 
                 $factura = new Factura();
                 
-                $factura->setNumero($numero);
+                $factura->setNumero($params->factura->numero);
                 $factura->setConsecutivo(0);
                 $factura->setEstado('Emitida');
-                $factura->setFechaCreacion($fechaCreacionDateTime);
-                $factura->setFechaVencimiento($fechaCreacionDateTime);
-                $factura->setValorBruto($valorBruto);
+                $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
+                $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
+                if ($params->factura->valorBruto) {
+                    $factura->setValorBruto($params->factura->valorBruto);
+                }
+                
                 //Inserta llaves foraneas
                 $factura->setSedeOperativa($sedeOperativa);
                 $factura->setVehiculo($vehiculo);
@@ -183,7 +182,6 @@ class FacturaController extends Controller
             $estado = $params->estado;
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
-            // $numeroLicenciaTrancito = $params->numeroLicenciaTrancito;
             $sedeOperativaId = $params->sedeOperativaId;
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
@@ -192,10 +190,8 @@ class FacturaController extends Controller
 
             if ($factura!=null) {
                 $factura->setNumero($numero);
-                $factura->setObservacion($observacion);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
                 $factura->setEstado($estado);
-                // $factura->setNumeroLicenciaTrancito($numeroLicenciaTrancito);
                 $factura->setSedeOperativa($sedeOperativa);
                 
 
@@ -283,7 +279,7 @@ class FacturaController extends Controller
      * @Route("/show/id", name="factura_id")
      * @Method("POST")
      */
-    public function showByNumero(Request $request)
+    public function showById(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -366,6 +362,52 @@ class FacturaController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "no hay facturas para el vehiculo", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca vehiculos por id.
+     *
+     * @Route("/seach/numero", name="factura_search_numero")
+     * @Method("POST")
+     */
+    public function searchByNumero(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $factura = $em->getRepository('AppBundle:Factura')->findOneBy(
+                array('numero' => $params->numero)
+            );
+
+            if ($factura!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Factura", 
+                    'data'=> $factura,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Factura no encontrada", 
                 );
             }
         }else{

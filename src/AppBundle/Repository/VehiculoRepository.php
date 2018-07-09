@@ -16,12 +16,8 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
-            WHERE ((v.cfgPlaca = p.id)
-
+            WHERE ((v.placa = p.id)
             AND (p.numero = :campo))
-
-
-            OR (v.motor = :campo)
             OR (v.vin = :campo)
             OR (v.chasis = :campo)
             OR (v.serie = :campo)
@@ -32,5 +28,18 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
             'campo' => $campo,
         ));
         return $consulta->getOneOrNullResult();
+    }
+
+    public function getRna()
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM AppBundle:Vehiculo v, AppBundle:Clase c, AppBundle:Modulo m
+            WHERE c.id = v.clase
+            AND m.id = c.modulo
+            AND m.id = 1
+            AND v.estado = true";
+        $consulta = $em->createQuery($dql);
+        return $consulta->getResult();
     }
 }

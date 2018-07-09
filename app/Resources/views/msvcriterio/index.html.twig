@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvcriterios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvCriterio in msvCriterios %}
+            <tr>
+                <td><a href="{{ path('msvcriterio_show', { 'id': msvCriterio.id }) }}">{{ msvCriterio.id }}</a></td>
+                <td>{{ msvCriterio.nombre }}</td>
+                <td>{% if msvCriterio.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvcriterio_show', { 'id': msvCriterio.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('msvcriterio_edit', { 'id': msvCriterio.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvcriterio_new') }}">Create a new msvCriterio</a>
+        </li>
+    </ul>
+{% endblock %}

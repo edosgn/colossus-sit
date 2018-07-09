@@ -156,7 +156,7 @@ class Comparendo
     protected $cuidadano;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\AgenteTransito", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
      **/
     protected $agenteTransito;
 
@@ -629,77 +629,5 @@ class Comparendo
     public function getCuidadano()
     {
         return $this->cuidadano;
-    }
-
-    /**
-     * Set agenteTransito
-     *
-     * @param \AppBundle\Entity\AgenteTransito $agenteTransito
-     *
-     * @return Comparendo
-     */
-    public function setAgenteTransito(\AppBundle\Entity\AgenteTransito $agenteTransito = null)
-    {
-        $this->agenteTransito = $agenteTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get agenteTransito
-     *
-     * @return \AppBundle\Entity\AgenteTransito
-     */
-    public function getAgenteTransito()
-    {
-        return $this->agenteTransito;
-    }
-
-    /**
-     * Set seguimientoEntrega
-     *
-     * @param \AppBundle\Entity\SeguimientoEntrega $seguimientoEntrega
-     *
-     * @return Comparendo
-     */
-    public function setSeguimientoEntrega(\AppBundle\Entity\SeguimientoEntrega $seguimientoEntrega = null)
-    {
-        $this->seguimientoEntrega = $seguimientoEntrega;
-
-        return $this;
-    }
-
-    /**
-     * Get seguimientoEntrega
-     *
-     * @return \AppBundle\Entity\SeguimientoEntrega
-     */
-    public function getSeguimientoEntrega()
-    {
-        return $this->seguimientoEntrega;
-    }
-
-    /**
-     * Set urlDocumento
-     *
-     * @param string $urlDocumento
-     *
-     * @return Comparendo
-     */
-    public function setUrlDocumento($urlDocumento)
-    {
-        $this->urlDocumento = $urlDocumento;
-
-        return $this;
-    }
-
-    /**
-     * Get urlDocumento
-     *
-     * @return string
-     */
-    public function getUrlDocumento()
-    {
-        return $this->urlDocumento;
     }
 }

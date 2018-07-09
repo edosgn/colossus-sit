@@ -101,20 +101,6 @@ class Vehiculo
      /**
      * @var string
      *
-     * @ORM\Column(name="radio_accion", type="string", length=255, nullable= true)
-     */
-    private $radioAccion;
-
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="modalidad_transporte", type="string", length=255, nullable= true)
-     */
-    private $modalidadTransporte;
-
-     /**
-     * @var string
-     *
      * @ORM\Column(name="transporte_pasajeros", type="string", length=255, nullable= true)
      */
     private $transportePasajeros;
@@ -177,10 +163,16 @@ class Vehiculo
     private $clase;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgPlaca", inversedBy="vehiculos") */
-    private $cfgPlaca;
+    private $placa;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
     private $sedeOperativa;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgRadioAccion", inversedBy="vehiculos") */
+    private $radioAccion;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgModalidadTransporte", inversedBy="vehiculos") */
+    private $modalidadTransporte;
 
 
     
@@ -240,7 +232,11 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura->format('Y-m-d');
+        if ($this->fechaFactura) {
+            return $this->fechaFactura->format('d/m/Y');
+        }else{
+            return $this->fechaFactura;
+        }
     }
 
     /**
@@ -312,7 +308,11 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto ->format('Y-m-d');
+        if ($this->fechaManifiesto) {
+            return $this->fechaManifiesto->format('d/m/Y');
+        }else{
+            return $this->fechaManifiesto;
+        }
     }
 
     /**
@@ -820,27 +820,27 @@ class Vehiculo
     }
 
     /**
-     * Set cfgPlaca
+     * Set placa
      *
-     * @param \AppBundle\Entity\CfgPlaca $cfgPlaca
+     * @param \AppBundle\Entity\CfgPlaca $placa
      *
      * @return Vehiculo
      */
-    public function setCfgPlaca(\AppBundle\Entity\CfgPlaca $cfgPlaca = null)
+    public function setPlaca(\AppBundle\Entity\CfgPlaca $placa = null)
     {
-        $this->cfgPlaca = $cfgPlaca;
+        $this->placa = $placa;
 
         return $this;
     }
 
     /**
-     * Get cfgPlaca
+     * Get placa
      *
      * @return \AppBundle\Entity\CfgPlaca
      */
-    public function getCfgPlaca()
+    public function getPlaca()
     {
-        return $this->cfgPlaca;
+        return $this->placa;
     }
 
     /**

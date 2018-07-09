@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvcalificacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Aplica</th>
+                <th>Evidencia</th>
+                <th>Responde</th>
+                <th>Valorobtenido</th>
+                <th>Observacion</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvCalificacion in msvCalificacions %}
+            <tr>
+                <td><a href="{{ path('msvcalificacion_show', { 'id': msvCalificacion.id }) }}">{{ msvCalificacion.id }}</a></td>
+                <td>{% if msvCalificacion.aplica %}Yes{% else %}No{% endif %}</td>
+                <td>{% if msvCalificacion.evidencia %}Yes{% else %}No{% endif %}</td>
+                <td>{% if msvCalificacion.responde %}Yes{% else %}No{% endif %}</td>
+                <td>{{ msvCalificacion.valorObtenido }}</td>
+                <td>{{ msvCalificacion.observacion }}</td>
+                <td>{% if msvCalificacion.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvcalificacion_show', { 'id': msvCalificacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('msvcalificacion_edit', { 'id': msvCalificacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvcalificacion_new') }}">Create a new msvCalificacion</a>
+        </li>
+    </ul>
+{% endblock %}
