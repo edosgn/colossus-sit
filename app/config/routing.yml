@@ -1,3 +1,7 @@
+app_tramite_traslado:
+    resource: "@AppBundle/Controller/TramiteTrasladoController.php"
+    type:     annotation
+
 app_cfg_modalidad_transporte:
     resource: "@AppBundle/Controller/CfgModalidadTransporteController.php"
     type:     annotation

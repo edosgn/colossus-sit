@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tramitetraslados list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechasalida</th>
+                <th>Numeroguia</th>
+                <th>Nombreempresa</th>
+                <th>Numerorut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tramiteTraslado in tramiteTraslados %}
+            <tr>
+                <td><a href="{{ path('tramitetraslado_show', { 'id': tramiteTraslado.id }) }}">{{ tramiteTraslado.id }}</a></td>
+                <td>{% if tramiteTraslado.fechaSalida %}{{ tramiteTraslado.fechaSalida|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ tramiteTraslado.numeroGuia }}</td>
+                <td>{{ tramiteTraslado.nombreEmpresa }}</td>
+                <td>{{ tramiteTraslado.numeroRut }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tramitetraslado_show', { 'id': tramiteTraslado.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tramitetraslado_edit', { 'id': tramiteTraslado.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tramitetraslado_new') }}">Create a new tramiteTraslado</a>
+        </li>
+    </ul>
+{% endblock %}
