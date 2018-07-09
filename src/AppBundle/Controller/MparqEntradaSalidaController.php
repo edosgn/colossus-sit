@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\MparqEntradaSalida;
 use AppBundle\Entity\MparqGrua;
+use AppBundle\Entity\CfgPlaca;
 use AppBundle\Entity\Vehiculo;
 use AppBundle\Entity\Comparendo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -82,14 +83,26 @@ class MparqEntradaSalidaController extends Controller
                     $em->flush();
                 }
 
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
+                $placa = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
                     $params->numeroPlaca
+                );
+                if (!$placa) {
+                    $placa = new CfgPlaca();
+
+                    $placa->setNumero($params->numeroPlaca);
+                    $placa->setEstado('Asignada');
+                    $em->persist($placa);
+                    $em->flush();
+                }
+
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
+                    $placa->getId()
                 );
 
                 if (!$vehiculo) {
                     $vehiculo = new Vehiculo();
 
-                    $vehiculo->setPlaca($params->numeroPlaca);
+                    $vehiculo->setPlaca($placa);
                     $em->persist($vehiculo);
                     $em->flush();
                 }
@@ -215,5 +228,55 @@ class MparqEntradaSalidaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/search/inventario", name="mparqentradasalida_search")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByNumeroInventarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $response = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $tipoPeticionario = $params->tipo;
+
+            $mparqEntradaSalida = $em->getRepository('AppBundle:MparqEntradaSalida')->findOneByNumeroInventario(
+                $params->numeroInventario
+            );
+            
+            if ($mparqEntradaSalida == null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $mparqEntradaSalida,
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 }

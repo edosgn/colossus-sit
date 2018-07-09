@@ -1,3 +1,11 @@
+app_cfg_modalidad_transporte:
+    resource: "@AppBundle/Controller/CfgModalidadTransporteController.php"
+    type:     annotation
+
+app_cfg_radio_accion:
+    resource: "@AppBundle/Controller/CfgRadioAccionController.php"
+    type:     annotation
+
 app_cfg_tipo_alerta:
     resource: "@AppBundle/Controller/CfgTipoAlertaController.php"
     type:     annotation
@@ -128,10 +136,6 @@ app_parametro:
 
 app_factura_sustrato:
     resource: "@AppBundle/Controller/FacturaSustratoController.php"
-    type:     annotation
-
-app_radio_accion:
-    resource: "@AppBundle/Controller/RadioAccionController.php"
     type:     annotation
 
 app_condicion_ingreso:

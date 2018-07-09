@@ -270,21 +270,22 @@ class ClaseController extends Controller
      */
     public function selectClasePorModuloAction($id)
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $clases = $em->getRepository('AppBundle:Clase')->findBy(
-        array(
-            'modulo' => $id,
-            'estado' => 1
-        )
-    );
-         $response = null;
-      foreach ($clases as $key => $clase) {
-        $response[$key] = array(
-            'value' => $clase->getId(),
-            'label' => $clase->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $clases = $em->getRepository('AppBundle:Clase')->findBy(
+            array(
+                'modulo' => $id,
+                'estado' => 1
+            )
+        );
+        
+        $response = null;
+        foreach ($clases as $key => $clase) {
+            $response[$key] = array(
+                'value' => $clase->getId(),
+                'label' => $clase->getNombre(),
             );
-      }
+        }
        return $helpers->json($response);
     }
 }

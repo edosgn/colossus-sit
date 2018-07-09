@@ -233,16 +233,26 @@ class MpersonalFuncionarioController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        
-        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
-            array('activo' => true)
-        );
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+                array('activo' => true)
+            );
 
-        foreach ($funcionarios as $key => $funcionario) {
-            $response[$key] = array(
-                'value' => $funcionario->getId(),
-                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+            foreach ($funcionarios as $key => $funcionario) {
+                $response[$key] = array(
+                    'value' => $funcionario->getId(),
+                    'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
             );
         }
         return $helpers->json($response);

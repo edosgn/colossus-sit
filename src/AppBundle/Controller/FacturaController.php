@@ -279,7 +279,7 @@ class FacturaController extends Controller
      * @Route("/show/id", name="factura_id")
      * @Method("POST")
      */
-    public function showByNumero(Request $request)
+    public function showById(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -362,6 +362,52 @@ class FacturaController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "no hay facturas para el vehiculo", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca vehiculos por id.
+     *
+     * @Route("/seach/numero", name="factura_search_numero")
+     * @Method("POST")
+     */
+    public function searchByNumero(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $factura = $em->getRepository('AppBundle:Factura')->findOneBy(
+                array('numero' => $params->numero)
+            );
+
+            if ($factura!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Factura", 
+                    'data'=> $factura,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Factura no encontrada", 
                 );
             }
         }else{
