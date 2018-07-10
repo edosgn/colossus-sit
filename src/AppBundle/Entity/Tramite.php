@@ -31,7 +31,7 @@ class Tramite
     /**
      * @var bool
      *
-     * @ORM\Column(name="redondeo", type="boolean")
+     * @ORM\Column(name="redondeo", type="boolean", nullable=true)
      */
     private $redondeo = true;
 
@@ -52,7 +52,7 @@ class Tramite
      /**
      * @var boolean
      *
-     * @ORM\Column(name="sustrato", type="boolean")
+     * @ORM\Column(name="sustrato", type="boolean", nullable=true)
      */
     private $sustrato = false;
 

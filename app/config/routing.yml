@@ -226,6 +226,10 @@ app_dependencia:
     resource: "@AppBundle/Controller/DependenciaController.php"
     type:     annotation
 
+app_default:
+    resource: "@AppBundle/Controller/DefaultController.php"
+    type:     annotation
+
 usuario:
     resource: "@UsuarioBundle/Controller/"
     type:     annotation
