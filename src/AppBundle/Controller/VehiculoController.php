@@ -7,8 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\Vehiculo;
-use AppBundle\Entity\CfgPlaca;
-use AppBundle\Entity\CfgModalidadTransporte;
 use AppBundle\Form\VehiculoType;
 
 /**
@@ -25,35 +23,48 @@ class VehiculoController extends Controller
      * @Method("GET")
      */
     public function indexAction()
-    {        
+    {
+        // $pdf = $this->container->get("white_october.tcpdf")->create(
+        //     'LANDSCAPE',
+        //     PDF_UNIT,
+        //     PDF_PAGE_FORMAT,
+        //     true,
+        //     'UTF-8',
+        //     false
+        // );
+        // $pdf->SetAuthor('qweqwe');
+        // $pdf->SetTitle('Prueba TCPDF');
+        // $pdf->SetSubject('Your client');
+        // $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        // $pdf->setFontSubsetting(true);
+
+        // $pdf->SetFont('helvetica', '', 11, '', true);
+        // $pdf->AddPage();
+
+        // $html = '<h1>Working on Symfony</h1>';
+
+        // $pdf->writeHTMLCell(
+        //     $w = 0,
+        //     $h = 0,
+        //     $x = '',
+        //     $y = '',
+        //     $html,
+        //     $border = 0,
+        //     $ln = 1,
+        //     $fill = 0,
+        //     $reseth = true,
+        //     $align = '',
+        //     $autopadding = true
+        // );
+
+        // $pdf->Output("example.pdf", 'I');
+        // die();
+        
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findBy(
             array('estado' => 1)
         );
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado vehiculo", 
-                    'data'=> $vehiculo,
-            );
-         
-        return $helpers->json($response);
-
-    }
-
-    /**
-     * Lists all Vehiculo entities.
-     *
-     * @Route("/rna", name="vehiculo_rna")
-     * @Method("GET")
-     */
-    public function indexRnaAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getRna();
-
         $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -86,6 +97,7 @@ class VehiculoController extends Controller
             //         'msj' => "los campos no pueden estar vacios", 
             //     );
             // }else{
+                        $placa = $params->placa;
                         $numeroFactura = $params->numeroFactura;
                         $fechaFactura = $params->fechaFactura;
                         $valor = $params->valor;
@@ -96,7 +108,9 @@ class VehiculoController extends Controller
                         $motor = $params->motor;
                         $chasis = $params->chasis;
                         $serie = $params->serie;
-                        $tipoVehiculo = $params->tipoVehiculo;
+                        // $tipoVehiculo = $params->tipoVehiculo;
+                        $radioAccion = $params->radioAccion;
+                        $modalidadTransporte = $params->modalidadTransporte;
                         $transportePasajeros = $params->transportePasajeros;
                         $vin = $params->vin;
                         $numeroPasajeros = $params->numeroPasajeros;
@@ -124,28 +138,9 @@ class VehiculoController extends Controller
                         $fechaFactura=new \DateTime($fechaFactura);
                         $fechaManifiesto=new \DateTime($fechaManifiesto);
 
-                        $cfgRadioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find(
-                            $params->radioAccionId
-                        );
-
-                        $cfgModalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find(
-                            $params->modalidadTransporteId
-                        );
-                        
-                        if ($params->placa) {
-                            $placa = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-                                $params->placa
-                            );
-                            if (!$placa) {
-                                $placa = new CfgPlaca();
-
-                                $placa->setNumero($params->placa);
-                                $placa->setEstado('Asignada');
-                                $em->persist($placa);
-                                $em->flush();
-                            }
-                            $vehiculo->setPlaca($placa);
-                        }
+                        $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
+                     
+                        $vehiculo->setCfgPlaca($CfgPlaca);
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
@@ -156,8 +151,9 @@ class VehiculoController extends Controller
                         $vehiculo->setMotor($motor);
                         $vehiculo->setChasis($chasis);
                         $vehiculo->setSerie($serie);
-                        $vehiculo->setRadioAccion($cfgRadioAccion);
-                        $vehiculo->setModalidadTRansporte($cfgModalidadTransporte);
+                        // $vehiculo->setTipoVehiculo($tipoVehiculo);
+                        $vehiculo->setRadioAccion($radioAccion);
+                        $vehiculo->setModalidadTRansporte($modalidadTransporte);
                         $vehiculo->setTransportePasajeros($transportePasajeros);
                         $vehiculo->setSerie($serie);
                         $vehiculo->setSerie($serie);
@@ -289,9 +285,9 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
+
             $placa = $params->placa;
             $numeroFactura = $params->numeroFactura;
-            $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
             $numeroManifiesto = $params->numeroManifiesto;
             $fechaManifiesto = $params->fechaManifiesto;
@@ -300,7 +296,7 @@ class VehiculoController extends Controller
             $motor = $params->motor;
             $chasis = $params->chasis;
             $serie = $params->serie;
-            $tipoVehiculo = $params->tipoVehiculo;
+            // $tipoVehiculo = $params->tipoVehiculo;
             $radioAccion = $params->radioAccion;
             $modalidadTransporte = $params->modalidadTransporte;
             $transportePasajeros = $params->transportePasajeros;
@@ -326,8 +322,9 @@ class VehiculoController extends Controller
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
+
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            $fechaFactura=new \DateTime($fechaFactura);
+
             $fechaManifiesto=new \DateTime($fechaManifiesto);
 
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
@@ -335,7 +332,7 @@ class VehiculoController extends Controller
             if ($vehiculo!=null) {
                 $vehiculo->setCfgPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
-                $vehiculo->setfechaFactura($fechaFactura);
+                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
                 $vehiculo->setValor($valor);
                 $vehiculo->setNumeroManifiesto($numeroManifiesto);
                 $vehiculo->setFechaManifiesto($fechaManifiesto);
@@ -344,6 +341,7 @@ class VehiculoController extends Controller
                 $vehiculo->setMotor($motor);
                 $vehiculo->setChasis($chasis);
                 $vehiculo->setSerie($serie);
+                // $vehiculo->setTipoVehiculo($tipoVehiculo);
                 $vehiculo->setRadioAccion($radioAccion);
                 $vehiculo->setModalidadTRansporte($modalidadTransporte);
                 $vehiculo->setTransportePasajeros($transportePasajeros);
@@ -363,7 +361,53 @@ class VehiculoController extends Controller
                 $vehiculo->setCancelado($cancelado);
                 $vehiculo->setEstado(true);
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($vehiculo);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con exito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar vehiculo", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing Vehiculo entity.
+     *
+     * @Route("/edit/sedeOperativa", name="vehiculo_edit_sedeOperativa")
+     * @Method({"GET", "POST"})
+     */
+    public function editSedeOperativaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->sedeOperativaId);
+
+            if ($vehiculo!=null) {
+                $vehiculo->setSedeOperativa($sedeOperativa);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -586,7 +630,7 @@ class VehiculoController extends Controller
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
            
             if ($vehiculo!=null) {
-                $vehiculo->setPlaca($CfgPlaca);               
+                $vehiculo->setCfgPlaca($CfgPlaca);               
                 $vehiculo->setSedeOperativa($sedeOperativa);
                 $CfgPlaca->setEstado('asignado');
                

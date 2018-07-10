@@ -22,13 +22,19 @@ class CfgTipoAlertaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $cfgTipoAlertas = $em->getRepository('AppBundle:CfgTipoAlerta')->findAll();
-
-        return $this->render('cfgtipoalerta/index.html.twig', array(
-            'cfgTipoAlertas' => $cfgTipoAlertas,
-        ));
+        $alerta = $em->getRepository('AppBundle:CfgTipoAlerta')->findBy(
+            array('estado' => 1)
+        );
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado alerta", 
+                    'data'=> $alerta,
+            );
+         
+        return $helpers->json($response);
     }
 
     /**
@@ -60,8 +66,8 @@ class CfgTipoAlertaController extends Controller
     /**
      * Finds and displays a cfgTipoAlertum entity.
      *
-     * @Route("/{id}", name="cfgtipoalerta_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="cfgtipoalerta_show")
+     * @Method("POST")
      */
     public function showAction(CfgTipoAlerta $cfgTipoAlertum)
     {
@@ -76,7 +82,7 @@ class CfgTipoAlertaController extends Controller
     /**
      * Displays a form to edit an existing cfgTipoAlertum entity.
      *
-     * @Route("/{id}/edit", name="cfgtipoalerta_edit")
+     * @Route("/edit", name="cfgtipoalerta_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, CfgTipoAlerta $cfgTipoAlertum)
@@ -101,8 +107,8 @@ class CfgTipoAlertaController extends Controller
     /**
      * Deletes a cfgTipoAlertum entity.
      *
-     * @Route("/{id}", name="cfgtipoalerta_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="cfgtipoalerta_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, CfgTipoAlerta $cfgTipoAlertum)
     {
@@ -144,13 +150,13 @@ class CfgTipoAlertaController extends Controller
     {
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
-    $alertas = $em->getRepository('AppBundle:Alerta')->findBy(
+    $alertas = $em->getRepository('AppBundle:CfgTipoAlerta')->findBy(
         array('estado' => 1)
     );
       foreach ($alertas as $key => $alerta) {
         $response[$key] = array(
             'value' => $alerta->getId(),
-            'label' => $alerta->getNombre()."_".$alerta->getNombre(),
+            'label' => $alerta->getNombre(),
             );
       }
        return $helpers->json($response);

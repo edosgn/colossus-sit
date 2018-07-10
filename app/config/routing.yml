@@ -1,3 +1,12 @@
+<<<<<<< HEAD
+app_tramite_traslado:
+    resource: "@AppBundle/Controller/TramiteTrasladoController.php"
+=======
+app_vehiculo_acreedor:
+    resource: "@AppBundle/Controller/VehiculoAcreedorController.php"
+>>>>>>> 0accbdce859e3b9f0e576543f99bf96eef94c4c0
+    type:     annotation
+
 app_cfg_modalidad_transporte:
     resource: "@AppBundle/Controller/CfgModalidadTransporteController.php"
     type:     annotation
