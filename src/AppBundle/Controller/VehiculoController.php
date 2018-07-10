@@ -23,43 +23,7 @@ class VehiculoController extends Controller
      * @Method("GET")
      */
     public function indexAction()
-    {
-        // $pdf = $this->container->get("white_october.tcpdf")->create(
-        //     'LANDSCAPE',
-        //     PDF_UNIT,
-        //     PDF_PAGE_FORMAT,
-        //     true,
-        //     'UTF-8',
-        //     false
-        // );
-        // $pdf->SetAuthor('qweqwe');
-        // $pdf->SetTitle('Prueba TCPDF');
-        // $pdf->SetSubject('Your client');
-        // $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-        // $pdf->setFontSubsetting(true);
-
-        // $pdf->SetFont('helvetica', '', 11, '', true);
-        // $pdf->AddPage();
-
-        // $html = '<h1>Working on Symfony</h1>';
-
-        // $pdf->writeHTMLCell(
-        //     $w = 0,
-        //     $h = 0,
-        //     $x = '',
-        //     $y = '',
-        //     $html,
-        //     $border = 0,
-        //     $ln = 1,
-        //     $fill = 0,
-        //     $reseth = true,
-        //     $align = '',
-        //     $autopadding = true
-        // );
-
-        // $pdf->Output("example.pdf", 'I');
-        // die();
-        
+    {        
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findBy(
@@ -111,7 +75,6 @@ class VehiculoController extends Controller
                         // $tipoVehiculo = $params->tipoVehiculo;
                         $radioAccion = $params->radioAccion;
                         $modalidadTransporte = $params->modalidadTransporte;
-                        $transportePasajeros = $params->transportePasajeros;
                         $vin = $params->vin;
                         $numeroPasajeros = $params->numeroPasajeros;
                         $municipioId = $params->municipioId;
@@ -151,10 +114,8 @@ class VehiculoController extends Controller
                         $vehiculo->setMotor($motor);
                         $vehiculo->setChasis($chasis);
                         $vehiculo->setSerie($serie);
-                        // $vehiculo->setTipoVehiculo($tipoVehiculo);
                         $vehiculo->setRadioAccion($radioAccion);
-                        $vehiculo->setModalidadTRansporte($modalidadTransporte);
-                        $vehiculo->setTransportePasajeros($transportePasajeros);
+                        $vehiculo->setModalidadTransporte($modalidadTransporte);
                         $vehiculo->setSerie($serie);
                         $vehiculo->setSerie($serie);
                         $vehiculo->setVin($vin);

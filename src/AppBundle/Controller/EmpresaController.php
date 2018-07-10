@@ -33,6 +33,9 @@ class EmpresaController extends Controller
         $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
             array('estado' => 1)
         );
+
+        $response['data'] = array();
+
         $response = array(
                     'status' => 'success',
                     'code' => 200,

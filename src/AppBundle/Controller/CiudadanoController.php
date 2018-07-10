@@ -477,4 +477,51 @@ class CiudadanoController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Displays a form to edit an existing Ciudadano entity.
+     *
+     * @Route("/edit/licencia/conduccion", name="ciudadano_edit_licencia_conduccion")
+     * @Method({"GET", "POST"})
+     */
+    public function editLicenciaConduccionAction(Request $request)
+    {   
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->solicitanteId);
+                
+            if ($ciudadano) {
+                $ciudadano->setLicenciaConduccion($params->licenciaConduccion);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Licencia de conducción actualizada con exito!", 
+                    'data'=> $ciudadano,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar ciudadano", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
 }

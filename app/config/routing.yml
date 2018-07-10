@@ -1,10 +1,9 @@
-<<<<<<< HEAD
 app_tramite_traslado:
     resource: "@AppBundle/Controller/TramiteTrasladoController.php"
-=======
+    type:     annotation
+
 app_vehiculo_acreedor:
     resource: "@AppBundle/Controller/VehiculoAcreedorController.php"
->>>>>>> 0accbdce859e3b9f0e576543f99bf96eef94c4c0
     type:     annotation
 
 app_cfg_modalidad_transporte:
@@ -127,6 +126,10 @@ app_mgd_tipo_correspondencia:
     resource: "@AppBundle/Controller/MgdTipoCorrespondenciaController.php"
     type:     annotation
 
+app_empresa:
+    resource: "@AppBundle/Controller/EmpresaController.php"
+    type:     annotation
+
 app_representante_empresa:
     resource: "@AppBundle/Controller/RepresentanteEmpresaController.php"
     type:     annotation
@@ -201,10 +204,6 @@ app_genero:
 
 app_sede_operativa:
     resource: "@AppBundle/Controller/SedeOperativaController.php"
-    type:     annotation
-
-app_infraccion:
-    resource: "@AppBundle/Controller/InfraccionController.php"
     type:     annotation
 
 app_inmovilizacion:

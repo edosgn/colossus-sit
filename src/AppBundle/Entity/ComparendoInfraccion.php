@@ -28,7 +28,7 @@ class ComparendoInfraccion
     protected $comparendo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Infraccion", inversedBy="comparendosInfracciones")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MflInfraccion", inversedBy="comparendosInfracciones")
      **/
     protected $infraccion;
 
@@ -70,11 +70,11 @@ class ComparendoInfraccion
     /**
      * Set infraccion
      *
-     * @param \AppBundle\Entity\Infraccion $infraccion
+     * @param \AppBundle\Entity\MflInfraccion $infraccion
      *
      * @return ComparendoInfraccion
      */
-    public function setInfraccion(\AppBundle\Entity\Infraccion $infraccion = null)
+    public function setInfraccion(\AppBundle\Entity\MflInfraccion $infraccion = null)
     {
         $this->infraccion = $infraccion;
 
@@ -84,7 +84,7 @@ class ComparendoInfraccion
     /**
      * Get infraccion
      *
-     * @return \AppBundle\Entity\Infraccion
+     * @return \AppBundle\Entity\MflInfraccion
      */
     public function getInfraccion()
     {

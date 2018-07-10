@@ -301,4 +301,53 @@ class SustratoController extends Controller
       }
        return $helpers->json($response);
     }
+
+    /**
+     * Displays a form to edit an existing sustrato entity.
+     *
+     * @Route("/edit/estado", name="sustrato_edit_estado")
+     * @Method({"GET", "POST"})
+     */
+    public function editEstadoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $sustrato = $em->getRepository("AppBundle:Sustrato")->find($params->id);
+
+            if ($sustrato) {
+                $sustrato->setEstado('Utilizado');
+                $em->flush();
+
+                 $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro actualizado con exito", 
+                        'data'=> $sustrato,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
 }

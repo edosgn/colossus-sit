@@ -28,7 +28,6 @@ class Ciudadano
      */
     private $direccion;
 
-
     /**
      * @var \DateTime
      *
@@ -56,6 +55,13 @@ class Ciudadano
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="licenciaConduccion", type="string", length=255, nullable=true)
+     */
+    private $licenciaConduccion;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
     private $municipioNacimiento;
@@ -334,5 +340,29 @@ class Ciudadano
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set licenciaConduccion
+     *
+     * @param string $licenciaConduccion
+     *
+     * @return Ciudadano
+     */
+    public function setLicenciaConduccion($licenciaConduccion)
+    {
+        $this->licenciaConduccion = $licenciaConduccion;
+
+        return $this;
+    }
+
+    /**
+     * Get licenciaConduccion
+     *
+     * @return string
+     */
+    public function getLicenciaConduccion()
+    {
+        return $this->licenciaConduccion;
     }
 }

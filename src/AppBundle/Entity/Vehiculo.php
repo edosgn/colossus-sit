@@ -97,13 +97,6 @@ class Vehiculo
      * @ORM\Column(name="vin", type="string", length=255, nullable= true)
      */
     private $vin;
-
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="transporte_pasajeros", type="string", length=255, nullable= true)
-     */
-    private $transportePasajeros;
   
     /**
      * @var int
@@ -232,11 +225,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        if ($this->fechaFactura) {
-            return $this->fechaFactura->format('d/m/Y');
-        }else{
-            return $this->fechaFactura;
-        }
+        return $this->fechaFactura;
     }
 
     /**
@@ -308,11 +297,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        if ($this->fechaManifiesto) {
-            return $this->fechaManifiesto->format('d/m/Y');
-        }else{
-            return $this->fechaManifiesto;
-        }
+        return $this->fechaManifiesto;
     }
 
     /**
@@ -457,78 +442,6 @@ class Vehiculo
     public function getVin()
     {
         return $this->vin;
-    }
-
-    /**
-     * Set radioAccion
-     *
-     * @param string $radioAccion
-     *
-     * @return Vehiculo
-     */
-    public function setRadioAccion($radioAccion)
-    {
-        $this->radioAccion = $radioAccion;
-
-        return $this;
-    }
-
-    /**
-     * Get radioAccion
-     *
-     * @return string
-     */
-    public function getRadioAccion()
-    {
-        return $this->radioAccion;
-    }
-
-    /**
-     * Set modalidadTransporte
-     *
-     * @param string $modalidadTransporte
-     *
-     * @return Vehiculo
-     */
-    public function setModalidadTransporte($modalidadTransporte)
-    {
-        $this->modalidadTransporte = $modalidadTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidadTransporte
-     *
-     * @return string
-     */
-    public function getModalidadTransporte()
-    {
-        return $this->modalidadTransporte;
-    }
-
-    /**
-     * Set transportePasajeros
-     *
-     * @param string $transportePasajeros
-     *
-     * @return Vehiculo
-     */
-    public function setTransportePasajeros($transportePasajeros)
-    {
-        $this->transportePasajeros = $transportePasajeros;
-
-        return $this;
-    }
-
-    /**
-     * Get transportePasajeros
-     *
-     * @return string
-     */
-    public function getTransportePasajeros()
-    {
-        return $this->transportePasajeros;
     }
 
     /**
@@ -865,5 +778,53 @@ class Vehiculo
     public function getSedeOperativa()
     {
         return $this->sedeOperativa;
+    }
+
+    /**
+     * Set radioAccion
+     *
+     * @param \AppBundle\Entity\CfgRadioAccion $radioAccion
+     *
+     * @return Vehiculo
+     */
+    public function setRadioAccion(\AppBundle\Entity\CfgRadioAccion $radioAccion = null)
+    {
+        $this->radioAccion = $radioAccion;
+
+        return $this;
+    }
+
+    /**
+     * Get radioAccion
+     *
+     * @return \AppBundle\Entity\CfgRadioAccion
+     */
+    public function getRadioAccion()
+    {
+        return $this->radioAccion;
+    }
+
+    /**
+     * Set modalidadTransporte
+     *
+     * @param \AppBundle\Entity\CfgModalidadTransporte $modalidadTransporte
+     *
+     * @return Vehiculo
+     */
+    public function setModalidadTransporte(\AppBundle\Entity\CfgModalidadTransporte $modalidadTransporte = null)
+    {
+        $this->modalidadTransporte = $modalidadTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadTransporte
+     *
+     * @return \AppBundle\Entity\CfgModalidadTransporte
+     */
+    public function getModalidadTransporte()
+    {
+        return $this->modalidadTransporte;
     }
 }
