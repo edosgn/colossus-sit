@@ -1,0 +1,113 @@
+<html>
+  <header>
+  </header>
+  <body>
+
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>Subsecretaria de transito y transporte departamental de nariño</b>
+        <br>      
+    </p>
+
+    <p>
+        <table>
+            <tr>
+                <td width="70%">El vehículo de placas: {{vehiculo.placa.numero}} tiene las siguientes características </td>
+            </tr>
+        </table>       
+        <br>
+        <br> 
+    </p>
+
+    <table>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Clase</td>
+            <td> {{vehiculo.clase.nombre}}</td>
+            <td style="font-weight:bold;">No.serie</td>
+            <td>{{vehiculo.serie}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Marca</td>
+            <td> {{vehiculo.linea.marca.nombre}}</td>
+            <td style="font-weight:bold;">No.Chasis</td>
+            <td>{{vehiculo.chasis}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Carrocería</td>
+            <td> {{vehiculo.carroceria.nombre}}</td>
+            <td style="font-weight:bold;">Cilindraje</td>
+            <td>{{vehiculo.cilindraje}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">linea</td>
+            <td> {{vehiculo.linea.nombre}}</td>
+            <td style="font-weight:bold;">Pasajeros</td>
+            <td>{{vehiculo.transportePasajeros}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Color</td>
+            <td> {{vehiculo.color.nombre}}</td>
+            <td style="font-weight:bold;">Servicio</td>
+            <td>{{vehiculo.servicio.nombre}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Modelo</td>
+            <td> {{vehiculo.modelo}}</td>
+            <td style="font-weight:bold;">No.motor</td>
+            <td>{{vehiculo.motor}}</td>
+        </tr>
+    </table>
+
+    <p style="text-align:center;">
+        <b>Propietarios</b>
+        <br>      
+    </p>
+
+    <table border="1">
+        <tr>
+            <td>Identificacion</td>
+            <td>nombres</td>
+            <td>Apellidos</td>
+            <td>Direccion</td>
+        </tr>
+        {% for propietarioVehiculo in propietariosVehiculo %}
+            <tr>
+                <td>{{ propietarioVehiculo.ciudadano.usuario.identificacion }}</td>
+                <td>{{ propietarioVehiculo.ciudadano.usuario.PrimerNombre }} {{ propietarioVehiculo.ciudadano.usuario.SegundoNombre }}</td>
+                <td>{{ propietarioVehiculo.ciudadano.usuario.PrimerApellido }} {{ propietarioVehiculo.ciudadano.usuario.SegundoApellido }}</td>
+                <td>{{ propietarioVehiculo.ciudadano.direccion }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p style="text-align:center;">
+        <b>tramites</b>
+        <br>      
+    </p>
+
+    <table border="1">
+        <tr>
+            <td>Fecha</td>
+            <td>Nombre Tramite</td>
+            <td>datos</td>
+        </tr>
+        {% for tramiteSolicitudArray in tramitesSolicitudArray %}
+            <tr>
+                <td>{{ tramiteSolicitudArray['fecha']|date('d/m/Y') }}</td>
+                <td>{{ tramiteSolicitudArray['tramiteNombre']}}</td>
+                <td>{{ tramiteSolicitudArray['datos'] | join(', ') }}</td>
+                
+            </tr>
+        {% endfor %}
+    </table>
+
+    
+
+    
+  </body>
+</html>
