@@ -53,6 +53,7 @@ class FacturaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
+
             /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
@@ -64,13 +65,16 @@ class FacturaController extends Controller
                 $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
                 $consecutivo = count($facturas)."-".date('y');
 
-
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
                     $params->factura->sedeOperativaId
                 );
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
-                    $params->factura->vehiculoId
-                );
+
+                if ($params->factura->vehiculoId) {
+                    $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                        $params->factura->vehiculoId
+                    );
+                    $factura->setVehiculo($vehiculo);
+                }
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
                     $params->factura->ciudadanoId
                 );
@@ -88,7 +92,6 @@ class FacturaController extends Controller
                 
                 //Inserta llaves foraneas
                 $factura->setSedeOperativa($sedeOperativa);
-                $factura->setVehiculo($vehiculo);
                 $factura->setCiudadano($ciudadano);
                 
                 $em = $this->getDoctrine()->getManager();
@@ -377,8 +380,8 @@ class FacturaController extends Controller
     /**
      * busca vehiculos por id.
      *
-     * @Route("/seach/numero", name="factura_search_numero")
-     * @Method("POST")
+     * @Route("/search/numero", name="factura_search_numero")
+     * @Method({"GET", "POST"})
      */
     public function searchByNumero(Request $request)
     {
@@ -393,14 +396,14 @@ class FacturaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $factura = $em->getRepository('AppBundle:Factura')->findOneBy(
-                array('numero' => $params->numero)
+                array('numero' => $params->numeroFactura)
             );
 
             if ($factura!=null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Factura", 
+                    'msj' => "Factura encontrada", 
                     'data'=> $factura,
             );
             }else{

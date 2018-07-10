@@ -33,42 +33,28 @@ class Tramite
      *
      * @ORM\Column(name="redondeo", type="boolean")
      */
-    private $redondeo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="unidad", type="string", length=255)
-     */
-    private $unidad;
+    private $redondeo = true;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="afectacion", type="boolean")
      */
-    private $afectacion;
+    private $afectacion = false;
 
      /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
+    private $estado = true;
 
      /**
      * @var boolean
      *
      * @ORM\Column(name="sustrato", type="boolean")
      */
-    private $sustrato;
-
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="valor", type="string")
-     */
-    private $valor;
+    private $sustrato = false;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="Tramites")
@@ -132,30 +118,6 @@ class Tramite
     public function getRedondeo()
     {
         return $this->redondeo;
-    }
-
-    /**
-     * Set unidad
-     *
-     * @param string $unidad
-     *
-     * @return Tramite
-     */
-    public function setUnidad($unidad)
-    {
-        $this->unidad = $unidad;
-
-        return $this;
-    }
-
-    /**
-     * Get unidad
-     *
-     * @return string
-     */
-    public function getUnidad()
-    {
-        return $this->unidad;
     }
 
     /**
@@ -228,30 +190,6 @@ class Tramite
     public function getSustrato()
     {
         return $this->sustrato;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param string $valor
-     *
-     * @return Tramite
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return string
-     */
-    public function getValor()
-    {
-        return $this->valor;
     }
 
     /**

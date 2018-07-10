@@ -110,28 +110,23 @@ class TramitePrecioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-                $valor = $params->valor;
                 $fechaInicio = $params->fechaInicio;
-                $moduloId = $params->moduloId;
-                $tramiteId = $params->tramiteId;
-                $claseId = $params->claseId;
+                
                 $em = $this->getDoctrine()->getManager();
                 $tramitePrecio = new TramitePrecio();
-                $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
-                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+                $tramite = $em->getRepository('AppBundle:Tramite')->find($params->tramiteId);
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
                 $fechaInicio = new \DateTime($fechaInicio);
 
-                if ($claseId != NULL) {
-                    $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+                if (isset($params->claseId)) {
+                    $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
                     $tramitePrecio->setClase($clase);
+                    $nombre = $tramite->getNombre() . ' ' . $clase->getNombre();
+                }else{
+                    $tramitePrecio->setNombre($tramite->getNombre());
                 }
-                
-                $nombre = $tramite->getNombre() . ' ' . $clase->getNombre();
 
-
-
-                $tramitePrecio->setNombre($nombre);
-                $tramitePrecio->setValor($valor);
+                $tramitePrecio->setValor($params->valor);
                 $tramitePrecio->setFechaInicio($fechaInicio);
                 $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setTramite($tramite);

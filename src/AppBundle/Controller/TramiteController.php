@@ -61,24 +61,16 @@ class TramiteController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $nombre = $params->nombre;
-                $valor = $params->valor;
-                $unidad = $params->unidad;
-                $redondeo = (isset($params->redondeo)) ? $params->redondeo : false;
-                $afectacion = (isset($params->afectacion)) ? $params->afectacion : false;
+                $sustrato = ($params->sustrato == 'true') ? true : false;
+                
                 $moduloId = $params->moduloId;
-
                 $em = $this->getDoctrine()->getManager();
                 $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
 
                 $tramite = new Tramite();
-                $tramite->setNombre($nombre);
-                $tramite->setValor($valor);
-                $tramite->setRedondeo($redondeo);
-                $tramite->setUnidad($unidad);
-                $tramite->setAfectacion($afectacion);
+                $tramite->setNombre($params->nombre);
+                $tramite->setSustrato($sustrato);
                 $tramite->setModulo($modulo);
-                $tramite->setEstado(true);
                 $em->persist($tramite);
                 $em->flush();
 
