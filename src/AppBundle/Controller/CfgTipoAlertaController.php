@@ -153,6 +153,7 @@ class CfgTipoAlertaController extends Controller
     $alertas = $em->getRepository('AppBundle:CfgTipoAlerta')->findBy(
         array('estado' => 1)
     );
+    $response= null;
       foreach ($alertas as $key => $alerta) {
         $response[$key] = array(
             'value' => $alerta->getId(),

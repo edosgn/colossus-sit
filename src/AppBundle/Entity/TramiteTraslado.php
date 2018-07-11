@@ -50,9 +50,9 @@ class TramiteTraslado
     private $numeroRunt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo")
      **/
-    protected $sedeOperativa;
+    protected $vehiculo;
 
     /**
      * @var bool
@@ -61,8 +61,6 @@ class TramiteTraslado
      */
     private $estado;
     
-
-   
 
     /**
      * Get id
@@ -195,26 +193,26 @@ class TramiteTraslado
     }
 
     /**
-     * Set sedeOperativa
+     * Set vehiculo
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
      * @return TramiteTraslado
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->vehiculo = $vehiculo;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get vehiculo
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \AppBundle\Entity\Vehiculo
      */
-    public function getSedeOperativa()
+    public function getVehiculo()
     {
-        return $this->sedeOperativa;
+        return $this->vehiculo;
     }
 }

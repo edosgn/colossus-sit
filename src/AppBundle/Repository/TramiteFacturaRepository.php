@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
 {
+    
 }
