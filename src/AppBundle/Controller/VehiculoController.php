@@ -66,7 +66,6 @@ class VehiculoController extends Controller
                         $fechaFactura = $params->fechaFactura;
                         $valor = $params->valor;
                         $numeroManifiesto = $params->numeroManifiesto;
-                        $fechaManifiesto = $params->fechaManifiesto;
                         $cilindraje = $params->cilindraje;
                         $modelo = $params->modelo;
                         $motor = $params->motor;
@@ -99,7 +98,6 @@ class VehiculoController extends Controller
                         $vehiculo = new Vehiculo();
                         
                         $fechaFactura=new \DateTime($fechaFactura);
-                        $fechaManifiesto=new \DateTime($fechaManifiesto);
 
                         $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
                      
@@ -108,7 +106,7 @@ class VehiculoController extends Controller
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
                         $vehiculo->setNumeroManifiesto($numeroManifiesto);
-                        $vehiculo->setFechaManifiesto($fechaManifiesto);
+                        $vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
                         $vehiculo->setCilindraje($cilindraje);
                         $vehiculo->setModelo($modelo);
                         $vehiculo->setMotor($motor);
@@ -245,13 +243,10 @@ class VehiculoController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-
             $placa = $params->placa;
             $numeroFactura = $params->numeroFactura;
             $valor = $params->valor;
             $numeroManifiesto = $params->numeroManifiesto;
-            $fechaManifiesto = $params->fechaManifiesto;
             $cilindraje = $params->cilindraje;
             $modelo = $params->modelo;
             $motor = $params->motor;
@@ -260,7 +255,6 @@ class VehiculoController extends Controller
             // $tipoVehiculo = $params->tipoVehiculo;
             $radioAccion = $params->radioAccion;
             $modalidadTransporte = $params->modalidadTransporte;
-            $transportePasajeros = $params->transportePasajeros;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
             $municipioId = $params->municipioId;
@@ -286,17 +280,18 @@ class VehiculoController extends Controller
 
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
 
-            $fechaManifiesto=new \DateTime($fechaManifiesto);
 
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             
             if ($vehiculo!=null) {
                 $vehiculo->setCfgPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
-                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
+                //$vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
+                $vehiculo->setFechaFactura($params->fechaFactura);
                 $vehiculo->setValor($valor);
                 $vehiculo->setNumeroManifiesto($numeroManifiesto);
-                $vehiculo->setFechaManifiesto($fechaManifiesto);
+                //$vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
+                $vehiculo->setFechaManifiesto($params->fechaManifiesto);
                 $vehiculo->setCilindraje($cilindraje);
                 $vehiculo->setModelo($modelo);
                 $vehiculo->setMotor($motor);
@@ -305,7 +300,7 @@ class VehiculoController extends Controller
                 // $vehiculo->setTipoVehiculo($tipoVehiculo);
                 $vehiculo->setRadioAccion($radioAccion);
                 $vehiculo->setModalidadTRansporte($modalidadTransporte);
-                $vehiculo->setTransportePasajeros($transportePasajeros);
+                $vehiculo->setNumeroPasajeros($numeroPasajeros);
                 $vehiculo->setSerie($serie);
                 $vehiculo->setSerie($serie);
                 $vehiculo->setVin($vin);
@@ -327,6 +322,51 @@ class VehiculoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "Vehiculo editado con exito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar vehiculo", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing Vehiculo entity.
+     *
+     * @Route("/edit/color", name="vehiculo_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editColorAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $color = $em->getRepository('AppBundle:Color')->find($params->colorId);
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            
+            if ($vehiculo!=null) {                
+                $vehiculo->setColor($color);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con éxito", 
                 );
             }else{
                 $response = array(
