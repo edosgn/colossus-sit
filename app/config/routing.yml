@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 app_insumo:
     resource: "@AppBundle/Controller/InsumoController.php"
     type:     annotation
@@ -8,6 +9,10 @@ app_lote_insumo:
 
 app_caso_insumo:
     resource: "@AppBundle/Controller/CasoInsumoController.php"
+=======
+app_vehiculo_maquinaria:
+    resource: "@AppBundle/Controller/VehiculoMaquinariaController.php"
+>>>>>>> d4e231fc402b525b999c5777ceb1da56480939f8
     type:     annotation
 
 app_tramite_traslado:

@@ -72,7 +72,8 @@ class ConceptoParametroController extends Controller
             // }
             $em = $this->getDoctrine()->getManager();
             $nombres = $em->getRepository('AppBundle:ConceptoParametro')->findOneByNombre($params->nombre);
-
+// var_dump($params->nombre);
+// die();
             if ($nombres==null) {
                 
             
@@ -199,35 +200,53 @@ class ConceptoParametroController extends Controller
             $valor = $params->valor;
             $cuenta = $params->cuenta;
             $em = $this->getDoctrine()->getManager();
+
             $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($params->id);
-            if ($conceptoParametro!=null) {
+            
+            $nombreConceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->findOneByNombre($params->nombre);
 
-                
-
+            if($nombreConceptoParametro){
+            if($nombreConceptoParametro->getId() == $params->id){          
                 $conceptoParametro->setNombre($nombre);
                 $conceptoParametro->setCuenta($cuenta);
                 $conceptoParametro->setValor($valor);
                 $conceptoParametro->setEstado(true);
                
-
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($conceptoParametro);
                 $em->flush();
-                
-                // 
 
                 $response = array(
                     'status' => 'success',
-                    'code' => 200,
-                    'msj' => "color editada con exito", 
+                    'code' => 2500,
+                    'msj' => "Actualización exitosa",
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La color no se encuentra en la base de datos", 
+                    'msj' => "No se puede editar este registro porque el nombre ya esta asignado a un concepto",
                 );
             }
+        }else if($conceptoParametro){
+            if($conceptoParametro->getNombre()!=$params->getNombre()){
+                $conceptoParametro->setNombre($nombre);
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 2500,
+                    'msj' => "Actualización exitosa",
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "No se puxgfdfgdfg mbre ya esta asignado a un concepto",
+                );
+            }
+
+        }
         }else{
             $response = array(
                     'status' => 'error',
