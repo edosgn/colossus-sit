@@ -8,6 +8,8 @@ app_lote_insumo:
 
 app_caso_insumo:
     resource: "@AppBundle/Controller/CasoInsumoController.php"
+    type:     annotation
+    
 app_vehiculo_maquinaria:
     resource: "@AppBundle/Controller/VehiculoMaquinariaController.php"
     type:     annotation

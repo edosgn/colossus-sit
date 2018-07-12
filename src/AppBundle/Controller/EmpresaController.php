@@ -353,17 +353,17 @@ class EmpresaController extends Controller
      /**
      * busca empresas por nit.
      *
-     * @Route("/show/nit", name="empresa_show")
+     * @Route("/show/empresa/{nit}", name="empresa_show_empresa")
      * @Method("POST")
      */
-    public function showNitAction(Request $request)
+    public function showNitAction(Request $request,$nit)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         $json = $request->get("json",null);
         $params = json_decode($json);
-        $nit = $params->nit;
+        //$nit = $params->nit;
        
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
