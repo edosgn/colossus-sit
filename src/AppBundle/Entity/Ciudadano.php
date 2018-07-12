@@ -56,13 +56,6 @@ class Ciudadano
      */
     private $estado;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="licenciaConduccion", type="string", length=255, nullable=true)
-     */
-    private $licenciaConduccion;
-
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
     private $municipioNacimiento;
 
@@ -84,10 +77,7 @@ class Ciudadano
     public function __toString()
     {
         return $this->getNombres();
-    } 
-   
-
-   
+    }   
 
     /**
      * Get id
@@ -144,7 +134,7 @@ class Ciudadano
      */
     public function getFechaExpedicionDocumento()
     {
-        return $this->fechaExpedicionDocumento->format("Y-m-d");
+        return $this->fechaExpedicionDocumento;
     }
 
     /**
@@ -218,7 +208,6 @@ class Ciudadano
     {
         return $this->estado;
     }
-
 
     /**
      * Set municipioNacimiento
@@ -316,8 +305,6 @@ class Ciudadano
         return $this->grupoSanguineo;
     }
 
-    
-
     /**
      * Set usuario
      *
@@ -340,29 +327,5 @@ class Ciudadano
     public function getUsuario()
     {
         return $this->usuario;
-    }
-
-    /**
-     * Set licenciaConduccion
-     *
-     * @param string $licenciaConduccion
-     *
-     * @return Ciudadano
-     */
-    public function setLicenciaConduccion($licenciaConduccion)
-    {
-        $this->licenciaConduccion = $licenciaConduccion;
-
-        return $this;
-    }
-
-    /**
-     * Get licenciaConduccion
-     *
-     * @return string
-     */
-    public function getLicenciaConduccion()
-    {
-        return $this->licenciaConduccion;
     }
 }
