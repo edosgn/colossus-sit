@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vehiculomaquinarium</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vehiculoMaquinarium.id }}</td>
+            </tr>
+            <tr>
+                <th>Clasemaquinaria</th>
+                <td>{{ vehiculoMaquinarium.claseMaquinaria }}</td>
+            </tr>
+            <tr>
+                <th>Tipommaclase</th>
+                <td>{{ vehiculoMaquinarium.tipoMmaClase }}</td>
+            </tr>
+            <tr>
+                <th>Tipomaquinaria</th>
+                <td>{{ vehiculoMaquinarium.tipoMaquinaria }}</td>
+            </tr>
+            <tr>
+                <th>Pesobrutovehicular</th>
+                <td>{{ vehiculoMaquinarium.pesoBrutoVehicular }}</td>
+            </tr>
+            <tr>
+                <th>Cargarutilmaxima</th>
+                <td>{{ vehiculoMaquinarium.cargarUtilMaxima }}</td>
+            </tr>
+            <tr>
+                <th>Rodaje</th>
+                <td>{{ vehiculoMaquinarium.rodaje }}</td>
+            </tr>
+            <tr>
+                <th>Numeroejes</th>
+                <td>{{ vehiculoMaquinarium.numeroEjes }}</td>
+            </tr>
+            <tr>
+                <th>Numerollantas</th>
+                <td>{{ vehiculoMaquinarium.numeroLlantas }}</td>
+            </tr>
+            <tr>
+                <th>Tipocabina</th>
+                <td>{{ vehiculoMaquinarium.tipoCabina }}</td>
+            </tr>
+            <tr>
+                <th>Altototal</th>
+                <td>{{ vehiculoMaquinarium.altoTotal }}</td>
+            </tr>
+            <tr>
+                <th>Anchototal</th>
+                <td>{{ vehiculoMaquinarium.anchoTotal }}</td>
+            </tr>
+            <tr>
+                <th>Largototal</th>
+                <td>{{ vehiculoMaquinarium.largoTotal }}</td>
+            </tr>
+            <tr>
+                <th>Origenvehiculo</th>
+                <td>{{ vehiculoMaquinarium.origenVehiculo }}</td>
+            </tr>
+            <tr>
+                <th>Subpartidaarancelaria</th>
+                <td>{{ vehiculoMaquinarium.subpartidaArancelaria }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vehiculomaquinaria_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vehiculomaquinaria_edit', { 'id': vehiculoMaquinarium.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

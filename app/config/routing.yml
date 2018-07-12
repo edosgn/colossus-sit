@@ -1,3 +1,7 @@
+app_vehiculo_maquinaria:
+    resource: "@AppBundle/Controller/VehiculoMaquinariaController.php"
+    type:     annotation
+
 app_tramite_traslado:
     resource: "@AppBundle/Controller/TramiteTrasladoController.php"
     type:     annotation
@@ -224,6 +228,10 @@ app_modulo_sistema:
 
 app_dependencia:
     resource: "@AppBundle/Controller/DependenciaController.php"
+    type:     annotation
+
+app_default:
+    resource: "@AppBundle/Controller/DefaultController.php"
     type:     annotation
 
 usuario:

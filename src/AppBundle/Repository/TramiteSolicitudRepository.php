@@ -10,4 +10,21 @@ namespace AppBundle\Repository;
  */
 class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 {
+    // public function getTramitesVehiculo($vehiculoId)
+    // {   
+    //     $em = $this->getEntityManager();
+    //     $dql = "SELECT ts
+    //         FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f
+    //         WHERE ((ts.tramiteFactura = tf.id)
+    //         AND (tf.factura = f.id)
+    //         AND (f.vehiculo = :vehiculoId)
+    //         )
+    //         ";
+    //     $consulta = $em->createQuery($dql);
+        
+    //     $consulta->setParameters(array(
+    //         'vehiculoId' => $vehiculoId,
+    //     ));
+    //     return $consulta->getResult();
+    // }
 }
