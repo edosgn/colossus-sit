@@ -52,12 +52,11 @@ class TramiteTrasladoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->vehiculoId);
             
                 $tramiteTraslado = new TramiteTraslado();
                 $tramiteTraslado->setFechaSalida(new \DateTime($params->fechaSalida));
-                $tramiteTraslado->setOrganismoTransito($sedeOperativa);
+                $tramiteTraslado->setVehiculo($vehiculo);
                 $tramiteTraslado->setNumeroGuia($params->numeroGuia);
                 $tramiteTraslado->setNombreEmpresa($params->nombreEmpresa);
                 $tramiteTraslado->setNumeroRunt($params->numeroRunt);
