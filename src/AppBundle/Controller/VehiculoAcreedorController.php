@@ -54,19 +54,66 @@ class VehiculoAcreedorController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            $vehiculoId = $params->vehiculoId;
-            $bancoId = $params->bancoId;
+            $placa = $params->vehiculoPlaca;
+            
+            // $bancoId = $params->bancoId;
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
-            $banco = $em->getRepository('AppBundle:Banco')->findOneByNombre($bancoId);
+            $placaId = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaId->getId());
+            $cfgTipoAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->find($params->tipoAlerta);
+            $gradoAlerta = $params->gradoAlerta;
+            // $banco = $em->getRepository('AppBundle:Banco')->findOneByNombre($bancoId);
+            // var_dump($vehiculo->getId());
+            // die();
 
             $vehiculoAcreedor = new VehiculoAcreedor();
 
-            $vehiculoAcreedor->setVehiculo($vehiculo);
-            $vehiculoAcreedor->setBanco($banco);
+            // $vehiculoAcreedor->setVehiculo($vehiculo);
+            // $vehiculoAcreedor->setBanco($banco);
+            if ($params->acreedoresCiudadanos) {
+                foreach ($params->acreedoresCiudadanos as $key => $ciudadano) {
+                    
+                    $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                        array(
+                            'estado' => 'Activo',
+                            'identificacion' => $ciudadano->identificacion
+                            )
+                        );
+                        
+                       
+                        $acreedorVehiculo = new VehiculoAcreedor();
+                        $acreedorVehiculo->setCiudadano($usuario->getCiudadano());
+                        $acreedorVehiculo->setVehiculo($vehiculo);
+                        $acreedorVehiculo->setCfgTipoAlerta($cfgTipoAlerta);
+                        $acreedorVehiculo->setGradoAlerta($gradoAlerta);
+                        $acreedorVehiculo->setEstado(true);
+                        $em->persist($acreedorVehiculo);
+                        $em->flush();
+                        
+                    }
+                }
+            if ($params->acreedoresEmpresas) {
+                
+                foreach ($params->acreedoresEmpresas as $key => $empresa) {
+                    $empresaNueva = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                        array(
+                            'estado' => 1,
+                            'nit' => $empresa->nit
+                            )
+                        );
+                        
+                        $acreedorVehiculo = new VehiculoAcreedor();
+                        $acreedorVehiculo->setEmpresa($empresaNueva);
+                        $acreedorVehiculo->setVehiculo($vehiculo);
+                        $acreedorVehiculo->setEstado(true);
+                        $em->persist($acreedorVehiculo);
+                        $em->flush();
+                        
+                    }
+                }
+
             
-            $em->persist($vehiculoAcreedor);
-            $em->flush();
+            
 
                 $response = array(
                     'status' => 'success',
