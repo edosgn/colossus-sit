@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\VehiculoAcreedor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vehiculoacreedor controller.
@@ -17,20 +18,20 @@ class VehiculoAcreedorController extends Controller
     /**
      * Lists all vehiculoAcreedor entities.
      *
-     * @Route("/", name="vehiculoacreedor_index")
+     * @Route("/", name="vehiculocreedor_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $vahiculoAcreedor = $em->getRepository('AppBundle:VehiculoAcreedor')->findBy(
+        $vehiculoAcreedor = $em->getRepository('AppBundle:VehiculoAcreedor')->findBy(
             array('estado' => 1)
         );
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado alerta", 
+                    'msj' => "listado acreedores", 
                     'data'=> $vehiculoAcreedor,
             );
          
@@ -48,24 +49,23 @@ class VehiculoAcreedorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        // var_dump($authCheck);
+        // die();
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            // var_dump($params);
-            // die();
             $vehiculoId = $params->vehiculoId;
             $bancoId = $params->bancoId;
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+            $banco = $em->getRepository('AppBundle:Banco')->findOneByNombre($bancoId);
 
-            $sedeOperativa = new Sedeoperativa();
+            $vehiculoAcreedor = new VehiculoAcreedor();
 
-            $sedeOperativa->setNombre($nombre);
-            $sedeOperativa->setCodigoDivipo($codigoDivipo);
-            $sedeOperativa->setMunicipio($municipio);
-            $sedeOperativa->setEstado(true);
-
-            $em->persist($sedeOperativa);
+            $vehiculoAcreedor->setVehiculo($vehiculo);
+            $vehiculoAcreedor->setBanco($banco);
+            
+            $em->persist($vehiculoAcreedor);
             $em->flush();
 
                 $response = array(

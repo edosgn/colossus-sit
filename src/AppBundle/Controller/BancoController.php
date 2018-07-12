@@ -242,4 +242,54 @@ class BancoController extends Controller
       }
        return $helpers->json($response);
     }
+
+
+
+     /**
+     * busca acreedor por nombre.
+     *
+     * @Route("/nombre", name="acreedor_show_ide")
+     * @Method("POST")
+     */
+    public function acreedorPorNombre(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $usuario = $em->getRepository('AppBundle:Banco')->findOneBy(
+                array('nombre' => $params->nombreAcreedor)
+            );
+
+            if ($usuario!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $usuario,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Nombre no encontrado en la base de datos", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
