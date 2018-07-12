@@ -26,7 +26,7 @@ class VehiculoAcreedor
      **/
     protected $vehiculo;
 
-        /**
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Banco", inversedBy="vehiculoacreedores")
      **/
     protected $banco;
@@ -39,5 +39,86 @@ class VehiculoAcreedor
     private $estado = true;  
 
 
-}
 
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return VehiculoAcreedor
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return VehiculoAcreedor
+     */
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \AppBundle\Entity\Vehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
+    }
+
+    /**
+     * Set banco
+     *
+     * @param \AppBundle\Entity\Banco $banco
+     *
+     * @return VehiculoAcreedor
+     */
+    public function setBanco(\AppBundle\Entity\Banco $banco = null)
+    {
+        $this->banco = $banco;
+
+        return $this;
+    }
+
+    /**
+     * Get banco
+     *
+     * @return \AppBundle\Entity\Banco
+     */
+    public function getBanco()
+    {
+        return $this->banco;
+    }
+}

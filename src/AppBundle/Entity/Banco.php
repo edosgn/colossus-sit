@@ -33,7 +33,7 @@ class Banco
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
+    private $estado = true;
 
    
 
