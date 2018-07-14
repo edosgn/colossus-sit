@@ -489,5 +489,43 @@ class PropietarioVehiculoController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Elimina el vehiculo al propietario.
+     *
+     * @Route("/delete/vehiculo", name="vehiculopropietario_delete")
+     * @Method({"GET", "POST"})
+     */
+    public function deleteVehiculoPropietario(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        var_dump($params);
+        die();
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findById($params->solicitanteId);
+            $propietarioVehiculo->setFechaPropiedadFinal(new \DateTime($params->fecha));
+            $propietarioVehiculo->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($propietarioVehiculo);
+
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Propietario eliminado del vehiculo con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
    
 }

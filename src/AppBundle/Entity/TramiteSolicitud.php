@@ -62,7 +62,7 @@ class TramiteSolicitud
     protected $tramiteFactura;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PropietarioVehiculo", inversedBy="tramitesSolicitud")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="tramitesSolicitud")
      **/
     protected $solicitante;
 
@@ -229,11 +229,11 @@ class TramiteSolicitud
     /**
      * Set solicitante
      *
-     * @param \AppBundle\Entity\PropietarioVehiculo $solicitante
+     * @param \AppBundle\Entity\Ciudadano $solicitante
      *
      * @return TramiteSolicitud
      */
-    public function setSolicitante(\AppBundle\Entity\PropietarioVehiculo $solicitante = null)
+    public function setSolicitante(\AppBundle\Entity\Ciudadano $solicitante = null)
     {
         $this->solicitante = $solicitante;
 
@@ -243,7 +243,7 @@ class TramiteSolicitud
     /**
      * Get solicitante
      *
-     * @return \AppBundle\Entity\PropietarioVehiculo
+     * @return \AppBundle\Entity\Ciudadano
      */
     public function getSolicitante()
     {
