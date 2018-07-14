@@ -72,6 +72,12 @@ class TramiteSolicitud
     protected $ciudadano;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tramitesSolicitud")
+     **/
+    protected $vehiculo;
+    
+
+    /**
      * Get id
      *
      * @return integer
@@ -271,5 +277,29 @@ class TramiteSolicitud
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     *
+     * @return TramiteSolicitud
+     */
+    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \AppBundle\Entity\Vehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

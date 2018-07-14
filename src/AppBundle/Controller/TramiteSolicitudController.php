@@ -98,6 +98,7 @@ class TramiteSolicitudController extends Controller
                 $observacion = (isset($params->observacion)) ? $params->observacion : null;
                 $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
+                $datos = $params->datos; 
                 //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
@@ -119,6 +120,11 @@ class TramiteSolicitudController extends Controller
                     }
                 }
 
+                if ($params->vehiculoId) {
+                    $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->vehiculoId);
+                    $tramiteSolicitud->setVehiculo($vehiculo);
+                }
+
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
 
                 $tramiteFactura->setRealizado(true);
@@ -130,7 +136,7 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setDocumentacion($documentacionCompleta);
                 $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
                 $tramiteSolicitud->setEstado(true);
-                $tramiteSolicitud->setDatos($params->datos);
+                $tramiteSolicitud->setDatos($datos);
                 //Inserta llaves foraneas
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
 
