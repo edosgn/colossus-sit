@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Loteinsumo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ loteInsumo.id }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if loteInsumo.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroacta</th>
+                <td>{{ loteInsumo.numeroActa }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if loteInsumo.fecha %}{{ loteInsumo.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Rangoinicio</th>
+                <td>{{ loteInsumo.rangoInicio }}</td>
+            </tr>
+            <tr>
+                <th>Rangofin</th>
+                <td>{{ loteInsumo.rangoFin }}</td>
+            </tr>
+            <tr>
+                <th>Referencia</th>
+                <td>{{ loteInsumo.referencia }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ loteInsumo.cantidad }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('loteinsumo_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('loteinsumo_edit', { 'id': loteInsumo.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

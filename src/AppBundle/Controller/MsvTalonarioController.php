@@ -105,8 +105,10 @@ class MsvTalonarioController extends Controller
                 $msvTalonario->setrangoini($params->rangoini);
                 $msvTalonario->setrangofin($params->rangofin);
                 $msvTalonario->setTotal($params->total);
-                $msvTalonario->setFechaAsignacion($fechaAsignacionDateTime);
+                $msvTalonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
                 $msvTalonario->setNResolucion($params->nResolucion);
+
+                $msvTalonario->setEstado('Disponible');
                 
                 
                 $em = $this->getDoctrine()->getManager();

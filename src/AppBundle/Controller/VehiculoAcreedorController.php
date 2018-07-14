@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\VehiculoAcreedor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vehiculoacreedor controller.
@@ -17,20 +18,20 @@ class VehiculoAcreedorController extends Controller
     /**
      * Lists all vehiculoAcreedor entities.
      *
-     * @Route("/", name="vehiculoacreedor_index")
+     * @Route("/", name="vehiculocreedor_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $vahiculoAcreedor = $em->getRepository('AppBundle:VehiculoAcreedor')->findBy(
+        $vehiculoAcreedor = $em->getRepository('AppBundle:VehiculoAcreedor')->findBy(
             array('estado' => 1)
         );
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado alerta", 
+                    'msj' => "listado acreedores", 
                     'data'=> $vehiculoAcreedor,
             );
          
@@ -48,25 +49,71 @@ class VehiculoAcreedorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        // var_dump($authCheck);
+        // die();
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            // var_dump($params);
-            // die();
-            $vehiculoId = $params->vehiculoId;
-            $bancoId = $params->bancoId;
+            $placa = $params->vehiculoPlaca;
+            
+            // $bancoId = $params->bancoId;
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            $placaId = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaId->getId());
+            $cfgTipoAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->find($params->tipoAlerta);
+            $gradoAlerta = $params->gradoAlerta;
+            // $banco = $em->getRepository('AppBundle:Banco')->findOneByNombre($bancoId);
+            // var_dump($vehiculo->getId());
+            // die();
 
-            $sedeOperativa = new Sedeoperativa();
+            $vehiculoAcreedor = new VehiculoAcreedor();
 
-            $sedeOperativa->setNombre($nombre);
-            $sedeOperativa->setCodigoDivipo($codigoDivipo);
-            $sedeOperativa->setMunicipio($municipio);
-            $sedeOperativa->setEstado(true);
+            // $vehiculoAcreedor->setVehiculo($vehiculo);
+            // $vehiculoAcreedor->setBanco($banco);
+            if ($params->acreedoresCiudadanos) {
+                foreach ($params->acreedoresCiudadanos as $key => $ciudadano) {
+                    
+                    $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                        array(
+                            'estado' => 'Activo',
+                            'identificacion' => $ciudadano->identificacion
+                            )
+                        );
+                        
+                       
+                        $acreedorVehiculo = new VehiculoAcreedor();
+                        $acreedorVehiculo->setCiudadano($usuario->getCiudadano());
+                        $acreedorVehiculo->setVehiculo($vehiculo);
+                        $acreedorVehiculo->setCfgTipoAlerta($cfgTipoAlerta);
+                        $acreedorVehiculo->setGradoAlerta($gradoAlerta);
+                        $acreedorVehiculo->setEstado(true);
+                        $em->persist($acreedorVehiculo);
+                        $em->flush();
+                        
+                    }
+                }
+            if ($params->acreedoresEmpresas) {
+                
+                foreach ($params->acreedoresEmpresas as $key => $empresa) {
+                    $empresaNueva = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                        array(
+                            'estado' => 1,
+                            'nit' => $empresa->nit
+                            )
+                        );
+                        
+                        $acreedorVehiculo = new VehiculoAcreedor();
+                        $acreedorVehiculo->setEmpresa($empresaNueva);
+                        $acreedorVehiculo->setVehiculo($vehiculo);
+                        $acreedorVehiculo->setEstado(true);
+                        $em->persist($acreedorVehiculo);
+                        $em->flush();
+                        
+                    }
+                }
 
-            $em->persist($sedeOperativa);
-            $em->flush();
+            
+            
 
                 $response = array(
                     'status' => 'success',

@@ -8,6 +8,9 @@ app_cfg_smlmv:
 
 app_mfl_infraccion:
     resource: "@AppBundle/Controller/MflInfraccionController.php"
+    type:     annotation
+    
+
 app_cfg_placa:
     resource: "@AppBundle/Controller/CfgPlacaController.php"
     type:     annotation

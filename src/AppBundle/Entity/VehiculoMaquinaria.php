@@ -21,28 +21,7 @@ class VehiculoMaquinaria
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="claseMaquinaria", type="string", length=255)
-     */
-    private $claseMaquinaria;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tipoMmaClase", type="string", length=255)
-     */
-    private $tipoMmaClase;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tipoMaquinaria", type="string", length=255)
-     */
-    private $tipoMaquinaria;
-
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="pesoBrutoVehicular", type="string", length=255)
@@ -94,16 +73,16 @@ class VehiculoMaquinaria
     /**
      * @var string
      *
-     * @ORM\Column(name="anchoTotal", type="string", length=255)
+     * @ORM\Column(name="largoTotal", type="string", length=255)
      */
-    private $anchoTotal;
+    private $largoTotal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="largoTotal", type="string", length=255)
+     * @ORM\Column(name="anchoTotal", type="string", length=255)
      */
-    private $largoTotal;
+    private $anchoTotal;
 
     /**
      * @var string
@@ -119,8 +98,34 @@ class VehiculoMaquinaria
      */
     private $subpartidaArancelaria;
 
+
+
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Color", inversedBy="propietariosVehiculo") */
+    private $color;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="propietariosVehiculo") */
+    private $tipoVehiculo;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="propietariosVehiculo") */
+    private $marca;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="propietariosVehiculo") */
+    private $clase;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="propietariosVehiculo") */
+    private $linea;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="propietariosVehiculo") */
+    private $carroceria;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Combustible", inversedBy="propietariosVehiculo") */
+    private $combustible;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
     private $vehiculo;
+
+
 
 
 
@@ -132,78 +137,6 @@ class VehiculoMaquinaria
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set claseMaquinaria
-     *
-     * @param string $claseMaquinaria
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setClaseMaquinaria($claseMaquinaria)
-    {
-        $this->claseMaquinaria = $claseMaquinaria;
-
-        return $this;
-    }
-
-    /**
-     * Get claseMaquinaria
-     *
-     * @return string
-     */
-    public function getClaseMaquinaria()
-    {
-        return $this->claseMaquinaria;
-    }
-
-    /**
-     * Set tipoMmaClase
-     *
-     * @param string $tipoMmaClase
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setTipoMmaClase($tipoMmaClase)
-    {
-        $this->tipoMmaClase = $tipoMmaClase;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoMmaClase
-     *
-     * @return string
-     */
-    public function getTipoMmaClase()
-    {
-        return $this->tipoMmaClase;
-    }
-
-    /**
-     * Set tipoMaquinaria
-     *
-     * @param string $tipoMaquinaria
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setTipoMaquinaria($tipoMaquinaria)
-    {
-        $this->tipoMaquinaria = $tipoMaquinaria;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoMaquinaria
-     *
-     * @return string
-     */
-    public function getTipoMaquinaria()
-    {
-        return $this->tipoMaquinaria;
     }
 
     /**
@@ -375,30 +308,6 @@ class VehiculoMaquinaria
     }
 
     /**
-     * Set anchoTotal
-     *
-     * @param string $anchoTotal
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setAnchoTotal($anchoTotal)
-    {
-        $this->anchoTotal = $anchoTotal;
-
-        return $this;
-    }
-
-    /**
-     * Get anchoTotal
-     *
-     * @return string
-     */
-    public function getAnchoTotal()
-    {
-        return $this->anchoTotal;
-    }
-
-    /**
      * Set largoTotal
      *
      * @param string $largoTotal
@@ -420,6 +329,30 @@ class VehiculoMaquinaria
     public function getLargoTotal()
     {
         return $this->largoTotal;
+    }
+
+    /**
+     * Set anchoTotal
+     *
+     * @param string $anchoTotal
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setAnchoTotal($anchoTotal)
+    {
+        $this->anchoTotal = $anchoTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get anchoTotal
+     *
+     * @return string
+     */
+    public function getAnchoTotal()
+    {
+        return $this->anchoTotal;
     }
 
     /**
@@ -468,6 +401,174 @@ class VehiculoMaquinaria
     public function getSubpartidaArancelaria()
     {
         return $this->subpartidaArancelaria;
+    }
+
+    /**
+     * Set color
+     *
+     * @param \AppBundle\Entity\Color $color
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setColor(\AppBundle\Entity\Color $color = null)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return \AppBundle\Entity\Color
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set tipoVehiculo
+     *
+     * @param \AppBundle\Entity\TipoVehiculo $tipoVehiculo
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setTipoVehiculo(\AppBundle\Entity\TipoVehiculo $tipoVehiculo = null)
+    {
+        $this->tipoVehiculo = $tipoVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVehiculo
+     *
+     * @return \AppBundle\Entity\TipoVehiculo
+     */
+    public function getTipoVehiculo()
+    {
+        return $this->tipoVehiculo;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param \AppBundle\Entity\Marca $marca
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setMarca(\AppBundle\Entity\Marca $marca = null)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return \AppBundle\Entity\Marca
+     */
+    public function getMarca()
+    {
+        return $this->marca;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \AppBundle\Entity\Linea $linea
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \AppBundle\Entity\Linea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
+    }
+
+    /**
+     * Set carroceria
+     *
+     * @param \AppBundle\Entity\Carroceria $carroceria
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
+    {
+        $this->carroceria = $carroceria;
+
+        return $this;
+    }
+
+    /**
+     * Get carroceria
+     *
+     * @return \AppBundle\Entity\Carroceria
+     */
+    public function getCarroceria()
+    {
+        return $this->carroceria;
+    }
+
+    /**
+     * Set combustible
+     *
+     * @param \AppBundle\Entity\Combustible $combustible
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
+    {
+        $this->combustible = $combustible;
+
+        return $this;
+    }
+
+    /**
+     * Get combustible
+     *
+     * @return \AppBundle\Entity\Combustible
+     */
+    public function getCombustible()
+    {
+        return $this->combustible;
     }
 
     /**
