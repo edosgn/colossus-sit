@@ -102,7 +102,6 @@ class TramiteSolicitudController extends Controller
                 //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
-                $solicitanteId = $params->solicitanteId;
 
                 $tramiteSolicitud = new TramiteSolicitud();
 
@@ -111,9 +110,14 @@ class TramiteSolicitudController extends Controller
                     $tramiteSolicitud->setVehiculo($vehiculo);
                 }
 
-                if ($solicitanteId) {
-                    $solicitante = $em->getRepository('AppBundle:PropietarioVehiculo')->find($solicitanteId);
-                    $tramiteSolicitud->setSolicitante($solicitante);
+                if ($params->propietarioId) {
+                    $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->propietarioId);
+                    $tramiteSolicitud->setSolicitante($propietario->getCiudadano());
+                }
+
+                if ($params->ciudadanoId) {
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->ciudadanoId);
+                    $tramiteSolicitud->setSolicitante($ciudadano);
                 }
 
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);

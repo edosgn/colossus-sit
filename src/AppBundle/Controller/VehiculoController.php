@@ -661,5 +661,50 @@ class VehiculoController extends Controller
         return $helpers->json($response);
     }
 
+        /**
+     * Displays a form to edit an existing Vehiculo entity.
+     *
+     * @Route("/edit/pignorado", name="vehiculo_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editPignoradoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $pignorado = $params->pignorado;
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            
+            if ($vehiculo!=null) {                
+                $vehiculo->setPignorado($pignorado);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar vehiculo", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
 
 }
