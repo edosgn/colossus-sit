@@ -284,7 +284,7 @@ class VehiculoController extends Controller
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             
             if ($vehiculo!=null) {
-                $vehiculo->setCfgPlaca($CfgPlaca);
+                $vehiculo->setPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
                 //$vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
                 $vehiculo->setFechaFactura($params->fechaFactura);
@@ -631,7 +631,7 @@ class VehiculoController extends Controller
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
            
             if ($vehiculo!=null) {
-                $vehiculo->setCfgPlaca($CfgPlaca);               
+                $vehiculo->setPlaca($CfgPlaca);               
                 $vehiculo->setSedeOperativa($sedeOperativa);
                 $CfgPlaca->setEstado('asignado');
                

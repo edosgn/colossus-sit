@@ -21,6 +21,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
             OR (v.vin = :campo)
             OR (v.chasis = :campo)
             OR (v.serie = :campo)
+            OR (v.motor = :campo)
             ";
         $consulta = $em->createQuery($dql);
         
