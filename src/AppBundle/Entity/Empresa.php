@@ -149,6 +149,9 @@ class Empresa
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="empresas") */
     private $ciudadano;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="empresas") */
+    private $empresa;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="empresas") */
     private $tipoIdentificacion;
     
@@ -618,53 +621,5 @@ class Empresa
     public function getTipoSociedad()
     {
         return $this->tipoSociedad;
-    }
-
-    /**
-     * Set ciudadano
-     *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
-     *
-     * @return Empresa
-     */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
-    {
-        $this->ciudadano = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadano
-     *
-     * @return \AppBundle\Entity\Ciudadano
-     */
-    public function getCiudadano()
-    {
-        return $this->ciudadano;
-    }
-
-    /**
-     * Set tipoIdentificacion
-     *
-     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
-     *
-     * @return Empresa
-     */
-    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
-    {
-        $this->tipoIdentificacion = $tipoIdentificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoIdentificacion
-     *
-     * @return \AppBundle\Entity\TipoIdentificacion
-     */
-    public function getTipoIdentificacion()
-    {
-        return $this->tipoIdentificacion;
     }
 }

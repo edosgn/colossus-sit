@@ -62,15 +62,14 @@ class TramiteSolicitud
     protected $tramiteFactura;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="tramitesSolicitud")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PropietarioVehiculo", inversedBy="tramitesSolicitud")
      **/
     protected $solicitante;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="tramitesSolicitud")
      **/
-    protected $vehiculo;
-  
+    protected $ciudadano;
 
     /**
      * Get id
@@ -229,11 +228,11 @@ class TramiteSolicitud
     /**
      * Set solicitante
      *
-     * @param \AppBundle\Entity\Ciudadano $solicitante
+     * @param \AppBundle\Entity\PropietarioVehiculo $solicitante
      *
      * @return TramiteSolicitud
      */
-    public function setSolicitante(\AppBundle\Entity\Ciudadano $solicitante = null)
+    public function setSolicitante(\AppBundle\Entity\PropietarioVehiculo $solicitante = null)
     {
         $this->solicitante = $solicitante;
 
@@ -243,7 +242,7 @@ class TramiteSolicitud
     /**
      * Get solicitante
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \AppBundle\Entity\PropietarioVehiculo
      */
     public function getSolicitante()
     {
@@ -251,26 +250,26 @@ class TramiteSolicitud
     }
 
     /**
-     * Set vehiculo
+     * Set ciudadano
      *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
      *
      * @return TramiteSolicitud
      */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
     {
-        $this->vehiculo = $vehiculo;
+        $this->ciudadano = $ciudadano;
 
         return $this;
     }
 
     /**
-     * Get vehiculo
+     * Get ciudadano
      *
-     * @return \AppBundle\Entity\Vehiculo
+     * @return \AppBundle\Entity\Ciudadano
      */
-    public function getVehiculo()
+    public function getCiudadano()
     {
-        return $this->vehiculo;
+        return $this->ciudadano;
     }
 }

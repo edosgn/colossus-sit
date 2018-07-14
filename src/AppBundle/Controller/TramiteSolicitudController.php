@@ -98,7 +98,6 @@ class TramiteSolicitudController extends Controller
                 $observacion = (isset($params->observacion)) ? $params->observacion : null;
                 $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
-                $datos = $params->datos; 
                 //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
@@ -110,14 +109,14 @@ class TramiteSolicitudController extends Controller
                     $tramiteSolicitud->setVehiculo($vehiculo);
                 }
 
-                if ($params->propietarioId) {
-                    $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->propietarioId);
-                    $tramiteSolicitud->setSolicitante($propietario->getCiudadano());
-                }
-
-                if ($params->ciudadanoId) {
-                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->ciudadanoId);
-                    $tramiteSolicitud->setSolicitante($ciudadano);
+                if ($params->solicitanteId) {
+                    $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->solicitanteId);
+                    $tramiteSolicitud->setSolicitante($propietario);
+                }else{
+                    if ($params->datos->ciudadanoId) {
+                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->datos->ciudadanoId);
+                        $tramiteSolicitud->setCiudadano($ciudadano);
+                    }
                 }
 
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
@@ -131,7 +130,7 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setDocumentacion($documentacionCompleta);
                 $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
                 $tramiteSolicitud->setEstado(true);
-                $tramiteSolicitud->setDatos($datos);
+                $tramiteSolicitud->setDatos($params->datos);
                 //Inserta llaves foraneas
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
 
