@@ -225,7 +225,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        return $this->fechaFactura;
+        return $this->fechaFactura->format('d/m/Y');
     }
 
     /**
@@ -297,7 +297,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        return $this->fechaManifiesto;
+        return $this->fechaManifiesto->format('d/m/Y');
     }
 
     /**

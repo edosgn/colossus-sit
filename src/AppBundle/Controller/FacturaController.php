@@ -68,6 +68,7 @@ class FacturaController extends Controller
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
                     $params->factura->sedeOperativaId
                 );
+                $factura = new Factura();
 
                 if ($params->factura->vehiculoId) {
                     $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
@@ -79,7 +80,6 @@ class FacturaController extends Controller
                     $params->factura->ciudadanoId
                 );
 
-                $factura = new Factura();
                 
                 $factura->setNumero($params->factura->numero);
                 $factura->setConsecutivo(0);
