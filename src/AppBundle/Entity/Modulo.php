@@ -31,7 +31,7 @@ class Modulo
     /**
      * @var string
      *
-     * @ORM\Column(name="abreviatura", type="string", length=255)
+     * @ORM\Column(name="abreviatura", type="string", length=10)
      */
     private $abreviatura;
 
@@ -55,8 +55,13 @@ class Modulo
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
-  
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tramite", type="string", length=50)
+     */
+    private $tramite;
 
     /**
      * Get id
@@ -186,5 +191,29 @@ class Modulo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set tramite
+     *
+     * @param string $tramite
+     *
+     * @return Modulo
+     */
+    public function setTramite($tramite)
+    {
+        $this->tramite = $tramite;
+
+        return $this;
+    }
+
+    /**
+     * Get tramite
+     *
+     * @return string
+     */
+    public function getTramite()
+    {
+        return $this->tramite;
     }
 }
