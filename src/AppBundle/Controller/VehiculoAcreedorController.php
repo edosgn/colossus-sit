@@ -105,6 +105,8 @@ class VehiculoAcreedorController extends Controller
                         $acreedorVehiculo = new VehiculoAcreedor();
                         $acreedorVehiculo->setEmpresa($empresaNueva);
                         $acreedorVehiculo->setVehiculo($vehiculo);
+                        $acreedorVehiculo->setCfgTipoAlerta($cfgTipoAlerta);
+                        $acreedorVehiculo->setGradoAlerta($gradoAlerta);
                         $acreedorVehiculo->setEstado(true);
                         $em->persist($acreedorVehiculo);
                         $em->flush();
@@ -134,7 +136,7 @@ class VehiculoAcreedorController extends Controller
     /**
      * Finds and displays a vehiculoAcreedor entity.
      *
-     * @Route("/{id}", name="vehiculoacreedor_show")
+     * @Route("/{id}/show", name="vehiculoacreedor_show")
      * @Method("GET")
      */
     public function showAction(VehiculoAcreedor $vehiculoAcreedor)
@@ -175,7 +177,7 @@ class VehiculoAcreedorController extends Controller
     /**
      * Deletes a vehiculoAcreedor entity.
      *
-     * @Route("/{id}", name="vehiculoacreedor_delete")
+     * @Route("/delete", name="vehiculoacreedor_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, VehiculoAcreedor $vehiculoAcreedor)
@@ -206,5 +208,93 @@ class VehiculoAcreedorController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+
+    /**
+     * busca acreedores por ciudadano.
+     *
+     * @Route("/search/acreedor", name="vehiculoacreedor_search_acreedor")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAcreedorAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            $acreedorCiudadano = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneByCiudadano($params);
+
+            if ($acreedorCiudadano!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "acreedorCiudadano", 
+                    'data'=> $acreedorCiudadano,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Ciudadano no encotrado", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca acreedores por ciudadano.
+     *
+     * @Route("/search/acreedor/empresa", name="vehiculoacreedor_search_acreedor_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAcreedorEmpresaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            // var_dump($request);
+            // die();
+            $em = $this->getDoctrine()->getManager();
+            $acreedorCiudadano = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneByEmpresa($params);
+
+            if ($acreedorCiudadano!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "acreedorCiudadano", 
+                    'data'=> $acreedorCiudadano,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Ciudadano no encotrado", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 }

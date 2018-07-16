@@ -157,6 +157,8 @@ class Empresa
     
 
 
+
+
     /**
      * Get id
      *
@@ -572,7 +574,7 @@ class Empresa
      */
     public function getFechaVencimientoRegistroMercantil()
     {
-        return $this->fechaVencimientoRegistroMercantil->format('Y-m-d');
+        return $this->fechaVencimientoRegistroMercantil;
     }
 
     /**
@@ -621,5 +623,77 @@ class Empresa
     public function getTipoSociedad()
     {
         return $this->tipoSociedad;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     *
+     * @return Empresa
+     */
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return Empresa
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * Set tipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
+     *
+     * @return Empresa
+     */
+    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
     }
 }
