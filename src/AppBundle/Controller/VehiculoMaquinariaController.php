@@ -22,13 +22,17 @@ class VehiculoMaquinariaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $vehiculoMaquinarias = $em->getRepository('AppBundle:VehiculoMaquinaria')->findAll();
-
-        return $this->render('vehiculomaquinaria/index.html.twig', array(
-            'vehiculoMaquinarias' => $vehiculoMaquinarias,
-        ));
+        $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->findAll();
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado vehiculos", 
+                    'data'=> $vehiculos,
+            );
+         
+        return $helpers->json($response);
     }
 
     /**
