@@ -502,17 +502,21 @@ class PropietarioVehiculoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         $json = $request->get("json",null);
         $params = json_decode($json);
-        var_dump($params);
-        die();
+        $fecha = new \DateTime($params->fecha);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findById($params->solicitanteId);
-            $propietarioVehiculo->setFechaPropiedadFinal(new \DateTime($params->fecha));
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findOneBy(
+                array(
+                    'ciudadano' => $params->solicitanteId,
+                    'estado' => true,
+                    'vehiculo' => $params->vehiculoId
+                )
+            );
+
+            $propietarioVehiculo->setFechaPropiedadFinal($fecha);
             $propietarioVehiculo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($propietarioVehiculo);
-
-                $em->flush();
+            $em->flush();
             $response = array(
                     'status' => 'success',
                         'code' => 200,
