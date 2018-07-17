@@ -247,6 +247,54 @@ class CiudadanoController extends Controller
     }
 
     /**
+     * busca cuidadano por Identificacion.
+     *
+     * @Route("/acreedor/id", name="acreedor_ciudadano_show_ide")
+     * @Method("POST")
+     */
+    public function ciudadanoPorId(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                array('identificacion' => $params)
+            );
+
+            if ($usuario!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $usuario,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Identificacion no encontrada en la base de datos", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Displays a form to edit an existing Ciudadano entity.
      *
      * @Route("/edit", name="ciudadano_edit")
