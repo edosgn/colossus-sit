@@ -101,24 +101,9 @@ class VehiculoMaquinaria
 
 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Color", inversedBy="propietariosVehiculo") */
-    private $color;
-
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="propietariosVehiculo") */
     private $tipoVehiculo;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Marca", inversedBy="propietariosVehiculo") */
-    private $marca;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="propietariosVehiculo") */
-    private $clase;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="propietariosVehiculo") */
-    private $linea;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="propietariosVehiculo") */
-    private $carroceria;
-
+    
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Combustible", inversedBy="propietariosVehiculo") */
     private $combustible;
 
@@ -404,30 +389,6 @@ class VehiculoMaquinaria
     }
 
     /**
-     * Set color
-     *
-     * @param \AppBundle\Entity\Color $color
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setColor(\AppBundle\Entity\Color $color = null)
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    /**
-     * Get color
-     *
-     * @return \AppBundle\Entity\Color
-     */
-    public function getColor()
-    {
-        return $this->color;
-    }
-
-    /**
      * Set tipoVehiculo
      *
      * @param \AppBundle\Entity\TipoVehiculo $tipoVehiculo
@@ -449,102 +410,6 @@ class VehiculoMaquinaria
     public function getTipoVehiculo()
     {
         return $this->tipoVehiculo;
-    }
-
-    /**
-     * Set marca
-     *
-     * @param \AppBundle\Entity\Marca $marca
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setMarca(\AppBundle\Entity\Marca $marca = null)
-    {
-        $this->marca = $marca;
-
-        return $this;
-    }
-
-    /**
-     * Get marca
-     *
-     * @return \AppBundle\Entity\Marca
-     */
-    public function getMarca()
-    {
-        return $this->marca;
-    }
-
-    /**
-     * Set clase
-     *
-     * @param \AppBundle\Entity\Clase $clase
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
-    {
-        $this->clase = $clase;
-
-        return $this;
-    }
-
-    /**
-     * Get clase
-     *
-     * @return \AppBundle\Entity\Clase
-     */
-    public function getClase()
-    {
-        return $this->clase;
-    }
-
-    /**
-     * Set linea
-     *
-     * @param \AppBundle\Entity\Linea $linea
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setLinea(\AppBundle\Entity\Linea $linea = null)
-    {
-        $this->linea = $linea;
-
-        return $this;
-    }
-
-    /**
-     * Get linea
-     *
-     * @return \AppBundle\Entity\Linea
-     */
-    public function getLinea()
-    {
-        return $this->linea;
-    }
-
-    /**
-     * Set carroceria
-     *
-     * @param \AppBundle\Entity\Carroceria $carroceria
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
-    {
-        $this->carroceria = $carroceria;
-
-        return $this;
-    }
-
-    /**
-     * Get carroceria
-     *
-     * @return \AppBundle\Entity\Carroceria
-     */
-    public function getCarroceria()
-    {
-        return $this->carroceria;
     }
 
     /**

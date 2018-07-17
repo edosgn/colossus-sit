@@ -1,3 +1,7 @@
+app_cfg_origen_registro:
+    resource: "@AppBundle/Controller/CfgOrigenRegistroController.php"
+    type:     annotation
+
 app_insumo:
     resource: "@AppBundle/Controller/InsumoController.php"
     type:     annotation
