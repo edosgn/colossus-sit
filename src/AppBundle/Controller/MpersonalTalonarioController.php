@@ -72,7 +72,7 @@ class MpersonalTalonarioController extends Controller
 
                 $talonario->setDesde($params->desde);
                 $talonario->setHasta($params->hasta);
-                $talonario->setRangos(($params->hasta + 1) - $params->desde);
+                $talonario->setRangos($params->rangos);
                 $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
                 $talonario->setNumeroResolucion($params->numeroResolucion);
                 
@@ -139,26 +139,61 @@ class MpersonalTalonarioController extends Controller
     /**
      * Displays a form to edit an existing mpersonalTalonario entity.
      *
-     * @Route("/{id}/edit", name="mpersonaltalonario_edit")
+     * @Route("/edit", name="mpersonaltalonario_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MpersonalTalonario $mpersonalTalonario)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($mpersonalTalonario);
-        $editForm = $this->createForm('AppBundle\Form\MpersonalTalonarioType', $mpersonalTalonario);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('mpersonaltalonario_edit', array('id' => $mpersonalTalonario->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $talonario = $em->getRepository("AppBundle:MpersonalTalonario")->find(
+                $params->id
+            );
+
+            if ($talonario!=null) {
+                $talonario->setDesde($params->desde);
+                $talonario->setHasta($params->hasta);
+                $talonario->setRangos($params->rangos);
+                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+                $talonario->setNumeroResolucion($params->numeroResolucion);
+                
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->sedeOperativaId
+                );
+                $talonario->setSedeOperativa($sedeOperativa);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro actualizado con exito", 
+                    'data'=> $talonario,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar", 
+            );
         }
 
-        return $this->render('mpersonaltalonario/edit.html.twig', array(
-            'mpersonalTalonario' => $mpersonalTalonario,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

@@ -49,27 +49,20 @@ class VehiculoAcreedorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        // var_dump($authCheck);
-        // die();
+        
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
             $placa = $params->vehiculoPlaca;
             
-            // $bancoId = $params->bancoId;
             $em = $this->getDoctrine()->getManager();
             $placaId = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaId->getId());
             $cfgTipoAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->find($params->tipoAlerta);
             $gradoAlerta = $params->gradoAlerta;
-            // $banco = $em->getRepository('AppBundle:Banco')->findOneByNombre($bancoId);
-            // var_dump($vehiculo->getId());
-            // die();
-
+            
             $vehiculoAcreedor = new VehiculoAcreedor();
 
-            // $vehiculoAcreedor->setVehiculo($vehiculo);
-            // $vehiculoAcreedor->setBanco($banco);
             if ($params->acreedoresCiudadanos) {
                 foreach ($params->acreedoresCiudadanos as $key => $ciudadano) {
                     
@@ -105,6 +98,8 @@ class VehiculoAcreedorController extends Controller
                         $acreedorVehiculo = new VehiculoAcreedor();
                         $acreedorVehiculo->setEmpresa($empresaNueva);
                         $acreedorVehiculo->setVehiculo($vehiculo);
+                        $acreedorVehiculo->setCfgTipoAlerta($cfgTipoAlerta);
+                        $acreedorVehiculo->setGradoAlerta($gradoAlerta);
                         $acreedorVehiculo->setEstado(true);
                         $em->persist($acreedorVehiculo);
                         $em->flush();
@@ -134,7 +129,7 @@ class VehiculoAcreedorController extends Controller
     /**
      * Finds and displays a vehiculoAcreedor entity.
      *
-     * @Route("/{id}", name="vehiculoacreedor_show")
+     * @Route("/{id}/show", name="vehiculoacreedor_show")
      * @Method("GET")
      */
     public function showAction(VehiculoAcreedor $vehiculoAcreedor)
@@ -175,21 +170,73 @@ class VehiculoAcreedorController extends Controller
     /**
      * Deletes a vehiculoAcreedor entity.
      *
-     * @Route("/{id}", name="vehiculoacreedor_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vehiculoacreedor_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, VehiculoAcreedor $vehiculoAcreedor)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vehiculoAcreedor);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vehiculoAcreedor);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            if ($params->acreedoresCiudadanos) {
+                
+                foreach ($params->acreedoresCiudadanos as $key => $ciudadano) {
+                    // var_dump($ciudadano);
+                    // die();
+                    $acreedorVehiculo = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
+                        array(
+                            'estado' => 1,
+                            'ciudadano' => $ciudadano->ciudadanoId
+                            )
+                        );
+                        
+                        $acreedorVehiculo->setEstado(false);
+                        $em->persist($acreedorVehiculo);
+                        $em->flush();
+                    $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Ciudadano acreedor eliminado con éxto",
+            );
+                        
+                    }
+                }
+            
+                if ($params->acreedoresEmpresas) {
+                
+                foreach ($params->acreedoresEmpresas as $key => $empresa) {
+                    $acreedorVehiculo = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
+                        array(
+                            'estado' => 1,
+                            'empresa' => $empresa->empresaId
+                            )
+                        );
+                        
+                        $acreedorVehiculo->setEstado(false);
+                        $em->persist($acreedorVehiculo);
+                        $em->flush();
+                    $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Empresa acreedora eliminada con éxto",
+            );
+                    }
+                }
 
-        return $this->redirectToRoute('vehiculoacreedor_index');
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -206,5 +253,102 @@ class VehiculoAcreedorController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+
+    /**
+     * busca acreedores por ciudadano.
+     *
+     * @Route("/search/acreedor", name="vehiculoacreedor_search_acreedor")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAcreedorAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $acreedorCiudadano = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
+                        array(
+                            'estado' => 1,
+                            'ciudadano' => $params
+                            )
+                        );
+
+            if ($acreedorCiudadano!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "acreedorCiudadano", 
+                    'data'=> $acreedorCiudadano,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Ciudadano acreedor no encotrado", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca acreedores por ciudadano.
+     *
+     * @Route("/search/acreedor/empresa", name="vehiculoacreedor_search_acreedor_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAcreedorEmpresaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            // var_dump($params);
+            // die();
+            $em = $this->getDoctrine()->getManager();
+            $acreedorCiudadano = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
+                        array(
+                            'estado' => 1,
+                            'empresa' => $params->id
+                            )
+                        );
+
+            if ($acreedorCiudadano!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "acreedorCiudadano", 
+                    'data'=> $acreedorCiudadano,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Empresa no encotrada como acreedor", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 }

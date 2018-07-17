@@ -172,7 +172,11 @@ class MpersonalTalonario
      */
     public function getFechaAsignacion()
     {
-        return $this->fechaAsignacion;
+        if ($this->fechaAsignacion) {
+            return $this->fechaAsignacion->format('Y-m-d');
+        }else{
+            return $this->fechaAsignacion;
+        }
     }
 
     /**
