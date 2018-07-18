@@ -706,5 +706,105 @@ class VehiculoController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * busca vehiculos por parametro: vin,placa,chasis,motor,propietario,serie.
+     *
+     * @Route("/parametro", name="vehiculo_show_parametro")
+     * @Method("POST")
+     */
+    public function vehiculoPorParametro(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByParametro($params);
+            if($vehiculo!=null){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehículo encontrado.", 
+                    'data'=> $vehiculo,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Vehículo no encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 401,
+                    'msj' => "Autorización no valida.", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca vehiculos por id para obtener el tipo
+     *
+     * @Route("/tipo", name="vehiculo_show_tipo")
+     * @Method("POST")
+     */
+    public function vehiculoPorTipo(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            var_dump($params);
+            die();
+            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneByVehiculo($params);
+            if($vehiculoPesado!=null){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehículo pesado encontrado.", 
+                    'data'=> $vehiculoPesado,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Vehículo pesado no encontrado.", 
+                );
+            }
+            $vehiculoMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->findOneByVehiculo($params);
+            if($vehiculoMaquinaria!=null){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehículo maquinaria encontrado.", 
+                    'data'=> $vehiculoMaquinaria,
+            );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Vehículo maquinaria no encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 401,
+                    'msj' => "Autorización no valida.", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
 
 }

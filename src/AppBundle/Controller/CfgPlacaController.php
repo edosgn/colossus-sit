@@ -196,8 +196,9 @@ class CfgPlacaController extends Controller
 
             $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->find($params);
 
+            $cfgPlaca->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->remove($cfgPlaca);
+                $em->persist($cfgPlaca);
                 $em->flush();
             $response = array(
                     'status' => 'success',

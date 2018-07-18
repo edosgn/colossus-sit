@@ -43,4 +43,28 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         $consulta = $em->createQuery($dql);
         return $consulta->getResult();
     }
+
+    //Obtiene el vehículo según un parametro
+    public function findOneByParametro($parametro)
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:PropietarioVehiculo pv, AppBundle:Ciudadano c, UsuarioBundle:Usuario u
+            WHERE ((v.placa = p.id)
+            AND (p.numero = :parametro))
+            OR((v.id = pv.vehiculo)
+            AND (pv.ciudadano = c.id)
+            AND(c.usuario = u.id)
+            AND(u.identificacion = :parametro))
+            OR (v.vin = :parametro)
+            OR (v.chasis = :parametro)
+            OR (v.serie = :parametro)
+            OR (v.motor = :parametro)";
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'parametro' => $parametro,
+        ));
+        return $consulta->getOneOrNullResult();
+    }
 }

@@ -10,14 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Casoinsumo controller.
  *
- * @Route("casoinsumo")
+ * @Route("cfgCasoInsumo")
  */
 class CasoInsumoController extends Controller
 {
     /**
      * Lists all casoInsumo entities.
      *
-     * @Route("/", name="casoinsumo_index")
+     * @Route("/", name="cfgCasoinsumo_index")
      * @Method("GET")
      */
     public function indexAction()
