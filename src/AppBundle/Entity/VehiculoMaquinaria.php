@@ -24,6 +24,20 @@ class VehiculoMaquinaria
      /**
      * @var string
      *
+     * @ORM\Column(name="condicionIngreso", type="string", length=255)
+     */
+    private $condicionIngreso;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaIngreso", type="datetime")
+     */
+    private $fechaIngreso;
+
+     /**
+     * @var string
+     *
      * @ORM\Column(name="pesoBrutoVehicular", type="string", length=255)
      */
     private $pesoBrutoVehicular;
@@ -87,13 +101,6 @@ class VehiculoMaquinaria
     /**
      * @var string
      *
-     * @ORM\Column(name="origenVehiculo", type="string", length=255)
-     */
-    private $origenVehiculo;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="subpartidaArancelaria", type="string", length=255)
      */
     private $subpartidaArancelaria;
@@ -104,15 +111,15 @@ class VehiculoMaquinaria
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoVehiculo", inversedBy="propietariosVehiculo") */
     private $tipoVehiculo;
     
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Combustible", inversedBy="propietariosVehiculo") */
-    private $combustible;
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgOrigenRegistro", inversedBy="propietariosVehiculo") */
+    private $cfgOrigenRegistro;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="propietariosVehiculo") */
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
+     */
     private $vehiculo;
 
-
-
-
+    
 
     /**
      * Get id
@@ -122,6 +129,57 @@ class VehiculoMaquinaria
     public function getId()
     {
         return $this->id;
+    }
+
+   
+
+
+    /**
+     * Set condicionIngreso
+     *
+     * @param string $condicionIngreso
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setCondicionIngreso($condicionIngreso)
+    {
+        $this->condicionIngreso = $condicionIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get condicionIngreso
+     *
+     * @return string
+     */
+    public function getCondicionIngreso()
+    {
+        return $this->condicionIngreso;
+    }
+
+    /**
+     * Set fechaIngreso
+     *
+     * @param \DateTime $fechaIngreso
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setFechaIngreso($fechaIngreso)
+    {
+        $this->fechaIngreso = $fechaIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIngreso
+     *
+     * @return \DateTime
+     */
+    public function getFechaIngreso()
+    {
+        return $this->fechaIngreso;
     }
 
     /**
@@ -341,30 +399,6 @@ class VehiculoMaquinaria
     }
 
     /**
-     * Set origenVehiculo
-     *
-     * @param string $origenVehiculo
-     *
-     * @return VehiculoMaquinaria
-     */
-    public function setOrigenVehiculo($origenVehiculo)
-    {
-        $this->origenVehiculo = $origenVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get origenVehiculo
-     *
-     * @return string
-     */
-    public function getOrigenVehiculo()
-    {
-        return $this->origenVehiculo;
-    }
-
-    /**
      * Set subpartidaArancelaria
      *
      * @param string $subpartidaArancelaria
@@ -413,27 +447,27 @@ class VehiculoMaquinaria
     }
 
     /**
-     * Set combustible
+     * Set cfgOrigenRegistro
      *
-     * @param \AppBundle\Entity\Combustible $combustible
+     * @param \AppBundle\Entity\CfgOrigenRegistro $cfgOrigenRegistro
      *
      * @return VehiculoMaquinaria
      */
-    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
+    public function setCfgOrigenRegistro(\AppBundle\Entity\CfgOrigenRegistro $cfgOrigenRegistro = null)
     {
-        $this->combustible = $combustible;
+        $this->cfgOrigenRegistro = $cfgOrigenRegistro;
 
         return $this;
     }
 
     /**
-     * Get combustible
+     * Get cfgOrigenRegistro
      *
-     * @return \AppBundle\Entity\Combustible
+     * @return \AppBundle\Entity\CfgOrigenRegistro
      */
-    public function getCombustible()
+    public function getCfgOrigenRegistro()
     {
-        return $this->combustible;
+        return $this->cfgOrigenRegistro;
     }
 
     /**

@@ -96,9 +96,7 @@ class CiudadanoController extends Controller
                     $municipioNacimientoId = (isset($params->municipioNacimientoId)) ? $params->municipioNacimientoId : null;
                     $municipioResidenciaId = (isset($params->municipioResidenciaId)) ? $params->municipioResidenciaId : null;
 
-                    $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
-                        $tipoIdentificacionUsuarioId
-                    );
+                    $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionUsuarioId);
                     
                     $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
                     $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
