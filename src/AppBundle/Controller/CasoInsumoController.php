@@ -16,32 +16,32 @@ use Symfony\Component\HttpFoundation\Request;
 class CasoInsumoController extends Controller
 {  
     /**
-     * Lists all Color entities.
+     * Lists all CasoInsumo entities.
      *
-     * @Route("/", name="color_index")
+     * @Route("/", name="casoInsumo_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $colores = $em->getRepository('AppBundle:Color')->findBy(
+        $casoInsumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
             array('estado' => 1)
         );
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado colores", 
-                    'data'=> $colores,
+                    'msj' => "listado casoInsumos", 
+                    'data'=> $casoInsumos,
             );
          
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new Color entity.
+     * Creates a new CasoInsumo entity.
      *
-     * @Route("/new", name="color_new")
+     * @Route("/new", name="casoInsumo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -63,26 +63,26 @@ class CasoInsumoController extends Controller
                 $nombre = $params->nombre;
 
                 $em = $this->getDoctrine()->getManager();
-                $color = $em->getRepository('AppBundle:Color')->findOneByNombre($params->nombre);
+                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneByNombre($params->nombre);
 
-                if ($color==null) {
-                    $color = new Color();
+                if ($casoInsumo==null) {
+                    $casoInsumo = new CasoInsumo();
     
-                    $color->setNombre(strtoupper($nombre));
-                    $color->setEstado(true);
+                    $casoInsumo->setNombre(strtoupper($nombre));
+                    $casoInsumo->setEstado(true);
     
-                    $em->persist($color);
+                    $em->persist($casoInsumo);
                     $em->flush();
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "Color creado con exito", 
+                        'msj' => "CasoInsumo creado con exito", 
                     );
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'msj' => "El nombre del color ya se encuentra registrado", 
+                        'msj' => "El nombre del casoInsumo ya se encuentra registrado", 
                     );
                 }
 
@@ -98,9 +98,9 @@ class CasoInsumoController extends Controller
     }
 
     /**
-     * Finds and displays a Color entity.
+     * Finds and displays a CasoInsumo entity.
      *
-     * @Route("/show/{id}", name="color_show")
+     * @Route("/show/{id}", name="casoInsumo_show")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)
@@ -111,12 +111,12 @@ class CasoInsumoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('AppBundle:Color')->find($id);
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "color encontrado", 
-                    'data'=> $color,
+                    'msj' => "casoInsumo encontrado", 
+                    'data'=> $casoInsumo,
             );
         }else{
             $response = array(
@@ -129,9 +129,9 @@ class CasoInsumoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Color entity.
+     * Displays a form to edit an existing CasoInsumo entity.
      *
-     * @Route("/edit", name="color_edit")
+     * @Route("/edit", name="casoInsumo_edit")
      * @Method({"GET", "POST"})
      */ 
     public function editAction(Request $request)
@@ -146,27 +146,27 @@ class CasoInsumoController extends Controller
 
             $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('AppBundle:Color')->find($params->id);
-            if ($color!=null) {
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->id);
+            if ($casoInsumo!=null) {
 
-                $color->setNombre($nombre);
-                $color->setEstado(true);
+                $casoInsumo->setNombre($nombre);
+                $casoInsumo->setEstado(true);
                
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($color);
+                $em->persist($casoInsumo);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "color editada con exito", 
+                    'msj' => "casoInsumo editada con exito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La color no se encuentra en la base de datos", 
+                    'msj' => "La casoInsumo no se encuentra en la base de datos", 
                 );
             }
         }else{
@@ -181,9 +181,9 @@ class CasoInsumoController extends Controller
     }
 
     /**
-     * Deletes a Color entity.
+     * Deletes a CasoInsumo entity.
      *
-     * @Route("/{id}/delete", name="color_delete")
+     * @Route("/{id}/delete", name="casoInsumo_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request,$id)
@@ -193,16 +193,16 @@ class CasoInsumoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();            
-            $color = $em->getRepository('AppBundle:Color')->find($id);
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($id);
 
-            $color->setEstado(0);
+            $casoInsumo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($color);
+                $em->persist($casoInsumo);
                 $em->flush();
             $response = array(
                     'status' => 'success',
                         'code' => 200,
-                        'msj' => "color eliminado con exito", 
+                        'msj' => "casoInsumo eliminado con exito", 
                 );
         }else{
             $response = array(
@@ -215,16 +215,16 @@ class CasoInsumoController extends Controller
     }
 
     /**
-     * Creates a form to delete a Color entity.
+     * Creates a form to delete a CasoInsumo entity.
      *
-     * @param Color $color The Color entity
+     * @param CasoInsumo $casoInsumo The CasoInsumo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Color $color)
+    private function createDeleteForm(CasoInsumo $casoInsumo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('color_delete', array('id' => $color->getId())))
+            ->setAction($this->generateUrl('casoInsumo_delete', array('id' => $casoInsumo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
