@@ -1,3 +1,7 @@
+app_cfg_licencia_conduccion_categoria:
+    resource: "@AppBundle/Controller/CfgLicenciaConduccionCategoriaController.php"
+    type:     annotation
+
 app_cfg_origen_registro:
     resource: "@AppBundle/Controller/CfgOrigenRegistroController.php"
     type:     annotation
