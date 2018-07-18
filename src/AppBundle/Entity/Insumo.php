@@ -22,9 +22,9 @@ class Insumo
     private $id;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="estado", type="string")
      */
     private $estado;
 
@@ -42,12 +42,14 @@ class Insumo
      */
     private $fecha;
 
+
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="tipo", type="boolean")
+     * @ORM\Column(name="tipo", type="string")
      */
     private $tipo;
+
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa")
@@ -59,8 +61,11 @@ class Insumo
      **/
     protected $casoInsumo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LoteInsumo")
+     **/
+    protected $loteInsumo;
 
-    
 
     /**
      * Get id
@@ -75,7 +80,7 @@ class Insumo
     /**
      * Set estado
      *
-     * @param boolean $estado
+     * @param string $estado
      *
      * @return Insumo
      */
@@ -89,7 +94,7 @@ class Insumo
     /**
      * Get estado
      *
-     * @return boolean
+     * @return string
      */
     public function getEstado()
     {
@@ -141,13 +146,13 @@ class Insumo
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->fecha->format('Y-m-d');
     }
 
     /**
      * Set tipo
      *
-     * @param boolean $tipo
+     * @param string $tipo
      *
      * @return Insumo
      */
@@ -161,7 +166,7 @@ class Insumo
     /**
      * Get tipo
      *
-     * @return boolean
+     * @return string
      */
     public function getTipo()
     {
@@ -214,5 +219,29 @@ class Insumo
     public function getCasoInsumo()
     {
         return $this->casoInsumo;
+    }
+
+    /**
+     * Set loteInsumo
+     *
+     * @param \AppBundle\Entity\LoteInsumo $loteInsumo
+     *
+     * @return Insumo
+     */
+    public function setLoteInsumo(\AppBundle\Entity\LoteInsumo $loteInsumo = null)
+    {
+        $this->loteInsumo = $loteInsumo;
+
+        return $this;
+    }
+
+    /**
+     * Get loteInsumo
+     *
+     * @return \AppBundle\Entity\LoteInsumo
+     */
+    public function getLoteInsumo()
+    {
+        return $this->loteInsumo;
     }
 }
