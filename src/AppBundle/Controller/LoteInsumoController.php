@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\LoteInsumo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Loteinsumo controller.
@@ -17,18 +18,49 @@ class LoteInsumoController extends Controller
     /**
      * Lists all loteInsumo entities.
      *
-     * @Route("/", name="loteinsumo_index")
+     * @Route("/sustrato", name="loteinsumo_index")
      * @Method("GET")
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
+            array('estado' => 'registrado','sedeOperativa'=>!null)
+        );
 
-        $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findAll();
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado lineas", 
+                    'data'=> $loteInsumos,
+            );
+         
+        return $helpers->json($response);
+    }
 
-        return $this->render('loteinsumo/index.html.twig', array(
-            'loteInsumos' => $loteInsumos,
-        ));
+    /**
+     * Lists all loteInsumo entities.
+     *
+     * @Route("/insumo", name="loteinsumoInsumos_index")
+     * @Method("GET")
+     */
+    public function indexInsumoAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
+            array('estado' => 'registrado','sedeOperativa'=>null)
+        );
+
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado lineas", 
+                    'data'=> $loteInsumos,
+            );
+         
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +71,57 @@ class LoteInsumoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $loteInsumo = new Loteinsumo();
-        $form = $this->createForm('AppBundle\Form\LoteInsumoType', $loteInsumo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+
+            $fecha = $params->fecha;
+            $fecha = new \DateTime($params->fecha);
+            // $observacion = $params->observacion;
+            // $bancoId = $params->bancoId;
+            
             $em = $this->getDoctrine()->getManager();
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($params->empresaId);
+
+            $sedeOperativaId = (isset($params->sedeOperativaId)) ? $params->sedeOperativaId : null;
+
+            $loteInsumo = new LoteInsumo();
+            if ($sedeOperativaId) {
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+                $loteInsumo->setSedeOperativa($sedeOperativa);
+                
+            }
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
+
+            $loteInsumo->setNumeroActa($params->numeroActa);
+            $loteInsumo->setEmpresa($empresa);
+            $loteInsumo->setCasoInsumo($casoInsumo); 
+            $loteInsumo->setEstado('registrado');
+            $loteInsumo->setRangoInicio($params->rangoInicio);
+            $loteInsumo->setRangoFin($params->rangoFin);
+            $loteInsumo->setCantidad($params->cantidad);
+            $loteInsumo->setReferencia($params->referencia);
+            $loteInsumo->setFecha($fecha);
             $em->persist($loteInsumo);
             $em->flush();
-
-            return $this->redirectToRoute('loteinsumo_show', array('id' => $loteInsumo->getId()));
-        }
-
-        return $this->render('loteinsumo/new.html.twig', array(
-            'loteInsumo' => $loteInsumo,
-            'form' => $form->createView(),
-        ));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "loteInsumo creado con exito", 
+            );
+              
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
     }
 
     /**
@@ -74,28 +141,68 @@ class LoteInsumoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing loteInsumo entity.
+     * Displays a form to edit an existing Linea entity.
      *
-     * @Route("/{id}/edit", name="loteinsumo_edit")
+     * @Route("/edit", name="loteinsumo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, LoteInsumo $loteInsumo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($loteInsumo);
-        $editForm = $this->createForm('AppBundle\Form\LoteInsumoType', $loteInsumo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->find($params->id);
+            
+            $empresa = $em->getRepository('AppBundle:Empresa')->find($params->empresaId);
 
-            return $this->redirectToRoute('loteinsumo_edit', array('id' => $loteInsumo->getId()));
+            $sedeOperativaId = (isset($params->sedeOperativaId)) ? $params->sedeOperativaId : null;
+
+            if ($sedeOperativaId) {
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+                $loteInsumo->setSedeOperativa($sedeOperativa);
+                
+            }
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
+
+            
+            if ($loteInsumo!=null) {
+
+                $loteInsumo->setNumeroActa($params->numeroActa);
+                $loteInsumo->setEmpresa($empresa);
+                $loteInsumo->setCasoInsumo($casoInsumo); 
+                $loteInsumo->setRangoInicio($params->rangoInicio);
+                $loteInsumo->setRangoFin($params->rangoFin);
+                $loteInsumo->setCantidad($params->cantidad);
+                $loteInsumo->setReferencia($params->referencia);
+                $em->persist($loteInsumo);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "linea editada con exito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La linea no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('loteinsumo/edit.html.twig', array(
-            'loteInsumo' => $loteInsumo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -132,5 +239,89 @@ class LoteInsumoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Lists all loteInsumo entities.
+     *
+     * @Route("/insumo/lote/sede", name="loteinsumoInsumosSede_index")
+     * @Method({"GET", "POST"})
+     */
+    public function loteInsumoSedeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->findOneBy(
+                array('estado' => 'registrado','sedeOperativa'=> $params->sedeOperativa,'casoInsumo'=>$params->casoInsumo)
+            );
+            if ($loteInsumo!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Lote encontrado con exito", 
+                    'data' => $loteInsumo, 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "no hay sustratos pa la sede", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco", 
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all loteInsumo entities.
+     *
+     * @Route("/insumo/lote/insumo", name="loteinsumoInsumosInsumo_index")
+     * @Method({"GET", "POST"})
+     */
+    public function loteInsumoInsumoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->findOneBy(
+                array('estado' => 'registrado','sedeOperativa'=> null,'casoInsumo'=>$params->casoInsumo)
+            );
+            if ($loteInsumo!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Lote encontrado con exito", 
+                    'data' => $loteInsumo, 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "no hay sustratos pa la sede", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco", 
+            );
+        }
+        return $helpers->json($response);
     }
 }

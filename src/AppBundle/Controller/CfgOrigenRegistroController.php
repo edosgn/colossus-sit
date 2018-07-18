@@ -60,7 +60,7 @@ class CfgOrigenRegistroController extends Controller
     /**
      * Finds and displays a cfgOrigenRegistro entity.
      *
-     * @Route("/{id}", name="cfgorigenregistro_show")
+     * @Route("/{id}/show", name="cfgorigenregistro_show")
      * @Method("GET")
      */
     public function showAction(CfgOrigenRegistro $cfgOrigenRegistro)
@@ -101,7 +101,7 @@ class CfgOrigenRegistroController extends Controller
     /**
      * Deletes a cfgOrigenRegistro entity.
      *
-     * @Route("/{id}", name="cfgorigenregistro_delete")
+     * @Route("/{id}/delete", name="cfgorigenregistro_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgOrigenRegistro $cfgOrigenRegistro)
@@ -138,7 +138,7 @@ class CfgOrigenRegistroController extends Controller
     /**
     * datos select
     *
-    *@Route("/select", name="origenregistro_select")
+    *@Route("/select", name="cfgorigenregistro_select")
     *@Method({"GET","POST"})
     */
     public function selectAction()
