@@ -5,132 +5,276 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\CasoInsumo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Casoinsumo controller.
  *
- * @Route("cfgCasoInsumo")
+ * @Route("casoinsumo")
  */
 class CasoInsumoController extends Controller
-{
+{  
     /**
-     * Lists all casoInsumo entities.
+     * Lists all Color entities.
      *
-     * @Route("/", name="cfgCasoinsumo_index")
+     * @Route("/", name="color_index")
      * @Method("GET")
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $casoInsumos = $em->getRepository('AppBundle:CasoInsumo')->findAll();
-
-        return $this->render('casoinsumo/index.html.twig', array(
-            'casoInsumos' => $casoInsumos,
-        ));
+        $colores = $em->getRepository('AppBundle:Color')->findBy(
+            array('estado' => 1)
+        );
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado colores", 
+                    'data'=> $colores,
+            );
+         
+        return $helpers->json($response);
     }
 
     /**
-     * Creates a new casoInsumo entity.
+     * Creates a new Color entity.
      *
-     * @Route("/new", name="casoinsumo_new")
+     * @Route("/new", name="color_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $casoInsumo = new Casoinsumo();
-        $form = $this->createForm('AppBundle\Form\CasoInsumoType', $casoInsumo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($casoInsumo);
-            $em->flush();
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $nombre = $params->nombre;
 
-            return $this->redirectToRoute('casoinsumo_show', array('id' => $casoInsumo->getId()));
-        }
+                $em = $this->getDoctrine()->getManager();
+                $color = $em->getRepository('AppBundle:Color')->findOneByNombre($params->nombre);
 
-        return $this->render('casoinsumo/new.html.twig', array(
-            'casoInsumo' => $casoInsumo,
-            'form' => $form->createView(),
-        ));
+                if ($color==null) {
+                    $color = new Color();
+    
+                    $color->setNombre(strtoupper($nombre));
+                    $color->setEstado(true);
+    
+                    $em->persist($color);
+                    $em->flush();
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Color creado con exito", 
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "El nombre del color ya se encuentra registrado", 
+                    );
+                }
+
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a casoInsumo entity.
+     * Finds and displays a Color entity.
      *
-     * @Route("/{id}", name="casoinsumo_show")
-     * @Method("GET")
+     * @Route("/show/{id}", name="color_show")
+     * @Method("POST")
      */
-    public function showAction(CasoInsumo $casoInsumo)
+    public function showAction(Request $request,$id)
     {
-        $deleteForm = $this->createDeleteForm($casoInsumo);
+       $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('casoinsumo/show.html.twig', array(
-            'casoInsumo' => $casoInsumo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $color = $em->getRepository('AppBundle:Color')->find($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "color encontrado", 
+                    'data'=> $color,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
-     * Displays a form to edit an existing casoInsumo entity.
+     * Displays a form to edit an existing Color entity.
      *
-     * @Route("/{id}/edit", name="casoinsumo_edit")
+     * @Route("/edit", name="color_edit")
      * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, CasoInsumo $casoInsumo)
+     */ 
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($casoInsumo);
-        $editForm = $this->createForm('AppBundle\Form\CasoInsumoType', $casoInsumo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('casoinsumo_edit', array('id' => $casoInsumo->getId()));
-        }
-
-        return $this->render('casoinsumo/edit.html.twig', array(
-            'casoInsumo' => $casoInsumo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Deletes a casoInsumo entity.
-     *
-     * @Route("/{id}", name="casoinsumo_delete")
-     * @Method("DELETE")
-     */
-    public function deleteAction(Request $request, CasoInsumo $casoInsumo)
-    {
-        $form = $this->createDeleteForm($casoInsumo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+            $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
-            $em->remove($casoInsumo);
-            $em->flush();
+            $color = $em->getRepository('AppBundle:Color')->find($params->id);
+            if ($color!=null) {
+
+                $color->setNombre($nombre);
+                $color->setEstado(true);
+               
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($color);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "color editada con exito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La color no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->redirectToRoute('casoinsumo_index');
+        return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a casoInsumo entity.
+     * Deletes a Color entity.
      *
-     * @param CasoInsumo $casoInsumo The casoInsumo entity
+     * @Route("/{id}/delete", name="color_delete")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();            
+            $color = $em->getRepository('AppBundle:Color')->find($id);
+
+            $color->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($color);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "color eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a form to delete a Color entity.
+     *
+     * @param Color $color The Color entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CasoInsumo $casoInsumo)
+    private function createDeleteForm(Color $color)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('casoinsumo_delete', array('id' => $casoInsumo->getId())))
+            ->setAction($this->generateUrl('color_delete', array('id' => $color->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
+
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/sustrato", name="casoInsumo_select_sustrato")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
+        array('estado' => 1,'tipo'=>'Sustrato')
+    );
+     
+      foreach ($insumos as $key => $insumo) {
+        $response[$key] = array(
+            'value' => $insumo->getId(),
+            'label' => $insumo->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/insumo", name="casoInsumo_select_insumo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectInsumoAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
+        array('estado' => 1,'tipo'=>'Insumo')
+    );
+     
+      foreach ($insumos as $key => $insumo) {
+        $response[$key] = array(
+            'value' => $insumo->getId(),
+            'label' => $insumo->getNombre(),
+            );
+      }
+       return $helpers->json($response); 
+    } 
+    
 }
