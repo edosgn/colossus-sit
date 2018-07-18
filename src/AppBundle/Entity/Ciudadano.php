@@ -74,6 +74,7 @@ class Ciudadano
     private $usuario;
    
 
+    
     public function __toString()
     {
         return $this->getNombres();
