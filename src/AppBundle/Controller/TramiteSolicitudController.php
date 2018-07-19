@@ -99,7 +99,6 @@ class TramiteSolicitudController extends Controller
                 $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 $datos = $params->datos; 
-                //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
                 $tramiteFacturaId = $params->tramiteFacturaId;
 
@@ -113,6 +112,11 @@ class TramiteSolicitudController extends Controller
                 if ($params->solicitanteId) {
                     $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->solicitanteId);
                     $tramiteSolicitud->setSolicitante($propietario);
+                    $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+                    if ($ciudadanoId) {
+                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->ciudadanoId);
+                        $tramiteSolicitud->setCiudadano($ciudadano);
+                    }
                 }else{
                     if ($params->datos->ciudadanoId) {
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->datos->ciudadanoId);
