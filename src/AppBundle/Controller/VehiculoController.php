@@ -253,6 +253,7 @@ class VehiculoController extends Controller
             $chasis = $params->chasis;
             $serie = $params->serie;
             // $tipoVehiculo = $params->tipoVehiculo;
+            
             $radioAccion = $params->radioAccion;
             $modalidadTransporte = $params->modalidadTransporte;
             $vin = $params->vin;
