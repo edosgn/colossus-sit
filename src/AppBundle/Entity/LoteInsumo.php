@@ -24,7 +24,7 @@ class LoteInsumo
     /**
      * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="estado", type="string")
      */
     private $estado;
 
@@ -33,7 +33,7 @@ class LoteInsumo
      *
      * @ORM\Column(name="numeroActa", type="string", length=255)
      */
-    private $numeroActa;
+    private $numeroActa; 
 
     /**
      * @var \DateTime
@@ -45,14 +45,14 @@ class LoteInsumo
     /**
      * @var string
      *
-     * @ORM\Column(name="rangoInicio", type="string", length=255)
+     * @ORM\Column(name="rangoInicio", type="string", length=255, nullable=true)
      */
     private $rangoInicio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rangoFin", type="string", length=255)
+     * @ORM\Column(name="rangoFin", type="string", length=255, nullable=true)
      */
     private $rangoFin;
 
@@ -86,6 +86,7 @@ class LoteInsumo
     protected $casoInsumo;
 
 
+
     /**
      * Get id
      *
@@ -99,7 +100,7 @@ class LoteInsumo
     /**
      * Set estado
      *
-     * @param boolean $estado
+     * @param string $estado
      *
      * @return LoteInsumo
      */
@@ -113,7 +114,7 @@ class LoteInsumo
     /**
      * Get estado
      *
-     * @return boolean
+     * @return string
      */
     public function getEstado()
     {
@@ -165,7 +166,7 @@ class LoteInsumo
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->fecha->format('Y-m-d');
     }
 
     /**

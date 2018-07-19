@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Insumo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Insumo controller.
@@ -17,18 +18,49 @@ class InsumoController extends Controller
     /**
      * Lists all insumo entities.
      *
-     * @Route("/", name="insumo_index")
+     * @Route("/sustrato", name="insumo_index")
      * @Method("GET")
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
+            array('estado' => 'disponible','tipo'=>'sustrato')
+        );
 
-        $insumos = $em->getRepository('AppBundle:Insumo')->findAll();
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado lineas", 
+                    'data'=> $insumos,
+            );
+         
+        return $helpers->json($response);
+    }
 
-        return $this->render('insumo/index.html.twig', array(
-            'insumos' => $insumos,
-        ));
+    /**
+     * Lists all insumo entities.
+     *
+     * @Route("/insumo", name="insumoInsumos_index")
+     * @Method("GET")
+     */
+    public function indexInsumoAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
+            array('estado' => 'disponible','tipo'=>'insumo')
+        );
+
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado lineas", 
+                    'data'=> $insumos,
+            );
+         
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +71,82 @@ class InsumoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $insumo = new Insumo();
-        $form = $this->createForm('AppBundle\Form\InsumoType', $insumo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+
+            $fecha = $params->fecha;
+            $fecha = new \DateTime($params->fecha);
+           
+            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($insumo);
+
+            $rangoInicio = (isset($params->rangoInicio)) ? $params->rangoInicio : null;
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->find($params->loteInsumoId);
+
+            $loteInsumo->setEstado('asignado');
+            $em->persist($loteInsumo);
             $em->flush();
-
-            return $this->redirectToRoute('insumo_show', array('id' => $insumo->getId()));
-        }
-
-        return $this->render('insumo/new.html.twig', array(
-            'insumo' => $insumo,
-            'form' => $form->createView(),
-        ));
+            
+            if ($rangoInicio) {
+                $desde = $params->rangoInicio;
+                $hasta = $params->rangoFin;
+                
+                while ($desde <= $hasta) {
+                    $insumo = new Insumo();
+                    $em = $this->getDoctrine()->getManager();
+                    $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
+                    
+                    $insumo->setNumero($casoInsumo->getModulo()->getSiglaSustrato().$desde);
+                    $insumo->setCasoInsumo($casoInsumo);
+                    $insumo->setSedeOperativa($sedeOperativa);
+                    $insumo->setLoteInsumo($loteInsumo);
+                    $insumo->setFecha($fecha);
+                    $insumo->setTipo('sustrato');
+                    $insumo->setEstado('disponible');
+                    $em->persist($insumo);
+                    $em->flush();
+                    $desde++;
+                }
+                
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "insumo creado con exito", 
+                );
+                
+            }else{
+                $insumo = new Insumo();
+                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
+                $insumo->setSedeOperativa($sedeOperativa);
+                $insumo->setLoteInsumo($loteInsumo);
+                $insumo->setCasoInsumo($casoInsumo); 
+                $insumo->setEstado('disponible');
+                $insumo->setNumero($params->numero);
+                $insumo->setFecha($fecha);
+                $insumo->setTipo('insumo');
+                $em->persist($insumo);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "insumo creado con exito", 
+                );
+            }
+              
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
     }
 
     /**

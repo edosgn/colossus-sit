@@ -764,36 +764,30 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            var_dump($params);
-            die();
             $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneByVehiculo($params);
+            $vehiculoMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->findOneByVehiculo($params);
             if($vehiculoPesado!=null){
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehículo pesado encontrado.", 
+                    'msj' => "Pesado", 
                     'data'=> $vehiculoPesado,
             );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Vehículo pesado no encontrado.", 
-                );
             }
-            $vehiculoMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->findOneByVehiculo($params);
-            if($vehiculoMaquinaria!=null){
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Vehículo maquinaria encontrado.", 
-                    'data'=> $vehiculoMaquinaria,
-            );
-            }else{
+            else if($vehiculoMaquinaria != null){
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Maquinaria", 
+                        'data'=> $vehiculoMaquinaria,
+                );
+                              
+            }
+           else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehículo maquinaria no encontrado.", 
+                    'msj' => "Vehículo no encontrado en maquinaria ni pesado.", 
                 );
             }
         }else{
