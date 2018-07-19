@@ -50,28 +50,44 @@ class CfgLicenciaConduccionCategoriaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgLicenciaConduccionCategorium = new Cfglicenciaconduccioncategorium();
-        $form = $this->createForm('AppBundle\Form\CfgLicenciaConduccionCategoriaType', $cfgLicenciaConduccionCategorium);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgLicenciaConduccionCategorium);
+            
+            $categoria = new CfgLicenciaConduccionCategoria();
+
+            $categoria->setNombre($params->nombre);
+            if ($params->descripcion) {
+                $categoria->setDescripcion($params->descripcion);
+            }
+            $categoria->setActivo(true);
+
+            $em->persist($categoria);
             $em->flush();
-
-            return $this->redirectToRoute('cfglicenciaconduccioncategoria_show', array('id' => $cfgLicenciaConduccionCategorium->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Categoria creada con éxito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no valida",
+            );
         }
-
-        return $this->render('cfglicenciaconduccioncategoria/new.html.twig', array(
-            'cfgLicenciaConduccionCategorium' => $cfgLicenciaConduccionCategorium,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a cfgLicenciaConduccionCategorium entity.
      *
-     * @Route("/{id}", name="cfglicenciaconduccioncategoria_show")
+     * @Route("/{id}/show", name="cfglicenciaconduccioncategoria_show")
      * @Method("GET")
      */
     public function showAction(CfgLicenciaConduccionCategoria $cfgLicenciaConduccionCategorium)
@@ -112,7 +128,7 @@ class CfgLicenciaConduccionCategoriaController extends Controller
     /**
      * Deletes a cfgLicenciaConduccionCategorium entity.
      *
-     * @Route("/{id}", name="cfglicenciaconduccioncategoria_delete")
+     * @Route("/delete", name="cfglicenciaconduccioncategoria_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgLicenciaConduccionCategoria $cfgLicenciaConduccionCategorium)
@@ -143,5 +159,31 @@ class CfgLicenciaConduccionCategoriaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="cfglicenciaconduccioncategoria_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $categorias = $em->getRepository('AppBundle:CfgLicenciaConduccionCategoria')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($categorias as $key => $categoria) {
+            $response[$key] = array(
+                'value' => $categoria->getId(),
+                'label' => $categoria->getNombre()
+            );
+        }
+        return $helpers->json($response);
     }
 }
