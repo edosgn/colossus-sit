@@ -208,6 +208,30 @@ class TramiteSolicitudController extends Controller
     }
 
     /**
+     * Obtiene tramiteSolicitud segun id_vehiculo entities.
+     *
+     * @Route("/byvehiculo", name="tramitesolicitud_byvehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function getTramiteByIdVehiculo(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $idVehiculo = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $tramitesSolicitud, 
+        );
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a form to delete a tramiteSolicitud entity.
      *
      * @param TramiteSolicitud $tramiteSolicitud The tramiteSolicitud entity
