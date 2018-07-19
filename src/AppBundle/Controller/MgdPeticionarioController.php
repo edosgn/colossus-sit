@@ -111,8 +111,8 @@ class MgdPeticionarioController extends Controller
             $mgdDocumento->setFechaRegistro($fechaRegistro);
             $mgdDocumento->setDescripcion($params->documento[0]->descripcion);
 
-            if ($params->documento[0]->correoCertificadoLlegada) {
-                $mgdDocumento->setCorreoCertificadoLlegada($params->documento[0]->correoCertificadoLlegada);
+            if ($params->documento[0]->correoCertificadoLlegada == 'true') {
+                $mgdDocumento->setCorreoCertificadoLlegada(true);
             }
 
             if ($params->documento[0]->nombreTransportadoraLlegada) {
