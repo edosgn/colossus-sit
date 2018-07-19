@@ -51,6 +51,7 @@ class DefaultController extends Controller
 
             foreach ((array)$tramiteSolicitud->getDatos() as $key => $value) {
                 $data[] = $key.":".$value;
+                // var_dump($value);
             }
 
             $tramitesSolicitudArray[]= array(

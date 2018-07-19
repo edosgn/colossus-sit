@@ -38,6 +38,7 @@ class BancoController extends Controller
          
         return $helpers->json($response);
     }
+    
 
     /**
      * Creates a new Banco entity.
