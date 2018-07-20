@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class LimitacionType extends AbstractType
+class CfgTipoProcesoType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('estado');
+        $builder->add('nombre');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Limitacion'
+            'data_class' => 'AppBundle\Entity\CfgTipoProceso'
         ));
     }
 
@@ -29,7 +29,7 @@ class LimitacionType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_limitacion';
+        return 'appbundle_cfgtipoproceso';
     }
 
 
