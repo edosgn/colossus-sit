@@ -175,7 +175,7 @@ class PropietarioVehiculoController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "propietarioVehiculo con nombre"." ".$propietarioVehiculo->getLicenciaTransito(), 
+                    'msj' => "propietarioVehiculo con nombre", 
                     'data'=> $propietarioVehiculo,
             );
         }else{
