@@ -18,7 +18,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
             FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
             WHERE ((v.placa = p.id)
             AND (p.numero = :campo))
-            OR (v.vin = :campo)
+            OR (v.vin = :campo) 
             OR (v.chasis = :campo)
             OR (v.serie = :campo)
             OR (v.motor = :campo)

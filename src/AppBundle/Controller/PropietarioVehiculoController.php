@@ -175,7 +175,38 @@ class PropietarioVehiculoController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "propietarioVehiculo con nombre"." ".$propietarioVehiculo->getLicenciaTransito(), 
+                    'msj' => "propietarioVehiculo con nombre", 
+                    'data'=> $propietarioVehiculo,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a CiudadanoVehiculo entity.
+     *
+     * @Route("/show/propietario/vehiculo/{id}", name="proìetariobyvehiculo")
+     * @Method("POST")
+     */
+    public function showActionPropietarioByVehiculo(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findOneByVehiculo($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "propietarioVehiculo con nombre", 
                     'data'=> $propietarioVehiculo,
             );
         }else{
