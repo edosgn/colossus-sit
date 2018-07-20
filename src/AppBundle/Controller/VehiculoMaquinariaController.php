@@ -26,7 +26,7 @@ class VehiculoMaquinariaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->findAll();
+        $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->getVehiculoCampo();
         $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -324,21 +324,60 @@ class VehiculoMaquinariaController extends Controller
     /**
      * Deletes a vehiculoMaquinaria entity.
      *
-     * @Route("/{id}", name="vehiculomaquinaria_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vehiculomaquinaria_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, VehiculoMaquinaria $vehiculoMaquinaria)
+    
+
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vehiculoMaquinaria);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            // var_dump($params);
+            // die();
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vehiculoMaquinaria);
-            $em->flush();
-        }
 
-        return $this->redirectToRoute('vehiculomaquinaria_index');
+            $registroMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->find($params);
+            $vehiculoId = $registroMaquinaria->getVehiculo();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+
+            $vehiculo->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($vehiculo);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "empresa eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    
+
+
+
+
+        // $form = $this->createDeleteForm($vehiculoMaquinaria);
+        // $form->handleRequest($request);
+
+        // if ($form->isSubmitted() && $form->isValid()) {
+        //     $em = $this->getDoctrine()->getManager();
+        //     $em->remove($vehiculoMaquinaria);
+        //     $em->flush();
+        // }
+
+        // return $this->redirectToRoute('vehiculomaquinaria_index');
     }
 
     /**
@@ -356,4 +395,6 @@ class VehiculoMaquinariaController extends Controller
             ->getForm()
         ;
     }
+
+    
 }
