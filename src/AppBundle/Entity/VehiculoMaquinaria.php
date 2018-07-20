@@ -179,7 +179,7 @@ class VehiculoMaquinaria
      */
     public function getFechaIngreso()
     {
-        return $this->fechaIngreso;
+        return $this->fechaIngreso->format('Y-m-d');
     }
 
     /**

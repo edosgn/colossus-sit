@@ -224,13 +224,28 @@ class TramiteSolicitudController extends Controller
         $hash = $request->get("authorization", null);
         $idVehiculo = $request->get("json", null);
         $authCheck = $helpers->authCheck($hash);
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);        
+
+        foreach ($tramitesSolicitud as $tramiteSolicitud) {
+
+            foreach ((array)$tramiteSolicitud->getDatos() as $key => $value) {
+                $data[] = $key.":".$value;
+                // var_dump($value);
+            }
+
+            $tramitesSolicitudArray[]= array(
+                'fecha' => $tramiteSolicitud->getFecha(),
+                'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getTramitePrecio()->getTramite()->getNombre(),
+                'datos' => $data
+            );
+        }
 
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de tramites",
             'data' => $tramitesSolicitud, 
+            'data2' => $tramitesSolicitudArray
         );
         return $helpers->json($response);
     }
