@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Limitaciondato</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ limitacionDato.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecharadicacion</th>
+                <td>{% if limitacionDato.fechaRadicacion %}{{ limitacionDato.fechaRadicacion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Nordenjudicial</th>
+                <td>{{ limitacionDato.nOrdenJudicial }}</td>
+            </tr>
+            <tr>
+                <th>Fechaexpedicion</th>
+                <td>{% if limitacionDato.fechaExpedicion %}{{ limitacionDato.fechaExpedicion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{ limitacionDato.observaciones }}</td>
+            </tr>
+            <tr>
+                <th>Datos</th>
+                <td>{% if limitacionDato.datos %}{{ limitacionDato.datos|join(', ') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ limitacionDato.estado }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('limitaciondatos_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('limitaciondatos_edit', { 'id': limitacionDato.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
