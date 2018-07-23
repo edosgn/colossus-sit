@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Limitacion
+ * CfgTipoProceso
  *
- * @ORM\Table(name="limitacion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\LimitacionRepository")
+ * @ORM\Table(name="cfg_tipo_proceso")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgTipoProcesoRepository")
  */
-class Limitacion
+class CfgTipoProceso
 {
     /**
      * @var int
@@ -21,20 +21,21 @@ class Limitacion
      */
     private $id;
 
-    /**
+     /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
 
-    /** 
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado;
-    
+    private $estado = true;    
+
+
 
     /**
      * Get id
@@ -51,7 +52,7 @@ class Limitacion
      *
      * @param string $nombre
      *
-     * @return Limitacion
+     * @return CfgTipoProceso
      */
     public function setNombre($nombre)
     {
@@ -75,7 +76,7 @@ class Limitacion
      *
      * @param boolean $estado
      *
-     * @return Limitacion
+     * @return CfgTipoProceso
      */
     public function setEstado($estado)
     {

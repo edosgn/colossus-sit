@@ -224,7 +224,7 @@ class TramiteSolicitudController extends Controller
         $hash = $request->get("authorization", null);
         $idVehiculo = $request->get("json", null);
         $authCheck = $helpers->authCheck($hash);
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);        
 
         $response = array(
             'status' => 'success',

@@ -1,5 +1,13 @@
+app_cfg_entidad_judicial:
+    resource: "@AppBundle/Controller/CfgEntidadJudicialController.php"
+    type:     annotation
+
+app_cfg_tipo_proceso:
+    resource: "@AppBundle/Controller/CfgTipoProcesoController.php"
+    type:     annotation
+
 app_limitacion:
-    resource: "@AppBundle/Controller/LimitacionController.php"
+    resource: "@AppBundle/Controller/CfgLimitacionController.php"
     type:     annotation
 
 app_cfg_licencia_conduccion_categoria:
