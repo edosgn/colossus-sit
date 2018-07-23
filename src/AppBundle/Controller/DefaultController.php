@@ -45,7 +45,7 @@ class DefaultController extends Controller
             array( 'vehiculo'=> $vehiculo->getId())
         );
 
-        
+        $tramitesSolicitudArray = false;
 
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
 
