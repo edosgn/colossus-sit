@@ -1,3 +1,7 @@
+app_licencia_conduccion:
+    resource: "@AppBundle/Controller/LicenciaConduccionController.php"
+    type:     annotation
+
 app_cfg_licencia_conduccion_categoria:
     resource: "@AppBundle/Controller/CfgLicenciaConduccionCategoriaController.php"
     type:     annotation

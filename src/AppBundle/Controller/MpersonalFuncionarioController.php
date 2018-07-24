@@ -50,7 +50,7 @@ class MpersonalFuncionarioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
                 $funcionario = new MpersonalFuncionario();
@@ -133,7 +133,7 @@ class MpersonalFuncionarioController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito", 
+                    'message' => "Registro creado con exito", 
                     'data' => $funcionario
                 );
             //}
@@ -141,7 +141,7 @@ class MpersonalFuncionarioController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);
@@ -252,7 +252,7 @@ class MpersonalFuncionarioController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         }
         return $helpers->json($response);
@@ -319,10 +319,10 @@ class MpersonalFuncionarioController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/search", name="mpersonalfuncionario_search")
+     * @Route("/search/parametros", name="mpersonalfuncionario_search_parametros")
      * @Method({"GET", "POST"})
      */
-    public function searchAction(Request $request)
+    public function searchByParametrosAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
@@ -340,13 +340,13 @@ class MpersonalFuncionarioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado", 
                 );
             }else{
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $funcionarios,
                 );
             }
@@ -356,7 +356,7 @@ class MpersonalFuncionarioController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -392,13 +392,13 @@ class MpersonalFuncionarioController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'msj' => "Registro no encontrado", 
+                        'message' => "Registro no encontrado", 
                     );
                 }else{
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "Registro encontrado", 
+                        'message' => "Registro encontrado", 
                         'data'=> $ciudadano,
                     );
                 }
@@ -406,7 +406,7 @@ class MpersonalFuncionarioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado", 
                 );
             }
 
@@ -415,7 +415,7 @@ class MpersonalFuncionarioController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -455,21 +455,21 @@ class MpersonalFuncionarioController extends Controller
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'msj' => "Registro encontrado", 
+                            'message' => "Registro encontrado", 
                             'data'=> $funcionario,
                         );
                     }else{
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'msj' => "El ciudadano no tiene registros de nombramientos vigentes", 
+                            'message' => "El ciudadano no tiene registros de nombramientos vigentes", 
                         );
                     }
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'msj' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
+                        'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
                     );
                 }
 
@@ -477,7 +477,7 @@ class MpersonalFuncionarioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
+                    'message' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
                 );
             }
 
@@ -487,7 +487,7 @@ class MpersonalFuncionarioController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }*/
         return $helpers->json($response);

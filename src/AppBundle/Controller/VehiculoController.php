@@ -61,7 +61,7 @@ class VehiculoController extends Controller
             //         'msj' => "los campos no pueden estar vacios", 
             //     );
             // }else{
-                        $placa = $params->placa;
+                        
                         $numeroFactura = $params->numeroFactura;
                         $fechaFactura = $params->fechaFactura;
                         $valor = $params->valor;
@@ -72,8 +72,7 @@ class VehiculoController extends Controller
                         $chasis = $params->chasis;
                         $serie = $params->serie;
                         // $tipoVehiculo = $params->tipoVehiculo;
-                        $radioAccion = $params->radioAccion;
-                        $modalidadTransporte = $params->modalidadTransporte;
+                        
                         $vin = $params->vin;
                         $numeroPasajeros = $params->numeroPasajeros;
                         $municipioId = $params->municipioId;
@@ -94,14 +93,24 @@ class VehiculoController extends Controller
                         $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
                         $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
                         $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+                        $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find(
+                            $params->radioAccionId
+                        );
+                        $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find(
+                            $params->modalidadTransporteId
+                        );
                         $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
                         $vehiculo = new Vehiculo();
                         
                         $fechaFactura=new \DateTime($fechaFactura);
 
-                        $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
-                     
-                        $vehiculo->setCfgPlaca($CfgPlaca);
+                        if ($params->placa) {
+                            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
+                                $params->placa
+                            );
+                            $vehiculo->setCfgPlaca($CfgPlaca);
+                        }
+                        
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);

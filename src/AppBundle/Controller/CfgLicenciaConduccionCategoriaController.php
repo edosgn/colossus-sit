@@ -103,26 +103,55 @@ class CfgLicenciaConduccionCategoriaController extends Controller
     /**
      * Displays a form to edit an existing cfgLicenciaConduccionCategorium entity.
      *
-     * @Route("/{id}/edit", name="cfglicenciaconduccioncategoria_edit")
+     * @Route("/edit", name="cfglicenciaconduccioncategoria_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgLicenciaConduccionCategoria $cfgLicenciaConduccionCategorium)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgLicenciaConduccionCategorium);
-        $editForm = $this->createForm('AppBundle\Form\CfgLicenciaConduccionCategoriaType', $cfgLicenciaConduccionCategorium);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cfglicenciaconduccioncategoria_edit', array('id' => $cfgLicenciaConduccionCategorium->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $categoria = $em->getRepository("AppBundle:CfgLicenciaConduccionCategoria")->find(
+                $params->id
+            );
+
+            if ($categoria!=null) {
+                $categoria->setNombre($params->nombre);
+
+                if ($params->descripcion) {
+                    $categoria->setDescripcion($params->descripcion);
+                }
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro actualizado con exito", 
+                    'data'=> $categoria,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('cfglicenciaconduccioncategoria/edit.html.twig', array(
-            'cfgLicenciaConduccionCategorium' => $cfgLicenciaConduccionCategorium,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

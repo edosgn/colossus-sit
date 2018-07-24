@@ -57,17 +57,17 @@ class TramiteSolicitudController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $tramiteSolicitud,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro encontrado", 
+                'data'=> $tramiteSolicitud,
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }
@@ -101,7 +101,6 @@ class TramiteSolicitudController extends Controller
                 $datos = $params->datos; 
                 //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
-                $tramiteFacturaId = $params->tramiteFacturaId;
 
                 $tramiteSolicitud = new TramiteSolicitud();
 
@@ -125,20 +124,21 @@ class TramiteSolicitudController extends Controller
                     $tramiteSolicitud->setVehiculo($vehiculo);
                 }
 
-                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($tramiteFacturaId);
-
-                $tramiteFactura->setRealizado(true);
-                $em->persist($tramiteFactura);
-                $em->flush();
-
+                if ($params->tramiteFacturaId) {
+                    $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find(
+                        $params->tramiteFacturaId
+                    );
+                    //$tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                    $tramiteFactura->setRealizado(true);
+                    $em->flush();
+                }
 
                 $tramiteSolicitud->setObservacion($observacion);
                 $tramiteSolicitud->setDocumentacion($documentacionCompleta);
                 $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
                 $tramiteSolicitud->setEstado(true);
                 $tramiteSolicitud->setDatos($datos);
-                //Inserta llaves foraneas
-                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramiteSolicitud);
