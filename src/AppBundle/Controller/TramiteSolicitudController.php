@@ -133,7 +133,7 @@ class TramiteSolicitudController extends Controller
                     $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find(
                         $params->tramiteFacturaId
                     );
-                    //$tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                     $tramiteFactura->setRealizado(true);
                     $em->flush();
                 }
