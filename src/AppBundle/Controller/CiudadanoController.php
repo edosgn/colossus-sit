@@ -214,21 +214,20 @@ class CiudadanoController extends Controller
             $params = json_decode($json);
 
             $numeroIdentificacion = $params->numeroIdentificacionUsuario;
-                $primerNombre = $params->primerNombreUsuario;
-                $segundoNombre = $params->segundoNombreUsuario;
-                $primerApellido = $params->primerApellidoUsuario;
-                $segundoApellido = $params->segundoApellidoUsuario;
-                $direccion = (isset($params->direccion)) ? $params->direccion : null;
-                $telefonoUsuario = (isset($params->telefonoUsuario)) ? $params->telefonoUsuario : null;
-                $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
+            $primerNombre = $params->primerNombreUsuario;
+            $segundoNombre = $params->segundoNombreUsuario;
+            $primerApellido = $params->primerApellidoUsuario;
+            $segundoApellido = $params->segundoApellidoUsuario;
+            $direccion = (isset($params->direccion)) ? $params->direccion : null;
+            $telefonoUsuario = (isset($params->telefonoUsuario)) ? $params->telefonoUsuario : null;
+            $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
 
-                $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
-                $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
-                $edad = (isset($params->edad)) ? $params->edad : null;
-                
-                $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
-               
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->id);
+            $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
+            $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
+            $edad = (isset($params->edad)) ? $params->edad : null;
+            $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
+            
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->id);
                 
  
                 if ($ciudadano) {
@@ -239,11 +238,8 @@ class CiudadanoController extends Controller
                     $municipioNacimientoId = (isset($params->municipioNacimientoId)) ? $params->municipioNacimientoId : null;
                     $municipioResidenciaId = (isset($params->municipioResidenciaId)) ? $params->municipioResidenciaId : null;
 
-                    $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
-                        $tipoIdentificacionUsuarioId
-                    );
+                    $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionUsuarioId);
                     $genero = $em->getRepository('AppBundle:Genero')->find($generoId);
-                    
                     $grupoSanguineo = $em->getRepository('AppBundle:GrupoSanguineo')->find($grupoSanguineoId);
                     $municipioNacimiento = $em->getRepository('AppBundle:Municipio')->find($municipioNacimientoId);
                     $municipioResidencia = $em->getRepository('AppBundle:Municipio')->find($municipioResidenciaId);

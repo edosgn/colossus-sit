@@ -240,11 +240,12 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit", name="vehiculo_edit")
+     * @Route("/edit", name="vehiculo_editar")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -252,18 +253,26 @@ class VehiculoController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            $placa = $params->placa;
+
+            // $placa = $params->placa;
             $numeroFactura = $params->numeroFactura;
+            $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
+            $marca = $params->marcaId; 
+            $linea = $params->lineaId; 
+            $clase = $params->claseId;
+            $carroceria = $params->carroceriaId;
+            $servicio = $params->servicioId;
+            $color = $params->colorId;
+            $combustible = $params->combustibleId;
+            $sedeOperativa = $params->sedeOperativaId;
             $numeroManifiesto = $params->numeroManifiesto;
+            $municipio = $params->municipioId;
             $cilindraje = $params->cilindraje;
             $modelo = $params->modelo;
             $motor = $params->motor;
             $chasis = $params->chasis;
             $serie = $params->serie;
-            // $tipoVehiculo = $params->tipoVehiculo;
-            $radioAccion = $params->radioAccion;
-            $modalidadTransporte = $params->modalidadTransporte;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
             $municipioId = $params->municipioId;
@@ -288,19 +297,26 @@ class VehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-
-
-            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             
+            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculo->getPlaca()->getNumero());
+            $radioAccion = $params->radioAccionId;
+            $modalidadTransporte = $params->modalidadTransporteId;
+            // $vehiculoId = $params->vehiculo->id;
+
+            
+            // $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
+            // $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
             if ($vehiculo!=null) {
                 $vehiculo->setPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
-                //$vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
-                $vehiculo->setFechaFactura($params->fechaFactura);
+                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
+                //$vehiculo->setFechaFactura($params->fechaFactura);
                 $vehiculo->setValor($valor);
                 $vehiculo->setNumeroManifiesto($numeroManifiesto);
-                //$vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
-                $vehiculo->setFechaManifiesto($params->fechaManifiesto);
+                $vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
+                //$vehiculo->setFechaManifiesto($params->fechaManifiesto);
                 $vehiculo->setCilindraje($cilindraje);
                 $vehiculo->setModelo($modelo);
                 $vehiculo->setMotor($motor);
@@ -308,7 +324,7 @@ class VehiculoController extends Controller
                 $vehiculo->setSerie($serie);
                 // $vehiculo->setTipoVehiculo($tipoVehiculo);
                 $vehiculo->setRadioAccion($radioAccion);
-                $vehiculo->setModalidadTRansporte($modalidadTransporte);
+                $vehiculo->setModalidadTransporte($modalidadTransporte);
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
                 $vehiculo->setSerie($serie);
                 $vehiculo->setSerie($serie);

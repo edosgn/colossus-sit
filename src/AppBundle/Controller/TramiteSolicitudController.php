@@ -99,7 +99,6 @@ class TramiteSolicitudController extends Controller
                 $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 $datos = $params->datos; 
-                //Captura llaves foraneas
                 $em = $this->getDoctrine()->getManager();
 
                 $tramiteSolicitud = new TramiteSolicitud();
@@ -112,8 +111,14 @@ class TramiteSolicitudController extends Controller
                 if ($params->solicitanteId) {
                     $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->solicitanteId);
                     $tramiteSolicitud->setSolicitante($propietario);
+                    $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+                    if ($ciudadanoId) {
+                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->ciudadanoId);
+                        $tramiteSolicitud->setCiudadano($ciudadano);
+                    }
                 }else{
-                    if ($params->datos->ciudadanoId) {
+                    $ciudadanoId = (isset($params->datos->ciudadanoId)) ? $params->datos->ciudadanoId : null;
+                    if ($ciudadanoId) {
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->datos->ciudadanoId);
                         $tramiteSolicitud->setCiudadano($ciudadano);
                     }
@@ -205,6 +210,30 @@ class TramiteSolicitudController extends Controller
         }
 
         return $this->redirectToRoute('tramitesolicitud_index');
+    }
+
+    /**
+     * Obtiene tramiteSolicitud segun id_vehiculo entities.
+     *
+     * @Route("/byvehiculo", name="tramitesolicitud_byvehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function getTramiteByIdVehiculo(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $idVehiculo = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);        
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $tramitesSolicitud, 
+        );
+        return $helpers->json($response);
     }
 
     /**

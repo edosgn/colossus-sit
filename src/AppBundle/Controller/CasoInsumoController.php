@@ -53,22 +53,25 @@ class CasoInsumoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
+            
                 $nombre = $params->nombre;
+                $moduloId = $params->moduloId;
+                $referencia = $params->referencia;
+                $tipo = $params->tipo;
+                $valor = $params->valor;
 
                 $em = $this->getDoctrine()->getManager();
                 $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneByNombre($params->nombre);
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
 
                 if ($casoInsumo==null) {
                     $casoInsumo = new CasoInsumo();
     
                     $casoInsumo->setNombre(strtoupper($nombre));
+                    $casoInsumo->setModulo($modulo);
+                    $casoInsumo->setReferencia($referencia);
+                    $casoInsumo->setValor($valor);
+                    $casoInsumo->setTipo($tipo);
                     $casoInsumo->setEstado(true);
     
                     $em->persist($casoInsumo);
@@ -145,13 +148,23 @@ class CasoInsumoController extends Controller
             $params = json_decode($json);
 
             $nombre = $params->nombre;
+            $moduloId = $params->moduloId;
+            $referencia = $params->referencia;
+            $tipo = $params->tipo;
+            $valor = $params->valor;
             $em = $this->getDoctrine()->getManager();
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->id);
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
+
             if ($casoInsumo!=null) {
 
-                $casoInsumo->setNombre($nombre);
+                $casoInsumo->setNombre(strtoupper($nombre));
+                $casoInsumo->setModulo($modulo);
+                $casoInsumo->setReferencia($referencia);
+                $casoInsumo->setValor($valor);
+                $casoInsumo->setTipo($tipo);
                 $casoInsumo->setEstado(true);
-               
+                
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($casoInsumo);
@@ -183,17 +196,19 @@ class CasoInsumoController extends Controller
     /**
      * Deletes a CasoInsumo entity.
      *
-     * @Route("/{id}/delete", name="casoInsumo_delete")
+     * @Route("/delete", name="casoInsumo_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();            
-            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($id);
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->id);
 
             $casoInsumo->setEstado(0);
             $em = $this->getDoctrine()->getManager();

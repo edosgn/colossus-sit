@@ -68,9 +68,12 @@ class PropietarioVehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();    
             $params = json_decode($json);
             $params = (object)$params;
-            // $datos = $params->datos;
             
-            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($params->vehiculo);
+            $cfgplaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(
+                array('numero' => $params->vehiculo->numero)
+            );
+
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($cfgplaca->getId());
 
             if ($tipoTraspaso == 1) {
                 $vehiculo->setLeasing(true);
@@ -175,7 +178,38 @@ class PropietarioVehiculoController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "propietarioVehiculo con nombre"." ".$propietarioVehiculo->getLicenciaTransito(), 
+                    'msj' => "propietarioVehiculo con nombre", 
+                    'data'=> $propietarioVehiculo,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a CiudadanoVehiculo entity.
+     *
+     * @Route("/show/propietario/vehiculo/{id}", name="proìetariobyvehiculo")
+     * @Method("POST")
+     */
+    public function showActionPropietarioByVehiculo(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findOneByVehiculo($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "propietarioVehiculo con nombre", 
                     'data'=> $propietarioVehiculo,
             );
         }else{
@@ -405,9 +439,14 @@ class PropietarioVehiculoController extends Controller
             $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(
                 array('id' => $ciudadanoId)
             );
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
-                            array('placa' => $vehiculoId)
+
+            
+            $cfgplaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(
+                array('numero' => $vehiculoId)
             );
+
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($cfgplaca->getId());
+
 
             $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
                 array('nit' => $empresaId)

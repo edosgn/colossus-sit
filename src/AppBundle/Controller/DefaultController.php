@@ -45,12 +45,13 @@ class DefaultController extends Controller
             array( 'vehiculo'=> $vehiculo->getId())
         );
 
-        
+        $tramitesSolicitudArray = false;
 
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
 
             foreach ((array)$tramiteSolicitud->getDatos() as $key => $value) {
                 $data[] = $key.":".$value;
+                // var_dump($value);
             }
 
             $tramitesSolicitudArray[]= array(

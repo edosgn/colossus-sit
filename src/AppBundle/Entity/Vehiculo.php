@@ -570,7 +570,12 @@ class Vehiculo
      */
     public function getCancelado()
     {
-        return $this->cancelado;
+        if ($this->cancelado) {
+            return $this->cancelado;
+        }else{
+            return "";
+        }
+        // return $this->cancelado;
     }
 
     /**
@@ -594,7 +599,13 @@ class Vehiculo
      */
     public function getMunicipio()
     {
-        return $this->municipio;
+        if ($this->municipio) {
+            return $this->municipio;
+        }else{
+            return "";
+        }
+
+        // return $this->municipio;
     }
 
     /**
@@ -618,7 +629,12 @@ class Vehiculo
      */
     public function getLinea()
     {
-        return $this->linea;
+        if ($this->linea) {
+            return $this->linea;
+        }else{
+            return "";
+        }
+        // return $this->linea;
     }
 
     /**
@@ -642,7 +658,13 @@ class Vehiculo
      */
     public function getServicio()
     {
-        return $this->servicio;
+        if ($this->servicio) {
+            return $this->servicio;
+        }else{
+            return "";
+        }
+
+        // return $this->servicio;
     }
 
     /**
@@ -666,7 +688,12 @@ class Vehiculo
      */
     public function getColor()
     {
-        return $this->color;
+        if ($this->color) {
+            return $this->color;
+        }else{
+            return "";
+        }
+        // return $this->color;
     }
 
     /**
@@ -690,7 +717,12 @@ class Vehiculo
      */
     public function getCombustible()
     {
-        return $this->combustible;
+        if ($this->combustible) {
+            return $this->combustible;
+        }else{
+            return "";
+        }
+        // return $this->combustible;
     }
 
     /**
@@ -714,7 +746,12 @@ class Vehiculo
      */
     public function getCarroceria()
     {
-        return $this->carroceria;
+        if ($this->carroceria) {
+            return $this->carroceria;
+        }else{
+            return "";
+        }
+        // return $this->carroceria;
     }
 
     /**
@@ -738,7 +775,12 @@ class Vehiculo
      */
     public function getClase()
     {
-        return $this->clase;
+        if ($this->clase) {
+            return $this->clase;
+        }else{
+            return "";
+        }
+        // return $this->clase;
     }
 
     /**
@@ -762,7 +804,12 @@ class Vehiculo
      */
     public function getPlaca()
     {
-        return $this->placa;
+        if ($this->placa) {
+            return $this->placa;
+        }else{
+            return "";
+        }
+        // return $this->placa;
     }
 
     /**
@@ -786,7 +833,11 @@ class Vehiculo
      */
     public function getSedeOperativa()
     {
-        return $this->sedeOperativa;
+        if ($this->sedeOperativa) {
+            return $this->sedeOperativa;
+        }else{
+            return "";
+        }
     }
 
     /**
@@ -810,7 +861,12 @@ class Vehiculo
      */
     public function getRadioAccion()
     {
-        return $this->radioAccion;
+        if ($this->radioAccion) {
+            return $this->radioAccion;
+        }else{
+            return "";
+        }
+        // return $this->radioAccion;
     }
 
     /**
@@ -834,6 +890,11 @@ class Vehiculo
      */
     public function getModalidadTransporte()
     {
-        return $this->modalidadTransporte;
+        if ($this->modalidadTransporte) {
+            return $this->modalidadTransporte;
+        }else{
+            return "";
+        }
+        // return $this->modalidadTransporte;
     }
 }

@@ -1,6 +1,26 @@
 app_licencia_conduccion:
     resource: "@AppBundle/Controller/LicenciaConduccionController.php"
     type:     annotation
+    
+app_vehiculo_limitacion:
+    resource: "@AppBundle/Controller/VehiculoLimitacionController.php"
+    type:     annotation
+
+app_limitacion_datos:
+    resource: "@AppBundle/Controller/LimitacionDatosController.php"
+    type:     annotation
+
+app_cfg_entidad_judicial:
+    resource: "@AppBundle/Controller/CfgEntidadJudicialController.php"
+    type:     annotation
+
+app_cfg_tipo_proceso:
+    resource: "@AppBundle/Controller/CfgTipoProcesoController.php"
+    type:     annotation
+
+app_limitacion:
+    resource: "@AppBundle/Controller/CfgLimitacionController.php"
+    type:     annotation
 
 app_cfg_licencia_conduccion_categoria:
     resource: "@AppBundle/Controller/CfgLicenciaConduccionCategoriaController.php"
