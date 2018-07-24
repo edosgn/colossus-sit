@@ -26,15 +26,23 @@ class VehiculoController extends Controller
     {        
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findBy(
-            array('estado' => 1)
-        );
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado vehiculo", 
-                    'data'=> $vehiculo,
+        $vehiculos = $em->getRepository('AppBundle:Vehiculo')->getOnlyVehiculos();
+
+        if($vehiculos){
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "listado vehiculo", 
+                'data'=> $vehiculos,
             );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "No existen registros"
+            );
+        }
+
          
         return $helpers->json($response);
 
@@ -258,8 +266,6 @@ class VehiculoController extends Controller
             $numeroFactura = $params->numeroFactura;
             $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
-            $marca = $params->marcaId; 
-            $linea = $params->lineaId; 
             $clase = $params->claseId;
             $carroceria = $params->carroceriaId;
             $servicio = $params->servicioId;
@@ -287,7 +293,7 @@ class VehiculoController extends Controller
             $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-            $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
+            $linea = $em->getRepository('AppBundle:Linea')->find($lineaId); 
             $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
@@ -295,19 +301,12 @@ class VehiculoController extends Controller
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $em = $this->getDoctrine()->getManager();
-
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculo->getPlaca()->getNumero());
-            $radioAccion = $params->radioAccionId;
-            $modalidadTransporte = $params->modalidadTransporteId;
-            // $vehiculoId = $params->vehiculo->id;
+            $radioAccionId = $params->radioAccion;
+            $modalidadTransporteId = $params->modalidadTransporte;
 
-            
-            // $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
-            // $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
             if ($vehiculo!=null) {
                 $vehiculo->setPlaca($CfgPlaca);
                 $vehiculo->setNumeroFactura($numeroFactura);
@@ -322,9 +321,14 @@ class VehiculoController extends Controller
                 $vehiculo->setMotor($motor);
                 $vehiculo->setChasis($chasis);
                 $vehiculo->setSerie($serie);
-                // $vehiculo->setTipoVehiculo($tipoVehiculo);
-                $vehiculo->setRadioAccion($radioAccion);
-                $vehiculo->setModalidadTransporte($modalidadTransporte);
+                if($radioAccionId != null){
+                    $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find($radioAccionId); 
+                    $vehiculo->setRadioAccion($radioAccion);
+                }
+                if($modalidadTransporteId != null){
+                    $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find($modalidadTransporteId); 
+                    $vehiculo->setRadioAccion($modalidadTransporte);
+                }
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
                 $vehiculo->setSerie($serie);
                 $vehiculo->setSerie($serie);

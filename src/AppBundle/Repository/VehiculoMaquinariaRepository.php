@@ -13,7 +13,6 @@ class VehiculoMaquinariaRepository extends \Doctrine\ORM\EntityRepository
     // 
     public function getVehiculoCampo()
     {   
-          
         $em = $this->getEntityManager();
         $dql = "SELECT vm
             FROM AppBundle:Vehiculo v, AppBundle:VehiculoMaquinaria vm

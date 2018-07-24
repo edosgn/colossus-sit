@@ -324,7 +324,7 @@ class VehiculoMaquinariaController extends Controller
     /**
      * Deletes a vehiculoMaquinaria entity.
      *
-     * @Route("/delete", name="vehiculomaquinaria_delete")
+     * @Route("/{id}/delete", name="vehiculomaquinaria_delete")
      * @Method("POST")
      */
     
@@ -338,7 +338,7 @@ class VehiculoMaquinariaController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            // var_dump($params);
+            // var_dump($json);
             // die();
             $em = $this->getDoctrine()->getManager();
 
@@ -346,8 +346,8 @@ class VehiculoMaquinariaController extends Controller
             $vehiculoId = $registroMaquinaria->getVehiculo();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
-            $vehiculo->setEstado(0);
-            $em = $this->getDoctrine()->getManager();
+                $vehiculo->setEstado(0);
+                $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);
                 $em->flush();
             $response = array(
