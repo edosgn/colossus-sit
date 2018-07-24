@@ -266,6 +266,30 @@ class VehiculoController extends Controller
             $serie = $params->serie;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
+            $municipioId = $params->municipioId;
+            $lineaId = $params->lineaId;
+            $servicioId = $params->servicioId;
+            $colorId = $params->colorId;
+            $combustibleId = $params->combustibleId;
+            $carroceriaId = $params->carroceriaId;
+            $sedeOperativaId = $params->sedeOperativaId;
+            $claseId = $params->claseId;
+            $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
+            $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
+            $em = $this->getDoctrine()->getManager();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
+            $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
+            $color = $em->getRepository('AppBundle:Color')->find($colorId);
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
+            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+            $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            
+            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculo->getPlaca()->getNumero());
             $radioAccion = $params->radioAccionId;
             $modalidadTransporte = $params->modalidadTransporteId;
             // $vehiculoId = $params->vehiculo->id;
@@ -276,63 +300,45 @@ class VehiculoController extends Controller
             // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             // $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
             if ($vehiculo!=null) {
-                
-            $fechaFactura = (isset($params->fechaFactura)) ? $params->fechaFactura: null;
-            $fechaFactura = new \DateTime($fechaFactura);
-            $fechaManifiesto = (isset($params->fechaManifiesto)) ? $params->fechaManifiesto: null;
-            $fechaManifiesto = new \DateTime($fechaManifiesto);
-                
-            $marca = $em->getRepository('AppBundle:Marca')->find($marca);
-            $linea = $em->getRepository('AppBundle:Linea')->find($linea);
-            $clase = $em->getRepository('AppBundle:Clase')->find($clase);
-            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
-            $servicio = $em->getRepository('AppBundle:Servicio')->find($servicio);
-            $color = $em->getRepository('AppBundle:Color')->find($color);
-            $combustible = $em->getRepository('AppBundle:Combustible')->find($combustible);
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativa);
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipio);
-            $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find($radioAccion);
-            $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find($modalidadTransporte);
-
-            // $vehiculo->setPlaca($CfgPlaca);
-            $vehiculo->setNumeroFactura($numeroFactura);
-            $vehiculo->setFechaFactura($fechaFactura);
-            $vehiculo->setValor($valor);
-            $vehiculo->setLinea($linea);
-            $vehiculo->setClase($clase);
-            $vehiculo->setCarroceria($carroceria);
-            $vehiculo->setServicio($servicio);
-            $vehiculo->setColor($color);
-            $vehiculo->setCombustible($combustible);
-            $vehiculo->setSedeOperativa($sedeOperativa);
-            $vehiculo->setNumeroManifiesto($numeroManifiesto);
-            $vehiculo->setMunicipio($municipio);
-            $vehiculo->setFechaManifiesto($fechaManifiesto);
-            $vehiculo->setModelo($modelo);
-            $vehiculo->setMotor($motor);
-            $vehiculo->setChasis($chasis);
-            $vehiculo->setSerie($serie);
-            $vehiculo->setVin($vin);
-            $vehiculo->setNumeroPasajeros($numeroPasajeros);
-            $vehiculo->setModalidadTransporte($modalidadTransporte);
-            $vehiculo->setRadioAccion($radioAccion);
-            $vehiculo->setEstado(true);
-            $em->flush();
-            
-                //$vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
-                //$vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
-                // $vehiculo->setFechaManifiesto($params->fechaManifiesto);
-                // $vehiculo->setCilindraje($cilindraje);
-                // $vehiculo->setSerie($serie);
+                $vehiculo->setPlaca($CfgPlaca);
+                $vehiculo->setNumeroFactura($numeroFactura);
+                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
+                //$vehiculo->setFechaFactura($params->fechaFactura);
+                $vehiculo->setValor($valor);
+                $vehiculo->setNumeroManifiesto($numeroManifiesto);
+                $vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
+                //$vehiculo->setFechaManifiesto($params->fechaManifiesto);
+                $vehiculo->setCilindraje($cilindraje);
+                $vehiculo->setModelo($modelo);
+                $vehiculo->setMotor($motor);
+                $vehiculo->setChasis($chasis);
+                $vehiculo->setSerie($serie);
                 // $vehiculo->setTipoVehiculo($tipoVehiculo);
-                // $vehiculo->setPignorado($pignorado);
-                // $vehiculo->setCancelado($cancelado);
-            
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Vehiculo editado con exito", 
-            );
+                $vehiculo->setRadioAccion($radioAccion);
+                $vehiculo->setModalidadTransporte($modalidadTransporte);
+                $vehiculo->setNumeroPasajeros($numeroPasajeros);
+                $vehiculo->setSerie($serie);
+                $vehiculo->setSerie($serie);
+                $vehiculo->setVin($vin);
+                $vehiculo->setNumeroPasajeros($numeroPasajeros);
+                $vehiculo->setMunicipio($municipio);
+                $vehiculo->setLinea($linea);
+                $vehiculo->setServicio($servicio);
+                $vehiculo->setColor($color);
+                $vehiculo->setCombustible($combustible);
+                $vehiculo->setCarroceria($carroceria);
+                $vehiculo->setSedeOperativa($sedeOperativa);
+                $vehiculo->setClase($clase);
+                $vehiculo->setPignorado($pignorado);
+                $vehiculo->setCancelado($cancelado);
+                $vehiculo->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con exito", 
+                );
             }else{
                 $response = array(
                     'status' => 'error',

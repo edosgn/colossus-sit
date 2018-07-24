@@ -1,3 +1,11 @@
+app_vehiculo_limitacion:
+    resource: "@AppBundle/Controller/VehiculoLimitacionController.php"
+    type:     annotation
+
+app_limitacion_datos:
+    resource: "@AppBundle/Controller/LimitacionDatosController.php"
+    type:     annotation
+
 app_cfg_entidad_judicial:
     resource: "@AppBundle/Controller/CfgEntidadJudicialController.php"
     type:     annotation
