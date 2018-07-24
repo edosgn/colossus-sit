@@ -169,10 +169,10 @@ class CiudadanoController extends Controller
     /**
      * Finds and displays a Ciudadano entity.
      *
-     * @Route("/show/{id}", name="ciudadano_show")
+     * @Route("/show", name="ciudadano_show")
      * @Method("POST")
      */
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -180,108 +180,12 @@ class CiudadanoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($id);
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByEstado(true);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'data'=> $ciudadano,
             );
-        }else{
-            $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
-        }
-        return $helpers->json($response);
-    }
-
-    /**
-     * busca cuidadano por Identificacion.
-     *
-     * @Route("/cedula", name="ciudadano_show_ide")
-     * @Method("POST")
-     */
-    public function ciudadanoPorIdentificacion(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-
-        if ($authCheck == true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
-                array('identificacion' => $params->numeroIdentificacion)
-            );
-
-            if ($usuario!=null) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $usuario,
-            );
-            }else{
-                 $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Identificacion no encontrada en la base de datos", 
-                );
-            }
-
-            
-        }else{
-            $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
-        }
-        return $helpers->json($response);
-    }
-
-    /**
-     * busca cuidadano por Identificacion.
-     *
-     * @Route("/acreedor/id", name="acreedor_ciudadano_show_ide")
-     * @Method("POST")
-     */
-    public function ciudadanoPorId(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-
-        if ($authCheck == true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
-                array('identificacion' => $params)
-            );
-
-            if ($usuario!=null) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $usuario,
-            );
-            }else{
-                 $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Identificacion no encontrada en la base de datos", 
-                );
-            }
-
-            
         }else{
             $response = array(
                     'status' => 'error',
@@ -450,6 +354,8 @@ class CiudadanoController extends Controller
         ;
     }
 
+    /* ========================================================== */
+
     /**
      * datos para select 2
      *
@@ -472,6 +378,97 @@ class CiudadanoController extends Controller
        return $helpers->json($response);
     }
 
+     /**
+     * busca cuidadano por Identificacion.
+     *
+     * @Route("/search/identificacion", name="ciudadano_search_identificacion")
+     * @Method({"GET", "POST"})
+     */
+    public function searchIdentificacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                array('identificacion' => $params->numeroIdentificacion)
+            );
+
+            if ($usuario!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $usuario,
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Identificacion no encontrada en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca cuidadano por Identificacion.
+     *
+     * @Route("/acreedor/id", name="acreedor_ciudadano_show_ide")
+     * @Method("POST")
+     */
+    public function ciudadanoPorId(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+                array('identificacion' => $params)
+            );
+
+            if ($usuario!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $usuario,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Identificacion no encontrada en la base de datos", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 
     /**
      * Deletes a Ciudadano entity.
@@ -518,52 +515,4 @@ class CiudadanoController extends Controller
         }
         return $helpers->json($response);
     }
-
-    /**
-     * Displays a form to edit an existing Ciudadano entity.
-     *
-     * @Route("/edit/licencia/conduccion", name="ciudadano_edit_licencia_conduccion")
-     * @Method({"GET", "POST"})
-     */
-    public function editLicenciaConduccionAction(Request $request)
-    {   
-        $em = $this->getDoctrine()->getManager();
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->solicitanteId);
-                
-            if ($ciudadano) {
-                $ciudadano->setLicenciaConduccion($params->licenciaConduccion);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Licencia de conducción actualizada con exito!", 
-                    'data'=> $ciudadano,
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
-                );
-            }
-        }else{
-            $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar ciudadano", 
-                );
-        }
-
-        return $helpers->json($response);
-    }
-
 }

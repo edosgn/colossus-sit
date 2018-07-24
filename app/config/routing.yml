@@ -1,3 +1,7 @@
+app_licencia_conduccion:
+    resource: "@AppBundle/Controller/LicenciaConduccionController.php"
+    type:     annotation
+    
 app_vehiculo_limitacion:
     resource: "@AppBundle/Controller/VehiculoLimitacionController.php"
     type:     annotation
