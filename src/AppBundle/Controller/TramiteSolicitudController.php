@@ -118,7 +118,8 @@ class TramiteSolicitudController extends Controller
                         $tramiteSolicitud->setCiudadano($ciudadano);
                     }
                 }else{
-                    if ($params->datos->ciudadanoId) {
+                    $ciudadanoId = (isset($params->datos->ciudadanoId)) ? $params->datos->ciudadanoId : null;
+                    if ($ciudadanoId) {
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->datos->ciudadanoId);
                         $tramiteSolicitud->setCiudadano($ciudadano);
                     }
