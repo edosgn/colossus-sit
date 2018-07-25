@@ -151,16 +151,31 @@ class MpersonalFuncionarioController extends Controller
      * Finds and displays a mpersonalFuncionario entity.
      *
      * @Route("/{id}/show", name="mpersonalfuncionario_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(MpersonalFuncionario $mpersonalFuncionario)
+    public function showAction($id)
     {
-        $deleteForm = $this->createDeleteForm($mpersonalFuncionario);
+        $helpers = $this->get("app.helpers");
+        
+        $em = $this->getDoctrine()->getManager();
+        $mpersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($id);
 
-        return $this->render('mpersonalfuncionario/show.html.twig', array(
-            'mpersonalFuncionario' => $mpersonalFuncionario,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($mpersonalFuncionario) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado", 
+                'data' => $mpersonalFuncionario
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Registro no encontrado", 
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -350,8 +365,6 @@ class MpersonalFuncionarioController extends Controller
                     'data'=> $funcionarios,
                 );
             }
-
-            
         }else{
             $response = array(
                     'status' => 'error',
