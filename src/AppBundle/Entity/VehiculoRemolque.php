@@ -59,6 +59,13 @@ class VehiculoRemolque
     /**
      * @var string
      *
+     * @ORM\Column(name="fichaTecnica", type="string", length=255)
+     */
+    private $fichaTecnica;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="altoTotal", type="string", length=255)
      */
     private $altoTotal;
@@ -82,6 +89,7 @@ class VehiculoRemolque
      */
     private $vehiculo;
 
+    
     /**
      * Get id
      *
@@ -91,6 +99,8 @@ class VehiculoRemolque
     {
         return $this->id;
     }
+
+    
 
     /**
      * Set pesoBrutoVehiculo
@@ -210,6 +220,30 @@ class VehiculoRemolque
     public function getNumeroLlantas()
     {
         return $this->numeroLlantas;
+    }
+
+    /**
+     * Set fichaTecnica
+     *
+     * @param string $fichaTecnica
+     *
+     * @return VehiculoRemolque
+     */
+    public function setFichaTecnica($fichaTecnica)
+    {
+        $this->fichaTecnica = $fichaTecnica;
+
+        return $this;
+    }
+
+    /**
+     * Get fichaTecnica
+     *
+     * @return string
+     */
+    public function getFichaTecnica()
+    {
+        return $this->fichaTecnica;
     }
 
     /**

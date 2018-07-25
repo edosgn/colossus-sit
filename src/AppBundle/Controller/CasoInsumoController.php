@@ -25,15 +25,19 @@ class CasoInsumoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $casoInsumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
             array('estado' => 1)
         );
+
+        $response['data'] = array();
+
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado casoInsumos", 
-                    'data'=> $casoInsumos,
-            );
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "listado casoInsumos", 
+                'data'=> $casoInsumos,
+        );
          
         return $helpers->json($response);
     }
@@ -54,41 +58,40 @@ class CasoInsumoController extends Controller
             $params = json_decode($json);
 
             
-                $nombre = $params->nombre;
-                $moduloId = $params->moduloId;
-                $referencia = $params->referencia;
-                $tipo = $params->tipo;
-                $valor = $params->valor;
-
                 $em = $this->getDoctrine()->getManager();
-                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneByNombre($params->nombre);
-                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
-
-                if ($casoInsumo==null) {
+                
+                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneByNombre(
+                    $params->nombre
+                );
+                
+                if (!$casoInsumo) {
                     $casoInsumo = new CasoInsumo();
     
-                    $casoInsumo->setNombre(strtoupper($nombre));
+                    $casoInsumo->setNombre(strtoupper($params->nombre));
+
+                    $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
                     $casoInsumo->setModulo($modulo);
-                    $casoInsumo->setReferencia($referencia);
-                    $casoInsumo->setValor($valor);
-                    $casoInsumo->setTipo($tipo);
+
+                    $casoInsumo->setReferencia($params->referencia);
+                    $casoInsumo->setValor($params->valor);
+                    $casoInsumo->setTipo($params->tipo);
                     $casoInsumo->setEstado(true);
     
                     $em->persist($casoInsumo);
                     $em->flush();
+
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "CasoInsumo creado con exito", 
+                        'msj' => "Registro creado con exito", 
                     );
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'msj' => "El nombre del casoInsumo ya se encuentra registrado", 
+                        'msj' => "El registro ya se encuentra registrado", 
                     );
                 }
-
             //}
         }else{
             $response = array(
@@ -254,19 +257,22 @@ class CasoInsumoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
-        array('estado' => 1,'tipo'=>'Sustrato')
-    );
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
+            array('estado' => 1,'tipo'=>'Sustrato')
+        );
+
+        $response = null;
      
-      foreach ($insumos as $key => $insumo) {
-        $response[$key] = array(
-            'value' => $insumo->getId(),
-            'label' => $insumo->getNombre(),
+        foreach ($insumos as $key => $insumo) {
+            $response[$key] = array(
+                'value' => $insumo->getId(),
+                'label' => $insumo->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -277,19 +283,22 @@ class CasoInsumoController extends Controller
      */
     public function selectInsumoAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
-        array('estado' => 1,'tipo'=>'Insumo')
-    );
+        $helpers = $this->get("app.helpers");
+        
+        $em = $this->getDoctrine()->getManager();
+        $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
+            array('estado' => 1,'tipo'=>'Insumo')
+        );
+
+        $response = null;
      
-      foreach ($insumos as $key => $insumo) {
-        $response[$key] = array(
-            'value' => $insumo->getId(),
-            'label' => $insumo->getNombre(),
+        foreach ($insumos as $key => $insumo) {
+            $response[$key] = array(
+                'value' => $insumo->getId(),
+                'label' => $insumo->getNombre(),
             );
-      }
-       return $helpers->json($response); 
+        }
+        return $helpers->json($response); 
     } 
     
 }

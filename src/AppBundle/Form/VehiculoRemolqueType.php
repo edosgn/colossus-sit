@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class TipoVehiculoType extends AbstractType
+class VehiculoRemolqueType extends AbstractType
 {
     
     /**
@@ -14,14 +14,14 @@ class TipoVehiculoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('estado');
+        $builder->add('pesoBrutoVehiculo')->add('cargaUtilMaxima')->add('rodaje')->add('numeroEjes')->add('numeroLlantas')->add('fichaTecnica')->add('altoTotal')->add('largoTotal')->add('anchoTotal')->add('vehiculo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\TipoVehiculo'
+            'data_class' => 'AppBundle\Entity\VehiculoRemolque'
         ));
     }
 
@@ -30,7 +30,7 @@ class TipoVehiculoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_tipovehiculo';
+        return 'appbundle_vehiculoremolque';
     }
 
 

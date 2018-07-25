@@ -157,6 +157,9 @@ class LicenciaConduccion
      */
     public function getFechaExpedicion()
     {
+        if ($this->fechaExpedicion) {
+           return $this->fechaExpedicion->format('Y-m-d');
+        }
         return $this->fechaExpedicion;
     }
 
