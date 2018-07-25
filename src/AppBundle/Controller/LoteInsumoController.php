@@ -25,9 +25,12 @@ class LoteInsumoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
             array('estado' => 'registrado','sedeOperativa'=>!null)
         );
+
+        $response['data'] = array();
 
         $response = array(
                     'status' => 'success',
