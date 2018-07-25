@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TipoVehiculoControllerTest extends WebTestCase
 {
+    
     /*
     public function testCompleteScenario()
     {

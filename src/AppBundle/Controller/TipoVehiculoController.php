@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class TipoVehiculoController extends Controller
 {
+    
     /**
      * Lists all tipoVehiculo entities.
      *
