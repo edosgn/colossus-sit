@@ -94,7 +94,7 @@ class LimitacionDatos
     /**
      * @var string
      *
-     * @ORM\Column(name="estado", type="string", length=255)
+     * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
 

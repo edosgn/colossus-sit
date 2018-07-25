@@ -26,15 +26,23 @@ class VehiculoController extends Controller
     {        
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findBy(
-            array('estado' => 1)
-        );
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado vehiculo", 
-                    'data'=> $vehiculo,
+        $vehiculos = $em->getRepository('AppBundle:Vehiculo')->getOnlyVehiculos();
+
+        if($vehiculos){
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "listado vehiculo", 
+                'data'=> $vehiculos,
             );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "No existen registros"
+            );
+        }
+
          
         return $helpers->json($response);
 

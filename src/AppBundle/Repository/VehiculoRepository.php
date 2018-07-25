@@ -67,4 +67,26 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         ));
         return $consulta->getOneOrNullResult();
     }
+
+    //Busca todos los vehiculos que no sean ni maquinaria ni remolques
+    public function getOnlyVehiculos()
+    {   
+        $em = $this->getEntityManager();
+        $dql =  "SELECT v
+                FROM AppBundle:Vehiculo v                              
+                WHERE v.estado = true AND
+                v.id NOT IN
+                (SELECT IDENTITY(vm.vehiculo)            
+                FROM AppBundle:VehiculoMaquinaria vm                   
+                WHERE vm.vehiculo = v.id) AND v.id NOT IN
+                (SELECT IDENTITY(vr.vehiculo)            
+                FROM AppBundle:VehiculoRemolque vr                   
+                WHERE vr.vehiculo = v.id)";
+
+
+
+
+        $consulta = $em->createQuery($dql);
+        return $consulta->getResult();
+    }
 }
