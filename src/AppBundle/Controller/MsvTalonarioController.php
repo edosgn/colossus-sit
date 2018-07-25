@@ -83,10 +83,17 @@ class MsvTalonarioController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
 
-                for ($consecutivo=$talonario->getRangoini(); $consecutivo <= $talonario->getRangoFin(); $consecutivo++) { 
-                   $nuevoConsecutivo = $consecutivo;
-                
+                $divipo = $sedeOperativa->getCodigoDivipo();
 
+                for ($consecutivo = $talonario->getRangoini(); $consecutivo <= $talonario->getRangoFin(); $consecutivo++) { 
+
+                    $longitud = (20 - (strlen($divipo)+strlen($consecutivo)));
+                    if ($longitud < 20) {
+                        $nuevoConsecutivo = $divipo.str_pad($consecutivo, $longitud, '0', STR_PAD_LEFT);
+                    }else{
+                        $nuevoConsecutivo = $divipo.$consecutivo;
+                    }
+                
                     $msvTConsecutivo = new MsvTConsecutivo();
 
                     $msvTConsecutivo->setMsvTalonario($talonario);
