@@ -8,6 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class VehiculoRemolqueType extends AbstractType
 {
+    
     /**
      * {@inheritdoc}
      */

@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\CfgEntidadJudicial;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cfgentidadjudicial controller.
@@ -22,6 +22,7 @@ class CfgEntidadJudicialController extends Controller
      */
     public function indexAction()
     {
+        $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $cfgEntidadesJudiciales = $em->getRepository('AppBundle:CfgEntidadJudicial')->findBy(
@@ -32,7 +33,7 @@ class CfgEntidadJudicialController extends Controller
             'status' => 'success',
             'code' => 200,
             'msj' => "lista de entidades judiciales",
-            'data' => $cfgEntidadesJudiciales, 
+            'data' => $cfgEntidadesJudiciales,
         );
         return $helpers->json($response);
     }
@@ -48,8 +49,8 @@ class CfgEntidadJudicialController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
             // var_dump($params);
             // die();
@@ -69,19 +70,19 @@ class CfgEntidadJudicialController extends Controller
             $em->persist($cfgEntidadJudicial);
             $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito",
+            );
             // }
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
@@ -100,17 +101,17 @@ class CfgEntidadJudicialController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $cfgEntidadJudicial,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro encontrado",
+                'data' => $cfgEntidadJudicial,
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -127,8 +128,8 @@ class CfgEntidadJudicialController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $nombre = $params->nombre;
@@ -136,10 +137,10 @@ class CfgEntidadJudicialController extends Controller
             $municipioId = $params->municipioId;
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-            
+
             $cfgEntidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($params->id);
 
-            if ($cfgEntidadJudicial!=null) {
+            if ($cfgEntidadJudicial != null) {
                 $cfgEntidadJudicial->setNombre($nombre);
                 $cfgEntidadJudicial->setCodigoDivipo($codigoDivipo);
                 $cfgEntidadJudicial->setMunicipio($municipio);
@@ -147,25 +148,25 @@ class CfgEntidadJudicialController extends Controller
                 $em->persist($cfgEntidadJudicial);
                 $em->flush();
 
-                 $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro actualizado con exito", 
-                        'data'=> $cfgEntidadJudicial,
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro actualizado con exito",
+                    'data' => $cfgEntidadJudicial,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
+                    'msj' => "El registro no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco",
+            );
         }
 
         return $helpers->json($response);
@@ -182,25 +183,25 @@ class CfgEntidadJudicialController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
 
             $cfgEntidadJudicial->setEstado(false);
-            
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($cfgEntidadJudicial);
             $em->flush();
             $response = array(
                 'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro eliminado con exito", 
+                'code' => 200,
+                'msj' => "Registro eliminado con exito",
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -229,18 +230,18 @@ class CfgEntidadJudicialController extends Controller
      */
     public function selectAction()
     {
-
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $cfgEntidadesJudiciales = $em->getRepository('AppBundle:CfgEntidadJudicial')->findBy(
-        array('estado' => 1)
-    );
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $cfgEntidadesJudiciales = $em->getRepository('AppBundle:CfgEntidadJudicial')->findBy(
+            array('estado' => 1)
+        );
         foreach ($cfgEntidadesJudiciales as $key => $cfgEntidadJudicial) {
             $consecutive = substr($cfgEntidadJudicial->getCodigoDivipo(), 0, 12);
             $response[$key] = array(
                 'value' => $cfgEntidadJudicial->getId(),
-                'label' => $cfgEntidadJudicial->getCodigoDivipo()."_".$cfgEntidadJudicial->getNombre()."  -  ".$sedeOperativa->getMunicipio(),
-                'consecutive' => $consecutive
+                'label' => $cfgEntidadJudicial->getCodigoDivipo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $sedeOperativa->getMunicipio(),
+                'consecutive' => $consecutive,
             );
         }
         return $helpers->json($response);
