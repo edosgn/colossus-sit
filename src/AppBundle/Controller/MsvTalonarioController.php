@@ -30,13 +30,15 @@ class MsvTalonarioController extends Controller
         $msvTalonarios = $em->getRepository('AppBundle:MsvTalonario')->findBy(
             array('estado' => true)
         );
-        $response=null;
+        
+        $response['data'] = array();
+
         if ($msvTalonarios) {
             $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => 'listado talonarios',
-                        'data' => $msvTalonarios,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => 'listado talonarios',
+                'data' => $msvTalonarios,
             );
         }
         return $helpers->json($response);
@@ -75,7 +77,7 @@ class MsvTalonarioController extends Controller
                 $talonario->setTotal($params->total);
                 $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
                 $talonario->setNResolucion($params->nResolucion);
-                $talonario->setEstado('Disponible');
+                $talonario->setEstado(true);
                 
 
                 $em = $this->getDoctrine()->getManager();
@@ -85,38 +87,29 @@ class MsvTalonarioController extends Controller
                    $nuevoConsecutivo = $consecutivo;
                 
 
-                $msvTConsecutivo = new MsvTConsecutivo();
+                    $msvTConsecutivo = new MsvTConsecutivo();
 
-                $msvTConsecutivo->setMsvTalonario($talonario);
-                $msvTConsecutivo->setConsecutivo($nuevoConsecutivo);
-                $msvTConsecutivo->setSedeOperativa($sedeOperativa);
-                $msvTConsecutivo->setActivo(true);
-                $msvTConsecutivo->setEstado('Disponible');
+                    $msvTConsecutivo->setMsvTalonario($talonario);
+                    $msvTConsecutivo->setConsecutivo($nuevoConsecutivo);
+                    $msvTConsecutivo->setSedeOperativa($sedeOperativa);
+                    $msvTConsecutivo->setActivo(true);
+                    $msvTConsecutivo->setEstado(true);
 
-                $em->persist($msvTConsecutivo);
-                $em->flush();
+                    $em->persist($msvTConsecutivo);
+                    $em->flush();
                 }
-
-                
             }else{
-
-                
                 $msvTalonario->setSedeOperativa($sedeOperativa);
                 $msvTalonario->setrangoini($params->rangoini);
                 $msvTalonario->setrangofin($params->rangofin);
                 $msvTalonario->setTotal($params->total);
                 $msvTalonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
                 $msvTalonario->setNResolucion($params->nResolucion);
-
-                $msvTalonario->setEstado('Disponible');
-                
+                $msvTalonario->setEstado(true);
                 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($msvTalonario);
-                $em->flush();
-
-                
-                
+                $em->flush();              
             }
                 $response = array(
                     'status' => 'success',
