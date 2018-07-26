@@ -20,49 +20,6 @@ class VehiculoRemolque
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="pesoVacio", type="string", length=255)
-     */
-    private $pesoVacio;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cargaUtil", type="string", length=255)
-     */
-    private $cargaUtil;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="referencia", type="string", length=255)
-     */
-    private $referencia;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroEjes", type="string", length=255)
-     */
-    private $numeroEjes;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroFth", type="string", length=255)
-     */
-    private $numeroFth;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="rut", type="string", length=255)
-     */
-    private $rut;
-
     
     /**
      * @var string
@@ -85,37 +42,59 @@ class VehiculoRemolque
      */
     private $ancho;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroEjes", type="string", length=255)
+     */
+    private $numeroEjes;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cargaUtil", type="string", length=255)
+     */
+    private $cargaUtil;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\ciudadano", inversedBy="vehiculosRemolques") */
-    private $usuario;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pesoVacio", type="string", length=255)
+     */
+    private $pesoVacio;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculosRemolques") */
-    private $clase;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="referencia", type="string", length=255)
+     */
+    private $referencia;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CondicionIngreso", inversedBy="vehiculosRemolques") */
-    private $condicionIngreso;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroFth", type="string", length=255)
+     */
+    private $numeroFth;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="rut", type="string", length=255)
+     */
+    private $rut;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgOrigenRegistro", inversedBy="vehiculosRemolques") */
     private $origenRegistro;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="vehiculosRemolques") */
-    private $linea;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="vehiculosRemolques") */
-    private $carroceria;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgPlaca", inversedBy="vehiculosRemolques") */
-    private $placa;
-
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CondicionIngreso", inversedBy="vehiculosRemolques") */
+    private $condicionIngreso;
+    
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
      */
     private $vehiculo;
-
-   
     
-
     /**
      * Get id
      *
@@ -124,150 +103,6 @@ class VehiculoRemolque
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set pesoVacio
-     *
-     * @param string $pesoVacio
-     *
-     * @return VehiculoRemolque
-     */
-    public function setPesoVacio($pesoVacio)
-    {
-        $this->pesoVacio = $pesoVacio;
-
-        return $this;
-    }
-
-    /**
-     * Get pesoVacio
-     *
-     * @return string
-     */
-    public function getPesoVacio()
-    {
-        return $this->pesoVacio;
-    }
-
-    /**
-     * Set cargaUtil
-     *
-     * @param string $cargaUtil
-     *
-     * @return VehiculoRemolque
-     */
-    public function setCargaUtil($cargaUtil)
-    {
-        $this->cargaUtil = $cargaUtil;
-
-        return $this;
-    }
-
-    /**
-     * Get cargaUtil
-     *
-     * @return string
-     */
-    public function getCargaUtil()
-    {
-        return $this->cargaUtil;
-    }
-
-    /**
-     * Set referencia
-     *
-     * @param string $referencia
-     *
-     * @return VehiculoRemolque
-     */
-    public function setReferencia($referencia)
-    {
-        $this->referencia = $referencia;
-
-        return $this;
-    }
-
-    /**
-     * Get referencia
-     *
-     * @return string
-     */
-    public function getReferencia()
-    {
-        return $this->referencia;
-    }
-
-    /**
-     * Set numeroEjes
-     *
-     * @param string $numeroEjes
-     *
-     * @return VehiculoRemolque
-     */
-    public function setNumeroEjes($numeroEjes)
-    {
-        $this->numeroEjes = $numeroEjes;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroEjes
-     *
-     * @return string
-     */
-    public function getNumeroEjes()
-    {
-        return $this->numeroEjes;
-    }
-
-    /**
-     * Set numeroFth
-     *
-     * @param string $numeroFth
-     *
-     * @return VehiculoRemolque
-     */
-    public function setNumeroFth($numeroFth)
-    {
-        $this->numeroFth = $numeroFth;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroFth
-     *
-     * @return string
-     */
-    public function getNumeroFth()
-    {
-        return $this->numeroFth;
-    }
-
-    /**
-     * Set rut
-     *
-     * @param string $rut
-     *
-     * @return VehiculoRemolque
-     */
-    public function setRut($rut)
-    {
-        $this->rut = $rut;
-
-        return $this;
-    }
-
-    /**
-     * Get rut
-     *
-     * @return string
-     */
-    public function getRut()
-    {
-        return $this->rut;
     }
 
     /**
@@ -343,75 +178,147 @@ class VehiculoRemolque
     }
 
     /**
-     * Set usuario
+     * Set numeroEjes
      *
-     * @param \AppBundle\Entity\ciudadano $usuario
+     * @param string $numeroEjes
      *
      * @return VehiculoRemolque
      */
-    public function setUsuario(\AppBundle\Entity\ciudadano $usuario = null)
+    public function setNumeroEjes($numeroEjes)
     {
-        $this->usuario = $usuario;
+        $this->numeroEjes = $numeroEjes;
 
         return $this;
     }
 
     /**
-     * Get usuario
+     * Get numeroEjes
      *
-     * @return \AppBundle\Entity\ciudadano
+     * @return string
      */
-    public function getUsuario()
+    public function getNumeroEjes()
     {
-        return $this->usuario;
+        return $this->numeroEjes;
     }
 
     /**
-     * Set clase
+     * Set cargaUtil
      *
-     * @param \AppBundle\Entity\Clase $clase
+     * @param string $cargaUtil
      *
      * @return VehiculoRemolque
      */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    public function setCargaUtil($cargaUtil)
     {
-        $this->clase = $clase;
+        $this->cargaUtil = $cargaUtil;
 
         return $this;
     }
 
     /**
-     * Get clase
+     * Get cargaUtil
      *
-     * @return \AppBundle\Entity\Clase
+     * @return string
      */
-    public function getClase()
+    public function getCargaUtil()
     {
-        return $this->clase;
+        return $this->cargaUtil;
     }
 
     /**
-     * Set condicionIngreso
+     * Set pesoVacio
      *
-     * @param \AppBundle\Entity\CondicionIngreso $condicionIngreso
+     * @param string $pesoVacio
      *
      * @return VehiculoRemolque
      */
-    public function setCondicionIngreso(\AppBundle\Entity\CondicionIngreso $condicionIngreso = null)
+    public function setPesoVacio($pesoVacio)
     {
-        $this->condicionIngreso = $condicionIngreso;
+        $this->pesoVacio = $pesoVacio;
 
         return $this;
     }
 
     /**
-     * Get condicionIngreso
+     * Get pesoVacio
      *
-     * @return \AppBundle\Entity\CondicionIngreso
+     * @return string
      */
-    public function getCondicionIngreso()
+    public function getPesoVacio()
     {
-        return $this->condicionIngreso;
+        return $this->pesoVacio;
+    }
+
+    /**
+     * Set referencia
+     *
+     * @param string $referencia
+     *
+     * @return VehiculoRemolque
+     */
+    public function setReferencia($referencia)
+    {
+        $this->referencia = $referencia;
+
+        return $this;
+    }
+
+    /**
+     * Get referencia
+     *
+     * @return string
+     */
+    public function getReferencia()
+    {
+        return $this->referencia;
+    }
+
+    /**
+     * Set numeroFth
+     *
+     * @param string $numeroFth
+     *
+     * @return VehiculoRemolque
+     */
+    public function setNumeroFth($numeroFth)
+    {
+        $this->numeroFth = $numeroFth;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroFth
+     *
+     * @return string
+     */
+    public function getNumeroFth()
+    {
+        return $this->numeroFth;
+    }
+
+    /**
+     * Set rut
+     *
+     * @param string $rut
+     *
+     * @return VehiculoRemolque
+     */
+    public function setRut($rut)
+    {
+        $this->rut = $rut;
+
+        return $this;
+    }
+
+    /**
+     * Get rut
+     *
+     * @return string
+     */
+    public function getRut()
+    {
+        return $this->rut;
     }
 
     /**
@@ -439,75 +346,27 @@ class VehiculoRemolque
     }
 
     /**
-     * Set linea
+     * Set condicionIngreso
      *
-     * @param \AppBundle\Entity\Linea $linea
+     * @param \AppBundle\Entity\CondicionIngreso $condicionIngreso
      *
      * @return VehiculoRemolque
      */
-    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    public function setCondicionIngreso(\AppBundle\Entity\CondicionIngreso $condicionIngreso = null)
     {
-        $this->linea = $linea;
+        $this->condicionIngreso = $condicionIngreso;
 
         return $this;
     }
 
     /**
-     * Get linea
+     * Get condicionIngreso
      *
-     * @return \AppBundle\Entity\Linea
+     * @return \AppBundle\Entity\CondicionIngreso
      */
-    public function getLinea()
+    public function getCondicionIngreso()
     {
-        return $this->linea;
-    }
-
-    /**
-     * Set carroceria
-     *
-     * @param \AppBundle\Entity\Carroceria $carroceria
-     *
-     * @return VehiculoRemolque
-     */
-    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
-    {
-        $this->carroceria = $carroceria;
-
-        return $this;
-    }
-
-    /**
-     * Get carroceria
-     *
-     * @return \AppBundle\Entity\Carroceria
-     */
-    public function getCarroceria()
-    {
-        return $this->carroceria;
-    }
-
-    /**
-     * Set placa
-     *
-     * @param \AppBundle\Entity\CfgPlaca $placa
-     *
-     * @return VehiculoRemolque
-     */
-    public function setPlaca(\AppBundle\Entity\CfgPlaca $placa = null)
-    {
-        $this->placa = $placa;
-
-        return $this;
-    }
-
-    /**
-     * Get placa
-     *
-     * @return \AppBundle\Entity\CfgPlaca
-     */
-    public function getPlaca()
-    {
-        return $this->placa;
+        return $this->condicionIngreso;
     }
 
     /**
