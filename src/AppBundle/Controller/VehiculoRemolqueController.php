@@ -119,6 +119,57 @@ class VehiculoRemolqueController extends Controller
     }
 
     /**
+     * Displays a form to edit an existing VehiculoRemolque entity.
+     *
+     * @Route("/transformacion", name="vehiculo_transformacion")
+     * @Method({"GET", "POST"})
+     */
+    public function transformacionVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            var_dump($params);
+            die();
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->idVehiculo);
+            $vehiculoRemolque = $em->getRepository("AppBundle:VehiculoRemolque")->findByVehiculo($params->idVehiculo);
+            
+            if ($vehiculoRemolque!=null) {                
+                $vehiculoRemolque->setVehiculo($vehiculo);
+                $vehiculoRemolque->setNumeroEjes($params->nuevoNumeroEjes);
+                $vehiculoRemolque->setFichaTecnica($params->numeroFTH);
+                $vehiculoRemolque->setPesoVacio($params->pesoVacio);
+                $vehiculoRemolque->setCargaUtil($params->cargaUtil);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar vehiculo", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a form to delete a vehiculoRemolque entity.
      *
      * @param VehiculoRemolque $vehiculoRemolque The vehiculoRemolque entity
