@@ -24,23 +24,23 @@ class VehiculoRemolque
     /**
      * @var string
      *
-     * @ORM\Column(name="pesoBrutoVehiculo", type="string", length=255)
+     * @ORM\Column(name="pesoVacio", type="string", length=255)
      */
-    private $pesoBrutoVehiculo;
+    private $pesoVacio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cargaUtilMaxima", type="string", length=255)
+     * @ORM\Column(name="cargaUtil", type="string", length=255)
      */
-    private $cargaUtilMaxima;
+    private $cargaUtil;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rodaje", type="string", length=255)
+     * @ORM\Column(name="referencia", type="string", length=255)
      */
-    private $rodaje;
+    private $referencia;
 
     /**
      * @var string
@@ -52,44 +52,70 @@ class VehiculoRemolque
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroLlantas", type="string", length=255)
+     * @ORM\Column(name="numeroFth", type="string", length=255)
      */
-    private $numeroLlantas;
+    private $numeroFth;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fichaTecnica", type="string", length=255)
+     * @ORM\Column(name="rut", type="string", length=255)
      */
-    private $fichaTecnica;
+    private $rut;
+
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alto", type="string", length=255)
+     */
+    private $alto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="altoTotal", type="string", length=255)
+     * @ORM\Column(name="largo", type="string", length=255)
      */
-    private $altoTotal;
+    private $largo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="largoTotal", type="string", length=255)
+     * @ORM\Column(name="ancho", type="string", length=255)
      */
-    private $largoTotal;
+    private $ancho;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="anchoTotal", type="string", length=255)
-     */
-    private $anchoTotal;
+
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="vehiculosRemolques") */
+    private $usuario;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculosRemolques") */
+    private $clase;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CondicionIngreso", inversedBy="vehiculosRemolques") */
+    private $condicionIngreso;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgOrigenRegistro", inversedBy="vehiculosRemolques") */
+    private $origenRegistro;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="vehiculosRemolques") */
+    private $linea;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="vehiculosRemolques") */
+    private $carroceria;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgPlaca", inversedBy="vehiculosRemolques") */
+    private $placa;
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
      */
     private $vehiculo;
 
+   
     
+
     /**
      * Get id
      *
@@ -100,78 +126,76 @@ class VehiculoRemolque
         return $this->id;
     }
 
-    
-
     /**
-     * Set pesoBrutoVehiculo
+     * Set pesoVacio
      *
-     * @param string $pesoBrutoVehiculo
+     * @param string $pesoVacio
      *
      * @return VehiculoRemolque
      */
-    public function setPesoBrutoVehiculo($pesoBrutoVehiculo)
+    public function setPesoVacio($pesoVacio)
     {
-        $this->pesoBrutoVehiculo = $pesoBrutoVehiculo;
+        $this->pesoVacio = $pesoVacio;
 
         return $this;
     }
 
     /**
-     * Get pesoBrutoVehiculo
+     * Get pesoVacio
      *
      * @return string
      */
-    public function getPesoBrutoVehiculo()
+    public function getPesoVacio()
     {
-        return $this->pesoBrutoVehiculo;
+        return $this->pesoVacio;
     }
 
     /**
-     * Set cargaUtilMaxima
+     * Set cargaUtil
      *
-     * @param string $cargaUtilMaxima
+     * @param string $cargaUtil
      *
      * @return VehiculoRemolque
      */
-    public function setCargaUtilMaxima($cargaUtilMaxima)
+    public function setCargaUtil($cargaUtil)
     {
-        $this->cargaUtilMaxima = $cargaUtilMaxima;
+        $this->cargaUtil = $cargaUtil;
 
         return $this;
     }
 
     /**
-     * Get cargaUtilMaxima
+     * Get cargaUtil
      *
      * @return string
      */
-    public function getCargaUtilMaxima()
+    public function getCargaUtil()
     {
-        return $this->cargaUtilMaxima;
+        return $this->cargaUtil;
     }
 
     /**
-     * Set rodaje
+     * Set referencia
      *
-     * @param string $rodaje
+     * @param string $referencia
      *
      * @return VehiculoRemolque
      */
-    public function setRodaje($rodaje)
+    public function setReferencia($referencia)
     {
-        $this->rodaje = $rodaje;
+        $this->referencia = $referencia;
 
         return $this;
     }
 
     /**
-     * Get rodaje
+     * Get referencia
      *
      * @return string
      */
-    public function getRodaje()
+    public function getReferencia()
     {
-        return $this->rodaje;
+        return $this->referencia;
     }
 
     /**
@@ -199,123 +223,291 @@ class VehiculoRemolque
     }
 
     /**
-     * Set numeroLlantas
+     * Set numeroFth
      *
-     * @param string $numeroLlantas
+     * @param string $numeroFth
      *
      * @return VehiculoRemolque
      */
-    public function setNumeroLlantas($numeroLlantas)
+    public function setNumeroFth($numeroFth)
     {
-        $this->numeroLlantas = $numeroLlantas;
+        $this->numeroFth = $numeroFth;
 
         return $this;
     }
 
     /**
-     * Get numeroLlantas
+     * Get numeroFth
      *
      * @return string
      */
-    public function getNumeroLlantas()
+    public function getNumeroFth()
     {
-        return $this->numeroLlantas;
+        return $this->numeroFth;
     }
 
     /**
-     * Set fichaTecnica
+     * Set rut
      *
-     * @param string $fichaTecnica
+     * @param string $rut
      *
      * @return VehiculoRemolque
      */
-    public function setFichaTecnica($fichaTecnica)
+    public function setRut($rut)
     {
-        $this->fichaTecnica = $fichaTecnica;
+        $this->rut = $rut;
 
         return $this;
     }
 
     /**
-     * Get fichaTecnica
+     * Get rut
      *
      * @return string
      */
-    public function getFichaTecnica()
+    public function getRut()
     {
-        return $this->fichaTecnica;
+        return $this->rut;
     }
 
     /**
-     * Set altoTotal
+     * Set alto
      *
-     * @param string $altoTotal
+     * @param string $alto
      *
      * @return VehiculoRemolque
      */
-    public function setAltoTotal($altoTotal)
+    public function setAlto($alto)
     {
-        $this->altoTotal = $altoTotal;
+        $this->alto = $alto;
 
         return $this;
     }
 
     /**
-     * Get altoTotal
+     * Get alto
      *
      * @return string
      */
-    public function getAltoTotal()
+    public function getAlto()
     {
-        return $this->altoTotal;
+        return $this->alto;
     }
 
     /**
-     * Set largoTotal
+     * Set largo
      *
-     * @param string $largoTotal
+     * @param string $largo
      *
      * @return VehiculoRemolque
      */
-    public function setLargoTotal($largoTotal)
+    public function setLargo($largo)
     {
-        $this->largoTotal = $largoTotal;
+        $this->largo = $largo;
 
         return $this;
     }
 
     /**
-     * Get largoTotal
+     * Get largo
      *
      * @return string
      */
-    public function getLargoTotal()
+    public function getLargo()
     {
-        return $this->largoTotal;
+        return $this->largo;
     }
 
     /**
-     * Set anchoTotal
+     * Set ancho
      *
-     * @param string $anchoTotal
+     * @param string $ancho
      *
      * @return VehiculoRemolque
      */
-    public function setAnchoTotal($anchoTotal)
+    public function setAncho($ancho)
     {
-        $this->anchoTotal = $anchoTotal;
+        $this->ancho = $ancho;
 
         return $this;
     }
 
     /**
-     * Get anchoTotal
+     * Get ancho
      *
      * @return string
      */
-    public function getAnchoTotal()
+    public function getAncho()
     {
-        return $this->anchoTotal;
+        return $this->ancho;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \AppBundle\Entity\Ciudadano $usuario
+     *
+     * @return VehiculoRemolque
+     */
+    public function setUsuario(\AppBundle\Entity\Ciudadano $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return VehiculoRemolque
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+
+    /**
+     * Set condicionIngreso
+     *
+     * @param \AppBundle\Entity\CondicionIngreso $condicionIngreso
+     *
+     * @return VehiculoRemolque
+     */
+    public function setCondicionIngreso(\AppBundle\Entity\CondicionIngreso $condicionIngreso = null)
+    {
+        $this->condicionIngreso = $condicionIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get condicionIngreso
+     *
+     * @return \AppBundle\Entity\CondicionIngreso
+     */
+    public function getCondicionIngreso()
+    {
+        return $this->condicionIngreso;
+    }
+
+    /**
+     * Set origenRegistro
+     *
+     * @param \AppBundle\Entity\CfgOrigenRegistro $origenRegistro
+     *
+     * @return VehiculoRemolque
+     */
+    public function setOrigenRegistro(\AppBundle\Entity\CfgOrigenRegistro $origenRegistro = null)
+    {
+        $this->origenRegistro = $origenRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get origenRegistro
+     *
+     * @return \AppBundle\Entity\CfgOrigenRegistro
+     */
+    public function getOrigenRegistro()
+    {
+        return $this->origenRegistro;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \AppBundle\Entity\Linea $linea
+     *
+     * @return VehiculoRemolque
+     */
+    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \AppBundle\Entity\Linea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
+    }
+
+    /**
+     * Set carroceria
+     *
+     * @param \AppBundle\Entity\Carroceria $carroceria
+     *
+     * @return VehiculoRemolque
+     */
+    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
+    {
+        $this->carroceria = $carroceria;
+
+        return $this;
+    }
+
+    /**
+     * Get carroceria
+     *
+     * @return \AppBundle\Entity\Carroceria
+     */
+    public function getCarroceria()
+    {
+        return $this->carroceria;
+    }
+
+    /**
+     * Set placa
+     *
+     * @param \AppBundle\Entity\CfgPlaca $placa
+     *
+     * @return VehiculoRemolque
+     */
+    public function setPlaca(\AppBundle\Entity\CfgPlaca $placa = null)
+    {
+        $this->placa = $placa;
+
+        return $this;
+    }
+
+    /**
+     * Get placa
+     *
+     * @return \AppBundle\Entity\CfgPlaca
+     */
+    public function getPlaca()
+    {
+        return $this->placa;
     }
 
     /**

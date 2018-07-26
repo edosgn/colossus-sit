@@ -251,15 +251,16 @@ class VehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-            // $placa = $params->placa;
+            
             $numeroFactura = $params->numeroFactura;
             $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
+            $marca = $params->marcaId;
+            $linea = $params->lineaId;
             $clase = $params->claseId;
             $carroceria = $params->carroceriaId;
             $servicio = $params->servicioId;
@@ -268,6 +269,7 @@ class VehiculoController extends Controller
             $sedeOperativa = $params->sedeOperativaId;
             $numeroManifiesto = $params->numeroManifiesto;
             $municipio = $params->municipioId;
+            $fechaManifiesto = $params->fechaManifiesto;
             $cilindraje = $params->cilindraje;
             $modelo = $params->modelo;
             $motor = $params->motor;
@@ -275,72 +277,60 @@ class VehiculoController extends Controller
             $serie = $params->serie;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
-            $municipioId = $params->municipioId;
-            $lineaId = $params->lineaId;
-            $servicioId = $params->servicioId;
-            $colorId = $params->colorId;
-            $combustibleId = $params->combustibleId;
-            $carroceriaId = $params->carroceriaId;
-            $sedeOperativaId = $params->sedeOperativaId;
-            $claseId = $params->claseId;
-            $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
-            $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
-            $em = $this->getDoctrine()->getManager();
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-            $linea = $em->getRepository('AppBundle:Linea')->find($lineaId); 
-            $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
-            $color = $em->getRepository('AppBundle:Color')->find($colorId);
-            $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
-            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-            $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
-            $em = $this->getDoctrine()->getManager();
+            $radioAccion = $params->radioAccionId;
+            $modalidadTransporte = $params->modalidadTransporteId;
+            
+            // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculo->getPlaca()->getNumero());
-            $radioAccionId = $params->radioAccion;
-            $modalidadTransporteId = $params->modalidadTransporte;
-
-            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            
             if ($vehiculo!=null) {
-                $vehiculo->setPlaca($CfgPlaca);
+                
+                $fechaFactura = (isset($params->fechaFactura)) ? $params->fechaFactura : null;
+                $fechaFactura = new \DateTime($fechaFactura);
+                $fechaManifiesto = (isset($params->fechaManifiesto)) ? $params->fechaManifiesto : null;
+                $fechaManifiesto = new \DateTime($fechaManifiesto);
+                
+                $marca = $em->getRepository('AppBundle:Marca')->find($marca);
+                $linea = $em->getRepository('AppBundle:Linea')->find($linea); 
+                $clase = $em->getRepository('AppBundle:Clase')->find($clase);
+                $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
+                $servicio = $em->getRepository('AppBundle:Servicio')->find($servicio);
+                $color = $em->getRepository('AppBundle:Color')->find($color);
+                $combustible = $em->getRepository('AppBundle:Combustible')->find($combustible);
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativa);
+                $municipio = $em->getRepository('AppBundle:Municipio')->find($municipio);
+                $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find($radioAccion);
+                $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find($modalidadTransporte);
+                
                 $vehiculo->setNumeroFactura($numeroFactura);
-                $vehiculo->setFechaFactura(new \DateTime($params->fechaFactura));
-                //$vehiculo->setFechaFactura($params->fechaFactura);
+                $vehiculo->setFechaFactura($fechaFactura);
                 $vehiculo->setValor($valor);
+                $vehiculo->setLinea($linea);
+                $vehiculo->setClase($clase);
+                $vehiculo->setCarroceria($carroceria);
+                $vehiculo->setServicio($servicio);
+                $vehiculo->setColor($color);
+                $vehiculo->setCombustible($combustible);
+                $vehiculo->setSedeOperativa($sedeOperativa);
                 $vehiculo->setNumeroManifiesto($numeroManifiesto);
-                $vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
-                //$vehiculo->setFechaManifiesto($params->fechaManifiesto);
+                $vehiculo->setMunicipio($municipio);
+                $vehiculo->setFechaManifiesto($fechaManifiesto);
                 $vehiculo->setCilindraje($cilindraje);
                 $vehiculo->setModelo($modelo);
                 $vehiculo->setMotor($motor);
                 $vehiculo->setChasis($chasis);
                 $vehiculo->setSerie($serie);
-                if($radioAccionId != null){
-                    $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find($radioAccionId); 
-                    $vehiculo->setRadioAccion($radioAccion);
-                }
-                if($modalidadTransporteId != null){
-                    $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find($modalidadTransporteId); 
-                    $vehiculo->setRadioAccion($modalidadTransporte);
-                }
-                $vehiculo->setNumeroPasajeros($numeroPasajeros);
-                $vehiculo->setSerie($serie);
-                $vehiculo->setSerie($serie);
                 $vehiculo->setVin($vin);
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
-                $vehiculo->setMunicipio($municipio);
-                $vehiculo->setLinea($linea);
-                $vehiculo->setServicio($servicio);
-                $vehiculo->setColor($color);
-                $vehiculo->setCombustible($combustible);
-                $vehiculo->setCarroceria($carroceria);
-                $vehiculo->setSedeOperativa($sedeOperativa);
-                $vehiculo->setClase($clase);
-                $vehiculo->setPignorado($pignorado);
-                $vehiculo->setCancelado($cancelado);
+                $vehiculo->setRadioAccion($radioAccion);
+                $vehiculo->setModalidadTransporte($modalidadTransporte);
                 $vehiculo->setEstado(true);
-                $em = $this->getDoctrine()->getManager();
+                // var_dump($params);
+                //  die();
+                
                 $em->flush();
+                
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -464,11 +454,12 @@ class VehiculoController extends Controller
      * @Route("/{id}/delete", name="vehiculo_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request,$id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($id);
