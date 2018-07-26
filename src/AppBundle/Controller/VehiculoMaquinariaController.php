@@ -329,7 +329,7 @@ class VehiculoMaquinariaController extends Controller
      */
     
 
-    public function deleteAction(Request $request)
+    public function deleteAction(Request $request,$id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);

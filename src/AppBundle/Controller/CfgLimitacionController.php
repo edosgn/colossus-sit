@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\CfgLimitacion;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * CfgLimitacion controller.
@@ -22,6 +22,7 @@ class CfgLimitacionController extends Controller
      */
     public function indexAction()
     {
+        $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
@@ -30,12 +31,12 @@ class CfgLimitacionController extends Controller
         );
 
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado limitaciones", 
-                    'data'=> $limitacion,
-            );
-         
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "listado limitaciones",
+            'data' => $limitacion,
+        );
+
         return $helpers->json($response);
     }
 
@@ -50,44 +51,44 @@ class CfgLimitacionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
-                $nombre = $params->nombre;
+            $nombre = $params->nombre;
 
-                $em = $this->getDoctrine()->getManager();
-                $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->findOneByNombre($params->nombre);
+            $em = $this->getDoctrine()->getManager();
+            $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->findOneByNombre($params->nombre);
 
-                if ($limitacion==null) {
-                    $limitacion = new CfgLimitacion();
-    
-                    $limitacion->setNombre(strtoupper($nombre));
-                    $limitacion->setEstado(true);
-    
-                    $em->persist($limitacion);
-                    $em->flush();
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Limitacion creado con exito", 
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "El nombre del limitacion ya se encuentra registrado", 
-                    );
-                }
+            if ($limitacion == null) {
+                $limitacion = new CfgLimitacion();
+
+                $limitacion->setNombre(strtoupper($nombre));
+                $limitacion->setEstado(true);
+
+                $em->persist($limitacion);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Limitacion creado con exito",
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El nombre del limitacion ya se encuentra registrado",
+                );
+            }
 
             //}
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
@@ -107,17 +108,17 @@ class CfgLimitacionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "limitacion encontrado", 
-                    'data'=> $limitacion,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "limitacion encontrado",
+                'data' => $limitacion,
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -134,39 +135,39 @@ class CfgLimitacionController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($params->id);
-            if ($limitacion!=null) {
+            if ($limitacion != null) {
 
                 $limitacion->setNombre($nombre);
                 $limitacion->setEstado(true);
-               
+
                 $em->persist($limitacion);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Limitación editada con exito", 
+                    'msj' => "Limitación editada con exito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La limitación no se encuentra en la base de datos", 
+                    'msj' => "La limitación no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco",
+            );
         }
 
         return $helpers->json($response);
@@ -183,25 +184,25 @@ class CfgLimitacionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();            
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($id);
 
             $limitacion->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($limitacion);
-                $em->flush();
+            $em->persist($limitacion);
+            $em->flush();
             $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Limitación eliminada con exito", 
-                );
-        }else{
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Limitación eliminada con exito",
+            );
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -223,24 +224,25 @@ class CfgLimitacionController extends Controller
     }
 
     /**
-     * datos para select 
+     * datos para select
      *
      * @Route("/select", name="limitacion_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $limitaciones = $em->getRepository('AppBundle:CfgLimitacion')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($limitaciones as $key => $limitacion) {
-        $response[$key] = array(
-            'value' => $limitacion->getId(),
-            'label' => $limitacion->getNombre(),
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $limitaciones = $em->getRepository('AppBundle:CfgLimitacion')->findBy(
+            array('estado' => 1)
+        );
+        foreach ($limitaciones as $key => $limitacion) {
+            $response[$key] = array(
+                'value' => $limitacion->getId(),
+                'label' => $limitacion->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+        return $helpers->json($response);
     }
 }

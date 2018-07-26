@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class TipoVehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
+    
 }

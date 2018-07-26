@@ -4,9 +4,8 @@ namespace AppBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class TipoVehiculoControllerTest extends WebTestCase
+class VehiculoRemolqueControllerTest extends WebTestCase
 {
-    
     /*
     public function testCompleteScenario()
     {
@@ -14,13 +13,13 @@ class TipoVehiculoControllerTest extends WebTestCase
         $client = static::createClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/tipovehiculo/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /tipovehiculo/");
+        $crawler = $client->request('GET', '/vehiculoremolque/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /vehiculoremolque/");
         $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create')->form(array(
-            'appbundle_tipovehiculo[field_name]'  => 'Test',
+            'appbundle_vehiculoremolque[field_name]'  => 'Test',
             // ... other fields to fill
         ));
 
@@ -34,7 +33,7 @@ class TipoVehiculoControllerTest extends WebTestCase
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Update')->form(array(
-            'appbundle_tipovehiculo[field_name]'  => 'Foo',
+            'appbundle_vehiculoremolque[field_name]'  => 'Foo',
             // ... other fields to fill
         ));
 

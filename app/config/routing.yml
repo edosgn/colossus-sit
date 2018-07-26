@@ -1,5 +1,7 @@
 app_cfg_valor_vehiculo:
     resource: "@AppBundle/Controller/CfgValorVehiculoController.php"
+app_vehiculo_remolque:
+    resource: "@AppBundle/Controller/VehiculoRemolqueController.php"
     type:     annotation
 
 app_licencia_conduccion:

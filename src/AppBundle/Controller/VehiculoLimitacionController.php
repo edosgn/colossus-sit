@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\VehiculoLimitacion;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vehiculolimitacion controller.
@@ -30,7 +30,7 @@ class VehiculoLimitacionController extends Controller
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de vehiculos con limitaciones",
-            'data' => $vehiculosLimitaciones, 
+            'data' => $vehiculosLimitaciones,
         );
         return $helpers->json($response);
     }
@@ -46,8 +46,8 @@ class VehiculoLimitacionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
             // var_dump($params);
             // die();
@@ -66,19 +66,19 @@ class VehiculoLimitacionController extends Controller
             $em->persist($vehiculoLimitacion);
             $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito",
+            );
             // }
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
