@@ -63,13 +63,7 @@ class VehiculoRemolque
      */
     private $rut;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fichaTecnica", type="string", length=255)
-     */
-    private $fichaTecnica;
-
+    
     /**
      * @var string
      *
@@ -274,30 +268,6 @@ class VehiculoRemolque
     public function getRut()
     {
         return $this->rut;
-    }
-
-    /**
-     * Set fichaTecnica
-     *
-     * @param string $fichaTecnica
-     *
-     * @return VehiculoRemolque
-     */
-    public function setFichaTecnica($fichaTecnica)
-    {
-        $this->fichaTecnica = $fichaTecnica;
-
-        return $this;
-    }
-
-    /**
-     * Get fichaTecnica
-     *
-     * @return string
-     */
-    public function getFichaTecnica()
-    {
-        return $this->fichaTecnica;
     }
 
     /**
