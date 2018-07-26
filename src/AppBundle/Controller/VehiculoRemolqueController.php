@@ -136,17 +136,40 @@ class VehiculoRemolqueController extends Controller
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->idVehiculo);
             $vehiculoRemolque = $em->getRepository("AppBundle:VehiculoRemolque")->findOneByVehiculo($vehiculo->getId());
-            $usuario = $em->getRepository("AppBundle:Ciudadano")->find($vehiculoRemolque->getCiudadano()->getId());
             $clase = $em->getRepository("AppBundle:Clase")->find($vehiculoRemolque->getClase()->getId());
-            
+            $condicionIngreso = $em->getRepository("AppBundle:CondicionIngreso")->find($vehiculoRemolque->getCondicionIngreso()->getId());
+            $origenRegistro = $em->getRepository("AppBundle:CfgOrigenRegistro")->find($vehiculoRemolque->getOrigenRegistro()->getId());
+            $linea = $em->getRepository("AppBundle:Linea")->find($vehiculoRemolque->getLinea()->getId());
+            $carroceria = $em->getRepository("AppBundle:Carroceria")->find($vehiculoRemolque->getCarroceria()->getId());
+            $placa = $em->getRepository("AppBundle:CfgPlaca")->find($vehiculoRemolque->getPlaca()->getid());
+            $numeroEjes = $vehiculoRemolque->getNumeroEjes();
+
+            if($numeroEjes == $params->nuevoNumeroEjes){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo tiene el mismo número de ejes", 
+                );
+            }
+            else{
             if ($vehiculoRemolque!=null) {                
                 $vehiculoRemolque->setVehiculo($vehiculo);
-                $vehiculoRemolque->setUsuario($usuario);
                 $vehiculoRemolque->setClase($clase);
+                $vehiculoRemolque->setCondicionIngreso($condicionIngreso);
+                $vehiculoRemolque->setOrigenRegistro($origenRegistro);
+                $vehiculoRemolque->setlinea($linea);
+                $vehiculoRemolque->setCarroceria($carroceria);
+                $vehiculoRemolque->setPlaca($placa);
                 $vehiculoRemolque->setNumeroEjes($params->nuevoNumeroEjes);
-                $vehiculoRemolque->setFichaTecnica($params->numeroFTH);
+                $vehiculoRemolque->setNumeroFth($params->numeroFTH);
                 $vehiculoRemolque->setPesoVacio($params->pesoVacio);
                 $vehiculoRemolque->setCargaUtil($params->cargaUtil);
+                $vehiculoRemolque->setReferencia($vehiculoRemolque->getReferencia());
+                $vehiculoRemolque->setNumeroFth($vehiculoRemolque->getNumeroFth());
+                $vehiculoRemolque->setRut($vehiculoRemolque->getRut());
+                $vehiculoRemolque->setAlto($vehiculoRemolque->getAlto());
+                $vehiculoRemolque->setLargo($vehiculoRemolque->getLargo());
+                $vehiculoRemolque->setAncho($vehiculoRemolque->getAncho());
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -160,6 +183,7 @@ class VehiculoRemolqueController extends Controller
                     'msj' => "El vehiculo no se encuentra en la base de datos", 
                 );
             }
+        }
         }else{
             $response = array(
                     'status' => 'error',
@@ -167,7 +191,6 @@ class VehiculoRemolqueController extends Controller
                     'msj' => "Autorizacion no valida para editar vehiculo", 
                 );
         }
-
         return $helpers->json($response);
     }
 
