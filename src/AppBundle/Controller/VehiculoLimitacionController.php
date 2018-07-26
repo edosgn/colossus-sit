@@ -10,14 +10,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\H
 /**
  * Vehiculolimitacion controller.
  *
- * @Route("vehiculolimitacion")
+ * @Route("vehiculoLimitacion")
  */
 class VehiculoLimitacionController extends Controller
 {
     /**
      * Lists all vehiculoLimitacion entities.
      *
-     * @Route("/", name="vehiculolimitacion_index")
+     * @Route("/", name="vehiculoLimitacion_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -38,7 +38,7 @@ class VehiculoLimitacionController extends Controller
     /**
      * Creates a new vehiculoLimitacion entity.
      *
-     * @Route("/new", name="vehiculolimitacion_new")
+     * @Route("/new", name="vehiculoLimitacion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -49,8 +49,8 @@ class VehiculoLimitacionController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            // var_dump($params);
-            // die();
+            var_dump($params);
+            die();
             $limitacionDatosId = $params->limitacionDatosId;
             $vehiculoId = $params->vehiculoId;
             $em = $this->getDoctrine()->getManager();
@@ -85,14 +85,14 @@ class VehiculoLimitacionController extends Controller
     /**
      * Finds and displays a vehiculoLimitacion entity.
      *
-     * @Route("/{id}", name="vehiculolimitacion_show")
+     * @Route("/{id}", name="vehiculoLimitacion_show")
      * @Method("GET")
      */
     public function showAction(VehiculoLimitacion $vehiculoLimitacion)
     {
         $deleteForm = $this->createDeleteForm($vehiculoLimitacion);
 
-        return $this->render('vehiculolimitacion/show.html.twig', array(
+        return $this->render('vehiculoLimitacion/show.html.twig', array(
             'vehiculoLimitacion' => $vehiculoLimitacion,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -101,7 +101,7 @@ class VehiculoLimitacionController extends Controller
     /**
      * Displays a form to edit an existing vehiculoLimitacion entity.
      *
-     * @Route("/{id}/edit", name="vehiculolimitacion_edit")
+     * @Route("/{id}/edit", name="vehiculoLimitacion_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, VehiculoLimitacion $vehiculoLimitacion)
@@ -113,10 +113,10 @@ class VehiculoLimitacionController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('vehiculolimitacion_edit', array('id' => $vehiculoLimitacion->getId()));
+            return $this->redirectToRoute('vehiculoLimitacion_edit', array('id' => $vehiculoLimitacion->getId()));
         }
 
-        return $this->render('vehiculolimitacion/edit.html.twig', array(
+        return $this->render('vehiculoLimitacion/edit.html.twig', array(
             'vehiculoLimitacion' => $vehiculoLimitacion,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
@@ -126,7 +126,7 @@ class VehiculoLimitacionController extends Controller
     /**
      * Deletes a vehiculoLimitacion entity.
      *
-     * @Route("/{id}", name="vehiculolimitacion_delete")
+     * @Route("/{id}", name="vehiculoLimitacion_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, VehiculoLimitacion $vehiculoLimitacion)
@@ -140,7 +140,7 @@ class VehiculoLimitacionController extends Controller
             $em->flush();
         }
 
-        return $this->redirectToRoute('vehiculolimitacion_index');
+        return $this->redirectToRoute('vehiculoLimitacion_index');
     }
 
     /**
@@ -153,7 +153,7 @@ class VehiculoLimitacionController extends Controller
     private function createDeleteForm(VehiculoLimitacion $vehiculoLimitacion)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('vehiculolimitacion_delete', array('id' => $vehiculoLimitacion->getId())))
+            ->setAction($this->generateUrl('vehiculoLimitacion_delete', array('id' => $vehiculoLimitacion->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
