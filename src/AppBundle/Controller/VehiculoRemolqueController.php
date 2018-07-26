@@ -133,14 +133,16 @@ class VehiculoRemolqueController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            var_dump($params);
-            die();
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->idVehiculo);
-            $vehiculoRemolque = $em->getRepository("AppBundle:VehiculoRemolque")->findByVehiculo($params->idVehiculo);
+            $vehiculoRemolque = $em->getRepository("AppBundle:VehiculoRemolque")->findOneByVehiculo($vehiculo->getId());
+            $usuario = $em->getRepository("AppBundle:Ciudadano")->find($vehiculoRemolque->getCiudadano()->getId());
+            $clase = $em->getRepository("AppBundle:Clase")->find($vehiculoRemolque->getClase()->getId());
             
             if ($vehiculoRemolque!=null) {                
                 $vehiculoRemolque->setVehiculo($vehiculo);
+                $vehiculoRemolque->setUsuario($usuario);
+                $vehiculoRemolque->setClase($clase);
                 $vehiculoRemolque->setNumeroEjes($params->nuevoNumeroEjes);
                 $vehiculoRemolque->setFichaTecnica($params->numeroFTH);
                 $vehiculoRemolque->setPesoVacio($params->pesoVacio);

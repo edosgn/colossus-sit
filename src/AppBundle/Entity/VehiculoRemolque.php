@@ -93,7 +93,7 @@ class VehiculoRemolque
 
 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\ciudadano", inversedBy="vehiculosRemolques") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="vehiculosRemolques") */
     private $usuario;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculosRemolques") */
@@ -375,11 +375,11 @@ class VehiculoRemolque
     /**
      * Set usuario
      *
-     * @param \AppBundle\Entity\ciudadano $usuario
+     * @param \AppBundle\Entity\Ciudadano $usuario
      *
      * @return VehiculoRemolque
      */
-    public function setUsuario(\AppBundle\Entity\ciudadano $usuario = null)
+    public function setUsuario(\AppBundle\Entity\Ciudadano $usuario = null)
     {
         $this->usuario = $usuario;
 
@@ -389,7 +389,7 @@ class VehiculoRemolque
     /**
      * Get usuario
      *
-     * @return \AppBundle\Entity\ciudadano
+     * @return \AppBundle\Entity\Ciudadano
      */
     public function getUsuario()
     {
