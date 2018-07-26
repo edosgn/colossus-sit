@@ -240,7 +240,7 @@ class CfgEntidadJudicialController extends Controller
             $consecutive = substr($cfgEntidadJudicial->getCodigoDivipo(), 0, 12);
             $response[$key] = array(
                 'value' => $cfgEntidadJudicial->getId(),
-                'label' => $cfgEntidadJudicial->getCodigoDivipo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $sedeOperativa->getMunicipio(),
+                'label' => $cfgEntidadJudicial->getCodigoDivipo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $cfgEntidadJudicial->getMunicipio(),
                 'consecutive' => $consecutive,
             );
         }

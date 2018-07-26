@@ -95,6 +95,8 @@ class VehiculoRemolque
      */
     private $vehiculo;
     
+    
+
     /**
      * Get id
      *
