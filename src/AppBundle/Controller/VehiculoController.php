@@ -210,7 +210,6 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
                 $params->placa
             );
