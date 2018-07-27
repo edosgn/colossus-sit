@@ -50,8 +50,6 @@ class LimitacionDatosController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            // var_dump($params[1]->vehiculosLimitacionArray->vehiculos[0]->placa);
-            // die();
 
             $fechaRadicacion = $params[0]->datosLimitacion->fechaRadicacion;
             $municipioId = $params[0]->datosLimitacion->municipioId;
@@ -65,7 +63,7 @@ class LimitacionDatosController extends Controller
             $entidadJudicialId = $params[0]->datosLimitacion->entidadJudicialId;
             $observaciones = $params[0]->datosLimitacion->observaciones;
             $datos = $params[0]->datosLimitacion->datos;
-            $placa = $params[1]->vehiculosLimitacionArray->vehiculos[0]->placa;
+            // $placa = $params[1]->vehiculosLimitacionArray->vehiculos[0]->placa;
 
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
@@ -76,42 +74,81 @@ class LimitacionDatosController extends Controller
             $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($tipoProcesoId);
             $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicialId);
 
-            $limitaciondatos = new LimitacionDatos();
+            $vehiculosLimitacion = $params[1]->vehiculosLimitacionArray;
+            foreach ($vehiculosLimitacion->vehiculos as $key => $vehiculoLimitacion) {
 
-            $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));
-            $limitaciondatos->setDepartamento($departamento);
-            $limitaciondatos->setMunicipio($municipio);
-            $limitaciondatos->setCiudadanoDemandado($ciudadanoDemandado);
-            $limitaciondatos->setCiudadanoDemandante($ciudadanoDemandante);
-            $limitaciondatos->setNOrdenJudicial($nOrdenJudicial);
-            $limitaciondatos->setLimitacion($limitacion);
-            $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
-            $limitaciondatos->setTipoProceso($tipoProceso);
-            $limitaciondatos->setEntidadJudicial($entidadJudicial);
-            $limitaciondatos->setObservaciones($observaciones);
-            $limitaciondatos->setDatos($datos);
-            $limitaciondatos->setEstado(true);
+                $placaNew = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculoLimitacion->placa);
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaNew);
+                // $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->findOneBy(
+                //     array('vehiculo' => $vehiculo->getId())
+                // );
+                // $limitacionDatos = $em->getRepository('AppBundle:LimitacionDatos')->findOneBy(
+                //     array('nOrdenJudicial' => $nOrdenJudicial,
+                //           'fechaExpedicion' => $fechaExpedicion,
+                //           'entidadJudicial' => $entidadJudicial,
+                //           'limitacion' => $limitacion,  )
+                // );
 
-            $em->persist($limitaciondatos);
-            $em->flush();
+                $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->getByDatosAndVehiculo(
+                    $vehiculo->getId(),
+                    $nOrdenJudicial,
+                    $fechaExpedicion,
+                    $entidadJudicial,
+                    $limitacion->getId()
 
-            foreach ($params[1]->vehiculosLimitacionArray as $vehiculoLimitacion) {
-                $em = $this->getDoctrine()->getManager();
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($placa);
+                );
 
-                $vehiculoLimitacionNew = new VehiculoLimitacion();
-                $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
-                $vehiculoLimitacionNew->setVehiculo($vehiculo);
+                if (!$vehiculoLimitacion) {
+                    $limitaciondatos = new LimitacionDatos();
 
-                $em->persist($vehiculoLimitacionNew);
-                $em->flush();
+                    $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));
+                    $limitaciondatos->setDepartamento($departamento);
+                    $limitaciondatos->setMunicipio($municipio);
+                    $limitaciondatos->setCiudadanoDemandado($ciudadanoDemandado);
+                    $limitaciondatos->setCiudadanoDemandante($ciudadanoDemandante);
+                    $limitaciondatos->setNOrdenJudicial($nOrdenJudicial);
+                    $limitaciondatos->setLimitacion($limitacion);
+                    $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
+                    $limitaciondatos->setTipoProceso($tipoProceso);
+                    $limitaciondatos->setEntidadJudicial($entidadJudicial);
+                    $limitaciondatos->setObservaciones($observaciones);
+                    $limitaciondatos->setDatos($datos);
+                    $limitaciondatos->setEstado(true);
+
+                    $em->persist($limitaciondatos);
+                    $em->flush();
+
+                    $em = $this->getDoctrine()->getManager();
+                    $placa = $vehiculoLimitacion->placa;
+
+                    $vehiculoLimitacionNew = new VehiculoLimitacion();
+                    $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
+                    $vehiculoLimitacionNew->setVehiculo($vehiculo);
+
+                    $em->persist($vehiculoLimitacionNew);
+                    $em->flush();
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro creado con exito",
+                    );
+
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 450,
+                        'msj' => "La limitacion a la propiedad numero ",
+                    );
+                }
 
             }
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Registro creado con exito",
-            );
+
+            // $response = array(
+            //     'status' => 'success',
+            //     'code' => 200,
+            //     'msj' => "Registro creado con exito",
+            // );
+
             // }
         } else {
             $response = array(
