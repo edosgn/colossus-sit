@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\VehiculoRemolque;
+use AppBundle\Entity\CfgPlaca;
+use AppBundle\Entity\Vehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -22,13 +24,20 @@ class VehiculoRemolqueController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $vehiculoRemolques = $em->getRepository('AppBundle:VehiculoRemolque')->findAll();
-
-        return $this->render('vehiculoremolque/index.html.twig', array(
-            'vehiculoRemolques' => $vehiculoRemolques,
-        ));
+        $remolques = $em->getRepository('AppBundle:VehiculoRemolque')->getVehiculoCampo();
+        $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "listado vehiculos", 
+                'data'=> $remolques,
+            );
+        return $helpers->json($response);
+        // return $this->render('vehiculoremolque/index.html.twig', array(
+        //     'vehiculoRemolques' => $vehiculoRemolques,
+        // ));
     }
 
     /**
@@ -39,22 +48,101 @@ class VehiculoRemolqueController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vehiculoRemolque = new Vehiculoremolque();
-        $form = $this->createForm('AppBundle\Form\VehiculoRemolqueType', $vehiculoRemolque);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vehiculoRemolque);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-            return $this->redirectToRoute('vehiculoremolque_show', array('id' => $vehiculoRemolque->getId()));
-        }
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $placa = $params->vehiculoPlaca;
+            $serie = $params->vehiculoSerie;
+            $vin = $params->vehiculoVin;
+            $carroceria = $params->vehiculoCarroceriaId;
+            $marca = $params->vehiculoMarcaId; 
+            $alto = $params->alto;
+            $largo = $params->largo;
+            $ancho = $params->ancho;
+            $numeroEjes = $params->numeroEjes;
+            $origenRegistro = $params->origenRegistroId;
+            $cargaUtil = $params->cargaUtil;
+            $pesoVacio = $params->pesoVacio;
+            $referencia = $params->referencia;
+            $modelo = $params->vehiculoModelo;
+            $numeroFth = $params->numeroFth;
+            $rut = $params->rut;
+            $condicionIngreso = $params->condicionIngresoId;                
+            $clase = $params->vehiculoClaseId;
+            
+            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findBy(array('numero' => $placa)); 
+            if (!$cfgPlaca) {
+                
+                $placaNew = new CfgPlaca();
+                $placaNew->setNumero($placa);
+                $placaNew->setEstado(true);
+                $em->persist($placaNew);
+                $em->flush();
+                
+                $carroceriaNew = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
+                $marcaNew = $em->getRepository('AppBundle:Marca')->find($marca);
+                $origenRegistroNew = $em->getRepository('AppBundle:CfgOrigenRegistro')->find($origenRegistro);
+                $condicionIngresoNew = $em->getRepository('AppBundle:CondicionIngreso')->find($condicionIngreso);
+                $claseNew = $em->getRepository('AppBundle:Clase')->find($clase);
+                $lineaNew = $em->getRepository('AppBundle:Linea')->findOneByMarca($marca);
+                
+                $vehiculo = new Vehiculo();
+                $vehiculo->setPlaca($placaNew);
+                $vehiculo->setSerie($serie);
+                $vehiculo->setVin($vin);
+                $vehiculo->setCarroceria($carroceriaNew);
+                $vehiculo->setLinea($lineaNew);
+                $vehiculo->setModelo($modelo);
+                $vehiculo->setClase($claseNew);
+                $vehiculo->setEstado("Activo");
+                $em->persist($vehiculo);
+                $em->flush();
 
-        return $this->render('vehiculoremolque/new.html.twig', array(
-            'vehiculoRemolque' => $vehiculoRemolque,
-            'form' => $form->createView(),
-        ));
+                $vehiculoRemolques = new VehiculoRemolque();
+                $vehiculoRemolques->setAlto($alto);
+                $vehiculoRemolques->setAncho($ancho);
+                $vehiculoRemolques->setLargo($largo);
+                $vehiculoRemolques->setNumeroEjes($numeroEjes);
+                $vehiculoRemolques->setOrigenRegistro($origenRegistroNew);
+                $vehiculoRemolques->setCargaUtil($cargaUtil);
+                $vehiculoRemolques->setPesoVacio($pesoVacio);
+                $vehiculoRemolques->setReferencia($referencia);
+                $vehiculoRemolques->setNumeroFth($numeroFth);
+                $vehiculoRemolques->setRut($rut);
+                $vehiculoRemolques->setCondicionIngreso($condicionIngresoNew);
+                $vehiculoRemolques->setVehiculo($vehiculo);
+                $em->persist($vehiculoRemolques);
+                $em->flush();
+                
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                            'msj' => "vehiculo maquinaria creado con exito", 
+                        );
+                  
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "la placa ya existe", 
+                    );
+                } 
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
+
     }
 
     /**
@@ -76,46 +164,140 @@ class VehiculoRemolqueController extends Controller
     /**
      * Displays a form to edit an existing vehiculoRemolque entity.
      *
-     * @Route("/{id}/edit", name="vehiculoremolque_edit")
+     * @Route("/edit", name="vehiculoremolque_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VehiculoRemolque $vehiculoRemolque)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vehiculoRemolque);
-        $editForm = $this->createForm('AppBundle\Form\VehiculoRemolqueType', $vehiculoRemolque);
-        $editForm->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('vehiculoremolque_edit', array('id' => $vehiculoRemolque->getId()));
-        }
-
-        return $this->render('vehiculoremolque/edit.html.twig', array(
-            'vehiculoRemolque' => $vehiculoRemolque,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $serie = $params->vehiculo->serie;
+            $vin = $params->vehiculo->vin;
+            $carroceria = $params->vehiculoCarroceriaId;
+            $marca = $params->vehiculoMarcaId; 
+            $alto = $params->alto;
+            $largo = $params->largo;
+            $ancho = $params->ancho;
+            $numeroEjes = $params->numeroEjes;
+            $origenRegistro = $params->origenRegistroId;
+            $cargaUtil = $params->cargaUtil;
+            $pesoVacio = $params->pesoVacio;
+            $referencia = $params->referencia;
+            $modelo = $params->vehiculo->modelo;
+            $numeroFth = $params->numeroFth;
+            $rut = $params->rut;
+            $condicionIngreso = $params->condicionIngresoId;                
+            $clase = $params->vehiculoClaseId;
+            $vehiculo = $params->vehiculo->id;
+            
+            $vehiculoRemolques = $em->getRepository("AppBundle:VehiculoRemolque")->find($params->id);
+           
+            if ($vehiculoRemolques) {
+                
+                $carroceriaNew = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
+                $marcaNew = $em->getRepository('AppBundle:Marca')->find($marca);
+                $origenRegistroNew = $em->getRepository('AppBundle:CfgOrigenRegistro')->find($origenRegistro);
+                $condicionIngresoNew = $em->getRepository('AppBundle:CondicionIngreso')->find($condicionIngreso);
+                $claseNew = $em->getRepository('AppBundle:Clase')->find($clase);
+                $lineaNew = $em->getRepository('AppBundle:Linea')->findOneByMarca($marca);
+                $vehiculoNew = $em->getRepository('AppBundle:Vehiculo')->find($vehiculo);
+                
+                $vehiculoRemolques->setAlto($alto);
+                $vehiculoRemolques->setAncho($ancho);
+                $vehiculoRemolques->setLargo($largo);
+                $vehiculoRemolques->setNumeroEjes($numeroEjes);
+                $vehiculoRemolques->setOrigenRegistro($origenRegistroNew);
+                $vehiculoRemolques->setCargaUtil($cargaUtil);
+                $vehiculoRemolques->setPesoVacio($pesoVacio);
+                $vehiculoRemolques->setReferencia($referencia);
+                $vehiculoRemolques->setNumeroFth($numeroFth);
+                $vehiculoRemolques->setRut($rut);
+                $vehiculoRemolques->setCondicionIngreso($condicionIngresoNew);
+                $vehiculoRemolques->setVehiculo($vehiculoNew);
+                    $em->flush();
+                    
+                    $vehiculoNew = $vehiculoRemolques->getVehiculo();
+                    $vehiculoNew->setVin($vin);
+                    $vehiculoNew->setCarroceria($carroceriaNew);
+                    $vehiculoNew->setLinea($lineaNew);
+                    $vehiculoNew->setModelo($modelo);
+                    $vehiculoNew->setClase($claseNew);
+                    $vehiculoNew->setEstado("Activo");
+                    $em->flush();
+                    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Maquinaria editada con exito", 
+                    );
+    
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "La maquina no se encuentra en la base de datos", 
+                    );
+                }
+            }else{
+                $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "Autorizacion no valida para editar banco", 
+                    );
+            }
+    
+            return $helpers->json($response);
+    
     }
 
     /**
      * Deletes a vehiculoRemolque entity.
      *
-     * @Route("/{id}", name="vehiculoremolque_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="vehiculoremolque_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, VehiculoRemolque $vehiculoRemolque)
+    public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($vehiculoRemolque);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck==true) {
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vehiculoRemolque);
-            $em->flush();
-        }
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
 
-        return $this->redirectToRoute('vehiculoremolque_index');
+            $registroRemolque = $em->getRepository('AppBundle:VehiculoRemolque')->find($params);
+            $vehiculoId = $registroRemolque->getVehiculo();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
+
+                $vehiculo->setEstado(0);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($vehiculo);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "empresa eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+
     }
 
     /**

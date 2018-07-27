@@ -10,4 +10,19 @@ namespace AppBundle\Repository;
  */
 class VehiculoRemolqueRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getVehiculoCampo()
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT vr
+            FROM AppBundle:Vehiculo v, AppBundle:VehiculoRemolque vr
+            WHERE ((v.id = vr.vehiculo)
+            AND (v.estado = :estado))
+            ";
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'estado' => 1,
+        ));
+        return $consulta->getResult();
+    }
 }

@@ -26,6 +26,7 @@ class VehiculoMaquinariaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->getVehiculoCampo();
         $response = array(
             'status' => 'success',
@@ -49,10 +50,18 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+<<<<<<< HEAD
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
 
+=======
+
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
             $placa = $params->vehiculoPlaca;
             $serie = $params->vehiculoSerie;
             $vin = $params->vehiculoVin;
@@ -83,6 +92,7 @@ class VehiculoMaquinariaController extends Controller
             $fechaIngreso = new \DateTime($fechaIngreso);
 
             $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findBy(array('numero' => $placa));
+
             if (!$cfgPlaca) {
 
                 $placaNew = new CfgPlaca();
@@ -115,6 +125,7 @@ class VehiculoMaquinariaController extends Controller
                 $vehiculo->setEstado("Activo");
                 $em->persist($vehiculo);
                 $em->flush();
+
                 $VehiculoMaquinaria = new VehiculoMaquinaria();
                 $VehiculoMaquinaria->setPesoBrutoVehicular($pesoBruto);
                 $VehiculoMaquinaria->setCargarUtilMaxima($cargaUtilMaxima);
@@ -186,9 +197,16 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+<<<<<<< HEAD
 
         if ($authCheck == true) {
             $json = $request->get("json", null);
+=======
+        
+        if ($authCheck==true) {
+
+            $json = $request->get("json",null);
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
             $params = json_decode($json);
 
             $serieEdit = $params->vehiculo->serie;
@@ -223,9 +241,14 @@ class VehiculoMaquinariaController extends Controller
 
                 $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
                 $fechaIngresoEdit = new \DateTime($fechaIngreso);
+<<<<<<< HEAD
 
                 $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);
 
+=======
+                
+                $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);   
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
                 $tipoVehiculoNew = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculoEdit);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($claseEdit);
                 $vehiculoNew = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
@@ -251,6 +274,7 @@ class VehiculoMaquinariaController extends Controller
                 $registroMaquinaria->setFechaIngreso($fechaIngresoEdit);
                 $registroMaquinaria->setVehiculo($vehiculoNew);
                 $em->flush();
+<<<<<<< HEAD
 
                 $vehiculoNew = $registroMaquinaria->getVehiculo();
                 $vehiculoNew->setSerie($serieEdit);
@@ -269,6 +293,23 @@ class VehiculoMaquinariaController extends Controller
 
                 $em->flush();
 
+=======
+    
+                    $vehiculoNew = $registroMaquinaria->getVehiculo();
+                    $vehiculoNew->setSerie($serieEdit);
+                    $vehiculoNew->setVin($vinEdit);
+                    $vehiculoNew->setChasis($chasisEdit);
+                    $vehiculoNew->setMotor($motorEdit);
+                    $vehiculoNew->setColor($colorNew);
+                    $vehiculoNew->setClase($claseNew);
+                    $vehiculoNew->setLinea($lineaNew);
+                    $vehiculoNew->setModelo($modeloEdit);
+                    $vehiculoNew->setCarroceria($carroceriaNew);
+                    $vehiculoNew->setCombustible($combustibleNew);
+                    $vehiculoNew->setEstado("Activo");
+                    $em->flush();
+                
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -292,6 +333,7 @@ class VehiculoMaquinariaController extends Controller
 
         return $helpers->json($response);
 
+<<<<<<< HEAD
         // $deleteForm = $this->createDeleteForm($vehiculoMaquinaria);
         // $editForm = $this->createForm('AppBundle\Form\VehiculoMaquinariaType', $vehiculoMaquinaria);
         // $editForm->handleRequest($request);
@@ -307,6 +349,8 @@ class VehiculoMaquinariaController extends Controller
         //     'edit_form' => $editForm->createView(),
         //     'delete_form' => $deleteForm->createView(),
         // ));
+=======
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
     }
 
     /**
@@ -315,19 +359,29 @@ class VehiculoMaquinariaController extends Controller
      * @Route("/{id}/delete", name="vehiculomaquinaria_delete")
      * @Method("POST")
      */
+<<<<<<< HEAD
 
     public function deleteAction(Request $request, $id)
+=======
+    public function deleteAction(Request $request,$id)
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+<<<<<<< HEAD
 
         if ($authCheck == true) {
             $json = $request->get("json", null);
-            $params = json_decode($json);
-            // var_dump($json);
-            // die();
+=======
+        
+        if ($authCheck==true) {
+
             $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json",null);
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
+            $params = json_decode($json);
+            
 
             $registroMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->find($params);
             $vehiculoId = $registroMaquinaria->getVehiculo();
@@ -350,6 +404,7 @@ class VehiculoMaquinariaController extends Controller
             );
         }
         return $helpers->json($response);
+<<<<<<< HEAD
 
         // $form = $this->createDeleteForm($vehiculoMaquinaria);
         // $form->handleRequest($request);
@@ -361,6 +416,9 @@ class VehiculoMaquinariaController extends Controller
         // }
 
         // return $this->redirectToRoute('vehiculomaquinaria_index');
+=======
+    
+>>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
     }
 
     /**

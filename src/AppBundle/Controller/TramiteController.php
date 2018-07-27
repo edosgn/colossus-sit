@@ -139,8 +139,6 @@ class TramiteController extends Controller
             $params = json_decode($json);
 
             $nombre = $params->nombre;
-            $valor = $params->valor;
-            $unidad = $params->unidad;
             $redondeo = (isset($params->redondeo)) ? $params->redondeo : false;
             $afectacion = (isset($params->afectacion)) ? $params->afectacion : false;
             $moduloId = $params->moduloId;
@@ -151,9 +149,7 @@ class TramiteController extends Controller
 
             if ($tramite!=null) {
                 $tramite->setNombre($nombre);
-                $tramite->setValor($valor);
                 $tramite->setRedondeo($redondeo);
-                $tramite->setUnidad($unidad);
                 $tramite->setAfectacion($afectacion);
                 $tramite->setModulo($modulo);
                 $tramite->setEstado(true);

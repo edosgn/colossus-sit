@@ -221,7 +221,7 @@ class CondicionIngresoController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="condicioningreso_select")
+     * @Route("/select", name="lista_condicioningreso_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
