@@ -722,23 +722,22 @@ class VehiculoController extends Controller
     }
 
     /**
-     * busca vehiculos por parametro: vin,placa,chasis,motor,propietario,serie.
+     * busca vehiculos por parametros: vin,placa,chasis,motor,propietario,serie.
      *
-     * @Route("/parametro", name="vehiculo_show_parametro")
-     * @Method("POST")
+     * @Route("/parametros", name="vehiculo_show_parametros")
+     * @Method({"POST","GET"})
      */
-    public function vehiculoPorParametro(Request $request)
+    public function vehiculoPorParametros(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-
         if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByParametro($params);
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByParametros($params);
             if($vehiculo!=null){
                 $response = array(
                     'status' => 'success',

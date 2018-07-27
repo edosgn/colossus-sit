@@ -71,7 +71,7 @@ class CfgTipoProcesoController extends Controller
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "Tipo Producto creado con exito", 
+                        'msj' => "Tipo Proceso creado con exito", 
                     );
                 }else{
                     $response = array(
@@ -226,7 +226,7 @@ class CfgTipoProcesoController extends Controller
         /**
      * datos para select 
      *
-     * @Route("/select", name="tipoProducto_select")
+     * @Route("/select", name="tipoProceso_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()

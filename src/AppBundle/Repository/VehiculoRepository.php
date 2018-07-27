@@ -44,28 +44,42 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    //Obtiene el vehículo según un parametro
-    public function findOneByParametro($parametro)
+    //Obtiene el vehículo según uno o varios parametros al tiempo
+    public function findOneByParametros($parametros)
     {   
+        $condicion = null;
         $em = $this->getEntityManager();
-        $dql = "SELECT v
-            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:PropietarioVehiculo pv, AppBundle:Ciudadano c, UsuarioBundle:Usuario u
-            WHERE ((v.placa = p.id)
-            AND (p.numero = :parametro))
-            OR((v.id = pv.vehiculo)
-            AND (pv.ciudadano = c.id)
-            AND(c.usuario = u.id)
-            AND(u.identificacion = :parametro))
-            OR (v.vin = :parametro)
-            OR (v.chasis = :parametro)
-            OR (v.serie = :parametro)
-            OR (v.motor = :parametro)";
+
+            $dql = "SELECT v
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
+            WHERE v.placa = p.id";
+
+            if ($parametros->numeroPlaca) {
+                $condicion .= " AND p.numero = '".$parametros->numeroPlaca."'";
+                
+            }
+            if ($parametros->numeroVIN) {
+                $condicion .= " AND v.vin ='".$parametros->numeroVIN."'";
+                
+            }
+            if ($parametros->numeroSerie) {
+                $condicion .= " AND v.serie ='".$parametros->numeroSerie."'";
+                
+            }
+            if ($parametros->numeroMotor) {
+                $condicion .= "AND v.motor ='".$parametros->numeroMotor."'";
+                
+            }
+            if ($parametros->numeroChasis) {
+                $condicion .= " AND v.chasis ='".$parametros->numeroChasis."'";
+                
+            }
+            if($condicion){
+                $dql .= $condicion;
+            }
         $consulta = $em->createQuery($dql);
         
-        $consulta->setParameters(array(
-            'parametro' => $parametro,
-        ));
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
 
     //Busca todos los vehiculos que no sean ni maquinaria ni remolques

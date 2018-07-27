@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\VehiculoMaquinaria;
 use AppBundle\Entity\CfgPlaca;
 use AppBundle\Entity\Vehiculo;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\VehiculoMaquinaria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vehiculomaquinaria controller.
@@ -29,12 +29,12 @@ class VehiculoMaquinariaController extends Controller
 
         $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->getVehiculoCampo();
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado vehiculos", 
-                    'data'=> $vehiculos,
-            );
-         
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "listado vehiculos",
+            'data' => $vehiculos,
+        );
+
         return $helpers->json($response);
     }
 
@@ -50,22 +50,21 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            
+
             $placa = $params->vehiculoPlaca;
             $serie = $params->vehiculoSerie;
             $vin = $params->vehiculoVin;
             $chasis = $params->vehiculoChasis;
             $motor = $params->vehiculoMotor;
-            $condicion = $params->condicionSelected;                
+            $condicion = $params->condicionSelected;
             $color = $params->vehiculoColorId;
             $tipoVehiculo = $params->tipoVehiculoId;
             $clase = $params->vehiculoClaseId;
-            $marca = $params->vehiculoMarcaId; 
-            $linea = $params->vehiculoLineaId; 
+            $marca = $params->vehiculoMarcaId;
+            $linea = $params->vehiculoLineaId;
             $modelo = $params->vehiculoModelo;
             $carroceria = $params->vehiculoCarroceriaId;
             $pesoBruto = $params->pesoBruto;
@@ -80,21 +79,21 @@ class VehiculoMaquinariaController extends Controller
             $combustible = $params->vehiculoCombustibleId;
             $origenVehiculo = $params->cfgOrigenVehiculoId;
             $subpartidaArancelaria = $params->subpartidaArancelaria;
-            
+
             $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
             $fechaIngreso = new \DateTime($fechaIngreso);
-            
-            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findBy(array('numero' => $placa)); 
+
+            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findBy(array('numero' => $placa));
 
             if (!$cfgPlaca) {
-                
+
                 $placaNew = new CfgPlaca();
                 $placaNew->setNumero($placa);
                 $placaNew->setEstado(true);
                 $em->persist($placaNew);
                 $em->flush();
-                
-                $colorNew = $em->getRepository('AppBundle:Color')->find($color);                    
+
+                $colorNew = $em->getRepository('AppBundle:Color')->find($color);
                 $tipoVehiculoNew = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculo);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($clase);
                 $marcaNew = $em->getRepository('AppBundle:Marca')->find($marca);
@@ -137,27 +136,27 @@ class VehiculoMaquinariaController extends Controller
                 $VehiculoMaquinaria->setVehiculo($vehiculo);
                 $em->persist($VehiculoMaquinaria);
                 $em->flush();
-                
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                            'msj' => "vehiculo maquinaria creado con exito", 
-                        );
-                  
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "la placa ya existe", 
-                    );
-                } 
-        }else{
+                    'msj' => "vehiculo maquinaria creado con exito",
+                );
+
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "la placa ya existe",
+                );
+            }
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
 
     }
@@ -190,22 +189,21 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
-        if ($authCheck==true) {
 
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-           
+
             $serieEdit = $params->vehiculo->serie;
             $vinEdit = $params->vehiculo->vin;
             $chasisEdit = $params->vehiculo->chasis;
             $motorEdit = $params->vehiculo->motor;
-            $condicionEdit = $params->condicionIngreso; 
+            $condicionEdit = $params->condicionIngreso;
             $colorEdit = $params->vehiculoColorId;
             $tipoVehiculoEdit = $params->tipoVehiculoId;
             $claseEdit = $params->vehiculoClaseId;
-            $marcaEdit = $params->vehiculoMarcaId; 
-            $lineaEdit = $params->vehiculoLineaId; 
+            $marcaEdit = $params->vehiculoMarcaId;
+            $lineaEdit = $params->vehiculoLineaId;
             $modeloEdit = $params->vehiculo->modelo;
             $carroceriaEdit = $params->vehiculoCarroceriaId;
             $pesoBrutoEdit = $params->pesoBrutoVehicular;
@@ -223,13 +221,14 @@ class VehiculoMaquinariaController extends Controller
             $vehiculoId = $params->vehiculo->id;
 
             $registroMaquinaria = $em->getRepository("AppBundle:VehiculoMaquinaria")->find($params->id);
-            
+
             if ($registroMaquinaria) {
-                
+
                 $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
                 $fechaIngresoEdit = new \DateTime($fechaIngreso);
-                
-                $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);   
+
+                $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);
+
                 $tipoVehiculoNew = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculoEdit);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($claseEdit);
                 $vehiculoNew = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
@@ -273,22 +272,22 @@ class VehiculoMaquinariaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Maquinaria editada con exito", 
+                    'msj' => "Maquinaria editada con exito",
                 );
 
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La maquina no se encuentra en la base de datos", 
+                    'msj' => "La maquina no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco",
+            );
         }
 
         return $helpers->json($response);
@@ -301,7 +300,8 @@ class VehiculoMaquinariaController extends Controller
      * @Route("/{id}/delete", name="vehiculomaquinaria_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,$id)
+
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -318,21 +318,21 @@ class VehiculoMaquinariaController extends Controller
             $vehiculoId = $registroMaquinaria->getVehiculo();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
 
-                $vehiculo->setEstado(0);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($vehiculo);
-                $em->flush();
+            $vehiculo->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($vehiculo);
+            $em->flush();
             $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "empresa eliminado con exito", 
-                );
-        }else{
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "empresa eliminado con exito",
+            );
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     
@@ -354,5 +354,4 @@ class VehiculoMaquinariaController extends Controller
         ;
     }
 
-    
 }

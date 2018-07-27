@@ -25,7 +25,6 @@ class VehiculoLimitacionController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $vehiculosLimitaciones = $em->getRepository('AppBundle:VehiculoLimitacion')->findAll();
-
         $response = array(
             'status' => 'success',
             'code' => 200,
@@ -49,8 +48,7 @@ class VehiculoLimitacionController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            var_dump($params);
-            die();
+
             $limitacionDatosId = $params->limitacionDatosId;
             $vehiculoId = $params->vehiculoId;
             $em = $this->getDoctrine()->getManager();
@@ -71,14 +69,15 @@ class VehiculoLimitacionController extends Controller
                 'code' => 200,
                 'msj' => "Registro creado con exito",
             );
-            // }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'msj' => "El registro ya se encuentra registrado",
             );
         }
+        // }
+
         return $helpers->json($response);
     }
 

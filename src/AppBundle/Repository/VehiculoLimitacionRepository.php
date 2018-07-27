@@ -10,4 +10,29 @@ namespace AppBundle\Repository;
  */
 class VehiculoLimitacionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getByDatosAndVehiculo($vehiculoId, $nOrdenJudicial, $fechaExpedicion, $entidadJudicialId, $limitacionId )
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT vl
+            FROM AppBundle:Vehiculo v, AppBundle:VehiculoLimitacion vl, 
+            AppBundle:LimitacionDatos ld
+            WHERE v.id = vl.vehiculo
+            AND ld.id = vl.limitacionDatos
+            AND ld.nOrdenJudicial = :nOrdenJudicial
+            AND ld.fechaExpedicion = :fechaExpedicion
+            AND ld.entidadJudicial = :entidadJudicial
+            AND ld.limitacion = :limitacionId
+            AND v.id = :vehiculoId";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'vehiculoId' => $vehiculoId,
+            'nOrdenJudicial' => $nOrdenJudicial,
+            'fechaExpedicion' => $fechaExpedicion,
+            'entidadJudicial' => $entidadJudicialId,
+            'limitacionId' => $limitacionId,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }
