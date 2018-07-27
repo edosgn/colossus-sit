@@ -50,18 +50,10 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-<<<<<<< HEAD
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-=======
-
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-            
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
             $placa = $params->vehiculoPlaca;
             $serie = $params->vehiculoSerie;
             $vin = $params->vehiculoVin;
@@ -197,16 +189,9 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-<<<<<<< HEAD
 
         if ($authCheck == true) {
             $json = $request->get("json", null);
-=======
-        
-        if ($authCheck==true) {
-
-            $json = $request->get("json",null);
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
             $params = json_decode($json);
 
             $serieEdit = $params->vehiculo->serie;
@@ -241,14 +226,9 @@ class VehiculoMaquinariaController extends Controller
 
                 $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
                 $fechaIngresoEdit = new \DateTime($fechaIngreso);
-<<<<<<< HEAD
 
                 $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);
 
-=======
-                
-                $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);   
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
                 $tipoVehiculoNew = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculoEdit);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($claseEdit);
                 $vehiculoNew = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
@@ -274,26 +254,6 @@ class VehiculoMaquinariaController extends Controller
                 $registroMaquinaria->setFechaIngreso($fechaIngresoEdit);
                 $registroMaquinaria->setVehiculo($vehiculoNew);
                 $em->flush();
-<<<<<<< HEAD
-
-                $vehiculoNew = $registroMaquinaria->getVehiculo();
-                $vehiculoNew->setSerie($serieEdit);
-                $vehiculoNew->setVin($vinEdit);
-                $vehiculoNew->setChasis($chasisEdit);
-                $vehiculoNew->setMotor($motorEdit);
-                $vehiculoNew->setColor($colorNew);
-                $vehiculoNew->setClase($claseNew);
-                $vehiculoNew->setLinea($lineaNew);
-                $vehiculoNew->setModelo($modeloEdit);
-                $vehiculoNew->setCarroceria($carroceriaNew);
-                $vehiculoNew->setCombustible($combustibleNew);
-                $vehiculoNew->setEstado("Activo");
-
-                $em->flush();
-
-                $em->flush();
-
-=======
     
                     $vehiculoNew = $registroMaquinaria->getVehiculo();
                     $vehiculoNew->setSerie($serieEdit);
@@ -309,7 +269,6 @@ class VehiculoMaquinariaController extends Controller
                     $vehiculoNew->setEstado("Activo");
                     $em->flush();
                 
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -333,24 +292,6 @@ class VehiculoMaquinariaController extends Controller
 
         return $helpers->json($response);
 
-<<<<<<< HEAD
-        // $deleteForm = $this->createDeleteForm($vehiculoMaquinaria);
-        // $editForm = $this->createForm('AppBundle\Form\VehiculoMaquinariaType', $vehiculoMaquinaria);
-        // $editForm->handleRequest($request);
-
-        // if ($editForm->isSubmitted() && $editForm->isValid()) {
-        //     $this->getDoctrine()->getManager()->flush();
-
-        //     return $this->redirectToRoute('vehiculomaquinaria_edit', array('id' => $vehiculoMaquinaria->getId()));
-        // }
-
-        // return $this->render('vehiculomaquinaria/edit.html.twig', array(
-        //     'vehiculoMaquinaria' => $vehiculoMaquinaria,
-        //     'edit_form' => $editForm->createView(),
-        //     'delete_form' => $deleteForm->createView(),
-        // ));
-=======
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
     }
 
     /**
@@ -359,27 +300,17 @@ class VehiculoMaquinariaController extends Controller
      * @Route("/{id}/delete", name="vehiculomaquinaria_delete")
      * @Method("POST")
      */
-<<<<<<< HEAD
 
     public function deleteAction(Request $request, $id)
-=======
-    public function deleteAction(Request $request,$id)
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-<<<<<<< HEAD
-
-        if ($authCheck == true) {
-            $json = $request->get("json", null);
-=======
         
         if ($authCheck==true) {
 
             $em = $this->getDoctrine()->getManager();
             $json = $request->get("json",null);
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
             $params = json_decode($json);
             
 
@@ -404,21 +335,7 @@ class VehiculoMaquinariaController extends Controller
             );
         }
         return $helpers->json($response);
-<<<<<<< HEAD
-
-        // $form = $this->createDeleteForm($vehiculoMaquinaria);
-        // $form->handleRequest($request);
-
-        // if ($form->isSubmitted() && $form->isValid()) {
-        //     $em = $this->getDoctrine()->getManager();
-        //     $em->remove($vehiculoMaquinaria);
-        //     $em->flush();
-        // }
-
-        // return $this->redirectToRoute('vehiculomaquinaria_index');
-=======
     
->>>>>>> 63f79bd78f4617b66b82044e9923b0459dddebe6
     }
 
     /**

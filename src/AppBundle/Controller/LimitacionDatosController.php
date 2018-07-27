@@ -73,22 +73,29 @@ class LimitacionDatosController extends Controller
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($limitacionId);
             $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($tipoProcesoId);
             $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicialId);
+            $limitaciondatos = new LimitacionDatos();
+
+            $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));
+            $limitaciondatos->setDepartamento($departamento);
+            $limitaciondatos->setMunicipio($municipio);
+            $limitaciondatos->setCiudadanoDemandado($ciudadanoDemandado);
+            $limitaciondatos->setCiudadanoDemandante($ciudadanoDemandante);
+            $limitaciondatos->setNOrdenJudicial($nOrdenJudicial);
+            $limitaciondatos->setLimitacion($limitacion);
+            $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
+            $limitaciondatos->setTipoProceso($tipoProceso);
+            $limitaciondatos->setEntidadJudicial($entidadJudicial);
+            $limitaciondatos->setObservaciones($observaciones);
+            $limitaciondatos->setDatos($datos);
+            $limitaciondatos->setEstado(true);
 
             $vehiculosLimitacion = $params[1]->vehiculosLimitacionArray;
+            $graba = false;
+            $vehiculosGrabar = array();
             foreach ($vehiculosLimitacion->vehiculos as $key => $vehiculoLimitacion) {
 
                 $placaNew = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculoLimitacion->placa);
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaNew);
-                // $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->findOneBy(
-                //     array('vehiculo' => $vehiculo->getId())
-                // );
-                // $limitacionDatos = $em->getRepository('AppBundle:LimitacionDatos')->findOneBy(
-                //     array('nOrdenJudicial' => $nOrdenJudicial,
-                //           'fechaExpedicion' => $fechaExpedicion,
-                //           'entidadJudicial' => $entidadJudicial,
-                //           'limitacion' => $limitacion,  )
-                // );
-
                 $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->getByDatosAndVehiculo(
                     $vehiculo->getId(),
                     $nOrdenJudicial,
@@ -99,47 +106,50 @@ class LimitacionDatosController extends Controller
                 );
 
                 if (!$vehiculoLimitacion) {
-                    $limitaciondatos = new LimitacionDatos();
-
-                    $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));
-                    $limitaciondatos->setDepartamento($departamento);
-                    $limitaciondatos->setMunicipio($municipio);
-                    $limitaciondatos->setCiudadanoDemandado($ciudadanoDemandado);
-                    $limitaciondatos->setCiudadanoDemandante($ciudadanoDemandante);
-                    $limitaciondatos->setNOrdenJudicial($nOrdenJudicial);
-                    $limitaciondatos->setLimitacion($limitacion);
-                    $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
-                    $limitaciondatos->setTipoProceso($tipoProceso);
-                    $limitaciondatos->setEntidadJudicial($entidadJudicial);
-                    $limitaciondatos->setObservaciones($observaciones);
-                    $limitaciondatos->setDatos($datos);
-                    $limitaciondatos->setEstado(true);
-
-                    $em->persist($limitaciondatos);
-                    $em->flush();
+                    $graba = true;
 
                     $em = $this->getDoctrine()->getManager();
-                    $placa = $vehiculoLimitacion->placa;
+                    //$placa = $vehiculoLimitacion->placa;
 
-                    $vehiculoLimitacionNew = new VehiculoLimitacion();
-                    $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
-                    $vehiculoLimitacionNew->setVehiculo($vehiculo);
+                    array_push($vehiculosGrabar, $vehiculo->getId());
 
-                    $em->persist($vehiculoLimitacionNew);
-                    $em->flush();
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro creado con exito",
-                    );
+                    // $response = array(
+                    //     'status' => 'success',
+                    //     'code' => 200,
+                    //     'msj' => "Registro creado con exito",
+                    // );
 
                 } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 450,
-                        'msj' => "La limitacion a la propiedad numero ",
+                        'msj' => "Ya existe registro",
                     );
                 }
+
+            }
+
+            if ($graba) {
+
+                $em->persist($limitaciondatos);
+                $em->flush();
+                foreach($vehiculosGrabar as $key => $vehiculoLimitacionGrabar){
+                    // var_dump($vehiculoLimitacionGrabar);
+                    $vehiculoN = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoLimitacionGrabar);
+                    $vehiculoLimitacionNew = new VehiculoLimitacion();
+                    $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
+                    $vehiculoLimitacionNew->setVehiculo($vehiculoN);
+                    
+                    $em->persist($vehiculoLimitacionNew);
+                    $em->flush();
+                    $response = array(
+    'status' => 'success',
+    'code' => 200,
+    'msj' => "Registro creado con exito",
+);
+
+                }
+                //  die();
 
             }
 
