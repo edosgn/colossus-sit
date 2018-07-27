@@ -244,4 +244,44 @@ class CfgValorVehiculoController extends Controller
       }
        return $helpers->json($response);
     }
+
+    /**
+     * datos para select1 
+     *
+     * @Route("/show/vehiculo/", name="valor_vehiculo_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function showVehiculoAction(Request $request)
+    {
+    $helpers = $this->get("app.helpers");
+    $hash = $request->get("authorization", null);
+    $authCheck = $helpers->authCheck($hash);
+    if ($authCheck== true) {
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $em = $this->getDoctrine()->getManager();
+        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->findOneBy(
+            array(
+                'linea' => $params->linea,
+                'clase' => $params->clase,
+                'anio' => $params->modelo,
+            )
+        );
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "valor Vehiculo", 
+            'datos' => $valorVehiculo, 
+        );
+
+    }else{
+        $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "Autorizacion no valida", 
+        );
+    }
+    return $helpers->json($response);
+    }
+    
 }
