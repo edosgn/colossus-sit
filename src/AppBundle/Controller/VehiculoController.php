@@ -106,23 +106,12 @@ class VehiculoController extends Controller
                         
                         $fechaFactura=new \DateTime($fechaFactura);
 
-<<<<<<< HEAD
                         // if ($params->placa) {
                         //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
                         //         $params->placa
                         //     );
                         //     $vehiculo->setCfgPlaca($CfgPlaca);
                         // }
-=======
-                        $placa = (isset($params->placa)) ? $params->placa : null;
-                        if ($placa) {
-                            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-                                $placa
-                            );
-                            $vehiculo->setPlaca($CfgPlaca);
-                        }
-                        
->>>>>>> 8c9f909337d1be63db6cb214e60793beb3fff08f
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
