@@ -49,7 +49,7 @@ class Modulo
      */
     private $siglaSustrato;
 
-     /**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
