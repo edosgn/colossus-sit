@@ -106,13 +106,12 @@ class VehiculoController extends Controller
                         
                         $fechaFactura=new \DateTime($fechaFactura);
 
-                        if ($params->placa) {
-                            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-                                $params->placa
-                            );
-                            $vehiculo->setCfgPlaca($CfgPlaca);
-                        }
-                        
+                        // if ($params->placa) {
+                        //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
+                        //         $params->placa
+                        //     );
+                        //     $vehiculo->setCfgPlaca($CfgPlaca);
+                        // }
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
@@ -139,7 +138,8 @@ class VehiculoController extends Controller
                         $vehiculo->setClase($clase);
                         $vehiculo->setPignorado($pignorado);
                         $vehiculo->setCancelado($cancelado);
-
+                        
+                        
                         $vehiculo->setEstado(true);
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($vehiculo);
