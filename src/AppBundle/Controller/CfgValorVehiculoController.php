@@ -2,23 +2,23 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\CfgTipoProceso;
+use AppBundle\Entity\CfgValorVehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgtipoproceso controller.
+ * Cfgvalorvehiculo controller.
  *
- * @Route("cfgTipoProceso")
+ * @Route("cfgValorVehiculo")
  */
-class CfgTipoProcesoController extends Controller
+class CfgValorVehiculoController extends Controller
 {
-    /**
-     * Lists all cfgTipoProceso entities.
+     /**
+     * Lists all cfgValorVehiculo entities.
      *
-     * @Route("/", name="cfgtipoproceso_index")
+     * @Route("/", name="cfgvalorvehiculo_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +26,7 @@ class CfgTipoProcesoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->findBy(
+        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->findBy(
             array('estado' => 1)
         );
 
@@ -34,16 +34,16 @@ class CfgTipoProcesoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'msj' => "listado tipos de proceso", 
-                    'data'=> $tipoProceso,
+                    'data'=> $valorVehiculo,
             );
          
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new cfgTipoProceso entity.
+     * Creates a new cfgValorVehiculo entity.
      *
-     * @Route("/new", name="cfgtipoproceso_new")
+     * @Route("/new", name="cfgvalorvehiculo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -55,31 +55,26 @@ class CfgTipoProcesoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-                $nombre = $params->nombre;
-
                 $em = $this->getDoctrine()->getManager();
-                $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->findOneByNombre($params->nombre);
+                $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
+                $linea = $em->getRepository('AppBundle:Linea')->find($params->lineaId);
 
-                if ($tipoProceso==null) {
-                    $tipoProceso = new CfgTipoProceso();
-    
-                    $tipoProceso->setNombre(strtoupper($nombre));
-                    $tipoProceso->setEstado(true);
-    
-                    $em->persist($tipoProceso);
-                    $em->flush();
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Tipo Producto creado con exito", 
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "El nombre del tipoProceso ya se encuentra registrado", 
-                    );
-                }
+                $valorVehiculo = new CfgValorVehiculo();
+
+                $valorVehiculo->setClase($clase);
+                $valorVehiculo->setLinea($linea);
+                $valorVehiculo->setCilindraje($params->cilindraje);
+                $valorVehiculo->setValor($params->valor);
+                $valorVehiculo->setAnio($params->anio);
+                $valorVehiculo->setEstado(true);
+
+                $em->persist($valorVehiculo);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Tipo Producto creado con exito", 
+                );
 
             //}
         }else{
@@ -93,12 +88,12 @@ class CfgTipoProcesoController extends Controller
     }
 
     /**
-     * Finds and displays a cfgTipoProceso entity.
+     * Finds and displays a cfgValorVehiculo entity.
      *
-     * @Route("/show/{id}", name="cfgtipoproceso_show")
+     * @Route("/show/{id}", name="cfgvalorvehiculo_show")
      * @Method("POST")
      */
-    public function showAction(CfgTipoProceso $cfgTipoProceso)
+    public function showAction(CfgValorVehiculo $cfgValorVehiculo)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -106,12 +101,12 @@ class CfgTipoProcesoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $cfgTipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($id);
+            $cfgValorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "cfgTipoProceso encontrado", 
-                    'data'=> $cfgTipoProceso,
+                    'msj' => "cfgValorVehiculo encontrado", 
+                    'data'=> $cfgValorVehiculo,
             );
         }else{
             $response = array(
@@ -124,9 +119,9 @@ class CfgTipoProcesoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing cfgTipoProceso entity.
+     * Displays a form to edit an existing cfgValorVehiculo entity.
      *
-     * @Route("/edit", name="cfgtipoproceso_edit")
+     * @Route("/edit", name="cfgvalorvehiculo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -139,15 +134,20 @@ class CfgTipoProcesoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
-            $cfgTipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($params->id);
-            if ($cfgTipoProceso!=null) {
+            $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
+            $linea = $em->getRepository('AppBundle:Linea')->find($params->lineaId);
+            $cfgValorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find($params->id);
+            if ($cfgValorVehiculo!=null) {
 
-                $cfgTipoProceso->setNombre($nombre);
-                $cfgTipoProceso->setEstado(true);
+                $cfgValorVehiculo->setClase($clase);
+                $cfgValorVehiculo->setLinea($linea);
+                $cfgValorVehiculo->setCilindraje($params->cilindraje);
+                $cfgValorVehiculo->setValor($params->valor);
+                $cfgValorVehiculo->setAnio($params->anio);
+                $cfgValorVehiculo->setEstado(true);
                
-                $em->persist($cfgTipoProceso);
+                $em->persist($cfgValorVehiculo);
                 $em->flush();
 
                 $response = array(
@@ -174,9 +174,9 @@ class CfgTipoProcesoController extends Controller
     }
 
     /**
-     * Deletes a cfgTipoProceso entity.
+     * Deletes a cfgValorVehiculo entity.
      *
-     * @Route("/{id}/delete", name="cfgtipoproceso_delete")
+     * @Route("/{id}/delete", name="cfgvalorvehiculo_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request,$id)
@@ -186,11 +186,11 @@ class CfgTipoProcesoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();            
-            $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($id);
+            $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find($id);
 
-            $tipoProceso->setEstado(0);
+            $valorVehiculo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($tipoProceso);
+                $em->persist($valorVehiculo);
                 $em->flush();
             $response = array(
                     'status' => 'success',
@@ -208,16 +208,16 @@ class CfgTipoProcesoController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgTipoProceso entity.
+     * Creates a form to delete a cfgValorVehiculo entity.
      *
-     * @param CfgTipoProceso $cfgTipoProceso The cfgTipoProceso entity
+     * @param CfgValorVehiculo $cfgValorVehiculo The cfgValorVehiculo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgTipoProceso $cfgTipoProceso)
+    private function createDeleteForm(CfgValorVehiculo $cfgValorVehiculo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgtipoproceso_delete', array('id' => $cfgTipoProceso->getId())))
+            ->setAction($this->generateUrl('cfgvalorvehiculo_delete', array('id' => $cfgValorVehiculo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -233,13 +233,13 @@ class CfgTipoProcesoController extends Controller
     {
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
-    $tipoProcesos = $em->getRepository('AppBundle:CfgTipoProceso')->findBy(
+    $valorVehiculos = $em->getRepository('AppBundle:CfgValorVehiculo')->findBy(
         array('estado' => 1)
     );
-      foreach ($tipoProcesos as $key => $tipoProceso) {
+      foreach ($valorVehiculos as $key => $valorVehiculo) {
         $response[$key] = array(
-            'value' => $tipoProceso->getId(),
-            'label' => $tipoProceso->getNombre(),
+            'value' => $valorVehiculo->getId(),
+            'label' => $valorVehiculo->getNombre(),
             );
       }
        return $helpers->json($response);

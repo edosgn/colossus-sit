@@ -129,7 +129,7 @@ class LimitacionDatos
      */
     public function getFechaRadicacion()
     {
-        return $this->fechaRadicacion;
+        return $this->fechaRadicacion->format('Y-m-d');
     }
 
     /**
@@ -177,7 +177,7 @@ class LimitacionDatos
      */
     public function getFechaExpedicion()
     {
-        return $this->fechaExpedicion;
+        return $this->fechaExpedicion->format('Y-m-d');
     }
 
     /**

@@ -3,14 +3,15 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\LimitacionDatos;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\VehiculoLimitacion;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Limitaciondato controller.
  *
- * @Route("limitaciondatos")
+ * @Route("limitacionDatos")
  */
 class LimitacionDatosController extends Controller
 {
@@ -30,7 +31,7 @@ class LimitacionDatosController extends Controller
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de datos limitaciones",
-            'data' => $limitacionesDatos, 
+            'data' => $limitacionesDatos,
         );
         return $helpers->json($response);
     }
@@ -46,23 +47,26 @@ class LimitacionDatosController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            
-            $fechaRadicacion = $params->fechaRadicacion;
-            $municipioId = $params->municipioId;
-            $departamentoId = $params->departamentoId;
-            $ciudadanoDemandadoId = $params->ciudadanoDemandadoId;
-            $ciudadanoDemandanteId = $params->ciudadanoDemandanteId;
-            $nOrdenJudicial = $params->nOrdenJudicial;
-            $limitacionId = $params->limitacionId;
-            $fechaExpedicion = $params->fechaExpedicion;
-            $tipoProcesoId = $params->tipoProcesoId;
-            $entidadJudicialId = $params->entidadJudicialId;
-            $observaciones = $params->observaciones;
-            $datos = $params->datos;
-            
+            // var_dump($params[1]->vehiculosLimitacionArray->vehiculos[0]->placa);
+            // die();
+
+            $fechaRadicacion = $params[0]->datosLimitacion->fechaRadicacion;
+            $municipioId = $params[0]->datosLimitacion->municipioId;
+            $departamentoId = $params[0]->datosLimitacion->departamentoId;
+            $ciudadanoDemandadoId = $params[0]->datosLimitacion->ciudadanoDemandadoId;
+            $ciudadanoDemandanteId = $params[0]->datosLimitacion->ciudadanoDemandanteId;
+            $nOrdenJudicial = $params[0]->datosLimitacion->nOrdenJudicial;
+            $limitacionId = $params[0]->datosLimitacion->limitacionId;
+            $fechaExpedicion = $params[0]->datosLimitacion->fechaExpedicion;
+            $tipoProcesoId = $params[0]->datosLimitacion->tipoProcesoId;
+            $entidadJudicialId = $params[0]->datosLimitacion->entidadJudicialId;
+            $observaciones = $params[0]->datosLimitacion->observaciones;
+            $datos = $params[0]->datosLimitacion->datos;
+            $placa = $params[1]->vehiculosLimitacionArray->vehiculos[0]->placa;
+
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
             $departamento = $em->getRepository('AppBundle:Departamento')->find($departamentoId);
@@ -70,18 +74,18 @@ class LimitacionDatosController extends Controller
             $ciudadanoDemandante = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoDemandanteId);
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($limitacionId);
             $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($tipoProcesoId);
-            $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicial);
+            $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicialId);
 
             $limitaciondatos = new LimitacionDatos();
 
-            $limitaciondatos->setFechaRadicacion($fechaRadicacion);
+            $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));
             $limitaciondatos->setDepartamento($departamento);
             $limitaciondatos->setMunicipio($municipio);
             $limitaciondatos->setCiudadanoDemandado($ciudadanoDemandado);
             $limitaciondatos->setCiudadanoDemandante($ciudadanoDemandante);
             $limitaciondatos->setNOrdenJudicial($nOrdenJudicial);
             $limitaciondatos->setLimitacion($limitacion);
-            $limitaciondatos->setFechaExpedicion($fechaExpedicion);
+            $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
             $limitaciondatos->setTipoProceso($tipoProceso);
             $limitaciondatos->setEntidadJudicial($entidadJudicial);
             $limitaciondatos->setObservaciones($observaciones);
@@ -91,19 +95,31 @@ class LimitacionDatosController extends Controller
             $em->persist($limitaciondatos);
             $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
+            foreach ($params[1]->vehiculosLimitacionArray as $vehiculoLimitacion) {
+                $em = $this->getDoctrine()->getManager();
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($placa);
+
+                $vehiculoLimitacionNew = new VehiculoLimitacion();
+                $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
+                $vehiculoLimitacionNew->setVehiculo($vehiculo);
+
+                $em->persist($vehiculoLimitacionNew);
+                $em->flush();
+
+            }
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito",
+            );
             // }
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
