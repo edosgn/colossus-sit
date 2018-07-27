@@ -363,10 +363,9 @@ class PropietarioVehiculoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         
-        
-
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
 
 
@@ -378,7 +377,8 @@ class PropietarioVehiculoController extends Controller
                 );
             }else{
                 $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
-                array('vehiculo' => $vehiculo->getId(),
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
                         'estado' => 1,
                         'estadoPropiedad' => '1',
                         'permisoTramite' => '1'

@@ -24,10 +24,12 @@ class CfgPlacaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
-
         $cfgPlacas = $em->getRepository('AppBundle:CfgPlaca')->findAll();
-        $response=null;
+
+        $response['data'] = array();
+
         if ($cfgPlacas) {
             $response = array(
                         'status' => 'success',
@@ -247,7 +249,7 @@ class CfgPlacaController extends Controller
         $placas = $em->getRepository('AppBundle:CfgPlaca')->findBy(
             array(
                 'sedeOperativa' => $id,
-                'estado' => 1
+                'estado' => 'Disponible'
             )
         );
         foreach ($placas as $key => $placa) {

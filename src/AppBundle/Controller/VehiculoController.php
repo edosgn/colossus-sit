@@ -106,13 +106,12 @@ class VehiculoController extends Controller
                         
                         $fechaFactura=new \DateTime($fechaFactura);
 
-                        if ($params->placa) {
-                            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-                                $params->placa
-                            );
-                            $vehiculo->setCfgPlaca($CfgPlaca);
-                        }
-                        
+                        // if ($params->placa) {
+                        //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
+                        //         $params->placa
+                        //     );
+                        //     $vehiculo->setCfgPlaca($CfgPlaca);
+                        // }
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
@@ -139,7 +138,8 @@ class VehiculoController extends Controller
                         $vehiculo->setClase($clase);
                         $vehiculo->setPignorado($pignorado);
                         $vehiculo->setCancelado($cancelado);
-
+                        
+                        
                         $vehiculo->setEstado(true);
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($vehiculo);
@@ -210,22 +210,23 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
-            array('placa' => $params->placa)
+
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
+                $params->placa
             );
 
             if ($vehiculo!=null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "vehiculo", 
+                    'msj' => "Registro encontrado", 
                     'data'=> $vehiculo,
             );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehiculo no encotrado", 
+                    'msj' => "Registro no encotrado", 
                 );
             }
         }else{
