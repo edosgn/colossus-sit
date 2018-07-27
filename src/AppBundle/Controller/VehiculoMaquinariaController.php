@@ -50,11 +50,10 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            
+
             $placa = $params->vehiculoPlaca;
             $serie = $params->vehiculoSerie;
             $vin = $params->vehiculoVin;
@@ -190,10 +189,9 @@ class VehiculoMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
-        if ($authCheck==true) {
 
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $serieEdit = $params->vehiculo->serie;
@@ -228,8 +226,9 @@ class VehiculoMaquinariaController extends Controller
 
                 $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
                 $fechaIngresoEdit = new \DateTime($fechaIngreso);
-                
-                $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);   
+
+                $colorNew = $em->getRepository('AppBundle:Color')->find($colorEdit);
+
                 $tipoVehiculoNew = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculoEdit);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($claseEdit);
                 $vehiculoNew = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
@@ -255,24 +254,21 @@ class VehiculoMaquinariaController extends Controller
                 $registroMaquinaria->setFechaIngreso($fechaIngresoEdit);
                 $registroMaquinaria->setVehiculo($vehiculoNew);
                 $em->flush();
-
-                $vehiculoNew = $registroMaquinaria->getVehiculo();
-                $vehiculoNew->setSerie($serieEdit);
-                $vehiculoNew->setVin($vinEdit);
-                $vehiculoNew->setChasis($chasisEdit);
-                $vehiculoNew->setMotor($motorEdit);
-                $vehiculoNew->setColor($colorNew);
-                $vehiculoNew->setClase($claseNew);
-                $vehiculoNew->setLinea($lineaNew);
-                $vehiculoNew->setModelo($modeloEdit);
-                $vehiculoNew->setCarroceria($carroceriaNew);
-                $vehiculoNew->setCombustible($combustibleNew);
-                $vehiculoNew->setEstado("Activo");
-
-                $em->flush();
-
-                $em->flush();
-
+    
+                    $vehiculoNew = $registroMaquinaria->getVehiculo();
+                    $vehiculoNew->setSerie($serieEdit);
+                    $vehiculoNew->setVin($vinEdit);
+                    $vehiculoNew->setChasis($chasisEdit);
+                    $vehiculoNew->setMotor($motorEdit);
+                    $vehiculoNew->setColor($colorNew);
+                    $vehiculoNew->setClase($claseNew);
+                    $vehiculoNew->setLinea($lineaNew);
+                    $vehiculoNew->setModelo($modeloEdit);
+                    $vehiculoNew->setCarroceria($carroceriaNew);
+                    $vehiculoNew->setCombustible($combustibleNew);
+                    $vehiculoNew->setEstado("Activo");
+                    $em->flush();
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -304,14 +300,17 @@ class VehiculoMaquinariaController extends Controller
      * @Route("/{id}/delete", name="vehiculomaquinaria_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,$id)
+
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck==true) {
 
-        if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json",null);
             $params = json_decode($json);
             
 
