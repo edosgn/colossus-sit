@@ -56,10 +56,6 @@ class CiudadanoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             
-            
-            
-            
-
             /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',

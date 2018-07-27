@@ -106,12 +106,23 @@ class VehiculoController extends Controller
                         
                         $fechaFactura=new \DateTime($fechaFactura);
 
+<<<<<<< HEAD
                         // if ($params->placa) {
                         //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
                         //         $params->placa
                         //     );
                         //     $vehiculo->setCfgPlaca($CfgPlaca);
                         // }
+=======
+                        $placa = (isset($params->placa)) ? $params->placa : null;
+                        if ($placa) {
+                            $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
+                                $placa
+                            );
+                            $vehiculo->setPlaca($CfgPlaca);
+                        }
+                        
+>>>>>>> 8c9f909337d1be63db6cb214e60793beb3fff08f
                         $vehiculo->setNumeroFactura($numeroFactura);
                         $vehiculo->setfechaFactura($fechaFactura);
                         $vehiculo->setValor($valor);
@@ -210,22 +221,23 @@ class VehiculoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(
-            array('placa' => $params->placa)
+
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
+                $params->placa
             );
 
             if ($vehiculo!=null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "vehiculo", 
+                    'msj' => "Registro encontrado", 
                     'data'=> $vehiculo,
             );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehiculo no encotrado", 
+                    'msj' => "Registro no encotrado", 
                 );
             }
         }else{

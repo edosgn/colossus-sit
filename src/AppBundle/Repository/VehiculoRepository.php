@@ -83,10 +83,24 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
                 FROM AppBundle:VehiculoRemolque vr                   
                 WHERE vr.vehiculo = v.id)";
 
-
-
-
         $consulta = $em->createQuery($dql);
         return $consulta->getResult();
+    }
+
+    //Obtiene el vehículo según un numero de placa
+    public function getByPlaca($placa)
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
+            WHERE v.placa = p.id
+            AND p.numero = :placa";
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'placa' => $placa,
+        ));
+
+        return $consulta->getOneOrNullResult();
     }
 }
