@@ -283,5 +283,4 @@ class CfgValorVehiculoController extends Controller
     }
     return $helpers->json($response);
     }
-    
 }
