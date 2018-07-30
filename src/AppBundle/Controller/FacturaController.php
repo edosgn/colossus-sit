@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Factura;
+use AppBundle\Entity\MflRetefuente;
 use AppBundle\Entity\TramiteFactura;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -45,6 +46,7 @@ class FacturaController extends Controller
      */
     public function newAction(Request $request)
     {
+        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -52,8 +54,6 @@ class FacturaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-
             /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
@@ -76,11 +76,11 @@ class FacturaController extends Controller
                     );
                     $factura->setVehiculo($vehiculo);
                 }
+                
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
                     $params->factura->ciudadanoId
                 );
 
-                
                 $factura->setNumero($params->factura->numero);
                 $factura->setConsecutivo(0);
                 $factura->setEstado('Emitida');
@@ -104,7 +104,27 @@ class FacturaController extends Controller
                     $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
                         array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
                     );
-                    
+                    if($tramitePrecio->getTramite()->getId() == 2){ 
+                        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
+                            $params->valorVehiculoId
+                        );
+                        foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
+                                $propietarioRetefuenteId
+                            );
+                            $mflRetefunte = new MflRetefuente();
+                            $mflRetefunte->setVehiculo($vehiculo);
+                            $mflRetefunte->setPropietarioVehiculo($propietarioVehiculo);
+                            $mflRetefunte->setValorVehiculo($valorVehiculo);
+                            $mflRetefunte->setFactura($factura);
+                            $mflRetefunte->setFecha(new \DateTime($params->factura->fechaCreacion));
+                            $mflRetefunte->setRetencion($params->retencion);
+                            $mflRetefunte->setEstado(true);
+                            $em->persist($mflRetefunte);
+                            $em->flush();
+                        }
+                    }
+
                     $tramiteFactura->setFactura($factura);
                     $tramiteFactura->setTramitePrecio($tramitePrecio);
                     $tramiteFactura->setEstado(true);
