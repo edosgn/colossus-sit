@@ -10,21 +10,42 @@ namespace AppBundle\Repository;
  */
 class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 {
-    // public function getTramitesVehiculo($vehiculoId)
-    // {   
-    //     $em = $this->getEntityManager();
-    //     $dql = "SELECT ts
-    //         FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f
-    //         WHERE ((ts.tramiteFactura = tf.id)
-    //         AND (tf.factura = f.id)
-    //         AND (f.vehiculo = :vehiculoId)
-    //         )
-    //         ";
-    //     $consulta = $em->createQuery($dql);
-        
-    //     $consulta->setParameters(array(
-    //         'vehiculoId' => $vehiculoId,
-    //     ));
-    //     return $consulta->getResult();
-    // }
+    public function findByVehiculoAndDate($datos)
+    {     
+        $fechaDesde = new \DateTime($datos->fechaDesde);
+        $fechaHasta = new \DateTime($datos->fechaHasta);
+        $em = $this->getEntityManager();
+        $dql = "SELECT ts
+            FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f
+            WHERE ts.tramiteFactura = tf.id
+            AND tf.factura = f.id
+            AND f.vehiculo = :vehiculoId
+            AND ts.fecha BETWEEN :fechaDesde AND :fechaHasta";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'vehiculoId' => $datos->idVehiculo,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta,
+        ));
+        return $consulta->getResult();
+    }
+
+    public function findByVehiculoOrderTramite($idVehiculo)
+    {     
+        $em = $this->getEntityManager();
+        $dql = "SELECT t
+            FROM AppBundle:TramiteSolicitud ts,AppBundle:TramiteFactura tf, AppBundle:TramitePrecio tp, AppBundle:Tramite t
+            WHERE ts.tramiteFactura = tf.id
+            AND tf.tramitePrecio = tp.id
+            AND tp.tramite = t.id
+            AND ts.vehiculo = :vehiculoId
+            GROUP BY t.id";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'vehiculoId' => $idVehiculo,
+        ));
+        return $consulta->getResult();
+    }
 }
