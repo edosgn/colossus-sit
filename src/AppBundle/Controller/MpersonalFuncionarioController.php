@@ -452,10 +452,10 @@ class MpersonalFuncionarioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             
+            
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
             );
-
             if ($usuario) {
                 if ($usuario->getCiudadano()) {
                     $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(

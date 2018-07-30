@@ -100,7 +100,8 @@ class TramiteSolicitudController extends Controller
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 $datos = $params->datos; 
                 $em = $this->getDoctrine()->getManager();
-
+var_dump($params);
+die();
                 $tramiteSolicitud = new TramiteSolicitud();
 
                 if ($params->vehiculoId) {
@@ -308,4 +309,33 @@ class TramiteSolicitudController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * Lists all tramiteSolicitud entities.
+     *
+     * @Route("/reporte", name="tramitesolicitud_index")
+     * @Method({"GET", "POST"})
+     */
+    public function reporte()
+    {
+       
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $tramiteReportes = $em->getRepository('AppBundle:TramiteSolicitud')->getTramiteReportes();
+
+        // foreach ($tramiteReportes as $key => $ts) {
+        //   var_dump($ts['id']);
+        //   die();
+        // }
+        
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $tramiteReportes, 
+        );
+        return $helpers->json($response);
+    }
+
 }
