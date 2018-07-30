@@ -25,6 +25,7 @@ class ComparendoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        
         $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
             array('estado' => 1)
         );

@@ -164,7 +164,13 @@ class Comparendo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SeguimientoEntrega", inversedBy="comparendos")
      **/
     protected $seguimientoEntrega;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="comparendos")
+     **/
+    protected $factura;
     
+
     /**
      * Get id
      *
@@ -536,6 +542,30 @@ class Comparendo
     }
 
     /**
+     * Set urlDocumento
+     *
+     * @param string $urlDocumento
+     *
+     * @return Comparendo
+     */
+    public function setUrlDocumento($urlDocumento)
+    {
+        $this->urlDocumento = $urlDocumento;
+
+        return $this;
+    }
+
+    /**
+     * Get urlDocumento
+     *
+     * @return string
+     */
+    public function getUrlDocumento()
+    {
+        return $this->urlDocumento;
+    }
+
+    /**
      * Set estado
      *
      * @param boolean $estado
@@ -629,5 +659,77 @@ class Comparendo
     public function getCuidadano()
     {
         return $this->cuidadano;
+    }
+
+    /**
+     * Set agenteTransito
+     *
+     * @param \AppBundle\Entity\MpersonalFuncionario $agenteTransito
+     *
+     * @return Comparendo
+     */
+    public function setAgenteTransito(\AppBundle\Entity\MpersonalFuncionario $agenteTransito = null)
+    {
+        $this->agenteTransito = $agenteTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get agenteTransito
+     *
+     * @return \AppBundle\Entity\MpersonalFuncionario
+     */
+    public function getAgenteTransito()
+    {
+        return $this->agenteTransito;
+    }
+
+    /**
+     * Set seguimientoEntrega
+     *
+     * @param \AppBundle\Entity\SeguimientoEntrega $seguimientoEntrega
+     *
+     * @return Comparendo
+     */
+    public function setSeguimientoEntrega(\AppBundle\Entity\SeguimientoEntrega $seguimientoEntrega = null)
+    {
+        $this->seguimientoEntrega = $seguimientoEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get seguimientoEntrega
+     *
+     * @return \AppBundle\Entity\SeguimientoEntrega
+     */
+    public function getSeguimientoEntrega()
+    {
+        return $this->seguimientoEntrega;
+    }
+
+    /**
+     * Set factura
+     *
+     * @param \AppBundle\Entity\Factura $factura
+     *
+     * @return Comparendo
+     */
+    public function setFactura(\AppBundle\Entity\Factura $factura = null)
+    {
+        $this->factura = $factura;
+
+        return $this;
+    }
+
+    /**
+     * Get factura
+     *
+     * @return \AppBundle\Entity\Factura
+     */
+    public function getFactura()
+    {
+        return $this->factura;
     }
 }
