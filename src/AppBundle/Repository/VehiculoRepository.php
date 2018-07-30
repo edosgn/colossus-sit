@@ -67,7 +67,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
                 
             }
             if ($parametros->numeroMotor) {
-                $condicion .= "AND v.motor ='".$parametros->numeroMotor."'";
+                $condicion .= " AND v.motor ='".$parametros->numeroMotor."'";
                 
             }
             if ($parametros->numeroChasis) {
