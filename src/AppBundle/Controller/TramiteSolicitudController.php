@@ -100,7 +100,8 @@ class TramiteSolicitudController extends Controller
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 $datos = $params->datos; 
                 $em = $this->getDoctrine()->getManager();
-
+var_dump($params);
+die();
                 $tramiteSolicitud = new TramiteSolicitud();
 
                 if ($params->vehiculoId) {

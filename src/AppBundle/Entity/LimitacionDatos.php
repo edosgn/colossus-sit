@@ -61,6 +61,11 @@ class LimitacionDatos
     protected $limitacion;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgCausalLimitacion", inversedBy="limitaciones")
+     **/
+    protected $causalLimitacion;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechaExpedicion", type="date")
@@ -97,6 +102,8 @@ class LimitacionDatos
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
+
+    
 
     /**
      * Get id
@@ -231,7 +238,7 @@ class LimitacionDatos
     /**
      * Set estado
      *
-     * @param string $estado
+     * @param boolean $estado
      *
      * @return LimitacionDatos
      */
@@ -245,7 +252,7 @@ class LimitacionDatos
     /**
      * Get estado
      *
-     * @return string
+     * @return boolean
      */
     public function getEstado()
     {
@@ -370,6 +377,30 @@ class LimitacionDatos
     public function getLimitacion()
     {
         return $this->limitacion;
+    }
+
+    /**
+     * Set causalLimitacion
+     *
+     * @param \AppBundle\Entity\CfgCausalLimitacion $causalLimitacion
+     *
+     * @return LimitacionDatos
+     */
+    public function setCausalLimitacion(\AppBundle\Entity\CfgCausalLimitacion $causalLimitacion = null)
+    {
+        $this->causalLimitacion = $causalLimitacion;
+
+        return $this;
+    }
+
+    /**
+     * Get causalLimitacion
+     *
+     * @return \AppBundle\Entity\CfgCausalLimitacion
+     */
+    public function getCausalLimitacion()
+    {
+        return $this->causalLimitacion;
     }
 
     /**
