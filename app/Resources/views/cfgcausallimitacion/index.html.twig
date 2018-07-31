@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgcausallimitacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgCausalLimitacion in cfgCausalLimitacions %}
+            <tr>
+                <td><a href="{{ path('cfgcausallimitacion_show', { 'id': cfgCausalLimitacion.id }) }}">{{ cfgCausalLimitacion.id }}</a></td>
+                <td>{{ cfgCausalLimitacion.nombre }}</td>
+                <td>{% if cfgCausalLimitacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgcausallimitacion_show', { 'id': cfgCausalLimitacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgcausallimitacion_edit', { 'id': cfgCausalLimitacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgcausallimitacion_new') }}">Create a new cfgCausalLimitacion</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -32,6 +32,14 @@ class VehiculoLimitacion
     protected $vehiculo;
 
     /**
+    * @var boolean
+    *
+    * @ORM\Column(name="estado", type="boolean")
+    */
+
+    private $estado;
+
+    /**
      * Get id
      *
      * @return integer
@@ -39,6 +47,30 @@ class VehiculoLimitacion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return VehiculoLimitacion
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

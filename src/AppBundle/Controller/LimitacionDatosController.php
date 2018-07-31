@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LimitacionDatos;
 use AppBundle\Entity\VehiculoLimitacion;
+use AppBundle\Entity\CfgCausalLimitacion;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
@@ -50,8 +51,7 @@ class LimitacionDatosController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            // var_dump($params[1]->vehiculosLimitacionArray->vehiculos[0]->placa);
-            // die();
+
 
             $fechaRadicacion = $params[0]->datosLimitacion->fechaRadicacion;
             $municipioId = $params[0]->datosLimitacion->municipioId;
@@ -62,10 +62,11 @@ class LimitacionDatosController extends Controller
             $limitacionId = $params[0]->datosLimitacion->limitacionId;
             $fechaExpedicion = $params[0]->datosLimitacion->fechaExpedicion;
             $tipoProcesoId = $params[0]->datosLimitacion->tipoProcesoId;
+            $causalLimitacionId = $params[0]->datosLimitacion->causalLimitacionId;
             $entidadJudicialId = $params[0]->datosLimitacion->entidadJudicialId;
             $observaciones = $params[0]->datosLimitacion->observaciones;
             $datos = $params[0]->datosLimitacion->datos;
-            $placa = $params[1]->vehiculosLimitacionArray->vehiculos[0]->placa;
+            // $placa = $params[1]->vehiculosLimitacionArray->vehiculos[0]->placa;
 
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
@@ -74,8 +75,8 @@ class LimitacionDatosController extends Controller
             $ciudadanoDemandante = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoDemandanteId);
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($limitacionId);
             $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($tipoProcesoId);
+            $causalLimitacion = $em->getRepository('AppBundle:CfgCausalLimitacion')->find($causalLimitacionId);
             $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicialId);
-
             $limitaciondatos = new LimitacionDatos();
 
             $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));
@@ -87,31 +88,84 @@ class LimitacionDatosController extends Controller
             $limitaciondatos->setLimitacion($limitacion);
             $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
             $limitaciondatos->setTipoProceso($tipoProceso);
+            $limitaciondatos->setCausalLimitacion($causalLimitacion);
             $limitaciondatos->setEntidadJudicial($entidadJudicial);
             $limitaciondatos->setObservaciones($observaciones);
             $limitaciondatos->setDatos($datos);
             $limitaciondatos->setEstado(true);
 
-            $em->persist($limitaciondatos);
-            $em->flush();
+            $vehiculosLimitacion = $params[1]->vehiculosLimitacionArray;
+            $graba = false;
+            $vehiculosGrabar = array();
+            foreach ($vehiculosLimitacion->vehiculos as $key => $vehiculoLimitacion) {
 
-            foreach ($params[1]->vehiculosLimitacionArray as $vehiculoLimitacion) {
-                $em = $this->getDoctrine()->getManager();
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($placa);
+                $placaNew = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculoLimitacion->placa);
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaNew);
+                $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->getByDatosAndVehiculo(
+                    $vehiculo->getId(),
+                    $nOrdenJudicial,
+                    $fechaExpedicion,
+                    $entidadJudicial,
+                    $limitacion->getId()
 
-                $vehiculoLimitacionNew = new VehiculoLimitacion();
-                $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
-                $vehiculoLimitacionNew->setVehiculo($vehiculo);
+                );
 
-                $em->persist($vehiculoLimitacionNew);
-                $em->flush();
+                if (!$vehiculoLimitacion) {
+                    $graba = true;
+
+                    $em = $this->getDoctrine()->getManager();
+                    //$placa = $vehiculoLimitacion->placa;
+
+                    array_push($vehiculosGrabar, $vehiculo->getId());
+
+                    // $response = array(
+                    //     'status' => 'success',
+                    //     'code' => 200,
+                    //     'msj' => "Registro creado con exito",
+                    // );
+
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 450,
+                        'msj' => "Ya existe registro",
+                    );
+                }
 
             }
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Registro creado con exito",
-            );
+
+            if ($graba) {
+
+                $em->persist($limitaciondatos);
+                $em->flush();
+                foreach($vehiculosGrabar as $key => $vehiculoLimitacionGrabar){
+                    // var_dump($vehiculoLimitacionGrabar);
+                    $vehiculoN = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoLimitacionGrabar);
+                    $vehiculoLimitacionNew = new VehiculoLimitacion();
+                    $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
+                    $vehiculoLimitacionNew->setVehiculo($vehiculoN);
+                    $vehiculoLimitacionNew->setEstado(true);
+
+                    
+                    $em->persist($vehiculoLimitacionNew);
+                    $em->flush();
+                    $response = array(
+    'status' => 'success',
+    'code' => 200,
+    'msj' => "Registro creado con exito",
+);
+
+                }
+                //  die();
+
+            }
+
+            // $response = array(
+            //     'status' => 'success',
+            //     'code' => 200,
+            //     'msj' => "Registro creado con exito",
+            // );
+
             // }
         } else {
             $response = array(

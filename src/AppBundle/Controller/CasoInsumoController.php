@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\CasoInsumo;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @Route("casoinsumo")
  */
 class CasoInsumoController extends Controller
-{  
+{
     /**
      * Lists all CasoInsumo entities.
      *
@@ -33,12 +33,12 @@ class CasoInsumoController extends Controller
         $response['data'] = array();
 
         $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "listado casoInsumos", 
-                'data'=> $casoInsumos,
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "listado casoInsumos",
+            'data' => $casoInsumos,
         );
-         
+
         return $helpers->json($response);
     }
 
@@ -53,55 +53,53 @@ class CasoInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
+            $em = $this->getDoctrine()->getManager();
+
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
             
-                $em = $this->getDoctrine()->getManager();
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneBy(
+                array(
+                    'nombre' => $params->nombre,
+                    'modulo' => $modulo->getId()
+                )
+            );
+            
+            if (!$casoInsumo) {
+                $casoInsumo = new CasoInsumo();
 
-                $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
-                
-                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneBy(
-                    array(
-                        'nombre' => $params->nombre,
-                        'modulo' => $modulo->getId()
-                    )
+                $casoInsumo->setNombre(strtoupper($params->nombre));
+                $casoInsumo->setModulo($modulo);
+                $casoInsumo->setReferencia($params->referencia);
+                $casoInsumo->setValor($params->valor);
+                $casoInsumo->setTipo($params->tipo);
+                $casoInsumo->setEstado(true);
+
+                $em->persist($casoInsumo);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro creado con exito", 
                 );
-                
-                if (!$casoInsumo) {
-                    $casoInsumo = new CasoInsumo();
-    
-                    $casoInsumo->setNombre(strtoupper($params->nombre));
-                    $casoInsumo->setModulo($modulo);
-                    $casoInsumo->setReferencia($params->referencia);
-                    $casoInsumo->setValor($params->valor);
-                    $casoInsumo->setTipo($params->tipo);
-                    $casoInsumo->setEstado(true);
-    
-                    $em->persist($casoInsumo);
-                    $em->flush();
-
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro creado con exito", 
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "El registro ya se encuentra registrado", 
-                    );
-                }
-            //}
-        }else{
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro ya se encuentra registrado", 
+                );
+            }
+        }else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
@@ -111,9 +109,9 @@ class CasoInsumoController extends Controller
      * @Route("/show/{id}", name="casoInsumo_show")
      * @Method("POST")
      */
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request, $id)
     {
-       $helpers = $this->get("app.helpers");
+        $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
@@ -121,17 +119,17 @@ class CasoInsumoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "casoInsumo encontrado", 
-                    'data'=> $casoInsumo,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "casoInsumo encontrado",
+                'data' => $casoInsumo,
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -141,15 +139,15 @@ class CasoInsumoController extends Controller
      *
      * @Route("/edit", name="casoInsumo_edit")
      * @Method({"GET", "POST"})
-     */ 
+     */
     public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $nombre = $params->nombre;
@@ -161,7 +159,7 @@ class CasoInsumoController extends Controller
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->id);
             $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
 
-            if ($casoInsumo!=null) {
+            if ($casoInsumo != null) {
 
                 $casoInsumo->setNombre(strtoupper($nombre));
                 $casoInsumo->setModulo($modulo);
@@ -169,7 +167,6 @@ class CasoInsumoController extends Controller
                 $casoInsumo->setValor($valor);
                 $casoInsumo->setTipo($tipo);
                 $casoInsumo->setEstado(true);
-                
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($casoInsumo);
@@ -178,21 +175,21 @@ class CasoInsumoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "casoInsumo editada con exito", 
+                    'msj' => "casoInsumo editada con exito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La casoInsumo no se encuentra en la base de datos", 
+                    'msj' => "La casoInsumo no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco",
+            );
         }
 
         return $helpers->json($response);
@@ -209,27 +206,27 @@ class CasoInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            $em = $this->getDoctrine()->getManager();            
+            $em = $this->getDoctrine()->getManager();
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->id);
 
             $casoInsumo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($casoInsumo);
-                $em->flush();
+            $em->persist($casoInsumo);
+            $em->flush();
             $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "casoInsumo eliminado con exito", 
-                );
-        }else{
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "casoInsumo eliminado con exito",
+            );
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -250,7 +247,6 @@ class CasoInsumoController extends Controller
         ;
     }
 
-
     /**
      * datos para select 2
      *
@@ -263,11 +259,11 @@ class CasoInsumoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
-            array('estado' => 1,'tipo'=>'Sustrato')
+            array('estado' => 1, 'tipo' => 'Sustrato')
         );
 
         $response = null;
-     
+
         foreach ($insumos as $key => $insumo) {
             $response[$key] = array(
                 'value' => $insumo->getId(),
@@ -286,21 +282,21 @@ class CasoInsumoController extends Controller
     public function selectInsumoAction()
     {
         $helpers = $this->get("app.helpers");
-        
+
         $em = $this->getDoctrine()->getManager();
         $insumos = $em->getRepository('AppBundle:CasoInsumo')->findBy(
-            array('estado' => 1,'tipo'=>'Insumo')
+            array('estado' => 1, 'tipo' => 'Insumo')
         );
 
         $response = null;
-     
+
         foreach ($insumos as $key => $insumo) {
             $response[$key] = array(
                 'value' => $insumo->getId(),
                 'label' => $insumo->getNombre(),
             );
         }
-        return $helpers->json($response); 
-    } 
-    
+        return $helpers->json($response);
+    }
+
 }

@@ -10,6 +10,45 @@ namespace AppBundle\Repository;
  */
 class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByVehiculoAndDate($datos)
+    {     
+        $fechaDesde = new \DateTime($datos->fechaDesde);
+        $fechaHasta = new \DateTime($datos->fechaHasta);
+        $em = $this->getEntityManager();
+        $dql = "SELECT ts
+            FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f
+            WHERE ts.tramiteFactura = tf.id
+            AND tf.factura = f.id
+            AND f.vehiculo = :vehiculoId
+            AND ts.fecha BETWEEN :fechaDesde AND :fechaHasta";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'vehiculoId' => $datos->idVehiculo,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta,
+        ));
+        return $consulta->getResult();
+    }
+
+    public function findByVehiculoOrderTramite($idVehiculo)
+    {     
+        $em = $this->getEntityManager();
+        $dql = "SELECT t
+            FROM AppBundle:TramiteSolicitud ts,AppBundle:TramiteFactura tf, AppBundle:TramitePrecio tp, AppBundle:Tramite t
+            WHERE ts.tramiteFactura = tf.id
+            AND tf.tramitePrecio = tp.id
+            AND tp.tramite = t.id
+            AND ts.vehiculo = :vehiculoId
+            GROUP BY t.id";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'vehiculoId' => $idVehiculo,
+        ));
+        return $consulta->getResult();
+    }
+
     // public function getTramitesVehiculo($vehiculoId)
     // {   
     //     $em = $this->getEntityManager();
@@ -27,4 +66,31 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     //     ));
     //     return $consulta->getResult();
     // }
+    /*public function getTramiteReportes()
+    {   
+        
+        
+        $em = $this->getEntityManager();
+        $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
+                FROM AppBundle:tramiteSolicitud ts
+               
+                GROUP BY ts.tramiteFactura
+                ORDER BY ts.id ASC
+            
+            ";
+        $consulta = $em->createQuery($dql);
+        
+      
+       
+        return $consulta->getResult();
+    }*/
+
+//      SELECT COUNT(tramite_factura_id) AS conteo, tramite_factura_id
+//      FROM `tramite_solicitud`
+//      GROUP BY tramite_factura_id
+//      ORDER BY tramite_factura_id ASC
+
+
+
+    
 }
