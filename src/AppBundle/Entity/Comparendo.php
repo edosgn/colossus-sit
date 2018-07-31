@@ -22,18 +22,19 @@ class Comparendo
     private $id;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="numeroOrden", type="string", length=45)
+     * @ORM\Column(name="fecha_comparendo", type="date", nullable=true)
      */
-    private $numeroOrden;
+    private $fechaComparendo;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaDiligenciamiento", type="datetime", nullable=true)
+     * @ORM\Column(name="hora_comparendo", type="time", nullable=true)
      */
-    private $fechaDiligenciamiento;
+    private $horaComparendo;
+
 
     /**
      * @var string
@@ -96,7 +97,7 @@ class Comparendo
      *
      * @ORM\Column(name="polca", type="boolean", nullable=true)
      */
-    private $polca;
+    private $polca = false;
 
     /**
      * @var bool

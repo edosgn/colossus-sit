@@ -368,7 +368,6 @@ class PropietarioVehiculoController extends Controller
 
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($id);
 
-
             if($vehiculo==null){
                 $response = array(
                     'status' => 'error',
@@ -492,8 +491,6 @@ class PropietarioVehiculoController extends Controller
      */
     public function editPropietarioLicenciaAction(Request $request)
     {
-
-
         $helpers = $this->get("app.helpers");
         $json = $request->get("json",null);
         $params = json_decode($json);

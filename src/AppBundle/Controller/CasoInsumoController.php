@@ -59,19 +59,21 @@ class CasoInsumoController extends Controller
 
             
                 $em = $this->getDoctrine()->getManager();
+
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
                 
-                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneByNombre(
-                    $params->nombre
+                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneBy(
+                    array(
+                        'nombre' => $params->nombre,
+                        'modulo' => $modulo->getId()
+                    )
                 );
                 
                 if (!$casoInsumo) {
                     $casoInsumo = new CasoInsumo();
     
                     $casoInsumo->setNombre(strtoupper($params->nombre));
-
-                    $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
                     $casoInsumo->setModulo($modulo);
-
                     $casoInsumo->setReferencia($params->referencia);
                     $casoInsumo->setValor($params->valor);
                     $casoInsumo->setTipo($params->tipo);

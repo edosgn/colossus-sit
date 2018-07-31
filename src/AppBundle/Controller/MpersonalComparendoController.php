@@ -221,4 +221,69 @@ class MpersonalComparendoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/consecutivo/funcionario", name="mpersonalcomparendo_record_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByConsecutivoAndFuncionarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findBy(
+                array(
+                    'consecutivo' => $params->consecutivo,
+                    'funcionario' => $params->funcionarioId,
+                    'estado' => 'Asignado'
+                )
+            );
+                
+            if ($comparendo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Número de comparendo disponible.",  
+                    'data'=> $comparendo,
+                );
+            }else{
+                $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findBy(
+                    array(
+                        'consecutivo' => $params->consecutivo,
+                        'funcionario' => $params->funcionarioId,
+                        'estado' => 'Utilizado'
+                    )
+                );
+                if ($comparendo) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de comparedo ya fue utilizado.",  
+                        'data'=> $comparendo,
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de comparendo no existe o no ha sido asignado al agente de transito seleccionado.",
+                    );
+                }
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
