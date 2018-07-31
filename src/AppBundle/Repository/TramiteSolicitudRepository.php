@@ -49,46 +49,66 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    // public function getTramitesVehiculo($vehiculoId)
-    // {   
-    //     $em = $this->getEntityManager();
-    //     $dql = "SELECT ts
-    //         FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f
-    //         WHERE ((ts.tramiteFactura = tf.id)
-    //         AND (tf.factura = f.id)
-    //         AND (f.vehiculo = :vehiculoId)
-    //         )
-    //         ";
-    //     $consulta = $em->createQuery($dql);
-        
-    //     $consulta->setParameters(array(
-    //         'vehiculoId' => $vehiculoId,
-    //     ));
-    //     return $consulta->getResult();
-    // }
-    /*public function getTramiteReportes()
+    public function getTramitesVehiculo($vehiculoId)
     {   
-        
-        
         $em = $this->getEntityManager();
-        $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
-                FROM AppBundle:tramiteSolicitud ts
-               
-                GROUP BY ts.tramiteFactura
-                ORDER BY ts.id ASC
-            
+        $dql = "SELECT ts
+            FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f
+            WHERE ((ts.tramiteFactura = tf.id)
+            AND (tf.factura = f.id)
+            AND (f.vehiculo = :vehiculoId)
+            )
             ";
         $consulta = $em->createQuery($dql);
         
-      
-       
+        $consulta->setParameters(array(
+            'vehiculoId' => $vehiculoId,
+        ));
         return $consulta->getResult();
-    }*/
+    }
+    // consulta para agrupar y hace conte por cada uno de tramite 
+   public function getTramiteReportes()
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
+                FROM AppBundle:tramiteSolicitud ts
+                GROUP BY ts.tramiteFactura
+                ORDER BY ts.id ASC
+            ";
+        $consulta = $em->createQuery($dql);
+        
+        return $consulta->getResult();
+    }
+    // consulta para agrupar y hace conte por cada uno de tramite segun las fechas 
+    public function getReporteFecha($datos)
+    {   
 
-//      SELECT COUNT(tramite_factura_id) AS conteo, tramite_factura_id
-//      FROM `tramite_solicitud`
-//      GROUP BY tramite_factura_id
-//      ORDER BY tramite_factura_id ASC
+        $desde = new \DateTime($datos->desde);
+        $hasta = new \DateTime($datos->hasta);
+        $sedeOperativa = ($datos->sedeOperativa);
+ 
+        $em = $this->getEntityManager(); 
+        $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
+                FROM AppBundle:tramiteSolicitud ts, AppBundle:tramiteFactura tf, 
+                     AppBundle:factura f, AppBundle:sedeOperativa so
+                WHERE ts.fecha BETWEEN :desde AND :hasta 
+                AND ts.tramiteFactura = tf.id AND tf.factura = f.id
+                AND f.sedeOperativa = so.id AND so.id = :sedeOperativa
+                GROUP BY ts.tramiteFactura
+                ORDER BY ts.id ASC";
+        $consulta = $em->createQuery($dql);
+        // var_dump($consulta);
+        // die();
+        
+        $consulta->setParameters(array(
+            'desde' => $desde,
+            'hasta' => $hasta,
+            'sedeOperativa' => $sedeOperativa,
+        ));
+        
+        return $consulta->getResult();
+    }
+
 
 
 
