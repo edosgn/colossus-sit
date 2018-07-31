@@ -192,10 +192,10 @@ class VehiculoController extends Controller
     /**
      * busca vehiculos por placa.
      *
-     * @Route("/placa", name="vehiculo_show_ide")
+     * @Route("/placa", name="vehiculo_search_placa")
      * @Method("POST")
      */
-    public function vehiculoPorPlaca(Request $request)
+    public function searchByPlacaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -220,7 +220,7 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encotrado",
+                    'msj' => "Registro no encontrado", 
                 );
             }
         } else {

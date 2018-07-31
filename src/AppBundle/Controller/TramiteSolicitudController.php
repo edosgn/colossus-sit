@@ -238,6 +238,63 @@ die();
     }
 
     /**
+     * Obtiene tramiteSolicitud segun id_vehiculo entities.
+     *
+     * @Route("/byvehiculoorder", name="tramitesolicitud_byvehiculoordertramite")
+     * @Method({"GET", "POST"})
+     */
+    public function getTramiteByIdVehiculoAndTramite(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $idVehiculo = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculoOrderTramite($idVehiculo);        
+
+        foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
+            $response[$key] = array(
+                'value' => $tramiteSolicitud->getId(),
+                'label' => $tramiteSolicitud->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Obtiene tramiteSolicitud segun id_vehiculo and dates entities.
+     *
+     * @Route("/byvehiculoanddate", name="tramitesolicitud_byvehiculoanddate")
+     * @Method({"GET", "POST"})
+     */
+    public function getTramiteByIdVehiculoAndDate(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $datos = $request->get("json", null);
+        $params = json_decode($datos);
+        $authCheck = $helpers->authCheck($hash);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculoAndDate($params);
+        if($tramitesSolicitud){
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $tramitesSolicitud, 
+        );}
+        else{
+            $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "No hay tramites entre esas fechas",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a form to delete a tramiteSolicitud entity.
      *
      * @param TramiteSolicitud $tramiteSolicitud The tramiteSolicitud entity
@@ -252,4 +309,67 @@ die();
             ->getForm()
         ;
     }
+
+    /**
+     * Lists all tramiteSolicitud entities.
+     *
+     * @Route("/reporte", name="tramitesolicitud_index")
+     * @Method({"GET", "POST"})
+     */
+    public function reporte()
+    {
+       
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $tramiteReportes = $em->getRepository('AppBundle:TramiteSolicitud')->getTramiteReportes();
+
+        // foreach ($tramiteReportes as $key => $ts) {
+        //   var_dump($ts['id']);
+        //   die();
+        // }
+        
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $tramiteReportes, 
+        );
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all tramiteSolicitud entities.
+     *
+     * @Route("/reportefecha", name="reporte_fecha_tramitesolicitud_index")
+     * @Method({"GET", "POST"})
+     */
+    public function reporteFecha(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $datos = $request->get("json", null);
+        $params = json_decode($datos);
+        $authCheck = $helpers->authCheck($hash);
+        $reporteFecha = $em->getRepository('AppBundle:TramiteSolicitud')->getReporteFecha($params);
+
+        if($reporteFecha){
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $reporteFecha, 
+        );}
+        else{
+            $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "No hay tramites entre esas fechas",
+            );
+        }
+        return $helpers->json($response);
+    }
+
 }

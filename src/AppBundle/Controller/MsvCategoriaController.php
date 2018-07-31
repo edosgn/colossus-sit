@@ -22,13 +22,18 @@ class MsvCategoriaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $msvCategoria = $em->getRepository('AppBundle:MsvCategoria')->findBy( array('estado' => 1));
 
-        $msvCategorias = $em->getRepository('AppBundle:MsvCategoria')->findAll();
+        $response = array(
+                    'status' => 'succes',
+                    'code' => 200,
+                    'msj' => "listado festivos",
+                    'data' => $msvCategoria,
+        );
 
-        return $this->render('msvcategoria/index.html.twig', array(
-            'msvCategorias' => $msvCategorias,
-        ));
+        return $helpers ->json($response);
     }
 
     /**

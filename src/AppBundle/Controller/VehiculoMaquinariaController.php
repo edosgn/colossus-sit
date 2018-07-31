@@ -25,7 +25,7 @@ class VehiculoMaquinariaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager(); 
 
         $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->getVehiculoCampo();
         $response = array(
