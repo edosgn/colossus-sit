@@ -214,6 +214,8 @@ class TramiteSolicitudController extends Controller
         return $this->redirectToRoute('tramitesolicitud_index');
     }
 
+
+
     /**
      * Obtiene tramiteSolicitud segun id_vehiculo entities.
      *
@@ -318,7 +320,6 @@ class TramiteSolicitudController extends Controller
      */
     public function reporte()
     {
-
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $tramiteReportes = $em->getRepository('AppBundle:TramiteSolicitud')->getTramiteReportes();

@@ -37,6 +37,31 @@ class MsvCategoriaController extends Controller
     }
 
     /**
+     * Categoria por id.
+     *
+     * @Route("/getById", name="msvcategoria_id")
+     * @Method({"GET", "POST"})
+     */
+    public function getCategoriaById(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $hash = $request->get("authorization", null);
+        $categoriaId = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $msvCategoria = $em->getRepository('AppBundle:MsvCategoria')->findById($categoriaId);
+
+        $response = array(
+                    'status' => 'succes',
+                    'code' => 200,
+                    'msj' => "Categoria encontrada",
+                    'data' => $msvCategoria,
+        );
+
+        return $helpers ->json($response);
+    }
+
+    /**
      * Creates a new msvCategorium entity.
      *
      * @Route("/new", name="msvcategoria_new")

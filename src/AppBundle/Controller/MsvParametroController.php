@@ -32,6 +32,39 @@ class MsvParametroController extends Controller
     }
 
     /**
+     * Parametros por categoriaid.
+     *
+     * @Route("/getByCategoriaId", name="msvparametrovycategoria")
+     * @Method({"GET", "POST"})
+     */
+    public function getParametroByCategoriaId(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $hash = $request->get("authorization", null);
+        $categoriaId = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
+
+        foreach ($msvParametros as $key => $msvParametro) {
+            $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
+            $msvParametrosArray[]= array(
+                'nombre' => $msvParametro->getNombre(),
+                'id' => $msvParametro->getId(),
+                'datos' => $variables
+            );
+        }
+        $response = array(
+                    'status' => 'succes',
+                    'code' => 200,
+                    'msj' => "Parametros no encontrados",
+                    'data' => $msvParametrosArray,
+        );
+
+        return $helpers ->json($response);
+    }
+
+    /**
      * Creates a new msvParametro entity.
      *
      * @Route("/new", name="msvparametro_new")
