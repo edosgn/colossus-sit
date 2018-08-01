@@ -143,8 +143,6 @@ class TramitePrecioController extends Controller
                     $tramitePrecio->setActivo(false);
                 }
                 
-
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tramitePrecio);
                 $em->flush();
