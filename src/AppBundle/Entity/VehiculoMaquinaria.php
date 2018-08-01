@@ -105,6 +105,30 @@ class VehiculoMaquinaria
      */
     private $subpartidaArancelaria;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroActivacion", type="string", length=255)
+     */
+    private $numeroActivacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipoDispositivo", type="string", length=255)
+     */
+    private $tipoDispositivo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroImportacion", type="string", length=255)
+     */
+    private $numeroImportacion;
+
+
+
+
 
 
 
@@ -119,6 +143,9 @@ class VehiculoMaquinaria
      */
     private $vehiculo;
 
+     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgEmpresaGps", inversedBy="propietariosVehiculo") */
+     private $cfgEmpresaGps;
+
     
 
     /**
@@ -130,9 +157,6 @@ class VehiculoMaquinaria
     {
         return $this->id;
     }
-
-   
-
 
     /**
      * Set condicionIngreso
@@ -179,7 +203,7 @@ class VehiculoMaquinaria
      */
     public function getFechaIngreso()
     {
-        return $this->fechaIngreso->format('Y-m-d');
+        return $this->fechaIngreso;
     }
 
     /**
@@ -423,6 +447,78 @@ class VehiculoMaquinaria
     }
 
     /**
+     * Set numeroActivacion
+     *
+     * @param string $numeroActivacion
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setNumeroActivacion($numeroActivacion)
+    {
+        $this->numeroActivacion = $numeroActivacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroActivacion
+     *
+     * @return string
+     */
+    public function getNumeroActivacion()
+    {
+        return $this->numeroActivacion;
+    }
+
+    /**
+     * Set tipoDispositivo
+     *
+     * @param string $tipoDispositivo
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setTipoDispositivo($tipoDispositivo)
+    {
+        $this->tipoDispositivo = $tipoDispositivo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoDispositivo
+     *
+     * @return string
+     */
+    public function getTipoDispositivo()
+    {
+        return $this->tipoDispositivo;
+    }
+
+    /**
+     * Set numeroImportacion
+     *
+     * @param string $numeroImportacion
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setNumeroImportacion($numeroImportacion)
+    {
+        $this->numeroImportacion = $numeroImportacion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroImportacion
+     *
+     * @return string
+     */
+    public function getNumeroImportacion()
+    {
+        return $this->numeroImportacion;
+    }
+
+    /**
      * Set tipoVehiculo
      *
      * @param \AppBundle\Entity\TipoVehiculo $tipoVehiculo
@@ -492,5 +588,29 @@ class VehiculoMaquinaria
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set cfgEmpresaGps
+     *
+     * @param \AppBundle\Entity\CfgEmpresaGps $cfgEmpresaGps
+     *
+     * @return VehiculoMaquinaria
+     */
+    public function setCfgEmpresaGps(\AppBundle\Entity\CfgEmpresaGps $cfgEmpresaGps = null)
+    {
+        $this->cfgEmpresaGps = $cfgEmpresaGps;
+
+        return $this;
+    }
+
+    /**
+     * Get cfgEmpresaGps
+     *
+     * @return \AppBundle\Entity\CfgEmpresaGps
+     */
+    public function getCfgEmpresaGps()
+    {
+        return $this->cfgEmpresaGps;
     }
 }

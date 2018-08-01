@@ -288,4 +288,30 @@ class ClaseController extends Controller
         }
        return $helpers->json($response);
     }
+
+    
+    /**
+     * datos para select 2
+     *
+     * @Route("/maquinaria/select", name="clase_select")
+     * @Method({"GET", "POST"})
+     */
+    public function maquinariaselect()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $clases = $em->getRepository('AppBundle:Clase')->findBy(
+        array(
+            'estado' => 1,
+            'modulo'=> 3
+            )
+    );
+      foreach ($clases as $key => $clase) {
+        $response[$key] = array(
+            'value' => $clase->getId(),
+            'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }
