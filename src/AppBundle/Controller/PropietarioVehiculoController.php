@@ -538,7 +538,7 @@ class PropietarioVehiculoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         $json = $request->get("json",null);
         $params = json_decode($json);
-        $fecha = new \DateTime($params->fecha);
+
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findOneBy(
@@ -549,7 +549,11 @@ class PropietarioVehiculoController extends Controller
                 )
             );
 
-            $propietarioVehiculo->setFechaPropiedadFinal($fecha);
+            if ($params->fecha) {
+                $propietarioVehiculo->setFechaPropiedadFinal(new \DateTime($params->fecha));
+            }else{
+                $propietarioVehiculo->setFechaPropiedadFinal(new \DateTime(date('Y-m-d')));
+            }
             $propietarioVehiculo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
             $em->flush();
@@ -567,5 +571,4 @@ class PropietarioVehiculoController extends Controller
         }
         return $helpers->json($response);
     }
-   
 }

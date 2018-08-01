@@ -10,4 +10,27 @@ namespace AppBundle\Repository;
  */
 class FacturaRepository extends \Doctrine\ORM\EntityRepository
 {
+        public function getFacturaModulo($moduloId, $id, $vehiculoId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT tf
+            FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
+            WHERE ((tf.factura = f.id)
+            AND (f.id = :id)
+            AND (tf.tramitePrecio = tp.id)
+            AND (f.vehiculo = :vehiculoId)
+            AND (tp.modulo = :moduloId)
+
+            )
+            ";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'moduloId' => $moduloId,
+            'id' => $id,
+            'vehiculoId' => $vehiculoId,
+        ));
+        return $consulta->getResult();
+
+    }
 }
