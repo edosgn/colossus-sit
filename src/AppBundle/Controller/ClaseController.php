@@ -293,25 +293,28 @@ class ClaseController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/maquinaria/select", name="clase_select")
+     * @Route("/maquinaria/select", name="clase_maquinaria_select")
      * @Method({"GET", "POST"})
      */
-    public function maquinariaselect()
+    public function maquinariaSelectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $clases = $em->getRepository('AppBundle:Clase')->findBy(
-        array(
-            'estado' => 1,
-            'modulo'=> 3
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $clases = $em->getRepository('AppBundle:Clase')->findBy(
+            array(
+                'estado' => 1,
+                'modulo'=> 3
             )
-    );
-      foreach ($clases as $key => $clase) {
-        $response[$key] = array(
-            'value' => $clase->getId(),
-            'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
+        );
+
+        $response = null;
+        foreach ($clases as $key => $clase) {
+            $response[$key] = array(
+                'value' => $clase->getId(),
+                'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
             );
-      }
+        }
        return $helpers->json($response);
     }
 }

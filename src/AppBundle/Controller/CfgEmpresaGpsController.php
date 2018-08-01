@@ -144,15 +144,19 @@ class CfgEmpresaGpsController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $cfgEmpresasGps = $em->getRepository('AppBundle:CfgEmpresaGps')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
         foreach ($cfgEmpresasGps as $key => $cfgEmpresaGps) {
             $response[$key] = array(
                 'value' => $cfgEmpresaGps->getId(),
                 'label' => $cfgEmpresaGps->getNombre(),
             );
         }
+        
         return $helpers->json($response);
     }
 }
