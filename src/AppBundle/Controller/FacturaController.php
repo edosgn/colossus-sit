@@ -54,6 +54,7 @@ class FacturaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+
             /*if (count($params)==0) {
                 $response = array(
                     'status' => 'error',
@@ -65,9 +66,6 @@ class FacturaController extends Controller
                 $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
                 $consecutivo = count($facturas)."-".date('y');
 
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->factura->sedeOperativaId
-                );
                 $factura = new Factura();
 
                 if ($params->factura->vehiculoId) {
@@ -91,6 +89,9 @@ class FacturaController extends Controller
                 }
                 
                 //Inserta llaves foraneas
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->factura->sedeOperativaId
+                );
                 $factura->setSedeOperativa($sedeOperativa);
                 $factura->setCiudadano($ciudadano);
                 
@@ -103,7 +104,8 @@ class FacturaController extends Controller
                     $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
                         array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
                     );
-                    if($tramitePrecio->getTramite()->getId() == 2){ 
+
+                    if($tramitePrecio->getTramite()->getId() == 6){ 
                         $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
                             $params->valorVehiculoId
                         );

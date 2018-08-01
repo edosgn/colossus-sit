@@ -126,7 +126,7 @@ class VehiculoLimitacionController extends Controller
      * Deletes a vehiculoLimitacion entity.
      *
      * @Route("/{id}", name="vehiculoLimitacion_delete")
-     * @Method("DELETE")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, VehiculoLimitacion $vehiculoLimitacion)
     {
@@ -156,5 +156,102 @@ class VehiculoLimitacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * busca limitaciones a vehiculo por placa .
+     *
+     * @Route("/limitacion/placaestado", name="vehiculo_show_limitacion")
+     * @Method({"GET", "POST"})
+     */
+    public function limitacionVehiculoPorPlaca(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:VehiculoLimitacion')->getByPlacaAndEstadoLimitacion(
+                $params->placa
+            );
+
+            if ($vehiculo != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado",
+                    'data' => $vehiculo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encotrado",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Levanta una limitacion an existing vehiculoLimitacion entity.
+     *
+     * @Route("/levantar/limitacion", name="levantar_vehiculoLimitacion")
+     * @Method({"GET", "POST"})
+     */
+    public function levantarLimitacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $vehiculoLimitacionId = $params;
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->find($vehiculoLimitacionId);
+
+            if ($vehiculoLimitacion != null) {
+                $vehiculoLimitacion->setEstado(false);
+                
+
+                $em->persist($vehiculoLimitacion);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Limitacion levantada con éxito",
+                );
+
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La limitacion no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autrización no válida para levantar limitacion",
+            );
+        }
+        return $helpers->json($response);
+
     }
 }

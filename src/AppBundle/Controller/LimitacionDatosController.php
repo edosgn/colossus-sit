@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\LimitacionDatos;
 use AppBundle\Entity\VehiculoLimitacion;
+use AppBundle\Entity\CfgCausalLimitacion;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
@@ -51,6 +52,7 @@ class LimitacionDatosController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
+
             $fechaRadicacion = $params[0]->datosLimitacion->fechaRadicacion;
             $municipioId = $params[0]->datosLimitacion->municipioId;
             $departamentoId = $params[0]->datosLimitacion->departamentoId;
@@ -60,6 +62,7 @@ class LimitacionDatosController extends Controller
             $limitacionId = $params[0]->datosLimitacion->limitacionId;
             $fechaExpedicion = $params[0]->datosLimitacion->fechaExpedicion;
             $tipoProcesoId = $params[0]->datosLimitacion->tipoProcesoId;
+            $causalLimitacionId = $params[0]->datosLimitacion->causalLimitacionId;
             $entidadJudicialId = $params[0]->datosLimitacion->entidadJudicialId;
             $observaciones = $params[0]->datosLimitacion->observaciones;
             $datos = $params[0]->datosLimitacion->datos;
@@ -72,6 +75,7 @@ class LimitacionDatosController extends Controller
             $ciudadanoDemandante = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoDemandanteId);
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($limitacionId);
             $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($tipoProcesoId);
+            $causalLimitacion = $em->getRepository('AppBundle:CfgCausalLimitacion')->find($causalLimitacionId);
             $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicialId);
             $limitaciondatos = new LimitacionDatos();
 
@@ -84,6 +88,7 @@ class LimitacionDatosController extends Controller
             $limitaciondatos->setLimitacion($limitacion);
             $limitaciondatos->setFechaExpedicion(new \Datetime($fechaExpedicion));
             $limitaciondatos->setTipoProceso($tipoProceso);
+            $limitaciondatos->setCausalLimitacion($causalLimitacion);
             $limitaciondatos->setEntidadJudicial($entidadJudicial);
             $limitaciondatos->setObservaciones($observaciones);
             $limitaciondatos->setDatos($datos);
@@ -139,6 +144,8 @@ class LimitacionDatosController extends Controller
                     $vehiculoLimitacionNew = new VehiculoLimitacion();
                     $vehiculoLimitacionNew->setLimitacionDatos($limitaciondatos);
                     $vehiculoLimitacionNew->setVehiculo($vehiculoN);
+                    $vehiculoLimitacionNew->setEstado(true);
+
                     
                     $em->persist($vehiculoLimitacionNew);
                     $em->flush();
