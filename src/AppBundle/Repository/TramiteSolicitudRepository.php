@@ -49,7 +49,6 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-<<<<<<< HEAD
     public function getTramitesVehiculo($vehiculoId)
     {   
         $em = $this->getEntityManager();
@@ -110,31 +109,49 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    public function getTramitesModulo($moduloId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT ts
+            FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
+            WHERE ((ts.tramiteFactura = tf.id)
+            AND (tf.factura = f.id)
+            AND (tf.tramitePrecio = tp.id)
+            AND (tp.modulo = :moduloId)
 
+            )
+            ";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'moduloId' => $moduloId,
+        ));
+        return $consulta->getResult();
+
+    }
 
 
     
 }
-=======
-    public function getTramiteReportes()
-    {   
+//     public function getTramiteReportes()
+//     {   
         
         
-        $em = $this->getEntityManager();
-        $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
-                FROM AppBundle:tramiteSolicitud ts
+//         $em = $this->getEntityManager();
+//         $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
+//                 FROM AppBundle:tramiteSolicitud ts
                
-                GROUP BY ts.tramiteFactura
-                ORDER BY ts.id ASC
+//                 GROUP BY ts.tramiteFactura
+//                 ORDER BY ts.id ASC
             
-            ";
-        $consulta = $em->createQuery($dql);
+//             ";
+//         $consulta = $em->createQuery($dql);
         
       
        
-        return $consulta->getResult();
-    }
-}
+//         return $consulta->getResult();
+//     }
+// }
     // public function getTramitesVehiculo($vehiculoId)
     // {   
     //     $em = $this->getEntityManager();
@@ -158,4 +175,3 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 //      FROM `tramite_solicitud`
 //      GROUP BY tramite_factura_id
 //      ORDER BY tramite_factura_id ASC
->>>>>>> 7c7f005ef7fe586eb0ba6d89db1424acb9ac0a90
