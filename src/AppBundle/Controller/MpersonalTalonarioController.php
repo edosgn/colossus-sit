@@ -98,6 +98,7 @@ class MpersonalTalonarioController extends Controller
                     $comparendo->setTalonario($talonario);
                     $comparendo->setConsecutivo($numeroComparendo);
                     $comparendo->setSedeOperativa($sedeOperativa);
+                    $comparendo->setEstado('Disponible');
                     $comparendo->setActivo(true);
 
                     $em->persist($comparendo);
