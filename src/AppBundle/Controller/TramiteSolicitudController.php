@@ -338,4 +338,38 @@ die();
         return $helpers->json($response);
     }
 
+    /**
+     * Lists all tramiteSolicitud entities.
+     *
+     * @Route("/reportefecha", name="reporte_fecha_tramitesolicitud_index")
+     * @Method({"GET", "POST"})
+     */
+    public function reporteFecha(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $datos = $request->get("json", null);
+        $params = json_decode($datos);
+        $authCheck = $helpers->authCheck($hash);
+        $reporteFecha = $em->getRepository('AppBundle:TramiteSolicitud')->getReporteFecha($params);
+
+        if($reporteFecha){
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $reporteFecha, 
+        );}
+        else{
+            $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "No hay tramites entre esas fechas",
+            );
+        }
+        return $helpers->json($response);
+    }
+
 }

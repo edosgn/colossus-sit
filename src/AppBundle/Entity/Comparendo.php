@@ -46,6 +46,13 @@ class Comparendo
     /**
      * @var string
      *
+     * @ORM\Column(name="numeroOrden", type="string", length=255, nullable=true)
+     */
+    private $numeroOrden;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="barrioInfraccion", type="string", length=45, nullable=true)
      */
     private $barrioInfraccion;
@@ -172,6 +179,8 @@ class Comparendo
     protected $factura;
     
 
+
+
     /**
      * Get id
      *
@@ -183,51 +192,51 @@ class Comparendo
     }
 
     /**
-     * Set numeroOrden
+     * Set fechaComparendo
      *
-     * @param string $numeroOrden
+     * @param \DateTime $fechaComparendo
      *
      * @return Comparendo
      */
-    public function setNumeroOrden($numeroOrden)
+    public function setFechaComparendo($fechaComparendo)
     {
-        $this->numeroOrden = $numeroOrden;
+        $this->fechaComparendo = $fechaComparendo;
 
         return $this;
     }
 
     /**
-     * Get numeroOrden
-     *
-     * @return string
-     */
-    public function getNumeroOrden()
-    {
-        return $this->numeroOrden;
-    }
-
-    /**
-     * Set fechaDiligenciamiento
-     *
-     * @param \DateTime $fechaDiligenciamiento
-     *
-     * @return Comparendo
-     */
-    public function setFechaDiligenciamiento($fechaDiligenciamiento)
-    {
-        $this->fechaDiligenciamiento = $fechaDiligenciamiento;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaDiligenciamiento
+     * Get fechaComparendo
      *
      * @return \DateTime
      */
-    public function getFechaDiligenciamiento()
+    public function getFechaComparendo()
     {
-        return $this->fechaDiligenciamiento;
+        return $this->fechaComparendo;
+    }
+
+    /**
+     * Set horaComparendo
+     *
+     * @param \DateTime $horaComparendo
+     *
+     * @return Comparendo
+     */
+    public function setHoraComparendo($horaComparendo)
+    {
+        $this->horaComparendo = $horaComparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get horaComparendo
+     *
+     * @return \DateTime
+     */
+    public function getHoraComparendo()
+    {
+        return $this->horaComparendo;
     }
 
     /**
@@ -252,6 +261,30 @@ class Comparendo
     public function getLugarInfraccion()
     {
         return $this->lugarInfraccion;
+    }
+
+    /**
+     * Set numeroOrden
+     *
+     * @param string $numeroOrden
+     *
+     * @return Comparendo
+     */
+    public function setNumeroOrden($numeroOrden)
+    {
+        $this->numeroOrden = $numeroOrden;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroOrden
+     *
+     * @return string
+     */
+    public function getNumeroOrden()
+    {
+        return $this->numeroOrden;
     }
 
     /**
