@@ -238,7 +238,7 @@ class MpersonalComparendoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            
+
             $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findBy(
                 array(
                     'consecutivo' => $params->consecutivo,

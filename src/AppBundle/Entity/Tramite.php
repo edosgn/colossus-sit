@@ -57,6 +57,13 @@ class Tramite
     private $sustrato = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="formulario", type="string", length=255, nullable=true)
+     */
+    private $formulario;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="Tramites")
      **/
     protected $modulo;
@@ -214,5 +221,29 @@ class Tramite
     public function getModulo()
     {
         return $this->modulo;
+    }
+
+    /**
+     * Set formulario
+     *
+     * @param string $formulario
+     *
+     * @return Tramite
+     */
+    public function setFormulario($formulario)
+    {
+        $this->formulario = $formulario;
+
+        return $this;
+    }
+
+    /**
+     * Get formulario
+     *
+     * @return string
+     */
+    public function getFormulario()
+    {
+        return $this->formulario;
     }
 }
