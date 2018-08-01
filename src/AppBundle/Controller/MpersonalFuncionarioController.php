@@ -457,8 +457,7 @@ class MpersonalFuncionarioController extends Controller
                 $params->identificacion
             );
             if ($usuario) {
-                var_dump($params->identificacion);
-                die();
+                
                 if ($usuario->getCiudadano()) {
                     $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(
                         array(
