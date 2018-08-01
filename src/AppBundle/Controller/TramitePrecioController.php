@@ -63,13 +63,13 @@ class TramitePrecioController extends Controller
 
         $response = array(
             'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado tramitePrecios", 
-                    'tramitePreciosActivo'=> $tramitePreciosActivo,
-                    'tramiteProximo'=> $tramiteProximo,
-                    'data'=> $tramitePreciosActivo, 
-                    'compa'=> $comprobar,
-                );
+            'code' => 200,
+            'msj' => "listado tramitePrecios", 
+            'tramitePreciosActivo'=> $tramitePreciosActivo,
+            'tramiteProximo'=> $tramiteProximo,
+            'data'=> $tramitePreciosActivo, 
+            'compa'=> $comprobar,
+        );
          
         return $helpers->json($response);
         // fin de lista activos
@@ -121,7 +121,7 @@ class TramitePrecioController extends Controller
                 if (isset($params->claseId)) {
                     $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
                     $tramitePrecio->setClase($clase);
-                    $nombre = $tramite->getNombre() . ' ' . $clase->getNombre();
+                    $tramitePrecio->setNombre($tramite->getNombre() . ' ' . $clase->getNombre());
                 }else{
                     $tramitePrecio->setNombre($tramite->getNombre());
                 }
