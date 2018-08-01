@@ -100,8 +100,7 @@ class TramiteSolicitudController extends Controller
                 $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
                 $datos = $params->datos; 
                 $em = $this->getDoctrine()->getManager();
-var_dump($params);
-die();
+
                 $tramiteSolicitud = new TramiteSolicitud();
 
                 if ($params->vehiculoId) {
@@ -212,6 +211,7 @@ die();
 
         return $this->redirectToRoute('tramitesolicitud_index');
     }
+<<<<<<< HEAD
 
     /**
      * Obtiene tramiteSolicitud segun id_vehiculo entities.
@@ -396,4 +396,6 @@ die();
         return $helpers->json($response);
     }
 
+=======
+>>>>>>> 4eefa00994e9d22b6c0f2196b28d3aa55f8e3621
 }

@@ -143,18 +143,19 @@ class CfgOrigenRegistroController extends Controller
     */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $cfgOrigenRegistros = $em->getRepository('AppBundle:CfgOrigenRegistro')->findBy(
-        array('estado' => 1)
-    );
-    
-    foreach ($cfgOrigenRegistros as $key => $cfgOrigenRegistro) {
-        $response[$key] = array(
-            'value' => $cfgOrigenRegistro->getId(),
-            'label' => $cfgOrigenRegistro->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $cfgOrigenRegistros = $em->getRepository('AppBundle:CfgOrigenRegistro')->findBy(
+            array('estado' => 1)
         );
-      }
+    
+        $response = null;
+        foreach ($cfgOrigenRegistros as $key => $cfgOrigenRegistro) {
+            $response[$key] = array(
+                'value' => $cfgOrigenRegistro->getId(),
+                'label' => $cfgOrigenRegistro->getNombre(),
+            );
+        }
        return $helpers->json($response);
     }
 

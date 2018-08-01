@@ -95,7 +95,6 @@ class FacturaController extends Controller
                 $factura->setSedeOperativa($sedeOperativa);
                 $factura->setCiudadano($ciudadano);
                 
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);
                 $em->flush();
 
@@ -106,18 +105,24 @@ class FacturaController extends Controller
                         array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
                     );
 
-                    if($tramitePrecio->getTramite()->getId() == 6){ 
-                        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
-                            $params->valorVehiculoId
-                        );
+                    if($tramitePrecio->getTramite()->getId() == 6){
                         foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                        
+                            $mflRetefunte = new MflRetefuente();
+
+                            $mflRetefunte->setVehiculo($vehiculo);
+                            
                             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
                                 $propietarioRetefuenteId
                             );
-                            $mflRetefunte = new MflRetefuente();
-                            $mflRetefunte->setVehiculo($vehiculo);
                             $mflRetefunte->setPropietarioVehiculo($propietarioVehiculo);
-                            $mflRetefunte->setValorVehiculo($valorVehiculo);
+
+                            if (isset($params->valorVehiculoId)) {
+                                $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
+                                    $params->valorVehiculoId
+                                );
+                                $mflRetefunte->setValorVehiculo($valorVehiculo);
+                            }
                             $mflRetefunte->setFactura($factura);
                             $mflRetefunte->setFecha(new \DateTime($params->factura->fechaCreacion));
                             $mflRetefunte->setRetencion($params->retencion);
@@ -443,5 +448,63 @@ class FacturaController extends Controller
                 );
         }
         return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new factura entity.
+     *
+     * @Route("/imprimir/factura", name="imprimir_factura_new")
+     * @Method({"GET", "POST"})
+     */
+    public function ImprimirFacturaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
+            $consecutivo = count($facturas)."-".date('y');
+
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                $params->factura->sedeOperativaId
+            );
+            $factura = new Factura();
+            if ($params->factura->vehiculoId) {
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                    $params->factura->vehiculoId
+                );
+                $factura->setVehiculo($vehiculo);
+            }
+            
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+                $params->factura->ciudadanoId
+            );
+            $factura->setNumero($params->factura->numero);
+            $factura->setConsecutivo(0);
+            $factura->setEstado('Emitida');
+            $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
+            $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
+            if ($params->factura->valorBruto) {
+                $factura->setValorBruto($params->factura->valorBruto);
+            }
+            
+            //Inserta llaves foraneas
+            $factura->setSedeOperativa($sedeOperativa);
+            $factura->setCiudadano($ciudadano);
+            var_dump($factura->getNumero());
+            die();
+
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);    
     }
 }

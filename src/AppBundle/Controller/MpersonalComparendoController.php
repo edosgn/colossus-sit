@@ -99,7 +99,7 @@ class MpersonalComparendoController extends Controller
     /**
      * Finds and displays a mpersonalComparendo entity.
      *
-     * @Route("/{id}", name="mpersonalcomparendo_show")
+     * @Route("/{id}/show", name="mpersonalcomparendo_show")
      * @Method("GET")
      */
     public function showAction(MpersonalComparendo $mpersonalComparendo)
@@ -140,8 +140,8 @@ class MpersonalComparendoController extends Controller
     /**
      * Deletes a mpersonalComparendo entity.
      *
-     * @Route("/{id}", name="mpersonalcomparendo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="mpersonalcomparendo_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, MpersonalComparendo $mpersonalComparendo)
     {

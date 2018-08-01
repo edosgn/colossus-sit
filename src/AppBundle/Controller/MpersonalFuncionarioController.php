@@ -348,14 +348,14 @@ class MpersonalFuncionarioController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
+           
             $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearch($params);
                 
             if ($funcionarios == null) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado",  
                 );
             }else{
                 $response = array(
@@ -457,6 +457,7 @@ class MpersonalFuncionarioController extends Controller
                 $params->identificacion
             );
             if ($usuario) {
+                
                 if ($usuario->getCiudadano()) {
                     $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(
                         array(
