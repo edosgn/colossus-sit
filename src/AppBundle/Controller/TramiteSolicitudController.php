@@ -240,6 +240,30 @@ die();
     /**
      * Obtiene tramiteSolicitud segun id_vehiculo entities.
      *
+     * @Route("/byidvehiculo", name="tramitesolicitud_byidvehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function byIdVehiculo(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $idVehiculo = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);        
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Lista de tramites",
+            'data' => $tramitesSolicitud, 
+        );
+        return $helpers->json($response);
+    }
+
+    /**
+     * Obtiene tramiteSolicitud segun id_vehiculo entities.
+     *
      * @Route("/byvehiculoorder", name="tramitesolicitud_byvehiculoordertramite")
      * @Method({"GET", "POST"})
      */

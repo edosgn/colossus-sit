@@ -759,12 +759,11 @@ class VehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneByVehiculo($params);
+            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoRemolque')->findOneByVehiculo($params);
             $vehiculoMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->findOneByVehiculo($params);
             if ($vehiculoPesado != null) {
                 $response = array(
