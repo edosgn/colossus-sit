@@ -105,18 +105,24 @@ class FacturaController extends Controller
                         array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
                     );
 
-                    if($tramitePrecio->getTramite()->getId() == 6){ 
-                        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
-                            $params->valorVehiculoId
-                        );
+                    if($tramitePrecio->getTramite()->getId() == 6){
                         foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                        
+                            $mflRetefunte = new MflRetefuente();
+
+                            $mflRetefunte->setVehiculo($vehiculo);
+                            
                             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
                                 $propietarioRetefuenteId
                             );
-                            $mflRetefunte = new MflRetefuente();
-                            $mflRetefunte->setVehiculo($vehiculo);
                             $mflRetefunte->setPropietarioVehiculo($propietarioVehiculo);
-                            $mflRetefunte->setValorVehiculo($valorVehiculo);
+
+                            if (isset($params->valorVehiculoId)) {
+                                $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
+                                    $params->valorVehiculoId
+                                );
+                                $mflRetefunte->setValorVehiculo($valorVehiculo);
+                            }
                             $mflRetefunte->setFactura($factura);
                             $mflRetefunte->setFecha(new \DateTime($params->factura->fechaCreacion));
                             $mflRetefunte->setRetencion($params->retencion);

@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\TramiteSolicitud;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -18,20 +18,24 @@ class TramiteSolicitudController extends Controller
     /**
      * Lists all tramiteSolicitud entities.
      *
-     * @Route("/index", name="tramitesolicitud_index")
-     * @Method("GET")
+     * @Route("/index", name="index_tramitesolicitud")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findAll();
+        $json = $request->get("json", null);
+        $params = json_decode($json);
+        $moduloId = $params;
+
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->getTramitesModulo($moduloId);
 
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de tramites",
-            'data' => $tramitesSolicitud, 
+            'data' => $tramitesSolicitud,
         );
         return $helpers->json($response);
     }
@@ -42,14 +46,14 @@ class TramiteSolicitudController extends Controller
      * @Route("/{tramiteSolicitudId}/show/tramiteSolicitud", name="tramite_solicitud_tramiteFactura")
      * @Method({"GET", "POST"})
      */
-    public function showAction(Request $request,$tramiteSolicitudId)
-    {   $em = $this->getDoctrine()->getManager();
+    public function showAction(Request $request, $tramiteSolicitudId)
+    {$em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         $tramiteSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findOneByTramiteFactura($tramiteSolicitudId);
 
-        $tramiteSolicitud->setDatos((array)$tramiteSolicitud->getDatos());
+        $tramiteSolicitud->setDatos((array) $tramiteSolicitud->getDatos());
 
         // var_dump($helpers->json((array)$tramiteSolicitud->getDatos()));
         // die();
@@ -59,14 +63,14 @@ class TramiteSolicitudController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro encontrado", 
-                'data'=> $tramiteSolicitud,
+                'msj' => "Registro encontrado",
+                'data' => $tramiteSolicitud,
             );
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -84,89 +88,86 @@ class TramiteSolicitudController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Los campos no pueden estar vacios", 
-                );
+            $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "Los campos no pueden estar vacios",
+            );
             }else{*/
-                $observacion = (isset($params->observacion)) ? $params->observacion : null;
-                $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
-                $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
-                $datos = $params->datos; 
-                $em = $this->getDoctrine()->getManager();
-var_dump($params);
-die();
-                $tramiteSolicitud = new TramiteSolicitud();
+            $observacion = (isset($params->observacion)) ? $params->observacion : null;
+            $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
+            $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
+            $datos = $params->datos;
+            $em = $this->getDoctrine()->getManager();
+            // var_dump($params);
+            // die();
+            $tramiteSolicitud = new TramiteSolicitud();
 
-                if ($params->vehiculoId) {
-                    $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->vehiculoId);
-                    $tramiteSolicitud->setVehiculo($vehiculo);
+            if ($params->vehiculoId) {
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->vehiculoId);
+                $tramiteSolicitud->setVehiculo($vehiculo);
+            }
+
+            if ($params->solicitanteId) {
+                $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->solicitanteId);
+                $tramiteSolicitud->setSolicitante($propietario);
+                $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+                if ($ciudadanoId) {
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->ciudadanoId);
+                    $tramiteSolicitud->setCiudadano($ciudadano);
                 }
-
-                if ($params->solicitanteId) {
-                    $propietario = $em->getRepository('AppBundle:PropietarioVehiculo')->find($params->solicitanteId);
-                    $tramiteSolicitud->setSolicitante($propietario);
-                    $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
-                    if ($ciudadanoId) {
-                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->ciudadanoId);
-                        $tramiteSolicitud->setCiudadano($ciudadano);
-                    }
-                }else{
-                    $ciudadanoId = (isset($params->datos->ciudadanoId)) ? $params->datos->ciudadanoId : null;
-                    if ($ciudadanoId) {
-                        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->datos->ciudadanoId);
-                        $tramiteSolicitud->setCiudadano($ciudadano);
-                    }
+            } else {
+                $ciudadanoId = (isset($params->datos->ciudadanoId)) ? $params->datos->ciudadanoId : null;
+                if ($ciudadanoId) {
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->datos->ciudadanoId);
+                    $tramiteSolicitud->setCiudadano($ciudadano);
                 }
+            }
 
-                if ($params->vehiculoId) {
-                    $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->vehiculoId);
-                    $tramiteSolicitud->setVehiculo($vehiculo);
-                }
+            if ($params->vehiculoId) {
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->vehiculoId);
+                $tramiteSolicitud->setVehiculo($vehiculo);
+            }
 
-                if ($params->tramiteFacturaId) {
-                    $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find(
-                        $params->tramiteFacturaId
-                    );
-                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-                    $tramiteFactura->setRealizado(true);
-                    $em->flush();
-                }
-
-                $tramiteSolicitud->setObservacion($observacion);
-                $tramiteSolicitud->setDocumentacion($documentacionCompleta);
-                $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
-                $tramiteSolicitud->setEstado(true);
-                $tramiteSolicitud->setDatos($datos);
-
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($tramiteSolicitud);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
+            if ($params->tramiteFacturaId) {
+                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find(
+                    $params->tramiteFacturaId
                 );
+                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                $tramiteFactura->setRealizado(true);
+                $em->flush();
+            }
+
+            $tramiteSolicitud->setObservacion($observacion);
+            $tramiteSolicitud->setDocumentacion($documentacionCompleta);
+            $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
+            $tramiteSolicitud->setEstado(true);
+            $tramiteSolicitud->setDatos($datos);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($tramiteSolicitud);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito",
+            );
             //}
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
-
-    
 
     /**
      * Displays a form to edit an existing tramiteSolicitud entity.
@@ -213,6 +214,8 @@ die();
         return $this->redirectToRoute('tramitesolicitud_index');
     }
 
+
+
     /**
      * Obtiene tramiteSolicitud segun id_vehiculo entities.
      *
@@ -226,13 +229,13 @@ die();
         $hash = $request->get("authorization", null);
         $idVehiculo = $request->get("json", null);
         $authCheck = $helpers->authCheck($hash);
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);        
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);
 
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de tramites",
-            'data' => $tramitesSolicitud, 
+            'data' => $tramitesSolicitud,
         );
         return $helpers->json($response);
     }
@@ -250,7 +253,7 @@ die();
         $hash = $request->get("authorization", null);
         $idVehiculo = $request->get("json", null);
         $authCheck = $helpers->authCheck($hash);
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculoOrderTramite($idVehiculo);        
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculoOrderTramite($idVehiculo);
 
         foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
             $response[$key] = array(
@@ -277,18 +280,17 @@ die();
         $params = json_decode($datos);
         $authCheck = $helpers->authCheck($hash);
         $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculoAndDate($params);
-        if($tramitesSolicitud){
-        $response = array(
-            'status' => 'success',
-            'code' => 200,
-            'msj' => "Lista de tramites",
-            'data' => $tramitesSolicitud, 
-        );}
-        else{
+        if ($tramitesSolicitud) {
             $response = array(
-            'status' => 'error',
-            'code' => 400,
-            'msj' => "No hay tramites entre esas fechas",
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Lista de tramites",
+                'data' => $tramitesSolicitud,
+            );} else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "No hay tramites entre esas fechas",
             );
         }
         return $helpers->json($response);
@@ -318,7 +320,6 @@ die();
      */
     public function reporte()
     {
-       
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $tramiteReportes = $em->getRepository('AppBundle:TramiteSolicitud')->getTramiteReportes();
@@ -327,13 +328,12 @@ die();
         //   var_dump($ts['id']);
         //   die();
         // }
-        
 
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de tramites",
-            'data' => $tramiteReportes, 
+            'data' => $tramiteReportes,
         );
         return $helpers->json($response);
     }
@@ -355,18 +355,17 @@ die();
         $authCheck = $helpers->authCheck($hash);
         $reporteFecha = $em->getRepository('AppBundle:TramiteSolicitud')->getReporteFecha($params);
 
-        if($reporteFecha){
-        $response = array(
-            'status' => 'success',
-            'code' => 200,
-            'msj' => "Lista de tramites",
-            'data' => $reporteFecha, 
-        );}
-        else{
+        if ($reporteFecha) {
             $response = array(
-            'status' => 'error',
-            'code' => 400,
-            'msj' => "No hay tramites entre esas fechas",
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Lista de tramites",
+                'data' => $reporteFecha,
+            );} else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "No hay tramites entre esas fechas",
             );
         }
         return $helpers->json($response);

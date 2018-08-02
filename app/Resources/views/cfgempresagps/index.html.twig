@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgempresagps list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgEmpresaGp in cfgEmpresaGps %}
+            <tr>
+                <td><a href="{{ path('cfgempresagps_show', { 'id': cfgEmpresaGp.id }) }}">{{ cfgEmpresaGp.id }}</a></td>
+                <td>{{ cfgEmpresaGp.nombre }}</td>
+                <td>{{ cfgEmpresaGp.estado }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgempresagps_show', { 'id': cfgEmpresaGp.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgempresagps_edit', { 'id': cfgEmpresaGp.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgempresagps_new') }}">Create a new cfgEmpresaGp</a>
+        </li>
+    </ul>
+{% endblock %}
