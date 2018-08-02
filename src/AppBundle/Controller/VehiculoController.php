@@ -253,7 +253,6 @@ class VehiculoController extends Controller
             $numeroFactura = $params->numeroFactura;
             $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
-            $marca = $params->marcaId;
             $linea = $params->lineaId;
             $clase = $params->claseId;
             $carroceria = $params->carroceriaId;
@@ -271,8 +270,8 @@ class VehiculoController extends Controller
             $serie = $params->serie;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
-            $radioAccion = $params->radioAccionId;
-            $modalidadTransporte = $params->modalidadTransporteId;
+            $radioAccion = $params->radioAccion;
+            $modalidadTransporte = $params->modalidadTransporte;
 
             // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
@@ -283,9 +282,8 @@ class VehiculoController extends Controller
                 $fechaFactura = new \DateTime($fechaFactura);
                 $fechaManifiesto = (isset($params->fechaManifiesto)) ? $params->fechaManifiesto : null;
                 $fechaManifiesto = new \DateTime($fechaManifiesto);
-
-                $marca = $em->getRepository('AppBundle:Marca')->find($marca);
                 $linea = $em->getRepository('AppBundle:Linea')->find($linea);
+                $marca = $linea->getMarca();
                 $clase = $em->getRepository('AppBundle:Clase')->find($clase);
                 $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
                 $servicio = $em->getRepository('AppBundle:Servicio')->find($servicio);
