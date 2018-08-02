@@ -285,7 +285,8 @@ class TramiteFacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $json = $request->get("json", null);
-        
+        $params = json_decode($json);
+
         $moduloId = $params->moduloId;
         $id = $params->id;
         $vehiculoId = $params->vehiculoId;
