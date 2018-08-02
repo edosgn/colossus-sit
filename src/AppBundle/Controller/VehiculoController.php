@@ -236,7 +236,7 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit", name="vehiculo_editar")
+     * @Route("/edit", name="vehiculo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -350,7 +350,7 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit/color", name="vehiculo_edit")
+     * @Route("/edit/color", name="vehiculo_edit_color")
      * @Method({"GET", "POST"})
      */
     public function editColorAction(Request $request)
@@ -665,7 +665,7 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit/pignorado", name="vehiculo_edit")
+     * @Route("/edit/pignorado", name="vehiculo_edit_pignorado")
      * @Method({"GET", "POST"})
      */
     public function editPignoradoAction(Request $request)

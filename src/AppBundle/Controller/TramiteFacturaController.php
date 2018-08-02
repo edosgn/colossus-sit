@@ -240,7 +240,7 @@ class TramiteFacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $factura = $em->getRepository('AppBundle:Factura')->findOneByNumero($idFactura);
+        $factura = $em->getRepository('AppBundle:Factura')->find($idFactura);
         $response = [];
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
             array('realizado' => false, 'factura' => $factura->getId())
@@ -248,9 +248,9 @@ class TramiteFacturaController extends Controller
         foreach ($tramitesFactura as $key => $tramiteFactura) {
             $response[$key] = array(
                 'value' => $tramiteFactura->getId(),
-                'label' => $tramiteFactura->getTramite()->getNombre(),
-                'tramiteId' => $tramiteFactura->getTramite()->getId(),
-                'tramite' => $tramiteFactura->getTramite(),
+                'label' => $tramiteFactura->getTramitePrecio()->getTramite()->getNombre(),
+                'tramiteId' => $tramiteFactura->getTramitePrecio()->getTramite()->getId(),
+                'tramite' => $tramiteFactura->getTramitePrecio()->getTramite(),
                 'cantidad' => $tramiteFactura->getCantidad(),
             );
         }
@@ -261,10 +261,10 @@ class TramiteFacturaController extends Controller
     /**
      * datos para factura
      *
-     * @Route("/{idFactura}/show/factura", name="tramitefactura_whow_factura")
+     * @Route("/{idFactura}/tramites/by/factura", name="tramitefactura_tramites_by_factura")
      * @Method({"GET", "POST"})
      */
-    public function selectFacturaAction($idFactura)
+    public function tramitesByFacturaAction($idFactura)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
@@ -278,20 +278,20 @@ class TramiteFacturaController extends Controller
     /**
      * datos para factura
      *
-     * @Route("/show/factura", name="factura_show_modulo")
+     * @Route("/show/modulo", name="factura_show_modulo")
      * @Method({"GET", "POST"})
      */
     public function selectFacturaModuloAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $json = $request->get("json", null);
-        $params = json_decode($json);
-    //    var_dump($json);
+        
         $moduloId = $params->moduloId;
         $id = $params->id;
         $vehiculoId = $params->vehiculoId;
 
         $em = $this->getDoctrine()->getManager();
+
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->getFacturaModulo($moduloId, $id, $vehiculoId);
 
         return $helpers->json($tramitesFactura);

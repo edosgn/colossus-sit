@@ -1,3 +1,7 @@
+app_mparq_patio:
+    resource: "@AppBundle/Controller/MparqPatioController.php"
+    type:     annotation
+
 app_cfg_empresa_gps:
     resource: "@AppBundle/Controller/CfgEmpresaGpsController.php"
     type:     annotation
