@@ -278,7 +278,7 @@ class TramiteFacturaController extends Controller
     /**
      * datos para factura
      *
-     * @Route("/show/modulo", name="factura_show_modulo")
+     * @Route("/show/factura", name="factura_show_modulo")
      * @Method({"GET", "POST"})
      */
     public function selectFacturaModuloAction(Request $request)
