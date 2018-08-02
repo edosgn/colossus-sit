@@ -50,7 +50,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
 
             $dql = "SELECT v
-            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:PropietarioVehiculo pv, AppBundle:Ciudadano c, UsuarioBundle:Usuario u
             WHERE v.placa = p.id";
 
             if ($parametros->numeroPlaca) {
@@ -71,6 +71,10 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
             }
             if ($parametros->numeroChasis) {
                 $condicion .= " AND v.chasis ='".$parametros->numeroChasis."'";
+                
+            }
+            if ($parametros->propietario) {
+                $condicion .= " AND pv.vehiculo = v.id AND pv.ciudadano = c.id AND c.usuario = u.id AND u.identificacion ='".$parametros->propietario."'";
                 
             }
             if($condicion){
