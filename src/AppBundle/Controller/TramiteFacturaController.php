@@ -261,10 +261,10 @@ class TramiteFacturaController extends Controller
     /**
      * datos para factura
      *
-     * @Route("/{idFactura}/tramites/by/factura", name="tramitefactura_tramites_by_factura")
+     * @Route("/{idFactura}/tramites/by/factura/select", name="tramitefactura_tramites_by_factura_select")
      * @Method({"GET", "POST"})
      */
-    public function tramitesByFacturaAction($idFactura)
+    public function tramitesByFacturaSelectAction($idFactura)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
