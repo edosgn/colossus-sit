@@ -462,49 +462,83 @@ class FacturaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-            $em = $this->getDoctrine()->getManager();
-            $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
-            $consecutivo = count($facturas)."-".date('y');
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $em = $this->getDoctrine()->getManager();
+        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
+        $consecutivo = count($facturas)."-".date('y');
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                $params->factura->sedeOperativaId
+        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+            $params->factura->sedeOperativaId
+        );
+        $factura = new Factura();
+        if ($params->factura->vehiculoId) {
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                $params->factura->vehiculoId
             );
-            $factura = new Factura();
-            if ($params->factura->vehiculoId) {
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
-                    $params->factura->vehiculoId
-                );
-                $factura->setVehiculo($vehiculo);
-            }
-            
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
-                $params->factura->ciudadanoId
-            );
-            $factura->setNumero($params->factura->numero);
-            $factura->setConsecutivo(0);
-            $factura->setEstado('Emitida');
-            $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
-            $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
-            if ($params->factura->valorBruto) {
-                $factura->setValorBruto($params->factura->valorBruto);
-            }
-            
-            //Inserta llaves foraneas
-            $factura->setSedeOperativa($sedeOperativa);
-            $factura->setCiudadano($ciudadano);
-            var_dump($factura->getNumero());
-            die();
+            $factura->setVehiculo($vehiculo);
+        }
+        
+        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+            $params->factura->ciudadanoId
+        );
+        $factura->setNumero($params->factura->numero);
+        $factura->setConsecutivo(0);
+        $factura->setEstado('Emitida');
+        $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
+        $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
+        if ($params->factura->valorBruto) {
+            $factura->setValorBruto($params->factura->valorBruto);
+        }
+        
+        //Inserta llaves foraneas
+        $factura->setSedeOperativa($sedeOperativa);
+        $factura->setCiudadano($ciudadano);
 
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorizacion no valida", 
-            );
-        } 
-        return $helpers->json($response);    
+        $this->openPdf($factura);
+    }
+
+    public function openPdf($factura){
+        $html = $this->renderView('@App/factura/pdfFactura.html.twig', array(
+            'factura'=>$factura,
+        ));
+
+        $pdf = $this->container->get("white_october.tcpdf")->create(
+            'PORTRAIT',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('qweqwe');
+        $pdf->SetTitle('Planilla');
+        $pdf->SetSubject('Your client');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->AddPage();
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+
+        $pdf->Output("example.pdf", 'I');
+        
+        return true;
     }
 }
