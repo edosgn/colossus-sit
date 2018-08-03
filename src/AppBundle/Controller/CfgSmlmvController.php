@@ -93,7 +93,7 @@ class CfgSmlmvController extends Controller
     /**
      * Finds and displays a cfgSmlmv entity.
      *
-     * @Route("/{id}", name="cfgsmlmv_show")
+     * @Route("/{id}/show", name="cfgsmlmv_show")
      * @Method("GET")
      */
     public function showAction(CfgSmlmv $cfgSmlmv)

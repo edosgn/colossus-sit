@@ -22,13 +22,24 @@ class MparqPatioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $patios = $em->getRepository('AppBundle:MparqPatio')->findBy(
+            array('activo' => true)
+        );
 
-        $mparqPatios = $em->getRepository('AppBundle:MparqPatio')->findAll();
+        $response['data'] = array();
 
-        return $this->render('mparqpatio/index.html.twig', array(
-            'mparqPatios' => $mparqPatios,
-        ));
+        if ($patios) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => count($patios)." Registros encontrados", 
+                'data'=> $patios,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +50,45 @@ class MparqPatioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $mparqPatio = new Mparqpatio();
-        $form = $this->createForm('AppBundle\Form\MparqPatioType', $mparqPatio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($mparqPatio);
-            $em->flush();
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $patio = new MparqPatio();
 
-            return $this->redirectToRoute('mparqpatio_show', array('id' => $mparqPatio->getId()));
-        }
+                $patio->setNombre($params->nombre);
+                $patio->setDireccion($params->direccion);
+                $patio->setActivo(true);
 
-        return $this->render('mparqpatio/new.html.twig', array(
-            'mparqPatio' => $mparqPatio,
-            'form' => $form->createView(),
-        ));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($patio);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                    'data' => $patio
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -81,21 +115,45 @@ class MparqPatioController extends Controller
      */
     public function editAction(Request $request, MparqPatio $mparqPatio)
     {
-        $deleteForm = $this->createDeleteForm($mparqPatio);
-        $editForm = $this->createForm('AppBundle\Form\MparqPatioType', $mparqPatio);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('mparqpatio_edit', array('id' => $mparqPatio->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $patio = $em->getRepository("AppBundle:MparqPatio")->find($params->id);
+
+            if ($patio!=null) {
+                $patio->setNombre($params->nombre);
+                $patio->setDireccion($params->direccion);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro actualizado con exito", 
+                    'data'=> $patio,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('mparqpatio/edit.html.twig', array(
-            'mparqPatio' => $mparqPatio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

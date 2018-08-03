@@ -101,33 +101,33 @@ class FacturaController extends Controller
                 foreach ($params->tramitesValor as $key => $tramiteValor) {
                     $tramiteFactura = new TramiteFactura();
 
-                    $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
-                        array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
+                    $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find(
+                        $tramiteValor->idTramitePrecio
                     );
 
                     if($tramitePrecio->getTramite()->getId() == 6){
                         foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
                         
-                            $mflRetefunte = new MflRetefuente();
+                            $mflRetefuente = new MflRetefuente();
 
-                            $mflRetefunte->setVehiculo($vehiculo);
+                            $mflRetefuente->setVehiculo($vehiculo);
                             
                             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
                                 $propietarioRetefuenteId
                             );
-                            $mflRetefunte->setPropietarioVehiculo($propietarioVehiculo);
+                            $mflRetefuente->setPropietarioVehiculo($propietarioVehiculo);
 
                             if (isset($params->valorVehiculoId)) {
                                 $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
                                     $params->valorVehiculoId
                                 );
-                                $mflRetefunte->setValorVehiculo($valorVehiculo);
+                                $mflRetefuente->setValorVehiculo($valorVehiculo);
                             }
-                            $mflRetefunte->setFactura($factura);
-                            $mflRetefunte->setFecha(new \DateTime($params->factura->fechaCreacion));
-                            $mflRetefunte->setRetencion($params->retencion);
-                            $mflRetefunte->setEstado(true);
-                            $em->persist($mflRetefunte);
+                            $mflRetefuente->setFactura($factura);
+                            $mflRetefuente->setFecha(new \DateTime($params->factura->fechaCreacion));
+                            $mflRetefuente->setRetencion($params->retencion);
+                            $mflRetefuente->setEstado(true);
+                            $em->persist($mflRetefuente);
                             $em->flush();
                         }
                     }
