@@ -18,13 +18,16 @@ class VehiculoLimitacionController extends Controller
      * Lists all vehiculoLimitacion entities.
      *
      * @Route("/", name="vehiculoLimitacion_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $vehiculosLimitaciones = $em->getRepository('AppBundle:VehiculoLimitacion')->findAll();
+        $json = $request->get("json", null);
+        $params = json_decode($json);
+
+        $vehiculosLimitaciones = $em->getRepository('AppBundle:VehiculoLimitacion')->getByModulo($params->moduloId);
         $response = array(
             'status' => 'success',
             'code' => 200,
@@ -219,14 +222,13 @@ class VehiculoLimitacionController extends Controller
             $params = json_decode($json);
 
             $vehiculoLimitacionId = $params;
-            
+
             $em = $this->getDoctrine()->getManager();
 
             $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->find($vehiculoLimitacionId);
 
             if ($vehiculoLimitacion != null) {
                 $vehiculoLimitacion->setEstado(false);
-                
 
                 $em->persist($vehiculoLimitacion);
                 $em->flush();
