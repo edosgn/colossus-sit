@@ -48,11 +48,21 @@ class MsvParametroController extends Controller
 
         foreach ($msvParametros as $key => $msvParametro) {
             $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
-            $msvParametrosArray[]= array(
-                'nombre' => $msvParametro->getNombre(),
-                'id' => $msvParametro->getId(),
-                'datos' => $variables
-            );
+            foreach ($variables as $key => $variable) {
+                $variablesArray=[];
+                $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable($variable->getId());
+                $variablesArray[]=array(
+                    'nombre' => $msvParametro->getNombre(),
+                    'id' => $msvParametro->getId(),
+                    'criterios' => $criterios
+                );
+                $msvParametrosArray[]= array(
+                    'nombre' => $msvParametro->getNombre(),
+                    'id' => $msvParametro->getId(),
+                    'variables' => $variablesArray
+                );
+            }
+            
         }
         $response = array(
                     'status' => 'succes',
