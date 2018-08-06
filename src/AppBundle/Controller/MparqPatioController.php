@@ -214,7 +214,7 @@ class MparqPatioController extends Controller
         foreach ($patios as $key => $patio) {
             $response[$key] = array(
                 'value' => $patio->getId(),
-                'label' => $patio->getNombre()
+                'label' => $patio->getNombre()." - ".$patio->getDireccion(),
             );
         }
         return $helpers->json($response);
