@@ -1,3 +1,19 @@
+app_cfg_objeto_fijo:
+    resource: "@AppBundle/Controller/CfgObjetoFijoController.php"
+    type:     annotation
+
+app_cfg_choque_con:
+    resource: "@AppBundle/Controller/CfgChoqueConController.php"
+    type:     annotation
+
+app_cfg_clase_accidente:
+    resource: "@AppBundle/Controller/CfgClaseAccidenteController.php"
+    type:     annotation
+
+app_cfg_gravedad:
+    resource: "@AppBundle/Controller/CfgGravedadController.php"
+    type:     annotation
+
 app_mparq_patio:
     resource: "@AppBundle/Controller/MparqPatioController.php"
     type:     annotation

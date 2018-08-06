@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgclaseaccidentes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgClaseAccidente in cfgClaseAccidentes %}
+            <tr>
+                <td><a href="{{ path('cfgclaseaccidente_show', { 'id': cfgClaseAccidente.id }) }}">{{ cfgClaseAccidente.id }}</a></td>
+                <td>{{ cfgClaseAccidente.nombre }}</td>
+                <td>{% if cfgClaseAccidente.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgclaseaccidente_show', { 'id': cfgClaseAccidente.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgclaseaccidente_edit', { 'id': cfgClaseAccidente.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgclaseaccidente_new') }}">Create a new cfgClaseAccidente</a>
+        </li>
+    </ul>
+{% endblock %}
