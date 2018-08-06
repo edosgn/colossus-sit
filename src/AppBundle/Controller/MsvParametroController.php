@@ -46,21 +46,41 @@ class MsvParametroController extends Controller
         $authCheck = $helpers->authCheck($hash);
         $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
 
-        foreach ($msvParametros as $key => $msvParametro) {
+        
+        foreach ($msvParametros as $keyParametro => $msvParametro) {
+            $msvParametrosArray[$keyParametro] = array(
+                'id'=>$msvParametro->getId(),
+                'name'=>$msvParametro->getNombre(),
+                'variables' => null,
+             );
             $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
-            $msvParametrosArray[]= array(
-                'nombre' => $msvParametro->getNombre(),
-                'id' => $msvParametro->getId(),
-                'datos' => $variables
+            if($variables){
+                foreach ($variables as $keyVariable => $variable) {
+                    $msvParametrosArray[$keyParametro]['variables'][$keyVariable] = array(
+                        'id'=> $variable->getId(),
+                        'name' => $variable->getNombre(),
+                        'criterios' => null
+                    );
+
+                    $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable($variable->getId());
+                    if($criterios){
+                        foreach ($criterios as $keyCriterio => $criterio) {
+                            $msvCriteriosArray[$keyParametro]['variables'][$keyVariable]['criterios'][$keyCriterio] = array(
+                                'id'=> $variable->getId(),
+                                'name' => $variable->getNombre(),
+                            );
+                        }
+                    }
+                }
+                
+            }
+            $response = array(
+                        'status' => 'succes',
+                        'code' => 200,
+                        'msj' => "Parametros no encontrados",
+                        'data' => $msvParametrosArray,
             );
         }
-        $response = array(
-                    'status' => 'succes',
-                    'code' => 200,
-                    'msj' => "Parametros no encontrados",
-                    'data' => $msvParametrosArray,
-        );
-
         return $helpers ->json($response);
     }
 
