@@ -10,4 +10,51 @@ namespace AppBundle\Repository;
  */
 class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
+        //Obtiene el vehículo según un numero de placa y módulo
+    public function getByConsecutivoSedeu($nroIpat, $identificacionUsuario)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT msc
+            FROM AppBundle:MsvTConsecutivo msc, UsuarioBundle:Usuario u, AppBundle:MpersonalFuncionario mpf
+            WHERE u.identificacion = :identificacionUsuario
+            AND u.ciudadano = mpf.ciudadano
+            AND mpf.sedeOperativa = msc.sedeOperativa
+            AND msc.consecutivo = :nroIpat";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'nroIpat' => 12312300000000000000,
+            'identificacionUsuario' => 2222,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+     public function getByConsecutivoSede($nroIpat, $identificacionUsuario)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT msc
+            FROM AppBundle:MsvTConsecutivo msc, UsuarioBundle:Usuario u, AppBundle:MpersonalFuncionario mpf
+            WHERE u.identificacion = :identificacionUsuario
+            AND u.ciudadano = mpf.ciudadano
+            AND mpf.sedeOperativa = msc.sedeOperativa
+            AND msc.consecutivo = :nroIpat";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'nroIpat' => $nroIpat,
+            'identificacionUsuario' => $identificacionUsuario,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }
+/*
+
+SELECT consecutivo FROM msv_t_consecutivo, usuario, mpersonal_funcionario 
+WHERE usuario.identificacion=2222 
+AND usuario.ciudadano_id = mpersonal_funcionario.ciudadano_id 
+AND mpersonal_funcionario.sede_operativa_id = msv_t_consecutivo.sede_operativa_id 
+AND msv_t_consecutivo.consecutivo = 12312300000000000000
+
+*/

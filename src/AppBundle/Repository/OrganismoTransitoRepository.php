@@ -10,4 +10,20 @@ namespace AppBundle\Repository;
  */
 class OrganismoTransitoRepository extends \Doctrine\ORM\EntityRepository
 {
+         public function getBySede($identificacionUsuario)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT ot
+            FROM UsuarioBundle:Usuario u, AppBundle:MpersonalFuncionario mpf, AppBundle:OrganismoTransito ot
+            WHERE u.identificacion = :identificacionUsuario
+            AND u.ciudadano = mpf.ciudadano
+            AND mpf.sedeOperativa = ot.sedeOperativa";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'identificacionUsuario' => $identificacionUsuario,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

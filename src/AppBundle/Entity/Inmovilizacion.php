@@ -24,52 +24,38 @@ class Inmovilizacion
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroPatio", type="string", length=45)
+     * @ORM\Column(name="numero", type="string", length=45)
      */
-    private $numeroPatio;
+    private $numero;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="numeroGrua", type="string", length=45)
+     * @ORM\Column(name="consecutivo", type="integer")
      */
-    private $numeroGrua;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroConsecutivo", type="string", length=45)
-     */
-    private $numeroConsecutivo;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="direccionPatio", type="string", length=45)
-     */
-    private $direccionPatio;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="placaGrua", type="string", length=45)
-     */
-    private $placaGrua;
+    private $consecutivo;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaIngreso", type="datetime")
+     * @ORM\Column(name="fecha", type="datetime")
      */
-    private $fechaIngreso;
+    private $fecha;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="inmovilizaciones")
      **/
     protected $comparendo;
 
-    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MparqGrua", inversedBy="inmovilizaciones")
+     **/
+    protected $grua;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MparqPatio", inversedBy="inmovilizaciones")
+     **/
+    protected $patio;
 
     /**
      * Get id
@@ -82,147 +68,75 @@ class Inmovilizacion
     }
 
     /**
-     * Set numeroPatio
+     * Set numero
      *
-     * @param string $numeroPatio
+     * @param string $numero
      *
      * @return Inmovilizacion
      */
-    public function setNumeroPatio($numeroPatio)
+    public function setNumero($numero)
     {
-        $this->numeroPatio = $numeroPatio;
+        $this->numero = $numero;
 
         return $this;
     }
 
     /**
-     * Get numeroPatio
+     * Get numero
      *
      * @return string
      */
-    public function getNumeroPatio()
+    public function getNumero()
     {
-        return $this->numeroPatio;
+        return $this->numero;
     }
 
     /**
-     * Set numeroGrua
+     * Set consecutivo
      *
-     * @param string $numeroGrua
+     * @param integer $consecutivo
      *
      * @return Inmovilizacion
      */
-    public function setNumeroGrua($numeroGrua)
+    public function setConsecutivo($consecutivo)
     {
-        $this->numeroGrua = $numeroGrua;
+        $this->consecutivo = $consecutivo;
 
         return $this;
     }
 
     /**
-     * Get numeroGrua
+     * Get consecutivo
      *
-     * @return string
+     * @return integer
      */
-    public function getNumeroGrua()
+    public function getConsecutivo()
     {
-        return $this->numeroGrua;
+        return $this->consecutivo;
     }
 
     /**
-     * Set numeroConsecutivo
+     * Set fecha
      *
-     * @param string $numeroConsecutivo
+     * @param \DateTime $fecha
      *
      * @return Inmovilizacion
      */
-    public function setNumeroConsecutivo($numeroConsecutivo)
+    public function setFecha($fecha)
     {
-        $this->numeroConsecutivo = $numeroConsecutivo;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get numeroConsecutivo
-     *
-     * @return string
-     */
-    public function getNumeroConsecutivo()
-    {
-        return $this->numeroConsecutivo;
-    }
-
-    /**
-     * Set direccionPatio
-     *
-     * @param string $direccionPatio
-     *
-     * @return Inmovilizacion
-     */
-    public function setDireccionPatio($direccionPatio)
-    {
-        $this->direccionPatio = $direccionPatio;
-
-        return $this;
-    }
-
-    /**
-     * Get direccionPatio
-     *
-     * @return string
-     */
-    public function getDireccionPatio()
-    {
-        return $this->direccionPatio;
-    }
-
-    /**
-     * Set placaGrua
-     *
-     * @param string $placaGrua
-     *
-     * @return Inmovilizacion
-     */
-    public function setPlacaGrua($placaGrua)
-    {
-        $this->placaGrua = $placaGrua;
-
-        return $this;
-    }
-
-    /**
-     * Get placaGrua
-     *
-     * @return string
-     */
-    public function getPlacaGrua()
-    {
-        return $this->placaGrua;
-    }
-
-    /**
-     * Set fechaIngreso
-     *
-     * @param \DateTime $fechaIngreso
-     *
-     * @return Inmovilizacion
-     */
-    public function setFechaIngreso($fechaIngreso)
-    {
-        $this->fechaIngreso = $fechaIngreso;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaIngreso
+     * Get fecha
      *
      * @return \DateTime
      */
-    public function getFechaIngreso()
+    public function getFecha()
     {
-        return $this->fechaIngreso;
+        return $this->fecha;
     }
 
     /**
@@ -247,5 +161,53 @@ class Inmovilizacion
     public function getComparendo()
     {
         return $this->comparendo;
+    }
+
+    /**
+     * Set grua
+     *
+     * @param \AppBundle\Entity\MparqGrua $grua
+     *
+     * @return Inmovilizacion
+     */
+    public function setGrua(\AppBundle\Entity\MparqGrua $grua = null)
+    {
+        $this->grua = $grua;
+
+        return $this;
+    }
+
+    /**
+     * Get grua
+     *
+     * @return \AppBundle\Entity\MparqGrua
+     */
+    public function getGrua()
+    {
+        return $this->grua;
+    }
+
+    /**
+     * Set patio
+     *
+     * @param \AppBundle\Entity\MparqPatio $patio
+     *
+     * @return Inmovilizacion
+     */
+    public function setPatio(\AppBundle\Entity\MparqPatio $patio = null)
+    {
+        $this->patio = $patio;
+
+        return $this;
+    }
+
+    /**
+     * Get patio
+     *
+     * @return \AppBundle\Entity\MparqPatio
+     */
+    public function getPatio()
+    {
+        return $this->patio;
     }
 }
