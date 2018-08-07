@@ -412,8 +412,6 @@ class EmpresaController extends Controller
         $json = $request->get("json",null);
         $params = json_decode($json);
         $em = $this->getDoctrine()->getManager();
-        var_dump($params);
-        die();
         if ($authCheck == true) {
         $empresa = $em->getRepository('AppBundle:Empresa')->findByNitOrNombre($params); 
         if($empresa){        
