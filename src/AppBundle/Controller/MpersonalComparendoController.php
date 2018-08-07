@@ -239,7 +239,7 @@ class MpersonalComparendoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findBy(
+            $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneBy(
                 array(
                     'consecutivo' => $params->consecutivo,
                     'funcionario' => $params->funcionarioId,
@@ -255,7 +255,7 @@ class MpersonalComparendoController extends Controller
                     'data'=> $comparendo,
                 );
             }else{
-                $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findBy(
+                $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneBy(
                     array(
                         'consecutivo' => $params->consecutivo,
                         'funcionario' => $params->funcionarioId,

@@ -24,66 +24,58 @@ class Comparendo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_comparendo", type="date", nullable=true)
+     * @ORM\Column(name="fecha", type="date", nullable=true)
      */
-    private $fechaComparendo;
+    private $fecha;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora_comparendo", type="time", nullable=true)
+     * @ORM\Column(name="hora", type="time", nullable=true)
      */
-    private $horaComparendo;
-
+    private $hora;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="lugarInfraccion", type="string", length=255, nullable=true)
+     * @ORM\Column(name="direccion", type="string", length=255, nullable=true)
      */
-    private $lugarInfraccion;
+    private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroOrden", type="string", length=255, nullable=true)
+     * @ORM\Column(name="localidad", type="string", length=255, nullable=true)
      */
-    private $numeroOrden;
+    private $localidad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="barrioInfraccion", type="string", length=45, nullable=true)
+     * @ORM\Column(name="numero_licencia_transito", type="string", length=255, nullable=true)
      */
-    private $barrioInfraccion;
+    private $numeroLicenciaTransito;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observacionesAgente", type="text", nullable=true)
+     * @ORM\Column(name="observaciones_agente", type="text", nullable=true)
      */
     private $observacionesAgente;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observacionesDigitador", type="text", nullable=true)
+     * @ORM\Column(name="observaciones_digitador", type="text", nullable=true)
      */
     private $observacionesDigitador;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="tipoInfractor", type="string", length=45, nullable=true)
+     * @ORM\Column(name="inmovilizacion", type="boolean", nullable=true)
      */
-    private $tipoInfractor;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="tarjetaOperacionInfractor", type="integer", nullable=true)
-     */
-    private $tarjetaOperacionInfractor;
+    private $inmovilizacion;
 
     /**
      * @var bool
@@ -102,9 +94,9 @@ class Comparendo
     /**
      * @var bool
      *
-     * @ORM\Column(name="polca", type="boolean", nullable=true)
+     * @ORM\Column(name="retencion_licencia", type="boolean", nullable=true)
      */
-    private $polca = false;
+    private $retencionLicencia;
 
     /**
      * @var bool
@@ -114,39 +106,63 @@ class Comparendo
     private $fotomulta;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="retencionLicencia", type="boolean", nullable=true)
-     */
-    private $retencionLicencia;
-
-    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaNotificacion", type="date", nullable=true)
+     * @ORM\Column(name="fecha_notificacion", type="date", nullable=true)
      */
     private $fechaNotificacion;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="gradoAlchoholemia", type="integer", nullable=true)
+     * @ORM\Column(name="grado_alchohol", type="integer", nullable=true)
      */
-    private $gradoAlchoholemia;
+    private $gradoAlchohol;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_infraccion", type="integer", nullable=true)
+     */
+    private $valorInfraccion;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_adicional", type="integer", nullable=true)
+     */
+    private $valorAdicional;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="urlDocumento", type="string", nullable=true)
+     * @ORM\Column(name="url_documento", type="string", nullable=true)
      */
     private $urlDocumento;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="polca", type="boolean", nullable=true)
+     */
+    private $polca = false;
+
+    /**
      * @var boolean
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado = true;
+    private $activo = true;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
+     **/
+    protected $agenteTransito;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalComparendo", inversedBy="comparendos")
+     **/
+    protected $consecutivo;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
@@ -161,25 +177,32 @@ class Comparendo
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="comparendos")
      **/
-    protected $cuidadano;
+    protected $cuidadanoInfractor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgTipoInfractor", inversedBy="comparendos")
      **/
-    protected $agenteTransito;
+    protected $tipoInfractor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SeguimientoEntrega", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\LicenciaConduccion", inversedBy="comparendos")
      **/
-    protected $seguimientoEntrega;
+    protected $licenciaConduccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="comparendos")
      **/
-    protected $factura;
-    
+    protected $cuidadanoTestigo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgComparendoEstado", inversedBy="comparendos")
+     **/
+    protected $estado;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MflInfraccion", inversedBy="comparendos")
+     **/
+    protected $infraccion;
 
     /**
      * Get id
@@ -192,123 +215,123 @@ class Comparendo
     }
 
     /**
-     * Set fechaComparendo
+     * Set fecha
      *
-     * @param \DateTime $fechaComparendo
+     * @param \DateTime $fecha
      *
      * @return Comparendo
      */
-    public function setFechaComparendo($fechaComparendo)
+    public function setFecha($fecha)
     {
-        $this->fechaComparendo = $fechaComparendo;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get fechaComparendo
+     * Get fecha
      *
      * @return \DateTime
      */
-    public function getFechaComparendo()
+    public function getFecha()
     {
-        return $this->fechaComparendo;
+        return $this->fecha;
     }
 
     /**
-     * Set horaComparendo
+     * Set hora
      *
-     * @param \DateTime $horaComparendo
+     * @param \DateTime $hora
      *
      * @return Comparendo
      */
-    public function setHoraComparendo($horaComparendo)
+    public function setHora($hora)
     {
-        $this->horaComparendo = $horaComparendo;
+        $this->hora = $hora;
 
         return $this;
     }
 
     /**
-     * Get horaComparendo
+     * Get hora
      *
      * @return \DateTime
      */
-    public function getHoraComparendo()
+    public function getHora()
     {
-        return $this->horaComparendo;
+        return $this->hora;
     }
 
     /**
-     * Set lugarInfraccion
+     * Set direccion
      *
-     * @param string $lugarInfraccion
+     * @param string $direccion
      *
      * @return Comparendo
      */
-    public function setLugarInfraccion($lugarInfraccion)
+    public function setDireccion($direccion)
     {
-        $this->lugarInfraccion = $lugarInfraccion;
+        $this->direccion = $direccion;
 
         return $this;
     }
 
     /**
-     * Get lugarInfraccion
+     * Get direccion
      *
      * @return string
      */
-    public function getLugarInfraccion()
+    public function getDireccion()
     {
-        return $this->lugarInfraccion;
+        return $this->direccion;
     }
 
     /**
-     * Set numeroOrden
+     * Set localidad
      *
-     * @param string $numeroOrden
+     * @param string $localidad
      *
      * @return Comparendo
      */
-    public function setNumeroOrden($numeroOrden)
+    public function setLocalidad($localidad)
     {
-        $this->numeroOrden = $numeroOrden;
+        $this->localidad = $localidad;
 
         return $this;
     }
 
     /**
-     * Get numeroOrden
+     * Get localidad
      *
      * @return string
      */
-    public function getNumeroOrden()
+    public function getLocalidad()
     {
-        return $this->numeroOrden;
+        return $this->localidad;
     }
 
     /**
-     * Set barrioInfraccion
+     * Set numeroLicenciaTransito
      *
-     * @param string $barrioInfraccion
+     * @param string $numeroLicenciaTransito
      *
      * @return Comparendo
      */
-    public function setBarrioInfraccion($barrioInfraccion)
+    public function setNumeroLicenciaTransito($numeroLicenciaTransito)
     {
-        $this->barrioInfraccion = $barrioInfraccion;
+        $this->numeroLicenciaTransito = $numeroLicenciaTransito;
 
         return $this;
     }
 
     /**
-     * Get barrioInfraccion
+     * Get numeroLicenciaTransito
      *
      * @return string
      */
-    public function getBarrioInfraccion()
+    public function getNumeroLicenciaTransito()
     {
-        return $this->barrioInfraccion;
+        return $this->numeroLicenciaTransito;
     }
 
     /**
@@ -360,51 +383,27 @@ class Comparendo
     }
 
     /**
-     * Set tipoInfractor
+     * Set inmovilizacion
      *
-     * @param string $tipoInfractor
+     * @param boolean $inmovilizacion
      *
      * @return Comparendo
      */
-    public function setTipoInfractor($tipoInfractor)
+    public function setInmovilizacion($inmovilizacion)
     {
-        $this->tipoInfractor = $tipoInfractor;
+        $this->inmovilizacion = $inmovilizacion;
 
         return $this;
     }
 
     /**
-     * Get tipoInfractor
+     * Get inmovilizacion
      *
-     * @return string
+     * @return boolean
      */
-    public function getTipoInfractor()
+    public function getInmovilizacion()
     {
-        return $this->tipoInfractor;
-    }
-
-    /**
-     * Set tarjetaOperacionInfractor
-     *
-     * @param integer $tarjetaOperacionInfractor
-     *
-     * @return Comparendo
-     */
-    public function setTarjetaOperacionInfractor($tarjetaOperacionInfractor)
-    {
-        $this->tarjetaOperacionInfractor = $tarjetaOperacionInfractor;
-
-        return $this;
-    }
-
-    /**
-     * Get tarjetaOperacionInfractor
-     *
-     * @return integer
-     */
-    public function getTarjetaOperacionInfractor()
-    {
-        return $this->tarjetaOperacionInfractor;
+        return $this->inmovilizacion;
     }
 
     /**
@@ -456,27 +455,27 @@ class Comparendo
     }
 
     /**
-     * Set polca
+     * Set retencionLicencia
      *
-     * @param boolean $polca
+     * @param boolean $retencionLicencia
      *
      * @return Comparendo
      */
-    public function setPolca($polca)
+    public function setRetencionLicencia($retencionLicencia)
     {
-        $this->polca = $polca;
+        $this->retencionLicencia = $retencionLicencia;
 
         return $this;
     }
 
     /**
-     * Get polca
+     * Get retencionLicencia
      *
      * @return boolean
      */
-    public function getPolca()
+    public function getRetencionLicencia()
     {
-        return $this->polca;
+        return $this->retencionLicencia;
     }
 
     /**
@@ -504,30 +503,6 @@ class Comparendo
     }
 
     /**
-     * Set retencionLicencia
-     *
-     * @param boolean $retencionLicencia
-     *
-     * @return Comparendo
-     */
-    public function setRetencionLicencia($retencionLicencia)
-    {
-        $this->retencionLicencia = $retencionLicencia;
-
-        return $this;
-    }
-
-    /**
-     * Get retencionLicencia
-     *
-     * @return boolean
-     */
-    public function getRetencionLicencia()
-    {
-        return $this->retencionLicencia;
-    }
-
-    /**
      * Set fechaNotificacion
      *
      * @param \DateTime $fechaNotificacion
@@ -552,27 +527,75 @@ class Comparendo
     }
 
     /**
-     * Set gradoAlchoholemia
+     * Set gradoAlchohol
      *
-     * @param integer $gradoAlchoholemia
+     * @param integer $gradoAlchohol
      *
      * @return Comparendo
      */
-    public function setGradoAlchoholemia($gradoAlchoholemia)
+    public function setGradoAlchohol($gradoAlchohol)
     {
-        $this->gradoAlchoholemia = $gradoAlchoholemia;
+        $this->gradoAlchohol = $gradoAlchohol;
 
         return $this;
     }
 
     /**
-     * Get gradoAlchoholemia
+     * Get gradoAlchohol
      *
      * @return integer
      */
-    public function getGradoAlchoholemia()
+    public function getGradoAlchohol()
     {
-        return $this->gradoAlchoholemia;
+        return $this->gradoAlchohol;
+    }
+
+    /**
+     * Set valorInfraccion
+     *
+     * @param integer $valorInfraccion
+     *
+     * @return Comparendo
+     */
+    public function setValorInfraccion($valorInfraccion)
+    {
+        $this->valorInfraccion = $valorInfraccion;
+
+        return $this;
+    }
+
+    /**
+     * Get valorInfraccion
+     *
+     * @return integer
+     */
+    public function getValorInfraccion()
+    {
+        return $this->valorInfraccion;
+    }
+
+    /**
+     * Set valorAdicional
+     *
+     * @param integer $valorAdicional
+     *
+     * @return Comparendo
+     */
+    public function setValorAdicional($valorAdicional)
+    {
+        $this->valorAdicional = $valorAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAdicional
+     *
+     * @return integer
+     */
+    public function getValorAdicional()
+    {
+        return $this->valorAdicional;
     }
 
     /**
@@ -600,27 +623,99 @@ class Comparendo
     }
 
     /**
-     * Set estado
+     * Set polca
      *
-     * @param boolean $estado
+     * @param boolean $polca
      *
      * @return Comparendo
      */
-    public function setEstado($estado)
+    public function setPolca($polca)
     {
-        $this->estado = $estado;
+        $this->polca = $polca;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get polca
      *
      * @return boolean
      */
-    public function getEstado()
+    public function getPolca()
     {
-        return $this->estado;
+        return $this->polca;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return Comparendo
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set agenteTransito
+     *
+     * @param \AppBundle\Entity\MpersonalFuncionario $agenteTransito
+     *
+     * @return Comparendo
+     */
+    public function setAgenteTransito(\AppBundle\Entity\MpersonalFuncionario $agenteTransito = null)
+    {
+        $this->agenteTransito = $agenteTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get agenteTransito
+     *
+     * @return \AppBundle\Entity\MpersonalFuncionario
+     */
+    public function getAgenteTransito()
+    {
+        return $this->agenteTransito;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param \AppBundle\Entity\MpersonalComparendo $consecutivo
+     *
+     * @return Comparendo
+     */
+    public function setConsecutivo(\AppBundle\Entity\MpersonalComparendo $consecutivo = null)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return \AppBundle\Entity\MpersonalComparendo
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
@@ -672,98 +767,146 @@ class Comparendo
     }
 
     /**
-     * Set cuidadano
+     * Set cuidadanoInfractor
      *
-     * @param \AppBundle\Entity\Ciudadano $cuidadano
+     * @param \AppBundle\Entity\Ciudadano $cuidadanoInfractor
      *
      * @return Comparendo
      */
-    public function setCuidadano(\AppBundle\Entity\Ciudadano $cuidadano = null)
+    public function setCuidadanoInfractor(\AppBundle\Entity\Ciudadano $cuidadanoInfractor = null)
     {
-        $this->cuidadano = $cuidadano;
+        $this->cuidadanoInfractor = $cuidadanoInfractor;
 
         return $this;
     }
 
     /**
-     * Get cuidadano
+     * Get cuidadanoInfractor
      *
      * @return \AppBundle\Entity\Ciudadano
      */
-    public function getCuidadano()
+    public function getCuidadanoInfractor()
     {
-        return $this->cuidadano;
+        return $this->cuidadanoInfractor;
     }
 
     /**
-     * Set agenteTransito
+     * Set tipoInfractor
      *
-     * @param \AppBundle\Entity\MpersonalFuncionario $agenteTransito
+     * @param \AppBundle\Entity\CfgTipoInfractor $tipoInfractor
      *
      * @return Comparendo
      */
-    public function setAgenteTransito(\AppBundle\Entity\MpersonalFuncionario $agenteTransito = null)
+    public function setTipoInfractor(\AppBundle\Entity\CfgTipoInfractor $tipoInfractor = null)
     {
-        $this->agenteTransito = $agenteTransito;
+        $this->tipoInfractor = $tipoInfractor;
 
         return $this;
     }
 
     /**
-     * Get agenteTransito
+     * Get tipoInfractor
      *
-     * @return \AppBundle\Entity\MpersonalFuncionario
+     * @return \AppBundle\Entity\CfgTipoInfractor
      */
-    public function getAgenteTransito()
+    public function getTipoInfractor()
     {
-        return $this->agenteTransito;
+        return $this->tipoInfractor;
     }
 
     /**
-     * Set seguimientoEntrega
+     * Set licenciaConduccion
      *
-     * @param \AppBundle\Entity\SeguimientoEntrega $seguimientoEntrega
+     * @param \AppBundle\Entity\LicenciaConduccion $licenciaConduccion
      *
      * @return Comparendo
      */
-    public function setSeguimientoEntrega(\AppBundle\Entity\SeguimientoEntrega $seguimientoEntrega = null)
+    public function setLicenciaConduccion(\AppBundle\Entity\LicenciaConduccion $licenciaConduccion = null)
     {
-        $this->seguimientoEntrega = $seguimientoEntrega;
+        $this->licenciaConduccion = $licenciaConduccion;
 
         return $this;
     }
 
     /**
-     * Get seguimientoEntrega
+     * Get licenciaConduccion
      *
-     * @return \AppBundle\Entity\SeguimientoEntrega
+     * @return \AppBundle\Entity\LicenciaConduccion
      */
-    public function getSeguimientoEntrega()
+    public function getLicenciaConduccion()
     {
-        return $this->seguimientoEntrega;
+        return $this->licenciaConduccion;
     }
 
     /**
-     * Set factura
+     * Set cuidadanoTestigo
      *
-     * @param \AppBundle\Entity\Factura $factura
+     * @param \AppBundle\Entity\Ciudadano $cuidadanoTestigo
      *
      * @return Comparendo
      */
-    public function setFactura(\AppBundle\Entity\Factura $factura = null)
+    public function setCuidadanoTestigo(\AppBundle\Entity\Ciudadano $cuidadanoTestigo = null)
     {
-        $this->factura = $factura;
+        $this->cuidadanoTestigo = $cuidadanoTestigo;
 
         return $this;
     }
 
     /**
-     * Get factura
+     * Get cuidadanoTestigo
      *
-     * @return \AppBundle\Entity\Factura
+     * @return \AppBundle\Entity\Ciudadano
      */
-    public function getFactura()
+    public function getCuidadanoTestigo()
     {
-        return $this->factura;
+        return $this->cuidadanoTestigo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param \AppBundle\Entity\CfgComparendoEstado $estado
+     *
+     * @return Comparendo
+     */
+    public function setEstado(\AppBundle\Entity\CfgComparendoEstado $estado = null)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return \AppBundle\Entity\CfgComparendoEstado
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set infraccion
+     *
+     * @param \AppBundle\Entity\MflInfraccion $infraccion
+     *
+     * @return Comparendo
+     */
+    public function setInfraccion(\AppBundle\Entity\MflInfraccion $infraccion = null)
+    {
+        $this->infraccion = $infraccion;
+
+        return $this;
+    }
+
+    /**
+     * Get infraccion
+     *
+     * @return \AppBundle\Entity\MflInfraccion
+     */
+    public function getInfraccion()
+    {
+        return $this->infraccion;
     }
 }

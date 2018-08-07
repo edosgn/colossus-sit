@@ -1,3 +1,9 @@
+app_cfg_tipo_infractor:
+    resource: "@AppBundle/Controller/CfgTipoInfractorController.php"
+    type:     annotation
+
+app_cfg_comparendo_estado:
+    resource: "@AppBundle/Controller/CfgComparendoEstadoController.php"
 app_cfg_objeto_fijo:
     resource: "@AppBundle/Controller/CfgObjetoFijoController.php"
     type:     annotation

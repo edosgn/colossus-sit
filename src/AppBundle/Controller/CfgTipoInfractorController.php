@@ -2,43 +2,40 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\MparqGrua;
+use AppBundle\Entity\CfgTipoInfractor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Mparqgrua controller.
+ * Cfgtipoinfractor controller.
  *
- * @Route("mparqgrua")
+ * @Route("cfgtipoinfractor")
  */
-class MparqGruaController extends Controller
+class CfgTipoInfractorController extends Controller
 {
     /**
-     * Lists all mparqGrua entities.
+     * Lists all cfgTipoInfractor entities.
      *
-     * @Route("/", name="mparqgrua_index")
+     * @Route("/", name="cfgtipoinfractor_index")
      * @Method("GET")
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $helpers = $this->get("app.helpers");
-        $json = $request->get("json",null);
-        $params = json_decode($json);
-
         $em = $this->getDoctrine()->getManager();
-        $gruas = $em->getRepository('AppBundle:MparqGrua')->findBy(
+        $tipos = $em->getRepository('AppBundle:CfgTipoInfractor')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($gruas) {
+        if ($tipos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($gruas)." Registros encontrados", 
-                'data'=> $gruas,
+                'message' => count($tipos)." registros encontrados", 
+                'data'=> $tipos,
             );
         }
 
@@ -46,9 +43,9 @@ class MparqGruaController extends Controller
     }
 
     /**
-     * Creates a new mparqGrua entity.
+     * Creates a new cfgTipoInfractor entity.
      *
-     * @Route("/new", name="mparqgrua_new")
+     * @Route("/new", name="cfgtipoinfractor_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -64,54 +61,54 @@ class MparqGruaController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $grua = new MparqGrua();
+                $tipo = new CfgTipoInfractor();
 
-                $grua->setPlaca($params->placa);
-                $grua->setNumeroInterno($params->numeroInterno);
+                $tipo->setNombre($params->nombre);
+                $tipo->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($grua);
+                $em->persist($tipo);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito",  
+                    'message' => "Registro creado con exito",
                 );
             //}
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a mparqGrua entity.
+     * Finds and displays a cfgTipoInfractor entity.
      *
-     * @Route("/{id}/show", name="mparqgrua_show")
+     * @Route("/{id}/show", name="cfgtipoinfractor_show")
      * @Method("GET")
      */
-    public function showAction(MparqGrua $mparqGrua)
+    public function showAction(CfgTipoInfractor $cfgTipoInfractor)
     {
-        $deleteForm = $this->createDeleteForm($mparqGrua);
+        $deleteForm = $this->createDeleteForm($cfgTipoInfractor);
 
-        return $this->render('mparqgrua/show.html.twig', array(
-            'mparqGrua' => $mparqGrua,
+        return $this->render('cfgtipoinfractor/show.html.twig', array(
+            'cfgTipoInfractor' => $cfgTipoInfractor,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing mparqGrua entity.
+     * Displays a form to edit an existing cfgTipoInfractor entity.
      *
-     * @Route("/edit", name="mparqgrua_edit")
+     * @Route("/edit", name="cfgtipoinfractor_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -125,32 +122,31 @@ class MparqGruaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $grua = $em->getRepository("AppBundle:MparqGrua")->find($params->id);
+            $tipo = $em->getRepository("AppBundle:CfgTipoInfractor")->find($params->id);
 
-            if ($grua!=null) {
-                $grua->setPlaca($params->placa);
-                $grua->setNumeroInterno($params->numeroInterno);
+            if ($tipo!=null) {
+                $tipo->setNombre($params->nombre);
                 
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro actualizado con exito", 
-                    'data'=> $grua,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $tipo,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar", 
+                    'message' => "Autorizacion no valida para editar", 
                 );
         }
 
@@ -158,36 +154,36 @@ class MparqGruaController extends Controller
     }
 
     /**
-     * Deletes a mparqGrua entity.
+     * Deletes a cfgTipoInfractor entity.
      *
-     * @Route("/{id}/delete", name="mparqgrua_delete")
+     * @Route("/{id}/delete", name="cfgtipoinfractor_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, MparqGrua $mparqGrua)
+    public function deleteAction(Request $request, CfgTipoInfractor $cfgTipoInfractor)
     {
-        $form = $this->createDeleteForm($mparqGrua);
+        $form = $this->createDeleteForm($cfgTipoInfractor);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($mparqGrua);
+            $em->remove($cfgTipoInfractor);
             $em->flush();
         }
 
-        return $this->redirectToRoute('mparqgrua_index');
+        return $this->redirectToRoute('cfgtipoinfractor_index');
     }
 
     /**
-     * Creates a form to delete a mparqGrua entity.
+     * Creates a form to delete a cfgTipoInfractor entity.
      *
-     * @param MparqGrua $mparqGrua The mparqGrua entity
+     * @param CfgTipoInfractor $cfgTipoInfractor The cfgTipoInfractor entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(MparqGrua $mparqGrua)
+    private function createDeleteForm(CfgTipoInfractor $cfgTipoInfractor)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('mparqgrua_delete', array('id' => $mparqGrua->getId())))
+            ->setAction($this->generateUrl('cfgtipoinfractor_delete', array('id' => $cfgTipoInfractor->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -196,26 +192,24 @@ class MparqGruaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="mparqgrua_select")
+     * @Route("/select", name="cfgtipoinfractor_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $response = null;
         
-        $gruas = $em->getRepository('AppBundle:MparqGrua')->findBy(
-            array(
-                'activo' => true,
-            )
+        $tipos = $em->getRepository('AppBundle:CfgTipoInfractor')->findBy(
+            array('activo' => true)
         );
 
-        foreach ($gruas as $key => $grua) {
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
             $response[$key] = array(
-                'value' => $grua->getId(),
-                'label' => $grua->getNumeroInterno()." - ".$grua->getPlaca(),
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre()
             );
         }
         return $helpers->json($response);
