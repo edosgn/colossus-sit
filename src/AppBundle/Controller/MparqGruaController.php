@@ -95,7 +95,7 @@ class MparqGruaController extends Controller
     /**
      * Finds and displays a mparqGrua entity.
      *
-     * @Route("/{id}", name="mparqgrua_show")
+     * @Route("/{id}/show", name="mparqgrua_show")
      * @Method("GET")
      */
     public function showAction(MparqGrua $mparqGrua)
@@ -160,7 +160,7 @@ class MparqGruaController extends Controller
     /**
      * Deletes a mparqGrua entity.
      *
-     * @Route("/{id}", name="mparqgrua_delete")
+     * @Route("/{id}/delete", name="mparqgrua_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, MparqGrua $mparqGrua)
@@ -191,5 +191,33 @@ class MparqGruaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="mparqgrua_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $response = null;
+        
+        $gruas = $em->getRepository('AppBundle:MparqGrua')->findBy(
+            array(
+                'activo' => true,
+            )
+        );
+
+        foreach ($gruas as $key => $grua) {
+            $response[$key] = array(
+                'value' => $grua->getId(),
+                'label' => $grua->getNumeroInterno()." - ".$grua->getPlaca(),
+            );
+        }
+        return $helpers->json($response);
     }
 }

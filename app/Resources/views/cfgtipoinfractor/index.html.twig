@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgtipoinfractors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgTipoInfractor in cfgTipoInfractors %}
+            <tr>
+                <td><a href="{{ path('cfgtipoinfractor_show', { 'id': cfgTipoInfractor.id }) }}">{{ cfgTipoInfractor.id }}</a></td>
+                <td>{{ cfgTipoInfractor.nombre }}</td>
+                <td>{% if cfgTipoInfractor.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgtipoinfractor_show', { 'id': cfgTipoInfractor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgtipoinfractor_edit', { 'id': cfgTipoInfractor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgtipoinfractor_new') }}">Create a new cfgTipoInfractor</a>
+        </li>
+    </ul>
+{% endblock %}

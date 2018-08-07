@@ -237,11 +237,11 @@ class CfgPlacaController extends Controller
     /**
      * datos para select 2 por modulo
      *
-     * @Route("/select/placas/por/sedeOperativa/{id}", name="placas_select_por_sedeOperativa")
+     * @Route("/select/placas/por/sedeOperativa/{id}", name="cfgplaca_select_sedeOperativa")
      * @Method({"GET", "POST"})
      */
 
-    public function SelectPlacaPorSede( $id)
+    public function selectPlacaBySedeOperativa( $id)
     {
         $response = null;
         $helpers = $this->get("app.helpers");

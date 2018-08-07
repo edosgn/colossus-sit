@@ -234,9 +234,54 @@ class VehiculoController extends Controller
     }
 
     /**
+     * busca vehiculos por placa y modulo.
+     *
+     * @Route("/modulo/placa", name="modulo_vehiculo_search_placa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlacaModulo(
+                $params->placa,
+                $params->moduloId
+            );
+
+            if ($vehiculo != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado",
+                    'data' => $vehiculo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit", name="vehiculo_editar")
+     * @Route("/edit", name="vehiculo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -249,20 +294,18 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
             $numeroFactura = $params->numeroFactura;
             $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
-            $marca = $params->marcaId;
-            $linea = $params->lineaId;
-            $clase = $params->claseId;
+            $linea = $params->linea;
+            $clase = $params->clase;
             $carroceria = $params->carroceriaId;
             $servicio = $params->servicioId;
-            $color = $params->colorId;
-            $combustible = $params->combustibleId;
-            $sedeOperativa = $params->sedeOperativaId;
+            $color = $params->color;
+            $combustible = $params->combustible;
+            $sedeOperativa = $params->sedeOperativa;
             $numeroManifiesto = $params->numeroManifiesto;
-            $municipio = $params->municipioId;
+            $municipio = $params->municipio;
             $fechaManifiesto = $params->fechaManifiesto;
             $cilindraje = $params->cilindraje;
             $modelo = $params->modelo;
@@ -271,8 +314,8 @@ class VehiculoController extends Controller
             $serie = $params->serie;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
-            $radioAccion = $params->radioAccionId;
-            $modalidadTransporte = $params->modalidadTransporteId;
+            $radioAccion = $params->radioAccion;
+            $modalidadTransporte = $params->modalidadTransporte;
 
             // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
@@ -283,9 +326,8 @@ class VehiculoController extends Controller
                 $fechaFactura = new \DateTime($fechaFactura);
                 $fechaManifiesto = (isset($params->fechaManifiesto)) ? $params->fechaManifiesto : null;
                 $fechaManifiesto = new \DateTime($fechaManifiesto);
-
-                $marca = $em->getRepository('AppBundle:Marca')->find($marca);
                 $linea = $em->getRepository('AppBundle:Linea')->find($linea);
+                $marca = $linea->getMarca();
                 $clase = $em->getRepository('AppBundle:Clase')->find($clase);
                 $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
                 $servicio = $em->getRepository('AppBundle:Servicio')->find($servicio);
@@ -350,7 +392,7 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit/color", name="vehiculo_edit")
+     * @Route("/edit/color", name="vehiculo_edit_color")
      * @Method({"GET", "POST"})
      */
     public function editColorAction(Request $request)
@@ -368,6 +410,51 @@ class VehiculoController extends Controller
 
             if ($vehiculo != null) {
                 $vehiculo->setColor($color);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con éxito",
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing Vehiculo entity.
+     *
+     * @Route("/edit/combustible", name="vehiculo_edit_combustible")
+     * @Method({"GET", "POST"})
+     */
+    public function editCombustibleAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($params->combustibleCambioId);
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->vehiculoId);
+
+            if ($vehiculo != null) {
+                $vehiculo->setCombustible($combustible);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -665,7 +752,7 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit/pignorado", name="vehiculo_edit")
+     * @Route("/edit/pignorado", name="vehiculo_edit_pignorado")
      * @Method({"GET", "POST"})
      */
     public function editPignoradoAction(Request $request)

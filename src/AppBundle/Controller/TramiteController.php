@@ -61,16 +61,22 @@ class TramiteController extends Controller
                     'msj' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $sustrato = ($params->sustrato == 'true') ? true : false;
                 
                 $moduloId = $params->moduloId;
                 $em = $this->getDoctrine()->getManager();
-                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
 
                 $tramite = new Tramite();
-                $tramite->setNombre($params->nombre);
-                $tramite->setSustrato($sustrato);
+                
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
                 $tramite->setModulo($modulo);
+                
+                $tramite->setNombre($params->nombre);
+
+                $sustrato = ($params->sustrato == 'true') ? true : false;
+                $tramite->setSustrato($sustrato);
+
+                $tramite->setFormulario($params->formulario);
+
                 $em->persist($tramite);
                 $em->flush();
 
@@ -138,21 +144,28 @@ class TramiteController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
             $redondeo = (isset($params->redondeo)) ? $params->redondeo : false;
             $afectacion = (isset($params->afectacion)) ? $params->afectacion : false;
             $moduloId = $params->moduloId;
 
             $em = $this->getDoctrine()->getManager();
-            $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
             $tramite = $em->getRepository("AppBundle:Tramite")->find($params->id);
 
             if ($tramite!=null) {
-                $tramite->setNombre($nombre);
                 $tramite->setRedondeo($redondeo);
                 $tramite->setAfectacion($afectacion);
+                
+                $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
                 $tramite->setModulo($modulo);
+
+                $tramite->setNombre($params->nombre);
+
+                $sustrato = ($params->sustrato == 'true') ? true : false;
+                $tramite->setSustrato($sustrato);
+
+                $tramite->setFormulario($params->formulario);
                 $tramite->setEstado(true);
+
                 $em->persist($tramite);
                 $em->flush();
 

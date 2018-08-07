@@ -95,7 +95,7 @@ class LicenciaConduccionController extends Controller
                 $licenciaConduccion->setServicio($servicio);
             }
 
-            if ($params->tramiteFacturaId) {
+            if (isset($params->tramiteFacturaId)) {
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find(
                     $params->tramiteFacturaId
                 );

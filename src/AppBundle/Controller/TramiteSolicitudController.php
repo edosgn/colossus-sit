@@ -18,7 +18,7 @@ class TramiteSolicitudController extends Controller
     /**
      * Lists all tramiteSolicitud entities.
      *
-     * @Route("/index", name="index_tramitesolicitud")
+     * @Route("/index", name="tramitesolicitud_index")
      * @Method({"GET", "POST"})
      */
     public function indexAction(Request $request)
@@ -214,29 +214,58 @@ class TramiteSolicitudController extends Controller
         return $this->redirectToRoute('tramitesolicitud_index');
     }
 
+    /**
+     * Creates a form to delete a tramiteSolicitud entity.
+     *
+     * @param TramiteSolicitud $tramiteSolicitud The tramiteSolicitud entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(TramiteSolicitud $tramiteSolicitud)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('tramitesolicitud_delete', array('id' => $tramiteSolicitud->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
+    }
 
+    /* ======================================================== */
 
     /**
      * Obtiene tramiteSolicitud segun id_vehiculo entities.
      *
-     * @Route("/byvehiculo", name="tramitesolicitud_byvehiculo")
+     * @Route("/vehiculo", name="tramitesolicitud_vehiculo")
      * @Method({"GET", "POST"})
      */
-    public function getTramiteByIdVehiculo(Request $request)
+    public function getByVehiculoAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
-        $idVehiculo = $request->get("json", null);
         $authCheck = $helpers->authCheck($hash);
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($idVehiculo);
 
-        $response = array(
-            'status' => 'success',
-            'code' => 200,
-            'msj' => "Lista de tramites",
-            'data' => $tramitesSolicitud,
-        );
+        if ($authCheck == true) {
+            $idVehiculo = $request->get("json", null);
+
+            $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo(
+                $idVehiculo
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Lista de tramites",
+                'data' => $tramitesSolicitud,
+            );
+        }else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+            
         return $helpers->json($response);
     }
 
@@ -297,28 +326,12 @@ class TramiteSolicitudController extends Controller
     }
 
     /**
-     * Creates a form to delete a tramiteSolicitud entity.
-     *
-     * @param TramiteSolicitud $tramiteSolicitud The tramiteSolicitud entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(TramiteSolicitud $tramiteSolicitud)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('tramitesolicitud_delete', array('id' => $tramiteSolicitud->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
-    }
-
-    /**
      * Lists all tramiteSolicitud entities.
      *
-     * @Route("/reporte", name="tramitesolicitud_index")
+     * @Route("/report/index", name="tramitesolicitud_report_index")
      * @Method({"GET", "POST"})
      */
-    public function reporte()
+    public function reportIndexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
@@ -341,10 +354,10 @@ class TramiteSolicitudController extends Controller
     /**
      * Lists all tramiteSolicitud entities.
      *
-     * @Route("/reportefecha", name="reporte_fecha_tramitesolicitud_index")
+     * @Route("/report/date", name="tramitesolicitud_report_date")
      * @Method({"GET", "POST"})
      */
-    public function reporteFecha(Request $request)
+    public function reportByDateAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 

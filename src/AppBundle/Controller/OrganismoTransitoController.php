@@ -241,4 +241,49 @@ class OrganismoTransitoController extends Controller
       }
        return $helpers->json($response);
     }
+
+     /**
+     * busca organismo de transito por sede operativa.
+     *
+     * @Route("/sede", name="organismoTransito_search_sedeOperativa")
+     * @Method("POST")
+     */
+    public function searchBySedeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $sedeOperativa = $em->getRepository('AppBundle:OrganismoTransito')->getBySede(
+                $params->identificacionUsuario
+            );
+
+            if ($sedeOperativa != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado",
+                    'data' => $sedeOperativa,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
