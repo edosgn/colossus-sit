@@ -1,3 +1,11 @@
+app_cfg_tipo_infractor:
+    resource: "@AppBundle/Controller/CfgTipoInfractorController.php"
+    type:     annotation
+
+app_cfg_comparendo_estado:
+    resource: "@AppBundle/Controller/CfgComparendoEstadoController.php"
+    type:     annotation
+
 app_mparq_patio:
     resource: "@AppBundle/Controller/MparqPatioController.php"
     type:     annotation
