@@ -412,11 +412,12 @@ class EmpresaController extends Controller
         $json = $request->get("json",null);
         $params = json_decode($json);
         $em = $this->getDoctrine()->getManager();
+        var_dump($params);
+        die();
         if ($authCheck == true) {
-        $empresa = $em->getRepository('AppBundle:Empresa')->findByNitOrNombre($params->parametro);
-        //$empresaId = $empresa
-        //$revision = $em->getRepository('AppBundle:MsvRevision')->findBy($empresa->getId());
-            if ($empresa!=null) {
+        $empresa = $em->getRepository('AppBundle:Empresa')->findByNitOrNombre($params); 
+        if($empresa){        
+        if (count($empresa)==1) {
                $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -427,9 +428,17 @@ class EmpresaController extends Controller
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
+                    'msj' => "Existe más de una empresa con ese nombre, ingrese nombre y NIT por favor.", 
+                );
+            } 
+        } 
+            else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
                     'msj' => "Empresa no Encontrada", 
                 );
-            }  
+            }
         }else{
             $response = array(
                 'status' => 'error',
