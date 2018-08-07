@@ -12,5 +12,100 @@
         <b>Subsecretaria de transito y transporte departamental de nariño</b>
         <br>      
     </p>
+    <table>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Fecha de EX</td>
+            <td> {{factura.fechaCreacion | date('Y-md-')}}</td>
+            <td style="font-weight:bold;">Fecha Vencimiento</td>
+            <td>{{factura.fechaVencimiento| date('Y-md-')}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Valor</td>
+            <td> {{factura.valorNeto}}</td>
+        </tr>
+    </table>
+    <p style="text-align:center;">
+        <b>Vehículo</b>
+    </p>
+    <table>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Clase</td>
+            <td> {{factura.vehiculo.clase.nombre}}</td>
+            <td style="font-weight:bold;">No.serie</td>
+            <td>{{factura.vehiculo.serie}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Marca</td>
+            <td> {{factura.vehiculo.linea.marca.nombre}}</td>
+            <td style="font-weight:bold;">No.Chasis</td>
+            <td>{{factura.vehiculo.chasis}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Carrocería</td>
+            <td> {{factura.vehiculo.carroceria.nombre}}</td>
+            <td style="font-weight:bold;">Cilindraje</td>
+            <td>{{factura.vehiculo.cilindraje}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">linea</td>
+            <td> {{factura.vehiculo.linea.nombre}}</td>
+            <td style="font-weight:bold;">Pasajeros</td>
+            <td>{{factura.vehiculo.numeroPasajeros}}</td>
+        </tr>
+        <tr> 
+            <td  width="15%" style="font-weight:bold;">Color</td>
+            <td> {{factura.vehiculo.color.nombre}}</td>
+            <td style="font-weight:bold;">Servicio</td>
+            <td>{{factura.vehiculo.servicio.nombre}}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Modelo</td>
+            <td> {{factura.vehiculo.modelo}}</td>
+            <td style="font-weight:bold;">No.motor</td>
+            <td>{{factura.vehiculo.motor}}</td>
+        </tr>
+    </table>
+    <p style="text-align:center;">
+        <b>Solicitante</b>
+    </p>
+    <table border="1">
+      <tr>
+        <td>{{ factura.ciudadano.usuario.identificacion }}</td>
+        <td>{{ factura.ciudadano.usuario.PrimerNombre }} {{ factura.ciudadano.usuario.SegundoNombre }}</td>
+        <td>{{ factura.ciudadano.usuario.PrimerApellido }} {{ factura.ciudadano.usuario.SegundoApellido }}</td>
+        <td>{{ factura.ciudadano.direccion }}</td>
+      </tr>    
+    </table>
+    <p style="text-align:center;">
+        <b>Tramites</b>
+    </p>
+    <table border="1">
+        <tr>
+            <td>Tramite</td>
+            <td>Valor</td>
+        </tr>
+        {% for tramiteFactura in tramitesFacturaArray[0] %}
+            <tr>
+                <td>{{ tramiteFactura.tramitePrecio.nombre }}</td>
+                <td>{{ tramiteFactura.tramitePrecio.valor }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <p style="text-align:center;">
+        <b>Retefuente</b>
+    </p>
+    <table border="1">
+        <tr>
+            <td>Propietario</td>
+            <td>Valor</td>
+        </tr>
+        {% for mflRetefuente in mflRetefuenteArray %}
+            <tr>
+                <td>{{ mflRetefuente.vendedorCedula }}</td>
+                <td>{{ mflRetefuente.valor }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
   </body>
 </html>

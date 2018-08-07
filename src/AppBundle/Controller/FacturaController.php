@@ -460,7 +460,8 @@ class FacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
+        $authCheck = $helpers->authCheck($hash); 
+        $mflRetefuenteArray=[];
 
         $json = $request->get("json",null);
         $params = json_decode($json);
@@ -494,51 +495,66 @@ class FacturaController extends Controller
         //Inserta llaves foraneas
         $factura->setSedeOperativa($sedeOperativa);
         $factura->setCiudadano($ciudadano);
+        $tramitesFacturaArray = false;
 
-        $this->openPdf($factura);
-    }
+      
+        
+        foreach ($params->tramitesValor as $key => $tramiteValor) {
+            $tramiteFactura = new TramiteFactura();
 
-    public function openPdf($factura){
+            $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find(
+                $tramiteValor->idTramitePrecio
+            );
+
+            if($tramitePrecio->getTramite()->getId() == 6){
+                foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                
+                    $mflRetefuente = new MflRetefuente();
+
+                    $mflRetefuente->setVehiculo($vehiculo);
+                    
+                    $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
+                        $propietarioRetefuenteId
+                    );
+                    $mflRetefuente->setPropietarioVehiculo($propietarioVehiculo);
+
+                    if (isset($params->valorVehiculoId)) {
+                        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
+                            $params->valorVehiculoId
+                        );
+                        $mflRetefuente->setValorVehiculo($valorVehiculo);
+                    }
+                    $mflRetefuente->setFactura($factura);
+                    $mflRetefuente->setFecha(new \DateTime($params->factura->fechaCreacion));
+                    $mflRetefuente->setRetencion($params->retencion);
+                    $mflRetefuente->setEstado(true);
+                 
+                    $mflRetefuenteArray[$key] = array(
+                        'vendedorCedula' => $mflRetefuente->getPropietarioVehiculo()->getCiudadano()->getUsuario()->getIdentificacion(),
+                        'valor' => $params->retencion, 
+                    );
+                }
+            }
+
+            $tramiteFactura->setFactura($factura);
+            $tramiteFactura->setTramitePrecio($tramitePrecio);
+            $tramiteFactura->setEstado(true);
+            $tramiteFactura->setRealizado(false);
+            $tramiteFactura->setCantidad(1);
+
+            $tramitesFacturaArray[]= array(
+                $tramiteFactura
+            );
+        }
+        
+     
         $html = $this->renderView('@App/factura/pdfFactura.html.twig', array(
             'factura'=>$factura,
+            'tramitesFacturaArray'=>$tramitesFacturaArray,
+            'mflRetefuenteArray'=>$mflRetefuenteArray,
         ));
 
-        $pdf = $this->container->get("white_october.tcpdf")->create(
-            'PORTRAIT',
-            PDF_UNIT,
-            PDF_PAGE_FORMAT,
-            true,
-            'UTF-8',
-            false
-        );
-        $pdf->SetAuthor('qweqwe');
-        $pdf->SetTitle('Planilla');
-        $pdf->SetSubject('Your client');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-        $pdf->setFontSubsetting(true);
-
-        $pdf->SetFont('helvetica', '', 11, '', true);
-        $pdf->SetMargins('25', '25', '25');
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->AddPage();
-
-        $pdf->writeHTMLCell(
-            $w = 0,
-            $h = 0,
-            $x = '',
-            $y = '',
-            $html,
-            $border = 0,
-            $ln = 1,
-            $fill = 0,
-            $reseth = true,
-            $align = '',
-            $autopadding = true
-        );
-
-        $pdf->Output("example.pdf", 'I');
-        
-        return true;
+        $nombrePdf = ($this->get('app.pdf.factura')->templateSummary($html,$factura));
+        return $helpers->json($nombrePdf);
     }
 }
