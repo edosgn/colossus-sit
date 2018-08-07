@@ -166,4 +166,50 @@ class MsvTConsecutivoController extends Controller
             ->getForm()
         ;
     }
+
+     /**
+     * busca ipat por numero de consecutivo.
+     *
+     * @Route("/sede/consecutivo", name="sede_search_consecutivo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByConsecutivoSedeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            // var_dump($params);die();
+            $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->getByConsecutivoSede(
+                $params->nroIpat,
+                $params->identificacionUsuario
+            );
+
+            if ($ipat != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado",
+                    'data' => $ipat,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

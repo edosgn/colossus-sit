@@ -2,40 +2,40 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\MparqPatio;
+use AppBundle\Entity\CfgComparendoEstado;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Mparqpatio controller.
+ * Cfgcomparendoestado controller.
  *
- * @Route("mparqpatio")
+ * @Route("cfgcomparendoestado")
  */
-class MparqPatioController extends Controller
+class CfgComparendoEstadoController extends Controller
 {
     /**
-     * Lists all mparqPatio entities.
+     * Lists all cfgComparendoEstado entities.
      *
-     * @Route("/", name="mparqpatio_index")
+     * @Route("/", name="cfgcomparendoestado_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $patios = $em->getRepository('AppBundle:MparqPatio')->findBy(
+        $estados = $em->getRepository('AppBundle:CfgComparendoEstado')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($patios) {
+        if ($estados) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($patios)." Registros encontrados", 
-                'data'=> $patios,
+                'message' => count($estados)." registros encontrados", 
+                'data'=> $estados,
             );
         }
 
@@ -43,9 +43,9 @@ class MparqPatioController extends Controller
     }
 
     /**
-     * Creates a new mparqPatio entity.
+     * Creates a new cfgComparendoEstado entity.
      *
-     * @Route("/new", name="mparqpatio_new")
+     * @Route("/new", name="cfgcomparendoestado_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -61,24 +61,22 @@ class MparqPatioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $patio = new MparqPatio();
+                $estado = new CfgComparendoEstado();
 
-                $patio->setNombre($params->nombre);
-                $patio->setDireccion($params->direccion);
-                $patio->setActivo(true);
+                $estado->setNombre($params->nombre);
+                $estado->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($patio);
+                $em->persist($estado);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito",
-                    'data' => $patio
                 );
             //}
         }else{
@@ -92,28 +90,28 @@ class MparqPatioController extends Controller
     }
 
     /**
-     * Finds and displays a mparqPatio entity.
+     * Finds and displays a cfgComparendoEstado entity.
      *
-     * @Route("/{id}/show", name="mparqpatio_show")
+     * @Route("/{id}/show", name="cfgcomparendoestado_show")
      * @Method("GET")
      */
-    public function showAction(MparqPatio $mparqPatio)
+    public function showAction(CfgComparendoEstado $cfgComparendoEstado)
     {
-        $deleteForm = $this->createDeleteForm($mparqPatio);
+        $deleteForm = $this->createDeleteForm($cfgComparendoEstado);
 
-        return $this->render('mparqpatio/show.html.twig', array(
-            'mparqPatio' => $mparqPatio,
+        return $this->render('cfgcomparendoestado/show.html.twig', array(
+            'cfgComparendoEstado' => $cfgComparendoEstado,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing mparqPatio entity.
+     * Displays a form to edit an existing cfgComparendoEstado entity.
      *
-     * @Route("/{id}/edit", name="mparqpatio_edit")
+     * @Route("/edit", name="cfgcomparendoestado_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MparqPatio $mparqPatio)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -124,32 +122,31 @@ class MparqPatioController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $patio = $em->getRepository("AppBundle:MparqPatio")->find($params->id);
+            $estado = $em->getRepository("AppBundle:CfgComparendoEstado")->find($params->id);
 
-            if ($patio!=null) {
-                $patio->setNombre($params->nombre);
-                $patio->setDireccion($params->direccion);
+            if ($estado!=null) {
+                $estado->setNombre($params->nombre);
                 
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro actualizado con exito", 
-                    'data'=> $patio,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $estado,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar", 
+                    'message' => "Autorizacion no valida para editar", 
                 );
         }
 
@@ -157,36 +154,36 @@ class MparqPatioController extends Controller
     }
 
     /**
-     * Deletes a mparqPatio entity.
+     * Deletes a cfgComparendoEstado entity.
      *
-     * @Route("/{id}/delete", name="mparqpatio_delete")
+     * @Route("/{id}/delete", name="cfgcomparendoestado_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, MparqPatio $mparqPatio)
+    public function deleteAction(Request $request, CfgComparendoEstado $cfgComparendoEstado)
     {
-        $form = $this->createDeleteForm($mparqPatio);
+        $form = $this->createDeleteForm($cfgComparendoEstado);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($mparqPatio);
+            $em->remove($cfgComparendoEstado);
             $em->flush();
         }
 
-        return $this->redirectToRoute('mparqpatio_index');
+        return $this->redirectToRoute('cfgcomparendoestado_index');
     }
 
     /**
-     * Creates a form to delete a mparqPatio entity.
+     * Creates a form to delete a cfgComparendoEstado entity.
      *
-     * @param MparqPatio $mparqPatio The mparqPatio entity
+     * @param CfgComparendoEstado $cfgComparendoEstado The cfgComparendoEstado entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(MparqPatio $mparqPatio)
+    private function createDeleteForm(CfgComparendoEstado $cfgComparendoEstado)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('mparqpatio_delete', array('id' => $mparqPatio->getId())))
+            ->setAction($this->generateUrl('cfgcomparendoestado_delete', array('id' => $cfgComparendoEstado->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -195,26 +192,24 @@ class MparqPatioController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="mparqpatio_select")
+     * @Route("/select", name="cfgcomparendoestado_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $response = null;
         
-        $patios = $em->getRepository('AppBundle:MparqPatio')->findBy(
-            array(
-                'activo' => true,
-            )
+        $estados = $em->getRepository('AppBundle:CfgComparendoEstado')->findBy(
+            array('activo' => true)
         );
 
-        foreach ($patios as $key => $patio) {
+        $response = null;
+
+        foreach ($estados as $key => $estado) {
             $response[$key] = array(
-                'value' => $patio->getId(),
-                'label' => $patio->getNombre()." - ".$patio->getDireccion(),
+                'value' => $estado->getId(),
+                'label' => $estado->getNombre()
             );
         }
         return $helpers->json($response);

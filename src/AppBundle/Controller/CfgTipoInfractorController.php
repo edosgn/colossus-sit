@@ -2,40 +2,40 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\MparqPatio;
+use AppBundle\Entity\CfgTipoInfractor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Mparqpatio controller.
+ * Cfgtipoinfractor controller.
  *
- * @Route("mparqpatio")
+ * @Route("cfgtipoinfractor")
  */
-class MparqPatioController extends Controller
+class CfgTipoInfractorController extends Controller
 {
     /**
-     * Lists all mparqPatio entities.
+     * Lists all cfgTipoInfractor entities.
      *
-     * @Route("/", name="mparqpatio_index")
+     * @Route("/", name="cfgtipoinfractor_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $patios = $em->getRepository('AppBundle:MparqPatio')->findBy(
+        $tipos = $em->getRepository('AppBundle:CfgTipoInfractor')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($patios) {
+        if ($tipos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($patios)." Registros encontrados", 
-                'data'=> $patios,
+                'message' => count($tipos)." registros encontrados", 
+                'data'=> $tipos,
             );
         }
 
@@ -43,9 +43,9 @@ class MparqPatioController extends Controller
     }
 
     /**
-     * Creates a new mparqPatio entity.
+     * Creates a new cfgTipoInfractor entity.
      *
-     * @Route("/new", name="mparqpatio_new")
+     * @Route("/new", name="cfgtipoinfractor_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -61,24 +61,22 @@ class MparqPatioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $patio = new MparqPatio();
+                $tipo = new CfgTipoInfractor();
 
-                $patio->setNombre($params->nombre);
-                $patio->setDireccion($params->direccion);
-                $patio->setActivo(true);
+                $tipo->setNombre($params->nombre);
+                $tipo->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($patio);
+                $em->persist($tipo);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito",
-                    'data' => $patio
                 );
             //}
         }else{
@@ -92,28 +90,28 @@ class MparqPatioController extends Controller
     }
 
     /**
-     * Finds and displays a mparqPatio entity.
+     * Finds and displays a cfgTipoInfractor entity.
      *
-     * @Route("/{id}/show", name="mparqpatio_show")
+     * @Route("/{id}/show", name="cfgtipoinfractor_show")
      * @Method("GET")
      */
-    public function showAction(MparqPatio $mparqPatio)
+    public function showAction(CfgTipoInfractor $cfgTipoInfractor)
     {
-        $deleteForm = $this->createDeleteForm($mparqPatio);
+        $deleteForm = $this->createDeleteForm($cfgTipoInfractor);
 
-        return $this->render('mparqpatio/show.html.twig', array(
-            'mparqPatio' => $mparqPatio,
+        return $this->render('cfgtipoinfractor/show.html.twig', array(
+            'cfgTipoInfractor' => $cfgTipoInfractor,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing mparqPatio entity.
+     * Displays a form to edit an existing cfgTipoInfractor entity.
      *
-     * @Route("/{id}/edit", name="mparqpatio_edit")
+     * @Route("/edit", name="cfgtipoinfractor_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MparqPatio $mparqPatio)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -124,32 +122,31 @@ class MparqPatioController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $patio = $em->getRepository("AppBundle:MparqPatio")->find($params->id);
+            $tipo = $em->getRepository("AppBundle:CfgTipoInfractor")->find($params->id);
 
-            if ($patio!=null) {
-                $patio->setNombre($params->nombre);
-                $patio->setDireccion($params->direccion);
+            if ($tipo!=null) {
+                $tipo->setNombre($params->nombre);
                 
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro actualizado con exito", 
-                    'data'=> $patio,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $tipo,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar", 
+                    'message' => "Autorizacion no valida para editar", 
                 );
         }
 
@@ -157,36 +154,36 @@ class MparqPatioController extends Controller
     }
 
     /**
-     * Deletes a mparqPatio entity.
+     * Deletes a cfgTipoInfractor entity.
      *
-     * @Route("/{id}/delete", name="mparqpatio_delete")
+     * @Route("/{id}/delete", name="cfgtipoinfractor_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, MparqPatio $mparqPatio)
+    public function deleteAction(Request $request, CfgTipoInfractor $cfgTipoInfractor)
     {
-        $form = $this->createDeleteForm($mparqPatio);
+        $form = $this->createDeleteForm($cfgTipoInfractor);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($mparqPatio);
+            $em->remove($cfgTipoInfractor);
             $em->flush();
         }
 
-        return $this->redirectToRoute('mparqpatio_index');
+        return $this->redirectToRoute('cfgtipoinfractor_index');
     }
 
     /**
-     * Creates a form to delete a mparqPatio entity.
+     * Creates a form to delete a cfgTipoInfractor entity.
      *
-     * @param MparqPatio $mparqPatio The mparqPatio entity
+     * @param CfgTipoInfractor $cfgTipoInfractor The cfgTipoInfractor entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(MparqPatio $mparqPatio)
+    private function createDeleteForm(CfgTipoInfractor $cfgTipoInfractor)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('mparqpatio_delete', array('id' => $mparqPatio->getId())))
+            ->setAction($this->generateUrl('cfgtipoinfractor_delete', array('id' => $cfgTipoInfractor->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -195,26 +192,24 @@ class MparqPatioController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="mparqpatio_select")
+     * @Route("/select", name="cfgtipoinfractor_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $response = null;
         
-        $patios = $em->getRepository('AppBundle:MparqPatio')->findBy(
-            array(
-                'activo' => true,
-            )
+        $tipos = $em->getRepository('AppBundle:CfgTipoInfractor')->findBy(
+            array('activo' => true)
         );
 
-        foreach ($patios as $key => $patio) {
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
             $response[$key] = array(
-                'value' => $patio->getId(),
-                'label' => $patio->getNombre()." - ".$patio->getDireccion(),
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre()
             );
         }
         return $helpers->json($response);
