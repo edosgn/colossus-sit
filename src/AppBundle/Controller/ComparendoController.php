@@ -409,10 +409,10 @@ class ComparendoController extends Controller
             'msj' => "Registro creado con exito", 
         );
         return $helpers->json($response);
-}
+    }
 
 
-/**
+    /**
      * Busca comparendo por número.
      *
      * @Route("/search", name="comparendo_search")
@@ -459,5 +459,50 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
-    
+    /**
+     * Busca comparendo por número.
+     *
+     * @Route("/search/tipo", name="comparendo_search_tipo")
+     * @Method("POST")
+     */
+    public function searchTipoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneBy(
+                array('numeroOrden' => $params->numeroOrden)
+            );
+
+            if ($comparendo != null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                    'msj' => "Número de comparendo ya existe", 
+            );
+            }else{
+                 $response = array(
+                    'status' => 'success',
+                    'code' => 400,
+                    'msj' => "Número de orden no encontrada en la base de datos", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    } 
 }
