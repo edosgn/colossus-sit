@@ -57,13 +57,6 @@ class Modulo
     private $estado;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="tramite", type="string", length=50)
-     */
-    private $tramite;
-
-    /**
      * Get id
      *
      * @return integer
@@ -191,29 +184,5 @@ class Modulo
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set tramite
-     *
-     * @param string $tramite
-     *
-     * @return Modulo
-     */
-    public function setTramite($tramite)
-    {
-        $this->tramite = $tramite;
-
-        return $this;
-    }
-
-    /**
-     * Get tramite
-     *
-     * @return string
-     */
-    public function getTramite()
-    {
-        return $this->tramite;
     }
 }
