@@ -391,7 +391,7 @@ class PropietarioVehiculoController extends Controller
                         'msj' => "propietario para vehiculo", 
                         'data'=> $propietarioVehiculo,
                     );
-                }else{
+                }else{ 
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
@@ -507,10 +507,7 @@ class PropietarioVehiculoController extends Controller
                 'vehiculo' => $vehiculoId,
             )
         );
-        var_dump($vehiculoId);
-        var_dump($licenciaTransito);
         $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
-        // die();
         $em = $this->getDoctrine()->getManager();
         $em->persist($propietarioVehiculo);
         $em->flush();

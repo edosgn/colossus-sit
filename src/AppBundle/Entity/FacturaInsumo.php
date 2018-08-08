@@ -29,6 +29,21 @@ class FacturaInsumo
     private $fecha;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", length=900, nullable=true)
+     */
+    private $descripcion;
+
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="entregado", type="boolean", nullable=true)
+     */
+    private $entregado;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
      **/
     protected $ciudadano;
@@ -42,9 +57,6 @@ class FacturaInsumo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="facturas")
      **/
     protected $factura;
-
-
-   
 
     /**
      * Get id
@@ -78,6 +90,54 @@ class FacturaInsumo
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return FacturaInsumo
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
+    }
+
+    /**
+     * Set entregado
+     *
+     * @param boolean $entregado
+     *
+     * @return FacturaInsumo
+     */
+    public function setEntregado($entregado)
+    {
+        $this->entregado = $entregado;
+
+        return $this;
+    }
+
+    /**
+     * Get entregado
+     *
+     * @return boolean
+     */
+    public function getEntregado()
+    {
+        return $this->entregado;
     }
 
     /**
