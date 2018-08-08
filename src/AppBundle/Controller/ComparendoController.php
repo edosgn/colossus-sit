@@ -505,4 +505,50 @@ class ComparendoController extends Controller
         }
         return $helpers->json($response);
     } 
+
+    /**
+     * Busca comparendo por parametros (agente, fecha desde y hasta, por tipo infracción).
+     *
+     * @Route("/search/parametros", name="comparendo_search_parametros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByParametros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->findByParametros($params);
+            var_dump($comparendos);
+            die();
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                    'msj' => "Lista de Comparendos", 
+                    'data' => $comparendos,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'success',
+                    'code' => 400,
+                    'msj' => "No existe comparendos para esos parametros de busqueda", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    } 
 }
