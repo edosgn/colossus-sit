@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tiposenals list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tipoSenal in tipoSenals %}
+            <tr>
+                <td><a href="{{ path('tiposenal_show', { 'id': tipoSenal.id }) }}">{{ tipoSenal.nombre }}</a></td>
+                <td>{% if tipoSenal.estado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ tipoSenal.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tiposenal_show', { 'id': tipoSenal.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tiposenal_edit', { 'id': tipoSenal.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tiposenal_new') }}">Create a new tipoSenal</a>
+        </li>
+    </ul>
+{% endblock %}

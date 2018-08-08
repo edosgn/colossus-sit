@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvcategorias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvCategorium in msvCategorias %}
+            <tr>
+                <td><a href="{{ path('msvcategoria_show', { 'id': msvCategorium.id }) }}">{{ msvCategorium.id }}</a></td>
+                <td>{{ msvCategorium.nombre }}</td>
+                <td>{% if msvCategorium.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvcategoria_show', { 'id': msvCategorium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('msvcategoria_edit', { 'id': msvCategorium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvcategoria_new') }}">Create a new msvCategorium</a>
+        </li>
+    </ul>
+{% endblock %}

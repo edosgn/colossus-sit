@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>VehiculoPesado list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Tonelaje</th>
+                <th>Numeroejes</th>
+                <th>Numeromt</th>
+                <th>Fichatecnicahomologacioncarroceria</th>
+                <th>Fichatecnicahomologacionchasis</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vehiculoPesado in vehiculoPesados %}
+            <tr>
+                <td><a href="{{ path('vehiculopesado_show', { 'id': vehiculoPesado.id }) }}">{{ vehiculoPesado.id }}</a></td>
+                <td>{{ vehiculoPesado.tonelaje }}</td>
+                <td>{{ vehiculoPesado.numeroEjes }}</td>
+                <td>{{ vehiculoPesado.numeroMt }}</td>
+                <td>{{ vehiculoPesado.fichaTecnicaHomologacionCarroceria }}</td>
+                <td>{{ vehiculoPesado.fichaTecnicaHomologacionChasis }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vehiculopesado_show', { 'id': vehiculoPesado.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vehiculopesado_edit', { 'id': vehiculoPesado.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vehiculopesado_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

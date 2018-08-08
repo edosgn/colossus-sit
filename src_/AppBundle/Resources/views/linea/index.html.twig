@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Linea list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigomt</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for linea in lineas %}
+            <tr>
+                <td><a href="{{ path('linea_show', { 'id': linea.id }) }}">{{ linea.id }}</a></td>
+                <td>{{ linea.nombre }}</td>
+                <td>{{ linea.codigoMt }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('linea_show', { 'id': linea.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('linea_edit', { 'id': linea.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('linea_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

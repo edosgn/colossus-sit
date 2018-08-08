@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mgdpeticionario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mgdPeticionario.id }}</td>
+            </tr>
+            <tr>
+                <th>Primernombre</th>
+                <td>{{ mgdPeticionario.primerNombre }}</td>
+            </tr>
+            <tr>
+                <th>Segundonombre</th>
+                <td>{{ mgdPeticionario.segundoNombre }}</td>
+            </tr>
+            <tr>
+                <th>Primerapellido</th>
+                <td>{{ mgdPeticionario.primerApellido }}</td>
+            </tr>
+            <tr>
+                <th>Segundoapellido</th>
+                <td>{{ mgdPeticionario.segundoApellido }}</td>
+            </tr>
+            <tr>
+                <th>Identificacion</th>
+                <td>{{ mgdPeticionario.identificacion }}</td>
+            </tr>
+            <tr>
+                <th>Entidadnombre</th>
+                <td>{{ mgdPeticionario.entidadNombre }}</td>
+            </tr>
+            <tr>
+                <th>Entidadcargo</th>
+                <td>{{ mgdPeticionario.entidadCargo }}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td>{{ mgdPeticionario.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ mgdPeticionario.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Correoelectronico</th>
+                <td>{{ mgdPeticionario.correoElectronico }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if mgdPeticionario.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mgdpeticionario_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('mgdpeticionario_edit', { 'id': mgdPeticionario.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

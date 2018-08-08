@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mparqgruas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Placa</th>
+                <th>Numerointerno</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mparqGrua in mparqGruas %}
+            <tr>
+                <td><a href="{{ path('mparqgrua_show', { 'id': mparqGrua.id }) }}">{{ mparqGrua.id }}</a></td>
+                <td>{{ mparqGrua.placa }}</td>
+                <td>{{ mparqGrua.numeroInterno }}</td>
+                <td>{% if mparqGrua.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mparqgrua_show', { 'id': mparqGrua.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mparqgrua_edit', { 'id': mparqGrua.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mparqgrua_new') }}">Create a new mparqGrua</a>
+        </li>
+    </ul>
+{% endblock %}

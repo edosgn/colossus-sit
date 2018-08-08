@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvevaluacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ msvEvaluacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ msvEvaluacion.numero }}</td>
+            </tr>
+            <tr>
+                <th>Parametro</th>
+                <td>{{ msvEvaluacion.parametro }}</td>
+            </tr>
+            <tr>
+                <th>Item</th>
+                <td>{{ msvEvaluacion.item }}</td>
+            </tr>
+            <tr>
+                <th>Variable</th>
+                <td>{{ msvEvaluacion.variable }}</td>
+            </tr>
+            <tr>
+                <th>Criterio</th>
+                <td>{{ msvEvaluacion.criterio }}</td>
+            </tr>
+            <tr>
+                <th>Aplica</th>
+                <td>{% if msvEvaluacion.aplica %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Evidencia</th>
+                <td>{% if msvEvaluacion.evidencia %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Responde</th>
+                <td>{% if msvEvaluacion.responde %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Observacion</th>
+                <td>{{ msvEvaluacion.observacion }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if msvEvaluacion.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvevaluacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('msvevaluacion_edit', { 'id': msvEvaluacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

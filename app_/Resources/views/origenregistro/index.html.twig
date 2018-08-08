@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Origenregistros list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for origenRegistro in origenRegistros %}
+            <tr>
+                <td><a href="{{ path('origenregistro_show', { 'id': origenRegistro.id }) }}">{{ origenRegistro.id }}</a></td>
+                <td>{{ origenRegistro.nombre }}</td>
+                <td>{% if origenRegistro.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('origenregistro_show', { 'id': origenRegistro.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('origenregistro_edit', { 'id': origenRegistro.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('origenregistro_new') }}">Create a new origenRegistro</a>
+        </li>
+    </ul>
+{% endblock %}

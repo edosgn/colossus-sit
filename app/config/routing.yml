@@ -1,37 +1,17 @@
-app_cfg_tipo_infractor:
-    resource: "@AppBundle/Controller/CfgTipoInfractorController.php"
+app_msv_inventario_senial:
+    resource: "@AppBundle/Controller/msvInventarioSenialController.php"
     type:     annotation
 
-app_cfg_comparendo_estado:
-    resource: "@AppBundle/Controller/CfgComparendoEstadoController.php"
+app_msv_senial:
+    resource: "@AppBundle/Controller/MsvSenialController.php"
     type:     annotation
     
-app_cfg_objeto_fijo:
-    resource: "@AppBundle/Controller/CfgObjetoFijoController.php"
+app_cfg_tipo_senial:
+    resource: "@AppBundle/Controller/CfgTipoSenialController.php"
     type:     annotation
 
-app_cfg_choque_con:
-    resource: "@AppBundle/Controller/CfgChoqueConController.php"
-    type:     annotation
-
-app_cfg_clase_accidente:
-    resource: "@AppBundle/Controller/CfgClaseAccidenteController.php"
-    type:     annotation
-
-app_cfg_gravedad:
-    resource: "@AppBundle/Controller/CfgGravedadController.php"
-    type:     annotation
-
-app_mparq_patio:
-    resource: "@AppBundle/Controller/MparqPatioController.php"
-    type:     annotation
-
-app_cfg_empresa_gps:
-    resource: "@AppBundle/Controller/CfgEmpresaGpsController.php"
-    type:     annotation
-
-app_cfg_causal_limitacion:
-    resource: "@AppBundle/Controller/CfgCausalLimitacionController.php"
+app_cfg_bodega:
+    resource: "@AppBundle/Controller/CfgBodegaController.php"
     type:     annotation
 
 app_cfg_valor_vehiculo:

@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mgddocumento</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mgdDocumento.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecharegistro</th>
+                <td>{% if mgdDocumento.fechaRegistro %}{{ mgdDocumento.fechaRegistro|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroradicado</th>
+                <td>{{ mgdDocumento.numeroRadicado }}</td>
+            </tr>
+            <tr>
+                <th>Folios</th>
+                <td>{{ mgdDocumento.folios }}</td>
+            </tr>
+            <tr>
+                <th>Numerooficio</th>
+                <td>{{ mgdDocumento.numeroOficio }}</td>
+            </tr>
+            <tr>
+                <th>Fechavencimiento</th>
+                <td>{% if mgdDocumento.fechaVencimiento %}{{ mgdDocumento.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ mgdDocumento.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ mgdDocumento.url }}</td>
+            </tr>
+            <tr>
+                <th>Correocertificadollegada</th>
+                <td>{% if mgdDocumento.correoCertificadoLlegada %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Nombretransportadorallegada</th>
+                <td>{{ mgdDocumento.nombreTransportadoraLlegada }}</td>
+            </tr>
+            <tr>
+                <th>Fechallegada</th>
+                <td>{% if mgdDocumento.fechaLlegada %}{{ mgdDocumento.fechaLlegada|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroguiallegada</th>
+                <td>{{ mgdDocumento.numeroGuiaLlegada }}</td>
+            </tr>
+            <tr>
+                <th>Correocertificadoenvio</th>
+                <td>{% if mgdDocumento.correoCertificadoEnvio %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Nombretransportadoraenvio</th>
+                <td>{{ mgdDocumento.nombreTransportadoraEnvio }}</td>
+            </tr>
+            <tr>
+                <th>Fechaenvio</th>
+                <td>{% if mgdDocumento.fechaEnvio %}{{ mgdDocumento.fechaEnvio|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroguia</th>
+                <td>{{ mgdDocumento.numeroGuia }}</td>
+            </tr>
+            <tr>
+                <th>Fechasalida</th>
+                <td>{% if mgdDocumento.fechaSalida %}{{ mgdDocumento.fechaSalida|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if mgdDocumento.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Asignado</th>
+                <td>{% if mgdDocumento.asignado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mgddocumento_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('mgddocumento_edit', { 'id': mgdDocumento.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

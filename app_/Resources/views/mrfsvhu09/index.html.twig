@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mrfsvhu09s list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Xdestino</th>
+                <th>Mrfsvhu08id</th>
+                <th>Id</th>
+				<th>Archivo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mrfsvHu09 in mrfsvHu09s %}
+            <tr>
+                <td><a href="{{ path('mrfsvhu09_show', { 'id': mrfsvHu09.id }) }}">{{ mrfsvHu09.xDestino }}</a></td>
+                <td>{{ mrfsvHu09.mrfsvHu08Id }}</td>
+                <td>{{ mrfsvHu09.id }}</td>
+				<td>{{ mrfsvHu08.archivo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mrfsvhu09_show', { 'id': mrfsvHu09.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mrfsvhu09_edit', { 'id': mrfsvHu09.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mrfsvhu09_new') }}">Create a new mrfsvHu09</a>
+        </li>
+    </ul>
+{% endblock %}

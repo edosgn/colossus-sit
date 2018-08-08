@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Casoinsumos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Referencia</th>
+                <th>Estado</th>
+                <th>Valor</th>
+                <th>Tipo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for casoInsumo in casoInsumos %}
+            <tr>
+                <td><a href="{{ path('casoinsumo_show', { 'id': casoInsumo.id }) }}">{{ casoInsumo.id }}</a></td>
+                <td>{{ casoInsumo.nombre }}</td>
+                <td>{{ casoInsumo.referencia }}</td>
+                <td>{% if casoInsumo.estado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ casoInsumo.valor }}</td>
+                <td>{{ casoInsumo.tipo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('casoinsumo_show', { 'id': casoInsumo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('casoinsumo_edit', { 'id': casoInsumo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('casoinsumo_new') }}">Create a new casoInsumo</a>
+        </li>
+    </ul>
+{% endblock %}

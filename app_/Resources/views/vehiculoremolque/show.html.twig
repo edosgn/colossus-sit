@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vehiculoremolque</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vehiculoRemolque.id }}</td>
+            </tr>
+            <tr>
+                <th>Pesobrutovehiculo</th>
+                <td>{{ vehiculoRemolque.pesoBrutoVehiculo }}</td>
+            </tr>
+            <tr>
+                <th>Cargautilmaxima</th>
+                <td>{{ vehiculoRemolque.cargaUtilMaxima }}</td>
+            </tr>
+            <tr>
+                <th>Rodaje</th>
+                <td>{{ vehiculoRemolque.rodaje }}</td>
+            </tr>
+            <tr>
+                <th>Numeroejes</th>
+                <td>{{ vehiculoRemolque.numeroEjes }}</td>
+            </tr>
+            <tr>
+                <th>Numerollantas</th>
+                <td>{{ vehiculoRemolque.numeroLlantas }}</td>
+            </tr>
+            <tr>
+                <th>Fichatecnica</th>
+                <td>{{ vehiculoRemolque.fichaTecnica }}</td>
+            </tr>
+            <tr>
+                <th>Altototal</th>
+                <td>{{ vehiculoRemolque.altoTotal }}</td>
+            </tr>
+            <tr>
+                <th>Largototal</th>
+                <td>{{ vehiculoRemolque.largoTotal }}</td>
+            </tr>
+            <tr>
+                <th>Anchototal</th>
+                <td>{{ vehiculoRemolque.anchoTotal }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vehiculoremolque_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vehiculoremolque_edit', { 'id': vehiculoRemolque.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

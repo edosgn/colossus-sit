@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mparqentradasalidas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechaingreso</th>
+                <th>Fechasalida</th>
+                <th>Horasalida</th>
+                <th>Numerosalida</th>
+                <th>Numeroinventario</th>
+                <th>Dias</th>
+                <th>Observaciones</th>
+                <th>Valorparqueadero</th>
+                <th>Salida</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mparqEntradaSalida in mparqEntradaSalidas %}
+            <tr>
+                <td><a href="{{ path('mparqentradasalida_show', { 'id': mparqEntradaSalida.id }) }}">{{ mparqEntradaSalida.id }}</a></td>
+                <td>{% if mparqEntradaSalida.fechaIngreso %}{{ mparqEntradaSalida.fechaIngreso|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if mparqEntradaSalida.fechaSalida %}{{ mparqEntradaSalida.fechaSalida|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if mparqEntradaSalida.horaSalida %}{{ mparqEntradaSalida.horaSalida|date('H:i:s') }}{% endif %}</td>
+                <td>{{ mparqEntradaSalida.numeroSalida }}</td>
+                <td>{{ mparqEntradaSalida.numeroInventario }}</td>
+                <td>{{ mparqEntradaSalida.dias }}</td>
+                <td>{{ mparqEntradaSalida.observaciones }}</td>
+                <td>{{ mparqEntradaSalida.valorParqueadero }}</td>
+                <td>{% if mparqEntradaSalida.salida %}Yes{% else %}No{% endif %}</td>
+                <td>{% if mparqEntradaSalida.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mparqentradasalida_show', { 'id': mparqEntradaSalida.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mparqentradasalida_edit', { 'id': mparqEntradaSalida.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mparqentradasalida_new') }}">Create a new mparqEntradaSalida</a>
+        </li>
+    </ul>
+{% endblock %}

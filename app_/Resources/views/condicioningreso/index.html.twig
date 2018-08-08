@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Condicioningresos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for condicionIngreso in condicionIngresos %}
+            <tr>
+                <td><a href="{{ path('condicioningreso_show', { 'id': condicionIngreso.id }) }}">{{ condicionIngreso.id }}</a></td>
+                <td>{{ condicionIngreso.nombre }}</td>
+                <td>{% if condicionIngreso.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('condicioningreso_show', { 'id': condicionIngreso.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('condicioningreso_edit', { 'id': condicionIngreso.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('condicioningreso_new') }}">Create a new condicionIngreso</a>
+        </li>
+    </ul>
+{% endblock %}

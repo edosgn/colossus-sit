@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mpersonalcomparendos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Estado</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mpersonalComparendo in mpersonalComparendos %}
+            <tr>
+                <td><a href="{{ path('mpersonalcomparendo_show', { 'id': mpersonalComparendo.id }) }}">{{ mpersonalComparendo.id }}</a></td>
+                <td>{{ mpersonalComparendo.estado }}</td>
+                <td>{% if mpersonalComparendo.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mpersonalcomparendo_show', { 'id': mpersonalComparendo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mpersonalcomparendo_edit', { 'id': mpersonalComparendo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mpersonalcomparendo_new') }}">Create a new mpersonalComparendo</a>
+        </li>
+    </ul>
+{% endblock %}

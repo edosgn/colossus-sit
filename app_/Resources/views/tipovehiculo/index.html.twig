@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tipovehiculos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tipoVehiculo in tipoVehiculos %}
+            <tr>
+                <td><a href="{{ path('tipovehiculo_show', { 'id': tipoVehiculo.id }) }}">{{ tipoVehiculo.id }}</a></td>
+                <td>{{ tipoVehiculo.nombre }}</td>
+                <td>{% if tipoVehiculo.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tipovehiculo_show', { 'id': tipoVehiculo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tipovehiculo_edit', { 'id': tipoVehiculo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tipovehiculo_new') }}">Create a new tipoVehiculo</a>
+        </li>
+    </ul>
+{% endblock %}

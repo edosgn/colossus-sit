@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mfltiporecaudos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mflTipoRecaudo in mflTipoRecaudos %}
+            <tr>
+                <td><a href="{{ path('mfltiporecaudo_show', { 'id': mflTipoRecaudo.id }) }}">{{ mflTipoRecaudo.id }}</a></td>
+                <td>{{ mflTipoRecaudo.nombre }}</td>
+                <td>{% if mflTipoRecaudo.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mfltiporecaudo_show', { 'id': mflTipoRecaudo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mfltiporecaudo_edit', { 'id': mflTipoRecaudo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mfltiporecaudo_new') }}">Create a new mflTipoRecaudo</a>
+        </li>
+    </ul>
+{% endblock %}
