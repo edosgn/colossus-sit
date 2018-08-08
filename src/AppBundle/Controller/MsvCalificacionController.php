@@ -76,26 +76,60 @@ class MsvCalificacionController extends Controller
     /**
      * Displays a form to edit an existing msvCalificacion entity.
      *
-     * @Route("/{id}/edit", name="msvcalificacion_edit")
+     * @Route("/edit", name="msvcalificacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvCalificacion $msvCalificacion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($msvCalificacion);
-        $editForm = $this->createForm('AppBundle\Form\MsvCalificacionType', $msvCalificacion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('msvcalificacion_edit', array('id' => $msvCalificacion->getId()));
+            $numero = $params->numero;
+            $estado = $params->estado;
+            $claseId = $params->claseId;
+            $sedeOperativaId = $params->sedeOperativaId;
+
+            $em = $this->getDoctrine()->getManager();
+            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->find($params->id);
+            $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+
+            if ($cfgPlaca != null) {
+                $cfgPlaca->setNumero($numero);
+                $cfgPlaca->setEstado($estado);
+                $cfgPlaca->setClase($clase);
+                $cfgPlaca->setSedeOperativa($sedeOperativa);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($cfgPlaca);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Placa editada con éxito",
+                );
+
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La placa no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autrización no válida para editar placa",
+                );
         }
-
-        return $this->render('msvcalificacion/edit.html.twig', array(
-            'msvCalificacion' => $msvCalificacion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

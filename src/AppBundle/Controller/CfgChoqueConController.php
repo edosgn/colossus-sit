@@ -56,7 +56,7 @@ class CfgChoqueConController extends Controller
             $nombre = $params->nombre;
 
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('AppBundle:CfgChoqueCon')->findOneByNombre($params->nombre);
+            $cfgChoqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->findOneByNombre($params->nombre);
 
             if ($cfgChoqueCon == null) {
                 $cfgChoqueCon = new CfgChoqueCon();

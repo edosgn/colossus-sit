@@ -212,4 +212,48 @@ class MsvTConsecutivoController extends Controller
         }
         return $helpers->json($response);
     }
+     /**
+     * busca ipats por sede Operativa.
+     *
+     * @Route("/operativasede", name="operativasede_search_consecutivos")
+     * @Method({"GET", "POST"})
+     */
+    public function searchBySedeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            // var_dump($params);die();
+            $ipats = $em->getRepository('AppBundle:MsvTConsecutivo')->getBySede(
+                $params->identificacionUsuario
+            );
+
+            if ($ipats != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado",
+                    'data' => $ipats,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
