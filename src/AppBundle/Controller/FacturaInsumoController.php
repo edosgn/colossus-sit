@@ -53,50 +53,43 @@ class FacturaInsumoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+          
+            $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
+            $entregado = (isset($params->entregado)) ? $params->entregado : null;
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $nombre = $params->nombre;
-                $tramiteId = $params->tramiteId;
-                $em = $this->getDoctrine()->getManager();
-                $tramite = $em->getRepository('AppBundle:Tramite')->find($tramiteId);
+            $insumoId = (isset($params->insumoId)) ? $params->insumoId : null;
+            $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
+            $facturaId = (isset($params->facturaId)) ? $params->facturaId : null;
 
-                if ($tramite==null) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "no existe el tramite", 
-                    );
-                }else{
-                    $facturaInsumo = new FacturaInsumo();
+            $em = $this->getDoctrine()->getManager();
+            $insumo = $em->getRepository("AppBundle:Insumo")->find($insumoId);
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion($ciudadanoId);
+            $factura = $em->getRepository('AppBundle:Factura')->find($facturaId);
 
-                    $facturaInsumo->setNombre($nombre);
-                    $facturaInsumo->setEstado(true);
-                    $facturaInsumo->setTramite($tramite);
+            $insumo->setEstado('usado');
+            $em->persist($insumo);
+            $em->flush();
+            $facturaInsumo = new FacturaInsumo();
 
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($facturaInsumo);
-                    $em->flush();
+            $facturaInsumo->setDescripcion($descripcion);
+            $facturaInsumo->setEntregado($entregado);
+            $facturaInsumo->setCiudadano($usuario->getCiudadano());
+            $facturaInsumo->setInsumo($insumo);
+            $facturaInsumo->setFactura($factura);
+            $fecha = new \DateTime();
+            $facturaInsumo->setFecha($fecha);
 
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "FacturaInsumo creado con exito", 
-                    );
-                }
-            //}
-        }else{
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($facturaInsumo);
+            $em->flush();
+
             $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "FacturaInsumo creado con exito", 
             );
-        } 
+        }
+        
         return $helpers->json($response);
     }
 
