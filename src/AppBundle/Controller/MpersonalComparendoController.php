@@ -176,7 +176,7 @@ class MpersonalComparendoController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/record/funcionario", name="mpersonalcomparendo_record_funcionario")
+     * @Route("/record/funcionario", name="mpersonacomparendo_record_funcionario")
      * @Method({"GET", "POST"})
      */
     public function recordFuncionarioAction(Request $request)
@@ -225,7 +225,7 @@ class MpersonalComparendoController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/search/consecutivo/funcionario", name="mpersonalcomparendo_record_funcionario")
+     * @Route("/search/consecutivo/funcionario", name="mpersonalcomparendo_consecutivo_funcionario")
      * @Method({"GET", "POST"})
      */
     public function searchByConsecutivoAndFuncionarioAction(Request $request)
