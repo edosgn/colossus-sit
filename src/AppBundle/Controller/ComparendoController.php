@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class ComparendoController extends Controller
 {
-    /**
+    /** 
      * Lists all comparendo entities.
      *
      * @Route("/", name="comparendo_index")
