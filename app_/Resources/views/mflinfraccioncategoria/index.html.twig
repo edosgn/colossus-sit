@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mflinfraccioncategorias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Smldv</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mflInfraccionCategorium in mflInfraccionCategorias %}
+            <tr>
+                <td><a href="{{ path('mflinfraccioncategoria_show', { 'id': mflInfraccionCategorium.id }) }}">{{ mflInfraccionCategorium.id }}</a></td>
+                <td>{{ mflInfraccionCategorium.nombre }}</td>
+                <td>{{ mflInfraccionCategorium.descripcion }}</td>
+                <td>{{ mflInfraccionCategorium.smldv }}</td>
+                <td>{% if mflInfraccionCategorium.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mflinfraccioncategoria_show', { 'id': mflInfraccionCategorium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mflinfraccioncategoria_edit', { 'id': mflInfraccionCategorium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mflinfraccioncategoria_new') }}">Create a new mflInfraccionCategorium</a>
+        </li>
+    </ul>
+{% endblock %}

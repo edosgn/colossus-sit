@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Comparendo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ comparendo.id }}</td>
+            </tr>
+            <tr>
+                <th>Numeroorden</th>
+                <td>{{ comparendo.numeroOrden }}</td>
+            </tr>
+            <tr>
+                <th>Fechadiligenciamiento</th>
+                <td>{% if comparendo.fechaDiligenciamiento %}{{ comparendo.fechaDiligenciamiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Lugarinfraccion</th>
+                <td>{{ comparendo.lugarInfraccion }}</td>
+            </tr>
+            <tr>
+                <th>Barrioinfraccion</th>
+                <td>{{ comparendo.barrioInfraccion }}</td>
+            </tr>
+            <tr>
+                <th>Observacionesagente</th>
+                <td>{{ comparendo.observacionesAgente }}</td>
+            </tr>
+            <tr>
+                <th>Tipoinfractor</th>
+                <td>{{ comparendo.tipoInfractor }}</td>
+            </tr>
+            <tr>
+                <th>Tarjetaoperacioninfractor</th>
+                <td>{{ comparendo.tarjetaOperacionInfractor }}</td>
+            </tr>
+            <tr>
+                <th>Fuga</th>
+                <td>{{ comparendo.fuga }}</td>
+            </tr>
+            <tr>
+                <th>Accidente</th>
+                <td>{{ comparendo.accidente }}</td>
+            </tr>
+            <tr>
+                <th>Polca</th>
+                <td>{% if comparendo.polca %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechanotificacion</th>
+                <td>{% if comparendo.fechaNotificacion %}{{ comparendo.fechaNotificacion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Gradoalchoholemia</th>
+                <td>{{ comparendo.gradoAlchoholemia }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('comparendo_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('comparendo_edit', { 'id': comparendo.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

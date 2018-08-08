@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gruposanguineos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Sigla</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for grupoSanguineo in grupoSanguineos %}
+            <tr>
+                <td><a href="{{ path('gruposanguineo_show', { 'id': grupoSanguineo.id }) }}">{{ grupoSanguineo.id }}</a></td>
+                <td>{{ grupoSanguineo.nombre }}</td>
+                <td>{{ grupoSanguineo.sigla }}</td>
+                <td>{% if grupoSanguineo.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gruposanguineo_show', { 'id': grupoSanguineo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gruposanguineo_edit', { 'id': grupoSanguineo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gruposanguineo_new') }}">Create a new grupoSanguineo</a>
+        </li>
+    </ul>
+{% endblock %}

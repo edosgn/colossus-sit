@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vehiculo list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Placa</th>
+                <th>Numerofactura</th>
+                <th>Fechafactura</th>
+                <th>Valor</th>
+                <th>Numeromanifiesto</th>
+                <th>Fechamanifiesto</th>
+                <th>Cilindraje</th>
+                <th>Modelo</th>
+                <th>Motor</th>
+                <th>Chasis</th>
+                <th>Serie</th>
+                <th>Vin</th>
+                <th>Numeropasajeros</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vehiculo in vehiculos %}
+            <tr>
+                <td><a href="{{ path('vehiculo_show', { 'id': vehiculo.id }) }}">{{ vehiculo.id }}</a></td>
+                <td>{{ vehiculo.placa }}</td>
+                <td>{{ vehiculo.numeroFactura }}</td>
+                <td>{% if vehiculo.fechaFactura %}{{ vehiculo.fechaFactura|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ vehiculo.valor }}</td>
+                <td>{{ vehiculo.numeroManifiesto }}</td>
+                <td>{% if vehiculo.fechaManifiesto %}{{ vehiculo.fechaManifiesto|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ vehiculo.cilindraje }}</td>
+                <td>{% if vehiculo.modelo %}{{ vehiculo.modelo|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ vehiculo.motor }}</td>
+                <td>{{ vehiculo.chasis }}</td>
+                <td>{{ vehiculo.serie }}</td>
+                <td>{{ vehiculo.vin }}</td>
+                <td>{{ vehiculo.numeroPasajeros }}</td>
+                <td>{% if vehiculo.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vehiculo_show', { 'id': vehiculo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vehiculo_edit', { 'id': vehiculo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vehiculo_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

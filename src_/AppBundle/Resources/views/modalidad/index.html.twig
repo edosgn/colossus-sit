@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Modalidad list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigomt</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for modalidad in modalidads %}
+            <tr>
+                <td><a href="{{ path('modalidad_show', { 'id': modalidad.id }) }}">{{ modalidad.id }}</a></td>
+                <td>{{ modalidad.nombre }}</td>
+                <td>{{ modalidad.codigoMt }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('modalidad_show', { 'id': modalidad.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('modalidad_edit', { 'id': modalidad.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('modalidad_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

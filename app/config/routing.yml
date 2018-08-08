@@ -1,3 +1,19 @@
+app_msv_inventario_senial:
+    resource: "@AppBundle/Controller/msvInventarioSenialController.php"
+    type:     annotation
+
+app_msv_senial:
+    resource: "@AppBundle/Controller/MsvSenialController.php"
+    type:     annotation
+    
+app_cfg_tipo_senial:
+    resource: "@AppBundle/Controller/CfgTipoSenialController.php"
+    type:     annotation
+
+app_cfg_bodega:
+    resource: "@AppBundle/Controller/CfgBodegaController.php"
+    type:     annotation
+
 app_cfg_valor_vehiculo:
     resource: "@AppBundle/Controller/CfgValorVehiculoController.php"
     type:     annotation

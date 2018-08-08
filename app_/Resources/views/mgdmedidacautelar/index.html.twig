@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mgdmedidacautelars list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numerooficio</th>
+                <th>Quienordena</th>
+                <th>Fechainicio</th>
+                <th>Fechafin</th>
+                <th>Implicadoidentificacion</th>
+                <th>Delito</th>
+                <th>Activo</th>
+                <th>Tipo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mgdMedidaCautelar in mgdMedidaCautelars %}
+            <tr>
+                <td><a href="{{ path('mgdmedidacautelar_show', { 'id': mgdMedidaCautelar.id }) }}">{{ mgdMedidaCautelar.id }}</a></td>
+                <td>{{ mgdMedidaCautelar.numeroOficio }}</td>
+                <td>{{ mgdMedidaCautelar.quienOrdena }}</td>
+                <td>{% if mgdMedidaCautelar.fechaInicio %}{{ mgdMedidaCautelar.fechaInicio|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if mgdMedidaCautelar.fechaFin %}{{ mgdMedidaCautelar.fechaFin|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ mgdMedidaCautelar.implicadoIdentificacion }}</td>
+                <td>{{ mgdMedidaCautelar.delito }}</td>
+                <td>{% if mgdMedidaCautelar.activo %}Yes{% else %}No{% endif %}</td>
+                <td>{{ mgdMedidaCautelar.tipo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mgdmedidacautelar_show', { 'id': mgdMedidaCautelar.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mgdmedidacautelar_edit', { 'id': mgdMedidaCautelar.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mgdmedidacautelar_new') }}">Create a new mgdMedidaCautelar</a>
+        </li>
+    </ul>
+{% endblock %}

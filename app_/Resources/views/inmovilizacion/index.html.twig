@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Inmovilizacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numeropatio</th>
+                <th>Numerogrua</th>
+                <th>Numeroconsecutivo</th>
+                <th>Direccionpatio</th>
+                <th>Placagrua</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for inmovilizacion in inmovilizacions %}
+            <tr>
+                <td><a href="{{ path('inmovilizacion_show', { 'id': inmovilizacion.id }) }}">{{ inmovilizacion.id }}</a></td>
+                <td>{{ inmovilizacion.numeroPatio }}</td>
+                <td>{{ inmovilizacion.numeroGrua }}</td>
+                <td>{{ inmovilizacion.numeroConsecutivo }}</td>
+                <td>{{ inmovilizacion.direccionPatio }}</td>
+                <td>{{ inmovilizacion.placaGrua }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('inmovilizacion_show', { 'id': inmovilizacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('inmovilizacion_edit', { 'id': inmovilizacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('inmovilizacion_new') }}">Create a new inmovilizacion</a>
+        </li>
+    </ul>
+{% endblock %}

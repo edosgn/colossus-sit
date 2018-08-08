@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pago</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pago.id }}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ pago.valor }}</td>
+            </tr>
+            <tr>
+                <th>Fechapago</th>
+                <td>{% if pago.fechaPago %}{{ pago.fechaPago|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horapago</th>
+                <td>{% if pago.horaPago %}{{ pago.horaPago|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ pago.estado }}</td>
+            </tr>
+            <tr>
+                <th>Fuente</th>
+                <td>{{ pago.fuente }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pago_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pago_edit', { 'id': pago.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

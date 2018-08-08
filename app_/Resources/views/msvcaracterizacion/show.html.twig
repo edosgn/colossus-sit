@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvcaracterizacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ msvCaracterizacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Asistencia</th>
+                <td>{% if msvCaracterizacion.asistencia %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if msvCaracterizacion.fecha %}{{ msvCaracterizacion.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Ciudad</th>
+                <td>{{ msvCaracterizacion.ciudad }}</td>
+            </tr>
+            <tr>
+                <th>Nombres</th>
+                <td>{{ msvCaracterizacion.nombres }}</td>
+            </tr>
+            <tr>
+                <th>Apellidos</th>
+                <td>{{ msvCaracterizacion.apellidos }}</td>
+            </tr>
+            <tr>
+                <th>Cedula</th>
+                <td>{{ msvCaracterizacion.cedula }}</td>
+            </tr>
+            <tr>
+                <th>Lugarexpedicion</th>
+                <td>{{ msvCaracterizacion.lugarExpedicion }}</td>
+            </tr>
+            <tr>
+                <th>Clc</th>
+                <td>{{ msvCaracterizacion.clc }}</td>
+            </tr>
+            <tr>
+                <th>Fechavigencia</th>
+                <td>{% if msvCaracterizacion.fechaVigencia %}{{ msvCaracterizacion.fechaVigencia|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Edad</th>
+                <td>{{ msvCaracterizacion.edad }}</td>
+            </tr>
+            <tr>
+                <th>Genero</th>
+                <td>{{ msvCaracterizacion.genero }}</td>
+            </tr>
+            <tr>
+                <th>Grupotrabajo</th>
+                <td>{{ msvCaracterizacion.grupoTrabajo }}</td>
+            </tr>
+            <tr>
+                <th>Tipocontrato</th>
+                <td>{{ msvCaracterizacion.tipoContrato }}</td>
+            </tr>
+            <tr>
+                <th>Experienciaconduccion</th>
+                <td>{{ msvCaracterizacion.experienciaConduccion }}</td>
+            </tr>
+            <tr>
+                <th>Accidentetransito</th>
+                <td>{% if msvCaracterizacion.accidenteTransito %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Circunstancias</th>
+                <td>{{ msvCaracterizacion.circunstancias }}</td>
+            </tr>
+            <tr>
+                <th>Incidente</th>
+                <td>{% if msvCaracterizacion.incidente %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Frecuenciadesplazamiento</th>
+                <td>{{ msvCaracterizacion.frecuenciaDesplazamiento }}</td>
+            </tr>
+            <tr>
+                <th>Vehiculopropio</th>
+                <td>{% if msvCaracterizacion.vehiculoPropio %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Planificaciondesplazamiento</th>
+                <td>{{ msvCaracterizacion.planificacionDesplazamiento }}</td>
+            </tr>
+            <tr>
+                <th>Tiempoantelacion</th>
+                <td>{{ msvCaracterizacion.tiempoAntelacion }}</td>
+            </tr>
+            <tr>
+                <th>Mediodesplazamiento</th>
+                <td>{{ msvCaracterizacion.medioDesplazamiento }}</td>
+            </tr>
+            <tr>
+                <th>Trayecto</th>
+                <td>{{ msvCaracterizacion.trayecto }}</td>
+            </tr>
+            <tr>
+                <th>Tiempotrayecto</th>
+                <td>{{ msvCaracterizacion.tiempoTrayecto }}</td>
+            </tr>
+            <tr>
+                <th>Kmmensualesrecorridos</th>
+                <td>{{ msvCaracterizacion.kmMensualesRecorridos }}</td>
+            </tr>
+            <tr>
+                <th>Factoresriesgo</th>
+                <td>{{ msvCaracterizacion.factoresRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Causasriesgo</th>
+                <td>{{ msvCaracterizacion.causasRiesgo }}</td>
+            </tr>
+            <tr>
+                <th>Riesgo</th>
+                <td>{{ msvCaracterizacion.riesgo }}</td>
+            </tr>
+            <tr>
+                <th>Propuestareduccionriesgo</th>
+                <td>{{ msvCaracterizacion.propuestaReduccionRiesgo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvcaracterizacion_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfglicenciaconduccioncategorium</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cfgLicenciaConduccionCategorium.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ cfgLicenciaConduccionCategorium.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ cfgLicenciaConduccionCategorium.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if cfgLicenciaConduccionCategorium.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfglicenciaconduccioncategoria_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cfglicenciaconduccioncategoria_edit', { 'id': cfgLicenciaConduccionCategorium.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

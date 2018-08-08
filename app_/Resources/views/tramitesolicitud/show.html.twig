@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tramitesolicitud</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ tramiteSolicitud.id }}</td>
+            </tr>
+            <tr>
+                <th>Fechasolicitud</th>
+                <td>{% if tramiteSolicitud.fechaSolicitud %}{{ tramiteSolicitud.fechaSolicitud|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Observacion</th>
+                <td>{{ tramiteSolicitud.observacion }}</td>
+            </tr>
+            <tr>
+                <th>Documentacioncompleta</th>
+                <td>{% if tramiteSolicitud.documentacionCompleta %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tramitesolicitud_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('tramitesolicitud_edit', { 'id': tramiteSolicitud.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

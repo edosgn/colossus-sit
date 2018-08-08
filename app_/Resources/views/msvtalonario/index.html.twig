@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvtalonarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Rangoinicio</th>
+                <th>Rangofin</th>
+                <th>Total</th>
+                <th>Fechaasignacion</th>
+                <th>Nresolucion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvTalonario in msvTalonarios %}
+            <tr>
+                <td><a href="{{ path('msvtalonario_show', { 'id': msvTalonario.id }) }}">{{ msvTalonario.id }}</a></td>
+                <td>{{ msvTalonario.rangoInicio }}</td>
+                <td>{{ msvTalonario.rangoFin }}</td>
+                <td>{{ msvTalonario.total }}</td>
+                <td>{% if msvTalonario.fechaAsignacion %}{{ msvTalonario.fechaAsignacion|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ msvTalonario.nResolucion }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvtalonario_show', { 'id': msvTalonario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('msvtalonario_edit', { 'id': msvTalonario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('msvtalonario_new') }}">Create a new msvTalonario</a>
+        </li>
+    </ul>
+{% endblock %}

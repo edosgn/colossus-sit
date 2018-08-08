@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Sedeoperativas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigodivipo</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sedeOperativa in sedeOperativas %}
+            <tr>
+                <td><a href="{{ path('sedeoperativa_show', { 'id': sedeOperativa.id }) }}">{{ sedeOperativa.id }}</a></td>
+                <td>{{ sedeOperativa.nombre }}</td>
+                <td>{{ sedeOperativa.codigoDivipo }}</td>
+                <td>{% if sedeOperativa.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('sedeoperativa_show', { 'id': sedeOperativa.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('sedeoperativa_edit', { 'id': sedeOperativa.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('sedeoperativa_new') }}">Create a new sedeOperativa</a>
+        </li>
+    </ul>
+{% endblock %}
