@@ -1,3 +1,18 @@
+app_msv_inventario_senial:
+    resource: "@AppBundle/Controller/msvInventarioSenialController.php"
+    type:     annotation
+
+app_msv_senial:
+    resource: "@AppBundle/Controller/MsvSenialController.php"
+    type:     annotation
+    
+app_cfg_tipo_senial:
+    resource: "@AppBundle/Controller/CfgTipoSenialController.php"
+    type:     annotation
+
+app_cfg_bodega:
+    resource: "@AppBundle/Controller/CfgBodegaController.php"
+
 app_cfg_tipo_infractor:
     resource: "@AppBundle/Controller/CfgTipoInfractorController.php"
     type:     annotation
@@ -32,6 +47,7 @@ app_cfg_empresa_gps:
 
 app_cfg_causal_limitacion:
     resource: "@AppBundle/Controller/CfgCausalLimitacionController.php"
+>>>>>>> e54a5bcf15c548277761560696049cf2709f0d3f
     type:     annotation
 
 app_cfg_valor_vehiculo:

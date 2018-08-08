@@ -1,0 +1,76 @@
+<html>
+  <header>
+  </header>
+  <body>
+
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>ACTA DE ENTREGA</b>
+        <br>      
+    </p>
+
+    <p>
+        <table>
+            <tr>
+                <td width="70%">Nombre de agente: {{ mpersonalFuncionario.ciudadano.usuario.primerNombre }} {{ mpersonalFuncionario.ciudadano.usuario.primerApellido }}</td>
+                <td>Placa: {{ mpersonalFuncionario.numeroPlaca }}</td>
+            </tr>
+        </table>       
+        <br>
+        <br>
+        <br>
+        Se hace entrega de los documentos que a continuación se relacionan:
+    </p>
+
+    <table border="1">
+        <tr style="text-align:center;font-weight:bold;">
+            <td>TIPO DE DOCUMENTO</td>
+            <td>UNIDAD DE ENTREGA</td>
+            <td>CANTIDAD</td>
+            <td>TOTAL ENTREGADOS</td>
+            <td>RANGOS</td>
+        </tr>
+        {% for asignacion in asignaciones %}
+            <tr style="text-align:center;">
+                <td>Comparendos</td>
+                <td>Talonario</td>
+                <td>1</td>
+                <td>{{ asignacion.rangos }}</td>
+                <td>
+                    {{ asignacion.desde }}
+                    a
+                    {{ asignacion.hasta }}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p style="text-align:justify;">
+NOTA: LA ENTREGA DE TALONARIOS DE COMPARENDOS DEBE REALIZARSE EN FORMA CONSECUTIVA A CADA POLICIA, PUES SE REQUIERE QUE LOS RANGOS SE USEN DE MANERA ASCENDENTE.
+<br>
+<br>
+SI EL AGENTE ASIGNADO ES RETIRADO DEL SERVICIO, AL SALIR DEBERA DEVOLVER FORMALMENTE EL TALONARIO DE COMPARENDOS ASIGNADO, EN EL ESTADO EN QUE SE ENCUENTRE.
+    </p>
+
+    <table style="padding-top:60px;">
+        <tr>
+            <td width="50%">
+FIRMA QUIEN ENTREGA
+Nombre del Funcionario
+Cargo
+            </td>
+            <td style="text-align:right;">
+FIRMA DEL AGENTE DE POLICIA
+Nombre del Agente
+            </td>
+        </tr>
+    </table>
+
+    <ta
+  </body>
+</html>

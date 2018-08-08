@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Insumo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ insumo.id }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if insumo.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ insumo.numero }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if insumo.fecha %}{{ insumo.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Tipo</th>
+                <td>{% if insumo.tipo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('insumo_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('insumo_edit', { 'id': insumo.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

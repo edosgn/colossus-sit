@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mparqgruaciudadanos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechaincio</th>
+                <th>Fechafin</th>
+                <th>Descripcion</th>
+                <th>Tipo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mparqGruaCiudadano in mparqGruaCiudadanos %}
+            <tr>
+                <td><a href="{{ path('mparqgruaciudadano_show', { 'id': mparqGruaCiudadano.id }) }}">{{ mparqGruaCiudadano.id }}</a></td>
+                <td>{% if mparqGruaCiudadano.fechaIncio %}{{ mparqGruaCiudadano.fechaIncio|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if mparqGruaCiudadano.fechaFin %}{{ mparqGruaCiudadano.fechaFin|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ mparqGruaCiudadano.descripcion }}</td>
+                <td>{{ mparqGruaCiudadano.tipo }}</td>
+                <td>{% if mparqGruaCiudadano.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mparqgruaciudadano_show', { 'id': mparqGruaCiudadano.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mparqgruaciudadano_edit', { 'id': mparqGruaCiudadano.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mparqgruaciudadano_new') }}">Create a new mparqGruaCiudadano</a>
+        </li>
+    </ul>
+{% endblock %}

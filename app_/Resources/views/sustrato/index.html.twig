@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Sustratos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Estado</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for sustrato in sustratos %}
+            <tr>
+                <td><a href="{{ path('sustrato_show', { 'id': sustrato.id }) }}">{{ sustrato.id }}</a></td>
+                <td>{{ sustrato.estado }}</td>
+                <td>{{ sustrato.desde }}</td>
+                <td>{{ sustrato.hasta }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('sustrato_show', { 'id': sustrato.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('sustrato_edit', { 'id': sustrato.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('sustrato_new') }}">Create a new sustrato</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mpersonalhorarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Dia</th>
+                <th>Horainicio</th>
+                <th>Horafin</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mpersonalHorario in mpersonalHorarios %}
+            <tr>
+                <td><a href="{{ path('mpersonalhorario_show', { 'id': mpersonalHorario.id }) }}">{{ mpersonalHorario.id }}</a></td>
+                <td>{{ mpersonalHorario.dia }}</td>
+                <td>{% if mpersonalHorario.horaInicio %}{{ mpersonalHorario.horaInicio|date('H:i:s') }}{% endif %}</td>
+                <td>{% if mpersonalHorario.horaFin %}{{ mpersonalHorario.horaFin|date('H:i:s') }}{% endif %}</td>
+                <td>{% if mpersonalHorario.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('mpersonalhorario_show', { 'id': mpersonalHorario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('mpersonalhorario_edit', { 'id': mpersonalHorario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('mpersonalhorario_new') }}">Create a new mpersonalHorario</a>
+        </li>
+    </ul>
+{% endblock %}

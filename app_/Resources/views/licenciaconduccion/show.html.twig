@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Licenciaconduccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ licenciaConduccion.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ licenciaConduccion.numero }}</td>
+            </tr>
+            <tr>
+                <th>Numerorunt</th>
+                <td>{{ licenciaConduccion.numeroRunt }}</td>
+            </tr>
+            <tr>
+                <th>Fechaexpedicion</th>
+                <td>{% if licenciaConduccion.fechaExpedicion %}{{ licenciaConduccion.fechaExpedicion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechavencimiento</th>
+                <td>{% if licenciaConduccion.fechaVencimiento %}{{ licenciaConduccion.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ licenciaConduccion.estado }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if licenciaConduccion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('licenciaconduccion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('licenciaconduccion_edit', { 'id': licenciaConduccion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
