@@ -7,7 +7,8 @@ use AppBundle\Entity\Vehiculo;
 use AppBundle\Entity\VehiculoMaquinaria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vehiculomaquinaria controller.
@@ -25,9 +26,12 @@ class VehiculoMaquinariaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager(); 
 
         $vehiculos = $em->getRepository('AppBundle:VehiculoMaquinaria')->getVehiculoCampo();
+
+        $response['data'] = array();
+
         $response = array(
             'status' => 'success',
             'code' => 200,
@@ -78,21 +82,24 @@ class VehiculoMaquinariaController extends Controller
             $anchoTotal = $params->anchoTotal;
             $combustible = $params->vehiculoCombustibleId;
             $origenVehiculo = $params->cfgOrigenVehiculoId;
+            $empresaGps = $params->cfgEmpresaGpsId;
             $subpartidaArancelaria = $params->subpartidaArancelaria;
-
+            $numeroActivacion = $params->numeroActivacion;
+            $tipoDispositivo = $params->tipoDispositivo;
+            $numeroImportacion = $params->numeroImportacion;
             $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
             $fechaIngreso = new \DateTime($fechaIngreso);
-
+            
             $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findBy(array('numero' => $placa));
-
+            
             if (!$cfgPlaca) {
-
+                
                 $placaNew = new CfgPlaca();
                 $placaNew->setNumero($placa);
                 $placaNew->setEstado(true);
                 $em->persist($placaNew);
                 $em->flush();
-
+                
                 $colorNew = $em->getRepository('AppBundle:Color')->find($color);
                 $tipoVehiculoNew = $em->getRepository('AppBundle:TipoVehiculo')->find($tipoVehiculo);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($clase);
@@ -101,7 +108,8 @@ class VehiculoMaquinariaController extends Controller
                 $carroceriaNew = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
                 $combustibleNew = $em->getRepository('AppBundle:Combustible')->find($combustible);
                 $origenVehiculoNew = $em->getRepository('AppBundle:CfgOrigenRegistro')->find($origenVehiculo);
-
+                $empresaGpsNew = $em->getRepository('AppBundle:CfgEmpresaGps')->find($empresaGps);
+                
                 $vehiculo = new Vehiculo();
                 $vehiculo->setPlaca($placaNew);
                 $vehiculo->setSerie($serie);
@@ -114,29 +122,35 @@ class VehiculoMaquinariaController extends Controller
                 $vehiculo->setModelo($modelo);
                 $vehiculo->setCarroceria($carroceriaNew);
                 $vehiculo->setCombustible($combustibleNew);
-                $vehiculo->setEstado("Activo");
+                $vehiculo->setEstado(true);
+
                 $em->persist($vehiculo);
                 $em->flush();
+                
+                $vehiculoMaquinaria = new VehiculoMaquinaria();
+                $vehiculoMaquinaria->setPesoBrutoVehicular($pesoBruto);
+                $vehiculoMaquinaria->setCargarUtilMaxima($cargaUtilMaxima);
+                $vehiculoMaquinaria->setRodaje($rodaje);
+                $vehiculoMaquinaria->setNumeroEjes($numeroEjes);
+                $vehiculoMaquinaria->setNumeroLlantas($numeroLlantas);
+                $vehiculoMaquinaria->setTipoCabina($tipoCabina);
+                $vehiculoMaquinaria->setAltoTotal($altoTotal);
+                $vehiculoMaquinaria->setAnchoTotal($anchoTotal);
+                $vehiculoMaquinaria->setLargoTotal($largoTotal);
+                $vehiculoMaquinaria->setSubpartidaArancelaria($subpartidaArancelaria);
+                $vehiculoMaquinaria->setTipoVehiculo($tipoVehiculoNew);
+                $vehiculoMaquinaria->setCfgOrigenRegistro($origenVehiculoNew);
+                $vehiculoMaquinaria->setCfgEmpresaGps($empresaGpsNew);
+                $vehiculoMaquinaria->setCondicionIngreso($condicion);
+                $vehiculoMaquinaria->setFechaIngreso($fechaIngreso);
+                $vehiculoMaquinaria->setNumeroActivacion($numeroActivacion);
+                $vehiculoMaquinaria->setTipoDispositivo($tipoDispositivo);
+                $vehiculoMaquinaria->setNumeroImportacion($numeroImportacion);
+                $vehiculoMaquinaria->setVehiculo($vehiculo);
 
-                $VehiculoMaquinaria = new VehiculoMaquinaria();
-                $VehiculoMaquinaria->setPesoBrutoVehicular($pesoBruto);
-                $VehiculoMaquinaria->setCargarUtilMaxima($cargaUtilMaxima);
-                $VehiculoMaquinaria->setRodaje($rodaje);
-                $VehiculoMaquinaria->setNumeroEjes($numeroEjes);
-                $VehiculoMaquinaria->setNumeroLlantas($numeroLlantas);
-                $VehiculoMaquinaria->setTipoCabina($tipoCabina);
-                $VehiculoMaquinaria->setAltoTotal($altoTotal);
-                $VehiculoMaquinaria->setAnchoTotal($anchoTotal);
-                $VehiculoMaquinaria->setLargoTotal($largoTotal);
-                $VehiculoMaquinaria->setSubpartidaArancelaria($subpartidaArancelaria);
-                $VehiculoMaquinaria->setTipoVehiculo($tipoVehiculoNew);
-                $VehiculoMaquinaria->setCfgOrigenRegistro($origenVehiculoNew);
-                $VehiculoMaquinaria->setCondicionIngreso($condicion);
-                $VehiculoMaquinaria->setFechaIngreso($fechaIngreso);
-                $VehiculoMaquinaria->setVehiculo($vehiculo);
-                $em->persist($VehiculoMaquinaria);
+                $em->persist($vehiculoMaquinaria);
                 $em->flush();
-
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -218,6 +232,9 @@ class VehiculoMaquinariaController extends Controller
             $combustibleEdit = $params->vehiculoCombustibleId;
             $origenVehiculoEdit = $params->cfgOrigenVehiculoId;
             $subpartidaArancelariaEdit = $params->subpartidaArancelaria;
+            $numeroActivacion = $params->numeroActivacion;
+            $tipoDispositivo = $params->tipoDispositivo;
+            $numeroImportacion = $params->numeroImportacion;
             $vehiculoId = $params->vehiculo->id;
 
             $registroMaquinaria = $em->getRepository("AppBundle:VehiculoMaquinaria")->find($params->id);
@@ -252,6 +269,9 @@ class VehiculoMaquinariaController extends Controller
                 $registroMaquinaria->setCfgOrigenRegistro($origenVehiculoNew);
                 $registroMaquinaria->setCondicionIngreso($condicionEdit);
                 $registroMaquinaria->setFechaIngreso($fechaIngresoEdit);
+                $vehiculoMaquinaria->setNumeroActivacion($numeroActivacion);
+                $vehiculoMaquinaria->setTipoDispositivo($tipoDispositivo);
+                $vehiculoMaquinaria->setNumeroImportacion($numeroImportacion);
                 $registroMaquinaria->setVehiculo($vehiculoNew);
                 $em->flush();
     
@@ -266,7 +286,7 @@ class VehiculoMaquinariaController extends Controller
                     $vehiculoNew->setModelo($modeloEdit);
                     $vehiculoNew->setCarroceria($carroceriaNew);
                     $vehiculoNew->setCombustible($combustibleNew);
-                    $vehiculoNew->setEstado("Activo");
+                    $vehiculoNew->setEstado(true);
                     $em->flush();
                 
                 $response = array(

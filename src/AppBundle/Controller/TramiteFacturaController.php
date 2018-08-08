@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\TramiteFactura;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,15 +26,15 @@ class TramiteFacturaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
-            array('factura'=>$idFactura,
-                  'estado'=> 1)
+            array('factura' => $idFactura,
+                'estado' => 1)
         );
 
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "Lista de tramites por factura",
-            'data' => $tramitesFactura, 
+            'data' => $tramitesFactura,
         );
         return $helpers->json($response);
     }
@@ -51,8 +51,8 @@ class TramiteFacturaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $factura = $em->getRepository('AppBundle:Factura')->find($params->factura);
@@ -74,17 +74,17 @@ class TramiteFacturaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro creado con exito", 
+                'msj' => "Registro creado con exito",
             );
 
             //}
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
 
@@ -99,22 +99,22 @@ class TramiteFacturaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
+
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->find($id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $tramiteFactura->getTramite(),
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro encontrado",
+                'data' => $tramiteFactura->getTramite(),
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -131,8 +131,8 @@ class TramiteFacturaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -152,29 +152,29 @@ class TramiteFacturaController extends Controller
                 $infraccion->setSuspensionLicencia($suspensionLicencia);
 
                 $em = $this->getDoctrine()->getManager();
-                
+
                 $em->persist($infraccion);
                 $em->flush();
 
-                 $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro actualizado con exito", 
-                        'data'=> $infraccion,
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro actualizado con exito",
+                    'data' => $infraccion,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
+                    'msj' => "El registro no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco",
+            );
         }
 
         return $helpers->json($response);
@@ -191,25 +191,25 @@ class TramiteFacturaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
 
             $infraccion->setEstado(false);
-            
+
             $em = $this->getDoctrine()->getManager();
-                $em->persist($infraccion);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Registro eliminado con exito", 
-                );
-        }else{
+            $em->persist($infraccion);
+            $em->flush();
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro eliminado con exito",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -230,9 +230,7 @@ class TramiteFacturaController extends Controller
         ;
     }
 
-    
-
-     /**
+    /**
      * datos para select 2
      *
      * @Route("/{idFactura}/select", name="tramitefactura_select")
@@ -242,7 +240,7 @@ class TramiteFacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $factura = $em->getRepository('AppBundle:Factura')->findOneByNumero($idFactura);
+        $factura = $em->getRepository('AppBundle:Factura')->find($idFactura);
         $response = [];
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
             array('realizado' => false, 'factura' => $factura->getId())
@@ -250,30 +248,53 @@ class TramiteFacturaController extends Controller
         foreach ($tramitesFactura as $key => $tramiteFactura) {
             $response[$key] = array(
                 'value' => $tramiteFactura->getId(),
-                'label' => $tramiteFactura->getTramite()->getNombre(),
-                'tramiteId' => $tramiteFactura->getTramite()->getId(),
-                'tramite' => $tramiteFactura->getTramite(),
+                'label' => $tramiteFactura->getTramitePrecio()->getTramite()->getNombre(),
+                'tramiteId' => $tramiteFactura->getTramitePrecio()->getTramite()->getId(),
+                'tramite' => $tramiteFactura->getTramitePrecio()->getTramite(),
                 'cantidad' => $tramiteFactura->getCantidad(),
             );
         }
-       
+
         return $helpers->json($response);
     }
 
-     /**
+    /**
      * datos para factura
      *
-     * @Route("/{idFactura}/show/factura", name="tramitefactura_whow_factura")
+     * @Route("/{idFactura}/tramites/by/factura/select", name="tramitefactura_tramites_by_factura_select")
      * @Method({"GET", "POST"})
      */
-    public function selectFacturaAction($idFactura)
+    public function tramitesByFacturaSelectAction($idFactura)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->findBy(
             array('factura' => $idFactura)
         );
-       
+
+        return $helpers->json($tramitesFactura);
+    }
+
+    /**
+     * datos para factura
+     *
+     * @Route("/show/factura", name="factura_show_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectFacturaModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $json = $request->get("json", null);
+        $params = json_decode($json);
+
+        $moduloId = $params->moduloId;
+        $id = $params->id;
+        $vehiculoId = $params->vehiculoId;
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->getFacturaModulo($moduloId, $id, $vehiculoId);
+
         return $helpers->json($tramitesFactura);
     }
 }

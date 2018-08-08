@@ -32,6 +32,60 @@ class MsvParametroController extends Controller
     }
 
     /**
+     * Parametros por categoriaid.
+     *
+     * @Route("/getByCategoriaId", name="msvparametrovycategoria")
+     * @Method({"GET", "POST"})
+     */
+    public function getParametroByCategoriaId(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $hash = $request->get("authorization", null);
+        $categoriaId = $request->get("json", null);
+        $authCheck = $helpers->authCheck($hash);
+        $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
+
+        foreach ($msvParametros as $keyParametro => $msvParametro) {
+            $msvParametrosArray[$keyParametro] = array(
+                'id'=>$msvParametro->getId(),
+                'name'=>$msvParametro->getNombre(),
+                'valor'=>$msvParametro->getValor(),
+                'variables' => null,
+             );
+            $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
+            if($variables){
+                foreach ($variables as $keyVariable => $variable) {
+                    $msvParametrosArray[$keyParametro]['variables'][$keyVariable] = array(
+                        'id'=> $variable->getId(),
+                        'name' => $variable->getNombre(),
+                        'criterios' => null
+                    );
+                    $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable($variable->getId());
+                    if($criterios){
+                        foreach ($criterios as $keyCriterio => $criterio) {
+                            $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'][$keyCriterio] = array(
+                                'id'=> $criterio->getId(),
+                                'name' => $criterio->getNombre(),
+                                'evidencia'=> false,
+                                'responde'=>false,
+                                'aplica'=>false,
+                                'observacion'=>null
+                            );
+                        }
+                    }
+                }                
+            }           
+        }
+        $response = array(
+            'status' => 'succes',
+            'code' => 200,
+            'msj' => "Parametros no encontrados",
+            'data' => $msvParametrosArray,);
+        return $helpers ->json($response);
+    }
+
+    /**
      * Creates a new msvParametro entity.
      *
      * @Route("/new", name="msvparametro_new")

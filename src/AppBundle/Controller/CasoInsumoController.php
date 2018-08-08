@@ -59,18 +59,20 @@ class CasoInsumoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneByNombre(
-                $params->nombre
+            $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
+            
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->findOneBy(
+                array(
+                    'nombre' => $params->nombre,
+                    'modulo' => $modulo->getId()
+                )
             );
-
+            
             if (!$casoInsumo) {
                 $casoInsumo = new CasoInsumo();
 
                 $casoInsumo->setNombre(strtoupper($params->nombre));
-
-                $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
                 $casoInsumo->setModulo($modulo);
-
                 $casoInsumo->setReferencia($params->referencia);
                 $casoInsumo->setValor($params->valor);
                 $casoInsumo->setTipo($params->tipo);
@@ -82,17 +84,16 @@ class CasoInsumoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito",
+                    'msj' => "Registro creado con exito", 
                 );
-            } else {
+            }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro ya se encuentra registrado",
+                    'msj' => "El registro ya se encuentra registrado", 
                 );
             }
-            //}
-        } else {
+        }else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,

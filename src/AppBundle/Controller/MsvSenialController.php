@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 /**
  * MsvSenial controller.
  *
- * @Route("msvSenial")
+ * @Route("msvsenial")
  */
 class MsvSenialController extends Controller
 {
@@ -62,7 +62,7 @@ class MsvSenialController extends Controller
     }*/
 
     /**
-     * Creates a new mpersonalFuncionario entity.
+     * Creates a new msvSenial entity.
      *
      * @Route("/new", name="msvSenial_new")
      * @Method({"GET", "POST"})
@@ -300,6 +300,7 @@ class MsvSenialController extends Controller
                 'data' => $msvSenial,
             );
         }
+
         return $helpers->json($response);
 
     }

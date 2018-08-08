@@ -12,19 +12,18 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
     //Obtiene la lista de Usuario disponibles para vincular en la Campaña
     public function getVehiculoCampo($campo)
-    {   
+    {
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
             WHERE ((v.placa = p.id)
             AND (p.numero = :campo))
-            OR (v.vin = :campo) 
+            OR (v.vin = :campo)
             OR (v.chasis = :campo)
             OR (v.serie = :campo)
-            OR (v.motor = :campo)
-            ";
+            OR (v.motor = :campo)";
         $consulta = $em->createQuery($dql);
-        
+
         $consulta->setParameters(array(
             'campo' => $campo,
         ));
@@ -32,7 +31,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
     }
 
     public function getRna()
-    {   
+    {
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM AppBundle:Vehiculo v, AppBundle:Clase c, AppBundle:Modulo m
@@ -46,55 +45,59 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
 
     //Obtiene el vehículo según uno o varios parametros al tiempo
     public function findOneByParametros($parametros)
-    {   
+    {
         $condicion = null;
         $em = $this->getEntityManager();
 
-            $dql = "SELECT v
-            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
+        $dql = "SELECT v
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:PropietarioVehiculo pv, AppBundle:Ciudadano c, UsuarioBundle:Usuario u
             WHERE v.placa = p.id";
 
-            if ($parametros->numeroPlaca) {
-                $condicion .= " AND p.numero = '".$parametros->numeroPlaca."'";
-                
-            }
-            if ($parametros->numeroVIN) {
-                $condicion .= " AND v.vin ='".$parametros->numeroVIN."'";
-                
-            }
-            if ($parametros->numeroSerie) {
-                $condicion .= " AND v.serie ='".$parametros->numeroSerie."'";
-                
-            }
-            if ($parametros->numeroMotor) {
-                $condicion .= " AND v.motor ='".$parametros->numeroMotor."'";
-                
-            }
-            if ($parametros->numeroChasis) {
-                $condicion .= " AND v.chasis ='".$parametros->numeroChasis."'";
-                
-            }
-            if($condicion){
-                $dql .= $condicion;
-            }
+        if ($parametros->numeroPlaca) {
+            $condicion .= " AND p.numero = '" . $parametros->numeroPlaca . "'";
+
+        }
+        if ($parametros->numeroVIN) {
+            $condicion .= " AND v.vin ='" . $parametros->numeroVIN . "'";
+
+        }
+        if ($parametros->numeroSerie) {
+            $condicion .= " AND v.serie ='" . $parametros->numeroSerie . "'";
+
+        }
+        if ($parametros->numeroMotor) {
+            $condicion .= " AND v.motor ='" . $parametros->numeroMotor . "'";
+
+        }
+        if ($parametros->numeroChasis) {
+            $condicion .= " AND v.chasis ='" . $parametros->numeroChasis . "'";
+
+        }
+        if ($parametros->propietario) {
+            $condicion .= " AND pv.vehiculo = v.id AND pv.ciudadano = c.id AND c.usuario = u.id AND u.identificacion ='" . $parametros->propietario . "'";
+
+        }
+        if ($condicion) {
+            $dql .= $condicion;
+        }
         $consulta = $em->createQuery($dql);
-        
+
         return $consulta->getResult();
     }
 
     //Busca todos los vehiculos que no sean ni maquinaria ni remolques
     public function getOnlyVehiculos()
-    {   
+    {
         $em = $this->getEntityManager();
-        $dql =  "SELECT v
-                FROM AppBundle:Vehiculo v                              
+        $dql = "SELECT v
+                FROM AppBundle:Vehiculo v
                 WHERE v.estado = true AND
                 v.id NOT IN
-                (SELECT IDENTITY(vm.vehiculo)            
-                FROM AppBundle:VehiculoMaquinaria vm                   
+                (SELECT IDENTITY(vm.vehiculo)
+                FROM AppBundle:VehiculoMaquinaria vm
                 WHERE vm.vehiculo = v.id) AND v.id NOT IN
-                (SELECT IDENTITY(vr.vehiculo)            
-                FROM AppBundle:VehiculoRemolque vr                   
+                (SELECT IDENTITY(vr.vehiculo)
+                FROM AppBundle:VehiculoRemolque vr
                 WHERE vr.vehiculo = v.id)";
 
         $consulta = $em->createQuery($dql);
@@ -103,16 +106,37 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
 
     //Obtiene el vehículo según un numero de placa
     public function getByPlaca($placa)
-    {   
+    {
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p
             WHERE v.placa = p.id
             AND p.numero = :placa";
         $consulta = $em->createQuery($dql);
-        
+
         $consulta->setParameters(array(
             'placa' => $placa,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+    //Obtiene el vehículo según un numero de placa y módulo
+    public function getByPlacaModulo($placa, $moduloId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:Clase c, AppBundle:Modulo m
+            WHERE v.placa = p.id
+            AND p.numero = :placa
+            AND v.clase = c.id
+            AND c.modulo = m.id
+            AND m.id = :moduloId";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'placa' => $placa,
+            'moduloId' => $moduloId,
         ));
 
         return $consulta->getOneOrNullResult();

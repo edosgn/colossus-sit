@@ -12,55 +12,69 @@ class MsvInventarioSenialRepository extends \Doctrine\ORM\EntityRepository
 {
     //Obtiene la lista de inventario de señales
     public function getSearch($params){
-        /*$em = $this->getEntityManager();
+        $em = $this->getEntityManager();
 
-        if (isset($params->tipoDestino) && !isset($params->tipoDestinoSelected) && !isset($params->tipoSenalSelected)) {
-            $dql = "SELECT Hu08
-                FROM AppBundle:MsvInventarioSenial Hu08, AppBundle:MsvSenial Hu09, AppBundle:CfgTipoSenial s, AppBundle:CfgTipoDestino d
-                WHERE Hu09.inventarioSenialId = Hu08.id
-                AND s.id = Hu09.tipoSenal
-                AND d.id = Hu09.tipoDestino
-                AND Hu08.tipoDestino = :tipoDestino";
-
-            $consulta = $em->createQuery($dql);
-            $consulta->setParameters(array(
-                'tipoDestino' => $params->tipoDestino,
-            ));
-        }elseif(isset($params->tipoDestinoSelected) && !isset($params->tipoDestino) && !isset($params->tipoSenalSelected)){
-            $dql = "SELECT Hu08
-                FROM AppBundle:MsvInventarioSenial Hu08, AppBundle:MsvSenial Hu09, AppBundle:CfgTipoSenial s, AppBundle:CfgTipoDestino d
-                WHERE Hu09.inventarioSenialId = Hu08.id
-                AND s.id = Hu09.tipoSenal
-                AND d.id = Hu09.tipoDestino
-                AND Hu08.xDestino = :tipoDestinoSelected";
-
-            $consulta = $em->createQuery($dql);
-            $consulta->setParameters(array(
-                'tipoDestinoSelected' => $params->tipoDestinoSelected,
-            ));
-        }elseif(isset($params->tipoSenalSelected) && !isset($params->tipoDestino) && !isset($params->tipoDestinoSelected)){
-            $dql = "SELECT Hu08
-                FROM AppBundle:MsvInventarioSenial Hu08, AppBundle:MsvSenial Hu09, AppBundle:CfgTipoSenial s, AppBundle:CfgTipoDestino d
-                WHERE Hu09.inventarioSenialId = Hu08.id
-                AND s.id = Hu09.tipoSenal
-                AND d.id = Hu09.tipoDestino
-                AND Hu08.tipoSenal = :tipoSenalSelected";
-
-            $consulta = $em->createQuery($dql);
-            $consulta->setParameters(array(
-                'tipoSenalSelected' => $params->tipoSenalSelected,
-            ));
-        }elseif(!isset($params->tipoDestino) && !isset($params->tipoDestinoSelected) && !isset($params->tipoSenalSelected)){
-            $dql = "SELECT Hu08
-                FROM AppBundle:MsvInventarioSenial Hu08, AppBundle:MsvSenial Hu09, AppBundle:CfgTipoSenial s, AppBundle:CfgTipoDestino d
-                WHERE Hu09.inventarioSenialId = Hu08.id
-                AND s.id = Hu09.tipoSenal
-                AND d.id = Hu09.tipoDestino";
-
-            $consulta = $em->createQuery($dql);
+        $sql = array();"";
+        if (isset($params->destinoId)) {
+            $sql['destinoId'] =  "Hu09.tipoDestino = :tipoDestino";
         }
 
-        return $consulta->getResult();*/
+        if (isset($params->tipoDestinoId)) {
+            $sql['tipoDestinoId'] = "Hu09.xDestino = :tipoDestinoSelected";
+        }
+
+        if (isset($params->tipoSenalId)) {
+            $sql['tipoSenalId'] = " Hu09.tipoSenal = :tipoSenalSelected";
+        }
+
+        $where = $result = "";
+        if(count($sql) > 0){
+            $where = " WHERE ";
+        }
+        $build = "";
+        foreach($sql as $key=>$value)
+        {
+            $build.=$value." AND ";
+        }
+
+        $result = trim($build, " AND ");
+
+        $dql = "SELECT Hu09
+                FROM AppBundle:MsvSenial Hu09
+                 JOIN AppBundle:MsvInventarioSenial Hu08 WITH Hu09.inventarioSenialId = Hu08.id
+                 JOIN AppBundle:CfgTipoSenial s WITH Hu09.tipoSenal = s.id
+                 JOIN AppBundle:CfgTipoDestino d WITH Hu09.tipoDestino = d.id".$where.$result;
+
+        $consulta = $em->createQuery($dql);
+
+        $parameters = array();
+        if (isset($params->destinoId)) {
+            $parameters['tipoDestino'] = $params->destinoId;
+        }
+
+        if (isset($params->tipoDestinoId)) {
+            $parameters['tipoDestinoSelected'] = $params->tipoDestinoId;
+        }
+
+        if (isset($params->tipoSenalId)) {
+            $parameters['tipoSenalSelected'] = $params->tipoSenalId;
+        }
+
+        $consulta->setParameters($parameters);
+
+        return $consulta->getResult();
+    }
+
+    //Obtiene la lista de inventario de señales
+    public function getFull(){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT Hu08
+                FROM AppBundle:MsvInventarioSenial Hu08";
+
+        $consulta = $em->createQuery($dql);
+
+        return $consulta->getResult();
     }
 
 }

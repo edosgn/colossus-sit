@@ -32,12 +32,12 @@ class VehiculoLimitacion
     protected $vehiculo;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="estado", type="string", length=255)
-     */
-    private $estado;
+    * @var boolean
+    *
+    * @ORM\Column(name="estado", type="boolean")
+    */
 
+    private $estado;
 
     /**
      * Get id
@@ -52,7 +52,7 @@ class VehiculoLimitacion
     /**
      * Set estado
      *
-     * @param string $estado
+     * @param boolean $estado
      *
      * @return VehiculoLimitacion
      */
@@ -66,7 +66,7 @@ class VehiculoLimitacion
     /**
      * Get estado
      *
-     * @return string
+     * @return boolean
      */
     public function getEstado()
     {

@@ -99,7 +99,7 @@ class MpersonalComparendoController extends Controller
     /**
      * Finds and displays a mpersonalComparendo entity.
      *
-     * @Route("/{id}", name="mpersonalcomparendo_show")
+     * @Route("/{id}/show", name="mpersonalcomparendo_show")
      * @Method("GET")
      */
     public function showAction(MpersonalComparendo $mpersonalComparendo)
@@ -140,8 +140,8 @@ class MpersonalComparendoController extends Controller
     /**
      * Deletes a mpersonalComparendo entity.
      *
-     * @Route("/{id}", name="mpersonalcomparendo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="mpersonalcomparendo_delete")
+     * @Method("GET")
      */
     public function deleteAction(Request $request, MpersonalComparendo $mpersonalComparendo)
     {
@@ -176,7 +176,7 @@ class MpersonalComparendoController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/record/funcionario", name="mpersonalcomparendo_record_funcionario")
+     * @Route("/record/funcionario", name="mpersonacomparendo_record_funcionario")
      * @Method({"GET", "POST"})
      */
     public function recordFuncionarioAction(Request $request)
@@ -217,6 +217,71 @@ class MpersonalComparendoController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/consecutivo/funcionario", name="mpersonalcomparendo_consecutivo_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByConsecutivoAndFuncionarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneBy(
+                array(
+                    'consecutivo' => $params->consecutivo,
+                    'funcionario' => $params->funcionarioId,
+                    'estado' => 'Asignado'
+                )
+            );
+                
+            if ($comparendo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Número de comparendo disponible.",  
+                    'data'=> $comparendo,
+                );
+            }else{
+                $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneBy(
+                    array(
+                        'consecutivo' => $params->consecutivo,
+                        'funcionario' => $params->funcionarioId,
+                        'estado' => 'Utilizado'
+                    )
+                );
+                if ($comparendo) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de comparedo ya fue utilizado.",  
+                        'data'=> $comparendo,
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de comparendo no existe o no ha sido asignado al agente de transito seleccionado.",
+                    );
+                }
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);

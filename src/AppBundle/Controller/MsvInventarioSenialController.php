@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * MsvInventarioSenial controller.
  *
- * @Route("msvInventarioSenial")
+ * @Route("msvinventariosenial")
  */
 class MsvInventarioSenialController extends Controller
 {
@@ -54,25 +54,112 @@ class MsvInventarioSenialController extends Controller
     /**
      * Creates a new msvInventarioSenial entity.
      *
+     * @Route("/new", name="msvInventarioSenial_new")
+     * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        //if ($authCheck== true) {
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        //if (count($params)==0) {
+        //$response = array(
+        //'status' => 'error',
+        //'code' => 400,
+        //'message' => "los campos no pueden estar vacios",
+        //);
+        //}else{
         $msvInventarioSenial = new MsvInventarioSenial();
-        $form = $this->createForm('AppBundle\Form\MsvInventarioSenialType', $msvInventarioSenial);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($msvInventarioSenial);
-            $em->flush();
+        $em = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('msvInventarioSenial_show', array('id' => $msvInventarioSenial->getId()));
-        }
+        //if ($params->inventarioSenialId) {
+            ///$build = explode(",", $params->inventarioSenialId);
 
-        return $this->render('msvInventarioSenial/new.html.twig', array(
-            'msvInventarioSenial' => $msvInventarioSenial,
-            'form' => $form->createView(),
-        ));
+            $file = $request->files->get('file');
+
+            if ($file) {
+                $extension = $file->guessExtension();
+                $fileName = md5(rand().time()).".".$extension;
+                $dir=__DIR__.'/../../../web/logos';
+
+                $file->move($dir,$fileName);
+            }
+
+            //for ($i = 0; $i < count($build); $i++) {
+
+                if ($params->fecha) {
+                    $msvInventarioSenial->setFecha($params->fecha);
+                }
+                if ($params->unidad) {
+                    $msvInventarioSenial->setUnidad($params->unidad);
+                }
+                if ($params->color) {
+                    $msvInventarioSenial->setColor($params->color);
+                }
+                if ($params->latitud) {
+                    $msvInventarioSenial->setLatitud($params->latitud);
+                }
+                if ($params->longitud) {
+                    $msvInventarioSenial->setLongitud($params->longitud);
+                }
+                if ($params->direccion) {
+                    $msvInventarioSenial->setDireccion($params->direccion);
+                }
+                if ($params->codigo) {
+                    $msvInventarioSenial->setCodigo($params->codigo);
+                }
+                if ($params->nombre) {
+                    $msvInventarioSenial->setNombre($params->nombre);
+                }
+                if ($params->valor) {
+                    $msvInventarioSenial->setValor($params->valor);
+                }
+                if ($params->estado) {
+                    $msvInventarioSenial->setEstado($params->estado);
+                }
+                if ($params->cantidad) {
+                    $msvInventarioSenial->setCantidad($params->cantidad);
+                }
+
+                //if ($build[$i]) {
+                  //  $inventarioSenialId = $em->getRepository('AppBundle:MsvInventarioSenial')->find(
+                    //    $build[$i]
+                    //);
+                    //$msvInventarioSenial->setInventarioSenialId($inventarioSenialId);
+                //}
+
+                $msvInventarioSenial->setArchivo($fileName);
+
+                $em->persist($msvInventarioSenial);
+                $em->flush();
+                $em->clear();
+
+            //}
+        //}
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'message' => "Registro creado con exito",
+            'data' => $msvInventarioSenial
+        );
+        //}
+        /*}else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }*/
+
+        return $helpers->json($response);
+
     }
 
     /**
@@ -188,5 +275,33 @@ class MsvInventarioSenialController extends Controller
             );
         }*/
         return $helpers->json($response);
+    }
+
+    /**
+     * Lists all msvInventarioenial entities.
+     *
+     * @Route("/full", name="msvInventarioSenial_search_full")
+     * @Method("GET")
+     */
+    public function searchByFullAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $msvInventarioSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getFull();
+
+        $response['data'] = array();
+
+        if ($msvInventarioSenial) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => 'listado senales',
+                'data' => $msvInventarioSenial,
+            );
+        }
+
+        return $helpers->json($response);
+
     }
 }

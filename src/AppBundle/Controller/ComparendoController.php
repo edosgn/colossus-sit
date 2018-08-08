@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class ComparendoController extends Controller
 {
-    /**
+    /** 
      * Lists all comparendo entities.
      *
      * @Route("/", name="comparendo_index")
@@ -25,6 +25,7 @@ class ComparendoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        
         $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
             array('estado' => 1)
         );
@@ -60,103 +61,128 @@ class ComparendoController extends Controller
                     'msj' => "Los campos no pueden estar vacios", 
                 );
             }else{*/
-                $numeroOrden = $params->numeroOrden;
-                $inmovilizacion = $params->inmovilizacion;
-                $observacionesDigitador = $params->observacionesDigitador;
-                $urlDocumento = (isset($params->urlDocumento)) ? $params->urlDocumento : null;
-                $fechaDiligenciamiento = (isset($params->fechaDiligenciamiento)) ? $params->fechaDiligenciamiento : null;
-                $fechaDiligenciamientoDateTime = new \DateTime($fechaDiligenciamiento);
-                $lugarInfraccion = $params->lugarInfraccion;
-                $barrioInfraccion = $params->barrioInfraccion;
-                $observacionesAgente = $params->observacionesAgente;
-                $tipoInfractor = 'infractor';
-                $tarjetaOperacionInfractor = '52001000';
-                $fuga = (isset($params->fuga)) ? $params->fuga : false;
-                $accidente = (isset($params->accidente)) ? $params->accidente : false;
-                $polca = (isset($params->polca)) ? $params->polca : false;
-                $fotomulta = (isset($params->fotomulta)) ? $params->fotomulta : false;
-                $retencionLicencia = (isset($params->retencionLicencia)) ? $params->retencionLicencia : false;
-                $fechaNotificacion = (isset($params->fechaNotificacion)) ? $params->fechaNotificacion : null;
-                $fechaNotificacionDateTime = new \DateTime($fechaNotificacion);
-                $gradoAlchoholemia = $params->gradoAlchoholemia;
+                //$urlDocumento = (isset($params->urlDocumento)) ? $params->urlDocumento : null;
 
-                $municipioId = $params->municipioId;
-                $vehiculoId = $params->vehiculoId;
-                $ciudadanoId = $params->ciudadanoId;
-                
                 $em = $this->getDoctrine()->getManager();
 
-                $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($vehiculoId);
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-                $agenteTransito = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
-                    $params->funcionarioId
-                );
-                $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->find(1);
-
                 $comparendo = new Comparendo();
-                $comparendo->setNumeroOrden($numeroOrden);
-                $comparendo->setFechaDiligenciamiento($fechaDiligenciamientoDateTime);
-                $comparendo->setLugarInfraccion($lugarInfraccion);
-                $comparendo->setBarrioInfraccion($barrioInfraccion);
-                $comparendo->setObservacionesAgente($observacionesAgente);
-                $comparendo->setTarjetaOperacionInfractor($tarjetaOperacionInfractor);
-                $comparendo->setFuga($fuga);
-                $comparendo->setAccidente($accidente);
-                $comparendo->setPolca($polca);
-                $comparendo->setFechaNotificacion($fechaNotificacionDateTime);
-                $comparendo->setGradoAlchoholemia($gradoAlchoholemia);
-                $comparendo->setEstado(true);
-                $comparendo->setUrlDocumento($urlDocumento);
-                $comparendo->setObservacionesDigitador($observacionesDigitador);
-                $comparendo->setFotomulta($fotomulta);
-                $comparendo->setRetencionLicencia($retencionLicencia);
-                //Relación llaves foraneas
-                $comparendo->setMunicipio($municipio);
-                $comparendo->setVehiculo($vehiculo);
-                $comparendo->setCuidadano($ciudadano);
+
+                $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
+                $comparendo->setHora(new \DateTime($params->comparendo->hora));
+                $comparendo->setDireccion($params->comparendo->direccion);                
+                $comparendo->setLocalidad($params->comparendo->localidad);
+                $comparendo->setInmovilizacion($params->comparendo->inmovilizacion);
+                $comparendo->setFuga($params->comparendo->fuga);
+                $comparendo->setAccidente($params->comparendo->accidente);
+                $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
+                $comparendo->setFotomulta($params->comparendo->fotomulta);
+                $comparendo->setGradoAlchohol($params->comparendo->gradoAlchoholemia);
+                $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
+                $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
+                $comparendo->setValorAdicional($params->comparendo->valorAdicional);
+
+                if (isset($params->fechaNotificacion)) {
+                    $comparendo->setFechaNotificacion(new \DateTime($params->fechaNotificacion));
+                }
+                //$comparendo->setUrlDocumento($urlDocumento);
+
+                $agenteTransito = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
+                    $params->comparendo->funcionarioId
+                );
                 $comparendo->setAgenteTransito($agenteTransito);
+
+                $consecutivo = $em->getRepository('AppBundle:MpersonalComparendo')->find(
+                    $params->comparendo->consecutivoId
+                );
+                $comparendo->setConsecutivo($consecutivo);
+
+                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                    $params->comparendo->municipioId
+                );
+                $comparendo->setMunicipio($municipio);
+
+                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                    $params->comparendo->vehiculoId
+                );
+                $comparendo->setVehiculo($vehiculo);
+
+                $infractor = $em->getRepository('AppBundle:Ciudadano')->find(
+                    $params->comparendo->ciudadanoId
+                );
+                $comparendo->setCuidadanoInfractor($infractor);
+
+                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                    $params->comparendo->estadoId
+                );
+                $comparendo->setEstado($estado);
+                
+                $tipoInfractor = $em->getRepository('AppBundle:CfgTipoInfractor')->find(
+                    $params->comparendo->tipoInfractorId
+                );
                 $comparendo->setTipoInfractor($tipoInfractor);
-                $comparendo->setSeguimientoEntrega($seguimientoEntrega);
+
+                if (isset($params->comparendo->testigoId)) {
+                    $testigo = $em->getRepository('AppBundle:Ciudadano')->find(
+                        $params->comparendo->testigoId
+                    );
+                    $comparendo->setCuidadanoTestigo($testigo);
+                }
+
+                $infraccion = $em->getRepository('AppBundle:MflInfraccion')->find(
+                    $params->comparendo->infraccionId
+                );
+                $comparendo->setInfraccion($infraccion);
+
+                //Calcula valor de infracción
+                $smlmv = $em->getRepository('AppBundle:CfgSmlmv')->findOneByActivo(
+                    true
+                );
+
+                $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
+                $comparendo->setValorInfraccion($valorInfraccion);
 
                 $em->persist($comparendo);
                 $em->flush();
 
-                if ($inmovilizacion == 1) {
-                    $fechaIngreso = (isset($params->fechaIngreso)) ? $params->fechaIngreso : null;
-                    $fechaIngresoDateTime = new \DateTime($fechaIngreso);
-
-                    $numeroPatio = $params->numeroPatio;
-                    $numeroGrua = $params->numeroGrua;
-                    $numeroConsecutivo = $params->numeroConsecutivo;
-                    $direccionPatio = $params->direccionPatio;
-                    $placaGrua = $params->placaGrua;
-
+                if ($params->comparendo->inmovilizacion) {
                     $inmovilizacion = new Inmovilizacion();
 
-                    $inmovilizacion->setNumeroPatio($numeroPatio);
-                    $inmovilizacion->setNumeroGrua($numeroGrua);
-                    $inmovilizacion->setNumeroConsecutivo($numeroConsecutivo);
-                    $inmovilizacion->setDireccionPatio($direccionPatio);
-                    $inmovilizacion->setPlacaGrua($placaGrua);
+                    $inmovilizacion->setNumero(123);
+                    $inmovilizacion->setConsecutivo(0);
+                    $inmovilizacion->setFecha(new \Datetime($params->comparendo->fecha));
+
+                    $grua = $em->getRepository('AppBundle:MparqGrua')->find(
+                        $params->inmovilizacion->gruaId
+                    );
+                    $inmovilizacion->setGrua($grua);
+
+                    $patio = $em->getRepository('AppBundle:MparqPatio')->find(
+                        $params->inmovilizacion->patioId
+                    );
+                    $inmovilizacion->setPatio($patio);
                     $inmovilizacion->setComparendo($comparendo);
-                    $inmovilizacion->setFechaIngreso($fechaIngresoDateTime);
 
                     $em->persist($inmovilizacion);
+                    $em->flush();
+                }
+
+                if ($consecutivo) {
+                    $consecutivo->setEstado('Utilizado');
+                    $consecutivo->setActivo(false);
                     $em->flush();
                 }
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito", 
+                    'message' => "Registro creado con exito", 
                 );
             //}
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
             } 
         return $helpers->json($response);
@@ -383,10 +409,10 @@ class ComparendoController extends Controller
             'msj' => "Registro creado con exito", 
         );
         return $helpers->json($response);
-}
+    }
 
 
-/**
+    /**
      * Busca comparendo por número.
      *
      * @Route("/search", name="comparendo_search")
@@ -433,5 +459,50 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
-    
+    /**
+     * Busca comparendo por número.
+     *
+     * @Route("/search/tipo", name="comparendo_search_tipo")
+     * @Method("POST")
+     */
+    public function searchTipoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneBy(
+                array('numeroOrden' => $params->numeroOrden)
+            );
+
+            if ($comparendo != null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                    'msj' => "Número de comparendo ya existe", 
+            );
+            }else{
+                 $response = array(
+                    'status' => 'success',
+                    'code' => 400,
+                    'msj' => "Número de orden no encontrada en la base de datos", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    } 
 }

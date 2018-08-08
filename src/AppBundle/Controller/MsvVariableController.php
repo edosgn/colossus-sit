@@ -22,13 +22,18 @@ class MsvVariableController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $msvVariable = $em->getRepository('AppBundle:MsvVariable')->findBy( array('estado' => 1));
 
-        $msvVariables = $em->getRepository('AppBundle:MsvVariable')->findAll();
+        $response = array(
+                    'status' => 'succes',
+                    'code' => 200,
+                    'msj' => "listado festivos",
+                    'data' => $msvVariable,
+        );
 
-        return $this->render('msvvariable/index.html.twig', array(
-            'msvVariables' => $msvVariables,
-        ));
+        return $helpers ->json($response);
     }
 
     /**

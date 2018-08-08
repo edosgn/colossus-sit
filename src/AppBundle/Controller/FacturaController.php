@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Factura;
+use AppBundle\Entity\MflRetefuente;
 use AppBundle\Entity\TramiteFactura;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -45,6 +46,7 @@ class FacturaController extends Controller
      */
     public function newAction(Request $request)
     {
+        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -52,7 +54,6 @@ class FacturaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
 
             /*if (count($params)==0) {
                 $response = array(
@@ -65,9 +66,6 @@ class FacturaController extends Controller
                 $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
                 $consecutivo = count($facturas)."-".date('y');
 
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->factura->sedeOperativaId
-                );
                 $factura = new Factura();
 
                 if ($params->factura->vehiculoId) {
@@ -76,11 +74,11 @@ class FacturaController extends Controller
                     );
                     $factura->setVehiculo($vehiculo);
                 }
+                
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
                     $params->factura->ciudadanoId
                 );
 
-                
                 $factura->setNumero($params->factura->numero);
                 $factura->setConsecutivo(0);
                 $factura->setEstado('Emitida');
@@ -91,20 +89,49 @@ class FacturaController extends Controller
                 }
                 
                 //Inserta llaves foraneas
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->factura->sedeOperativaId
+                );
                 $factura->setSedeOperativa($sedeOperativa);
                 $factura->setCiudadano($ciudadano);
                 
-                $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);
                 $em->flush();
 
                 foreach ($params->tramitesValor as $key => $tramiteValor) {
                     $tramiteFactura = new TramiteFactura();
 
-                    $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneBy(
-                        array('nombre' => $tramiteValor->nombre, 'estado'=>1, 'activo'=>1)
+                    $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find(
+                        $tramiteValor->idTramitePrecio
                     );
-                    
+
+                    if($tramitePrecio->getTramite()->getId() == 6){
+                        foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                        
+                            $mflRetefuente = new MflRetefuente();
+
+                            $mflRetefuente->setVehiculo($vehiculo);
+                            
+                            $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
+                                $propietarioRetefuenteId
+                            );
+                            $mflRetefuente->setPropietarioVehiculo($propietarioVehiculo);
+
+                            if (isset($params->valorVehiculoId)) {
+                                $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
+                                    $params->valorVehiculoId
+                                );
+                                $mflRetefuente->setValorVehiculo($valorVehiculo);
+                            }
+                            $mflRetefuente->setFactura($factura);
+                            $mflRetefuente->setFecha(new \DateTime($params->factura->fechaCreacion));
+                            $mflRetefuente->setRetencion($params->retencion);
+                            $mflRetefuente->setEstado(true);
+                            $em->persist($mflRetefuente);
+                            $em->flush();
+                        }
+                    }
+
                     $tramiteFactura->setFactura($factura);
                     $tramiteFactura->setTramitePrecio($tramitePrecio);
                     $tramiteFactura->setEstado(true);
@@ -421,5 +448,113 @@ class FacturaController extends Controller
                 );
         }
         return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new factura entity.
+     *
+     * @Route("/imprimir/factura", name="imprimir_factura_new")
+     * @Method({"GET", "POST"})
+     */
+    public function ImprimirFacturaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash); 
+        $mflRetefuenteArray=[];
+
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $em = $this->getDoctrine()->getManager();
+        $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
+        $consecutivo = count($facturas)."-".date('y');
+
+        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+            $params->factura->sedeOperativaId
+        );
+        $factura = new Factura();
+        if ($params->factura->vehiculoId) {
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
+                $params->factura->vehiculoId
+            );
+            $factura->setVehiculo($vehiculo);
+        }
+        
+        $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+            $params->factura->ciudadanoId
+        );
+        $factura->setNumero($params->factura->numero);
+        $factura->setConsecutivo(0);
+        $factura->setEstado('Emitida');
+        $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
+        $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
+        if ($params->factura->valorBruto) {
+            $factura->setValorBruto($params->factura->valorBruto);
+        }
+        
+        //Inserta llaves foraneas
+        $factura->setSedeOperativa($sedeOperativa);
+        $factura->setCiudadano($ciudadano);
+        $tramitesFacturaArray = false;
+
+      
+        
+        foreach ($params->tramitesValor as $key => $tramiteValor) {
+            $tramiteFactura = new TramiteFactura();
+
+            $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find(
+                $tramiteValor->idTramitePrecio
+            );
+
+            if($tramitePrecio->getTramite()->getId() == 6){
+                foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                
+                    $mflRetefuente = new MflRetefuente();
+
+                    $mflRetefuente->setVehiculo($vehiculo);
+                    
+                    $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->find(
+                        $propietarioRetefuenteId
+                    );
+                    $mflRetefuente->setPropietarioVehiculo($propietarioVehiculo);
+
+                    if (isset($params->valorVehiculoId)) {
+                        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find(
+                            $params->valorVehiculoId
+                        );
+                        $mflRetefuente->setValorVehiculo($valorVehiculo);
+                    }
+                    $mflRetefuente->setFactura($factura);
+                    $mflRetefuente->setFecha(new \DateTime($params->factura->fechaCreacion));
+                    $mflRetefuente->setRetencion($params->retencion);
+                    $mflRetefuente->setEstado(true);
+                 
+                    $mflRetefuenteArray[$key] = array(
+                        'vendedorCedula' => $mflRetefuente->getPropietarioVehiculo()->getCiudadano()->getUsuario()->getIdentificacion(),
+                        'valor' => $params->retencion, 
+                    );
+                }
+            }
+
+            $tramiteFactura->setFactura($factura);
+            $tramiteFactura->setTramitePrecio($tramitePrecio);
+            $tramiteFactura->setEstado(true);
+            $tramiteFactura->setRealizado(false);
+            $tramiteFactura->setCantidad(1);
+
+            $tramitesFacturaArray[]= array(
+                $tramiteFactura
+            );
+        }
+        
+     
+        $html = $this->renderView('@App/factura/pdfFactura.html.twig', array(
+            'factura'=>$factura,
+            'tramitesFacturaArray'=>$tramitesFacturaArray,
+            'mflRetefuenteArray'=>$mflRetefuenteArray,
+        ));
+
+        $nombrePdf = ($this->get('app.pdf.factura')->templateSummary($html,$factura));
+        return $helpers->json($nombrePdf);
     }
 }

@@ -35,4 +35,42 @@ class VehiculoLimitacionRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+        //Obtiene el vehículo según un numero de placa, si tiene una limitacion activa 
+    public function getByPlacaAndEstadoLimitacion($placa)
+    {   
+        $em = $this->getEntityManager();
+        $dql = "SELECT vl
+            FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:VehiculoLimitacion vl
+            WHERE v.placa = p.id
+            AND p.numero = :placa
+            AND vl.estado = true
+            AND v.id = vl.vehiculo";
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'placa' => $placa,
+        ));
+
+        return $consulta->getResult();
+    }
+
+        //Obtiene el vehículo según un numero de placa y módulo
+    public function getByModulo($moduloId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT vl
+            FROM AppBundle:VehiculoLimitacion vl, AppBundle:Vehiculo v, AppBundle:Clase c, AppBundle:Modulo m
+            WHERE vl.vehiculo = v.id
+            AND v.clase = c.id
+            AND c.modulo = m.id
+            AND m.id = :moduloId";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'moduloId' => $moduloId,
+        ));
+
+        return $consulta->getResult();
+    }
 }

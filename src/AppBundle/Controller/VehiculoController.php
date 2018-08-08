@@ -2,12 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\Vehiculo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\Vehiculo;
-use AppBundle\Form\VehiculoType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vehiculo controller.
@@ -23,27 +22,26 @@ class VehiculoController extends Controller
      * @Method("GET")
      */
     public function indexAction()
-    {        
+    {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $vehiculos = $em->getRepository('AppBundle:Vehiculo')->getOnlyVehiculos();
 
-        if($vehiculos){
+        if ($vehiculos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "listado vehiculo", 
-                'data'=> $vehiculos,
+                'msj' => "listado vehiculo",
+                'data' => $vehiculos,
             );
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "No existen registros"
+                'msj' => "No existen registros",
             );
         }
 
-         
         return $helpers->json($response);
 
     }
@@ -59,106 +57,104 @@ class VehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
-                        
-                        $numeroFactura = $params->numeroFactura;
-                        $fechaFactura = $params->fechaFactura;
-                        $valor = $params->valor;
-                        $numeroManifiesto = $params->numeroManifiesto;
-                        $cilindraje = $params->cilindraje;
-                        $modelo = $params->modelo;
-                        $motor = $params->motor;
-                        $chasis = $params->chasis;
-                        $serie = $params->serie;
-                        // $tipoVehiculo = $params->tipoVehiculo;
-                        
-                        $vin = $params->vin;
-                        $numeroPasajeros = $params->numeroPasajeros;
-                        $municipioId = $params->municipioId;
-                        $lineaId = $params->lineaId;
-                        $servicioId = $params->servicioId;
-                        $colorId = $params->colorId;
-                        $combustibleId = $params->combustibleId;
-                        $carroceriaId = $params->carroceriaId;
-                        $sedeOperativaId = $params->sedeOperativaId;
-                        $claseId = $params->claseId;
-                        $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
-                        $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
-                        $em = $this->getDoctrine()->getManager();
-                        $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
-                        $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
-                        $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
-                        $color = $em->getRepository('AppBundle:Color')->find($colorId);
-                        $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
-                        $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
-                        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-                        $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find(
-                            $params->radioAccionId
-                        );
-                        $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find(
-                            $params->modalidadTransporteId
-                        );
-                        $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
-                        $vehiculo = new Vehiculo();
-                        
-                        $fechaFactura=new \DateTime($fechaFactura);
+            $numeroFactura = $params->numeroFactura;
+            $fechaFactura = $params->fechaFactura;
+            $valor = $params->valor;
+            $numeroManifiesto = $params->numeroManifiesto;
+            $cilindraje = $params->cilindraje;
+            $modelo = $params->modelo;
+            $motor = $params->motor;
+            $chasis = $params->chasis;
+            $serie = $params->serie;
+            // $tipoVehiculo = $params->tipoVehiculo;
 
-                        // if ($params->placa) {
-                        //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-                        //         $params->placa
-                        //     );
-                        //     $vehiculo->setCfgPlaca($CfgPlaca);
-                        // }
-                        $vehiculo->setNumeroFactura($numeroFactura);
-                        $vehiculo->setfechaFactura($fechaFactura);
-                        $vehiculo->setValor($valor);
-                        $vehiculo->setNumeroManifiesto($numeroManifiesto);
-                        $vehiculo->setFechaManifiesto(new \DateTime( $params->fechaManifiesto));
-                        $vehiculo->setCilindraje($cilindraje);
-                        $vehiculo->setModelo($modelo);
-                        $vehiculo->setMotor($motor);
-                        $vehiculo->setChasis($chasis);
-                        $vehiculo->setSerie($serie);
-                        $vehiculo->setRadioAccion($radioAccion);
-                        $vehiculo->setModalidadTransporte($modalidadTransporte);
-                        $vehiculo->setSerie($serie);
-                        $vehiculo->setSerie($serie);
-                        $vehiculo->setVin($vin);
-                        $vehiculo->setNumeroPasajeros($numeroPasajeros);
-                        $vehiculo->setMunicipio($municipio);
-                        $vehiculo->setLinea($linea);
-                        $vehiculo->setServicio($servicio);
-                        $vehiculo->setColor($color);
-                        $vehiculo->setCombustible($combustible);
-                        $vehiculo->setCarroceria($carroceria);
-                        $vehiculo->setSedeOperativa($sedeOperativa);
-                        $vehiculo->setClase($clase);
-                        $vehiculo->setPignorado($pignorado);
-                        $vehiculo->setCancelado($cancelado);
-                        
-                        
-                        $vehiculo->setEstado(true);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($vehiculo);
-                        $em->flush();
+            $vin = $params->vin;
+            $numeroPasajeros = $params->numeroPasajeros;
+            $municipioId = $params->municipioId;
+            $lineaId = $params->lineaId;
+            $servicioId = $params->servicioId;
+            $colorId = $params->colorId;
+            $combustibleId = $params->combustibleId;
+            $carroceriaId = $params->carroceriaId;
+            $sedeOperativaId = $params->sedeOperativaId;
+            $claseId = $params->claseId;
+            $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
+            $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
+            $em = $this->getDoctrine()->getManager();
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
+            $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
+            $color = $em->getRepository('AppBundle:Color')->find($colorId);
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
+            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+            $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find(
+                $params->radioAccionId
+            );
+            $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find(
+                $params->modalidadTransporteId
+            );
+            $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+            $vehiculo = new Vehiculo();
 
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Vehiculo creado con exito", 
-                        );
-                       
-                    // }
-        }else{
+            $fechaFactura = new \DateTime($fechaFactura);
+
+            // if ($params->placa) {
+            //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
+            //         $params->placa
+            //     );
+            //     $vehiculo->setCfgPlaca($CfgPlaca);
+            // }
+            $vehiculo->setNumeroFactura($numeroFactura);
+            $vehiculo->setfechaFactura($fechaFactura);
+            $vehiculo->setValor($valor);
+            $vehiculo->setNumeroManifiesto($numeroManifiesto);
+            $vehiculo->setFechaManifiesto(new \DateTime($params->fechaManifiesto));
+            $vehiculo->setCilindraje($cilindraje);
+            $vehiculo->setModelo($modelo);
+            $vehiculo->setMotor($motor);
+            $vehiculo->setChasis($chasis);
+            $vehiculo->setSerie($serie);
+            $vehiculo->setRadioAccion($radioAccion);
+            $vehiculo->setModalidadTransporte($modalidadTransporte);
+            $vehiculo->setSerie($serie);
+            $vehiculo->setSerie($serie);
+            $vehiculo->setVin($vin);
+            $vehiculo->setNumeroPasajeros($numeroPasajeros);
+            $vehiculo->setMunicipio($municipio);
+            $vehiculo->setLinea($linea);
+            $vehiculo->setServicio($servicio);
+            $vehiculo->setColor($color);
+            $vehiculo->setCombustible($combustible);
+            $vehiculo->setCarroceria($carroceria);
+            $vehiculo->setSedeOperativa($sedeOperativa);
+            $vehiculo->setClase($clase);
+            $vehiculo->setPignorado($pignorado);
+            $vehiculo->setCancelado($cancelado);
+
+            $vehiculo->setEstado(true);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($vehiculo);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Vehiculo creado con exito",
+            );
+
+            // }
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'msj' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
@@ -168,7 +164,7 @@ class VehiculoController extends Controller
      * @Route("/show/{id}", name="vehiculo_show")
      * @Method("POST")
      */
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -178,17 +174,17 @@ class VehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "vehiculo", 
-                    'data'=> $vehiculo,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "vehiculo",
+                'data' => $vehiculo,
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -196,53 +192,96 @@ class VehiculoController extends Controller
     /**
      * busca vehiculos por placa.
      *
-     * @Route("/placa", name="vehiculo_show_ide")
+     * @Route("/placa", name="vehiculo_search_placa")
      * @Method("POST")
      */
-    public function vehiculoPorPlaca(Request $request)
+    public function searchByPlacaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
                 $params->placa
             );
 
-            if ($vehiculo!=null) {
+            if ($vehiculo != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'data'=> $vehiculo,
-            );
-            }else{
+                    'msj' => "Registro encontrado",
+                    'data' => $vehiculo,
+                );
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encotrado", 
+                    'msj' => "Registro no encontrado", 
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
-    
+
+    /**
+     * busca vehiculos por placa y modulo.
+     *
+     * @Route("/modulo/placa", name="modulo_vehiculo_search_placa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlacaModulo(
+                $params->placa,
+                $params->moduloId
+            );
+
+            if ($vehiculo != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado",
+                    'data' => $vehiculo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Registro no encontrado", 
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit", name="vehiculo_editar")
+     * @Route("/edit", name="vehiculo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -251,24 +290,22 @@ class VehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            
             $numeroFactura = $params->numeroFactura;
             $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
-            $marca = $params->marcaId;
-            $linea = $params->lineaId;
-            $clase = $params->claseId;
+            $linea = $params->linea;
+            $clase = $params->clase;
             $carroceria = $params->carroceriaId;
             $servicio = $params->servicioId;
-            $color = $params->colorId;
-            $combustible = $params->combustibleId;
-            $sedeOperativa = $params->sedeOperativaId;
+            $color = $params->color;
+            $combustible = $params->combustible;
+            $sedeOperativa = $params->sedeOperativa;
             $numeroManifiesto = $params->numeroManifiesto;
-            $municipio = $params->municipioId;
+            $municipio = $params->municipio;
             $fechaManifiesto = $params->fechaManifiesto;
             $cilindraje = $params->cilindraje;
             $modelo = $params->modelo;
@@ -277,21 +314,20 @@ class VehiculoController extends Controller
             $serie = $params->serie;
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
-            $radioAccion = $params->radioAccionId;
-            $modalidadTransporte = $params->modalidadTransporteId;
-            
+            $radioAccion = $params->radioAccion;
+            $modalidadTransporte = $params->modalidadTransporte;
+
             // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            
-            if ($vehiculo!=null) {
-                
+
+            if ($vehiculo != null) {
+
                 $fechaFactura = (isset($params->fechaFactura)) ? $params->fechaFactura : null;
                 $fechaFactura = new \DateTime($fechaFactura);
                 $fechaManifiesto = (isset($params->fechaManifiesto)) ? $params->fechaManifiesto : null;
                 $fechaManifiesto = new \DateTime($fechaManifiesto);
-                
-                $marca = $em->getRepository('AppBundle:Marca')->find($marca);
-                $linea = $em->getRepository('AppBundle:Linea')->find($linea); 
+                $linea = $em->getRepository('AppBundle:Linea')->find($linea);
+                $marca = $linea->getMarca();
                 $clase = $em->getRepository('AppBundle:Clase')->find($clase);
                 $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
                 $servicio = $em->getRepository('AppBundle:Servicio')->find($servicio);
@@ -301,7 +337,7 @@ class VehiculoController extends Controller
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($municipio);
                 $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find($radioAccion);
                 $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find($modalidadTransporte);
-                
+
                 $vehiculo->setNumeroFactura($numeroFactura);
                 $vehiculo->setFechaFactura($fechaFactura);
                 $vehiculo->setValor($valor);
@@ -327,28 +363,27 @@ class VehiculoController extends Controller
                 $vehiculo->setEstado(true);
                 // var_dump($params);
                 //  die();
-                
+
                 $em->flush();
-                
-                
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con exito", 
+                    'msj' => "Vehiculo editado con exito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar vehiculo", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
         }
 
         return $helpers->json($response);
@@ -357,7 +392,7 @@ class VehiculoController extends Controller
     /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit/color", name="vehiculo_edit")
+     * @Route("/edit/color", name="vehiculo_edit_color")
      * @Method({"GET", "POST"})
      */
     public function editColorAction(Request $request)
@@ -366,34 +401,79 @@ class VehiculoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $color = $em->getRepository('AppBundle:Color')->find($params->colorId);
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            
-            if ($vehiculo!=null) {                
+
+            if ($vehiculo != null) {
                 $vehiculo->setColor($color);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con éxito", 
+                    'msj' => "Vehiculo editado con éxito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing Vehiculo entity.
+     *
+     * @Route("/edit/combustible", name="vehiculo_edit_combustible")
+     * @Method({"GET", "POST"})
+     */
+    public function editCombustibleAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $combustible = $em->getRepository('AppBundle:Combustible')->find($params->combustibleCambioId);
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->vehiculoId);
+
+            if ($vehiculo != null) {
+                $vehiculo->setCombustible($combustible);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Vehiculo editado con éxito",
+                );
+            } else {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar vehiculo", 
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
                 );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
         }
 
         return $helpers->json($response);
@@ -411,8 +491,8 @@ class VehiculoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -420,33 +500,31 @@ class VehiculoController extends Controller
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
             $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->sedeOperativaId);
 
-            if ($vehiculo!=null) {
+            if ($vehiculo != null) {
                 $vehiculo->setSedeOperativa($sedeOperativa);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con exito", 
+                    'msj' => "Vehiculo editado con exito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar vehiculo", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
         }
 
         return $helpers->json($response);
     }
-
-    
 
     /**
      * Deletes a Vehiculo entity.
@@ -454,31 +532,31 @@ class VehiculoController extends Controller
      * @Route("/{id}/delete", name="vehiculo_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($id);
 
             $vehiculo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($vehiculo);
-                $em->flush();
+            $em->persist($vehiculo);
+            $em->flush();
             $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "vehiculo eliminado con exito", 
-                );
-        }else{
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "vehiculo eliminado con exito",
+            );
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -507,21 +585,19 @@ class VehiculoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($vehiculos as $key => $vehiculo) {
-        $response[$key] = array(
-            'value' => $vehiculo->getId(),
-            'label' => $vehiculo->getPlaca(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
+            array('estado' => 1)
+        );
+        foreach ($vehiculos as $key => $vehiculo) {
+            $response[$key] = array(
+                'value' => $vehiculo->getId(),
+                'label' => $vehiculo->getPlaca(),
             );
-      }
-       return $helpers->json($response);
+        }
+        return $helpers->json($response);
     }
-
-
 
     /**
      * Filtra los vehiculos por los parametros estado clase y sede operativa.
@@ -534,9 +610,9 @@ class VehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $estado = $params->estado;
@@ -547,19 +623,19 @@ class VehiculoController extends Controller
 
             if ($estado == 1) {
                 $pignorado = 1;
-            }elseif ($estado == 2) {
+            } elseif ($estado == 2) {
                 $cancelado = 1;
             }
 
-            if ($claseId == 0 and $sedeOperativaId == 0 ) {
+            if ($claseId == 0 and $sedeOperativaId == 0) {
                 $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
                     array(
                         'pignorado' => $pignorado,
                         'cancelado' => $cancelado,
                         'estado' => 1,
                     )
-                );  
-            }elseif ($claseId == 0 and $sedeOperativaId != 0 ) {
+                );
+            } elseif ($claseId == 0 and $sedeOperativaId != 0) {
                 $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
                     array(
                         'pignorado' => $pignorado,
@@ -567,8 +643,8 @@ class VehiculoController extends Controller
                         'sedeOperativa' => $sedeOperativaId,
                         'estado' => 1,
                     )
-                ); 
-            }elseif ($claseId != 0 and $sedeOperativaId == 0) {
+                );
+            } elseif ($claseId != 0 and $sedeOperativaId == 0) {
                 $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
                     array(
                         'pignorado' => $pignorado,
@@ -576,8 +652,8 @@ class VehiculoController extends Controller
                         'clase' => $claseId,
                         'estado' => 1,
                     )
-                ); 
-            }elseif ($claseId != 0 and $sedeOperativaId != 0) {
+                );
+            } elseif ($claseId != 0 and $sedeOperativaId != 0) {
                 $vehiculos = $em->getRepository('AppBundle:Vehiculo')->findBy(
                     array(
                         'pignorado' => $pignorado,
@@ -593,27 +669,26 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 500,
-                    'data' => $vehiculos, 
-                ); 
-            }else{
+                    'data' => $vehiculos,
+                );
+            } else {
                 $response = array(
                     'status' => 'notFound',
                     'code' => 600,
-                    'msj' => "No se encontraron registros con los parametros seleccionados", 
+                    'msj' => "No se encontraron registros con los parametros seleccionados",
                 );
             }
 
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no validaaaaaaa", 
-            );  
+                'msj' => "Autorizacion no validaaaaaaa",
+            );
         }
-        
+
         return $helpers->json($response);
     }
-
 
     /**
      * Displays a form to asignacionPlca an existing Vehiculo entity.
@@ -628,57 +703,56 @@ class VehiculoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $placa = $params->placa;
             $sedeOperativaId = $params->sedeOperativaId;
-          
 
-            $em = $this->getDoctrine()->getManager();            
+            $em = $this->getDoctrine()->getManager();
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             //bucar en una tabla x
             $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($placa);
 
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-           
-            if ($vehiculo!=null) {
-                $vehiculo->setPlaca($CfgPlaca);               
+
+            if ($vehiculo != null) {
+                $vehiculo->setPlaca($CfgPlaca);
                 $vehiculo->setSedeOperativa($sedeOperativa);
                 $CfgPlaca->setEstado('asignado');
-               
+
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($vehiculo);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con exito", 
+                    'msj' => "Vehiculo editado con exito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar vehiculo", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
         }
 
         return $helpers->json($response);
     }
 
-        /**
+    /**
      * Displays a form to edit an existing Vehiculo entity.
      *
-     * @Route("/edit/pignorado", name="vehiculo_edit")
+     * @Route("/edit/pignorado", name="vehiculo_edit_pignorado")
      * @Method({"GET", "POST"})
      */
     public function editPignoradoAction(Request $request)
@@ -687,34 +761,34 @@ class VehiculoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $pignorado = $params->pignorado;
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            
-            if ($vehiculo!=null) {                
+
+            if ($vehiculo != null) {
                 $vehiculo->setPignorado($pignorado);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con éxito", 
+                    'msj' => "Vehiculo editado con éxito",
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos", 
+                    'msj' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida para editar vehiculo", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar vehiculo",
+            );
         }
 
         return $helpers->json($response);
@@ -733,30 +807,30 @@ class VehiculoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByParametros($params);
-            if($vehiculo!=null){
+            if ($vehiculo != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehículo encontrado.", 
-                    'data'=> $vehiculo,
-            );
-            }else{
+                    'msj' => "Vehículo encontrado.",
+                    'data' => $vehiculo,
+                );
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehículo no encontrado.", 
+                    'msj' => "Vehículo no encontrado.",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 401,
-                    'msj' => "Autorización no valida.", 
-                );
+                'status' => 'error',
+                'code' => 401,
+                'msj' => "Autorización no valida.",
+            );
         }
         return $helpers->json($response);
     }
@@ -772,46 +846,42 @@ class VehiculoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoPesado')->findOneByVehiculo($params);
+            $vehiculoPesado = $em->getRepository('AppBundle:VehiculoRemolque')->findOneByVehiculo($params);
             $vehiculoMaquinaria = $em->getRepository('AppBundle:VehiculoMaquinaria')->findOneByVehiculo($params);
-            if($vehiculoPesado!=null){
+            if ($vehiculoPesado != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Pesado", 
-                    'data'=> $vehiculoPesado,
-            );
-            }
-            else if($vehiculoMaquinaria != null){
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Maquinaria", 
-                        'data'=> $vehiculoMaquinaria,
+                    'msj' => "Pesado",
+                    'data' => $vehiculoPesado,
                 );
-                              
-            }
-           else{
+            } else if ($vehiculoMaquinaria != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Maquinaria",
+                    'data' => $vehiculoMaquinaria,
+                );
+
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehículo no encontrado en maquinaria ni pesado.", 
+                    'msj' => "Vehículo no encontrado en maquinaria ni pesado.",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 401,
-                    'msj' => "Autorización no valida.", 
-                );
+                'status' => 'error',
+                'code' => 401,
+                'msj' => "Autorización no valida.",
+            );
         }
         return $helpers->json($response);
     }
-
 
 }
