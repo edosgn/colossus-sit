@@ -18,9 +18,10 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
             $comparendosId = $params->comparendosId;
             $condicion = null;
 
-            $em = $this->getEntityManager();
 
-            $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
                     WHERE c.agenteTransito = m.id
                     AND m.id = :agenteId
                     AND c.fechaNotificacion BETWEEN :fechaDesde AND :fechaHasta";
@@ -46,5 +47,22 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 
             return $consulta->getResult();
         }
+
+        //Obtiene el comparendo según ciudadano
+    public function getByCiudadanoInfractor($ciudadanoId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT co
+            FROM AppBundle:Comparendo co
+            WHERE co.cuidadanoInfractor = :ciudadanoId
+            AND co.estado = 1";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'ciudadanoId' => $ciudadanoId,
+        ));
+
+        return $consulta->getResult();
+    }
 
 }

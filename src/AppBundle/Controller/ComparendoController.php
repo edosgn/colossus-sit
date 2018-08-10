@@ -451,7 +451,7 @@ class ComparendoController extends Controller
     /**
  * Busca comparendo por ciudadano.
  *
- * @Route("/ciudadano/search", name="ciudadano_comparendo_search")
+ * @Route("/ciudadano/search", name="ciudadano_infractor_comparendo_search")
  * @Method({"GET", "POST"})
  */
     public function searchByCiudadanoAction(Request $request)
@@ -463,15 +463,15 @@ class ComparendoController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $ciudadanoId = $params->ciudadanoId;
-            //var_dump($params->ciudadanoId);die();
+           // var_dump($params);die();
 
             
             $em = $this->getDoctrine()->getManager();
-            $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
-                //$ciudadanoId
-                array('cuidadanoInfractor' => $ciudadanoId)
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor(
+                $ciudadanoId
+                // array('cuidadanoInfractor' => 1)
             );
-            var_dump($comparendos);die();
+            //var_dump($comparendos);die();
 
             if ($comparendos != null) {
                 $response = array(
