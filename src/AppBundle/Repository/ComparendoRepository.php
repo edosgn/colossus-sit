@@ -19,15 +19,15 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 
             $em = $this->getEntityManager();
 
-            $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario p
-                    WHERE c.agenteTransito =  p.id
-                    AND c.agenteTransito = :agenteId 
+            $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
+                    WHERE c.agenteTransito = m.id
+                    AND m.id = :agenteId
                     AND c.fecha BETWEEN :fechaDesde AND :fechaHasta";
 
             $consulta = $em->createQuery($dql);
 
             $consulta->setParameters(array(
-                'agenteId' => $agenteId = 1,
+                'agenteId' => $params->agenteId,
                 'fechaDesde' => $fechaDesde,
                 'fechaHasta' => $fechaHasta,
             ));
