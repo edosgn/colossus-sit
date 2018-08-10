@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bodegas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bodega in bodegas %}
+            <tr>
+                <td><a href="{{ path('bodega_show', { 'id': bodega.id }) }}">{{ bodega.nombre }}</a></td>
+                <td>{% if bodega.estado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ bodega.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('bodega_show', { 'id': bodega.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('bodega_edit', { 'id': bodega.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bodega_new') }}">Create a new bodega</a>
+        </li>
+    </ul>
+{% endblock %}

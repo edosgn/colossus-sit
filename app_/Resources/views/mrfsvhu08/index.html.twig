@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mrfsvhu08s list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Xdestino</th>
+                <th>Fecha</th>
+                <th>Unidad</th>
+                <th>Color</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Direccion</th>
+                <th>Codigo</th>
+                <th>Logo</th>
+                <th>Nombre</th>
+                <th>Valor</th>
+                <th>Estado</th>
+                <th>Cantidad</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mrfsvHu08 in mrfsvHu08s %}
+            <tr>
+                <td><a href="{{ path('yes_show', { 'id': mrfsvHu08.id }) }}">{{ mrfsvHu08.xDestino }}</a></td>
+                <td>{% if mrfsvHu08.fecha %}{{ mrfsvHu08.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ mrfsvHu08.unidad }}</td>
+                <td>{{ mrfsvHu08.color }}</td>
+                <td>{{ mrfsvHu08.latitud }}</td>
+                <td>{{ mrfsvHu08.longitud }}</td>
+                <td>{{ mrfsvHu08.direccion }}</td>
+                <td>{{ mrfsvHu08.codigo }}</td>
+                <td>{{ mrfsvHu08.logo }}</td>
+                <td>{{ mrfsvHu08.nombre }}</td>
+                <td>{{ mrfsvHu08.valor }}</td>
+                <td>{{ mrfsvHu08.estado }}</td>
+                <td>{{ mrfsvHu08.cantidad }}</td>
+                <td>{{ mrfsvHu08.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('yes_show', { 'id': mrfsvHu08.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('yes_edit', { 'id': mrfsvHu08.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('yes_new') }}">Create a new mrfsvHu08</a>
+        </li>
+    </ul>
+{% endblock %}

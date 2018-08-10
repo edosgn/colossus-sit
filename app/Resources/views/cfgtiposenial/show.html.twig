@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>cfgTipoSenial</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ cfgTipoSenial.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if cfgTipoSenial.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ cfgTipoSenial.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgtiposenial_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cfgtiposenial_edit', { 'id': cfgTipoSenial.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

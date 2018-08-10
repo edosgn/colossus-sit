@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>VehiculoPesado</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vehiculoPesado.id }}</td>
+            </tr>
+            <tr>
+                <th>Tonelaje</th>
+                <td>{{ vehiculoPesado.tonelaje }}</td>
+            </tr>
+            <tr>
+                <th>Numeroejes</th>
+                <td>{{ vehiculoPesado.numeroEjes }}</td>
+            </tr>
+            <tr>
+                <th>Numeromt</th>
+                <td>{{ vehiculoPesado.numeroMt }}</td>
+            </tr>
+            <tr>
+                <th>Fichatecnicahomologacioncarroceria</th>
+                <td>{{ vehiculoPesado.fichaTecnicaHomologacionCarroceria }}</td>
+            </tr>
+            <tr>
+                <th>Fichatecnicahomologacionchasis</th>
+                <td>{{ vehiculoPesado.fichaTecnicaHomologacionChasis }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vehiculopesado_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vehiculopesado_edit', { 'id': vehiculoPesado.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

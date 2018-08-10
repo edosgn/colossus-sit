@@ -189,7 +189,7 @@ class InsumoController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
+ 
     /**
      * Deletes a insumo entity.
      *
@@ -224,5 +224,46 @@ class InsumoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Finds and displays a sustrato entity.
+     *
+     * @Route("/showInsumo/numero/{numero}", name="insumo_show_numero")
+     * @Method({"GET", "POST"})
+     */
+    public function showNumeroAction(Request $request,$numero)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $sustrato = $em->getRepository('AppBundle:Insumo')->findOneBy(
+                array('numero' => $numero,'estado'=>'Disponible','tipo'=>'sustrato')
+            );
+
+            if ($sustrato) {
+                $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'data'=> $sustrato,
+                );
+            }else{
+                $response = array(
+                        'status' => 'error',
+                        'code' => 300,
+                        'msj'=> 'sustrato no encontrado',
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 }

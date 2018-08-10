@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>MsvInventarioSenial</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Xdestino</th>
+                <td>{{ msvInventarioSenial.xDestino }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if msvInventarioSenial.fecha %}{{ msvInventarioSenial.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Unidad</th>
+                <td>{{ msvInventarioSenial.unidad }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ msvInventarioSenial.color }}</td>
+            </tr>
+            <tr>
+                <th>Latitud</th>
+                <td>{{ msvInventarioSenial.latitud }}</td>
+            </tr>
+            <tr>
+                <th>Longitud</th>
+                <td>{{ msvInventarioSenial.longitud }}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td>{{ msvInventarioSenial.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ msvInventarioSenial.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Logo</th>
+                <td>{{ msvInventarioSenial.logo }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ msvInventarioSenial.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ msvInventarioSenial.valor }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ msvInventarioSenial.estado }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ msvInventarioSenial.cantidad }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ msvInventarioSenial.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('yes_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('yes_edit', { 'id': msvInventarioSenial.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

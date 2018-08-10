@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\H
  */
 class ComparendoController extends Controller
 {
-    /**
+    /** 
      * Lists all comparendo entities.
      *
      * @Route("/", name="comparendo_index")
@@ -401,12 +401,13 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
-/**
- * Busca comparendo por número.
- *
- * @Route("/search", name="comparendo_search")
- * @Method("POST")
- */
+
+    /**
+     * Busca comparendo por número.
+     *
+     * @Route("/search", name="comparendo_search")
+     * @Method("POST")
+     */
     public function searchAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
@@ -497,4 +498,96 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Busca comparendo por número.
+     *
+     * @Route("/search/tipo", name="comparendo_search_tipo")
+     * @Method("POST")
+     */
+    public function searchTipoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneBy(
+                array('numeroOrden' => $params->numeroOrden)
+            );
+
+            if ($comparendo != null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                    'msj' => "Número de comparendo ya existe", 
+            );
+            }else{
+                 $response = array(
+                    'status' => 'success',
+                    'code' => 400,
+                    'msj' => "Número de orden no encontrada en la base de datos", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    } 
+
+    /**
+     * Busca comparendo por parametros (agente, fecha desde y hasta, por tipo infracción).
+     *
+     * @Route("/search/parametros", name="comparendo_search_parametros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByParametros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->findByParametros($params);
+            var_dump($comparendos);
+            die();
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                    'msj' => "Lista de Comparendos", 
+                    'data' => $comparendos,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'success',
+                    'code' => 400,
+                    'msj' => "No existe comparendos para esos parametros de busqueda", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    } 
 }

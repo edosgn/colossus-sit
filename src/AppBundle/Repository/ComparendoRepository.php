@@ -10,4 +10,29 @@ namespace AppBundle\Repository;
  */
 class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 {
+
+        public function findByParametros($params){
+            
+            $fechaDesde = new \DateTime($params->fechaDesde);
+            $fechaHasta = new \DateTime($params->fechaHasta);
+            $comparendosId = $params->comparendosId;
+
+            $em = $this->getEntityManager();
+
+            $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario p
+                    WHERE c.agenteTransito =  p.id
+                    AND c.agenteTransito = :agenteId 
+                    AND c.fecha BETWEEN :fechaDesde AND :fechaHasta";
+
+            $consulta = $em->createQuery($dql);
+
+            $consulta->setParameters(array(
+                'agenteId' => $agenteId = 1,
+                'fechaDesde' => $fechaDesde,
+                'fechaHasta' => $fechaHasta,
+            ));
+
+            return $consulta->getResult();
+        }
+
 }

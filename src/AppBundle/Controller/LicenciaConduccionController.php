@@ -270,4 +270,110 @@ class LicenciaConduccionController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Search one licenciaConduccion form entity vigente.
+     *
+     * @Route("/search/vigente", name="licenciaconduccion_vigente")
+     * @Method({"GET", "POST"})
+     */
+    public function searchVigenteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $em = $this->getDoctrine()->getManager();
+
+            $licencia = $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(
+                array(
+                    'activo' => true
+                )
+            );
+
+            if ($licencia) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "El ciudadano si tiene al menos una licencia de conducción vigente",
+                    'data' => $licencias,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El ciudadano no tiene ninguna licencia de conducción vigente",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Validate if tipoIdentificacion is TI.
+     *
+     * @Route("/validate/tipo/identificacion/ciudadano/id", name="licenciaconduccion_validate_tipo_identificacion")
+     * @Method({"GET", "POST"})
+     */
+    public function validateTipoIdentificacionByCiudadanoIdAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->ciudadanoId) {
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+                    $params->ciudadanoId
+                );
+
+                if ($ciudadano->getUsuario()) {
+                    if ($ciudadano->getUsuario()->getTipoIdentificacion()->getSigla() == 'TI') {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "El ciudadano aún tiene tarjeta de identidad.",
+                            'data' => $ciudadano->getUsuario(),
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "No se puede realizar el trámite porque el tipo de identificación actual no es válido.",
+                        );
+                    }
+                    
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El ciudadano no tiene datos vinculados como usuario.",
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El ID del ciudadano no ha sido recibido",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

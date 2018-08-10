@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>CfgTipoDestinos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgTipoDestino in cfgTipoDestinos %}
+            <tr>
+                <td><a href="{{ path('cfgTipoDestino_show', { 'id': cfgTipoDestino.id }) }}">{{ cfgTipoDestino.nombre }}</a></td>
+                <td>{% if cfgTipoDestino.estado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ cfgTipoDestino.id }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgtipodestino_show', { 'id': cfgTipoDestino.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgtipodestino_edit', { 'id': cfgTipoDestino.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgtipodestino_new') }}">Create a new cfgTipoDestino</a>
+        </li>
+    </ul>
+{% endblock %}

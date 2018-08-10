@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Representanteempresas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechainicial</th>
+                <th>Fechafinal</th>
+                <th>Estado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for representanteEmpresa in representanteEmpresas %}
+            <tr>
+                <td><a href="{{ path('representanteempresa_show', { 'id': representanteEmpresa.id }) }}">{{ representanteEmpresa.id }}</a></td>
+                <td>{% if representanteEmpresa.fechaInicial %}{{ representanteEmpresa.fechaInicial|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if representanteEmpresa.fechaFinal %}{{ representanteEmpresa.fechaFinal|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if representanteEmpresa.estado %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('representanteempresa_show', { 'id': representanteEmpresa.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('representanteempresa_edit', { 'id': representanteEmpresa.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('representanteempresa_new') }}">Create a new representanteEmpresa</a>
+        </li>
+    </ul>
+{% endblock %}

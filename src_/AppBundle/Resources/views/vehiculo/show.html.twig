@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vehiculo</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vehiculo.id }}</td>
+            </tr>
+            <tr>
+                <th>Placa</th>
+                <td>{{ vehiculo.placa }}</td>
+            </tr>
+            <tr>
+                <th>Numerofactura</th>
+                <td>{{ vehiculo.numeroFactura }}</td>
+            </tr>
+            <tr>
+                <th>Fechafactura</th>
+                <td>{% if vehiculo.fechaFactura %}{{ vehiculo.fechaFactura|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ vehiculo.valor }}</td>
+            </tr>
+            <tr>
+                <th>Numeromanifiesto</th>
+                <td>{{ vehiculo.numeroManifiesto }}</td>
+            </tr>
+            <tr>
+                <th>Fechamanifiesto</th>
+                <td>{% if vehiculo.fechaManifiesto %}{{ vehiculo.fechaManifiesto|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Cilindraje</th>
+                <td>{{ vehiculo.cilindraje }}</td>
+            </tr>
+            <tr>
+                <th>Modelo</th>
+                <td>{% if vehiculo.modelo %}{{ vehiculo.modelo|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Motor</th>
+                <td>{{ vehiculo.motor }}</td>
+            </tr>
+            <tr>
+                <th>Chasis</th>
+                <td>{{ vehiculo.chasis }}</td>
+            </tr>
+            <tr>
+                <th>Serie</th>
+                <td>{{ vehiculo.serie }}</td>
+            </tr>
+            <tr>
+                <th>Vin</th>
+                <td>{{ vehiculo.vin }}</td>
+            </tr>
+            <tr>
+                <th>Numeropasajeros</th>
+                <td>{{ vehiculo.numeroPasajeros }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{% if vehiculo.estado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vehiculo_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vehiculo_edit', { 'id': vehiculo.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

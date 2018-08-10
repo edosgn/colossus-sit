@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Infraccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigoinfraccion</th>
+                <th>Descripcioninfraccion</th>
+                <th>Valorinfraccion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for infraccion in infraccions %}
+            <tr>
+                <td><a href="{{ path('infraccion_show', { 'id': infraccion.id }) }}">{{ infraccion.id }}</a></td>
+                <td>{{ infraccion.codigoInfraccion }}</td>
+                <td>{{ infraccion.descripcionInfraccion }}</td>
+                <td>{{ infraccion.valorInfraccion }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('infraccion_show', { 'id': infraccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('infraccion_edit', { 'id': infraccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('infraccion_new') }}">Create a new infraccion</a>
+        </li>
+    </ul>
+{% endblock %}

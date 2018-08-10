@@ -32,7 +32,7 @@ class MflTipoRecaudoController extends Controller
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado mflTiposRecaudo", 
+                    'msj' => "Listado de tipos de recaudo", 
                     'data'=> $mflTiposRecaudo,
             );
          
@@ -145,14 +145,12 @@ class MflTipoRecaudoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
+            
             $tipoRecaudo = $em->getRepository('AppBundle:MflTipoRecaudo')->find($params->id);
             if ($tipoRecaudo!=null) {
 
-                $tipoRecaudo->setNombre($nombre);
-                $tipoRecaudo->setEstado(true);
-               
+                $tipoRecaudo->setNombre(strtoupper($params->nombre));             
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($tipoRecaudo);

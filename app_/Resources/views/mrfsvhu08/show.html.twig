@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Mrfsvhu08</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Xdestino</th>
+                <td>{{ mrfsvHu08.xDestino }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if mrfsvHu08.fecha %}{{ mrfsvHu08.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Unidad</th>
+                <td>{{ mrfsvHu08.unidad }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ mrfsvHu08.color }}</td>
+            </tr>
+            <tr>
+                <th>Latitud</th>
+                <td>{{ mrfsvHu08.latitud }}</td>
+            </tr>
+            <tr>
+                <th>Longitud</th>
+                <td>{{ mrfsvHu08.longitud }}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td>{{ mrfsvHu08.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Codigo</th>
+                <td>{{ mrfsvHu08.codigo }}</td>
+            </tr>
+            <tr>
+                <th>Logo</th>
+                <td>{{ mrfsvHu08.logo }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ mrfsvHu08.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ mrfsvHu08.valor }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ mrfsvHu08.estado }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ mrfsvHu08.cantidad }}</td>
+            </tr>
+            <tr>
+                <th>Id</th>
+                <td>{{ mrfsvHu08.id }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('yes_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('yes_edit', { 'id': mrfsvHu08.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
