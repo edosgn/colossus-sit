@@ -562,8 +562,6 @@ class ComparendoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            var_dump($json);
-            die();
             $comparendos = $em->getRepository('AppBundle:Comparendo')->findByParametros($params);
             if ($comparendos) {
                 $response = array(
