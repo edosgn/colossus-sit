@@ -21,12 +21,7 @@ class Comparendo
      */
     private $id;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fecha", type="date", nullable=true)
-     */
-    private $fecha;
+
 
     /**
      * @var \DateTime
@@ -214,29 +209,7 @@ class Comparendo
         return $this->id;
     }
 
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return Comparendo
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
+    
 
     /**
      * Set hora
