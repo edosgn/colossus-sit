@@ -2,6 +2,14 @@ app_msv_inventario_senial:
     resource: "@AppBundle/Controller/msvInventarioSenialController.php"
     type:     annotation
 
+app_cfg_comparendo_estado:
+    resource: "@AppBundle/Controller/CfgComparendoEstadoController.php"
+    type:     annotation
+    
+app_cfg_objeto_fijo:
+    resource: "@AppBundle/Controller/CfgObjetoFijoController.php"
+    type:     annotation
+    
 app_msv_senial:
     resource: "@AppBundle/Controller/MsvSenialController.php"
     type:     annotation
