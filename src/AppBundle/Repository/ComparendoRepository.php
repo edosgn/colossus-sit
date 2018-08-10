@@ -16,14 +16,26 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
             $fechaDesde = new \DateTime($params->fechaDesde);
             $fechaHasta = new \DateTime($params->fechaHasta);
             $comparendosId = $params->comparendosId;
+            $condicion = null;
 
             $em = $this->getEntityManager();
 
             $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
                     WHERE c.agenteTransito = m.id
                     AND m.id = :agenteId
-                    AND c.fecha BETWEEN :fechaDesde AND :fechaHasta";
+                    AND c.fechaNotificacion BETWEEN :fechaDesde AND :fechaHasta";
+            $i=0;
 
+            foreach ($comparendosId as $keyComparendo => $comparendo) {
+                if($keyComparendo==0){
+                    $condicion .= " AND c.estado = '" . $comparendo . "'";
+                }
+                else {
+                    $condicion .= " OR c.estado = '" . $comparendo . "'";
+                    }
+                }
+
+            $dql .= $condicion;
             $consulta = $em->createQuery($dql);
 
             $consulta->setParameters(array(
