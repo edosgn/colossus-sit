@@ -11,28 +11,46 @@ namespace AppBundle\Repository;
 class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 {
 
-        public function findByParametros($params){
-            
-            $fechaDesde = new \DateTime($params->fechaDesde);
-            $fechaHasta = new \DateTime($params->fechaHasta);
-            $comparendosId = $params->comparendosId;
+    public function findByParametros($params)
+    {
 
-            $em = $this->getEntityManager();
+        $fechaDesde = new \DateTime($params->fechaDesde);
+        $fechaHasta = new \DateTime($params->fechaHasta);
+        $comparendosId = $params->comparendosId;
 
-            $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
                     WHERE c.agenteTransito = m.id
                     AND m.id = :agenteId
                     AND c.fecha BETWEEN :fechaDesde AND :fechaHasta";
 
-            $consulta = $em->createQuery($dql);
+        $consulta = $em->createQuery($dql);
 
-            $consulta->setParameters(array(
-                'agenteId' => $params->agenteId,
-                'fechaDesde' => $fechaDesde,
-                'fechaHasta' => $fechaHasta,
-            ));
+        $consulta->setParameters(array(
+            'agenteId' => $params->agenteId,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta,
+        ));
 
-            return $consulta->getResult();
-        }
+        return $consulta->getResult();
+    }
+
+    //Obtiene el comparendo según ciudadano
+    public function getByCiudadanoInfractor($ciudadanoId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT co
+            FROM AppBundle:Comparendo co
+            WHERE co.cuidadanoInfractor = :ciudadanoId
+            AND co.estado = 1";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'ciudadanoId' => $ciudadanoId,
+        ));
+
+        return $consulta->getResult();
+    }
 
 }
