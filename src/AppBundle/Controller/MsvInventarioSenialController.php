@@ -5,9 +5,9 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\MsvInventarioSenial;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route; use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * MsvInventarioSenial controller.
@@ -74,7 +74,7 @@ class MsvInventarioSenialController extends Controller
         //'message' => "los campos no pueden estar vacios",
         //);
         //}else{
-        $msvInventarioSenial = new MsvInventarioSenial();
+        /*$msvInventarioSenial = new MsvInventarioSenial();
 
         $em = $this->getDoctrine()->getManager();
 
@@ -148,7 +148,7 @@ class MsvInventarioSenialController extends Controller
             'code' => 200,
             'message' => "Registro creado con exito",
             'data' => $msvInventarioSenial
-        );
+        );*/
         //}
         /*}else{
             $response = array(
@@ -158,8 +158,9 @@ class MsvInventarioSenialController extends Controller
             );
         }*/
 
-        return $helpers->json($response);
-
+        //return $helpers->json($response);
+        print_r($params);
+return new Response("");
     }
 
     /**
@@ -302,6 +303,87 @@ class MsvInventarioSenialController extends Controller
         }
 
         return $helpers->json($response);
+
+    }
+
+    /**
+     * Lists all msvSenial entities.
+     *
+     * @Route("/export", name="msvInventarioSenial_export")
+     * @Method("GET")
+     */
+    public function exportAction()
+    {
+
+        // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("liuggio")
+            ->setLastModifiedBy("Giulio De Donato")
+            ->setTitle("Office 2005 XLSX Test Document")
+            ->setSubject("Office 2005 XLSX Test Document")
+            ->setDescription("Test document for Office 2005 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2005 openxml php")
+            ->setCategory("Test result file");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $msvSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getFull();
+
+        $row = 1;
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A'.$row, "ID")
+            ->setCellValue('B'.$row, "FECHA")
+            ->setCellValue('C'.$row, "UNIDAD")
+            ->setCellValue('D'.$row, "COLOR")
+            ->setCellValue('E'.$row, "LATITUD")
+            ->setCellValue('F'.$row, "LONGITUD")
+            ->setCellValue('G'.$row, "CODIGO")
+            ->setCellValue('H'.$row, "LOGO")
+            ->setCellValue('I'.$row, "NOMBRE")
+            ->setCellValue('J'.$row, "VALOR")
+            ->setCellValue('K'.$row, "ESTADO")
+            ->setCellValue('L'.$row, "CANTIDAD");
+
+        $row = 2;
+        foreach ($msvSenial as $item) {
+
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('A'.$row, $item->getId())
+                ->setCellValue('B'.$row, $item->getFecha())
+                ->setCellValue('C'.$row, $item->getUnidad())
+                ->setCellValue('D'.$row, $item->getColor())
+                ->setCellValue('E'.$row, $item->getLatitud())
+                ->setCellValue('F'.$row, $item->getLongitud())
+                ->setCellValue('G'.$row, $item->getCodigo())
+                ->setCellValue('H'.$row, $item->getLogo())
+                ->setCellValue('I'.$row, $item->getNombre())
+                ->setCellValue('J'.$row, $item->getValor())
+                ->setCellValue('K'.$row, $item->getEstado())
+                ->setCellValue('L'.$row, $item->getCantidad());
+
+            $row ++;
+        }
+
+        $phpExcelObject->getActiveSheet()->setTitle('Simple');
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->setActiveSheetIndex(0);
+
+        // create the writer
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'mrfsvhu08-file.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
 
     }
 }
