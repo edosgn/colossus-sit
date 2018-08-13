@@ -111,6 +111,18 @@ class LicenciaConduccionController extends Controller
                     $usuario->getId()
                 );
                 $licenciaConduccion->setCiudadano($ciudadano);
+
+                $licenciasOld = $em->getRepository('AppBundle:LicenciaConduccion')->findBy(
+                    array(
+                        'ciudadano' => $ciudadano->getId(),
+                        'activo' => true
+                    )
+                );
+
+                foreach ($licenciasOld as $key => $licenciaOld) {
+                    $licenciaOld->setActivo(false);
+                    $em->flush();
+                }
             }
 
             if (isset($params->paisId)) {

@@ -296,7 +296,7 @@ class MpersonalFuncionarioController extends Controller
         foreach ($funcionarios as $key => $funcionario) {
             $response[$key] = array(
                 'value' => $funcionario->getId(),
-                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+                'label' => $funcionario->getNumeroPlaca()."_".$funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
             );
         }
         return $helpers->json($response);

@@ -100,11 +100,13 @@ class MgdPeticionarioController extends Controller
 
             $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
 
-            $consecutivo = $em->getRepository('AppBundle:MgdDocumento')->findMaximo($fechaRegistro->format('Y'));
+            $consecutivo = $em->getRepository('AppBundle:MgdDocumento')->findMaximo(
+                $fechaRegistro->format('Y')
+            );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
             $mgdDocumento->setConsecutivo($consecutivo);
 
-            $mgdDocumento->setNumeroRadicado($fechaRegistro->format('Y').$fechaRegistro->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
+            $mgdDocumento->setNumeroRadicado(str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaRegistro->format('Y'));
 
             $mgdDocumento->setNumeroOficio($params->documento[0]->numeroOficio);
             $mgdDocumento->setFolios($params->documento[0]->folios);

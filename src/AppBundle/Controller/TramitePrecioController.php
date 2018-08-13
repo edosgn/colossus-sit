@@ -126,7 +126,7 @@ class TramitePrecioController extends Controller
                     $tramitePrecio->setNombre($tramite->getNombre());
                 }
 
-                $tramitePrecio->setValor($params->valor);
+                $tramitePrecio->setValor(ceil($params->valor));
                 $tramitePrecio->setFechaInicio($fechaInicio);
                 $tramitePrecio->setModulo($modulo);
                 $tramitePrecio->setTramite($tramite);
