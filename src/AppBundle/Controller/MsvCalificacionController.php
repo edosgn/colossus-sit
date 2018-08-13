@@ -95,6 +95,10 @@ class MsvCalificacionController extends Controller
         $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
 
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
             $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->find($params->id);
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
