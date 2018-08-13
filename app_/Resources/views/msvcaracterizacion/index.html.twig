@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvcaracterizacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Asistencia</th>
+                <th>Fecha</th>
+                <th>Ciudad</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Cedula</th>
+                <th>Lugarexpedicion</th>
+                <th>Clc</th>
+                <th>Fechavigencia</th>
+                <th>Edad</th>
+                <th>Genero</th>
+                <th>Grupotrabajo</th>
+                <th>Tipocontrato</th>
+                <th>Experienciaconduccion</th>
+                <th>Accidentetransito</th>
+                <th>Circunstancias</th>
+                <th>Incidente</th>
+                <th>Frecuenciadesplazamiento</th>
+                <th>Vehiculopropio</th>
+                <th>Planificaciondesplazamiento</th>
+                <th>Tiempoantelacion</th>
+                <th>Mediodesplazamiento</th>
+                <th>Trayecto</th>
+                <th>Tiempotrayecto</th>
+                <th>Kmmensualesrecorridos</th>
+                <th>Factoresriesgo</th>
+                <th>Causasriesgo</th>
+                <th>Riesgo</th>
+                <th>Propuestareduccionriesgo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvCaracterizacion in msvCaracterizacions %}
+            <tr>
+                <td><a href="{{ path('msvcaracterizacion_show', { 'id': msvCaracterizacion.id }) }}">{{ msvCaracterizacion.id }}</a></td>
+                <td>{% if msvCaracterizacion.asistencia %}Yes{% else %}No{% endif %}</td>
+                <td>{% if msvCaracterizacion.fecha %}{{ msvCaracterizacion.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ msvCaracterizacion.ciudad }}</td>
+                <td>{{ msvCaracterizacion.nombres }}</td>
+                <td>{{ msvCaracterizacion.apellidos }}</td>
+                <td>{{ msvCaracterizacion.cedula }}</td>
+                <td>{{ msvCaracterizacion.lugarExpedicion }}</td>
+                <td>{{ msvCaracterizacion.clc }}</td>
+                <td>{% if msvCaracterizacion.fechaVigencia %}{{ msvCaracterizacion.fechaVigencia|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ msvCaracterizacion.edad }}</td>
+                <td>{{ msvCaracterizacion.genero }}</td>
+                <td>{{ msvCaracterizacion.grupoTrabajo }}</td>
+                <td>{{ msvCaracterizacion.tipoContrato }}</td>
+                <td>{{ msvCaracterizacion.experienciaConduccion }}</td>
+                <td>{% if msvCaracterizacion.accidenteTransito %}Yes{% else %}No{% endif %}</td>
+                <td>{{ msvCaracterizacion.circunstancias }}</td>
+                <td>{% if msvCaracterizacion.incidente %}Yes{% else %}No{% endif %}</td>
+                <td>{{ msvCaracterizacion.frecuenciaDesplazamiento }}</td>
+                <td>{% if msvCaracterizacion.vehiculoPropio %}Yes{% else %}No{% endif %}</td>
+                <td>{{ msvCaracterizacion.planificacionDesplazamiento }}</td>
+                <td>{{ msvCaracterizacion.tiempoAntelacion }}</td>
+                <td>{{ msvCaracterizacion.medioDesplazamiento }}</td>
+                <td>{{ msvCaracterizacion.trayecto }}</td>
+                <td>{{ msvCaracterizacion.tiempoTrayecto }}</td>
+                <td>{{ msvCaracterizacion.kmMensualesRecorridos }}</td>
+                <td>{{ msvCaracterizacion.factoresRiesgo }}</td>
+                <td>{{ msvCaracterizacion.causasRiesgo }}</td>
+                <td>{{ msvCaracterizacion.riesgo }}</td>
+                <td>{{ msvCaracterizacion.propuestaReduccionRiesgo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvcaracterizacion_show', { 'id': msvCaracterizacion.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

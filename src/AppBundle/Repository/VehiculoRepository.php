@@ -46,7 +46,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
     //Obtiene el vehículo según uno o varios parametros al tiempo
     public function findOneByParametros($parametros)
     {
-        $condicion = null;
+        $condicion = null; 
         $em = $this->getEntityManager();
 
         $dql = "SELECT v

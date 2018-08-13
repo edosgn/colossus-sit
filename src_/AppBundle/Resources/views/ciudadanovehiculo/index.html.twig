@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>CiudadanoVehiculo list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Licenciatransito</th>
+                <th>Fechapropiedadinicial</th>
+                <th>Fechapropiedadfinal</th>
+                <th>Estadopropiedad</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for ciudadanoVehiculo in ciudadanoVehiculos %}
+            <tr>
+                <td><a href="{{ path('ciudadanovehiculo_show', { 'id': ciudadanoVehiculo.id }) }}">{{ ciudadanoVehiculo.id }}</a></td>
+                <td>{{ ciudadanoVehiculo.licenciaTransito }}</td>
+                <td>{% if ciudadanoVehiculo.fechaPropiedadInicial %}{{ ciudadanoVehiculo.fechaPropiedadInicial|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if ciudadanoVehiculo.fechaPropiedadFinal %}{{ ciudadanoVehiculo.fechaPropiedadFinal|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ ciudadanoVehiculo.estadoPropiedad }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('ciudadanovehiculo_show', { 'id': ciudadanoVehiculo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('ciudadanovehiculo_edit', { 'id': ciudadanoVehiculo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('ciudadanovehiculo_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -34,27 +34,37 @@ class MsvCalificacionController extends Controller
     /**
      * Creates a new msvCalificacion entity.
      *
-     * @Route("/new", name="msvcalificacion_new")
+     * @Route("/{id}/new", name="msvcalificacion_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request,$id)
     {
-        $msvCalificacion = new Msvcalificacion();
-        $form = $this->createForm('AppBundle\Form\MsvCalificacionType', $msvCalificacion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($msvCalificacion);
-            $em->flush();
 
-            return $this->redirectToRoute('msvcalificacion_show', array('id' => $msvCalificacion->getId()));
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+                foreach ($params as $key => $parametro) {
+                    foreach ($parametro->variables as $key => $variable) {
+                        foreach ($variable->criterios as $key => $criterio) {
+                            $criterio = $em->getRepository('AppBundle:MsvCriterio')->find($criterio->id);
+                            $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
+    
+                        }
+                    }
+                }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no válida",
+            );
         }
-
-        return $this->render('msvcalificacion/new.html.twig', array(
-            'msvCalificacion' => $msvCalificacion,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -76,23 +86,14 @@ class MsvCalificacionController extends Controller
     /**
      * Displays a form to edit an existing msvCalificacion entity.
      *
-     * @Route("/edit", name="msvcalificacion_edit")
+     * @Route("/{id}/edit", name="msvcalificacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request)
+    public function editAction(Request $request,$id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck == true) {
-            $json = $request->get("json", null);
-            $params = json_decode($json);
-
-            $numero = $params->numero;
-            $estado = $params->estado;
-            $claseId = $params->claseId;
-            $sedeOperativaId = $params->sedeOperativaId;
 
             $em = $this->getDoctrine()->getManager();
             $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->find($params->id);

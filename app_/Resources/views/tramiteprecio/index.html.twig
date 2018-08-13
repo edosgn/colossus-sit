@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tramiteprecios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Valor</th>
+                <th>Ano</th>
+                <th>Tipo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tramitePrecio in tramitePrecios %}
+            <tr>
+                <td><a href="{{ path('tramiteprecio_show', { 'id': tramitePrecio.id }) }}">{{ tramitePrecio.id }}</a></td>
+                <td>{{ tramitePrecio.valor }}</td>
+                <td>{{ tramitePrecio.ano }}</td>
+                <td>{{ tramitePrecio.tipo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tramiteprecio_show', { 'id': tramitePrecio.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tramiteprecio_edit', { 'id': tramitePrecio.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tramiteprecio_new') }}">Create a new tramitePrecio</a>
+        </li>
+    </ul>
+{% endblock %}
