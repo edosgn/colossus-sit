@@ -1,5 +1,5 @@
 app_msv_inventario_senial:
-    resource: "@AppBundle/Controller/msvInventarioSenialController.php"
+    resource: "@AppBundle/Controller/MsvInventarioSenialController.php"
     type:     annotation
 
 app_cfg_comparendo_estado:
