@@ -42,14 +42,14 @@ class Tramite
      */
     private $afectacion = false;
 
-     /**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado = true;
 
-     /**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="sustrato", type="boolean", nullable=true)

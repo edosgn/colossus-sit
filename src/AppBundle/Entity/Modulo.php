@@ -57,6 +57,13 @@ class Modulo
     private $estado;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="vehiculo", type="boolean", nullable=true)
+     */
+    private $vehiculo = false;
+
+    /**
      * Get id
      *
      * @return integer
@@ -184,5 +191,29 @@ class Modulo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param boolean $vehiculo
+     *
+     * @return Modulo
+     */
+    public function setVehiculo($vehiculo)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return boolean
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }
