@@ -38,32 +38,6 @@ class MsvSenialController extends Controller
     /**
      * Creates a new msvSenial entity.
      *
-     * Route("/new", name="msvSenial_new")
-     * Method({"GET", "POST"})
-     */
-    /*public function newAction(Request $request)
-    {
-        $msvSenial = new MsvSenial();
-        $form = $this->createForm('AppBundle\Form\MsvSenialType', $msvSenial);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($msvSenial);
-            $em->flush();
-
-            return $this->redirectToRoute('msvSenial_show', array('id' => $msvSenial->getId()));
-        }
-
-        return $this->render('msvSenial/new.html.twig', array(
-            'msvSenial' => $msvSenial,
-            'form' => $form->createView(),
-        ));
-    }*/
-
-    /**
-     * Creates a new msvSenial entity.
-     *
      * @Route("/new", name="msvSenial_new")
      * @Method({"GET", "POST"})
      */
@@ -332,17 +306,19 @@ class MsvSenialController extends Controller
         $row = 1;
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('A'.$row, "ID")
-            ->setCellValue('B'.$row, "FECHA")
-            ->setCellValue('C'.$row, "UNIDAD")
-            ->setCellValue('D'.$row, "COLOR")
-            ->setCellValue('E'.$row, "LATITUD")
-            ->setCellValue('F'.$row, "LONGITUD")
-            ->setCellValue('G'.$row, "CODIGO")
-            ->setCellValue('H'.$row, "LOGO")
-            ->setCellValue('I'.$row, "NOMBRE")
-            ->setCellValue('J'.$row, "VALOR")
-            ->setCellValue('K'.$row, "ESTADO")
-            ->setCellValue('L'.$row, "CANTIDAD");
+            ->setCellValue('B'.$row, "# INVENTARIO")
+            ->setCellValue('C'.$row, "FECHA DE INVENTARIO")
+            ->setCellValue('D'.$row, "FECHA DE INGRESO")
+            ->setCellValue('E'.$row, "UNIDAD")
+            ->setCellValue('F'.$row, "COLOR")
+            ->setCellValue('G'.$row, "LATITUD")
+            ->setCellValue('H'.$row, "LONGITUD")
+            ->setCellValue('I'.$row, "CODIGO")
+            ->setCellValue('J'.$row, "LOGO")
+            ->setCellValue('K'.$row, "NOMBRE")
+            ->setCellValue('L'.$row, "VALOR")
+            ->setCellValue('M'.$row, "ESTADO")
+            ->setCellValue('N'.$row, "CANTIDAD");
 
         $row = 2;
         foreach ($msvSenial as $item) {
@@ -350,16 +326,34 @@ class MsvSenialController extends Controller
             $phpExcelObject->setActiveSheetIndex(0)
                 ->setCellValue('A'.$row, $item->getId())
                 ->setCellValue('B'.$row, $item->getFecha())
-                ->setCellValue('C'.$row, $item->getUnidad())
-                ->setCellValue('D'.$row, $item->getColor())
-                ->setCellValue('E'.$row, $item->getLatitud())
-                ->setCellValue('F'.$row, $item->getLongitud())
-                ->setCellValue('G'.$row, $item->getCodigo())
-                ->setCellValue('H'.$row, $item->getLogo())
-                ->setCellValue('I'.$row, $item->getNombre())
-                ->setCellValue('J'.$row, $item->getValor())
-                ->setCellValue('K'.$row, $item->getEstado())
-                ->setCellValue('L'.$row, $item->getCantidad());
+                ->setCellValue('C'.$row, $item->getFecha())
+                ->setCellValue('D'.$row, $item->getFecha())
+                ->setCellValue('E'.$row, $item->getUnidad())
+                ->setCellValue('F'.$row, $item->getTipoColor()->getNombre())
+                ->setCellValue('G'.$row, $item->getLatitud())
+                ->setCellValue('H'.$row, $item->getLongitud())
+                ->setCellValue('I'.$row, $item->getCodigo())
+                ->setCellValue('J'.$row, '')
+                ->setCellValue('K'.$row, $item->getNombre())
+                ->setCellValue('L'.$row, $item->getValor())
+                ->setCellValue('M'.$row, $item->getTipoEstado()->getNombre())
+                ->setCellValue('N'.$row, $item->getCantidad());
+
+            $objDrawing = new \PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('PHPExcel image');
+            $objDrawing->setDescription('PHPExcel image');
+            $objDrawing->setPath(__DIR__.'/../../../web/logos/'.$item->getLogo());
+            $objDrawing->setHeight(25);
+            $objDrawing->setCoordinates('J'.$row);
+            $objDrawing->setOffsetX(100);
+            $objDrawing->setWorksheet($phpExcelObject->getActiveSheet());
+
+            $phpExcelObject->getActiveSheet()
+                ->getStyle('F'.$row)
+                ->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setRGB(substr($item->getTipoColor()->getHex(), 1));
 
             $row ++;
         }

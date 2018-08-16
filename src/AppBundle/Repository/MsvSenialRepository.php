@@ -10,7 +10,7 @@ namespace AppBundle\Repository;
  */
 class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
 {
-    //Obtiene la lista de inventario de señales
+    //Get the inventory of signals inventory
     public function getSearch($params){
         $em = $this->getEntityManager();
 
@@ -39,9 +39,10 @@ class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
 
         $result = trim($build, " AND ");
 
-        $dql = "SELECT Hu09
+        $dql = "SELECT DISTINCT Hu08.inventario, Hu09
                 FROM AppBundle:MsvSenial Hu09
                  JOIN AppBundle:MsvInventarioSenial Hu08 WITH Hu09.inventarioSenialId = Hu08.id
+                 JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
                  JOIN AppBundle:CfgTipoSenial s WITH Hu09.tipoSenal = s.id
                  JOIN AppBundle:CfgTipoDestino d WITH Hu09.tipoDestino = d.id".$where.$result;
 
@@ -65,7 +66,7 @@ class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    //Obtiene la lista de inventario de señales
+    //Get the inventory of signals inventory
     public function getFull(){
         $em = $this->getEntityManager();
 
