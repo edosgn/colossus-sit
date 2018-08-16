@@ -35,6 +35,13 @@ class MpersonalTipoContrato
      */
     private $activo;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="horarios", type="boolean")
+     */
+    private $horarios;
+
 
     /**
      * Get id
@@ -93,5 +100,28 @@ class MpersonalTipoContrato
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set horarios
+     *
+     * @param boolean $horarios
+     *
+     * @return MpersonalTipoContrato
+     */
+    public function setHorarios($horarios)
+    {
+        $this->horarios = $horarios;
+
+        return $this;
+    }
+
+    /**
+     * Get horarios
+     *
+     * @return boolean
+     */
+    public function getHorarios()
+    {
+        return $this->horarios;
+    }
+}

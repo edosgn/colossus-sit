@@ -109,10 +109,10 @@ class CfgCargoController extends Controller
     /**
      * Displays a form to edit an existing cfgCargo entity.
      *
-     * @Route("/{id}/edit", name="cfgcargo_edit")
+     * @Route("/edit", name="cfgcargo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgCargo $cfgCargo)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);

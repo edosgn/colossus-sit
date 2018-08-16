@@ -51,22 +51,44 @@ class MpersonalTipoContratoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $mpersonalTipoContrato = new Mpersonaltipocontrato();
-        $form = $this->createForm('AppBundle\Form\MpersonalTipoContratoType', $mpersonalTipoContrato);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($mpersonalTipoContrato);
-            $em->flush();
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $tipoContrato = new MpersonalTipoContrato();
 
-            return $this->redirectToRoute('mpersonaltipocontrato_show', array('id' => $mpersonalTipoContrato->getId()));
-        }
+                $tipoContrato->setNombre($params->nombre);
+                $tipoContrato->setHorarios($params->horarios);
+                $tipoContrato->setActivo(true);
 
-        return $this->render('mpersonaltipocontrato/new.html.twig', array(
-            'mpersonalTipoContrato' => $mpersonalTipoContrato,
-            'form' => $form->createView(),
-        ));
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($tipoContrato);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                );
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -88,26 +110,50 @@ class MpersonalTipoContratoController extends Controller
     /**
      * Displays a form to edit an existing mpersonalTipoContrato entity.
      *
-     * @Route("/{id}/edit", name="mpersonaltipocontrato_edit")
+     * @Route("/edit", name="mpersonaltipocontrato_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MpersonalTipoContrato $mpersonalTipoContrato)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($mpersonalTipoContrato);
-        $editForm = $this->createForm('AppBundle\Form\MpersonalTipoContratoType', $mpersonalTipoContrato);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('mpersonaltipocontrato_edit', array('id' => $mpersonalTipoContrato->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $tipoContrato = $em->getRepository("AppBundle:MpersonalTipoContrato")->find($params->id);
+
+            if ($tipoContrato!=null) {
+                $tipoContrato->setNombre($params->nombre);
+                $tipoContrato->setHorarios($params->horarios);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $tipoContrato,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('mpersonaltipocontrato/edit.html.twig', array(
-            'mpersonalTipoContrato' => $mpersonalTipoContrato,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
