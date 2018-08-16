@@ -160,7 +160,7 @@ class MflInfraccionCategoriaController extends Controller
      * Deletes a mflInfraccionCategorium entity.
      *
      * @Route("/delete", name="mflinfraccioncategoria_delete")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, MflInfraccionCategoria $mflInfraccionCategorium)
     {
@@ -195,7 +195,7 @@ class MflInfraccionCategoriaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="mflinfraccioncategoria_select")
+     * @Route("/select", name="mflinfraccioncategoria_select_two")
      * @Method({"GET", "POST"})
      */
     public function selectAction()

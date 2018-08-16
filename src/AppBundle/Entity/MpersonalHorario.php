@@ -93,7 +93,8 @@ class MpersonalHorario
      */
     public function getDia()
     {
-        return $this->dia;
+        return date('l',$this->dia);
+
     }
 
     /**
@@ -117,7 +118,7 @@ class MpersonalHorario
      */
     public function getHoraInicio()
     {
-        return $this->horaInicio;
+        return $this->horaInicio->format('h:m a');
     }
 
     /**
@@ -141,7 +142,7 @@ class MpersonalHorario
      */
     public function getHoraFin()
     {
-        return $this->horaFin;
+        return $this->horaFin->format('h:m a');
     }
 
     /**

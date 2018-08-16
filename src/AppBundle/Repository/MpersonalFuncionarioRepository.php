@@ -38,8 +38,9 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	        )); 
         }elseif(isset($params->cargo)){
         	$dql = "SELECT f
-            FROM AppBundle:MpersonalFuncionario f
-            WHERE f.cargo = :cargo";
+            FROM AppBundle:MpersonalFuncionario f, AppBundle:CfgCargo c
+            WHERE f.cargo = c.id
+            AND c.id = :cargo";
 
 	        $consulta = $em->createQuery($dql);
 	        $consulta->setParameters(array(

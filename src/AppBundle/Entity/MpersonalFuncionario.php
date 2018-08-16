@@ -24,13 +24,6 @@ class MpersonalFuncionario
     /**
      * @var string
      *
-     * @ORM\Column(name="cargo", type="string", length=255)
-     */
-    private $cargo;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="actaPosesion", type="string", length=10, nullable=true)
      */
     private $actaPosesion;
@@ -109,6 +102,11 @@ class MpersonalFuncionario
     protected $tipoContrato;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgCargo", inversedBy="funcionarios")
+     **/
+    protected $cargo;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="funcionarios")
      **/
     protected $ciudadano;
@@ -121,30 +119,6 @@ class MpersonalFuncionario
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set cargo
-     *
-     * @param string $cargo
-     *
-     * @return MpersonalFuncionario
-     */
-    public function setCargo($cargo)
-    {
-        $this->cargo = $cargo;
-
-        return $this;
-    }
-
-    /**
-     * Get cargo
-     *
-     * @return string
-     */
-    public function getCargo()
-    {
-        return $this->cargo;
     }
 
     /**
@@ -409,6 +383,30 @@ class MpersonalFuncionario
     public function getTipoContrato()
     {
         return $this->tipoContrato;
+    }
+
+    /**
+     * Set cargo
+     *
+     * @param \AppBundle\Entity\CfgCargo $cargo
+     *
+     * @return MpersonalFuncionario
+     */
+    public function setCargo(\AppBundle\Entity\CfgCargo $cargo = null)
+    {
+        $this->cargo = $cargo;
+
+        return $this;
+    }
+
+    /**
+     * Get cargo
+     *
+     * @return \AppBundle\Entity\CfgCargo
+     */
+    public function getCargo()
+    {
+        return $this->cargo;
     }
 
     /**

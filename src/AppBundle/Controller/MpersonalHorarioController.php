@@ -62,6 +62,8 @@ class MpersonalHorarioController extends Controller
                 foreach ($params->dias as $key => $dias) {
                     foreach ($dias as $numero => $dia) {
                         $horario = new MpersonalHorario();
+
+                        
                         if ($params->manana) {
                             $horario->setHoraInicio(new \Datetime($params->horaInicioManana));
                             $horario->setHoraFin(new \Datetime($params->horaFinManana));

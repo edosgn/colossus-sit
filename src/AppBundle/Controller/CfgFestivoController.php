@@ -190,7 +190,7 @@ class CfgFestivoController extends Controller
             );
         }
         return $helpers->json($response);
-        }
+    }
 
     /**
      * Creates a form to delete a cfgFestivo entity.

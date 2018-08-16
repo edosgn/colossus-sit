@@ -65,7 +65,6 @@ class MpersonalFuncionarioController extends Controller
                 );
                 $funcionario->setCiudadano($ciudadano);
 
-                $funcionario->setCargo($params->cargo);
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
                     $params->sedeOperativaId
                 );
@@ -75,6 +74,11 @@ class MpersonalFuncionarioController extends Controller
                     $params->tipoContratoId
                 );
                 $funcionario->setTipoContrato($tipoContrato);
+
+                $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
+                    $params->cargoId
+                );
+                $funcionario->setCargo($cargo);
 
                 $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                     $params->identificacion
@@ -507,5 +511,51 @@ class MpersonalFuncionarioController extends Controller
         return $helpers->json($response);
     }
 
-    
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/times", name="mpersonalfuncionario_record_times")
+     * @Method({"GET", "POST"})
+     */
+    public function recordTimesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+           
+            $horarios = $em->getRepository('AppBundle:MpersonalHorario')->findBy(
+                array(
+                    'funcionario' => $params->id
+                )
+            );
+                
+            if ($horarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados", 
+                    'data'=> $horarios,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",  
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }

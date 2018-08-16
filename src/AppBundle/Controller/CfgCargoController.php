@@ -157,21 +157,37 @@ class CfgCargoController extends Controller
     /**
      * Deletes a cfgCargo entity.
      *
-     * @Route("/{id}/delete", name="cfgcargo_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cfgcargo_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, CfgCargo $cfgCargo)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($cfgCargo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgCargo);
+            $cargo = $em->getRepository('AppBundle:CfgCargo')->find($params->id);
+            
+            $cargo->setActivo(false);
             $em->flush();
-        }
 
-        return $this->redirectToRoute('cfgcargo_index');
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro eliminado con éxito", 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no valida", 
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
