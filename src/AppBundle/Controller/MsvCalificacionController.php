@@ -60,7 +60,7 @@ class MsvCalificacionController extends Controller
                             $msvCalificacion->setEvidencia($criterio->evidencia);
                             $msvCalificacion->setResponde($criterio->responde);
                             $msvCalificacion->setObservacion($criterio->observacion);
-                            if($criterio->response == true){
+                            if($criterio->responde == true){
                                 $valorParametro = $parametro->valor;
                                 $numeroVariables = $parametro->numeroVariables;
                                 $msvCalificacion->setValorObtenido($valorParametro/$numeroVariables);
