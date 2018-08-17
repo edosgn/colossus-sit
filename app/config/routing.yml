@@ -1,3 +1,7 @@
+app_cfg_cargo:
+    resource: "@AppBundle/Controller/CfgCargoController.php"
+    type:     annotation
+
 app_msv_inventario_senial:
     resource: "@AppBundle/Controller/MsvInventarioSenialController.php"
     type:     annotation

@@ -5,12 +5,12 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MpersonalTipoContrato
+ * CfgCargo
  *
- * @ORM\Table(name="mpersonal_tipo_contrato")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\MpersonalTipoContratoRepository")
+ * @ORM\Table(name="cfg_cargo")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgCargoRepository")
  */
-class MpersonalTipoContrato
+class CfgCargo
 {
     /**
      * @var int
@@ -24,7 +24,7 @@ class MpersonalTipoContrato
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=100)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
 
@@ -34,13 +34,6 @@ class MpersonalTipoContrato
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="horarios", type="boolean")
-     */
-    private $horarios;
 
 
     /**
@@ -58,7 +51,7 @@ class MpersonalTipoContrato
      *
      * @param string $nombre
      *
-     * @return MpersonalTipoContrato
+     * @return CfgCargo
      */
     public function setNombre($nombre)
     {
@@ -82,7 +75,7 @@ class MpersonalTipoContrato
      *
      * @param boolean $activo
      *
-     * @return MpersonalTipoContrato
+     * @return CfgCargo
      */
     public function setActivo($activo)
     {
@@ -100,28 +93,5 @@ class MpersonalTipoContrato
     {
         return $this->activo;
     }
-
-    /**
-     * Set horarios
-     *
-     * @param boolean $horarios
-     *
-     * @return MpersonalTipoContrato
-     */
-    public function setHorarios($horarios)
-    {
-        $this->horarios = $horarios;
-
-        return $this;
-    }
-
-    /**
-     * Get horarios
-     *
-     * @return boolean
-     */
-    public function getHorarios()
-    {
-        return $this->horarios;
-    }
 }
+

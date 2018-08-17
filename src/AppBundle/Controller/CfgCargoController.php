@@ -2,41 +2,41 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\MpersonalTipoContrato;
+use AppBundle\Entity\CfgCargo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Mpersonaltipocontrato controller.
+ * Cfgcargo controller.
  *
- * @Route("mpersonaltipocontrato")
+ * @Route("cfgcargo")
  */
-class MpersonalTipoContratoController extends Controller
+class CfgCargoController extends Controller
 {
     /**
-     * Lists all mpersonalTipoContrato entities.
+     * Lists all cfgCargo entities.
      *
-     * @Route("/", name="mpersonaltipocontrato_index")
+     * @Route("/", name="cfgcargo_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $tiposContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->findBy(
+        $cargos = $em->getRepository('AppBundle:CfgCargo')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($tiposContrato) {
+        if ($cargos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($tiposContrato)." Registros encontrados", 
-                'data'=> $tiposContrato,
+                'message' => count($cargos)." registros encontrados", 
+                'data'=> $cargos,
             );
         }
 
@@ -44,9 +44,9 @@ class MpersonalTipoContratoController extends Controller
     }
 
     /**
-     * Creates a new mpersonalTipoContrato entity.
+     * Creates a new cfgCargo entity.
      *
-     * @Route("/new", name="mpersonaltipocontrato_new")
+     * @Route("/new", name="cfgcargo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -65,14 +65,13 @@ class MpersonalTipoContratoController extends Controller
                     'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $tipoContrato = new MpersonalTipoContrato();
+                $cargo = new CfgCargo();
 
-                $tipoContrato->setNombre($params->nombre);
-                $tipoContrato->setHorarios($params->horarios);
-                $tipoContrato->setActivo(true);
+                $cargo->setNombre($params->nombre);
+                $cargo->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($tipoContrato);
+                $em->persist($cargo);
                 $em->flush();
 
                 $response = array(
@@ -92,25 +91,25 @@ class MpersonalTipoContratoController extends Controller
     }
 
     /**
-     * Finds and displays a mpersonalTipoContrato entity.
+     * Finds and displays a cfgCargo entity.
      *
-     * @Route("/{id}/show", name="mpersonaltipocontrato_show")
+     * @Route("/{id}/show", name="cfgcargo_show")
      * @Method("GET")
      */
-    public function showAction(MpersonalTipoContrato $mpersonalTipoContrato)
+    public function showAction(CfgCargo $cfgCargo)
     {
-        $deleteForm = $this->createDeleteForm($mpersonalTipoContrato);
+        $deleteForm = $this->createDeleteForm($cfgCargo);
 
-        return $this->render('mpersonaltipocontrato/show.html.twig', array(
-            'mpersonalTipoContrato' => $mpersonalTipoContrato,
+        return $this->render('cfgcargo/show.html.twig', array(
+            'cfgCargo' => $cfgCargo,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing mpersonalTipoContrato entity.
+     * Displays a form to edit an existing cfgCargo entity.
      *
-     * @Route("/edit", name="mpersonaltipocontrato_edit")
+     * @Route("/edit", name="cfgcargo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -124,11 +123,10 @@ class MpersonalTipoContratoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $tipoContrato = $em->getRepository("AppBundle:MpersonalTipoContrato")->find($params->id);
+            $cargo = $em->getRepository("AppBundle:CfgCargo")->find($params->id);
 
-            if ($tipoContrato!=null) {
-                $tipoContrato->setNombre($params->nombre);
-                $tipoContrato->setHorarios($params->horarios);
+            if ($cargo!=null) {
+                $cargo->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -136,7 +134,7 @@ class MpersonalTipoContratoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $tipoContrato,
+                    'data'=> $cargo,
                 );
             }else{
                 $response = array(
@@ -157,36 +155,52 @@ class MpersonalTipoContratoController extends Controller
     }
 
     /**
-     * Deletes a mpersonalTipoContrato entity.
+     * Deletes a cfgCargo entity.
      *
-     * @Route("/{id}/delete", name="mpersonaltipocontrato_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cfgcargo_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, MpersonalTipoContrato $mpersonalTipoContrato)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($mpersonalTipoContrato);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($mpersonalTipoContrato);
+            $cargo = $em->getRepository('AppBundle:CfgCargo')->find($params->id);
+            
+            $cargo->setActivo(false);
             $em->flush();
-        }
 
-        return $this->redirectToRoute('mpersonaltipocontrato_index');
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro eliminado con éxito", 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no valida", 
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a mpersonalTipoContrato entity.
+     * Creates a form to delete a cfgCargo entity.
      *
-     * @param MpersonalTipoContrato $mpersonalTipoContrato The mpersonalTipoContrato entity
+     * @param CfgCargo $cfgCargo The cfgCargo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(MpersonalTipoContrato $mpersonalTipoContrato)
+    private function createDeleteForm(CfgCargo $cfgCargo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('mpersonaltipocontrato_delete', array('id' => $mpersonalTipoContrato->getId())))
+            ->setAction($this->generateUrl('cfgcargo_delete', array('id' => $cfgCargo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -195,7 +209,7 @@ class MpersonalTipoContratoController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="mpersonaltipocontrato_select")
+     * @Route("/select", name="cfgcargo_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -203,14 +217,16 @@ class MpersonalTipoContratoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $tiposContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->findBy(
+        $cargos = $em->getRepository('AppBundle:CfgCargo')->findBy(
             array('activo' => true)
         );
-        $response= null;
-        foreach ($tiposContrato as $key => $tipoContrato) {
+
+        $response = null;
+
+        foreach ($cargos as $key => $cargo) {
             $response[$key] = array(
-                'value' => $tipoContrato->getId(),
-                'label' => $tipoContrato->getNombre()
+                'value' => $cargo->getId(),
+                'label' => $cargo->getNombre()
             );
         }
         return $helpers->json($response);

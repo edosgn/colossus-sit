@@ -21,6 +21,16 @@ class MsvInventarioSenial
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id; 
+	
+	/**
+     * @var \Inventario
+     *
+     * @ORM\ManyToOne(targetEntity="CfgInventario")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="inventario_id", referencedColumnName="id")
+     * })
+     */
+    private $inventario;
 
     /**
      * @var \DateTime
@@ -35,13 +45,16 @@ class MsvInventarioSenial
      * @ORM\Column(name="unidad", type="string", length=255, nullable=false)
      */
     private $unidad;
-
-    /**
-     * @var string
+	
+	/**
+     * @var \TipoColor
      *
-     * @ORM\Column(name="color", type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="CfgTipoColor")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tipo_color_id", referencedColumnName="id")
+     * })
      */
-    private $color;
+    private $tipoColor;
 
     /**
      * @var float
@@ -93,11 +106,14 @@ class MsvInventarioSenial
     private $valor;
 
     /**
-     * @var string
+     * @var \TipoEstado
      *
-     * @ORM\Column(name="estado", type="string", length=255, nullable=false)
+     * @ORM\ManyToOne(targetEntity="CfgTipoEstado")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tipo_estado_id", referencedColumnName="id")
+     * })
      */
-    private $estado;
+    private $tipoEstado;
 
     /**
      * @var integer
@@ -106,8 +122,31 @@ class MsvInventarioSenial
      */
     private $cantidad;
 
+    /**
+     * Set inventario
+     *
+     * @param \AppBundle\Entity\CfgInventario $inventario
+     *
+     * @return MsvInventarioSenial
+     */
+    public function setInventario(\AppBundle\Entity\CfgInventario $inventario = null)
+    {
+        $this->inventario = $inventario;
+
+        return $this;
+    }
 
     /**
+     * Get inventario
+     *
+     * @return \AppBundle\Entity\CfgInventario
+     */
+    public function getInventario()
+    {
+        return $this->inventario;
+    }
+	
+	/**
      * Set fecha
      *
      * @param \DateTime $fecha
@@ -128,7 +167,7 @@ class MsvInventarioSenial
      */
     public function getFecha()
     {
-        return $this->fecha->format('d/m/Y');
+        return $this->fecha->format('Y-m-d');
     }
 
     /**
@@ -154,30 +193,31 @@ class MsvInventarioSenial
     {
         return $this->unidad;
     }
-
-    /**
-     * Set color
+	
+	/**
+     * Set senal
      *
-     * @param string $color
+     * @param \AppBundle\Entity\CfgTipoColor $tipoColor
      *
-     * @return MsvInventarioSenial
+     * @return MsvSenial
      */
-    public function setColor($color)
+    public function setTipoColor(\AppBundle\Entity\CfgTipoColor $tipoColor = null)
     {
-        $this->color = $color;
+        $this->tipoColor = $tipoColor;
 
         return $this;
     }
 
     /**
-     * Get color
+     * Get tipoSenal
      *
-     * @return string
+     * @return \AppBundle\Entity\CfgTipoColor
      */
-    public function getColor()
+    public function getTipoColor()
     {
-        return $this->color;
+        return $this->tipoColor;
     }
+
 
     /**
      * Set latitud
@@ -347,28 +387,29 @@ class MsvInventarioSenial
         return $this->valor;
     }
 
+
     /**
-     * Set estado
+     * Set senal
      *
-     * @param string $estado
+     * @param \AppBundle\Entity\CfgTipoEstado $tipoEstado
      *
-     * @return MsvInventarioSenial
+     * @return MsvSenial
      */
-    public function setEstado($estado)
+    public function setTipoEstado(\AppBundle\Entity\CfgTipoEstado $tipoEstado = null)
     {
-        $this->estado = $estado;
+        $this->tipoEstado = $tipoEstado;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get tipoEstado
      *
-     * @return string
+     * @return \AppBundle\Entity\CfgTipoEstado
      */
-    public function getEstado()
+    public function getTipoEstado()
     {
-        return $this->estado;
+        return $this->tipoEstado;
     }
 
     /**
@@ -393,6 +434,20 @@ class MsvInventarioSenial
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     *
+     * @return MsvInventarioSenial
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**

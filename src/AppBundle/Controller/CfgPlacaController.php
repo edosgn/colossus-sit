@@ -75,7 +75,7 @@ class CfgPlacaController extends Controller
             if ($cfgPlaca == null) {
                     $cfgPlaca = new CfgPlaca();
                     $cfgPlaca->setNumero($numero);
-                    $cfgPlaca->setEstado($estado);
+                    $cfgPlaca->setEstado('Disponible');
                     $cfgPlaca->setClase($clase);
                     $cfgPlaca->setSedeOperativa($sedeOperativa);
                     $em = $this->getDoctrine()->getManager();
