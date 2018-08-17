@@ -37,7 +37,7 @@ class MsvParametroController extends Controller
      * @Route("/getByCategoriaId", name="msvparametrovycategoria")
      * @Method({"GET", "POST"})
      */
-    public function getParametroByCategoriaId(Request $request)
+    public function allCategoriaId(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
@@ -61,10 +61,12 @@ class MsvParametroController extends Controller
                         'name' => $variable->getNombre(),
                         'criterios' => null
                     );
-                    $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable($variable->getId());
+                    $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable(
+                        $variable->getId()
+                    );
                     if($criterios){
                         foreach ($criterios as $keyCriterio => $criterio) {
-                            $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'][$keyCriterio] = array(
+                            $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'] = array(
                                 'id'=> $criterio->getId(),
                                 'name' => $criterio->getNombre(),
                                 'evidencia'=> false,
