@@ -52,14 +52,17 @@ class MsvParametroController extends Controller
                 'name'=>$msvParametro->getNombre(),
                 'valor'=>$msvParametro->getValor(),
                 'variables' => null,
+                'numeroVariables'=> null
              );
             $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
+            $numeroVariables = count($variables);
+            $msvParametrosArray[$keyParametro]['numeroVariables']= $numeroVariables;
             if($variables){
                 foreach ($variables as $keyVariable => $variable) {
                     $msvParametrosArray[$keyParametro]['variables'][$keyVariable] = array(
                         'id'=> $variable->getId(),
                         'name' => $variable->getNombre(),
-                        'criterios' => null
+                        'criterios' => null,
                     );
                     $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable(
                         $variable->getId()
@@ -72,7 +75,7 @@ class MsvParametroController extends Controller
                                 'evidencia'=> false,
                                 'responde'=>false,
                                 'aplica'=>false,
-                                'observacion'=>null
+                                'observacion'=>null,
                             );
                         }
                     }

@@ -10,7 +10,7 @@ namespace AppBundle\Repository;
  */
 class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
 {
-    //Obtiene la lista de inventario de señales
+    //Get the inventory of signals inventory
     public function getSearch($params){
         $em = $this->getEntityManager();
 
@@ -24,7 +24,7 @@ class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
         }
 
         if (isset($params->tipoSenalId)) {
-            $sql['tipoSenalId'] = " Hu09.tipoSenal = :tipoSenalSelected";
+            $sql['tipoSenalId'] = " Hu09.tipoSenial = :tipoSenalSelected";
         }
 
         $where = $result = "";
@@ -39,10 +39,11 @@ class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
 
         $result = trim($build, " AND ");
 
-        $dql = "SELECT Hu09
+        $dql = "SELECT DISTINCT i
                 FROM AppBundle:MsvSenial Hu09
                  JOIN AppBundle:MsvInventarioSenial Hu08 WITH Hu09.inventarioSenialId = Hu08.id
-                 JOIN AppBundle:CfgTipoSenial s WITH Hu09.tipoSenal = s.id
+                 JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
+                 JOIN AppBundle:CfgTipoSenial s WITH Hu09.tipoSenial = s.id
                  JOIN AppBundle:CfgTipoDestino d WITH Hu09.tipoDestino = d.id".$where.$result;
 
         $consulta = $em->createQuery($dql);
@@ -65,16 +66,73 @@ class MsvSenialRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    //Obtiene la lista de inventario de señales
+    //Get the inventory of signals inventory
+    public function getBySenial($params){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT Hu08
+                FROM AppBundle:MsvInventarioSenial Hu08
+                JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
+                JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
+                JOIN AppBundle:CfgTipoColor c WITH Hu08.tipoColor = c.id
+                JOIN AppBundle:CfgTipoEstado e WITH Hu08.tipoEstado = e.id
+                WHERE ((i.id = :idInv)
+                AND (i.fecha = :dateInv)
+                AND (Hu09.tipoSenial = :typeSen))";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'idInv' => @$params->idInv,
+            'dateInv' => @$params->dateInv,
+            'typeSen' => @$params->typeSen
+        ));
+
+        return $consulta->getResult();
+    }
+
+    //Get the inventory of signals inventory
     public function getFull(){
         $em = $this->getEntityManager();
 
         $dql = "SELECT Hu08
                 FROM AppBundle:MsvInventarioSenial Hu08
-                LEFT JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
-                WHERE Hu09.inventarioSenialId IS NULL";
+                JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
+                JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
+                JOIN AppBundle:CfgTipoColor c WITH Hu08.tipoColor = c.id
+                JOIN AppBundle:CfgTipoEstado e WITH Hu08.tipoEstado = e.id";
 
         $consulta = $em->createQuery($dql);
+
+        return $consulta->getResult();
+    }
+
+    //Get the inventory of signals inventory
+    public function getByInv($data){
+
+        $param = array();
+        $get = explode("_", $data);
+        $param['idInv'] = $get[0];
+        $param['dateInv'] = $get[1];
+        $param['typeSen'] = $get[2];
+
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT Hu08
+                FROM AppBundle:MsvInventarioSenial Hu08
+                JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
+                JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
+                JOIN AppBundle:CfgTipoColor c WITH Hu08.tipoColor = c.id
+                JOIN AppBundle:CfgTipoEstado e WITH Hu08.tipoEstado = e.id
+                WHERE ((i.id = :idInv)
+                AND (i.fecha = :dateInv)
+                AND (Hu09.tipoSenial = :typeSen))";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'idInv' => $param['idInv'],
+            'dateInv' => $param['dateInv'],
+            'typeSen' => $param['typeSen']
+        ));
 
         return $consulta->getResult();
     }

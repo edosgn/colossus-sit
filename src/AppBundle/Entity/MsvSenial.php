@@ -40,14 +40,14 @@ class MsvSenial
     private $inventarioSenialId;
 
     /**
-     * @var \TipoSenal
+     * @var \TipoSenial
      *
      * @ORM\ManyToOne(targetEntity="CfgTipoSenial")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tipo_senial_id", referencedColumnName="id")
      * })
      */
-    private $tipoSenal;
+    private $tipoSenial;
 
     /**
      * @var \TipoDestino
@@ -142,25 +142,25 @@ class MsvSenial
     /**
      * Set senal
      *
-     * @param \AppBundle\Entity\CfgTipoSenial $tipoSenal
+     * @param \AppBundle\Entity\CfgTipoSenial $tipoSenial
      *
      * @return MsvSenial
      */
-    public function setTipoSenal(\AppBundle\Entity\CfgTipoSenial $tipoSenal = null)
+    public function setTipoSenial(\AppBundle\Entity\CfgTipoSenial $tipoSenial = null)
     {
-        $this->tipoSenal = $tipoSenal;
+        $this->tipoSenal = $tipoSenial;
 
         return $this;
     }
 
     /**
-     * Get tipoSenal
+     * Get tipoSenial
      *
      * @return \AppBundle\Entity\CfgTipoSenial
      */
-    public function getTipoSenal()
+    public function getTipoSenial()
     {
-        return $this->tipoSenal;
+        return $this->tipoSenial;
     }
 
     /**
