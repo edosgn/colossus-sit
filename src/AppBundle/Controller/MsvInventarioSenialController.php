@@ -355,6 +355,40 @@ class MsvInventarioSenialController extends Controller
     /**
      * Lists all msvInventarioenial entities.
      *
+     * @Route("/bysenial", name="msvInventarioSenial_search_by_senial")
+     * @Method({"GET", "POST"})
+     */
+    public function searchBySenialAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $msvInventarioSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getBySenial($params);
+
+        $response['data'] = array();
+
+        if ($msvInventarioSenial) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => 'listado senales',
+                'data' => $msvInventarioSenial,
+            );
+        }
+
+        return $helpers->json($response);
+
+    }
+
+    /**
+     * Lists all msvInventarioenial entities.
+     *
      * @Route("/full", name="msvInventarioSenial_search_full")
      * @Method("GET")
      */
@@ -426,8 +460,110 @@ class MsvInventarioSenialController extends Controller
 
             $phpExcelObject->setActiveSheetIndex(0)
                 ->setCellValue('A'.$row, $item->getId())
-                ->setCellValue('B'.$row, $item->getFecha())
-                ->setCellValue('C'.$row, $item->getFecha())
+                ->setCellValue('B'.$row, $item->getInventario()->getNumero())
+                ->setCellValue('C'.$row, $item->getInventario()->getFecha())
+                ->setCellValue('D'.$row, $item->getFecha())
+                ->setCellValue('E'.$row, $item->getUnidad())
+                ->setCellValue('F'.$row, $item->getTipoColor()->getNombre())
+                ->setCellValue('G'.$row, $item->getLatitud())
+                ->setCellValue('H'.$row, $item->getLongitud())
+                ->setCellValue('I'.$row, $item->getCodigo())
+                ->setCellValue('J'.$row, '')
+                ->setCellValue('K'.$row, $item->getNombre())
+                ->setCellValue('L'.$row, $item->getValor())
+                ->setCellValue('M'.$row, $item->getTipoEstado()->getNombre())
+                ->setCellValue('N'.$row, $item->getCantidad());
+
+            $objDrawing = new \PHPExcel_Worksheet_Drawing();
+            $objDrawing->setName('PHPExcel image');
+            $objDrawing->setDescription('PHPExcel image');
+            $objDrawing->setPath(__DIR__.'/../../../web/logos/'.$item->getLogo());
+            $objDrawing->setHeight(25);
+            $objDrawing->setCoordinates('J'.$row);
+            $objDrawing->setOffsetX(100);
+            $objDrawing->setWorksheet($phpExcelObject->getActiveSheet());
+
+            $phpExcelObject->getActiveSheet()
+                ->getStyle('F'.$row)
+                ->getFill()
+                ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
+                ->getStartColor()
+                ->setRGB(substr($item->getTipoColor()->getHex(), 1));
+
+            $row ++;
+        }
+
+        $phpExcelObject->getActiveSheet()->setTitle('Simple');
+        // Set active sheet index to the first sheet, so Excel opens this as the first sheet
+        $phpExcelObject->setActiveSheetIndex(0);
+
+        // create the writer
+        $writer = $this->get('phpexcel')->createWriter($phpExcelObject, 'Excel5');
+        // create the response
+        $response = $this->get('phpexcel')->createStreamedResponse($writer);
+        // adding headers
+        $dispositionHeader = $response->headers->makeDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            'mrfsvhu08-file.xls'
+        );
+        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $response->headers->set('Pragma', 'public');
+        $response->headers->set('Cache-Control', 'maxage=1');
+        $response->headers->set('Content-Disposition', $dispositionHeader);
+
+        return $response;
+
+    }
+
+
+    /**
+     * Lists all msvInventarioSenial entities.
+     *
+     * @Route("/exportinv/{data}", name="msvInventarioSenial_exportInv")
+     * @Method("GET")
+     */
+    public function exportInvAction($data)
+    {
+
+        // ask the service for a Excel5
+        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject();
+
+        $phpExcelObject->getProperties()->setCreator("liuggio")
+            ->setLastModifiedBy("Giulio De Donato")
+            ->setTitle("Office 2005 XLSX Test Document")
+            ->setSubject("Office 2005 XLSX Test Document")
+            ->setDescription("Test document for Office 2005 XLSX, generated using PHP classes.")
+            ->setKeywords("office 2005 openxml php")
+            ->setCategory("Test result file");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $msvSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getByInv($data);
+
+        $row = 1;
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('A'.$row, "ID")
+            ->setCellValue('B'.$row, "# INVENTARIO")
+            ->setCellValue('C'.$row, "FECHA DE INVENTARIO")
+            ->setCellValue('D'.$row, "FECHA DE INGRESO")
+            ->setCellValue('E'.$row, "UNIDAD")
+            ->setCellValue('F'.$row, "COLOR")
+            ->setCellValue('G'.$row, "LATITUD")
+            ->setCellValue('H'.$row, "LONGITUD")
+            ->setCellValue('I'.$row, "CODIGO")
+            ->setCellValue('J'.$row, "LOGO")
+            ->setCellValue('K'.$row, "NOMBRE")
+            ->setCellValue('L'.$row, "VALOR")
+            ->setCellValue('M'.$row, "ESTADO")
+            ->setCellValue('N'.$row, "CANTIDAD");
+
+        $row = 2;
+        foreach ($msvSenial as $item) {
+
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('A'.$row, $item->getId())
+                ->setCellValue('B'.$row, $item->getInventario()->getNumero())
+                ->setCellValue('C'.$row, $item->getInventario()->getFecha())
                 ->setCellValue('D'.$row, $item->getFecha())
                 ->setCellValue('E'.$row, $item->getUnidad())
                 ->setCellValue('F'.$row, $item->getTipoColor()->getNombre())
