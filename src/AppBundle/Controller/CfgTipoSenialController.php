@@ -147,6 +147,9 @@ class CfgTipoSenialController extends Controller
         $senales = $em->getRepository('AppBundle:CfgTipoSenial')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
+        
         foreach ($senales as $key => $senal) {
             $response[$key] = array(
                 'value' => $senal->getId(),

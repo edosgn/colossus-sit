@@ -60,7 +60,7 @@ class CfgInventarioController extends Controller
     /**
      * Finds and displays a cfgInventario entity.
      *
-     * Route("/{id}", name="cfgInventario_show")
+     * Route("/{id}/show", name="cfgInventario_show")
      * Method("GET")
      */
     public function showAction(CfgInventario $cfgInventario)
@@ -101,7 +101,7 @@ class CfgInventarioController extends Controller
     /**
      * Deletes a cfgInventario entity.
      *
-     * @Route("/{id}", name="cfgInventario_delete")
+     * @Route("/{id}/delete", name="cfgInventario_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgInventario $cfgInventario)
@@ -145,8 +145,11 @@ class CfgInventarioController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $cfgInventarios = $em->getRepository('AppBundle:CfgInventario')->findBy(
-            array('estado' => 1)
+            array('estado' => true)
         );
+
+        $response = null;
+
         foreach ($cfgInventarios as $key => $cfgInventario) {
             $response[$key] = array(
                 'value' => $cfgInventario->getId(),

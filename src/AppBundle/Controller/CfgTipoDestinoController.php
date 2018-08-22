@@ -153,10 +153,14 @@ class CfgTipoDestinoController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
         $tiposDestino = $em->getRepository('AppBundle:CfgTipoDestino')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
+        
         foreach ($tiposDestino as $key => $cfgTipoDestino) {
             $response[$key] = array(
                 'value' => $cfgTipoDestino->getId(),
