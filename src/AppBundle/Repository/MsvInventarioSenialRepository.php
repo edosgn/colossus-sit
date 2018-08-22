@@ -70,7 +70,23 @@ class MsvInventarioSenialRepository extends \Doctrine\ORM\EntityRepository
     public function getBySenial($params){
         $em = $this->getEntityManager();
 
-            $dql = "SELECT Hu08
+            $dql = "SELECT Hu08.id AS ID,
+                i.numero AS NUMERO_INVENTARIO,
+                i.fecha AS FECHA_INVENTARIO,
+                Hu08.fecha AS FECHA_INGRESO,
+                Hu08.unidad AS UNIDAD,
+                c.nombre AS COLOR,
+                c.hex AS HEX,
+                Hu08.latitud AS LATITUD,
+                Hu08.longitud AS LONGITUD,
+                Hu08.direccion AS DIRECCION,
+                Hu08.codigo AS CODIGO,
+                Hu08.logo AS LOGO,
+                Hu08.nombre AS NOMBRE,
+                Hu08.valor AS VALOR,
+                e.nombre AS ESTADO,
+                Hu08.cantidad AS CANTIDAD,
+                Hu09.archivo AS ARCHIVO
                 FROM AppBundle:MsvInventarioSenial Hu08
                 JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
                 JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
@@ -94,12 +110,78 @@ class MsvInventarioSenialRepository extends \Doctrine\ORM\EntityRepository
     public function getFull(){
         $em = $this->getEntityManager();
 
-            $dql = "SELECT Hu08
+        $dql = "SELECT Hu08.id AS ID,
+                i.numero AS NUMERO_INVENTARIO,
+                i.fecha AS FECHA_INVENTARIO,
+                Hu08.fecha AS FECHA_INGRESO,
+                Hu08.unidad AS UNIDAD,
+                c.nombre AS COLOR,
+                c.hex AS HEX,
+                Hu08.latitud AS LATITUD,
+                Hu08.longitud AS LONGITUD,
+                Hu08.direccion AS DIRECCION,
+                Hu08.codigo AS CODIGO,
+                Hu08.logo AS LOGO,
+                Hu08.nombre AS NOMBRE,
+                Hu08.valor AS VALOR,
+                e.nombre AS ESTADO,
+                Hu08.cantidad AS CANTIDAD,
+                Hu09.archivo AS ARCHIVO
                 FROM AppBundle:MsvInventarioSenial Hu08
                 JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
                 JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
                 JOIN AppBundle:CfgTipoColor c WITH Hu08.tipoColor = c.id
                 JOIN AppBundle:CfgTipoEstado e WITH Hu08.tipoEstado = e.id";
+
+        $consulta = $em->createQuery($dql);
+
+        return $consulta->getResult();
+    }
+
+    //Get the inventory of signals inventory
+    public function getFullInv(){
+        $em = $this->getEntityManager();
+
+            $dql = "SELECT Hu08.id AS ID,
+                i.numero AS NUMERO_INVENTARIO,
+                i.fecha AS FECHA_INVENTARIO,
+                d.nombre AS TIPO_DESTINO,
+                (CASE
+                 WHEN (d.id = 1)
+                 THEN b.nombre
+                 ELSE m.nombre
+                 END) AS NOMBRE_DESTINO,
+                s.nombre AS TIPO,
+                Hu08.fecha AS FECHA_INGRESO,
+                Hu08.unidad AS UNIDAD,
+                c.nombre AS COLOR,
+                c.hex AS HEX,
+                Hu08.latitud AS LATITUD,
+                Hu08.longitud AS LONGITUD,
+                Hu08.codigo AS CODIGO,
+                Hu08.logo AS LOGO,
+                Hu08.nombre AS NOMBRE,
+                Hu08.valor AS VALOR,
+                e.nombre AS ESTADO,
+                Hu08.cantidad AS CANTIDAD,
+                Hu09.archivo AS ARCHIVO
+                FROM AppBundle:MsvInventarioSenial Hu08
+                JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
+                JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
+                JOIN AppBundle:CfgTipoColor c WITH Hu08.tipoColor = c.id
+                JOIN AppBundle:CfgTipoEstado e WITH Hu08.tipoEstado = e.id
+                JOIN AppBundle:CfgTipoDestino d WITH Hu09.tipoDestino = d.id
+                JOIN AppBundle:CfgTipoSenial s WITH Hu09.tipoSenial = s.id
+                LEFT JOIN AppBundle:CfgBodega b WITH Hu09.xDestino = (CASE
+                                    WHEN (d.id = 1)
+                                    THEN b.id
+                                    ELSE ''
+                                    END)
+                LEFT JOIN AppBundle:Municipio m WITH Hu09.xDestino = (CASE
+                                    WHEN (d.id = 2)
+                                    THEN m.id
+                                    ELSE ''
+                                    END)";
 
         $consulta = $em->createQuery($dql);
 
@@ -117,12 +199,46 @@ class MsvInventarioSenialRepository extends \Doctrine\ORM\EntityRepository
 
         $em = $this->getEntityManager();
 
-        $dql = "SELECT Hu08
+        $dql = "SELECT Hu08.id AS ID,
+                i.numero AS NUMERO_INVENTARIO,
+                i.fecha AS FECHA_INVENTARIO,
+                d.nombre AS TIPO_DESTINO,
+                (CASE
+                 WHEN (d.id = 1)
+                 THEN b.nombre
+                 ELSE m.nombre
+                 END) AS NOMBRE_DESTINO,
+                s.nombre AS TIPO,
+                Hu08.fecha AS FECHA_INGRESO,
+                Hu08.unidad AS UNIDAD,
+                c.nombre AS COLOR,
+                c.hex AS HEX,
+                Hu08.latitud AS LATITUD,
+                Hu08.longitud AS LONGITUD,
+                Hu08.codigo AS CODIGO,
+                Hu08.logo AS LOGO,
+                Hu08.nombre AS NOMBRE,
+                Hu08.valor AS VALOR,
+                e.nombre AS ESTADO,
+                Hu08.cantidad AS CANTIDAD,
+                Hu09.archivo AS ARCHIVO
                 FROM AppBundle:MsvInventarioSenial Hu08
                 JOIN AppBundle:MsvSenial Hu09 WITH Hu09.inventarioSenialId = Hu08.id
                 JOIN AppBundle:CfgInventario i WITH Hu08.inventario = i.id
                 JOIN AppBundle:CfgTipoColor c WITH Hu08.tipoColor = c.id
                 JOIN AppBundle:CfgTipoEstado e WITH Hu08.tipoEstado = e.id
+                JOIN AppBundle:CfgTipoDestino d WITH Hu09.tipoDestino = d.id
+                JOIN AppBundle:CfgTipoSenial s WITH Hu09.tipoSenial = s.id
+                LEFT JOIN AppBundle:CfgBodega b WITH Hu09.xDestino = (CASE
+                                    WHEN (d.id = 1)
+                                    THEN b.id
+                                    ELSE ''
+                                    END)
+                LEFT JOIN AppBundle:Municipio m WITH Hu09.xDestino = (CASE
+                                    WHEN (d.id = 2)
+                                    THEN m.id
+                                    ELSE ''
+                                    END)
                 WHERE ((i.id = :idInv)
                 AND (i.fecha = :dateInv)
                 AND (Hu09.tipoSenial = :typeSen))";

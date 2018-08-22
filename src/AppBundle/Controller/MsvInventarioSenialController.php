@@ -415,7 +415,7 @@ class MsvInventarioSenialController extends Controller
     }
 
     /**
-     * Lists all msvSenial entities.
+     * Lists all msvInventarioSenial entities.
      *
      * @Route("/export", name="msvInventarioSenial_export")
      * @Method("GET")
@@ -436,59 +436,70 @@ class MsvInventarioSenialController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $msvSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getFull();
+        $msvInventarioSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getFullInv();
+
+        $destino = '';
+        foreach ($msvInventarioSenial as $item) {
+            $destino = strtoupper($item['TIPO_DESTINO']);
+        }
 
         $row = 1;
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('A'.$row, "ID")
             ->setCellValue('B'.$row, "# INVENTARIO")
             ->setCellValue('C'.$row, "FECHA DE INVENTARIO")
-            ->setCellValue('D'.$row, "FECHA DE INGRESO")
-            ->setCellValue('E'.$row, "UNIDAD")
-            ->setCellValue('F'.$row, "COLOR")
-            ->setCellValue('G'.$row, "LATITUD")
-            ->setCellValue('H'.$row, "LONGITUD")
-            ->setCellValue('I'.$row, "CODIGO")
-            ->setCellValue('J'.$row, "LOGO")
-            ->setCellValue('K'.$row, "NOMBRE")
-            ->setCellValue('L'.$row, "VALOR")
-            ->setCellValue('M'.$row, "ESTADO")
-            ->setCellValue('N'.$row, "CANTIDAD");
+            ->setCellValue('D'.$row, $destino)
+            ->setCellValue('E'.$row, "TIPO")
+            ->setCellValue('F'.$row, "FECHA DE INGRESO")
+            ->setCellValue('G'.$row, "UNIDAD")
+            ->setCellValue('H'.$row, "COLOR")
+            ->setCellValue('I'.$row, "LATITUD")
+            ->setCellValue('J'.$row, "LONGITUD")
+            ->setCellValue('K'.$row, "CODIGO")
+            ->setCellValue('L'.$row, "LOGO")
+            ->setCellValue('M'.$row, "NOMBRE")
+            ->setCellValue('N'.$row, "VALOR")
+            ->setCellValue('O'.$row, "ESTADO")
+            ->setCellValue('P'.$row, "CANTIDAD")
+            ->setCellValue('Q'.$row, "COMPROBANTE/NOTA");
 
         $row = 2;
-        foreach ($msvSenial as $item) {
+        foreach ($msvInventarioSenial as $item) {
 
             $phpExcelObject->setActiveSheetIndex(0)
-                ->setCellValue('A'.$row, $item->getId())
-                ->setCellValue('B'.$row, $item->getInventario()->getNumero())
-                ->setCellValue('C'.$row, $item->getInventario()->getFecha())
-                ->setCellValue('D'.$row, $item->getFecha())
-                ->setCellValue('E'.$row, $item->getUnidad())
-                ->setCellValue('F'.$row, $item->getTipoColor()->getNombre())
-                ->setCellValue('G'.$row, $item->getLatitud())
-                ->setCellValue('H'.$row, $item->getLongitud())
-                ->setCellValue('I'.$row, $item->getCodigo())
-                ->setCellValue('J'.$row, '')
-                ->setCellValue('K'.$row, $item->getNombre())
-                ->setCellValue('L'.$row, $item->getValor())
-                ->setCellValue('M'.$row, $item->getTipoEstado()->getNombre())
-                ->setCellValue('N'.$row, $item->getCantidad());
+                ->setCellValue('A'.$row, $item['ID'])
+                ->setCellValue('B'.$row, $item['NUMERO_INVENTARIO'])
+                ->setCellValue('C'.$row, $item['FECHA_INVENTARIO'])
+                ->setCellValue('D'.$row, $item['NOMBRE_DESTINO'])
+                ->setCellValue('E'.$row, $item['TIPO'])
+                ->setCellValue('F'.$row, $item['FECHA_INGRESO'])
+                ->setCellValue('G'.$row, $item['UNIDAD'])
+                ->setCellValue('H'.$row, $item['COLOR'])
+                ->setCellValue('I'.$row, $item['LATITUD'])
+                ->setCellValue('J'.$row, $item['LONGITUD'])
+                ->setCellValue('K'.$row, $item['CODIGO'])
+                ->setCellValue('L'.$row, '')
+                ->setCellValue('M'.$row, $item['NOMBRE'])
+                ->setCellValue('N'.$row, $item['VALOR'])
+                ->setCellValue('O'.$row, $item['ESTADO'])
+                ->setCellValue('P'.$row, $item['CANTIDAD'])
+                ->setCellValue('Q'.$row, (($item['ARCHIVO']!='')?'SI':'NO'));
 
             $objDrawing = new \PHPExcel_Worksheet_Drawing();
             $objDrawing->setName('PHPExcel image');
             $objDrawing->setDescription('PHPExcel image');
-            $objDrawing->setPath(__DIR__.'/../../../web/logos/'.$item->getLogo());
+            $objDrawing->setPath(__DIR__.'/../../../web/logos/'.$item['LOGO']);
             $objDrawing->setHeight(25);
-            $objDrawing->setCoordinates('J'.$row);
+            $objDrawing->setCoordinates('L'.$row);
             $objDrawing->setOffsetX(100);
             $objDrawing->setWorksheet($phpExcelObject->getActiveSheet());
 
             $phpExcelObject->getActiveSheet()
-                ->getStyle('F'.$row)
+                ->getStyle('G'.$row)
                 ->getFill()
                 ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
                 ->getStartColor()
-                ->setRGB(substr($item->getTipoColor()->getHex(), 1));
+                ->setRGB(substr($item['HEX'], 1));
 
             $row ++;
         }
@@ -538,59 +549,70 @@ class MsvInventarioSenialController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $msvSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getByInv($data);
+        $msvInventarioSenial = $em->getRepository('AppBundle:MsvInventarioSenial')->getByInv($data);
+
+        $destino = '';
+        foreach ($msvInventarioSenial as $item) {
+        $destino = strtoupper($item['TIPO_DESTINO']);
+        }
 
         $row = 1;
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('A'.$row, "ID")
             ->setCellValue('B'.$row, "# INVENTARIO")
             ->setCellValue('C'.$row, "FECHA DE INVENTARIO")
-            ->setCellValue('D'.$row, "FECHA DE INGRESO")
-            ->setCellValue('E'.$row, "UNIDAD")
-            ->setCellValue('F'.$row, "COLOR")
-            ->setCellValue('G'.$row, "LATITUD")
-            ->setCellValue('H'.$row, "LONGITUD")
-            ->setCellValue('I'.$row, "CODIGO")
-            ->setCellValue('J'.$row, "LOGO")
-            ->setCellValue('K'.$row, "NOMBRE")
-            ->setCellValue('L'.$row, "VALOR")
-            ->setCellValue('M'.$row, "ESTADO")
-            ->setCellValue('N'.$row, "CANTIDAD");
+            ->setCellValue('D'.$row, $destino)
+            ->setCellValue('E'.$row, "TIPO")
+            ->setCellValue('F'.$row, "FECHA DE INGRESO")
+            ->setCellValue('G'.$row, "UNIDAD")
+            ->setCellValue('H'.$row, "COLOR")
+            ->setCellValue('I'.$row, "LATITUD")
+            ->setCellValue('J'.$row, "LONGITUD")
+            ->setCellValue('K'.$row, "CODIGO")
+            ->setCellValue('L'.$row, "LOGO")
+            ->setCellValue('M'.$row, "NOMBRE")
+            ->setCellValue('N'.$row, "VALOR")
+            ->setCellValue('O'.$row, "ESTADO")
+            ->setCellValue('P'.$row, "CANTIDAD")
+            ->setCellValue('Q'.$row, "COMPROBANTE/NOTA");
 
         $row = 2;
-        foreach ($msvSenial as $item) {
+        foreach ($msvInventarioSenial as $item) {
 
             $phpExcelObject->setActiveSheetIndex(0)
-                ->setCellValue('A'.$row, $item->getId())
-                ->setCellValue('B'.$row, $item->getInventario()->getNumero())
-                ->setCellValue('C'.$row, $item->getInventario()->getFecha())
-                ->setCellValue('D'.$row, $item->getFecha())
-                ->setCellValue('E'.$row, $item->getUnidad())
-                ->setCellValue('F'.$row, $item->getTipoColor()->getNombre())
-                ->setCellValue('G'.$row, $item->getLatitud())
-                ->setCellValue('H'.$row, $item->getLongitud())
-                ->setCellValue('I'.$row, $item->getCodigo())
-                ->setCellValue('J'.$row, '')
-                ->setCellValue('K'.$row, $item->getNombre())
-                ->setCellValue('L'.$row, $item->getValor())
-                ->setCellValue('M'.$row, $item->getTipoEstado()->getNombre())
-                ->setCellValue('N'.$row, $item->getCantidad());
+                ->setCellValue('A'.$row, $item['ID'])
+                ->setCellValue('B'.$row, $item['NUMERO_INVENTARIO'])
+                ->setCellValue('C'.$row, $item['FECHA_INVENTARIO'])
+                ->setCellValue('D'.$row, $item['NOMBRE_DESTINO'])
+                ->setCellValue('E'.$row, $item['TIPO'])
+                ->setCellValue('F'.$row, $item['FECHA_INGRESO'])
+                ->setCellValue('G'.$row, $item['UNIDAD'])
+                ->setCellValue('H'.$row, $item['COLOR'])
+                ->setCellValue('I'.$row, $item['LATITUD'])
+                ->setCellValue('J'.$row, $item['LONGITUD'])
+                ->setCellValue('K'.$row, $item['CODIGO'])
+                ->setCellValue('L'.$row, '')
+                ->setCellValue('M'.$row, $item['NOMBRE'])
+                ->setCellValue('N'.$row, $item['VALOR'])
+                ->setCellValue('O'.$row, $item['ESTADO'])
+                ->setCellValue('P'.$row, $item['CANTIDAD'])
+                ->setCellValue('Q'.$row, (($item['ARCHIVO']!='')?'SI':'NO'));
 
             $objDrawing = new \PHPExcel_Worksheet_Drawing();
             $objDrawing->setName('PHPExcel image');
             $objDrawing->setDescription('PHPExcel image');
-            $objDrawing->setPath(__DIR__.'/../../../web/logos/'.$item->getLogo());
+            $objDrawing->setPath(__DIR__.'/../../../web/logos/'.$item['LOGO']);
             $objDrawing->setHeight(25);
-            $objDrawing->setCoordinates('J'.$row);
+            $objDrawing->setCoordinates('L'.$row);
             $objDrawing->setOffsetX(100);
             $objDrawing->setWorksheet($phpExcelObject->getActiveSheet());
 
             $phpExcelObject->getActiveSheet()
-                ->getStyle('F'.$row)
+                ->getStyle('G'.$row)
                 ->getFill()
                 ->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)
                 ->getStartColor()
-                ->setRGB(substr($item->getTipoColor()->getHex(), 1));
+                ->setRGB(substr($item['HEX'], 1));
 
             $row ++;
         }
