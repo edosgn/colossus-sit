@@ -153,10 +153,14 @@ class CfgTipoEstadoController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
         $tiposEstado = $em->getRepository('AppBundle:CfgTipoEstado')->findBy(
-            array('estado' => 1)
+            array('estado' => true)
         );
+
+        $response = null;
+
         foreach ($tiposEstado as $key => $cfgTipoEstado) {
             $response[$key] = array(
                 'value' => $cfgTipoEstado->getId(),

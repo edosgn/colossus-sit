@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "1f64c55ac9554b8f06b79b3195cbc3a1",
@@ -1304,17 +1304,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oroinc/doctrine-extensions.git",
-                "reference": "96e1eae08a6f374098f1bdd83cc5903f496a9086"
+                "reference": "3bbea2a83a42f4ac662dedb354fdc923401476ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oroinc/doctrine-extensions/zipball/96e1eae08a6f374098f1bdd83cc5903f496a9086",
-                "reference": "96e1eae08a6f374098f1bdd83cc5903f496a9086",
+                "url": "https://api.github.com/repos/oroinc/doctrine-extensions/zipball/3bbea2a83a42f4ac662dedb354fdc923401476ce",
+                "reference": "3bbea2a83a42f4ac662dedb354fdc923401476ce",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": ">=2.2.3",
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "doctrine/data-fixtures": "^1.0",
@@ -1351,7 +1351,7 @@
                 "postgresql",
                 "type"
             ],
-            "time": "2017-12-14T15:11:28+00:00"
+            "time": "2018-08-15T09:13:47+00:00"
         },
         {
             "name": "paragonie/random_compat",

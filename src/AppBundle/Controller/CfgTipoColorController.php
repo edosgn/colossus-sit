@@ -153,10 +153,13 @@ class CfgTipoColorController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
         $tiposColor = $em->getRepository('AppBundle:CfgTipoColor')->findBy(
             array('estado' => 1), array('nombre' => 'ASC')
         );
+        $response = null;
+
         foreach ($tiposColor as $key => $cfgTipoColor) {
             $response[$key] = array(
                 'value' => $cfgTipoColor->getId(),
