@@ -10,13 +10,28 @@ namespace AppBundle\Repository;
  */
 class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
 {
+    // public function getFacturaModulo($moduloId, $facturaId, $vehiculoId)
+    // {
+    //     $em = $this->getEntityManager();
+    //     $dql = "SELECT tf
+    //         FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
+    //         WHERE tf.factura = f.id
+    //         AND f.id = :facturaId";
+    //     $consulta = $em->createQuery($dql);
+
+    //     $consulta->setParameters(array(
+    //         'facturaId' => $facturaId,
+    //     ));
+    //     return $consulta->getResult();
+
+    // }
     public function getFacturaModulo($moduloId, $facturaId, $vehiculoId)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT tf
             FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
             WHERE tf.factura = f.id
-            AND f.id = :facturaId";
+            AND f.numero = :facturaId"; 
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

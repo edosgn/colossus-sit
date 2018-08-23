@@ -166,6 +166,40 @@ class InsumoController extends Controller
     }
 
     /**
+     * Finds and displays a insumo entity.
+     *
+     * @Route("/show/loteInsumo", name="insumo_show_loteInsumo")
+     * @Method({"GET", "POST"})
+     */
+    public function showLoteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
+            $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
+                array('tipo'=>'sustrato',)
+            );
+    
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'datos' => $insumos,
+                'msj' => "insumo creado con exito", 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Displays a form to edit an existing insumo entity.
      *
      * @Route("/{id}/edit", name="insumo_edit")
@@ -193,21 +227,35 @@ class InsumoController extends Controller
     /**
      * Deletes a insumo entity.
      *
-     * @Route("/{id}", name="insumo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="insumo_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, Insumo $insumo)
+    public function deleteAction(Request $request,$id)
     {
-        $form = $this->createDeleteForm($insumo);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($insumo);
-            $em->flush();
-        }
+            $insumo = $em->getRepository('AppBundle:Insumo')->find($id);
 
-        return $this->redirectToRoute('insumo_index');
+            $insumo->setEstado('dañado');
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($insumo);
+            $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'msj' => "lase eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
