@@ -355,18 +355,18 @@ class MpersonalFuncionarioController extends Controller
            
             $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearch($params);
                 
-            if ($funcionarios == null) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Registro no encontrado",  
-                );
-            }else{
+            if ($funcionarios) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado", 
+                    'message' => count($funcionarios)." ¡Registros encontrados!", 
                     'data'=> $funcionarios,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "¡No existen funcionarios, por favor registrelo!",  
                 );
             }
         }else{
@@ -405,25 +405,25 @@ class MpersonalFuncionarioController extends Controller
                     $usuario->getId()
                 );
                     
-                if ($ciudadano == null) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "Registro no encontrado", 
-                    );
-                }else{
+                if ($ciudadano) {
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Registro encontrado", 
                         'data'=> $ciudadano,
                     );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!", 
+                    );
                 }
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado", 
+                    'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!", 
                 );
             }
 

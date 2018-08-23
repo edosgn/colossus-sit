@@ -294,7 +294,7 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            $numeroFactura = $params->numeroFactura;
+            /*$numeroFactura = $params->numeroFactura;
             $fechaFactura = $params->fechaFactura;
             $valor = $params->valor;
             $linea = $params->linea;
@@ -315,14 +315,14 @@ class VehiculoController extends Controller
             $vin = $params->vin;
             $numeroPasajeros = $params->numeroPasajeros;
             $radioAccion = $params->radioAccion;
-            $modalidadTransporte = $params->modalidadTransporte;
+            $modalidadTransporte = $params->modalidadTransporte;*/
 
             // $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
 
             if ($vehiculo != null) {
 
-                $fechaFactura = (isset($params->fechaFactura)) ? $params->fechaFactura : null;
+                /*$fechaFactura = (isset($params->fechaFactura)) ? $params->fechaFactura : null;
                 $fechaFactura = new \DateTime($fechaFactura);
                 $fechaManifiesto = (isset($params->fechaManifiesto)) ? $params->fechaManifiesto : null;
                 $fechaManifiesto = new \DateTime($fechaManifiesto);
@@ -364,7 +364,7 @@ class VehiculoController extends Controller
                 // var_dump($params);
                 //  die();
 
-                $em->flush();
+                $em->flush();*/
 
                 $response = array(
                     'status' => 'success',
