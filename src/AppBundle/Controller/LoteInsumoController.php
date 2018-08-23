@@ -255,7 +255,7 @@ class LoteInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
+        if ($authCheck== true) { 
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
@@ -268,6 +268,49 @@ class LoteInsumoController extends Controller
                     'code' => 200,
                     'msj' => "Lote encontrado con exito", 
                     'data' => $loteInsumo, 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "no hay sustratos pa la sede", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida para editar banco", 
+            );
+        }
+        return $helpers->json($response);
+    }
+
+
+    /**
+     * Lists all loteInsumo entities.
+     *
+     * @Route("/insumo/lote/sedeOperativa", name="loteinsumoInsumosSedeOperativa_index")
+     * @Method({"GET", "POST"})
+     */
+    public function loteInsumoSedeOperativaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) { 
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $lotesInsumo = $em->getRepository('AppBundle:LoteInsumo')->findBy(
+                array('estado' => 'registrado','sedeOperativa'=> $params->sedeOperativa,'estado'=>'asignado')
+            );
+            if ($lotesInsumo!=null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Lote encontrado con exito", 
+                    'data' => $lotesInsumo, 
                 );
             }else{
                 $response = array(
