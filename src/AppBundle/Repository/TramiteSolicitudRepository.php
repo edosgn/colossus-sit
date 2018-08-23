@@ -114,13 +114,8 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
         $dql = "SELECT ts
             FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
-            WHERE ((ts.tramiteFactura = tf.id)
-            AND (tf.factura = f.id)
-            AND (tf.tramitePrecio = tp.id)
-            AND (tp.modulo = :moduloId)
-
-            )
-            ";
+            WHERE tf.factura = f.id AND tf.tramitePrecio = tp.id
+            AND tp.modulo = :moduloId";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
