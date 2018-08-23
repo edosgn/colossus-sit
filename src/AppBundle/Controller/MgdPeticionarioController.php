@@ -401,18 +401,18 @@ class MgdPeticionarioController extends Controller
                 )
             );
 
-            if ($peticionario == null) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Registro no encontrado", 
-                );
-            }else{
+            if ($peticionario) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $peticionario,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!", 
                 );
             }
 
