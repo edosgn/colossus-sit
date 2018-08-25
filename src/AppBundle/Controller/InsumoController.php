@@ -86,6 +86,9 @@ class InsumoController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $rangoInicio = (isset($params->rangoInicio)) ? $params->rangoInicio : null;
+
+            var_dump($params->sedeOperativaId);
+            die();
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
             $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->find($params->loteInsumoId);
 
