@@ -136,23 +136,17 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setVehiculo($vehiculo);
             }
 
-            if ($params->facturaId && $params->tramiteFormulario) {
-
-
+            if ($params->datos->facturaId && $params->datos->tramiteFormulario) {
                 $factura = $em->getRepository('AppBundle:Factura')->find(
-                    $params->facturaId
+                    $params->datos->facturaId
                 );
 
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
-                    $params->tramiteFormulario
+                    $params->datos->tramiteFormulario
                 );
 
-                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->findOneBy(
-                    array(
-                        'factura' => $factura->getId(),
-                        'tramite' => $tramite->getId()
-                    )
-                );
+                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(),$tramite->getId());
+
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                 $tramiteFactura->setRealizado(true);
                 $em->flush();

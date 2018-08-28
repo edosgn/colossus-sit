@@ -41,4 +41,23 @@ class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    public function getByFacturaAndTramite($facturaId, $tramiteId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT tf
+            FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Tramite t, AppBundle:TramitePrecio tp
+            WHERE tf.factura = f.id
+            AND tf.tramitePrecio = tp.id
+            AND tp.tramite = t.id
+            AND t.id = :tramiteId
+            AND f.id = :facturaId"; 
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'facturaId' => $facturaId,
+            'tramiteId' => $tramiteId,
+        ));
+        return $consulta->getOneOrNullResult();
+
+    }
 }
