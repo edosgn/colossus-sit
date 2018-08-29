@@ -231,17 +231,22 @@ class CfgTipoProcesoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $tipoProcesos = $em->getRepository('AppBundle:CfgTipoProceso')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($tipoProcesos as $key => $tipoProceso) {
-        $response[$key] = array(
-            'value' => $tipoProceso->getId(),
-            'label' => $tipoProceso->getNombre(),
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        $tipoProcesos = $em->getRepository('AppBundle:CfgTipoProceso')->findBy(
+            array('estado' => 1)
+        );
+
+        $response = null;
+        
+        foreach ($tipoProcesos as $key => $tipoProceso) {
+            $response[$key] = array(
+                'value' => $tipoProceso->getId(),
+                'label' => $tipoProceso->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+
+        return $helpers->json($response);
     }
 }
