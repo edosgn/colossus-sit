@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Vehiculo;
 use AppBundle\Entity\PropietarioVehiculo;
+use AppBundle\Entity\CfgPlaca;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -87,6 +88,7 @@ class VehiculoController extends Controller
             $claseId = $params->vehiculo->claseId;
             $pignorado = (isset($params->vehiculo->pignorado)) ? $params->vehiculo->pignorado : false;
             $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
+            $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
             $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
@@ -106,12 +108,27 @@ class VehiculoController extends Controller
 
             $fechaFactura = new \DateTime($fechaFactura);
 
-            // if ($params->vehiculo->placa) {
-            //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-            //         $params->vehiculo->placa
-            //     );
-            //     $vehiculo->setCfgPlaca($CfgPlaca);
-            // }
+            if ($placa) {
+                $CfgPlacaBd = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($params->vehiculo->placa);
+                if ($CfgPlacaBd) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 200,
+                        'msj' => "La placa ".$params->vehiculo->placa.' ya se encontra registrada'.'para la sede '.$CfgPlacaBd->getSedeOperativa()->getNombre(),
+                    );
+                    return $helpers->json($response);
+                }else{
+                    $cfgPlaca = new CfgPlaca();
+                    $sedeOperativaCfgPlaca = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+                    $cfgPlaca->setClase($clase);
+                    $cfgPlaca->setSedeOperativa($sedeOperativaCfgPlaca);
+                    $cfgPlaca->setNumero($params->vehiculo->placa);
+                    $cfgPlaca->setEstado('asignado');
+                    $em->persist($cfgPlaca);
+                    $em->flush();
+                    $vehiculo->setPlaca($cfgPlaca);
+                }
+            }
             $vehiculo->setNumeroFactura($numeroFactura);
             $vehiculo->setfechaFactura($fechaFactura);
             $vehiculo->setValor($valor);
@@ -143,47 +160,6 @@ class VehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($vehiculo);
             $em->flush();
-            $fechaActual = new \DateTime(date('Y-m-d'));
-            foreach ($params->datosPropietarios->propietariosEmpresas as $key => $empresa) {
-                $empresaNueva = $em->getRepository('AppBundle:Empresa')->findOneBy(
-                    array(
-                            'estado' => 1,
-                            'nit' => $empresa->nit
-                        )
-                    );
-                    
-                    $propietarioVehiculo = new PropietarioVehiculo();
-                    $propietarioVehiculo->setLicenciaTransito(null);
-                    $propietarioVehiculo->setFechaPropiedadInicial($fechaActual);
-                    $propietarioVehiculo->setEstadoPropiedad(true);
-                    $propietarioVehiculo->setPermisoTramite($empresa->permisoTramite);
-                    $propietarioVehiculo->setEmpresa($empresaNueva);
-                    $propietarioVehiculo->setVehiculo($vehiculo);
-                    $propietarioVehiculo->setEstado(true);
-                    $em->persist($propietarioVehiculo);
-                    $em->flush();
-            }
-
-            foreach ($params->datosPropietarios->propietariosCiudadanos as $key => $ciudadano) {
-
-                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
-                array(
-                        'estado' => 'Activo',
-                        'identificacion' => $ciudadano->identificacion
-                    )
-                );
-                
-                $propietarioVehiculo = new PropietarioVehiculo();
-                $propietarioVehiculo->setLicenciaTransito(null);
-                $propietarioVehiculo->setFechaPropiedadInicial($fechaActual);
-                $propietarioVehiculo->setEstadoPropiedad(true);
-                $propietarioVehiculo->setPermisoTramite($ciudadano->permisoTramite);
-                $propietarioVehiculo->setCiudadano($usuario->getCiudadano());
-                $propietarioVehiculo->setVehiculo($vehiculo);
-                $propietarioVehiculo->setEstado(true);
-                $em->persist($propietarioVehiculo);
-                $em->flush();
-            }
 
             $response = array(
                 'status' => 'success',

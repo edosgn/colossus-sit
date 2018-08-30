@@ -456,6 +456,8 @@ class MpersonalFuncionarioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             
+            // var_dump($params);
+            // die();
             
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
