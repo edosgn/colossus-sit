@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Vehiculo;
+use AppBundle\Entity\PropietarioVehiculo;
+use AppBundle\Entity\CfgPlaca;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -60,30 +62,33 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+            // var_dump($params);
+            // die();
 
-            $numeroFactura = $params->numeroFactura;
-            $fechaFactura = $params->fechaFactura;
-            $valor = $params->valor;
-            $numeroManifiesto = $params->numeroManifiesto;
-            $cilindraje = $params->cilindraje;
-            $modelo = $params->modelo;
-            $motor = $params->motor;
-            $chasis = $params->chasis;
-            $serie = $params->serie;
-            // $tipoVehiculo = $params->tipoVehiculo;
+            $numeroFactura = $params->vehiculo->numeroFactura;
+            $fechaFactura = $params->vehiculo->fechaFactura;
+            $valor = $params->vehiculo->valor;
+            $numeroManifiesto = $params->vehiculo->numeroManifiesto;
+            $cilindraje = $params->vehiculo->cilindraje;
+            $modelo = $params->vehiculo->modelo;
+            $motor = $params->vehiculo->motor;
+            $chasis = $params->vehiculo->chasis;
+            $serie = $params->vehiculo->serie;
+            // $tipoVehiculo = $params->vehiculo->tipoVehiculo;
 
-            $vin = $params->vin;
-            $numeroPasajeros = $params->numeroPasajeros;
-            $municipioId = $params->municipioId;
-            $lineaId = $params->lineaId;
-            $servicioId = $params->servicioId;
-            $colorId = $params->colorId;
-            $combustibleId = $params->combustibleId;
-            $carroceriaId = $params->carroceriaId;
-            $sedeOperativaId = $params->sedeOperativaId;
-            $claseId = $params->claseId;
-            $pignorado = (isset($params->pignorado)) ? $params->pignorado : false;
-            $cancelado = (isset($params->cancelado)) ? $params->cancelado : false;
+            $vin = $params->vehiculo->vin;
+            $numeroPasajeros = $params->vehiculo->numeroPasajeros;
+            $municipioId = $params->vehiculo->municipioId;
+            $lineaId = $params->vehiculo->lineaId;
+            $servicioId = $params->vehiculo->servicioId;
+            $colorId = $params->vehiculo->colorId;
+            $combustibleId = $params->vehiculo->combustibleId;
+            $carroceriaId = $params->vehiculo->carroceriaId;
+            $sedeOperativaId = $params->vehiculo->sedeOperativaId;
+            $claseId = $params->vehiculo->claseId;
+            $pignorado = (isset($params->vehiculo->pignorado)) ? $params->vehiculo->pignorado : false;
+            $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
+            $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
             $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
@@ -93,27 +98,42 @@ class VehiculoController extends Controller
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
             $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find(
-                $params->radioAccionId
+                $params->vehiculo->radioAccionId
             );
             $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find(
-                $params->modalidadTransporteId
+                $params->vehiculo->modalidadTransporteId
             );
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
             $vehiculo = new Vehiculo();
 
             $fechaFactura = new \DateTime($fechaFactura);
 
-            // if ($params->placa) {
-            //     $CfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
-            //         $params->placa
-            //     );
-            //     $vehiculo->setCfgPlaca($CfgPlaca);
-            // }
+            if ($placa) {
+                $CfgPlacaBd = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($params->vehiculo->placa);
+                if ($CfgPlacaBd) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 200,
+                        'msj' => "La placa ".$params->vehiculo->placa.' ya se encontra registrada'.'para la sede '.$CfgPlacaBd->getSedeOperativa()->getNombre(),
+                    );
+                    return $helpers->json($response);
+                }else{
+                    $cfgPlaca = new CfgPlaca();
+                    $sedeOperativaCfgPlaca = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+                    $cfgPlaca->setClase($clase);
+                    $cfgPlaca->setSedeOperativa($sedeOperativaCfgPlaca);
+                    $cfgPlaca->setNumero($params->vehiculo->placa);
+                    $cfgPlaca->setEstado('asignado');
+                    $em->persist($cfgPlaca);
+                    $em->flush();
+                    $vehiculo->setPlaca($cfgPlaca);
+                }
+            }
             $vehiculo->setNumeroFactura($numeroFactura);
             $vehiculo->setfechaFactura($fechaFactura);
             $vehiculo->setValor($valor);
             $vehiculo->setNumeroManifiesto($numeroManifiesto);
-            $vehiculo->setFechaManifiesto(new \DateTime($params->fechaManifiesto));
+            $vehiculo->setFechaManifiesto(new \DateTime($params->vehiculo->fechaManifiesto));
             $vehiculo->setCilindraje($cilindraje);
             $vehiculo->setModelo($modelo);
             $vehiculo->setMotor($motor);
@@ -146,7 +166,7 @@ class VehiculoController extends Controller
                 'code' => 200,
                 'msj' => "Vehiculo creado con exito",
             );
-
+ 
             // }
         } else {
             $response = array(
