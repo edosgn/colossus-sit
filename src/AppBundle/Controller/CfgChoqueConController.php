@@ -234,10 +234,13 @@ class CfgChoqueConController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
         $cfgChoquesCon = $em->getRepository('AppBundle:CfgChoqueCon')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
 
         foreach ($cfgChoquesCon as $key => $cfgChoqueCon) {
             $response[$key] = array(

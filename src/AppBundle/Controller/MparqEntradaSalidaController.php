@@ -76,23 +76,27 @@ class MparqEntradaSalidaController extends Controller
                 );
 
                 if (!$grua) {
-                    $grua = new MparqGrua();
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La grúa no existe", 
+                    );
 
-                    $grua->setNumeroInterno($params->numeroGrua);
-                    $em->persist($grua);
-                    $em->flush();
+                    return $helpers->json($response);
                 }
 
                 $placa = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero(
                     $params->numeroPlaca
                 );
-                if (!$placa) {
-                    $placa = new CfgPlaca();
 
-                    $placa->setNumero($params->numeroPlaca);
-                    $placa->setEstado('Asignada');
-                    $em->persist($placa);
-                    $em->flush();
+                if (!$placa) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de placa digitado no existe", 
+                    );
+
+                    return $helpers->json($response);
                 }
 
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
@@ -100,30 +104,27 @@ class MparqEntradaSalidaController extends Controller
                 );
 
                 if (!$vehiculo) {
-                    $vehiculo = new Vehiculo();
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El vehiculo con el número de placa digitado no existe", 
+                    );
 
-                    $vehiculo->setPlaca($placa);
-                    $em->persist($vehiculo);
-                    $em->flush();
+                    return $helpers->json($response);
                 }
 
-                $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneByNumeroOrden(
+                $consecutivo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneByConsecutivo(
                     $params->numeroComparendo
                 );
 
                 if (!$comparendo) {
-                    $comparendo = new Comparendo();
-
-                    $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
-                        $params->funcionarioId
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de comparendo no existe", 
                     );
 
-                    $comparendo->setNumeroOrden($params->numeroComparendo);
-                    $comparendo->setVehiculo($vehiculo);
-                    $comparendo->setLugarInfraccion($params->lugarInmovilizacion);
-                    //$comparendo->setFuncionario($params->funcionarioId);
-                    $em->persist($comparendo);
-                    $em->flush();
+                    return $helpers->json($response);
                 }
 
                 $entradaSalida = new MparqEntradaSalida();
@@ -131,7 +132,7 @@ class MparqEntradaSalidaController extends Controller
                 $entradaSalida->setFechaIngreso(new \Datetime(date('Y-m-d h:m:s')));
                 $entradaSalida->setNumeroInventario($params->numeroInventario);
                 $entradaSalida->setGrua($grua);
-                $entradaSalida->setComparendo($comparendo);
+                //$entradaSalida->setComparendo($comparendo);
 
                 
                 $em->persist($entradaSalida);
@@ -140,14 +141,14 @@ class MparqEntradaSalidaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito",  
+                    'message' => "Registro creado con exito",  
                 );
             //}
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);
