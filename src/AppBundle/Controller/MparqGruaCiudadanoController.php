@@ -24,7 +24,7 @@ class MparqGruaCiudadanoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $gruaCiudadanos = $em->getRepository('AppBundle:MparqGruaCiudadano')->findByCiudadano(
+        $gruaCiudadanos = $em->getRepository('AppBundle:MparqGruaCiudadano')->findByGrua(
             $idGrua
         );
 

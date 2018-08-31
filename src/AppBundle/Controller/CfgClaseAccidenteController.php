@@ -235,10 +235,13 @@ class CfgClaseAccidenteController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
         $cfgClasesAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
 
         foreach ($cfgClasesAccidente as $key => $cfgClaseAccidente) {
             $response[$key] = array(

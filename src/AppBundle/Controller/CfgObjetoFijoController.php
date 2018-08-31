@@ -235,10 +235,13 @@ class CfgObjetoFijoController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
         $cfgObjetosFijos = $em->getRepository('AppBundle:CfgObjetoFijo')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
 
         foreach ($cfgObjetosFijos as $key => $cfgObjetoFijo) {
             $response[$key] = array(

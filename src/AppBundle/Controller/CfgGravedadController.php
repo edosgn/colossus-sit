@@ -235,10 +235,13 @@ class CfgGravedadController extends Controller
     public function selectAction()
     {
     $helpers = $this->get("app.helpers");
+
     $em = $this->getDoctrine()->getManager();
     $cfgGravedades = $em->getRepository('AppBundle:CfgGravedad')->findBy(
         array('estado' => 1)
     );
+
+    $response = null;
     
     foreach ($cfgGravedades as $key => $cfgGravedad) {
         $response[$key] = array(
