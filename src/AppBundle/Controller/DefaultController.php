@@ -29,29 +29,28 @@ class DefaultController extends Controller
         $fechaActual = strftime("%d de %B del %Y");
 
         $em = $this->getDoctrine()->getManager();
-
+        
         $asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
             1
         );
-        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
+        
+        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
             $placaId
-        );
+        ); 
+        
 
         $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
             $vehiculo->getId()
         );
 
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findBy(
-            array( 'vehiculo'=> $vehiculo->getId())
-        );
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo(7);
 
         $tramitesSolicitudArray = false;
-
+        
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
 
-            foreach ((array)$tramiteSolicitud->getDatos() as $key => $value) {
+            foreach ((array)$tramiteSolicitud->getResumen() as $key => $value) {
                 $data[] = $key.":".$value;
-                // var_dump($value); 
             }  
 
             $tramitesSolicitudArray[]= array(
