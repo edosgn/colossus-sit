@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new WhiteOctober\TCPDFBundle\WhiteOctoberTCPDFBundle(),
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new AppBundle\AppBundle(),
+            new JHWEB\VehiculoBundle\JHWEBVehiculoBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

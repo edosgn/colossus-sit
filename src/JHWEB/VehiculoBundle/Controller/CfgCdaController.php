@@ -1,23 +1,23 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\VehiculoBundle\Controller;
 
-use AppBundle\Entity\CfgComparendoEstado;
+use JHWEB\VehiculoBundle\Entity\CfgCda;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcomparendoestado controller.
+ * Cfgcda controller.
  *
- * @Route("cfgcomparendoestado")
+ * @Route("cfgcda")
  */
-class CfgComparendoEstadoController extends Controller
+class CfgCdaController extends Controller
 {
     /**
-     * Lists all cfgComparendoEstado entities.
+     * Lists all cfgCda entities.
      *
-     * @Route("/", name="cfgcomparendoestado_index")
+     * @Route("/", name="cfgcda_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgComparendoEstadoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $estados = $em->getRepository('AppBundle:CfgComparendoEstado')->findBy(
+        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($estados) {
+        if ($cdas) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($estados)." registros encontrados", 
-                'data'=> $estados,
+                'message' => count($cdas)." registros encontrados", 
+                'data'=> $cdas,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgComparendoEstadoController extends Controller
     }
 
     /**
-     * Creates a new cfgComparendoEstado entity.
+     * Creates a new cfgCda entity.
      *
-     * @Route("/new", name="cfgcomparendoestado_new")
+     * @Route("/new", name="cfgcda_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -55,6 +55,7 @@ class CfgComparendoEstadoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -66,13 +67,14 @@ class CfgComparendoEstadoController extends Controller
                     'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
-                $estado = new CfgComparendoEstado();
+                $cda = new CfgCda();
 
-                $estado->setNombre($params->nombre);
-                $estado->setActivo(true);
+                $cda->setNombre($params->nombre);
+                $cda->setNit($params->nit);
+                $cda->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
-                $em->persist($estado);
+                $em->persist($cda);
                 $em->flush();
 
                 $response = array(
@@ -92,25 +94,25 @@ class CfgComparendoEstadoController extends Controller
     }
 
     /**
-     * Finds and displays a cfgComparendoEstado entity.
+     * Finds and displays a cfgCda entity.
      *
-     * @Route("/{id}/show", name="cfgcomparendoestado_show")
+     * @Route("/{id}/show", name="cfgcda_show")
      * @Method("GET")
      */
-    public function showAction(CfgComparendoEstado $cfgComparendoEstado)
+    public function showAction(CfgCda $cfgCda)
     {
-        $deleteForm = $this->createDeleteForm($cfgComparendoEstado);
+        $deleteForm = $this->createDeleteForm($cfgCda);
 
-        return $this->render('cfgcomparendoestado/show.html.twig', array(
-            'cfgComparendoEstado' => $cfgComparendoEstado,
+        return $this->render('cfgcda/show.html.twig', array(
+            'cfgCda' => $cfgCda,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgComparendoEstado entity.
+     * Displays a form to edit an existing cfgCda entity.
      *
-     * @Route("/edit", name="cfgcomparendoestado_edit")
+     * @Route("/edit", name="cfgcda_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -124,10 +126,11 @@ class CfgComparendoEstadoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $estado = $em->getRepository("AppBundle:CfgComparendoEstado")->find($params->id);
+            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
 
-            if ($estado!=null) {
-                $estado->setNombre($params->nombre);
+            if ($cda) {
+                $cda->setNombre($params->nombre);
+                $cda->setNit($params->nit);
                 
                 $em->flush();
 
@@ -135,7 +138,7 @@ class CfgComparendoEstadoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $estado,
+                    'data'=> $cda,
                 );
             }else{
                 $response = array(
@@ -156,36 +159,64 @@ class CfgComparendoEstadoController extends Controller
     }
 
     /**
-     * Deletes a cfgComparendoEstado entity.
+     * Deletes a cfgCda entity.
      *
-     * @Route("/{id}/delete", name="cfgcomparendoestado_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cfgcda_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, CfgComparendoEstado $cfgComparendoEstado)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($cfgComparendoEstado);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgComparendoEstado);
-            $em->flush();
+            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+
+            if ($cda) {
+                $cda->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con exito", 
+                    'data'=> $cda,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->redirectToRoute('cfgcomparendoestado_index');
+        return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a cfgComparendoEstado entity.
+     * Creates a form to delete a cfgCda entity.
      *
-     * @param CfgComparendoEstado $cfgComparendoEstado The cfgComparendoEstado entity
+     * @param CfgCda $cfgCda The cfgCda entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgComparendoEstado $cfgComparendoEstado)
+    private function createDeleteForm(CfgCda $cfgCda)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcomparendoestado_delete', array('id' => $cfgComparendoEstado->getId())))
+            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -194,7 +225,7 @@ class CfgComparendoEstadoController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgcomparendoestado_select")
+     * @Route("/select", name="cfgcda_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -202,16 +233,16 @@ class CfgComparendoEstadoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $estados = $em->getRepository('AppBundle:CfgComparendoEstado')->findBy(
+        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($estados as $key => $estado) {
+        foreach ($cdas as $key => $cda) {
             $response[$key] = array(
-                'value' => $estado->getId(),
-                'label' => $estado->getNombre()
+                'value' => $cda->getId(),
+                'label' => $cda->getNombre()
             );
         }
         return $helpers->json($response);

@@ -224,30 +224,32 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+            
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
                 $params->placa
             );
 
-            if ($vehiculo != null) {
+            if ($vehiculo) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado",
+                    'message' => "Registro encontrado",
                     'data' => $vehiculo,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado", 
                 );
             }
-        } else {
+        }else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
