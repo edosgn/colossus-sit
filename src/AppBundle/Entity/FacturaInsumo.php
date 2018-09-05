@@ -34,7 +34,7 @@ class FacturaInsumo
      * @ORM\Column(name="descripcion", type="string", length=900, nullable=true)
      */
     private $descripcion;
-
+    
 
     /**
      * @var bool

@@ -133,6 +133,7 @@ class Empresa
      */
     private $empresaPrestadora;
 
+
      /**
      * @var \DateTime
      *
@@ -154,10 +155,8 @@ class Empresa
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="empresas") */
     private $tipoIdentificacion;
-    
 
-
-
+   
 
     /**
      * Get id
