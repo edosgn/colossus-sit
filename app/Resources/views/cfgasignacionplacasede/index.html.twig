@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgasignacionplacasedes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Estado</th>
+                <th>Letrasplaca</th>
+                <th>Numeroinicial</th>
+                <th>Numerofinal</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgAsignacionPlacaSede in cfgAsignacionPlacaSedes %}
+            <tr>
+                <td><a href="{{ path('cfgasignacionplacasede_show', { 'id': cfgAsignacionPlacaSede.id }) }}">{{ cfgAsignacionPlacaSede.id }}</a></td>
+                <td>{% if cfgAsignacionPlacaSede.estado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ cfgAsignacionPlacaSede.letrasPlaca }}</td>
+                <td>{{ cfgAsignacionPlacaSede.numeroInicial }}</td>
+                <td>{{ cfgAsignacionPlacaSede.numeroFinal }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgasignacionplacasede_show', { 'id': cfgAsignacionPlacaSede.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

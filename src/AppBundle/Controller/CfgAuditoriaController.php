@@ -57,21 +57,24 @@ class CfgAuditoriaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+
+            $ip = $request->getClientIp();
             
-                $auditoria = new CfgAuditoria();
-                $auditoria->setFecha(new \Datetime(date('Y-m-d h:i:s')));
-                $auditoria->setUrl($params->url);
-                $auditoria->setToken($params->token);
-                $auditoria->setDatos($params->json);
-                $auditoria->setAccion($params->action);
-                
-                $em->persist($auditoria);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con éxito",
-                );
+            $auditoria = new CfgAuditoria();
+            $auditoria->setFecha(new \Datetime(date('Y-m-d h:i:s')));
+            $auditoria->setUrl($params->url);
+            $auditoria->setToken($params->token);
+            $auditoria->setDatos($params->json);
+            $auditoria->setAccion($params->action);
+            $auditoria->setIp($ip);
+            
+            $em->persist($auditoria);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con éxito",
+            );
             
         }else{
             $response = array(

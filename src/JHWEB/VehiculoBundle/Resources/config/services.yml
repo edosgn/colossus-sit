@@ -1,0 +1,4 @@
+services:
+#    jhweb_vehiculo.example:
+#        class: JHWEB\VehiculoBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

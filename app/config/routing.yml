@@ -1,3 +1,20 @@
+jhweb_vehiculo:
+    resource: "@JHWEBVehiculoBundle/Controller/"
+    type:     annotation
+    prefix:   /vehiculo
+    
+app_cfg_asignacion_placa_sede:
+    resource: "@AppBundle/Controller/CfgAsignacionPlacaSedeController.php"
+    type:     annotation
+
+app_cfg_tipo_clase:
+    resource: "@AppBundle/Controller/CfgTipoClaseController.php"
+    type:     annotation
+
+app_cfg_tipo_vehiculo:
+    resource: "@AppBundle/Controller/CfgTipoVehiculoController.php"
+    type:     annotation
+
 app_cfg_cargo:
     resource: "@AppBundle/Controller/CfgCargoController.php"
     type:     annotation

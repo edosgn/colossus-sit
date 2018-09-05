@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgcdas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Nit</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgCda in cfgCdas %}
+            <tr>
+                <td><a href="{{ path('cfgcda_show', { 'id': cfgCda.id }) }}">{{ cfgCda.id }}</a></td>
+                <td>{{ cfgCda.nombre }}</td>
+                <td>{{ cfgCda.nit }}</td>
+                <td>{% if cfgCda.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgcda_show', { 'id': cfgCda.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgcda_edit', { 'id': cfgCda.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgcda_new') }}">Create a new cfgCda</a>
+        </li>
+    </ul>
+{% endblock %}
