@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgtipoclases list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgTipoClase in cfgTipoClases %}
+            <tr>
+                <td><a href="{{ path('cfgtipoclase_show', { 'id': cfgTipoClase.id }) }}">{{ cfgTipoClase.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgtipoclase_show', { 'id': cfgTipoClase.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

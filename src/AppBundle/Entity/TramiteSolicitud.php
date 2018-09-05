@@ -52,9 +52,16 @@ class TramiteSolicitud
     /**
      * @var array
      *
-     * @ORM\Column(name="datos", type="array")
+     * @ORM\Column(name="datos", type="array", nullable=true)
      */
     private $datos;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="resumen", type="array", nullable=true)
+     */
+    private $resumen;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TramiteFactura", inversedBy="tramitesSolicitud")
@@ -77,6 +84,7 @@ class TramiteSolicitud
     protected $vehiculo;
     
 
+
     /**
      * Get id
      *
@@ -86,6 +94,7 @@ class TramiteSolicitud
     {
         return $this->id;
     }
+
 
     /**
      * Set fecha
@@ -108,7 +117,7 @@ class TramiteSolicitud
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        return $this->fecha;
     }
 
     /**
@@ -205,6 +214,30 @@ class TramiteSolicitud
     public function getDatos()
     {
         return $this->datos;
+    }
+
+    /**
+     * Set resumen
+     *
+     * @param array $resumen
+     *
+     * @return TramiteSolicitud
+     */
+    public function setResumen($resumen)
+    {
+        $this->resumen = $resumen;
+
+        return $this;
+    }
+
+    /**
+     * Get resumen
+     *
+     * @return array
+     */
+    public function getResumen()
+    {
+        return $this->resumen;
     }
 
     /**

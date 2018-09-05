@@ -29,9 +29,9 @@ class TramiteSolicitudController extends Controller
         $params = json_decode($json);
         $moduloId = $params;
 
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->getTramitesModulo(
-            $moduloId
-        );
+            $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->getTramitesModulo(
+                $moduloId
+            );
 
         $response = array(
             'status' => 'success',
