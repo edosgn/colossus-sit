@@ -69,7 +69,7 @@ class CfgAsignacionPlacaSedeController extends Controller
             $cfgAsignacionPlacaSedes = $em->getRepository('AppBundle:CfgAsignacionPlacaSede')->findAll();
 
             foreach ($cfgAsignacionPlacaSedes as $key => $cfgAsignacionPlacaSede) {
-                if ($cfgAsignacionPlacaSede->getLetrasPlaca() == $params->letrasPlaca && $cfgAsignacionPlacaSede->getNumeroInicial() <= $params->numeroInicial && $cfgAsignacionPlacaSede->getNumeroFinal() >= $params->numeroInicial) {
+                if ($params->numeroFinal < $cfgAsignacionPlacaSede->getNumeroInicial() && $cfgAsignacionPlacaSede->getLetrasPlaca() == $params->letrasPlaca && $cfgAsignacionPlacaSede->getNumeroInicial() <= $params->numeroInicial && $cfgAsignacionPlacaSede->getNumeroFinal() >= $params->numeroInicial) {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
@@ -77,14 +77,14 @@ class CfgAsignacionPlacaSedeController extends Controller
                     );
                     return $helpers->json($response);
                 }
-                if ($params->numeroFinal < $cfgAsignacionPlacaSede->getNumeroInicial()) {
+                /*if ($params->numeroFinal < $cfgAsignacionPlacaSede->getNumeroInicial()) {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
                         'message' => "El rango de placas ya se encuentra registrado",
                     );
                     return $helpers->json($response);
-                }
+                }*/
 
             }
 
@@ -94,14 +94,14 @@ class CfgAsignacionPlacaSedeController extends Controller
                 $params->letrasPlaca,
                 $tipoVehiculo->getNombre()
             );
-
+            #preg_match('/^[a-zA-Z]+$/', 
             $contadorPlacas = 0;
 
             if ($automotor) {
                 for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
                     $em = $this->getDoctrine()->getManager();
                     if ($tipoVehiculo->getNombre() == "MOTOCICLETA") {
-                        $numero = $params->letrasPlaca . $i . preg_match('/^[a-zA-Z]+$/', $letraFinal);
+                        $numero = $params->letrasPlaca . $i . $params->letraFinal;
                         $cfgPlaca = new CfgPlaca();
                         $cfgPlaca->setNumero($numero);
                         $cfgPlaca->setEstado('Fabricada');
@@ -122,8 +122,10 @@ class CfgAsignacionPlacaSedeController extends Controller
                         $em->persist($cfgPlaca);
                         $em->flush();
 
-                        $contadorPlacas += 1;
+                        #$contadorPlacas += 1;
                     }
+                    $contadorPlacas += 1;
+
                 }
 
                 $asignacion = new CfgAsignacionPlacaSede();
