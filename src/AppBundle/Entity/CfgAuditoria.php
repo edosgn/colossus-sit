@@ -56,6 +56,13 @@ class CfgAuditoria
      */
     private $accion;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ip", type="string", length=255)
+     */
+    private $ip;
+
 
     /**
      * Get id
@@ -185,5 +192,29 @@ class CfgAuditoria
     public function getAccion()
     {
         return $this->accion;
+    }
+
+    /**
+     * Set ip
+     *
+     * @param string $ip
+     *
+     * @return CfgAuditoria
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
     }
 }

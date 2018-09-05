@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Tecnomecanicas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numerocontrol</th>
+                <th>Fechaexpedicion</th>
+                <th>Fechavencimiento</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for tecnoMecanica in tecnoMecanicas %}
+            <tr>
+                <td><a href="{{ path('tecnomecanica_show', { 'id': tecnoMecanica.id }) }}">{{ tecnoMecanica.id }}</a></td>
+                <td>{{ tecnoMecanica.numeroControl }}</td>
+                <td>{% if tecnoMecanica.fechaExpedicion %}{{ tecnoMecanica.fechaExpedicion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if tecnoMecanica.fechaVencimiento %}{{ tecnoMecanica.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if tecnoMecanica.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('tecnomecanica_show', { 'id': tecnoMecanica.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('tecnomecanica_edit', { 'id': tecnoMecanica.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('tecnomecanica_new') }}">Create a new tecnoMecanica</a>
+        </li>
+    </ul>
+{% endblock %}
