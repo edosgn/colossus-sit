@@ -36,15 +36,14 @@ class CfgPlaca
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="placas")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgTipoVehiculo", inversedBy="placas")
      **/
-    protected $clase;
+    protected $tipoVehiculo;
 
      /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="placas")
      **/
     protected $sedeOperativa;
-
 
     /**
      * Get id
@@ -105,29 +104,28 @@ class CfgPlaca
     }
 
 
-
     /**
-     * Set clase
+     * Set tipoVehiculo
      *
-     * @param \AppBundle\Entity\Clase $clase
+     * @param \AppBundle\Entity\CfgTipoVehiculo $tipoVehiculo
      *
      * @return CfgPlaca
      */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    public function setTipoVehiculo(\AppBundle\Entity\CfgTipoVehiculo $tipoVehiculo = null)
     {
-        $this->clase = $clase;
+        $this->tipoVehiculo = $tipoVehiculo;
 
         return $this;
     }
 
     /**
-     * Get clase
+     * Get tipoVehiculo
      *
-     * @return \AppBundle\Entity\Clase
+     * @return \AppBundle\Entity\CfgTipoVehiculo
      */
-    public function getClase()
+    public function getTipoVehiculo()
     {
-        return $this->clase;
+        return $this->tipoVehiculo;
     }
 
     /**
