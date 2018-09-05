@@ -22,28 +22,21 @@ class CfgEmpresaServicioController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $cfgEmpresaServicios = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findAll();
-
-        return $this->render('cfgempresaservicio/index.html.twig', array(
-            'cfgEmpresaServicios' => $cfgEmpresaServicios,
-        ));
 
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cargos = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findBy(
+        $CfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cargos) {
+        if ($CfgEmpresaServicio) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cargos)." registros encontrados", 
-                'data'=> $cargos,
+                'message' => count($CfgEmpresaServicio)." registros encontrados", 
+                'data'=> $CfgEmpresaServicio,
             );
         }
 
@@ -58,22 +51,37 @@ class CfgEmpresaServicioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgEmpresaServicio = new Cfgempresaservicio();
-        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgEmpresaServicioType', $cfgEmpresaServicio);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+           
+            $cfgEmpresaServicio = new Cfgempresaservicio();
+
+            $cfgEmpresaServicio->setNombre($params->nombre);
+            $cfgEmpresaServicio->setActivo(true);
+            $cfgEmpresaServicio->setGestionable($params->gestionable);
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($cfgEmpresaServicio);
             $em->flush();
 
-            return $this->redirectToRoute('cfgempresaservicio_show', array('id' => $cfgEmpresaServicio->getId()));
-        }
-
-        return $this->render('cfgempresaservicio/new.html.twig', array(
-            'cfgEmpresaServicio' => $cfgEmpresaServicio,
-            'form' => $form->createView(),
-        ));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );    
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
@@ -95,26 +103,48 @@ class CfgEmpresaServicioController extends Controller
     /**
      * Displays a form to edit an existing cfgEmpresaServicio entity.
      *
-     * @Route("/{id}/edit", name="cfgempresaservicio_edit")
+     * @Route("/edit", name="cfgempresaservicio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgEmpresaServicio $cfgEmpresaServicio)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgEmpresaServicio);
-        $editForm = $this->createForm('JHWEB\ConfigBundle\Form\CfgEmpresaServicioType', $cfgEmpresaServicio);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $cfgEmpresaServicio = $em->getRepository("JHWEBConfigBundle:CfgEmpresaServicio")->find($params->id);
 
-            return $this->redirectToRoute('cfgempresaservicio_edit', array('id' => $cfgEmpresaServicio->getId()));
+            if ($cfgEmpresaServicio!=null) {
+                $cfgEmpresaServicio->setNombre($params->nombre);
+                $cfgEmpresaServicio->setGestionable($params->gestionable);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $cfgEmpresaServicio,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('cfgempresaservicio/edit.html.twig', array(
-            'cfgEmpresaServicio' => $cfgEmpresaServicio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
