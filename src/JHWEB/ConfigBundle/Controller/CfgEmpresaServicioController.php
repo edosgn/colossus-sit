@@ -1,43 +1,42 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\ConfigBundle\Controller;
 
-use AppBundle\Entity\CfgBodega;
+use JHWEB\ConfigBundle\Entity\CfgEmpresaServicio;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request; use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * CfgBodega controller.
+ * Cfgempresaservicio controller.
  *
- * @Route("cfgbodega")
+ * @Route("cfgempresaservicio")
  */
-class CfgBodegaController extends Controller
+class CfgEmpresaServicioController extends Controller
 {
     /**
-     * Lists all cfgBodega entities.
+     * Lists all cfgEmpresaServicio entities.
      *
-     * @Route("/", name="cfgbodega_index")
+     * @Route("/", name="cfgempresaservicio_index")
      * @Method("GET")
      */
     public function indexAction()
     {
-        $helpers = $this->get("app.helpers");
 
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
-            array('estado' => 1)
+        $CfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findBy(
+            array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cfgBodegas) {
+        if ($CfgEmpresaServicio) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cfgBodegas)." registros encontrados", 
-                'data'=> $cfgBodegas,
+                'message' => count($CfgEmpresaServicio)." registros encontrados", 
+                'data'=> $CfgEmpresaServicio,
             );
         }
 
@@ -45,37 +44,36 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Creates a new cfgBodega entity.
+     * Creates a new cfgEmpresaServicio entity.
      *
-     * @Route("/new", name="cfgbodega_new")
+     * @Route("/new", name="cfgempresaservicio_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
+
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+           
+            $cfgEmpresaServicio = new Cfgempresaservicio();
 
-
-            $bodega = new CfgBodega();
-
-            $bodega->setNombre($params->nombre);
-            $bodega->setEstado(true);
+            $cfgEmpresaServicio->setNombre($params->nombre);
+            $cfgEmpresaServicio->setActivo(true);
+            $cfgEmpresaServicio->setGestionable($params->gestionable);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($bodega);
+            $em->persist($cfgEmpresaServicio);
             $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
-            );
-
+            );    
         }else{
             $response = array(
                 'status' => 'error',
@@ -87,28 +85,28 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgBodega entity.
+     * Finds and displays a cfgEmpresaServicio entity.
      *
-     * Route("/{id}/show", name="cfgbodega_show")
-     * Method("GET")
+     * @Route("/{id}", name="cfgempresaservicio_show")
+     * @Method("GET")
      */
-    public function showAction(CfgBodega $cfgBodega)
+    public function showAction(CfgEmpresaServicio $cfgEmpresaServicio)
     {
-        $deleteForm = $this->createDeleteForm($cfgBodega);
+        $deleteForm = $this->createDeleteForm($cfgEmpresaServicio);
 
-        return $this->render('cfgBodega/show.html.twig', array(
-            'cfgBodega' => $cfgBodega,
+        return $this->render('cfgempresaservicio/show.html.twig', array(
+            'cfgEmpresaServicio' => $cfgEmpresaServicio,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgBodega entity.
+     * Displays a form to edit an existing cfgEmpresaServicio entity.
      *
-     * @Route("/{id}/edit", name="cfgbodega_edit")
+     * @Route("/edit", name="cfgempresaservicio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgBodega $cfgBodega)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -117,20 +115,19 @@ class CfgBodegaController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
-            $cfgBodega = $em->getRepository("AppBundle:CfgBodega")->find($params->id);
+            $cfgEmpresaServicio = $em->getRepository("JHWEBConfigBundle:CfgEmpresaServicio")->find($params->id);
 
-            if ($cfgBodega) {
-                $cfgBodega->setNombre($params->nombre);
-                
+            if ($cfgEmpresaServicio!=null) {
+                $cfgEmpresaServicio->setNombre($params->nombre);
+                $cfgEmpresaServicio->setGestionable($params->gestionable);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cfgBodega,
+                    'data'=> $cfgEmpresaServicio,
                 );
             }else{
                 $response = array(
@@ -151,64 +148,38 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Deletes a cfgBodega entity.
+     * Deletes a cfgEmpresaServicio entity.
      *
-     * @Route("/{id}/delete", name="cfgbodega_delete")
+     * @Route("/{id}", name="cfgempresaservicio_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, CfgBodega $cfgBodega)
+    public function deleteAction(Request $request, CfgEmpresaServicio $cfgEmpresaServicio)
     {
-        $form = $this->createDeleteForm($cfgBodega);
+        $form = $this->createDeleteForm($cfgEmpresaServicio);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgBodega);
+            $em->remove($cfgEmpresaServicio);
             $em->flush();
         }
 
-        return $this->redirectToRoute('cfgBodega_index');
+        return $this->redirectToRoute('cfgempresaservicio_index');
     }
 
     /**
-     * Creates a form to delete a cfgBodega entity.
+     * Creates a form to delete a cfgEmpresaServicio entity.
      *
-     * @param CfgBodega $cfgBodega The cfgBodega entity
+     * @param CfgEmpresaServicio $cfgEmpresaServicio The cfgEmpresaServicio entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgBodega $cfgBodega)
+    private function createDeleteForm(CfgEmpresaServicio $cfgEmpresaServicio)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgBodega_delete', array('id' => $cfgBodega->getId())))
+            ->setAction($this->generateUrl('cfgempresaservicio_delete', array('id' => $cfgEmpresaServicio->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
-
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="cfgbodega_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
-            array('estado' => 1)
-        );
-
-        $response = null;
-
-        foreach ($cfgBodegas as $key => $cfgBodega) {
-            $response[$key] = array(
-                'value' => $cfgBodega->getId(),
-                'label' => $cfgBodega->getNombre(),
-            );
-        }
-        return $helpers->json($response);
-    }
-
 }
