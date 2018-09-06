@@ -1,7 +1,7 @@
-jhweb_seguridad_vial:
-    resource: "@JHWEBSeguridadVialBundle/Controller/"
+jhweb_config:
+    resource: "@JHWEBConfigBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /configuracion
 
 jhweb_vehiculo:
     resource: "@JHWEBVehiculoBundle/Controller/"
