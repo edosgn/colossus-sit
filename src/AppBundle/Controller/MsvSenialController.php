@@ -26,13 +26,22 @@ class MsvSenialController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $msvSenials = $em->getRepository('AppBundle:MsvSenial')->findAll();
+        $msvSeniales = $em->getRepository('AppBundle:MsvSenial')->findAll();
+        
+        $response['data'] = array();
 
-        return $this->render('msvSenial/index.html.twig', array(
-            'msvSenials' => $msvSenials,
-        ));
+        if ($msvSeniales) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($msvSeniales)." registros encontrados", 
+                'data' => $msvSeniales,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
