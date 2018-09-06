@@ -17,50 +17,79 @@ class CfgBodegaController extends Controller
     /**
      * Lists all cfgBodega entities.
      *
-     * @Route("/", name="cfgBodega_index")
+     * @Route("/", name="cfgbodega_index")
      * @Method("GET")
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
+            array('estado' => 1)
+        );
 
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findAll();
+        $response['data'] = array();
 
-        return $this->render('cfgBodega/index.html.twig', array(
-            'cfgBodegas' => $cfgBodegas,
-        ));
+        if ($cfgBodegas) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($cfgBodegas)." registros encontrados", 
+                'data'=> $cfgBodegas,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
      * Creates a new cfgBodega entity.
      *
-     * @Route("/new", name="cfgBodega_new")
+     * @Route("/new", name="cfgbodega_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $cfgBodega = new CfgBodega();
-        $form = $this->createForm('AppBundle\Form\CfgBodegaType', $cfgBodega);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+
+            $bodega = new CfgBodega();
+
+            $bodega->setNombre($params->nombre);
+            $bodega->setEstado(true);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgBodega);
+            $em->persist($bodega);
             $em->flush();
 
-            return $this->redirectToRoute('cfgBodega_show', array('id' => $cfgBodega->getId()));
-        }
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
 
-        return $this->render('cfgBodega/new.html.twig', array(
-            'cfgBodega' => $cfgBodega,
-            'form' => $form->createView(),
-        ));
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a cfgBodega entity.
      *
-     * Route("/{id}", name="cfgBodega_show")
+     * Route("/{id}/show", name="cfgbodega_show")
      * Method("GET")
      */
     public function showAction(CfgBodega $cfgBodega)
@@ -76,32 +105,55 @@ class CfgBodegaController extends Controller
     /**
      * Displays a form to edit an existing cfgBodega entity.
      *
-     * @Route("/{id}/edit", name="cfgBodega_edit")
+     * @Route("/{id}/edit", name="cfgbodega_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, CfgBodega $cfgBodega)
     {
-        $deleteForm = $this->createDeleteForm($cfgBodega);
-        $editForm = $this->createForm('AppBundle\Form\CfgBodegaType', $cfgBodega);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cfgBodega_edit', array('id' => $cfgBodega->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $cfgBodega = $em->getRepository("AppBundle:CfgBodega")->find($params->id);
+
+            if ($cfgBodega) {
+                $cfgBodega->setNombre($params->nombre);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $cfgBodega,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('cfgBodega/edit.html.twig', array(
-            'cfgBodega' => $cfgBodega,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a cfgBodega entity.
      *
-     * @Route("/{id}", name="cfgBodega_delete")
+     * @Route("/{id}/delete", name="cfgbodega_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgBodega $cfgBodega)
@@ -137,7 +189,7 @@ class CfgBodegaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgBodega_select")
+     * @Route("/select", name="cfgbodega_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -147,6 +199,9 @@ class CfgBodegaController extends Controller
         $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
+
         foreach ($cfgBodegas as $key => $cfgBodega) {
             $response[$key] = array(
                 'value' => $cfgBodega->getId(),
