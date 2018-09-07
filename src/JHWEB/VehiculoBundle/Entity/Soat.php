@@ -21,7 +21,7 @@ class Soat
      */
     private $id;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tecnoMecanicas") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="soats") */
     private $vehiculo;
 
     /**
@@ -34,21 +34,28 @@ class Soat
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="vigencia", type="date")
+     * @ORM\Column(name="fecha_vigencia", type="date")
      */
-    private $vigencia;
+    private $fechaVigencia;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_vencimiento", type="date")
+     */
+    private $fechaVencimiento;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_poliza", type="date")
+     * @ORM\Column(name="numero_poliza", type="string")
      */
     private $numeroPoliza;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre_empresa", type="date")
+     * @ORM\Column(name="nombre_empresa", type="string")
      */
     private $nombreEmpresa;
 
@@ -61,6 +68,13 @@ class Soat
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+/**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string")
+     */
+    private $estado;
 
     /**
      * Get id
@@ -102,35 +116,64 @@ class Soat
     }
 
     /**
-     * Set vigencia
+     * Set fechaVigencia
      *
-     * @param \DateTime $vigencia
+     * @param \DateTime $fechaVigencia
      *
      * @return Soat
      */
-    public function setVigencia($vigencia)
+    public function setFechaVigencia($fechaVigencia)
     {
-        $this->vigencia = $vigencia;
+        $this->fechaVigencia = $fechaVigencia;
+
         return $this;
     }
 
     /**
-     * Get vigencia
+     * Get fechaVigencia
      *
      * @return \DateTime
      */
-    public function getVigencia()
+    public function getFechaVigencia()
     {
-        if ($this->vigencia) {
-            return $this->vigencia->format('d/m/Y');
+        if ($this->fechaVigencia) {
+            return $this->fechaVigencia->format('d/m/Y');
         }
-        return $this->vigencia;
+        return $this->fechaVigencia;
+    }
+
+    /**
+     * Set fechaVencimiento
+     *
+     * @param \DateTime $fechaVencimiento
+     *
+     * @return Soat
+     */
+    public function setFechaVencimiento($fechaVencimiento)
+    {
+        $this->fechaVencimiento = $fechaVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimiento()
+    {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('d/m/Y');
+        }
+        return $this->fechaVencimiento;
+
     }
 
     /**
      * Set numeroPoliza
      *
-     * @param \DateTime $numeroPoliza
+     * @param string $numeroPoliza
      *
      * @return Soat
      */
@@ -144,7 +187,7 @@ class Soat
     /**
      * Get numeroPoliza
      *
-     * @return \DateTime
+     * @return string
      */
     public function getNumeroPoliza()
     {
@@ -154,7 +197,7 @@ class Soat
     /**
      * Set nombreEmpresa
      *
-     * @param \DateTime $nombreEmpresa
+     * @param string $nombreEmpresa
      *
      * @return Soat
      */
@@ -168,7 +211,7 @@ class Soat
     /**
      * Get nombreEmpresa
      *
-     * @return \DateTime
+     * @return string
      */
     public function getNombreEmpresa()
     {
@@ -245,5 +288,29 @@ class Soat
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return Soat
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 }
