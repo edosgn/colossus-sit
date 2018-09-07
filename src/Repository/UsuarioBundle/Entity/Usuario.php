@@ -354,6 +354,9 @@ class Usuario
      */
     public function getFechaNacimiento()
     {
+        if ($this->fechaNacimiento) {
+            return $this->fechaNacimiento->format('Y-m-d');
+        }
         return $this->fechaNacimiento;
     }
 

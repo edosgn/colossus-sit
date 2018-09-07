@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgsvsenialcolors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgSvSenialColor in cfgSvSenialColors %}
+            <tr>
+                <td><a href="{{ path('cfgsvsenialcolor_show', { 'id': cfgSvSenialColor.id }) }}">{{ cfgSvSenialColor.id }}</a></td>
+                <td>{{ cfgSvSenialColor.nombre }}</td>
+                <td>{% if cfgSvSenialColor.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgsvsenialcolor_show', { 'id': cfgSvSenialColor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgsvsenialcolor_edit', { 'id': cfgSvSenialColor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgsvsenialcolor_new') }}">Create a new cfgSvSenialColor</a>
+        </li>
+    </ul>
+{% endblock %}

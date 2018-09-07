@@ -70,7 +70,7 @@ class ComparendoController extends Controller
             $comparendo->setGradoAlchohol($params->comparendo->gradoAlchoholemia);
             $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
             $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
-            $comparendo->setValorAdicional($params->comparendo->valorAdicional);
+            $comparendo->setValorAdicional($params->comparendo->infraccionValorAdicional);
 
             if (isset($params->fechaNotificacion)) {
                 $comparendo->setFechaNotificacion(new \DateTime($params->fechaNotificacion));
@@ -419,6 +419,7 @@ class ComparendoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            
             $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneBy(
                 array('numeroOrden' => $params->numeroOrden)
             );
@@ -587,5 +588,5 @@ class ComparendoController extends Controller
                 );
         }
         return $helpers->json($response);
-    } 
+    }
 }

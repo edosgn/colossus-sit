@@ -99,17 +99,45 @@ class MflInfraccionController extends Controller
     /**
      * Finds and displays a mflInfraccion entity.
      *
-     * @Route("/{id}/show", name="mflinfraccion_show")
-     * @Method("GET")
+     * @Route("/show", name="mflinfraccion_show")
+     * @Method("POST")
      */
-    public function showAction(MflInfraccion $mflInfraccion)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($mflInfraccion);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('mflinfraccion/show.html.twig', array(
-            'mflInfraccion' => $mflInfraccion,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $infraccion = $em->getRepository("AppBundle:MflInfraccion")->find($params->id);
+
+            if ($infraccion) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $infraccion,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -212,6 +240,7 @@ class MflInfraccionController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
         
         $infracciones = $em->getRepository('AppBundle:MflInfraccion')->findBy(
@@ -222,6 +251,51 @@ class MflInfraccionController extends Controller
             $response[$key] = array(
                 'value' => $infraccion->getId(),
                 'label' => $infraccion->getCodigo()."_".$infraccion->getNombre()
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a comparendo entity.
+     *
+     * @Route("/calculate/value", name="mflinfraccion_calculate_value")
+     * @Method("POST")
+     */
+    public function calculateValueAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            //Calcula valor de infracción
+            $smlmv = $em->getRepository('AppBundle:CfgSmlmv')->findOneByActivo(
+                true
+            );
+
+            $infraccion = $em->getRepository('AppBundle:MflInfraccion')->find(
+                $params->idInfraccion
+            );
+
+            $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro encontrado",
+                'data' => $valorInfraccion,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);

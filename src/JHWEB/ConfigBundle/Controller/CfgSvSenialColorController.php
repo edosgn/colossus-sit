@@ -1,23 +1,23 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\ConfigBundle\Controller;
 
-use AppBundle\Entity\CfgBodega;
+use JHWEB\ConfigBundle\Entity\CfgSvSenialColor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request; use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * CfgBodega controller.
+ * Cfgsvsenialcolor controller.
  *
- * @Route("cfgbodega")
+ * @Route("cfgsvsenialcolor")
  */
-class CfgBodegaController extends Controller
+class CfgSvSenialColorController extends Controller
 {
     /**
-     * Lists all cfgBodega entities.
+     * Lists all cfgSvSenialColor entities.
      *
-     * @Route("/", name="cfgbodega_index")
+     * @Route("/", name="cfgsvsenialcolor_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgBodegaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
-            array('estado' => 1)
+        $colores = $em->getRepository('JHWEBConfigBundle:CfgSvSenialColor')->findBy(
+            array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cfgBodegas) {
+        if ($colores) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cfgBodegas)." registros encontrados", 
-                'data'=> $cfgBodegas,
+                'message' => count($colores)." registros encontrados", 
+                'data'=> $colores,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Creates a new cfgBodega entity.
+     * Creates a new cfgSvSenialColor entity.
      *
-     * @Route("/new", name="cfgbodega_new")
+     * @Route("/new", name="cfgsvsenialcolor_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -59,15 +59,14 @@ class CfgBodegaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+           
+            $color = new CfgSvSenialColor();
 
-
-            $bodega = new CfgBodega();
-
-            $bodega->setNombre($params->nombre);
-            $bodega->setEstado(true);
+            $color->setNombre($params->nombre);
+            $color->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($bodega);
+            $em->persist($color);
             $em->flush();
 
             $response = array(
@@ -75,7 +74,6 @@ class CfgBodegaController extends Controller
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
-
         }else{
             $response = array(
                 'status' => 'error',
@@ -87,25 +85,25 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgBodega entity.
+     * Finds and displays a cfgSvSenialColor entity.
      *
-     * Route("/{id}/show", name="cfgbodega_show")
-     * Method("GET")
+     * @Route("/{id}/show", name="cfgsvsenialcolor_show")
+     * @Method("GET")
      */
-    public function showAction(CfgBodega $cfgBodega)
+    public function showAction(CfgSvSenialColor $cfgSvSenialColor)
     {
-        $deleteForm = $this->createDeleteForm($cfgBodega);
+        $deleteForm = $this->createDeleteForm($cfgSvSenialColor);
 
-        return $this->render('cfgBodega/show.html.twig', array(
-            'cfgBodega' => $cfgBodega,
+        return $this->render('cfgsvsenialcolor/show.html.twig', array(
+            'cfgSvSenialColor' => $cfgSvSenialColor,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgBodega entity.
+     * Displays a form to edit an existing cfgSvSenialColor entity.
      *
-     * @Route("/edit", name="cfgbodega_edit")
+     * @Route("/edit", name="cfgsvsenialcolor_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -119,10 +117,13 @@ class CfgBodegaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cfgBodega = $em->getRepository("AppBundle:CfgBodega")->find($params->id);
 
-            if ($cfgBodega) {
-                $cfgBodega->setNombre($params->nombre);
+            $color = $em->getRepository("JHWEBConfigBundle:CfgSvSenialColor")->find(
+                $params->id
+            );
+
+            if ($color) {
+                $color->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -130,7 +131,7 @@ class CfgBodegaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cfgBodega,
+                    'data'=> $conector,
                 );
             }else{
                 $response = array(
@@ -151,36 +152,36 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Deletes a cfgBodega entity.
+     * Deletes a cfgSvSenialColor entity.
      *
-     * @Route("/{id}/delete", name="cfgbodega_delete")
+     * @Route("/{id}/delete", name="cfgsvsenialcolor_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, CfgBodega $cfgBodega)
+    public function deleteAction(Request $request, CfgSvSenialColor $cfgSvSenialColor)
     {
-        $form = $this->createDeleteForm($cfgBodega);
+        $form = $this->createDeleteForm($cfgSvSenialColor);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgBodega);
+            $em->remove($cfgSvSenialColor);
             $em->flush();
         }
 
-        return $this->redirectToRoute('cfgBodega_index');
+        return $this->redirectToRoute('cfgsvsenialcolor_index');
     }
 
     /**
-     * Creates a form to delete a cfgBodega entity.
+     * Creates a form to delete a cfgSvSenialColor entity.
      *
-     * @param CfgBodega $cfgBodega The cfgBodega entity
+     * @param CfgSvSenialColor $cfgSvSenialColor The cfgSvSenialColor entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgBodega $cfgBodega)
+    private function createDeleteForm(CfgSvSenialColor $cfgSvSenialColor)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgBodega_delete', array('id' => $cfgBodega->getId())))
+            ->setAction($this->generateUrl('cfgsvsenialcolor_delete', array('id' => $cfgSvSenialColor->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -189,26 +190,26 @@ class CfgBodegaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgbodega_select")
+     * @Route("/select", name="cfgsvsenialcolor_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
-            array('estado' => 1)
+        
+        $colores = $em->getRepository('JHWEBConfigBundle:CfgSvSenialColor')->findBy(
+            array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($cfgBodegas as $key => $cfgBodega) {
+        foreach ($colores as $key => $color) {
             $response[$key] = array(
-                'value' => $cfgBodega->getId(),
-                'label' => $cfgBodega->getNombre(),
+                'value' => $color->getId(),
+                'label' => $color->getNombre()
             );
         }
         return $helpers->json($response);
     }
-
 }
