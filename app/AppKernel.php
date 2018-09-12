@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Liuggio\ExcelBundle\LiuggioExcelBundle(),
             new AppBundle\AppBundle(),
             new JHWEB\VehiculoBundle\JHWEBVehiculoBundle(),
+            new JHWEB\SeguridadVialBundle\JHWEBSeguridadVialBundle(),
             new JHWEB\ConfigBundle\JHWEBConfigBundle(),
         ];
 

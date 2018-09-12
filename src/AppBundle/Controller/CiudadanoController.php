@@ -78,7 +78,6 @@ class CiudadanoController extends Controller
 
                 $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
                 $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
-                $edad = (isset($params->edad)) ? $params->edad : null;
                 
                 $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
                
@@ -104,7 +103,6 @@ class CiudadanoController extends Controller
                     $ciudadano->setMunicipioResidencia($municipioResidencia);
                     $ciudadano->setDireccion($direccion);
                     $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
-                    $ciudadano->setEdad($edad);
                     $ciudadano->setGenero($genero);
                     $ciudadano->setGrupoSanguineo($grupoSanguineo);
                     $ciudadano->setDireccionTrabajo($direccionTrabajo);
@@ -220,7 +218,6 @@ class CiudadanoController extends Controller
 
             $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
             $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
-            $edad = (isset($params->edad)) ? $params->edad : null;
             $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
             
             $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->id);
@@ -246,7 +243,6 @@ class CiudadanoController extends Controller
                     $ciudadano->setMunicipioResidencia($municipioResidencia);
                     $ciudadano->setDireccion($direccion);
                     $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
-                    $ciudadano->setEdad($edad);
                     $ciudadano->setGenero($genero);
                     $ciudadano->setGrupoSanguineo($grupoSanguineo);
                     $ciudadano->setDireccionTrabajo($direccionTrabajo);
@@ -374,7 +370,7 @@ class CiudadanoController extends Controller
        return $helpers->json($response);
     }
 
-     /**
+    /**
      * busca cuidadano por Identificacion.
      *
      * @Route("/search/identificacion", name="ciudadano_search_identificacion")
@@ -407,6 +403,50 @@ class CiudadanoController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Identificacion no encontrada en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Calcula edad según fecha de nacimiento.
+     *
+     * @Route("/calculate/age", name="ciudadano_calculate_age")
+     * @Method({"GET", "POST"})
+     */
+    public function calculateAgeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $edad = $this->get("app.helpers")->calculateAge($params->fechaNacimiento);
+
+            if ($edad) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $edad,
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "No se pudo calcular la edad", 
                 );
             }
         }else{

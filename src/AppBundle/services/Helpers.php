@@ -50,4 +50,12 @@ class Helpers
 		
 		return $response;
 	}
+
+	public function calculateAge($fechaNacimiento){
+		$fechaNacimiento = new \DateTime($fechaNacimiento);
+	    $fechaActual = new \DateTime();
+	    $edad = $fechaActual->diff($fechaNacimiento);
+
+	    return $edad->y;
+	}
 }

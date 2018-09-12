@@ -1,23 +1,23 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\ConfigBundle\Controller;
 
-use AppBundle\Entity\CfgBodega;
+use JHWEB\ConfigBundle\Entity\CfgSvSenialEstado;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request; use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * CfgBodega controller.
+ * Cfgsvsenialestado controller.
  *
- * @Route("cfgbodega")
+ * @Route("cfgsvsenialestado")
  */
-class CfgBodegaController extends Controller
+class CfgSvSenialEstadoController extends Controller
 {
     /**
-     * Lists all cfgBodega entities.
+     * Lists all cfgSvSenialEstado entities.
      *
-     * @Route("/", name="cfgbodega_index")
+     * @Route("/", name="cfgsvsenialestado_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgBodegaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
-            array('estado' => 1)
+        $estados = $em->getRepository('JHWEBConfigBundle:CfgSvSenialEstado')->findBy(
+            array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cfgBodegas) {
+        if ($estados) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cfgBodegas)." registros encontrados", 
-                'data'=> $cfgBodegas,
+                'message' => count($estados)." registros encontrados", 
+                'data'=> $estados,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Creates a new cfgBodega entity.
+     * Creates a new cfgSvSenialEstado entity.
      *
-     * @Route("/new", name="cfgbodega_new")
+     * @Route("/new", name="cfgsvsenialestado_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -59,15 +59,14 @@ class CfgBodegaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+           
+            $estado = new CfgSvSenialEstado();
 
-
-            $bodega = new CfgBodega();
-
-            $bodega->setNombre($params->nombre);
-            $bodega->setEstado(true);
+            $estado->setNombre($params->nombre);
+            $estado->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($bodega);
+            $em->persist($estado);
             $em->flush();
 
             $response = array(
@@ -75,7 +74,6 @@ class CfgBodegaController extends Controller
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
-
         }else{
             $response = array(
                 'status' => 'error',
@@ -87,25 +85,25 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgBodega entity.
+     * Finds and displays a cfgSvSenialEstado entity.
      *
-     * Route("/{id}/show", name="cfgbodega_show")
-     * Method("GET")
+     * @Route("/{id}/show", name="cfgsvsenialestado_show")
+     * @Method("GET")
      */
-    public function showAction(CfgBodega $cfgBodega)
+    public function showAction(CfgSvSenialEstado $cfgSvSenialEstado)
     {
-        $deleteForm = $this->createDeleteForm($cfgBodega);
+        $deleteForm = $this->createDeleteForm($cfgSvSenialEstado);
 
-        return $this->render('cfgBodega/show.html.twig', array(
-            'cfgBodega' => $cfgBodega,
+        return $this->render('cfgsvsenialestado/show.html.twig', array(
+            'cfgSvSenialEstado' => $cfgSvSenialEstado,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgBodega entity.
+     * Displays a form to edit an existing cfgSvSenialEstado entity.
      *
-     * @Route("/edit", name="cfgbodega_edit")
+     * @Route("/edit", name="cfgsvsenialestado_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -119,10 +117,13 @@ class CfgBodegaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cfgBodega = $em->getRepository("AppBundle:CfgBodega")->find($params->id);
+            
+            $estado = $em->getRepository("JHWEBConfigBundle:CfgSvSenialEstado")->find(
+                $params->id
+            );
 
-            if ($cfgBodega) {
-                $cfgBodega->setNombre($params->nombre);
+            if ($estado) {
+                $estado->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -130,7 +131,7 @@ class CfgBodegaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cfgBodega,
+                    'data'=> $conector,
                 );
             }else{
                 $response = array(
@@ -151,36 +152,36 @@ class CfgBodegaController extends Controller
     }
 
     /**
-     * Deletes a cfgBodega entity.
+     * Deletes a cfgSvSenialEstado entity.
      *
-     * @Route("/{id}/delete", name="cfgbodega_delete")
+     * @Route("/{id}/delete", name="cfgsvsenialestado_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, CfgBodega $cfgBodega)
+    public function deleteAction(Request $request, CfgSvSenialEstado $cfgSvSenialEstado)
     {
-        $form = $this->createDeleteForm($cfgBodega);
+        $form = $this->createDeleteForm($cfgSvSenialEstado);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgBodega);
+            $em->remove($cfgSvSenialEstado);
             $em->flush();
         }
 
-        return $this->redirectToRoute('cfgBodega_index');
+        return $this->redirectToRoute('cfgsvsenialestado_index');
     }
 
     /**
-     * Creates a form to delete a cfgBodega entity.
+     * Creates a form to delete a cfgSvSenialEstado entity.
      *
-     * @param CfgBodega $cfgBodega The cfgBodega entity
+     * @param CfgSvSenialEstado $cfgSvSenialEstado The cfgSvSenialEstado entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgBodega $cfgBodega)
+    private function createDeleteForm(CfgSvSenialEstado $cfgSvSenialEstado)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgBodega_delete', array('id' => $cfgBodega->getId())))
+            ->setAction($this->generateUrl('cfgsvsenialestado_delete', array('id' => $cfgSvSenialEstado->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -189,26 +190,26 @@ class CfgBodegaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgbodega_select")
+     * @Route("/select", name="cfgsvsenialestado_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgBodegas = $em->getRepository('AppBundle:CfgBodega')->findBy(
-            array('estado' => 1)
+        
+        $estados = $em->getRepository('JHWEBConfigBundle:CfgSvSenialEstado')->findBy(
+            array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($cfgBodegas as $key => $cfgBodega) {
+        foreach ($estados as $key => $estado) {
             $response[$key] = array(
-                'value' => $cfgBodega->getId(),
-                'label' => $cfgBodega->getNombre(),
+                'value' => $estado->getId(),
+                'label' => $estado->getNombre()
             );
         }
         return $helpers->json($response);
     }
-
 }

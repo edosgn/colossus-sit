@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\VehiculoBundle\Controller;
+namespace JHWEB\ConfigBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\CfgCda;
+use JHWEB\ConfigBundle\Entity\CfgSvConector;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcda controller.
+ * Cfgsvconector controller.
  *
- * @Route("cfgcda")
+ * @Route("cfgsvconector")
  */
-class CfgCdaController extends Controller
+class CfgSvConectorController extends Controller
 {
     /**
-     * Lists all cfgCda entities.
+     * Lists all cfgSvConector entities.
      *
-     * @Route("/", name="cfgcda_index")
+     * @Route("/", name="cfgsvconector_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgCdaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $conectores = $em->getRepository('JHWEBConfigBundle:CfgSvConector')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cdas) {
+        if ($conectores) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cdas)." registros encontrados", 
-                'data'=> $cdas,
+                'message' => count($conectores)." registros encontrados", 
+                'data'=> $conectores,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new cfgSvConector entity.
      *
-     * @Route("/new", name="cfgcda_new")
+     * @Route("/new", name="cfgsvconector_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,14 +60,13 @@ class CfgCdaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
            
-            $cda = new CfgCda();
+            $conector = new CfgSvConector();
 
-            $cda->setNombre($params->nombre);
-            $cda->setNit($params->nit);
-            $cda->setActivo(true);
+            $conector->setNombre($params->nombre);
+            $conector->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cda);
+            $em->persist($conector);
             $em->flush();
 
             $response = array(
@@ -86,25 +85,25 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgCda entity.
+     * Finds and displays a cfgSvConector entity.
      *
-     * @Route("/{id}/show", name="cfgcda_show")
+     * @Route("/{id}/show", name="cfgsvconector_show")
      * @Method("GET")
      */
-    public function showAction(CfgCda $cfgCda)
+    public function showAction(CfgSvConector $cfgSvConector)
     {
-        $deleteForm = $this->createDeleteForm($cfgCda);
+        $deleteForm = $this->createDeleteForm($cfgSvConector);
 
-        return $this->render('cfgcda/show.html.twig', array(
-            'cfgCda' => $cfgCda,
+        return $this->render('cfgsvconector/show.html.twig', array(
+            'cfgSvConector' => $cfgSvConector,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgCda entity.
+     * Displays a form to edit an existing cfgSvConector entity.
      *
-     * @Route("/edit", name="cfgcda_edit")
+     * @Route("/edit", name="cfgsvconector_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -118,11 +117,12 @@ class CfgCdaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $conector = $em->getRepository("JHWEBConfigBundle:CfgSvConector")->find(
+                $params->id
+            );
 
-            if ($cda) {
-                $cda->setNombre($params->nombre);
-                $cda->setNit($params->nit);
+            if ($conector) {
+                $conector->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -130,7 +130,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cda,
+                    'data'=> $conector,
                 );
             }else{
                 $response = array(
@@ -151,9 +151,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Deletes a cfgCda entity.
+     * Deletes a cfgSvConector entity.
      *
-     * @Route("/delete", name="cfgcda_delete")
+     * @Route("/delete", name="cfgsvconector_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -167,10 +167,12 @@ class CfgCdaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $conector = $em->getRepository("JHWEBConfigBundle:CfgSvConector")->find(
+                $params->id
+            );
 
-            if ($cda) {
-                $cda->setActivo(false);
+            if ($conector) {
+                $conector->setActivo(false);
                 
                 $em->flush();
 
@@ -178,7 +180,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $cda,
+                    'data'=> $conector,
                 );
             }else{
                 $response = array(
@@ -199,16 +201,16 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgCda entity.
+     * Creates a form to delete a cfgSvConector entity.
      *
-     * @param CfgCda $cfgCda The cfgCda entity
+     * @param CfgSvConector $cfgSvConector The cfgSvConector entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgCda $cfgCda)
+    private function createDeleteForm(CfgSvConector $cfgSvConector)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
+            ->setAction($this->generateUrl('cfgsvconector_delete', array('id' => $cfgSvConector->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -217,7 +219,7 @@ class CfgCdaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgcda_select")
+     * @Route("/select", name="cfgsvconector_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -225,16 +227,16 @@ class CfgCdaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $conectores = $em->getRepository('JHWEBConfigBundle:CfgSvConector')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($cdas as $key => $cda) {
+        foreach ($conectores as $key => $conector) {
             $response[$key] = array(
-                'value' => $cda->getId(),
-                'label' => $cda->getNombre()
+                'value' => $conector->getId(),
+                'label' => $conector->getNombre()
             );
         }
         return $helpers->json($response);

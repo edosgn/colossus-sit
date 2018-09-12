@@ -36,13 +36,6 @@ class Ciudadano
     private $fechaExpedicionDocumento;
 
      /**
-     * @var int
-     *
-     * @ORM\Column(name="edad", type="integer")
-     */
-    private $edad;
-
-     /**
      * @var string
      *
      * @ORM\Column(name="direccion_trabajo", type="string", length=255, nullable=true)
@@ -136,30 +129,6 @@ class Ciudadano
     public function getFechaExpedicionDocumento()
     {
         return $this->fechaExpedicionDocumento;
-    }
-
-    /**
-     * Set edad
-     *
-     * @param integer $edad
-     *
-     * @return Ciudadano
-     */
-    public function setEdad($edad)
-    {
-        $this->edad = $edad;
-
-        return $this;
-    }
-
-    /**
-     * Get edad
-     *
-     * @return integer
-     */
-    public function getEdad()
-    {
-        return $this->edad;
     }
 
     /**

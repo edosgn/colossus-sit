@@ -1,6 +1,6 @@
 <?php
 
-namespace JHWEB\VehiculoBundle\Tests\Controller;
+namespace JHWEB\SeguridadVialBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

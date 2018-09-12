@@ -48,6 +48,14 @@ class TecnoMecanicaController extends Controller
                     'message' => count($tecnoMecanicas)." registros encontrados", 
                     'data'=> $tecnoMecanicas,
                 );
+            } 
+            else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se ha encontrado ningun registro de revisiones técnico mecánicas para este vehículo",
+                    'data' => $tecnoMecanicas,
+                );
             }
         }else{
             $response = array(

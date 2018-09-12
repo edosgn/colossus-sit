@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgsvsenialestados list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgSvSenialEstado in cfgSvSenialEstados %}
+            <tr>
+                <td><a href="{{ path('cfgsvsenialestado_show', { 'id': cfgSvSenialEstado.id }) }}">{{ cfgSvSenialEstado.id }}</a></td>
+                <td>{{ cfgSvSenialEstado.nombre }}</td>
+                <td>{% if cfgSvSenialEstado.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgsvsenialestado_show', { 'id': cfgSvSenialEstado.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgsvsenialestado_edit', { 'id': cfgSvSenialEstado.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgsvsenialestado_new') }}">Create a new cfgSvSenialEstado</a>
+        </li>
+    </ul>
+{% endblock %}
