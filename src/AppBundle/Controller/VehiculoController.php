@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Vehiculo controller.
  *
- * @Route("/vehiculo")
+ * @Route("/app/vehiculo")
  */
 class VehiculoController extends Controller
 {

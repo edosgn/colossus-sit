@@ -87,7 +87,7 @@ class CfgEmpresaServicioController extends Controller
     /**
      * Finds and displays a cfgEmpresaServicio entity.
      *
-     * @Route("/{id}", name="cfgempresaservicio_show")
+     * @Route("/{id}/show", name="cfgempresaservicio_show")
      * @Method("GET")
      */
     public function showAction(CfgEmpresaServicio $cfgEmpresaServicio)
@@ -129,7 +129,7 @@ class CfgEmpresaServicioController extends Controller
                     'message' => "Registro actualizado con exito", 
                     'data'=> $cfgEmpresaServicio,
                 );
-            }else{
+            }else{ 
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
@@ -150,7 +150,7 @@ class CfgEmpresaServicioController extends Controller
     /**
      * Deletes a cfgEmpresaServicio entity.
      *
-     * @Route("/{id}", name="cfgempresaservicio_delete")
+     * @Route("/{id}/delete", name="cfgempresaservicio_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgEmpresaServicio $cfgEmpresaServicio)
@@ -182,4 +182,28 @@ class CfgEmpresaServicioController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="cfgempresaservicio_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $cfgEmpresaServicios = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findBy(
+            array('activo' => true)
+        );
+        foreach ($cfgEmpresaServicios as $key => $cfgEmpresaServicio) {
+            $response[$key] = array( 
+                'value' => $cfgEmpresaServicio->getId(),
+                'label' => $cfgEmpresaServicio->getNombre(),
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    
 }
