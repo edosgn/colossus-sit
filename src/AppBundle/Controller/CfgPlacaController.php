@@ -219,6 +219,45 @@ class CfgPlacaController extends Controller
     }
 
     /**
+     * Deletes a cfgPlaca entity.
+     *
+     * @Route("/liberar/placa", name="cfgplaca_liberar")
+     * @Method("POST")
+     */
+    public function liberarAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->find($params);
+
+            $cfgPlaca->setEstado('Fabricada');
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($cfgPlaca);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Placa eliminada con éxto",
+            );
+
+        }else{
+            $reponse = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a form to delete a cfgPlaca entity.
      *
      * @param CfgPlaca $cfgPlaca The cfgPlaca entity
