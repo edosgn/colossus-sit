@@ -156,7 +156,10 @@ class Empresa
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="empresas") */
     private $tipoIdentificacion;
 
-   
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEmpresaServicio", inversedBy="empresas") */
+    private $cfgEmpresaServicio;
+
+    
 
     /**
      * Get id
@@ -694,5 +697,29 @@ class Empresa
     public function getTipoIdentificacion()
     {
         return $this->tipoIdentificacion;
+    }
+
+    /**
+     * Set cfgEmpresaServicio
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgEmpresaServicio $cfgEmpresaServicio
+     *
+     * @return Empresa
+     */
+    public function setCfgEmpresaServicio(\JHWEB\ConfigBundle\Entity\CfgEmpresaServicio $cfgEmpresaServicio = null)
+    {
+        $this->cfgEmpresaServicio = $cfgEmpresaServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get cfgEmpresaServicio
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgEmpresaServicio
+     */
+    public function getCfgEmpresaServicio()
+    {
+        return $this->cfgEmpresaServicio;
     }
 }

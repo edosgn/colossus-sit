@@ -516,6 +516,82 @@ class MpersonalFuncionarioController extends Controller
     /**
      * Lists all mpersonalFuncionario entities.
      *
+     * @Route("/search/empresa", name="mpersonalfuncionario_search_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchEmpresaAction(Request $request)
+    {
+        
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+       // if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            // var_dump($params);
+            // die();
+            
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                $params->identificacion
+            );
+            
+            if ($usuario) {
+                if ($usuario->getCiudadano()) {
+                    $funcionario = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                        array(
+                            'ciudadano' => $usuario->getCiudadano()->getId(),
+                            'estado' => true,
+                            'cfgEmpresaServicio' => 1
+                        )
+                    );
+                    if ($funcionario) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro encontrado", 
+                            'data'=> $funcionario,
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "El ciudadano no tiene concesionarios", 
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
+                    );
+                }
+
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
+                );
+            }
+
+
+            
+        /*}else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }*/
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
      * @Route("/record/times", name="mpersonalfuncionario_record_times")
      * @Method({"GET", "POST"})
      */

@@ -398,7 +398,7 @@ class PropietarioVehiculoController extends Controller
                         'msj' => "este vehiculo no tiene propietarios asignados", 
                         'data' => $vehiculo, 
                     );
-                }
+                } 
             }
             
         }else{
