@@ -115,9 +115,9 @@ class Comparendo
     /**
      * @var int
      *
-     * @ORM\Column(name="grado_alchohol", type="integer", nullable=true)
+     * @ORM\Column(name="grado_alcohol", type="integer", nullable=true)
      */
-    private $gradoAlchohol;
+    private $gradoAlcohol;
 
     /**
      * @var int
@@ -177,7 +177,7 @@ class Comparendo
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="comparendos")
      **/
-    protected $cuidadanoInfractor;
+    protected $ciudadanoInfractor;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgTipoInfractor", inversedBy="comparendos")
@@ -192,7 +192,7 @@ class Comparendo
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="comparendos")
      **/
-    protected $cuidadanoTestigo;
+    protected $ciudadanoTestigo;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgComparendoEstado", inversedBy="comparendos")
@@ -205,6 +205,11 @@ class Comparendo
     protected $infraccion;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgTipoVehiculo", inversedBy="tipos")
+     **/
+    protected $tipoVehiculo;
+
+    /**
      * Get id
      *
      * @return integer
@@ -213,6 +218,7 @@ class Comparendo
     {
         return $this->id;
     }
+
 
     /**
      * Set fecha
@@ -235,7 +241,10 @@ class Comparendo
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
+        return $this->fecha;
     }
 
     /**
@@ -259,7 +268,11 @@ class Comparendo
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('H:m');
+        }
         return $this->hora;
+
     }
 
     /**
@@ -523,31 +536,34 @@ class Comparendo
      */
     public function getFechaNotificacion()
     {
+        if ($this->fechaNotificacion) {
+            return $this->fechaNotificacion->format('d/m/Y');
+        }
         return $this->fechaNotificacion;
     }
 
     /**
-     * Set gradoAlchohol
+     * Set gradoAlcohol
      *
-     * @param integer $gradoAlchohol
+     * @param integer $gradoAlcohol
      *
      * @return Comparendo
      */
-    public function setGradoAlchohol($gradoAlchohol)
+    public function setGradoAlcohol($gradoAlcohol)
     {
-        $this->gradoAlchohol = $gradoAlchohol;
+        $this->gradoAlcohol = $gradoAlcohol;
 
         return $this;
     }
 
     /**
-     * Get gradoAlchohol
+     * Get gradoAlcohol
      *
      * @return integer
      */
-    public function getGradoAlchohol()
+    public function getGradoAlcohol()
     {
-        return $this->gradoAlchohol;
+        return $this->gradoAlcohol;
     }
 
     /**
@@ -767,27 +783,27 @@ class Comparendo
     }
 
     /**
-     * Set cuidadanoInfractor
+     * Set ciudadanoInfractor
      *
-     * @param \AppBundle\Entity\Ciudadano $cuidadanoInfractor
+     * @param \AppBundle\Entity\Ciudadano $ciudadanoInfractor
      *
      * @return Comparendo
      */
-    public function setCuidadanoInfractor(\AppBundle\Entity\Ciudadano $cuidadanoInfractor = null)
+    public function setCiudadanoInfractor(\AppBundle\Entity\Ciudadano $ciudadanoInfractor = null)
     {
-        $this->cuidadanoInfractor = $cuidadanoInfractor;
+        $this->ciudadanoInfractor = $ciudadanoInfractor;
 
         return $this;
     }
 
     /**
-     * Get cuidadanoInfractor
+     * Get ciudadanoInfractor
      *
      * @return \AppBundle\Entity\Ciudadano
      */
-    public function getCuidadanoInfractor()
+    public function getCiudadanoInfractor()
     {
-        return $this->cuidadanoInfractor;
+        return $this->ciudadanoInfractor;
     }
 
     /**
@@ -839,27 +855,27 @@ class Comparendo
     }
 
     /**
-     * Set cuidadanoTestigo
+     * Set ciudadanoTestigo
      *
-     * @param \AppBundle\Entity\Ciudadano $cuidadanoTestigo
+     * @param \AppBundle\Entity\Ciudadano $ciudadanoTestigo
      *
      * @return Comparendo
      */
-    public function setCuidadanoTestigo(\AppBundle\Entity\Ciudadano $cuidadanoTestigo = null)
+    public function setCiudadanoTestigo(\AppBundle\Entity\Ciudadano $ciudadanoTestigo = null)
     {
-        $this->cuidadanoTestigo = $cuidadanoTestigo;
+        $this->ciudadanoTestigo = $ciudadanoTestigo;
 
         return $this;
     }
 
     /**
-     * Get cuidadanoTestigo
+     * Get ciudadanoTestigo
      *
      * @return \AppBundle\Entity\Ciudadano
      */
-    public function getCuidadanoTestigo()
+    public function getCiudadanoTestigo()
     {
-        return $this->cuidadanoTestigo;
+        return $this->ciudadanoTestigo;
     }
 
     /**
@@ -908,5 +924,29 @@ class Comparendo
     public function getInfraccion()
     {
         return $this->infraccion;
+    }
+
+    /**
+     * Set tipoVehiculo
+     *
+     * @param \AppBundle\Entity\CfgTipoVehiculo $tipoVehiculo
+     *
+     * @return Comparendo
+     */
+    public function setTipoVehiculo(\AppBundle\Entity\CfgTipoVehiculo $tipoVehiculo = null)
+    {
+        $this->tipoVehiculo = $tipoVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVehiculo
+     *
+     * @return \AppBundle\Entity\CfgTipoVehiculo
+     */
+    public function getTipoVehiculo()
+    {
+        return $this->tipoVehiculo;
     }
 }

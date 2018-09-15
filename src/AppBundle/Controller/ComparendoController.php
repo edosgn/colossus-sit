@@ -6,7 +6,10 @@ use AppBundle\Entity\Comparendo;
 use AppBundle\Entity\Inmovilizacion;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+
 
 /**
  * Comparendo controller.
@@ -587,6 +590,28 @@ class ComparendoController extends Controller
                     'msj' => "Autorizacion no valida", 
                 );
         }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Exporta un comparendo en un archivo plano.
+     *
+     * @Route("/export", name="comparendo_export")
+     * @Method("GET")
+     */
+    public function exportAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $comparendos = $em->getRepository('AppBundle:Comparendo')->findAll();
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "lista de comparendos",
+            'data' => $comparendos,
+        );
         return $helpers->json($response);
     }
 }
