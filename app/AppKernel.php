@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new JHWEB\VehiculoBundle\JHWEBVehiculoBundle(),
             new JHWEB\SeguridadVialBundle\JHWEBSeguridadVialBundle(),
             new JHWEB\ConfigBundle\JHWEBConfigBundle(),
+            new JHWEB\ContravencionalBundle\JHWEBContravencionalBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

@@ -2,15 +2,19 @@
 
 namespace AppBundle\services;
 
+use Doctrine\ORM\EntityManager;
+
 /**
 * 
 */
 class Helpers 
 {
 	public $jwt_auth;
+	protected $em;
 	
-	public function __construct($jwt_auth) {
+	public function __construct($jwt_auth, EntityManager $em) {
 		$this->jwt_auth = $jwt_auth;
+		$this->em = $em;
 	}
 
 	public function authCheck($hash, $getIdentity = null){
@@ -57,5 +61,57 @@ class Helpers
 	    $edad = $fechaActual->diff($fechaNacimiento);
 
 	    return $edad->y;
+	}
+
+	public function comparendoState($params){
+
+		$em = $this->em;
+
+		if ($params->comparendo->ciudadanoId) {
+            $infractor = $em->getRepository('AppBundle:Ciudadano')->find(
+                $params->comparendo->ciudadanoId
+            );
+            $comparendo->setCuidadanoInfractor($infractor);
+
+            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
+                'Inhibitorio'
+            );
+        }
+
+        $fecha = $params->comparendo->fecha." ".$params->comparendo->hora;
+
+        $fechaInicio = '2002-01-01 00:00:00';
+        $fechaFin = '2017-07-13 23:59:00';
+		$caducidad = $this->checkRangeDates($fechaInicio, $fechaFin, $fecha);
+
+		if ($caducidad) {
+			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
+                'Caducidad'
+            );
+		}
+
+		$fechaInicio = '2017-07-14 00:00:00';
+        $fechaFin = date('Y-m-d h:i:s');
+		$caducidad = $this->checkRangeDates($fechaInicio, $fechaFin, $fecha);
+
+		if ($caducidad) {
+			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
+                'Caducidad'
+            );
+		}
+	   
+	    return $estado;
+	}
+
+	protected function checkRangeDates($fechaInicio, $fechaFin, $fecha){
+		$fechaInicio = strtotime($fechaInicio);
+		$fechaFin = strtotime($fechaFin);
+		$fecha = strtotime($fecha);
+
+		if(($fecha >= $fechaInicio) && ($fecha <= $fechaFin)) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 }

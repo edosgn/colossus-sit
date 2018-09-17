@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svsenialinventariobodegas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Consecutivo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svSenialInventarioBodega in svSenialInventarioBodegas %}
+            <tr>
+                <td><a href="{{ path('svsenialinventariobodega_show', { 'id': svSenialInventarioBodega.id }) }}">{{ svSenialInventarioBodega.id }}</a></td>
+                <td>{% if svSenialInventarioBodega.fecha %}{{ svSenialInventarioBodega.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svSenialInventarioBodega.consecutivo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svsenialinventariobodega_show', { 'id': svSenialInventarioBodega.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svsenialinventariobodega_edit', { 'id': svSenialInventarioBodega.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svsenialinventariobodega_new') }}">Create a new svSenialInventarioBodega</a>
+        </li>
+    </ul>
+{% endblock %}

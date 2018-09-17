@@ -10,4 +10,17 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvSenialRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene las señales por tipo de señal en inventario de bodega
+    public function getByTipoSenial($idTipoSenial)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT s
+            FROM JHWEBSeguridadVialBundle:SvSenialInventarioBodega sib,
+            JHWEBSeguridadVialBundle:SvSenial s
+            WHERE s.inventario = sib.id
+            AND sib.tipoSenial = :idTipoSenial";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('idTipoSenial', $idTipoSenial);
+        return $consulta->getResult();
+    }
 }
