@@ -68,6 +68,7 @@ class EmpresaController extends Controller
             //     );
             // }else{
                         $nombre = $params->empresa->nombre;
+                        $cfgEmpresaServicioId = $params->empresa->cfgEmpresaServicioId;
                         $sigla = $params->empresa->sigla;
                         $nit = $params->empresa->nit;
                         $dv = $params->empresa->dv;
@@ -101,6 +102,8 @@ class EmpresaController extends Controller
                         $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
                         $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
+                        
+                        $cfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->find($cfgEmpresaServicioId);
                 
 
                         $em = $this->getDoctrine()->getManager();                       
@@ -129,6 +132,7 @@ class EmpresaController extends Controller
                             $empresa->setCorreo($correo);
                             $empresa->setFax($fax);
                             $empresa->setCiudadano($ciudadano); 
+                            $empresa->setCfgEmpresaServicio($cfgEmpresaServicio); 
                             $empresa->setEstado(true);
 
                             $em = $this->getDoctrine()->getManager();                            
@@ -220,6 +224,7 @@ class EmpresaController extends Controller
             if ($empresa!=null) {
 
                 $nombre = $params->nombre;
+                $cfgEmpresaServicioId = $params->cfgEmpresaServicioId;
                 $sigla = $params->sigla;
                 $nit = $params->nit;
                 $dv = $params->dv;
@@ -239,14 +244,16 @@ class EmpresaController extends Controller
                 $correo = $params->correo;
                 $fax = $params->fax;
                 $ciudadanoId = $params->ciudadanoId;
-
-                $fechaVencimientoRegistroMercantil=new \DateTime($fechaVencimientoRegistroMercantil);
+              
+                $fechaVencimientoRegistroMercantil = new \DateTime($fechaVencimientoRegistroMercantil);
 
                 $em = $this->getDoctrine()->getManager();
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
                 $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
-                // $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
+                $cfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->find($cfgEmpresaServicioId);
+                // var_dump($cfgEmpresaServicio->getId());
+                // die();
 
                 $empresa->setNombre($nombre);
                 $empresa->setSigla($sigla);
@@ -270,6 +277,7 @@ class EmpresaController extends Controller
                 $empresa->setCorreo($correo);
                 $empresa->setFax($fax);
                 $empresa->setCiudadano($ciudadano); 
+                $empresa->setCfgEmpresaServicio($cfgEmpresaServicio);
                 $empresa->setEstado(true);
 
                 $em = $this->getDoctrine()->getManager();

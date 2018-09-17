@@ -20,7 +20,7 @@ class CfgAsignacionPlacaSedeController extends Controller
      * Lists all cfgAsignacionPlacaSede entities.
      *
      * @Route("/", name="cfgasignacionplacasede_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function indexAction()
     {
@@ -66,10 +66,12 @@ class CfgAsignacionPlacaSedeController extends Controller
             $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
             $tipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->find($params->cfgTipoVehiculo);
 
+            $letrasPlaca = strtoupper($params->letrasPlaca);
+            
             $cfgAsignacionPlacaSedes = $em->getRepository('AppBundle:CfgAsignacionPlacaSede')->findAll();
 
             foreach ($cfgAsignacionPlacaSedes as $key => $cfgAsignacionPlacaSede) {
-                if ($params->numeroFinal < $cfgAsignacionPlacaSede->getNumeroInicial() && $cfgAsignacionPlacaSede->getLetrasPlaca() == $params->letrasPlaca && $cfgAsignacionPlacaSede->getNumeroInicial() <= $params->numeroInicial && $cfgAsignacionPlacaSede->getNumeroFinal() >= $params->numeroInicial) {
+                if ($params->numeroFinal < $cfgAsignacionPlacaSede->getNumeroInicial() && $cfgAsignacionPlacaSede->getLetrasPlaca() == $letrasPlaca && $cfgAsignacionPlacaSede->getNumeroInicial() <= $params->numeroInicial && $cfgAsignacionPlacaSede->getNumeroFinal() >= $params->numeroInicial) {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
@@ -77,31 +79,81 @@ class CfgAsignacionPlacaSedeController extends Controller
                     );
                     return $helpers->json($response);
                 }
-                /*if ($params->numeroFinal < $cfgAsignacionPlacaSede->getNumeroInicial()) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El rango de placas ya se encuentra registrado",
-                    );
-                    return $helpers->json($response);
-                }*/
-
             }
 
             $automotor = $this->validarTipoVehiculo(
                 $params->numeroInicial,
                 $params->numeroFinal,
-                $params->letrasPlaca,
+                $letrasPlaca,
                 $tipoVehiculo->getNombre()
             );
-            #preg_match('/^[a-zA-Z]+$/', 
             $contadorPlacas = 0;
 
             if ($automotor) {
                 for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
                     $em = $this->getDoctrine()->getManager();
                     if ($tipoVehiculo->getNombre() == "MOTOCICLETA") {
-                        $numero = $params->letrasPlaca . $i . $params->letraFinal;
+                        $numero = $letrasPlaca . $i . strtoupper($params->letraFinal);
+                        if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
+                            $cadena = "0" . $i;
+                            $numero = $letrasPlaca . $cadena . strtoupper($params->letraFinal);
+                        }
+
+                        $cfgPlaca = new CfgPlaca();
+                        $cfgPlaca->setNumero($numero);
+                        $cfgPlaca->setEstado('Fabricada');
+                        $cfgPlaca->setTipoVehiculo($tipoVehiculo);
+                        $cfgPlaca->setSedeOperativa($sedeOperativa);
+
+                        $em->persist($cfgPlaca);
+                        $em->flush();
+
+                    } else if ($tipoVehiculo->getNombre() == "REMOLQUE Y SEMIREMOLQUE") {
+                        $numero = $letrasPlaca . $i;
+                        if ($letrasPlaca == 'R' || $letrasPlaca == 'S') {
+                            if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
+                                $cadena = "0000" . $i;
+                                $numero = $letrasPlaca . $cadena;
+                            } else if ($i >= 10 && $i < 100 && $contadorPlacas != 0) {
+                                $cadena = "000" . $i;
+                                $numero = $letrasPlaca . $cadena;
+                            } else if ($i >= 100 && $i < 999 && $contadorPlacas != 0) {
+                                $cadena = "00" . $i;
+                                $numero = $letrasPlaca . $cadena;
+                            } else if ($i >= 1000 && $i < 10000 && $contadorPlacas != 0) {
+                                $cadena = "0" . $i;
+                                $numero = $letrasPlaca . $cadena;
+                            }
+                       
+                            $cfgPlaca = new CfgPlaca();
+                            $cfgPlaca->setNumero($numero);
+                            $cfgPlaca->setEstado('Fabricada');
+                            $cfgPlaca->setTipoVehiculo($tipoVehiculo);
+                            $cfgPlaca->setSedeOperativa($sedeOperativa);
+
+                            $em->persist($cfgPlaca);
+                            $em->flush();
+                        } else {
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => "Error en el formato de placas para REMOLQUE Y SEMIREMOLQUE",
+                            );
+                            return $helpers->json($response);
+                        }
+                    } elseif ($tipoVehiculo->getNombre() == "MOTOCARRO"){
+                        $numero = $i. $letrasPlaca;
+
+                        if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
+                            $cadena = "00" . $i;
+                            $numero = $cadena.$letrasPlaca;
+
+                        } else if ($i >= 10 && $i < 100 && $contadorPlacas != 0) {
+                            $cadena = "0" . $i;
+                            $numero = $cadena.$letrasPlaca;
+
+                        }
+
                         $cfgPlaca = new CfgPlaca();
                         $cfgPlaca->setNumero($numero);
                         $cfgPlaca->setEstado('Fabricada');
@@ -112,7 +164,18 @@ class CfgAsignacionPlacaSedeController extends Controller
                         $em->flush();
 
                     } else {
-                        $numero = $params->letrasPlaca . $i;
+                        $numero = $letrasPlaca . $i;
+
+                        if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
+                            $cadena = "00" . $i;
+                            $numero = $letrasPlaca . $cadena;
+
+                        } else if ($i >= 10 && $i < 100 && $contadorPlacas != 0) {
+                            $cadena = "0" . $i;
+                            $numero = $letrasPlaca . $cadena;
+
+                        }
+
                         $cfgPlaca = new CfgPlaca();
                         $cfgPlaca->setNumero($numero);
                         $cfgPlaca->setEstado('Fabricada');
@@ -134,7 +197,7 @@ class CfgAsignacionPlacaSedeController extends Controller
                 $asignacion->setSedeOperativa($sedeOperativa);
                 $asignacion->setTipoVehiculo($tipoVehiculo);
                 $asignacion->setModulo($modulo);
-                $asignacion->setLetrasPlaca($params->letrasPlaca);
+                $asignacion->setLetrasPlaca($letrasPlaca);
                 $asignacion->setNumeroInicial($params->numeroInicial);
                 $asignacion->setNumeroFinal($params->numeroFinal);
 

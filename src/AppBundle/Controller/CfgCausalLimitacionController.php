@@ -81,9 +81,7 @@ class CfgCausalLimitacionController extends Controller
                     'msj' => "El nombre del causal limitacion ya se encuentra registrado",
                 );
             }
-
-            //}
-        } else {
+        }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
@@ -121,22 +119,17 @@ class CfgCausalLimitacionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
             $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
             $cfgCausalLimitacion = $em->getRepository('AppBundle:CfgCausalLimitacion')->find($params->id);
             if ($cfgCausalLimitacion != null) {
-
                 $cfgCausalLimitacion->setNombre($nombre);
                 $cfgCausalLimitacion->setActivo(true);
-
                 $em->persist($cfgCausalLimitacion);
                 $em->flush();
-
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -156,9 +149,7 @@ class CfgCausalLimitacionController extends Controller
                 'msj' => "Autorizacion no valida para editar banco",
             );
         }
-
         return $helpers->json($response);
-
     }
 
     /**
@@ -175,7 +166,6 @@ class CfgCausalLimitacionController extends Controller
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $cfgCausalLimitacion = $em->getRepository('AppBundle:CfgCausalLimitacion')->find($id);
-
             $cfgCausalLimitacion->setActivo(0);
             $em = $this->getDoctrine()->getManager();
             $em->persist($cfgCausalLimitacion);
@@ -193,7 +183,6 @@ class CfgCausalLimitacionController extends Controller
             );
         }
         return $helpers->json($response);
-
     }
 
     /**
@@ -212,7 +201,7 @@ class CfgCausalLimitacionController extends Controller
         ;
     }
 
-         /**
+    /**
      * datos para select
      *
      * @Route("/select", name="cfgcausallimitacion_select")

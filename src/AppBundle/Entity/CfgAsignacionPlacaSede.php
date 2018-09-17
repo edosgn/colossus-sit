@@ -40,7 +40,7 @@ class CfgAsignacionPlacaSede
     /**
      * @var string
      *
-     * @ORM\Column(name="letrasPlaca", type="string", length=255)
+     * @ORM\Column(name="letras_placa", type="string", length=255)
      */
     private $letrasPlaca;
 

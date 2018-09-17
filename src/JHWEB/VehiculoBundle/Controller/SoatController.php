@@ -47,6 +47,14 @@ class SoatController extends Controller
                     'data' => $soats,
                 );
             }
+            else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se ha encontrado ningun registro de soat para este vehículo",
+                    'data' => $soats,
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',
@@ -72,6 +80,7 @@ class SoatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+            
             $soat = new Soat();
 
             $em = $this->getDoctrine()->getManager();
@@ -90,10 +99,12 @@ class SoatController extends Controller
             }
 
             $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-            $soat->setVigencia(new \Datetime($params->vigencia));
+            $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
+            $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
             $soat->setNumeroPoliza($params->numeroPoliza);
             $soat->setNombreEmpresa($params->nombreEmpresa);
             $soat->setActivo(true);
+            $soat->setEstado("Disponible");
             $em->persist($soat);
             $em->flush();
 
@@ -191,10 +202,10 @@ class SoatController extends Controller
     /**
      * Creates a new Soat entity.
      *
-     * @Route("/get/vigencia", name="vigencia_soat")
+     * @Route("/get/fecha/vencimiento", name="soat_fecha_vencimiento")
      * @Method({"GET", "POST"})
      */
-    public function getVigenciaSoatAction(Request $request)
+    public function getFechaVencimientoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -204,13 +215,15 @@ class SoatController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $vigencia = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));
+            $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));
+            $fechaVigencia = new \Datetime(date('Y-m-d', strtotime('+1 day', strtotime($params->fechaExpedicion))));
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Fecha de vigencia soat calculada con exito",
-                'data' => $vigencia->format('Y-m-d')
+                'message' => "Fecha de vencimiento del soat calculada con éxito",
+                'fechaVencimiento' => $fechaVencimiento->format('Y-m-d'),
+                'fechaVigencia' => $fechaVigencia->format('Y-m-d')
             );
         }else{
             $response = array(

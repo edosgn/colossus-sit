@@ -184,7 +184,11 @@ class LicenciaConduccion
      */
     public function getFechaVencimiento()
     {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('d/m/Y');
+        }
         return $this->fechaVencimiento;
+
     }
 
     /**
