@@ -468,15 +468,12 @@ class ComparendoController extends Controller
             $params = json_decode($json);
             $ciudadanoId = $params->ciudadanoId;
            // var_dump($params);die();
-
+ 
             
             $em = $this->getDoctrine()->getManager();
             $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor(
                 $ciudadanoId
-                // array('cuidadanoInfractor' => 1)
             );
-            //var_dump($comparendos);die();
-
             if ($comparendos != null) {
                 $response = array(
                     'status' => 'success',
