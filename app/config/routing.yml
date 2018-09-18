@@ -1,3 +1,20 @@
+jhweb_config_cfg_adm_acto_administrativo:
+    resource: "@JHWEBConfigBundle/Controller/CfgAdmActoAdministrativoController.php"
+    type:     annotation
+
+jhweb_config_cfg_adm_formato:
+    resource: "@JHWEBConfigBundle/Controller/CfgAdmFormatoController.php"
+    type:     annotation
+
+jhweb_config_cfg_adm_formato_tipo:
+    resource: "@JHWEBConfigBundle/Controller/CfgAdmFormatoTipoController.php"
+    type:     annotation
+
+jhweb_contravencional:
+    resource: "@JHWEBContravencionalBundle/Controller/"
+    type:     annotation
+    prefix:   /contravencional
+
 jhweb_seguridad_vial:
     resource: "@JHWEBSeguridadVialBundle/Controller/"
     type:     annotation

@@ -70,13 +70,16 @@ class SvSenial
      */
     private $logo;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida", inversedBy="seniales") */
+    private $unidadMedida;
+
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialEstado", inversedBy="seniales") */
     private $estado;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialColor", inversedBy="seniales") */
     private $color;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvSenialInventario", inversedBy="seniales") */
+    /** @ORM\ManyToOne(targetEntity="SvSenialInventarioBodega", inversedBy="seniales") */
     private $inventario;
 
     /**
@@ -258,6 +261,30 @@ class SvSenial
     }
 
     /**
+     * Set unidadMedida
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida $unidadMedida
+     *
+     * @return SvSenial
+     */
+    public function setUnidadMedida(\JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida $unidadMedida = null)
+    {
+        $this->unidadMedida = $unidadMedida;
+
+        return $this;
+    }
+
+    /**
+     * Get unidadMedida
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida
+     */
+    public function getUnidadMedida()
+    {
+        return $this->unidadMedida;
+    }
+
+    /**
      * Set estado
      *
      * @param \JHWEB\ConfigBundle\Entity\CfgSvSenialEstado $estado
@@ -308,11 +335,11 @@ class SvSenial
     /**
      * Set inventario
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\CfgSvSenialInventario $inventario
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega $inventario
      *
      * @return SvSenial
      */
-    public function setInventario(\JHWEB\SeguridadVialBundle\Entity\CfgSvSenialInventario $inventario = null)
+    public function setInventario(\JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega $inventario = null)
     {
         $this->inventario = $inventario;
 
@@ -322,7 +349,7 @@ class SvSenial
     /**
      * Get inventario
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\CfgSvSenialInventario
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega
      */
     public function getInventario()
     {
