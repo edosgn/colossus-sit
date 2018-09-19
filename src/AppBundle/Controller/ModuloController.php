@@ -53,38 +53,29 @@ class ModuloController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+            
+            $nombre = $params->nombre;
+            $abreviatura = $params->abreviatura;
+            $siglaSustrato = $params->siglaSustrato;
+            $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $nombre = $params->nombre;
-                $abreviatura = $params->abreviatura;
-                $siglaSustrato = $params->siglaSustrato;
-                $descripcion = (isset($params->descripcion)) ? $params->descripcion : null;
+            $modulo = new Modulo();
 
-                $modulo = new Modulo();
+            $modulo->setNombre($nombre);
+            $modulo->setAbreviatura($abreviatura);
+            $modulo->setSiglaSustrato($siglaSustrato);
+            $modulo->setDescripcion($descripcion);
+            $modulo->setEstado(true);
 
-                $modulo->setNombre($nombre);
-                $modulo->setAbreviatura($abreviatura);
-                $modulo->setSiglaSustrato($siglaSustrato);
-                $modulo->setDescripcion($descripcion);
-                $modulo->setEstado(true);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($modulo);
+            $em->flush();
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($modulo);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Modulo creado con exito", 
-                );
-                       
-            //}
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Modulo creado con exito", 
+            );
         }else{
             $response = array(
                 'status' => 'error',
@@ -98,7 +89,7 @@ class ModuloController extends Controller
     /**
      * Finds and displays a Modulo entity.
      *
-     * @Route("/show/{id}", name="modulo_show")
+     * @Route("/{id}/show", name="modulo_show")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)

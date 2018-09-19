@@ -100,20 +100,15 @@ class ComparendoController extends Controller
             );
             $comparendo->setVehiculo($vehiculo);
 
-            $infractor = $em->getRepository('AppBundle:Ciudadano')->find(
-                $params->comparendo->ciudadanoId
-            );
-            $comparendo->setCuidadanoInfractor($infractor);
-
-            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                $params->comparendo->estadoId
-            );
+            $estado = $helpers->comparendoState($params);
             $comparendo->setEstado($estado);
 
-            $tipoInfractor = $em->getRepository('AppBundle:CfgTipoInfractor')->find(
-                $params->comparendo->tipoInfractorId
-            );
-            $comparendo->setTipoInfractor($tipoInfractor);
+            if (isset( $params->comparendo->tipoInfractorId)) {
+                $tipoInfractor = $em->getRepository('AppBundle:CfgTipoInfractor')->find(
+                    $params->comparendo->tipoInfractorId
+                );
+                $comparendo->setTipoInfractor($tipoInfractor);
+            }
 
             if (isset($params->comparendo->testigoId)) {
                 $testigo = $em->getRepository('AppBundle:Ciudadano')->find(
@@ -468,15 +463,12 @@ class ComparendoController extends Controller
             $params = json_decode($json);
             $ciudadanoId = $params->ciudadanoId;
            // var_dump($params);die();
-
+ 
             
             $em = $this->getDoctrine()->getManager();
             $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor(
                 $ciudadanoId
-                // array('cuidadanoInfractor' => 1)
             );
-            //var_dump($comparendos);die();
-
             if ($comparendos != null) {
                 $response = array(
                     'status' => 'success',
@@ -505,10 +497,10 @@ class ComparendoController extends Controller
     /**
      * Busca comparendo por número.
      *
-     * @Route("/search/tipo", name="comparendo_search_tipo")
+     * @Route("/search/estado", name="comparendo_search_estado")
      * @Method("POST")
      */
-    public function searchTipoAction(Request $request)
+    public function searchByEstadoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -520,21 +512,25 @@ class ComparendoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $comparendo = $em->getRepository('AppBundle:Comparendo')->findOneBy(
-                array('numeroOrden' => $params->numeroOrden)
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
+                array(
+                    'estado' => $params->idEstado
+                )
             );
 
-            if ($comparendo != null) {
+            if ($comparendos) {
                 $response = array(
-                    'status' => 'error',
+                    'status' => 'success',
                     'code' => 200,
-                    'msj' => "Número de comparendo ya existe", 
+                    'message' => count($comparendos)." registros encontrados.",
+                    'data' => $comparendos
             );
             }else{
                  $response = array(
-                    'status' => 'success',
+                    'status' => 'error',
                     'code' => 400,
-                    'msj' => "Número de orden no encontrada en la base de datos", 
+                    'message' => "Ningún registro encontrado.", 
                 );
             }
 
@@ -543,9 +539,10 @@ class ComparendoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
+
         return $helpers->json($response);
     } 
 

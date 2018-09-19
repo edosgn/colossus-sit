@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svsenialubicacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+                <th>Via1</th>
+                <th>Numero1</th>
+                <th>Via2</th>
+                <th>Numero2</th>
+                <th>Via3</th>
+                <th>Numero3</th>
+                <th>Direccion</th>
+                <th>Valor</th>
+                <th>Cantidad</th>
+                <th>Unidad</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svSenialUbicacion in svSenialUbicacions %}
+            <tr>
+                <td><a href="{{ path('svsenialubicacion_show', { 'id': svSenialUbicacion.id }) }}">{{ svSenialUbicacion.id }}</a></td>
+                <td>{% if svSenialUbicacion.fecha %}{{ svSenialUbicacion.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svSenialUbicacion.latitud }}</td>
+                <td>{{ svSenialUbicacion.longitud }}</td>
+                <td>{{ svSenialUbicacion.via1 }}</td>
+                <td>{{ svSenialUbicacion.numero1 }}</td>
+                <td>{{ svSenialUbicacion.via2 }}</td>
+                <td>{{ svSenialUbicacion.numero2 }}</td>
+                <td>{{ svSenialUbicacion.via3 }}</td>
+                <td>{{ svSenialUbicacion.numero3 }}</td>
+                <td>{{ svSenialUbicacion.direccion }}</td>
+                <td>{{ svSenialUbicacion.valor }}</td>
+                <td>{{ svSenialUbicacion.cantidad }}</td>
+                <td>{{ svSenialUbicacion.unidad }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svsenialubicacion_show', { 'id': svSenialUbicacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svsenialubicacion_edit', { 'id': svSenialUbicacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svsenialubicacion_new') }}">Create a new svSenialUbicacion</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -48,13 +48,13 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
             return $consulta->getResult();
         }
 
-        //Obtiene el comparendo según ciudadano
+    //Obtiene el comparendo según ciudadano
     public function getByCiudadanoInfractor($ciudadanoId)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT co
             FROM AppBundle:Comparendo co
-            WHERE co.cuidadanoInfractor = :ciudadanoId
+            WHERE co.ciudadanoInfractor = :ciudadanoId
             AND co.estado = 1";
         $consulta = $em->createQuery($dql);
 
