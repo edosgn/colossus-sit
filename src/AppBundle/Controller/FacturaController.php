@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FacturaController extends Controller
 {
-    /**
+    /** 
      * Lists all factura entities.
      *
      * @Route("/", name="factura_index")

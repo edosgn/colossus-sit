@@ -21,7 +21,7 @@ class CiudadanoController extends Controller
      * Lists all Ciudadano entities.
      *
      * @Route("/", name="ciudadano_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function indexAction()
     {
@@ -477,21 +477,21 @@ class CiudadanoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
-                array('identificacion' => $params)
+                array('identificacion' => $params->cedula)
             );
 
             if ($usuario!=null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $usuario,
             );
             }else{
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Identificacion no encontrada en la base de datos", 
+                    'message' => "Identificación no encontrada en la base de datos", 
                 );
             }
 

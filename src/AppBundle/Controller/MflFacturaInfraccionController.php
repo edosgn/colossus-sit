@@ -19,7 +19,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * Lists all factura entities.
      *
-     * @Route("/", name="factura_index")
+     * @Route("/", name="facturaInfraccion_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -40,7 +40,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * Creates a new factura entity.
      *
-     * @Route("/new", name="factura_new")
+     * @Route("/new", name="facturaInfraccion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -159,7 +159,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * Finds and displays a factura entity.
      *
-     * @Route("/{id}/show", name="factura_show")
+     * @Route("/{id}/show", name="facturaInfraccion_show")
      * @Method("GET")
      */
     public function showAction(MflFacturaInfraccion $factura, $id)
@@ -190,7 +190,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * Displays a form to edit an existing factura entity.
      *
-     * @Route("/edit", name="factura_edit")
+     * @Route("/edit", name="facturaInfraccion_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -255,7 +255,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * Deletes a factura entity.
      *
-     * @Route("/{id}/delete", name="factura_delete")
+     * @Route("/{id}/delete", name="facturaInfraccion_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request, MflFacturaInfraccion $factura)
@@ -296,7 +296,7 @@ class MflFacturaInfraccionController extends Controller
     private function createDeleteForm(MflFacturaInfraccion $factura)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('factura_delete', array('id' => $factura->getId())))
+            ->setAction($this->generateUrl('facturaInfraccion_delete', array('id' => $factura->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -305,7 +305,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * busca vehiculos por id.
      *
-     * @Route("/show/id", name="factura_id")
+     * @Route("/show/id", name="facturaInfraccion_id")
      * @Method("POST")
      */
     public function showById(Request $request)
@@ -351,7 +351,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * busca factura por nvehiculoumero.
      *
-     * @Route("/show/factura/vehiculo", name="factura_vehiculo")
+     * @Route("/show/factura/vehiculo", name="facturaInfraccion_vehiculo")
      * @Method("POST")
      */
     public function showByVehiculo(Request $request)
@@ -406,7 +406,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * busca vehiculos por id.
      *
-     * @Route("/search/numero", name="factura_search_numero")
+     * @Route("/search/numero", name="facturaInfraccion_search_numero")
      * @Method({"GET", "POST"})
      */
     public function searchByNumero(Request $request)
@@ -452,7 +452,7 @@ class MflFacturaInfraccionController extends Controller
     /**
      * Creates a new factura entity.
      *
-     * @Route("/imprimir/factura", name="imprimir_factura_new")
+     * @Route("/imprimir/factura", name="imprimir_facturaInfraccion_new")
      * @Method({"GET", "POST"})
      */
     public function ImprimirMflFacturaInfraccionAction(Request $request)
