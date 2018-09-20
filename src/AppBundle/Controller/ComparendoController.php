@@ -406,7 +406,6 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
-
     /**
      * Busca comparendo por número.
      *
@@ -455,11 +454,11 @@ class ComparendoController extends Controller
 
 
     /**
- * Busca comparendo por ciudadano.
- *
- * @Route("/ciudadano/search", name="ciudadano_infractor_comparendo_search")
- * @Method({"GET", "POST"})
- */
+     * Busca comparendo por ciudadano.
+     *
+     * @Route("/ciudadano/search", name="ciudadano_infractor_comparendo_search")
+     * @Method({"GET", "POST"})
+     */
     public function searchByCiudadanoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
@@ -468,26 +467,23 @@ class ComparendoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            $ciudadanoId = $params->ciudadanoId;
-           // var_dump($params);die();
- 
             
             $em = $this->getDoctrine()->getManager();
-            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor(
-                $ciudadanoId
-            );
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor($params->ciudadanoId);
+
             if ($comparendos != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "El ciudadano tiene comparendos",
+                    'message' => "El ciudadano tiene ".count($comparendos)." comparendos",
                     'data' => $comparendos,
                 );
             } else {
                 $response = array(
                     'status' => 'success',
                     'code' => 400,
-                    'msj' => "El ciudadano no tiene comparendos en la base de datos",
+                    'message' => "El ciudadano no tiene comparendos en la base de datos",
                 );
             }
 
@@ -495,7 +491,7 @@ class ComparendoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);

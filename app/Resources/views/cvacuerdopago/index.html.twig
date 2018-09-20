@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvacuerdopagos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Numerocuotas</th>
+                <th>Cuotaspagadas</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvAcuerdoPago in cvAcuerdoPagos %}
+            <tr>
+                <td><a href="{{ path('cvacuerdopago_show', { 'id': cvAcuerdoPago.id }) }}">{{ cvAcuerdoPago.id }}</a></td>
+                <td>{% if cvAcuerdoPago.fecha %}{{ cvAcuerdoPago.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ cvAcuerdoPago.numeroCuotas }}</td>
+                <td>{{ cvAcuerdoPago.cuotasPagadas }}</td>
+                <td>{% if cvAcuerdoPago.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvacuerdopago_show', { 'id': cvAcuerdoPago.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvacuerdopago_edit', { 'id': cvAcuerdoPago.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvacuerdopago_new') }}">Create a new cvAcuerdoPago</a>
+        </li>
+    </ul>
+{% endblock %}
