@@ -376,7 +376,7 @@ class CiudadanoController extends Controller
      * @Route("/search/identificacion", name="ciudadano_search_identificacion")
      * @Method({"GET", "POST"})
      */
-    public function searchIdentificacionAction(Request $request)
+    public function searchByIdentificacionAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);

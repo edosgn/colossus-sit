@@ -62,7 +62,12 @@ class ComparendoController extends Controller
             $comparendo = new Comparendo();
 
             $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
-            $comparendo->setHora(new \DateTime($params->comparendo->hora));
+            $horas = $params->comparendo->horas;
+            $minutos = $params->comparendo->minutos;
+            
+            $comparendo->setHora(new \DateTime($horas.':'.$minutos));
+            
+
             $comparendo->setDireccion($params->comparendo->direccion);
             $comparendo->setLocalidad($params->comparendo->localidad);
             $comparendo->setInmovilizacion($params->comparendo->inmovilizacion);
@@ -70,7 +75,7 @@ class ComparendoController extends Controller
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
             $comparendo->setFotomulta($params->comparendo->fotomulta);
-            $comparendo->setGradoAlchohol($params->comparendo->gradoAlchoholemia);
+            $comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
             $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
             $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
             $comparendo->setValorAdicional($params->comparendo->infraccionValorAdicional);
@@ -100,7 +105,7 @@ class ComparendoController extends Controller
             );
             $comparendo->setVehiculo($vehiculo);
 
-            $estado = $helpers->comparendoState($params);
+            $estado = $helpers->comparendoState($params,$comparendo);
             $comparendo->setEstado($estado);
 
             if (isset( $params->comparendo->tipoInfractorId)) {
@@ -114,7 +119,7 @@ class ComparendoController extends Controller
                 $testigo = $em->getRepository('AppBundle:Ciudadano')->find(
                     $params->comparendo->testigoId
                 );
-                $comparendo->setCuidadanoTestigo($testigo);
+                $comparendo->setCiudadanoTestigo($testigo);
             }
 
             $infraccion = $em->getRepository('AppBundle:MflInfraccion')->find(
@@ -132,6 +137,8 @@ class ComparendoController extends Controller
 
             $em->persist($comparendo);
             $em->flush();
+            var_dump($comparendo->getHora());
+            die();
 
             if ($params->comparendo->inmovilizacion) {
                 $inmovilizacion = new Inmovilizacion();
@@ -399,7 +406,6 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
-
     /**
      * Busca comparendo por número.
      *
@@ -448,11 +454,11 @@ class ComparendoController extends Controller
 
 
     /**
- * Busca comparendo por ciudadano.
- *
- * @Route("/ciudadano/search", name="ciudadano_infractor_comparendo_search")
- * @Method({"GET", "POST"})
- */
+     * Busca comparendo por ciudadano.
+     *
+     * @Route("/ciudadano/search", name="ciudadano_infractor_comparendo_search")
+     * @Method({"GET", "POST"})
+     */
     public function searchByCiudadanoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
@@ -461,26 +467,23 @@ class ComparendoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            $ciudadanoId = $params->ciudadanoId;
-           // var_dump($params);die();
- 
             
             $em = $this->getDoctrine()->getManager();
-            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor(
-                $ciudadanoId
-            );
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor($params->ciudadanoId);
+
             if ($comparendos != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "El ciudadano tiene comparendos",
+                    'message' => "El ciudadano tiene ".count($comparendos)." comparendos",
                     'data' => $comparendos,
                 );
             } else {
                 $response = array(
                     'status' => 'success',
                     'code' => 400,
-                    'msj' => "El ciudadano no tiene comparendos en la base de datos",
+                    'message' => "El ciudadano no tiene comparendos en la base de datos",
                 );
             }
 
@@ -488,7 +491,7 @@ class ComparendoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
