@@ -63,15 +63,15 @@ class Helpers
 	    return $edad->y;
 	}
 
-	public function comparendoState($params){
-
+	public function comparendoState($params,$comparendo){
+ 
 		$em = $this->em;
 
 		if ($params->comparendo->ciudadanoId) {
             $infractor = $em->getRepository('AppBundle:Ciudadano')->find(
                 $params->comparendo->ciudadanoId
             );
-            $comparendo->setCuidadanoInfractor($infractor);
+            $comparendo->setCiudadanoInfractor($infractor);
 
             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
                 'Inhibitorio'
