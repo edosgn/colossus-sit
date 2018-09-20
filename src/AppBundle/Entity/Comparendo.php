@@ -210,6 +210,11 @@ class Comparendo
     protected $tipoVehiculo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago", inversedBy="comparendos")
+     **/
+    protected $acuerdoPago;
+
+    /**
      * Get id
      *
      * @return integer
@@ -948,5 +953,29 @@ class Comparendo
     public function getTipoVehiculo()
     {
         return $this->tipoVehiculo;
+    }
+
+    /**
+     * Set acuerdoPago
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago $acuerdoPago
+     *
+     * @return Comparendo
+     */
+    public function setAcuerdoPago(\JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago $acuerdoPago = null)
+    {
+        $this->acuerdoPago = $acuerdoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get acuerdoPago
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago
+     */
+    public function getAcuerdoPago()
+    {
+        return $this->acuerdoPago;
     }
 }
