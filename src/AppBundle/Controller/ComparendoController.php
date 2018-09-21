@@ -606,11 +606,25 @@ class ComparendoController extends Controller
 
         $comparendos = $em->getRepository('AppBundle:Comparendo')->findAll();
 
+        foreach ($comparendos as $key => $comparendo) {
+            $comparendoId = $comparendo->getId();
+            $vehiculoId = $comparendo->getVehiculo()->getId();
+            
+            $inmovilizacion = $em->getRepository('AppBundle:Inmovilizacion')->findOneBy(array('comparendo' => $comparendoId));      
+           $comparendo->{"inmovilizacion"}  = $inmovilizacion;
+
+            //$propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(array('vehiculo' => $vehiculoId));
+            var_dump($comparendo);
+            die();
+        }
+
+        
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "lista de comparendos",
             'data' => $comparendos,
+            'inmovilizacion' => $inmovilizacion,
         );
         return $helpers->json($response);
     }
