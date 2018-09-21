@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgtemacapacitacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgTemaCapacitacion in svCfgTemaCapacitacions %}
+            <tr>
+                <td><a href="{{ path('svcfgtemacapacitacion_show', { 'id': svCfgTemaCapacitacion.id }) }}">{{ svCfgTemaCapacitacion.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgtemacapacitacion_show', { 'id': svCfgTemaCapacitacion.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

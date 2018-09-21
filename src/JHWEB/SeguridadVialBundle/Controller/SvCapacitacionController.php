@@ -97,7 +97,6 @@ class SvCapacitacionController extends Controller
             }*/
             $capacitacion->setCedula($params->cedula);
             $capacitacion->setFecha(new \Datetime($params->fecha));
-            $capacitacion->setHora($params->hora);
             $capacitacion->setFormador($params->formador);
             $capacitacion->setSemana($params->semana);
             $capacitacion->setFechaActividad(new \Datetime($params->fechaActividad));

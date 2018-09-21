@@ -143,8 +143,8 @@ class VehiculoMaquinaria
      */
     private $vehiculo;
 
-     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgGps", inversedBy="propietariosVehiculo") */
-     private $cfgGps;
+     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgEmpresaGps", inversedBy="propietariosVehiculo") */
+     private $cfgEmpresaGps;
 
     
 
@@ -591,26 +591,26 @@ class VehiculoMaquinaria
     }
 
     /**
-     * Set cfgGps
+     * Set cfgEmpresaGps
      *
-     * @param \AppBundle\Entity\CfgGps $cfgGps
+     * @param \AppBundle\Entity\CfgEmpresaGps $cfgEmpresaGps
      *
      * @return VehiculoMaquinaria
      */
-    public function setCfgGps(\AppBundle\Entity\CfgGps $cfgGps = null)
+    public function setCfgEmpresaGps(\AppBundle\Entity\CfgEmpresaGps $cfgEmpresaGps = null)
     {
-        $this->cfgGps = $cfgGps;
+        $this->cfgEmpresaGps = $cfgEmpresaGps;
 
         return $this;
     }
 
     /**
-     * Get cfgGps
+     * Get cfgEmpresaGps
      *
-     * @return \AppBundle\Entity\CfgGps
+     * @return \AppBundle\Entity\CfgEmpresaGps
      */
-    public function getCfgGps()
+    public function getCfgEmpresaGps()
     {
-        return $this->cfgGps;
+        return $this->cfgEmpresaGps;
     }
 }

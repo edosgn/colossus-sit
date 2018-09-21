@@ -1037,17 +1037,9 @@ class Comparendo
     }
 
     /**
-<<<<<<< HEAD
-     * Get propietarioIdentificacion
-=======
-     * @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago", inversedBy="comparendos")
-     **/
-    protected $acuerdoPago;
-
-    /**
      * Get id
->>>>>>> f1aa6ae609ab5b4aa958400d3ddee3c208d9a3ca
-     *
+     * 
+     * 
      * @return integer
      */
     public function getPropietarioIdentificacion()
@@ -1922,29 +1914,5 @@ class Comparendo
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set acuerdoPago
-     *
-     * @param \JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago $acuerdoPago
-     *
-     * @return Comparendo
-     */
-    public function setAcuerdoPago(\JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago $acuerdoPago = null)
-    {
-        $this->acuerdoPago = $acuerdoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get acuerdoPago
-     *
-     * @return \JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago
-     */
-    public function getAcuerdoPago()
-    {
-        return $this->acuerdoPago;
     }
 }
