@@ -1,26 +1,26 @@
 <?php
 
-namespace AppBundle\Form;
+namespace JHWEB\ConfigBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CfgBodegaType extends AbstractType
+class CfgSvSenialDestinoType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('estado');
+        $builder->add('nombre')->add('activo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\CfgBodega'
+            'data_class' => 'JHWEB\ConfigBundle\Entity\CfgSvSenialDestino'
         ));
     }
 
@@ -29,7 +29,7 @@ class CfgBodegaType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_cfgBodega';
+        return 'jhweb_configbundle_cfgsvsenialdestino';
     }
 
 

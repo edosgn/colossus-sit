@@ -70,7 +70,7 @@ class ComparendoController extends Controller
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
             $comparendo->setFotomulta($params->comparendo->fotomulta);
-            $comparendo->setGradoAlchohol($params->comparendo->gradoAlchoholemia);
+            //$comparendo->setGradoAlchohol($params->comparendo->gradoAlchoholemia);
             $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
             $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
             $comparendo->setValorAdicional($params->comparendo->infraccionValorAdicional);

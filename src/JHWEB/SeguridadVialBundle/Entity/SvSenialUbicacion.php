@@ -99,14 +99,18 @@ class SvSenialUbicacion
     private $valor;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="adjunto", type="string", length=255)
+     */
+    private $adjunto;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="cantidad", type="integer", nullable=true)
      */
     private $cantidad;
-
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida", inversedBy="senialesUbicacion") */
-    private $unidadMedida;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvConector", inversedBy="senialesUbicacion") */
     private $conector;
@@ -116,6 +120,9 @@ class SvSenialUbicacion
 
     /** @ORM\ManyToOne(targetEntity="SvSenialInventarioMunicipio", inversedBy="senialesUbicacion") */
     private $inventario;
+
+    /** @ORM\ManyToOne(targetEntity="SvSenial", inversedBy="senialesUbicacion") */
+    private $senial;
 
     /**
      * Get id
@@ -440,30 +447,6 @@ class SvSenialUbicacion
     }
 
     /**
-     * Set unidadMedida
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida $unidadMedida
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setUnidadMedida(\JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida $unidadMedida = null)
-    {
-        $this->unidadMedida = $unidadMedida;
-
-        return $this;
-    }
-
-    /**
-     * Get unidadMedida
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida
-     */
-    public function getUnidadMedida()
-    {
-        return $this->unidadMedida;
-    }
-
-    /**
      * Set conector
      *
      * @param \JHWEB\ConfigBundle\Entity\CfgSvConector $conector
@@ -533,5 +516,53 @@ class SvSenialUbicacion
     public function getInventario()
     {
         return $this->inventario;
+    }
+
+    /**
+     * Set adjunto
+     *
+     * @param string $adjunto
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setAdjunto($adjunto)
+    {
+        $this->adjunto = $adjunto;
+
+        return $this;
+    }
+
+    /**
+     * Get adjunto
+     *
+     * @return string
+     */
+    public function getAdjunto()
+    {
+        return $this->adjunto;
+    }
+
+    /**
+     * Set senial
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenial $senial
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setSenial(\JHWEB\SeguridadVialBundle\Entity\SvSenial $senial = null)
+    {
+        $this->senial = $senial;
+
+        return $this;
+    }
+
+    /**
+     * Get senial
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenial
+     */
+    public function getSenial()
+    {
+        return $this->senial;
     }
 }
