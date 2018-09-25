@@ -62,7 +62,12 @@ class ComparendoController extends Controller
             $comparendo = new Comparendo();
 
             $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
-            $comparendo->setHora(new \DateTime($params->comparendo->hora));
+            $horas = $params->comparendo->horas;
+            $minutos = $params->comparendo->minutos;
+            
+            $comparendo->setHora(new \DateTime($horas.':'.$minutos));
+            
+
             $comparendo->setDireccion($params->comparendo->direccion);
             $comparendo->setLocalidad($params->comparendo->localidad);
             $comparendo->setInmovilizacion($params->comparendo->inmovilizacion);
@@ -70,7 +75,7 @@ class ComparendoController extends Controller
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
             $comparendo->setFotomulta($params->comparendo->fotomulta);
-            //$comparendo->setGradoAlchohol($params->comparendo->gradoAlchoholemia);
+            //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
             $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
             $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
             $comparendo->setValorAdicional($params->comparendo->infraccionValorAdicional);
@@ -100,7 +105,7 @@ class ComparendoController extends Controller
             );
             $comparendo->setVehiculo($vehiculo);
 
-            $estado = $helpers->comparendoState($params);
+            $estado = $helpers->comparendoState($params,$comparendo);
             $comparendo->setEstado($estado);
 
             if (isset( $params->comparendo->tipoInfractorId)) {
@@ -114,7 +119,7 @@ class ComparendoController extends Controller
                 $testigo = $em->getRepository('AppBundle:Ciudadano')->find(
                     $params->comparendo->testigoId
                 );
-                $comparendo->setCuidadanoTestigo($testigo);
+                $comparendo->setCiudadanoTestigo($testigo);
             }
 
             $infraccion = $em->getRepository('AppBundle:MflInfraccion')->find(
@@ -132,6 +137,8 @@ class ComparendoController extends Controller
 
             $em->persist($comparendo);
             $em->flush();
+            var_dump($comparendo->getHora());
+            die();
 
             if ($params->comparendo->inmovilizacion) {
                 $inmovilizacion = new Inmovilizacion();
@@ -599,11 +606,25 @@ class ComparendoController extends Controller
 
         $comparendos = $em->getRepository('AppBundle:Comparendo')->findAll();
 
+        foreach ($comparendos as $key => $comparendo) {
+            $comparendoId = $comparendo->getId();
+            $vehiculoId = $comparendo->getVehiculo()->getId();
+            
+            $inmovilizacion = $em->getRepository('AppBundle:Inmovilizacion')->findOneBy(array('comparendo' => $comparendoId));      
+           $comparendo->{"inmovilizacion"}  = $inmovilizacion;
+
+            //$propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(array('vehiculo' => $vehiculoId));
+            var_dump($comparendo);
+            die();
+        }
+
+        
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "lista de comparendos",
             'data' => $comparendos,
+            'inmovilizacion' => $inmovilizacion,
         );
         return $helpers->json($response);
     }

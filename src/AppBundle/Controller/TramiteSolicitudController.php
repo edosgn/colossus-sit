@@ -104,7 +104,7 @@ class TramiteSolicitudController extends Controller
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
             $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
-            $datos = $params->datos;
+            $datos = $params->datos->foraneas; 
             $em = $this->getDoctrine()->getManager();
             // var_dump($params);
             // die();
@@ -136,13 +136,13 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setVehiculo($vehiculo);
             }
 
-            if ($params->datos->facturaId && $params->datos->tramiteFormulario) {
+            if ($datos->facturaId && $datos->tramiteFormulario) {
                 $factura = $em->getRepository('AppBundle:Factura')->find(
-                    $params->datos->facturaId
+                    $datos->facturaId
                 );
 
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
-                    $params->datos->tramiteFormulario
+                    $datos->tramiteFormulario
                 );
 
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(),$tramite->getId());
@@ -157,7 +157,7 @@ class TramiteSolicitudController extends Controller
             $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
             $tramiteSolicitud->setEstado(true);
             $tramiteSolicitud->setDatos($datos);
-
+            $tramiteSolicitud->setResumen($params->datos->resumen);
             $em = $this->getDoctrine()->getManager();
             $em->persist($tramiteSolicitud);
             $em->flush();

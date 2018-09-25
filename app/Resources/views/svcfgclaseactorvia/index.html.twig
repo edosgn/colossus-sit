@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgclaseactorvias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgClaseActorVium in svCfgClaseActorVias %}
+            <tr>
+                <td><a href="{{ path('svcfgclaseactorvia_show', { 'id': svCfgClaseActorVium.id }) }}">{{ svCfgClaseActorVium.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgclaseactorvia_show', { 'id': svCfgClaseActorVium.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

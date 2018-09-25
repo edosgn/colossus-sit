@@ -24,16 +24,9 @@ class SvCapacitacion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="date")
+     * @ORM\Column(name="fecha_hora_registro", type="date")
      */
-    private $fecha;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hora", type="string")
-     */
-    private $hora;
+    private $fechaHoraRegistro;
 
     /**
      * @var string
@@ -69,13 +62,9 @@ class SvCapacitacion
     protected $municipio;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="funcion_seguridad_vial", type="string")
-     */
-    private $funcionSeguridadVial;
-
-
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion", inversedBy="funciones")
+     **/
+    protected $funcion;
 
     /**
      * @var string
@@ -87,7 +76,7 @@ class SvCapacitacion
     /**
      * @var string
      *
-     * @ORM\Column(name="tema_capacitacion", type="string")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion", inversedBy="temascapacitaciones")
      */
     private $temaCapacitacion;
 
@@ -122,7 +111,7 @@ class SvCapacitacion
     /**
      * @var string
      *
-     * @ORM\Column(name="clase_actor_vial", type="string")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgClaseActorVia", inversedBy="clasesactoresvia")
      */
     private $claseActorVial;
 
@@ -149,58 +138,34 @@ class SvCapacitacion
     {
         return $this->id;
     }
-
+    /*if ($this->fechaHoraRegistro) {
+        return $this->fechaHoraRegistro->format('d/m/Y HH:mm:ss a');
+        }
+        return $this->fechaHoraRegistro;
+        */
 
     /**
-     * Set fecha
+     * Set fechaHoraRegistro
      *
-     * @param \DateTime $fecha
+     * @param \DateTime $fechaHoraRegistro
      *
      * @return SvCapacitacion
      */
-    public function setFecha($fecha)
+    public function setFechaHoraRegistro($fechaHoraRegistro)
     {
-        $this->fecha = $fecha;
+        $this->fechaHoraRegistro = $fechaHoraRegistro;
 
         return $this;
     }
 
     /**
-     * Get fecha
+     * Get fechaHoraRegistro
      *
      * @return \DateTime
      */
-    public function getFecha()
+    public function getFechaHoraRegistro()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-        }
-        return $this->fecha;
-
-    }
-
-    /**
-     * Set hora
-     *
-     * @param string $hora
-     *
-     * @return SvCapacitacion
-     */
-    public function setHora($hora)
-    {
-        $this->hora = $hora;
-
-        return $this;
-    }
-
-    /**
-     * Get hora
-     *
-     * @return string
-     */
-    public function getHora()
-    {
-        return $this->hora;
+        return $this->fechaHoraRegistro;
     }
 
     /**
@@ -272,11 +237,7 @@ class SvCapacitacion
      */
     public function getFechaActividad()
     {
-        if ($this->fechaActividad) {
-            return $this->fechaActividad->format('d/m/Y');
-        }
         return $this->fechaActividad;
-
     }
 
     /**
@@ -304,30 +265,6 @@ class SvCapacitacion
     }
 
     /**
-     * Set funcionSeguridadVial
-     *
-     * @param string $funcionSeguridadVial
-     *
-     * @return SvCapacitacion
-     */
-    public function setFuncionSeguridadVial($funcionSeguridadVial)
-    {
-        $this->funcionSeguridadVial = $funcionSeguridadVial;
-
-        return $this;
-    }
-
-    /**
-     * Get funcionSeguridadVial
-     *
-     * @return string
-     */
-    public function getFuncionSeguridadVial()
-    {
-        return $this->funcionSeguridadVial;
-    }
-
-    /**
      * Set claseActividad
      *
      * @param string $claseActividad
@@ -349,30 +286,6 @@ class SvCapacitacion
     public function getClaseActividad()
     {
         return $this->claseActividad;
-    }
-
-    /**
-     * Set temaCapacitacion
-     *
-     * @param string $temaCapacitacion
-     *
-     * @return SvCapacitacion
-     */
-    public function setTemaCapacitacion($temaCapacitacion)
-    {
-        $this->temaCapacitacion = $temaCapacitacion;
-
-        return $this;
-    }
-
-    /**
-     * Get temaCapacitacion
-     *
-     * @return string
-     */
-    public function getTemaCapacitacion()
-    {
-        return $this->temaCapacitacion;
     }
 
     /**
@@ -472,30 +385,6 @@ class SvCapacitacion
     }
 
     /**
-     * Set claseActorVial
-     *
-     * @param string $claseActorVial
-     *
-     * @return SvCapacitacion
-     */
-    public function setClaseActorVial($claseActorVial)
-    {
-        $this->claseActorVial = $claseActorVial;
-
-        return $this;
-    }
-
-    /**
-     * Get claseActorVial
-     *
-     * @return string
-     */
-    public function getClaseActorVial()
-    {
-        return $this->claseActorVial;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
@@ -565,5 +454,77 @@ class SvCapacitacion
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set funcion
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion $funcion
+     *
+     * @return SvCapacitacion
+     */
+    public function setFuncion(\JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion $funcion = null)
+    {
+        $this->funcion = $funcion;
+
+        return $this;
+    }
+
+    /**
+     * Get funcion
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion
+     */
+    public function getFuncion()
+    {
+        return $this->funcion;
+    }
+
+    /**
+     * Set temaCapacitacion
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion $temaCapacitacion
+     *
+     * @return SvCapacitacion
+     */
+    public function setTemaCapacitacion(\JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion $temaCapacitacion = null)
+    {
+        $this->temaCapacitacion = $temaCapacitacion;
+
+        return $this;
+    }
+
+    /**
+     * Get temaCapacitacion
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion
+     */
+    public function getTemaCapacitacion()
+    {
+        return $this->temaCapacitacion;
+    }
+
+    /**
+     * Set claseActorVial
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseActorVia $claseActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setClaseActorVial(\JHWEB\SeguridadVialBundle\Entity\SvCfgClaseActorVia $claseActorVial = null)
+    {
+        $this->claseActorVial = $claseActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get claseActorVial
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseActorVia
+     */
+    public function getClaseActorVial()
+    {
+        return $this->claseActorVial;
     }
 }
