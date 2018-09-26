@@ -441,12 +441,9 @@ class Comparendo
      */
     public function getHora()
     {
-<<<<<<< HEAD
-=======
         if ($this->hora) {
             return $this->hora->format('H:i:s A');
         }
->>>>>>> 10d78342ed169bf45637c684272e3756be1a0e21
         return $this->hora;
     }
 
