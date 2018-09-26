@@ -137,10 +137,10 @@ class SvSenialUbicacionController extends Controller
     /**
      * Creates a new svSenialInventario entity.
      *
-     * @Route("/search/tiposenial/municipio", name="svsenialinventario_search_tiposenial_municipio")
+     * @Route("/search/destino", name="svsenialinventario_search_destino")
      * @Method({"GET", "POST"})
      */
-    public function searchByTipoSenialAndMunicipioAction(Request $request)
+    public function searchByDestinoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -155,9 +155,7 @@ class SvSenialUbicacionController extends Controller
         
             $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->findBy(
                 array(
-                    'activo' => 1,
-                    'tipoSenial' => $params->idTipoSenial,
-                    'municipio' => $params->idMunicipio
+                    'inventario' => $params->inventario->id
                 )
             );
 
@@ -186,4 +184,6 @@ class SvSenialUbicacionController extends Controller
         } 
         return $helpers->json($response);
     }
+
+
 }

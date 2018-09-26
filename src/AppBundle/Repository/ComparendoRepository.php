@@ -65,4 +65,20 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    //Obtiene el comparendo mas viejo vigente segun el ciudadano
+    public function getLastDateByCiudadano($ciudadanoId)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MIN(co.fecha), co.id
+            FROM AppBundle:Comparendo co
+            WHERE co.ciudadanoInfractor = :ciudadanoId
+            AND co.estado = 2";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'ciudadanoId' => $ciudadanoId,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

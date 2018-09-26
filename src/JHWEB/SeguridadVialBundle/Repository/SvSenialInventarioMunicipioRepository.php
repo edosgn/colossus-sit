@@ -10,4 +10,15 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvSenialInventarioMunicipioRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene el numero maximo de las inventario
+    public function findMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(si.consecutivo) AS maximo
+            FROM JHWEBSeguridadVialBundle:SvSenialInventarioMunicipio si
+            WHERE YEAR(si.fecha) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
 }
