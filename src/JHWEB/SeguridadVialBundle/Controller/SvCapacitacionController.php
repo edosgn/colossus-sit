@@ -79,7 +79,7 @@ class SvCapacitacionController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             
             $capacitacion = new SvCapacitacion();
@@ -89,6 +89,19 @@ class SvCapacitacionController extends Controller
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
                 $capacitacion->setMunicipio($municipio);
             }
+            if ($params->funcion) {
+                $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->funcion);
+                $capacitacion->setFuncion($funcion);
+            }
+            if ($params->temaCapacitacion) {
+                $temaCapacitacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->find($params->temaCapacitacion);
+                $capacitacion->setTemaCapacitacion($temaCapacitacion);
+            }
+            if ($params->claseActorVial) {
+                $claseActorVial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->find($params->claseActorVial);
+                $capacitacion->setClaseActorVial($claseActorVial);
+            }
+
             /*if ($params->cedula) {
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->cedula);
                 var_dump($ciudadano);
@@ -96,19 +109,17 @@ class SvCapacitacionController extends Controller
                 $capacitacion->setCedula($ciudadano);
             }*/
             $capacitacion->setCedula($params->cedula);
-            $capacitacion->setFecha(new \Datetime($params->fecha));
+            $capacitacion->setFechaHoraRegistro(new \Datetime(date('Y-m-d h:i:s', strtotime($params->fechaHoraRegistro))));
             $capacitacion->setFormador($params->formador);
             $capacitacion->setSemana($params->semana);
             $capacitacion->setFechaActividad(new \Datetime($params->fechaActividad));
-            $capacitacion->setFuncionSeguridadVial($params->funcionSeguridadVial);
             $capacitacion->setClaseActividad($params->claseActividad);
-            $capacitacion->setTemaCapacitacion($params->temaCapacitacion);
             $capacitacion->setDescripcionActividad($params->descripcionActividad);
             $capacitacion->setNombreActorVial($params->nombreActorVial);
             $capacitacion->setApellidoActorVial($params->apellidoActorVial);
             $capacitacion->setNumeroCedulaActorVial($params->numeroCedulaActorVial);
-            $capacitacion->setClaseActorVial($params->claseActorVial);
             $capacitacion->setActivo(true);
+            //$capacitacion->setDocumento($params->documento);
 
             $file = $request->files->get('file');
 

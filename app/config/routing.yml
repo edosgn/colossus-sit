@@ -1,41 +1,17 @@
+jhweb_seguridad_vial_sv_cfg_funcion_criterio:
+    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgFuncionCriterioController.php"
+    type:     annotation
+
 jhweb_seguridad_vial_sv_cfg_funcion:
     resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgFuncionController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_seguridad_ciudadana:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgSeguridadCiudadanaController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_solidaridad:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgSolidaridadController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_asistencia_civica:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgAsistenciaCivicaController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_policia_judicial:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgPoliciaJudicialController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_preventiva:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgPreventivaController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_clase_actor_via:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgClaseActorViaController.php"
     type:     annotation
 
 jhweb_seguridad_vial_sv_cfg_tema_capacitacion:
     resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgTemaCapacitacionController.php"
     type:     annotation
 
-jhweb_seguridad_vial_sv_cfg_educacion:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgEducacionController.php"
-    type:     annotation
-
-jhweb_seguridad_vial_sv_cfg_funcion:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgFuncionController.php"
+jhweb_seguridad_vial_sv_cfg_clase_actor_via:
+    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgClaseActorViaController.php"
     type:     annotation
 
 jhweb_contravencional:

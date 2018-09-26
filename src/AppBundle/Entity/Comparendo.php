@@ -87,37 +87,37 @@ class Comparendo
     private $categoria;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="fecha_expedicion", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fecha_expedicion", type="date", length=255, nullable=true)
      */
     private $fechaExpedicion;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fecha_vencimiento", type="date", length=255, nullable=true)
      */
     private $fechaVencimiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="infractor_nombres", type="string", length=255)
+     * @ORM\Column(name="infractor_nombres", type="string", length=255, nullable=true)
      */
     private $infractorNombres;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="infractor_apellidos", type="string", length=255)
+     * @ORM\Column(name="infractor_apellidos", type="string", length=255, nullable=true)
      */
     private $infractorApellidos;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="infractor_direccion", type="string", length=255)
+     * @ORM\Column(name="infractor_direccion", type="string", length=255, nullable=true)
      */
     private $infractorDireccion;
 
@@ -166,49 +166,49 @@ class Comparendo
     /**
      * @var string
      *
-     * @ORM\Column(name="propietario_tipo_documento", type="string", length=255)
+     * @ORM\Column(name="propietario_tipo_documento", type="string", length=255, nullable=true)
      */
     private $propietarioTipoDocumento;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="propietario_identificacion", type="bigint", length=20)
+     * @ORM\Column(name="propietario_identificacion", type="bigint", length=20, nullable=true)
      */
     private $propietarioIdentificacion;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="propietario_nombres", type="string", length=255)
+     * @ORM\Column(name="propietario_nombres", type="string", length=255, nullable=true)
      */
     private $propietarioNombre;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="propietario_apellidos", type="string", length=255)
+     * @ORM\Column(name="propietario_apellidos", type="string", length=255, nullable=true)
      */
     private $propietarioApellidos;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="empresa_nit", type="string", length=255)
+     * @ORM\Column(name="empresa_nit", type="string", length=255, nullable=true)
      */
     private $empresaNit;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="empresa_nombre", type="string", length=255)
+     * @ORM\Column(name="empresa_nombre", type="string", length=255, nullable=true)
      */
     private $empresaNombre;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nit", type="string", length=255)
+     * @ORM\Column(name="tarjeta_operacion", type="string", length=255, nullable=true)
      */
     private $tarjetaOperacion;
 
@@ -223,35 +223,35 @@ class Comparendo
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_nombres", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_nombres", type="string", nullable=true)
      */
     private $ciudadanoTestigoNombres;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_apellidos", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_apellidos", type="string", nullable=true)
      */
     private $ciudadanoTestigoApellidos;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_identificacion", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_identificacion", type="string", nullable=true)
      */
     private $ciudadanoTestigoIdentificacion;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_direccion", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_direccion", type="string", nullable=true)
      */
     private $ciudadanoTestigoDireccion;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_telefono", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_telefono", type="string", nullable=true)
      */
     private $ciudadanoTestigoTelefono;
 
@@ -389,7 +389,13 @@ class Comparendo
     {
         return $this->id;
     }
-
+    /*
+    if ($this->fecha) {
+        return $this->fecha->format('d/m/Y');
+        }
+        return $this->fecha;
+     */
+    
     /**
      * Set fecha
      *
@@ -435,6 +441,12 @@ class Comparendo
      */
     public function getHora()
     {
+<<<<<<< HEAD
+=======
+        if ($this->hora) {
+            return $this->hora->format('H:i:s A');
+        }
+>>>>>>> 10d78342ed169bf45637c684272e3756be1a0e21
         return $this->hora;
     }
 
@@ -609,7 +621,7 @@ class Comparendo
     /**
      * Set fechaExpedicion
      *
-     * @param string $fechaExpedicion
+     * @param \DateTime $fechaExpedicion
      *
      * @return Comparendo
      */
@@ -623,7 +635,7 @@ class Comparendo
     /**
      * Get fechaExpedicion
      *
-     * @return string
+     * @return \DateTime
      */
     public function getFechaExpedicion()
     {
@@ -633,7 +645,7 @@ class Comparendo
     /**
      * Set fechaVencimiento
      *
-     * @param string $fechaVencimiento
+     * @param \DateTime $fechaVencimiento
      *
      * @return Comparendo
      */
@@ -647,7 +659,7 @@ class Comparendo
     /**
      * Get fechaVencimiento
      *
-     * @return string
+     * @return \DateTime
      */
     public function getFechaVencimiento()
     {
