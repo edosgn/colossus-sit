@@ -5,12 +5,12 @@ namespace JHWEB\SeguridadVialBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SvCfgSeguridadCiudadana
+ * SvCfgFuncionCriterio
  *
- * @ORM\Table(name="sv_cfg_seguridad_ciudadana")
- * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgSeguridadCiudadanaRepository")
+ * @ORM\Table(name="sv_cfg_funcion_criterio")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgFuncionCriterioRepository")
  */
-class SvCfgSeguridadCiudadana
+class SvCfgFuncionCriterio
 {
     /**
      * @var int
@@ -27,6 +27,13 @@ class SvCfgSeguridadCiudadana
      * @ORM\Column(name="nombre", type="string")
      */
     private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion", inversedBy="funciones")
+     */
+    private $funcion;
 
     /**
      * @var bool
@@ -50,7 +57,7 @@ class SvCfgSeguridadCiudadana
      *
      * @param string $nombre
      *
-     * @return SvCfgSeguridadCiudadana
+     * @return SvCfgFuncionCriterio
      */
     public function setNombre($nombre)
     {
@@ -74,7 +81,7 @@ class SvCfgSeguridadCiudadana
      *
      * @param boolean $activo
      *
-     * @return SvCfgSeguridadCiudadana
+     * @return SvCfgFuncionCriterio
      */
     public function setActivo($activo)
     {
@@ -91,5 +98,29 @@ class SvCfgSeguridadCiudadana
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set funcion
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion $funcion
+     *
+     * @return SvCfgFuncionCriterio
+     */
+    public function setFuncion(\JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion $funcion = null)
+    {
+        $this->funcion = $funcion;
+
+        return $this;
+    }
+
+    /**
+     * Get funcion
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion
+     */
+    public function getFuncion()
+    {
+        return $this->funcion;
     }
 }
