@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgempresagps list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgEmpresaGp in vhloCfgEmpresaGps %}
+            <tr>
+                <td><a href="{{ path('vhlocfgempresagps_show', { 'id': vhloCfgEmpresaGp.id }) }}">{{ vhloCfgEmpresaGp.id }}</a></td>
+                <td>{{ vhloCfgEmpresaGp.nombre }}</td>
+                <td>{{ vhloCfgEmpresaGp.activo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgempresagps_show', { 'id': vhloCfgEmpresaGp.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfgempresagps_edit', { 'id': vhloCfgEmpresaGp.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgempresagps_new') }}">Create a new vhloCfgEmpresaGp</a>
+        </li>
+    </ul>
+{% endblock %}

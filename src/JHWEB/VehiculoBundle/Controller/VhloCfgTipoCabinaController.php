@@ -2,22 +2,22 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\CfgCda;
+use JHWEB\VehiculoBundle\Entity\VhloCfgTipoCabina;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcda controller.
+ * Vhlocfgtipocabina controller.
  *
- * @Route("cfgcda")
+ * @Route("vhlocfgtipocabina")
  */
-class CfgCdaController extends Controller
+class VhloCfgTipoCabinaController extends Controller
 {
     /**
-     * Lists all cfgCda entities.
+     * Lists all vhloCfgTipoCabina entities.
      *
-     * @Route("/", name="cfgcda_index")
+     * @Route("/", name="vhlocfgtipocabina_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgCdaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $tiposCabina = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoCabina')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cdas) {
+        if ($tiposCabina) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cdas)." registros encontrados", 
-                'data'=> $cdas,
+                'message' => count($tiposCabina)." registros encontrados", 
+                'data'=> $tiposCabina,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new vhloCfgTipoCabina entity.
      *
-     * @Route("/new", name="cfgcda_new")
+     * @Route("/new", name="vhlocfgtipocabina_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,17 +57,16 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $cda = new CfgCda();
+            $tipoCabina = new VhloCfgTipoCabina();
 
-            $cda->setNombre($params->nombre);
-            $cda->setNit($params->nit);
-            $cda->setActivo(true);
+            $tipoCabina->setNombre($params->nombre);
+            $tipoCabina->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cda);
+            $em->persist($tipoCabina);
             $em->flush();
 
             $response = array(
@@ -87,25 +86,25 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgCda entity.
+     * Finds and displays a vhloCfgTipoCabina entity.
      *
-     * @Route("/{id}/show", name="cfgcda_show")
+     * @Route("/{id}/show", name="vhlocfgtipocabina_show")
      * @Method("GET")
      */
-    public function showAction(CfgCda $cfgCda)
+    public function showAction(VhloCfgTipoCabina $vhloCfgTipoCabina)
     {
-        $deleteForm = $this->createDeleteForm($cfgCda);
+        $deleteForm = $this->createDeleteForm($vhloCfgTipoCabina);
 
-        return $this->render('cfgcda/show.html.twig', array(
-            'cfgCda' => $cfgCda,
+        return $this->render('vhlocfgtipocabina/show.html.twig', array(
+            'vhloCfgTipoCabina' => $vhloCfgTipoCabina,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgCda entity.
+     * Displays a form to edit an existing vhloCfgTipoCabina entity.
      *
-     * @Route("/edit", name="cfgcda_edit")
+     * @Route("/edit", name="vhlocfgtipocabina_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -115,15 +114,14 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $tipoCabina = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoCabina")->find($params->id);
 
-            if ($cda) {
-                $cda->setNombre($params->nombre);
-                $cda->setNit($params->nit);
+            if ($tipoCabina) {
+                $tipoCabina->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -131,7 +129,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cda,
+                    'data'=> $tipoCabina,
                 );
             }else{
                 $response = array(
@@ -152,10 +150,10 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Deletes a cfgCda entity.
+     * Deletes a vhloCfgTipoCabina entity.
      *
-     * @Route("/delete", name="cfgcda_delete")
-     * @Method("POST")
+     * @Route("/delete", name="vhlocfgtipocabina_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
     {
@@ -164,14 +162,14 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $tipoCabina = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoCabina")->find($params->id);
 
-            if ($cda) {
-                $cda->setActivo(false);
+            if ($tipoCabina) {
+                $tipoCabina->setActivo(false);
                 
                 $em->flush();
 
@@ -179,7 +177,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $cda,
+                    'data'=> $tipoCabina,
                 );
             }else{
                 $response = array(
@@ -200,44 +198,18 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgCda entity.
+     * Creates a form to delete a vhloCfgTipoCabina entity.
      *
-     * @param CfgCda $cfgCda The cfgCda entity
+     * @param VhloCfgTipoCabina $vhloCfgTipoCabina The vhloCfgTipoCabina entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgCda $cfgCda)
+    private function createDeleteForm(VhloCfgTipoCabina $vhloCfgTipoCabina)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
+            ->setAction($this->generateUrl('vhlocfgtipocabina_delete', array('id' => $vhloCfgTipoCabina->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="cfgcda_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
-            array('activo' => true)
-        );
-
-        $response = null;
-
-        foreach ($cdas as $key => $cda) {
-            $response[$key] = array(
-                'value' => $cda->getId(),
-                'label' => $cda->getNombre()
-            );
-        }
-        return $helpers->json($response);
     }
 }

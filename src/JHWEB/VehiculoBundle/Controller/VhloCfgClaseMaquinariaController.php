@@ -2,22 +2,22 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\CfgCda;
+use JHWEB\VehiculoBundle\Entity\VhloCfgClaseMaquinaria;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcda controller.
+ * Vhlocfgclasemaquinarium controller.
  *
- * @Route("cfgcda")
+ * @Route("vhlocfgclasemaquinaria")
  */
-class CfgCdaController extends Controller
+class VhloCfgClaseMaquinariaController extends Controller
 {
     /**
-     * Lists all cfgCda entities.
+     * Lists all vhloCfgClaseMaquinarium entities.
      *
-     * @Route("/", name="cfgcda_index")
+     * @Route("/", name="vhlocfgclasemaquinaria_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgCdaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $clasesMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClaseMaquinaria')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cdas) {
+        if ($clasesMaquinaria) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cdas)." registros encontrados", 
-                'data'=> $cdas,
+                'message' => count($clasesMaquinaria)." registros encontrados", 
+                'data'=> $clasesMaquinaria,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new vhloCfgClaseMaquinarium entity.
      *
-     * @Route("/new", name="cfgcda_new")
+     * @Route("/new", name="vhlocfgclasemaquinaria_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,14 +60,21 @@ class CfgCdaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
            
-            $cda = new CfgCda();
+            $claseMaquinaria = new VhloCfgClaseMaquinaria();
 
-            $cda->setNombre($params->nombre);
-            $cda->setNit($params->nit);
-            $cda->setActivo(true);
+            $claseMaquinaria->setNombre($params->nombre);
+            $claseMaquinaria->setCodigo($params->codigo);
+            $claseMaquinaria->setActivo(true);
+
+            if ($params->idTipoMaquinaria) {
+                $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
+                    $params->idTipoMaquinaria
+                );
+                $claseMaquinaria->setTipoMaquinaria($tipoMaquinaria);
+            }
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cda);
+            $em->persist($claseMaquinaria);
             $em->flush();
 
             $response = array(
@@ -87,25 +94,25 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgCda entity.
+     * Finds and displays a vhloCfgClaseMaquinarium entity.
      *
-     * @Route("/{id}/show", name="cfgcda_show")
+     * @Route("/{id}/show", name="vhlocfgclasemaquinaria_show")
      * @Method("GET")
      */
-    public function showAction(CfgCda $cfgCda)
+    public function showAction(VhloCfgClaseMaquinaria $vhloCfgClaseMaquinarium)
     {
-        $deleteForm = $this->createDeleteForm($cfgCda);
+        $deleteForm = $this->createDeleteForm($vhloCfgClaseMaquinarium);
 
-        return $this->render('cfgcda/show.html.twig', array(
-            'cfgCda' => $cfgCda,
+        return $this->render('vhlocfgclasemaquinaria/show.html.twig', array(
+            'vhloCfgClaseMaquinarium' => $vhloCfgClaseMaquinarium,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgCda entity.
+     * Displays a form to edit an existing vhloCfgClaseMaquinarium entity.
      *
-     * @Route("/edit", name="cfgcda_edit")
+     * @Route("/edit", name="vhlocfgclasemaquinaria_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -119,11 +126,18 @@ class CfgCdaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $claseMaquinaria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClaseMaquinaria")->find($params->id);
 
-            if ($cda) {
-                $cda->setNombre($params->nombre);
-                $cda->setNit($params->nit);
+            if ($claseMaquinaria) {
+                $claseMaquinaria->setNombre($params->nombre);
+                $claseMaquinaria->setCodigo($params->codigo);
+
+                if ($params->idTipoMaquinaria) {
+                    $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
+                        $params->idTipoMaquinaria
+                    );
+                    $claseMaquinaria->setTipoMaquinaria($tipoMaquinaria);
+                }
                 
                 $em->flush();
 
@@ -131,7 +145,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cda,
+                    'data'=> $claseMaquinaria,
                 );
             }else{
                 $response = array(
@@ -152,10 +166,10 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Deletes a cfgCda entity.
+     * Deletes a vhloCfgClaseMaquinarium entity.
      *
-     * @Route("/delete", name="cfgcda_delete")
-     * @Method("POST")
+     * @Route("/delete", name="vhlocfgclasemaquinaria_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
     {
@@ -168,10 +182,10 @@ class CfgCdaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $claseMaquinaria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClaseMaquinaria")->find($params->id);
 
-            if ($cda) {
-                $cda->setActivo(false);
+            if ($claseMaquinaria) {
+                $claseMaquinaria->setActivo(false);
                 
                 $em->flush();
 
@@ -179,7 +193,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $cda,
+                    'data'=> $claseMaquinaria,
                 );
             }else{
                 $response = array(
@@ -200,16 +214,16 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgCda entity.
+     * Creates a form to delete a vhloCfgClaseMaquinarium entity.
      *
-     * @param CfgCda $cfgCda The cfgCda entity
+     * @param VhloCfgClaseMaquinaria $vhloCfgClaseMaquinarium The vhloCfgClaseMaquinarium entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgCda $cfgCda)
+    private function createDeleteForm(VhloCfgClaseMaquinaria $vhloCfgClaseMaquinarium)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
+            ->setAction($this->generateUrl('vhlocfgclasemaquinaria_delete', array('id' => $vhloCfgClaseMaquinarium->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -218,7 +232,7 @@ class CfgCdaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgcda_select")
+     * @Route("/select", name="vhlocfgclasemaquinaria_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -226,18 +240,19 @@ class CfgCdaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $clasesMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClaseMaquinaria')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($cdas as $key => $cda) {
+        foreach ($clasesMaquinaria as $key => $claseMaquinaria) {
             $response[$key] = array(
-                'value' => $cda->getId(),
-                'label' => $cda->getNombre()
+                'value' => $claseMaquinaria->getId(),
+                'label' => $claseMaquinaria->getNombre()
             );
         }
+        
         return $helpers->json($response);
     }
 }

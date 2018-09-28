@@ -2,22 +2,22 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\CfgCda;
+use JHWEB\VehiculoBundle\Entity\VhloCfgOrigenRegistro;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcda controller.
+ * Vhlocfgorigenregistro controller.
  *
- * @Route("cfgcda")
+ * @Route("vhlocfgorigenregistro")
  */
-class CfgCdaController extends Controller
+class VhloCfgOrigenRegistroController extends Controller
 {
     /**
-     * Lists all cfgCda entities.
+     * Lists all vhloCfgOrigenRegistro entities.
      *
-     * @Route("/", name="cfgcda_index")
+     * @Route("/", name="vhlocfgorigenregistro_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgCdaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $origenesRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cdas) {
+        if ($origenesRegistro) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cdas)." registros encontrados", 
-                'data'=> $cdas,
+                'message' => count($origenesRegistro)." registros encontrados", 
+                'data'=> $origenesRegistro,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new vhloCfgOrigenRegistro entity.
      *
-     * @Route("/new", name="cfgcda_new")
+     * @Route("/new", name="vhlocfgorigenregistro_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,17 +57,16 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $cda = new CfgCda();
+            $origenRegistro = new VhloCfgOrigenRegistro();
 
-            $cda->setNombre($params->nombre);
-            $cda->setNit($params->nit);
-            $cda->setActivo(true);
+            $origenRegistro->setNombre($params->nombre);
+            $origenRegistro->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cda);
+            $em->persist($origenRegistro);
             $em->flush();
 
             $response = array(
@@ -82,30 +81,30 @@ class CfgCdaController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         }
-        
+
         return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a cfgCda entity.
+     * Finds and displays a vhloCfgOrigenRegistro entity.
      *
-     * @Route("/{id}/show", name="cfgcda_show")
+     * @Route("/{id}/show", name="vhlocfgorigenregistro_show")
      * @Method("GET")
      */
-    public function showAction(CfgCda $cfgCda)
+    public function showAction(VhloCfgOrigenRegistro $vhloCfgOrigenRegistro)
     {
-        $deleteForm = $this->createDeleteForm($cfgCda);
+        $deleteForm = $this->createDeleteForm($vhloCfgOrigenRegistro);
 
-        return $this->render('cfgcda/show.html.twig', array(
-            'cfgCda' => $cfgCda,
+        return $this->render('vhlocfgorigenregistro/show.html.twig', array(
+            'vhloCfgOrigenRegistro' => $vhloCfgOrigenRegistro,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgCda entity.
+     * Displays a form to edit an existing vhloCfgOrigenRegistro entity.
      *
-     * @Route("/edit", name="cfgcda_edit")
+     * @Route("/edit", name="vhlocfgorigenregistro_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -115,15 +114,14 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $origenRegistro = $em->getRepository("JHWEBVehiculoBundle:VhloCfgOrigenRegistro")->find($params->id);
 
-            if ($cda) {
-                $cda->setNombre($params->nombre);
-                $cda->setNit($params->nit);
+            if ($origenRegistro) {
+                $origenRegistro->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -131,7 +129,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cda,
+                    'data'=> $origenRegistro,
                 );
             }else{
                 $response = array(
@@ -152,10 +150,10 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Deletes a cfgCda entity.
+     * Deletes a vhloCfgOrigenRegistro entity.
      *
-     * @Route("/delete", name="cfgcda_delete")
-     * @Method("POST")
+     * @Route("/delete", name="vhlocfgorigenregistro_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
     {
@@ -164,14 +162,14 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $origenRegistro = $em->getRepository("JHWEBVehiculoBundle:VhloCfgOrigenRegistro")->find($params->id);
 
-            if ($cda) {
-                $cda->setActivo(false);
+            if ($origenRegistro) {
+                $origenRegistro->setActivo(false);
                 
                 $em->flush();
 
@@ -179,7 +177,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $cda,
+                    'data'=> $origenRegistro,
                 );
             }else{
                 $response = array(
@@ -200,16 +198,16 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgCda entity.
+     * Creates a form to delete a vhloCfgOrigenRegistro entity.
      *
-     * @param CfgCda $cfgCda The cfgCda entity
+     * @param VhloCfgOrigenRegistro $vhloCfgOrigenRegistro The vhloCfgOrigenRegistro entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgCda $cfgCda)
+    private function createDeleteForm(VhloCfgOrigenRegistro $vhloCfgOrigenRegistro)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
+            ->setAction($this->generateUrl('vhlocfgorigenregistro_delete', array('id' => $vhloCfgOrigenRegistro->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -218,7 +216,7 @@ class CfgCdaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgcda_select")
+     * @Route("/select", name="vhlocfgorigenregistro_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -226,16 +224,16 @@ class CfgCdaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $origenesRegistro = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($cdas as $key => $cda) {
+        foreach ($origenesRegistro as $key => $origenRegistro) {
             $response[$key] = array(
-                'value' => $cda->getId(),
-                'label' => $cda->getNombre()
+                'value' => $origenRegistro->getId(),
+                'label' => $origenRegistro->getNombre()
             );
         }
         return $helpers->json($response);

@@ -2,22 +2,22 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\CfgCda;
+use JHWEB\VehiculoBundle\Entity\VhloCfgEmpresaGps;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcda controller.
+ * Vhlocfgempresagp controller.
  *
- * @Route("cfgcda")
+ * @Route("vhlocfgempresagps")
  */
-class CfgCdaController extends Controller
+class VhloCfgEmpresaGpsController extends Controller
 {
     /**
-     * Lists all cfgCda entities.
+     * Lists all vhloCfgEmpresaGp entities.
      *
-     * @Route("/", name="cfgcda_index")
+     * @Route("/", name="vhlocfgempresagps_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class CfgCdaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $empresas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgEmpresaGps')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($cdas) {
+        if ($empresas) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cdas)." registros encontrados", 
-                'data'=> $cdas,
+                'message' => count($empresas)." registros encontrados", 
+                'data'=> $empresas,
             );
         }
 
@@ -45,9 +45,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new vhloCfgEmpresaGp entity.
      *
-     * @Route("/new", name="cfgcda_new")
+     * @Route("/new", name="vhlocfgempresagps_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,17 +57,16 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $cda = new CfgCda();
+            $empresa = new VhloCfgEmpresaGps();
 
-            $cda->setNombre($params->nombre);
-            $cda->setNit($params->nit);
-            $cda->setActivo(true);
+            $empresa->setNombre($params->nombre);
+            $empresa->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cda);
+            $em->persist($empresa);
             $em->flush();
 
             $response = array(
@@ -87,25 +86,25 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgCda entity.
+     * Finds and displays a vhloCfgEmpresaGp entity.
      *
-     * @Route("/{id}/show", name="cfgcda_show")
+     * @Route("/{id}/show", name="vhlocfgempresagps_show")
      * @Method("GET")
      */
-    public function showAction(CfgCda $cfgCda)
+    public function showAction(VhloCfgEmpresaGps $vhloCfgEmpresaGp)
     {
-        $deleteForm = $this->createDeleteForm($cfgCda);
+        $deleteForm = $this->createDeleteForm($vhloCfgEmpresaGp);
 
-        return $this->render('cfgcda/show.html.twig', array(
-            'cfgCda' => $cfgCda,
+        return $this->render('vhlocfgempresagps/show.html.twig', array(
+            'vhloCfgEmpresaGp' => $vhloCfgEmpresaGp,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgCda entity.
+     * Displays a form to edit an existing vhloCfgEmpresaGp entity.
      *
-     * @Route("/edit", name="cfgcda_edit")
+     * @Route("/edit", name="vhlocfgempresagps_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -115,15 +114,14 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $empresa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgEmpresaGps")->find($params->id);
 
-            if ($cda) {
-                $cda->setNombre($params->nombre);
-                $cda->setNit($params->nit);
+            if ($empresa) {
+                $empresa->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -131,7 +129,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $cda,
+                    'data'=> $empresa,
                 );
             }else{
                 $response = array(
@@ -152,10 +150,10 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Deletes a cfgCda entity.
+     * Deletes a vhloCfgEmpresaGp entity.
      *
-     * @Route("/delete", name="cfgcda_delete")
-     * @Method("POST")
+     * @Route("/delete", name="vhlocfgempresagps_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
     {
@@ -164,14 +162,14 @@ class CfgCdaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $empresa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgEmpresaGps")->find($params->id);
 
-            if ($cda) {
-                $cda->setActivo(false);
+            if ($empresa) {
+                $empresa->setActivo(false);
                 
                 $em->flush();
 
@@ -179,7 +177,7 @@ class CfgCdaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $cda,
+                    'data'=> $empresa,
                 );
             }else{
                 $response = array(
@@ -200,16 +198,16 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgCda entity.
+     * Creates a form to delete a vhloCfgEmpresaGp entity.
      *
-     * @param CfgCda $cfgCda The cfgCda entity
+     * @param VhloCfgEmpresaGps $vhloCfgEmpresaGp The vhloCfgEmpresaGp entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgCda $cfgCda)
+    private function createDeleteForm(VhloCfgEmpresaGps $vhloCfgEmpresaGp)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
+            ->setAction($this->generateUrl('vhlocfgempresagps_delete', array('id' => $vhloCfgEmpresaGp->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -218,7 +216,7 @@ class CfgCdaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgcda_select")
+     * @Route("/select", name="vhlocfgempresagps_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -226,18 +224,19 @@ class CfgCdaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $empresas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgEmpresaGps')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($cdas as $key => $cda) {
+        foreach ($empresas as $key => $empresa) {
             $response[$key] = array(
-                'value' => $cda->getId(),
-                'label' => $cda->getNombre()
+                'value' => $empresa->getId(),
+                'label' => $empresa->getNombre()
             );
         }
+        
         return $helpers->json($response);
     }
 }

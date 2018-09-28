@@ -84,18 +84,16 @@ class VehiculoRemolque
      */
     private $rut;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgOrigenRegistro", inversedBy="vehiculosRemolques") */
-    private $origenRegistro;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CondicionIngreso", inversedBy="vehiculosRemolques") */
-    private $condicionIngreso;
-    
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
      */
     private $vehiculo;
-    
-    
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgOrigenRegistro", inversedBy="remolques") */
+    private $origenRegistro;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgCondicionIngreso", inversedBy="remolques") */
+    private $condicionIngreso;
 
     /**
      * Get id
@@ -324,54 +322,6 @@ class VehiculoRemolque
     }
 
     /**
-     * Set origenRegistro
-     *
-     * @param \AppBundle\Entity\CfgOrigenRegistro $origenRegistro
-     *
-     * @return VehiculoRemolque
-     */
-    public function setOrigenRegistro(\AppBundle\Entity\CfgOrigenRegistro $origenRegistro = null)
-    {
-        $this->origenRegistro = $origenRegistro;
-
-        return $this;
-    }
-
-    /**
-     * Get origenRegistro
-     *
-     * @return \AppBundle\Entity\CfgOrigenRegistro
-     */
-    public function getOrigenRegistro()
-    {
-        return $this->origenRegistro;
-    }
-
-    /**
-     * Set condicionIngreso
-     *
-     * @param \AppBundle\Entity\CondicionIngreso $condicionIngreso
-     *
-     * @return VehiculoRemolque
-     */
-    public function setCondicionIngreso(\AppBundle\Entity\CondicionIngreso $condicionIngreso = null)
-    {
-        $this->condicionIngreso = $condicionIngreso;
-
-        return $this;
-    }
-
-    /**
-     * Get condicionIngreso
-     *
-     * @return \AppBundle\Entity\CondicionIngreso
-     */
-    public function getCondicionIngreso()
-    {
-        return $this->condicionIngreso;
-    }
-
-    /**
      * Set vehiculo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
@@ -393,5 +343,53 @@ class VehiculoRemolque
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set origenRegistro
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgOrigenRegistro $origenRegistro
+     *
+     * @return VehiculoRemolque
+     */
+    public function setOrigenRegistro(\JHWEB\VehiculoBundle\Entity\VhloCfgOrigenRegistro $origenRegistro = null)
+    {
+        $this->origenRegistro = $origenRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get origenRegistro
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgOrigenRegistro
+     */
+    public function getOrigenRegistro()
+    {
+        return $this->origenRegistro;
+    }
+
+    /**
+     * Set condicionIngreso
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgCondicionIngreso $condicionIngreso
+     *
+     * @return VehiculoRemolque
+     */
+    public function setCondicionIngreso(\JHWEB\VehiculoBundle\Entity\VhloCfgCondicionIngreso $condicionIngreso = null)
+    {
+        $this->condicionIngreso = $condicionIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get condicionIngreso
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgCondicionIngreso
+     */
+    public function getCondicionIngreso()
+    {
+        return $this->condicionIngreso;
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\SeguridadVialBundle\Entity;
+namespace JHWEB\VehiculoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SvCfgFuncionCriterio
+ * VhloCfgTipoRodaje
  *
- * @ORM\Table(name="sv_cfg_funcion_criterio")
- * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgFuncionCriterioRepository")
+ * @ORM\Table(name="vhlo_cfg_tipo_rodaje")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloCfgTipoRodajeRepository")
  */
-class SvCfgFuncionCriterio
+class VhloCfgTipoRodaje
 {
     /**
      * @var int
@@ -24,7 +24,7 @@ class SvCfgFuncionCriterio
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string")
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
 
@@ -35,12 +35,6 @@ class SvCfgFuncionCriterio
      */
     private $activo;
 
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="SvCfgFuncion", inversedBy="funciones")
-     */
-    private $funcion;
 
     /**
      * Get id
@@ -57,7 +51,7 @@ class SvCfgFuncionCriterio
      *
      * @param string $nombre
      *
-     * @return SvCfgFuncionCriterio
+     * @return VhloCfgTipoRodaje
      */
     public function setNombre($nombre)
     {
@@ -81,7 +75,7 @@ class SvCfgFuncionCriterio
      *
      * @param boolean $activo
      *
-     * @return SvCfgFuncionCriterio
+     * @return VhloCfgTipoRodaje
      */
     public function setActivo($activo)
     {
@@ -93,34 +87,11 @@ class SvCfgFuncionCriterio
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
         return $this->activo;
     }
-
-    /**
-     * Set funcion
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion $funcion
-     *
-     * @return SvCfgFuncionCriterio
-     */
-    public function setFuncion(\JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion $funcion = null)
-    {
-        $this->funcion = $funcion;
-
-        return $this;
-    }
-
-    /**
-     * Get funcion
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion
-     */
-    public function getFuncion()
-    {
-        return $this->funcion;
-    }
 }
+

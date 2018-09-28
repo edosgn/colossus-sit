@@ -165,10 +165,7 @@ class Vehiculo
     private $radioAccion;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgModalidadTransporte", inversedBy="vehiculos") */
-    private $modalidadTransporte;
-
-
-    
+    private $modalidadTransporte;    
 
     /**
      * Get id

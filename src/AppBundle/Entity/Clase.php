@@ -47,8 +47,6 @@ class Clase
      **/
     protected $modulo;
 
-
-
     /**
      * Get id
      *
