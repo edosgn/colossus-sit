@@ -2,22 +2,22 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\VhloCfgClaseMaquinaria;
+use JHWEB\VehiculoBundle\Entity\VhloCfgSubpartidaArancelaria;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Vhlocfgclasemaquinarium controller.
+ * Vhlocfgsubpartidaarancelarium controller.
  *
- * @Route("vhlocfgclasemaquinaria")
+ * @Route("vhlocfgsubpartidaarancelaria")
  */
-class VhloCfgClaseMaquinariaController extends Controller
+class VhloCfgSubpartidaArancelariaController extends Controller
 {
     /**
-     * Lists all vhloCfgClaseMaquinarium entities.
+     * Lists all vhloCfgSubpartidaArancelarium entities.
      *
-     * @Route("/", name="vhlocfgclasemaquinaria_index")
+     * @Route("/", name="vhlocfgsubpartidaarancelaria_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class VhloCfgClaseMaquinariaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $clasesMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClaseMaquinaria')->findBy(
+        $subpartidas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($clasesMaquinaria) {
+        if ($subpartidas) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($clasesMaquinaria)." registros encontrados", 
-                'data'=> $clasesMaquinaria,
+                'message' => count($subpartidas)." registros encontrados", 
+                'data'=> $subpartidas,
             );
         }
 
@@ -45,9 +45,9 @@ class VhloCfgClaseMaquinariaController extends Controller
     }
 
     /**
-     * Creates a new vhloCfgClaseMaquinarium entity.
+     * Creates a new vhloCfgSubpartidaArancelarium entity.
      *
-     * @Route("/new", name="vhlocfgclasemaquinaria_new")
+     * @Route("/new", name="vhlocfgsubpartidaarancelaria_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,22 +60,13 @@ class VhloCfgClaseMaquinariaController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $claseMaquinaria = new VhloCfgClaseMaquinaria();
+            $subpartida = new VhloCfgSubpartidaArancelaria();
 
-            $claseMaquinaria->setNombre($params->nombre);
-            $claseMaquinaria->setCodigo($params->codigo);
-            $claseMaquinaria->setActivo(true);
+            $subpartida->setCodigo($params->codigo);
+            $subpartida->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            
-            if ($params->idTipoMaquinaria) {
-                $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
-                    $params->idTipoMaquinaria
-                );
-                $claseMaquinaria->setTipoMaquinaria($tipoMaquinaria);
-            }
-
-            $em->persist($claseMaquinaria);
+            $em->persist($subpartida);
             $em->flush();
 
             $response = array(
@@ -95,25 +86,25 @@ class VhloCfgClaseMaquinariaController extends Controller
     }
 
     /**
-     * Finds and displays a vhloCfgClaseMaquinarium entity.
+     * Finds and displays a vhloCfgSubpartidaArancelarium entity.
      *
-     * @Route("/{id}/show", name="vhlocfgclasemaquinaria_show")
+     * @Route("/{id}/show", name="vhlocfgsubpartidaarancelaria_show")
      * @Method("GET")
      */
-    public function showAction(VhloCfgClaseMaquinaria $vhloCfgClaseMaquinarium)
+    public function showAction(VhloCfgSubpartidaArancelaria $vhloCfgSubpartidaArancelarium)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgClaseMaquinarium);
+        $deleteForm = $this->createDeleteForm($vhloCfgSubpartidaArancelarium);
 
-        return $this->render('vhlocfgclasemaquinaria/show.html.twig', array(
-            'vhloCfgClaseMaquinarium' => $vhloCfgClaseMaquinarium,
+        return $this->render('vhlocfgsubpartidaarancelaria/show.html.twig', array(
+            'vhloCfgSubpartidaArancelarium' => $vhloCfgSubpartidaArancelarium,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing vhloCfgClaseMaquinarium entity.
+     * Displays a form to edit an existing vhloCfgSubpartidaArancelarium entity.
      *
-     * @Route("/edit", name="vhlocfgclasemaquinaria_edit")
+     * @Route("/edit", name="vhlocfgsubpartidaarancelaria_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -127,18 +118,10 @@ class VhloCfgClaseMaquinariaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $claseMaquinaria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClaseMaquinaria")->find($params->id);
+            $subpartida = $em->getRepository("JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria")->find($params->id);
 
-            if ($claseMaquinaria) {
-                $claseMaquinaria->setNombre($params->nombre);
-                $claseMaquinaria->setCodigo($params->codigo);
-
-                if ($params->idTipoMaquinaria) {
-                    $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
-                        $params->idTipoMaquinaria
-                    );
-                    $claseMaquinaria->setTipoMaquinaria($tipoMaquinaria);
-                }
+            if ($subpartida) {
+                $subpartida->setCodigo($params->codigo);
                 
                 $em->flush();
 
@@ -146,7 +129,7 @@ class VhloCfgClaseMaquinariaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $claseMaquinaria,
+                    'data'=> $subpartida,
                 );
             }else{
                 $response = array(
@@ -167,9 +150,9 @@ class VhloCfgClaseMaquinariaController extends Controller
     }
 
     /**
-     * Deletes a vhloCfgClaseMaquinarium entity.
+     * Deletes a vhloCfgSubpartidaArancelarium entity.
      *
-     * @Route("/delete", name="vhlocfgclasemaquinaria_delete")
+     * @Route("/delete", name="vhlocfgsubpartidaarancelaria_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
@@ -183,10 +166,10 @@ class VhloCfgClaseMaquinariaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $claseMaquinaria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClaseMaquinaria")->find($params->id);
+            $subpartida = $em->getRepository("JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria")->find($params->id);
 
-            if ($claseMaquinaria) {
-                $claseMaquinaria->setActivo(false);
+            if ($subpartida) {
+                $subpartida->setActivo(false);
                 
                 $em->flush();
 
@@ -194,7 +177,7 @@ class VhloCfgClaseMaquinariaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro eliminado con exito", 
-                    'data'=> $claseMaquinaria,
+                    'data'=> $subpartida,
                 );
             }else{
                 $response = array(
@@ -215,16 +198,16 @@ class VhloCfgClaseMaquinariaController extends Controller
     }
 
     /**
-     * Creates a form to delete a vhloCfgClaseMaquinarium entity.
+     * Creates a form to delete a vhloCfgSubpartidaArancelarium entity.
      *
-     * @param VhloCfgClaseMaquinaria $vhloCfgClaseMaquinarium The vhloCfgClaseMaquinarium entity
+     * @param VhloCfgSubpartidaArancelaria $vhloCfgSubpartidaArancelarium The vhloCfgSubpartidaArancelarium entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(VhloCfgClaseMaquinaria $vhloCfgClaseMaquinarium)
+    private function createDeleteForm(VhloCfgSubpartidaArancelaria $vhloCfgSubpartidaArancelarium)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('vhlocfgclasemaquinaria_delete', array('id' => $vhloCfgClaseMaquinarium->getId())))
+            ->setAction($this->generateUrl('vhlocfgsubpartidaarancelaria_delete', array('id' => $vhloCfgSubpartidaArancelarium->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -233,7 +216,7 @@ class VhloCfgClaseMaquinariaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="vhlocfgclasemaquinaria_select")
+     * @Route("/select", name="vhlocfgsubpartidaarancelaria_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -241,16 +224,16 @@ class VhloCfgClaseMaquinariaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $clasesMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClaseMaquinaria')->findBy(
+        $subpartidas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgSubpartidaArancelaria')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($clasesMaquinaria as $key => $claseMaquinaria) {
+        foreach ($subpartidas as $key => $subpartida) {
             $response[$key] = array(
-                'value' => $claseMaquinaria->getId(),
-                'label' => $claseMaquinaria->getNombre()
+                'value' => $subpartida->getId(),
+                'label' => $subpartida->getNombre()
             );
         }
         
