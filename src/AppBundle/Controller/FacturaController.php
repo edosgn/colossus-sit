@@ -98,7 +98,9 @@ class FacturaController extends Controller
                 $em->persist($factura);
                 $em->flush();
 
+                
                 foreach ($params->tramitesValor as $key => $tramiteValor) {
+                    
                     $tramiteFactura = new TramiteFactura();
 
                     $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find(
