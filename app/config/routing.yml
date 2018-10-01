@@ -1,3 +1,7 @@
+app_mgd_remitente:
+    resource: "@AppBundle/Controller/MgdRemitenteController.php"
+    type:     annotation
+
 jhweb_seguridad_vial_sv_cfg_funcion:
     resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgFuncionController.php"
     type:     annotation

@@ -211,6 +211,20 @@ class MgdDocumento
     private $respuesta;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="entidadNombre", type="text", nullable=true)
+     */
+    private $entidadNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entidadCargo", type="text", nullable=true)
+     */
+    private $entidadCargo;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdTipoCorrespondencia", inversedBy="documentos")
      **/
     protected $tipoCorrespondencia;
@@ -223,14 +237,17 @@ class MgdDocumento
     /** @ORM\ManyToOne(targetEntity="Repository\UsuarioBundle\Entity\Usuario", inversedBy="documentos") */
     protected $responsable;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdPeticionario", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="documentos") */
     protected $peticionario;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MgdRemitente", inversedBy="documentos") */
+    protected $remitente;
 
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -283,6 +300,30 @@ class MgdDocumento
     public function getNumeroRadicado()
     {
         return $this->numeroRadicado;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return MgdDocumento
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
@@ -598,6 +639,30 @@ class MgdDocumento
     }
 
     /**
+     * Set medioEnvio
+     *
+     * @param string $medioEnvio
+     *
+     * @return MgdDocumento
+     */
+    public function setMedioEnvio($medioEnvio)
+    {
+        $this->medioEnvio = $medioEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get medioEnvio
+     *
+     * @return string
+     */
+    public function getMedioEnvio()
+    {
+        return $this->medioEnvio;
+    }
+
+    /**
      * Set numeroGuia
      *
      * @param string $numeroGuia
@@ -619,6 +684,30 @@ class MgdDocumento
     public function getNumeroGuia()
     {
         return $this->numeroGuia;
+    }
+
+    /**
+     * Set numeroCarpeta
+     *
+     * @param string $numeroCarpeta
+     *
+     * @return MgdDocumento
+     */
+    public function setNumeroCarpeta($numeroCarpeta)
+    {
+        $this->numeroCarpeta = $numeroCarpeta;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCarpeta
+     *
+     * @return string
+     */
+    public function getNumeroCarpeta()
+    {
+        return $this->numeroCarpeta;
     }
 
     /**
@@ -790,6 +879,78 @@ class MgdDocumento
     }
 
     /**
+     * Set respuesta
+     *
+     * @param string $respuesta
+     *
+     * @return MgdDocumento
+     */
+    public function setRespuesta($respuesta)
+    {
+        $this->respuesta = $respuesta;
+
+        return $this;
+    }
+
+    /**
+     * Get respuesta
+     *
+     * @return string
+     */
+    public function getRespuesta()
+    {
+        return $this->respuesta;
+    }
+
+    /**
+     * Set entidadNombre
+     *
+     * @param string $entidadNombre
+     *
+     * @return MgdDocumento
+     */
+    public function setEntidadNombre($entidadNombre)
+    {
+        $this->entidadNombre = $entidadNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadNombre
+     *
+     * @return string
+     */
+    public function getEntidadNombre()
+    {
+        return $this->entidadNombre;
+    }
+
+    /**
+     * Set entidadCargo
+     *
+     * @param string $entidadCargo
+     *
+     * @return MgdDocumento
+     */
+    public function setEntidadCargo($entidadCargo)
+    {
+        $this->entidadCargo = $entidadCargo;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCargo
+     *
+     * @return string
+     */
+    public function getEntidadCargo()
+    {
+        return $this->entidadCargo;
+    }
+
+    /**
      * Set tipoCorrespondencia
      *
      * @param \AppBundle\Entity\MgdTipoCorrespondencia $tipoCorrespondencia
@@ -864,11 +1025,11 @@ class MgdDocumento
     /**
      * Set peticionario
      *
-     * @param \AppBundle\Entity\MgdPeticionario $peticionario
+     * @param \AppBundle\Entity\Ciudadano $peticionario
      *
      * @return MgdDocumento
      */
-    public function setPeticionario(\AppBundle\Entity\MgdPeticionario $peticionario = null)
+    public function setPeticionario(\AppBundle\Entity\Ciudadano $peticionario = null)
     {
         $this->peticionario = $peticionario;
 
@@ -878,7 +1039,7 @@ class MgdDocumento
     /**
      * Get peticionario
      *
-     * @return \AppBundle\Entity\MgdPeticionario
+     * @return \AppBundle\Entity\Ciudadano
      */
     public function getPeticionario()
     {
@@ -886,98 +1047,26 @@ class MgdDocumento
     }
 
     /**
-     * Set consecutivo
+     * Set remitente
      *
-     * @param integer $consecutivo
+     * @param \AppBundle\Entity\MgdRemitente $remitente
      *
      * @return MgdDocumento
      */
-    public function setConsecutivo($consecutivo)
+    public function setRemitente(\AppBundle\Entity\MgdRemitente $remitente = null)
     {
-        $this->consecutivo = $consecutivo;
+        $this->remitente = $remitente;
 
         return $this;
     }
 
     /**
-     * Get consecutivo
+     * Get remitente
      *
-     * @return integer
+     * @return \AppBundle\Entity\MgdRemitente
      */
-    public function getConsecutivo()
+    public function getRemitente()
     {
-        return $this->consecutivo;
-    }
-
-    /**
-     * Set respuesta
-     *
-     * @param string $respuesta
-     *
-     * @return MgdDocumento
-     */
-    public function setRespuesta($respuesta)
-    {
-        $this->respuesta = $respuesta;
-
-        return $this;
-    }
-
-    /**
-     * Get respuesta
-     *
-     * @return string
-     */
-    public function getRespuesta()
-    {
-        return $this->respuesta;
-    }
-
-    /**
-     * Set medioEnvio
-     *
-     * @param string $medioEnvio
-     *
-     * @return MgdDocumento
-     */
-    public function setMedioEnvio($medioEnvio)
-    {
-        $this->medioEnvio = $medioEnvio;
-
-        return $this;
-    }
-
-    /**
-     * Get medioEnvio
-     *
-     * @return string
-     */
-    public function getMedioEnvio()
-    {
-        return $this->medioEnvio;
-    }
-
-    /**
-     * Set numeroCarpeta
-     *
-     * @param string $numeroCarpeta
-     *
-     * @return MgdDocumento
-     */
-    public function setNumeroCarpeta($numeroCarpeta)
-    {
-        $this->numeroCarpeta = $numeroCarpeta;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroCarpeta
-     *
-     * @return string
-     */
-    public function getNumeroCarpeta()
-    {
-        return $this->numeroCarpeta;
+        return $this->remitente;
     }
 }

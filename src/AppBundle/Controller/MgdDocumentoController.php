@@ -67,6 +67,8 @@ class MgdDocumentoController extends Controller
                 $documento->setNumeroOficio($params->numeroOficio);
                 $documento->setFechaVencimiento(new \Datetime(date('Y-m-d h:i:s')));
                 $documento->setDescripcion($params->descripcion);
+                $documento->setEntidadNombre($params->entidadNombre);
+                $documento->setEntidadCargo($params->entidadCargo);
 
                 if ($params->correoCertificadoLlegada) {
                     $documento->setCorreoCertificadoLlegada($params->correoCertificadoLlegada);
@@ -159,6 +161,8 @@ class MgdDocumentoController extends Controller
                 $documento->setNumeroOficio($params->numeroOficio);
                 $documento->setFechaVencimiento(new \Datetime(date('Y-m-d h:i:s')));
                 $documento->setDescripcion($params->descripcion);
+                $documento->setEntidadNombre($params->entidadNombre);
+                $documento->setEntidadCargo($params->entidadCargo);
 
                 if ($params->correoCertificadoLlegada) {
                     $documento->setCorreoCertificadoLlegada($params->correoCertificadoLlegada);
