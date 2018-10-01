@@ -46,9 +46,6 @@ class CvAcuerdoPagoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-            var_dump($params);
-            die();
            
             $em = $this->getDoctrine()->getManager();
             
@@ -64,7 +61,7 @@ class CvAcuerdoPagoController extends Controller
 
             $acuerdoPago->setFecha($fecha);
             $acuerdoPago->setNumeroCuotas($params->numeroCuotas);
-            $acuerdoPago->setValor($params->valor);
+            $acuerdoPago->setValor($params->valorCapital);
             $acuerdoPago->setCuotasPagadas(0);
             
             if ($params->idPorcentajeInicial) {
@@ -85,6 +82,21 @@ class CvAcuerdoPagoController extends Controller
 
             $em->persist($acuerdoPago);
             $em->flush();
+
+            if ($params->comparendos) {
+                foreach ($params->comparendos as $key => $idComparendo) {
+                    $comparendo = $em->getRepository('AppBundleBundle:Comparendo')->find(
+                        $idComparendo
+                    );
+                    $comparendo->setAcuerdoPago($acuerdoPago);
+
+                    $estado = $em->getRepository('AppBundleBundle:CfgComparendoEstado')->find(
+                        4
+                    );
+                    $comparendo->setEstado($estado);
+                    $em->flush();
+                }
+            }
 
             $response = array(
                 'status' => 'success',
@@ -281,9 +293,6 @@ class CvAcuerdoPagoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
-            var_dump($params);
-            die();
 
             $em = $this->getDoctrine()->getManager();
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace JHWEB\ConfigBundle\Repository;
+namespace JHWEB\SeguridadVialBundle\Repository;
 
 /**
  * SvSenialUbicacionRepository

@@ -75,7 +75,7 @@ class ComparendoController extends Controller
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
             $comparendo->setFotomulta($params->comparendo->fotomulta);
-            $comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
+            //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
             $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
             $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
             $comparendo->setValorAdicional($params->comparendo->infraccionValorAdicional);
@@ -605,8 +605,7 @@ class ComparendoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $comparendos = $em->getRepository('AppBundle:Comparendo')->findAll();
-
-        foreach ($comparendos as $key => $comparendo) {
+        /*foreach ($comparendos as $key => $comparendo) {
             $comparendoId = $comparendo->getId();
             $vehiculoId = $comparendo->getVehiculo()->getId();
             
@@ -614,17 +613,15 @@ class ComparendoController extends Controller
            $comparendo->{"inmovilizacion"}  = $inmovilizacion;
 
             //$propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(array('vehiculo' => $vehiculoId));
-            var_dump($comparendo);
-            die();
-        }
-
+            //var_dump($comparendo);
+            //die();
+        }*/
         
         $response = array(
             'status' => 'success',
             'code' => 200,
             'msj' => "lista de comparendos",
             'data' => $comparendos,
-            'inmovilizacion' => $inmovilizacion,
         );
         return $helpers->json($response);
     }

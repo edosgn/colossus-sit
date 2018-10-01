@@ -43,11 +43,6 @@ class Comparendo
     private $direccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
-     **/
-    protected $municipio;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="localidad", type="string", length=255, nullable=true)
@@ -60,52 +55,8 @@ class Comparendo
      * @ORM\Column(name="placa", type="string", length=255, nullable=true)
      */
     private $placa;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="codigo_infraccion", type="string", length=255, nullable=true)
-     */
-    private $codigoInfraccion;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
-     **/
-    protected $matriculadoEn;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="clases")
-     **/
-    protected $clase;
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="servicios")
-     **/
-    protected $servicio;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgRadioAccion", inversedBy="radioacciones")
-     **/
-    private $radioAccion;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgModalidadTransporte", inversedBy="modalidades") */
-    private $modalidadTransporte;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="transporte_pasajeros", type="string", length=255, nullable=true)
-     */
-    private $transportePasajeros;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="especial_pasajeros", type="string", length=255, nullable=true)
-     */
-    private $especialPasajeros;
-
-    /****************************************************INFRACTOR*************************************************************/
+    /*************************DATOS INFRACTOR***************************/
 
     /**
      * @var string
@@ -136,37 +87,37 @@ class Comparendo
     private $categoria;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="fecha_expedicion", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fecha_expedicion", type="date", length=255, nullable=true)
      */
     private $fechaExpedicion;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fecha_vencimiento", type="date", length=255, nullable=true)
      */
     private $fechaVencimiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="infractor_nombres", type="string", length=255)
+     * @ORM\Column(name="infractor_nombres", type="string", length=255, nullable=true)
      */
     private $infractorNombres;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="infractor_apellidos", type="string", length=255)
+     * @ORM\Column(name="infractor_apellidos", type="string", length=255, nullable=true)
      */
     private $infractorApellidos;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="infractor_direccion", type="string", length=255)
+     * @ORM\Column(name="infractor_direccion", type="string", length=255, nullable=true)
      */
     private $infractorDireccion;
 
@@ -197,18 +148,9 @@ class Comparendo
      * @ORM\Column(name="infractor_email", type="string", length=255, nullable=true)
      */
     private $infractorEmail;
-    
-    /*******************************************************TIPO INFRACTOR******************************************************/
-    
+
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgTipoInfractor", inversedBy="comparendos")
-     **/
-    protected $tipoInfractor;
-    
-    /*******************************************************LICENCIA DE TRANSITO******************************************************/
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sedesOperativas")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
      **/
     protected $organismoTransito;
     
@@ -218,136 +160,101 @@ class Comparendo
      * @ORM\Column(name="numero_licencia_transito", type="string", length=255, nullable=true)
      */
     private $numeroLicenciaTransito;
-    
-    
-    /*******************************************************DATOS PROPIETARIO******************************************************/
+
+    /**************************DATOS PROPIETARIO************************/
     
     /**
      * @var string
      *
-     * @ORM\Column(name="propietario_tipo_documento", type="string", length=255)
+     * @ORM\Column(name="propietario_tipo_documento", type="string", length=255, nullable=true)
      */
     private $propietarioTipoDocumento;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="propietario_identificacion", type="bigint", length=20)
+     * @ORM\Column(name="propietario_identificacion", type="bigint", length=20, nullable=true)
      */
     private $propietarioIdentificacion;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="propietario_nombres", type="string", length=255)
+     * @ORM\Column(name="propietario_nombres", type="string", length=255, nullable=true)
      */
     private $propietarioNombre;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="propietario_apellidos", type="string", length=255)
+     * @ORM\Column(name="propietario_apellidos", type="string", length=255, nullable=true)
      */
     private $propietarioApellidos;
-    
-    
-    
-    /*******************************************************EMPRESA******************************************************/
     
     /**
      * @var string
      *
-     * @ORM\Column(name="empresa_nit", type="string", length=255)
+     * @ORM\Column(name="empresa_nit", type="string", length=255, nullable=true)
      */
     private $empresaNit;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="empresa_nombre", type="string", length=255)
+     * @ORM\Column(name="empresa_nombre", type="string", length=255, nullable=true)
      */
     private $empresaNombre;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nit", type="string", length=255)
+     * @ORM\Column(name="tarjeta_operacion", type="string", length=255, nullable=true)
      */
     private $tarjetaOperacion;
-    
-    
-    /*******************************************************AGENTE TRANSITO******************************************************/
-    
-    /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
-     **/
-    protected $agenteTransito;
-    
-    
-    /*******************************************************INMOVILIZACION******************************************************/
-    
-    /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Inmovilizacion")
-     */
-    private $inmovilizacion;
-    
-    /*******************************************************OBSERVACIONES******************************************************/
-    
+
+
     /**
      * @var string
      *
      * @ORM\Column(name="observaciones_agente", type="text", nullable=true)
      */
     private $observacionesAgente;
-    
+
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones_digitador", type="text", nullable=true)
-     */
-    private $observacionesDigitador;
-    
-    
-    /*******************************************************DATOS TESTIGO******************************************************/
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="ciudadano_testigo_nombres", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_nombres", type="string", nullable=true)
      */
     private $ciudadanoTestigoNombres;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_apellidos", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_apellidos", type="string", nullable=true)
      */
     private $ciudadanoTestigoApellidos;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_identificacion", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_identificacion", type="string", nullable=true)
      */
     private $ciudadanoTestigoIdentificacion;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_direccion", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_direccion", type="string", nullable=true)
      */
     private $ciudadanoTestigoDireccion;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudadano_testigo_telefono", type="text", nullable=true)
+     * @ORM\Column(name="ciudadano_testigo_telefono", type="string", nullable=true)
      */
     private $ciudadanoTestigoTelefono;
-    
-    
-    /*******************************************************OTROS DATOS******************************************************/
-    
+
     /**
      * @var bool
      *
@@ -370,39 +277,12 @@ class Comparendo
     private $retencionLicencia;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="fotomulta", type="boolean", nullable=true)
-     */
-    private $fotomulta;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fecha_notificacion", type="date", nullable=true)
-     */
-    private $fechaNotificacion;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="grado_alcohol", type="integer", nullable=true)
-     */
-    private $gradoAlcohol;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="valor_infraccion", type="integer", nullable=true)
      */
     private $valorInfraccion;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="valor_adicional", type="integer", nullable=true)
-     */
-    private $valorAdicional;
 
     /**
      * @var string
@@ -424,6 +304,66 @@ class Comparendo
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo = true;
+    
+    /****************************Llaves foraneas****************************/
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
+     **/
+    protected $municipio;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MflInfraccion", inversedBy="comparendos")
+     **/
+    protected $infraccion;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
+     **/
+    protected $matriculadoEn;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="comparendos")
+     **/
+    protected $servicio;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="comparendos")
+     **/
+    protected $clase;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgRadioAccion", inversedBy="comparendos")
+     **/
+    private $radioAccion;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgModalidadTransporte", inversedBy="comparendos") */
+    private $modalidadTransporte;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\CfgTransportePasajero", inversedBy="comparendos")
+     **/
+    private $transportePasajero;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial", inversedBy="comparendos")
+     **/
+    private $transporteEspecial;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgTipoInfractor", inversedBy="comparendos")
+     **/
+    protected $tipoInfractor;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
+     **/
+    protected $agenteTransito;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Inmovilizacion")
+     */
+    private $inmovilizacion;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalComparendo", inversedBy="comparendos")
@@ -449,7 +389,13 @@ class Comparendo
     {
         return $this->id;
     }
-
+    /*
+    if ($this->fecha) {
+        return $this->fecha->format('d/m/Y');
+        }
+        return $this->fecha;
+     */
+    
     /**
      * Set fecha
      *
@@ -471,11 +417,7 @@ class Comparendo
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-        }
         return $this->fecha;
-
     }
 
     /**
@@ -500,10 +442,9 @@ class Comparendo
     public function getHora()
     {
         if ($this->hora) {
-            return $this->hora->format('H:m');
+            return $this->hora->format('H:i:s A');
         }
         return $this->hora;
-
     }
 
     /**
@@ -576,78 +517,6 @@ class Comparendo
     public function getPlaca()
     {
         return $this->placa;
-    }
-
-    /**
-     * Set codigoInfraccion
-     *
-     * @param string $codigoInfraccion
-     *
-     * @return Comparendo
-     */
-    public function setCodigoInfraccion($codigoInfraccion)
-    {
-        $this->codigoInfraccion = $codigoInfraccion;
-
-        return $this;
-    }
-
-    /**
-     * Get codigoInfraccion
-     *
-     * @return string
-     */
-    public function getCodigoInfraccion()
-    {
-        return $this->codigoInfraccion;
-    }
-
-    /**
-     * Set transportePasajeros
-     *
-     * @param string $transportePasajeros
-     *
-     * @return Comparendo
-     */
-    public function setTransportePasajeros($transportePasajeros)
-    {
-        $this->transportePasajeros = $transportePasajeros;
-
-        return $this;
-    }
-
-    /**
-     * Get transportePasajeros
-     *
-     * @return string
-     */
-    public function getTransportePasajeros()
-    {
-        return $this->transportePasajeros;
-    }
-
-    /**
-     * Set especialPasajeros
-     *
-     * @param string $especialPasajeros
-     *
-     * @return Comparendo
-     */
-    public function setEspecialPasajeros($especialPasajeros)
-    {
-        $this->especialPasajeros = $especialPasajeros;
-
-        return $this;
-    }
-
-    /**
-     * Get especialPasajeros
-     *
-     * @return string
-     */
-    public function getEspecialPasajeros()
-    {
-        return $this->especialPasajeros;
     }
 
     /**
@@ -749,7 +618,7 @@ class Comparendo
     /**
      * Set fechaExpedicion
      *
-     * @param string $fechaExpedicion
+     * @param \DateTime $fechaExpedicion
      *
      * @return Comparendo
      */
@@ -763,21 +632,17 @@ class Comparendo
     /**
      * Get fechaExpedicion
      *
-     * @return string
+     * @return \DateTime
      */
     public function getFechaExpedicion()
     {
-        if ($this->fechaExpedicion) {
-            return $this->fechaExpedicion->format('d/m/Y');
-        }
         return $this->fechaExpedicion;
-
     }
 
     /**
      * Set fechaVencimiento
      *
-     * @param string $fechaVencimiento
+     * @param \DateTime $fechaVencimiento
      *
      * @return Comparendo
      */
@@ -791,15 +656,11 @@ class Comparendo
     /**
      * Get fechaVencimiento
      *
-     * @return string
+     * @return \DateTime
      */
     public function getFechaVencimiento()
     {
-        if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('d/m/Y');
-        }
         return $this->fechaVencimiento;
-
     }
 
     /**
@@ -895,11 +756,7 @@ class Comparendo
      */
     public function getInfractorFechaNacimiento()
     {
-        if ($this->infractorFechaNacimiento) {
-            return $this->infractorFechaNacimiento->format('d/m/Y');
-        }
         return $this->infractorFechaNacimiento;
-
     }
 
     /**
@@ -1037,9 +894,8 @@ class Comparendo
     }
 
     /**
-     * Get id
-     * 
-     * 
+     * Get propietarioIdentificacion
+     *
      * @return integer
      */
     public function getPropietarioIdentificacion()
@@ -1189,30 +1045,6 @@ class Comparendo
     public function getObservacionesAgente()
     {
         return $this->observacionesAgente;
-    }
-
-    /**
-     * Set observacionesDigitador
-     *
-     * @param string $observacionesDigitador
-     *
-     * @return Comparendo
-     */
-    public function setObservacionesDigitador($observacionesDigitador)
-    {
-        $this->observacionesDigitador = $observacionesDigitador;
-
-        return $this;
-    }
-
-    /**
-     * Get observacionesDigitador
-     *
-     * @return string
-     */
-    public function getObservacionesDigitador()
-    {
-        return $this->observacionesDigitador;
     }
 
     /**
@@ -1408,82 +1240,6 @@ class Comparendo
     }
 
     /**
-     * Set fotomulta
-     *
-     * @param boolean $fotomulta
-     *
-     * @return Comparendo
-     */
-    public function setFotomulta($fotomulta)
-    {
-        $this->fotomulta = $fotomulta;
-
-        return $this;
-    }
-
-    /**
-     * Get fotomulta
-     *
-     * @return boolean
-     */
-    public function getFotomulta()
-    {
-        return $this->fotomulta;
-    }
-
-    /**
-     * Set fechaNotificacion
-     *
-     * @param \DateTime $fechaNotificacion
-     *
-     * @return Comparendo
-     */
-    public function setFechaNotificacion($fechaNotificacion)
-    {
-        $this->fechaNotificacion = $fechaNotificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaNotificacion
-     *
-     * @return \DateTime
-     */
-    public function getFechaNotificacion()
-    {
-        if ($this->fechaNotificacion) {
-            return $this->fechaNotificacion->format('d/m/Y');
-        }
-        return $this->fechaNotificacion;
-
-    }
-
-    /**
-     * Set gradoAlcohol
-     *
-     * @param integer $gradoAlcohol
-     *
-     * @return Comparendo
-     */
-    public function setGradoAlcohol($gradoAlcohol)
-    {
-        $this->gradoAlcohol = $gradoAlcohol;
-
-        return $this;
-    }
-
-    /**
-     * Get gradoAlcohol
-     *
-     * @return integer
-     */
-    public function getGradoAlcohol()
-    {
-        return $this->gradoAlcohol;
-    }
-
-    /**
      * Set valorInfraccion
      *
      * @param integer $valorInfraccion
@@ -1505,30 +1261,6 @@ class Comparendo
     public function getValorInfraccion()
     {
         return $this->valorInfraccion;
-    }
-
-    /**
-     * Set valorAdicional
-     *
-     * @param integer $valorAdicional
-     *
-     * @return Comparendo
-     */
-    public function setValorAdicional($valorAdicional)
-    {
-        $this->valorAdicional = $valorAdicional;
-
-        return $this;
-    }
-
-    /**
-     * Get valorAdicional
-     *
-     * @return integer
-     */
-    public function getValorAdicional()
-    {
-        return $this->valorAdicional;
     }
 
     /**
@@ -1604,6 +1336,30 @@ class Comparendo
     }
 
     /**
+     * Set organismoTransito
+     *
+     * @param \AppBundle\Entity\SedeOperativa $organismoTransito
+     *
+     * @return Comparendo
+     */
+    public function setOrganismoTransito(\AppBundle\Entity\SedeOperativa $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
+    }
+
+    /**
      * Set municipio
      *
      * @param \AppBundle\Entity\Municipio $municipio
@@ -1625,6 +1381,30 @@ class Comparendo
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set infraccion
+     *
+     * @param \AppBundle\Entity\MflInfraccion $infraccion
+     *
+     * @return Comparendo
+     */
+    public function setInfraccion(\AppBundle\Entity\MflInfraccion $infraccion = null)
+    {
+        $this->infraccion = $infraccion;
+
+        return $this;
+    }
+
+    /**
+     * Get infraccion
+     *
+     * @return \AppBundle\Entity\MflInfraccion
+     */
+    public function getInfraccion()
+    {
+        return $this->infraccion;
     }
 
     /**
@@ -1652,30 +1432,6 @@ class Comparendo
     }
 
     /**
-     * Set clase
-     *
-     * @param \AppBundle\Entity\Clase $clase
-     *
-     * @return Comparendo
-     */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
-    {
-        $this->clase = $clase;
-
-        return $this;
-    }
-
-    /**
-     * Get clase
-     *
-     * @return \AppBundle\Entity\Clase
-     */
-    public function getClase()
-    {
-        return $this->clase;
-    }
-
-    /**
      * Set servicio
      *
      * @param \AppBundle\Entity\Servicio $servicio
@@ -1697,6 +1453,30 @@ class Comparendo
     public function getServicio()
     {
         return $this->servicio;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return Comparendo
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
     }
 
     /**
@@ -1748,6 +1528,54 @@ class Comparendo
     }
 
     /**
+     * Set transportePasajero
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\CfgTransportePasajero $transportePasajero
+     *
+     * @return Comparendo
+     */
+    public function setTransportePasajero(\JHWEB\VehiculoBundle\Entity\CfgTransportePasajero $transportePasajero = null)
+    {
+        $this->transportePasajero = $transportePasajero;
+
+        return $this;
+    }
+
+    /**
+     * Get transportePasajero
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\CfgTransportePasajero
+     */
+    public function getTransportePasajero()
+    {
+        return $this->transportePasajero;
+    }
+
+    /**
+     * Set transporteEspecial
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial $transporteEspecial
+     *
+     * @return Comparendo
+     */
+    public function setTransporteEspecial(\JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial $transporteEspecial = null)
+    {
+        $this->transporteEspecial = $transporteEspecial;
+
+        return $this;
+    }
+
+    /**
+     * Get transporteEspecial
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial
+     */
+    public function getTransporteEspecial()
+    {
+        return $this->transporteEspecial;
+    }
+
+    /**
      * Set tipoInfractor
      *
      * @param \AppBundle\Entity\CfgTipoInfractor $tipoInfractor
@@ -1769,30 +1597,6 @@ class Comparendo
     public function getTipoInfractor()
     {
         return $this->tipoInfractor;
-    }
-
-    /**
-     * Set organismoTransito
-     *
-     * @param \AppBundle\Entity\SedeOperativa $organismoTransito
-     *
-     * @return Comparendo
-     */
-    public function setOrganismoTransito(\AppBundle\Entity\SedeOperativa $organismoTransito = null)
-    {
-        $this->organismoTransito = $organismoTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get organismoTransito
-     *
-     * @return \AppBundle\Entity\SedeOperativa
-     */
-    public function getOrganismoTransito()
-    {
-        return $this->organismoTransito;
     }
 
     /**
@@ -1866,7 +1670,6 @@ class Comparendo
     {
         return $this->consecutivo;
     }
-
 
     /**
      * Set acuerdoPago

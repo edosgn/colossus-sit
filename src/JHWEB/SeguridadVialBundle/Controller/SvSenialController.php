@@ -147,24 +147,59 @@ class SvSenialController extends Controller
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
             );
-        } 
+        }
+
         return $helpers->json($response);
     }
 
     /**
      * Finds and displays a svSenial entity.
      *
-     * @Route("/{id}", name="svsenial_show")
-     * @Method("GET")
+     * @Route("/show", name="svsenial_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(SvSenial $svSenial)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svSenial);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('svsenial/show.html.twig', array(
-            'svSenial' => $svSenial,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->idSenial) {
+                $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvSenial')->find(
+                    $params->idSenial
+                );
+            }
+
+
+            if ($senial) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado con exito',
+                    'data' => $senial
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**

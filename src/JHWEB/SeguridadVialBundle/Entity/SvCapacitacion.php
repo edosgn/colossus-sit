@@ -24,7 +24,7 @@ class SvCapacitacion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_hora_registro", type="date")
+     * @ORM\Column(name="fecha_hora_registro", type="datetime")
      */
     private $fechaHoraRegistro;
 
@@ -76,7 +76,7 @@ class SvCapacitacion
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion", inversedBy="temascapacitaciones")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion", inversedBy="capacitaciones")
      */
     private $temaCapacitacion;
 
@@ -111,7 +111,7 @@ class SvCapacitacion
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgClaseActorVia", inversedBy="clasesactoresvia")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgClaseActorVia", inversedBy="clasesActores")
      */
     private $claseActorVial;
 
@@ -165,7 +165,11 @@ class SvCapacitacion
      */
     public function getFechaHoraRegistro()
     {
+        if ($this->fechaHoraRegistro) {
+            return $this->fechaHoraRegistro->format('d/m/Y h:i:s A');
+        }
         return $this->fechaHoraRegistro;
+
     }
 
     /**
@@ -237,7 +241,11 @@ class SvCapacitacion
      */
     public function getFechaActividad()
     {
+        if ($this->fechaActividad) {
+            return $this->fechaActividad->format('d/m/Y');
+        }
         return $this->fechaActividad;
+
     }
 
     /**

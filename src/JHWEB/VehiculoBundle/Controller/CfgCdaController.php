@@ -81,7 +81,8 @@ class CfgCdaController extends Controller
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
             );
-        } 
+        }
+        
         return $helpers->json($response);
     }
 
