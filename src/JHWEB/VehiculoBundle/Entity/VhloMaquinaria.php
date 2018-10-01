@@ -94,13 +94,6 @@ class VhloMaquinaria
     /**
      * @var string
      *
-     * @ORM\Column(name="subpartida_arancelaria", type="string", length=255)
-     */
-    private $subpartidaArancelaria;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="numero_activacion_gps", type="string", length=255)
      */
     private $numeroActivacionGps;
@@ -109,6 +102,9 @@ class VhloMaquinaria
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
      */
     private $vehiculo;
+
+    /** @ORM\ManyToOne(targetEntity="VhloCfgSubpartidaArancelaria", inversedBy="maquinarias") */
+    private $subpartidaArancelaria;
 
     /** @ORM\ManyToOne(targetEntity="VhloCfgTipoRodaje", inversedBy="maquinarias") */
     private $tipoRodaje;

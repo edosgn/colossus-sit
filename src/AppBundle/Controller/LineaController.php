@@ -242,19 +242,40 @@ class LineaController extends Controller
         ;
     }
 
-     /**
-     *busca las lineas de una marca.
+    /**
+     * datos para select 2
      *
-     * @Route("/lin/mar/{marcaId}", name="linea_mar")
+     * @Route("/select", name="linea_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $lineas = $em->getRepository('AppBundle:Linea')->findBy(
+            array('estado' => 1)
+        );
+        foreach ($lineas as $key => $linea) {
+            $response[$key] = array(
+                'value' => $linea->getId(),
+                'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca las lineas por marca.
+     *
+     * @Route("/search/marca", name="linea_mar")
      * @Method("POST")
      */
-    public function LineaMarcaAction($marcaId,Request $request)
+    public function searchByMarcaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
-        
 
             $em = $this->getDoctrine()->getManager();
             $Lineas = $em->getRepository('AppBundle:Linea')->findBy(
@@ -279,28 +300,5 @@ class LineaController extends Controller
 
         
         return $helpers->json($response);
-    }
-
-
-    /**
-     * datos para select 2
-     *
-     * @Route("/select", name="linea_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $lineas = $em->getRepository('AppBundle:Linea')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($lineas as $key => $linea) {
-        $response[$key] = array(
-            'value' => $linea->getId(),
-            'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
-            );
-      }
-       return $helpers->json($response);
     }
 }

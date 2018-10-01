@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlomaquinarium</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vhloMaquinarium.id }}</td>
+            </tr>
+            <tr>
+                <th>Fechaingreso</th>
+                <td>{% if vhloMaquinarium.fechaIngreso %}{{ vhloMaquinarium.fechaIngreso|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Peso</th>
+                <td>{{ vhloMaquinarium.peso }}</td>
+            </tr>
+            <tr>
+                <th>Cargarutilmaxima</th>
+                <td>{{ vhloMaquinarium.cargarUtilMaxima }}</td>
+            </tr>
+            <tr>
+                <th>Numerollantas</th>
+                <td>{{ vhloMaquinarium.numeroLlantas }}</td>
+            </tr>
+            <tr>
+                <th>Numeroejes</th>
+                <td>{{ vhloMaquinarium.numeroEjes }}</td>
+            </tr>
+            <tr>
+                <th>Alto</th>
+                <td>{{ vhloMaquinarium.alto }}</td>
+            </tr>
+            <tr>
+                <th>Largo</th>
+                <td>{{ vhloMaquinarium.largo }}</td>
+            </tr>
+            <tr>
+                <th>Ancho</th>
+                <td>{{ vhloMaquinarium.ancho }}</td>
+            </tr>
+            <tr>
+                <th>Tipodispositivo</th>
+                <td>{{ vhloMaquinarium.tipoDispositivo }}</td>
+            </tr>
+            <tr>
+                <th>Numeroimportacion</th>
+                <td>{{ vhloMaquinarium.numeroImportacion }}</td>
+            </tr>
+            <tr>
+                <th>Numeroactivaciongps</th>
+                <td>{{ vhloMaquinarium.numeroActivacionGps }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlomaquinaria_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vhlomaquinaria_edit', { 'id': vhloMaquinarium.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
