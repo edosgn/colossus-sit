@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gdcfgtipocorrespondencias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gdCfgTipoCorrespondencium in gdCfgTipoCorrespondencias %}
+            <tr>
+                <td><a href="{{ path('gdcfgtipocorrespondencia_show', { 'id': gdCfgTipoCorrespondencium.id }) }}">{{ gdCfgTipoCorrespondencium.id }}</a></td>
+                <td>{{ gdCfgTipoCorrespondencium.nombre }}</td>
+                <td>{% if gdCfgTipoCorrespondencium.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gdcfgtipocorrespondencia_show', { 'id': gdCfgTipoCorrespondencium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gdcfgtipocorrespondencia_edit', { 'id': gdCfgTipoCorrespondencium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gdcfgtipocorrespondencia_new') }}">Create a new gdCfgTipoCorrespondencium</a>
+        </li>
+    </ul>
+{% endblock %}
