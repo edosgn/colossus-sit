@@ -395,21 +395,21 @@ class CiudadanoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $usuario,
                 );
             }else{
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Identificacion no encontrada en la base de datos", 
+                    'message' => "Identificacion no encontrada en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);

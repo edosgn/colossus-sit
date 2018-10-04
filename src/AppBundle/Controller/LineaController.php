@@ -268,7 +268,7 @@ class LineaController extends Controller
     /**
      * Busca las lineas por marca.
      *
-     * @Route("/search/marca", name="linea_mar")
+     * @Route("/search/marca/select", name="linea_search_marca_select")
      * @Method("POST")
      */
     public function searchByMarcaAction(Request $request)
@@ -277,27 +277,31 @@ class LineaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $Lineas = $em->getRepository('AppBundle:Linea')->findBy(
-                array('marca' => $marcaId)
+
+            $lineas = $em->getRepository('AppBundle:Linea')->findBy(
+                array('marca' => $params->idMarca)
             );
-            $lineasArray[] = null;
-            foreach ($Lineas as $key => $linea) {
-            $lineasArray[$key] = array(
-                'value' => $linea->getId(),
-                'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
+
+            $response = null;
+
+            foreach ($lineas as $key => $linea) {
+                $response[$key] = array(
+                    'value' => $linea->getId(),
+                    'label' => $linea->getCodigoMt()."_".$linea->getNombre()
                 );
             }
-
-         
+        }else{
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Lineas encontradas", 
-                    'data'=> $lineasArray,
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
             );
-           
-
+        }
         
         return $helpers->json($response);
     }

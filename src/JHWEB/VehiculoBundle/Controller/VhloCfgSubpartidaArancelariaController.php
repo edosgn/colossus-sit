@@ -233,7 +233,7 @@ class VhloCfgSubpartidaArancelariaController extends Controller
         foreach ($subpartidas as $key => $subpartida) {
             $response[$key] = array(
                 'value' => $subpartida->getId(),
-                'label' => $subpartida->getNombre()
+                'label' => $subpartida->getCodigo()
             );
         }
         
