@@ -256,4 +256,45 @@ class VhloCfgClaseMaquinariaController extends Controller
         
         return $helpers->json($response);
     }
+
+    /**
+     * Busca las clases por tipo de maquinaria.
+     *
+     * @Route("/search/tipomaquinaria/select", name="vhlocfgclasemaquinaria_search_tipomaquinaria_select")
+     * @Method("POST")
+     */
+    public function searchByTipoMaquinariaSelectAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $clasesMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClaseMaquinaria')->findBy(
+                array('tipoMaquinaria' => $params->idTipoMaquinaria)
+            );
+
+            $response = null;
+            
+            foreach ($clasesMaquinaria as $key => $claseMaquinaria) {
+                $response[$key] = array(
+                    'value' => $claseMaquinaria->getId(),
+                    'label' => $claseMaquinaria->getNombre()
+                );
+            }           
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }

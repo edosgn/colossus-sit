@@ -212,4 +212,31 @@ class VhloCfgTipoCabinaController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="vhlocfgtipocabina_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $tiposCabina = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoCabina')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($tiposCabina as $key => $tipoCabina) {
+            $response[$key] = array(
+                'value' => $tipoCabina->getId(),
+                'label' => $tipoCabina->getNombre()
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }
