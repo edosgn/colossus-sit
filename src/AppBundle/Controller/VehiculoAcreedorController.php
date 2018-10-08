@@ -187,8 +187,6 @@ class VehiculoAcreedorController extends Controller
             if ($params->acreedoresCiudadanos) {
                 
                 foreach ($params->acreedoresCiudadanos as $key => $ciudadano) {
-                    // var_dump($ciudadano);
-                    // die();
                     $acreedorVehiculo = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
                         array(
                             'estado' => 1,
@@ -196,14 +194,14 @@ class VehiculoAcreedorController extends Controller
                             )
                         );
                         
-                        $acreedorVehiculo->setEstado(false);
-                        $em->persist($acreedorVehiculo);
-                        $em->flush();
+                    $acreedorVehiculo->setEstado(false);
+                    $em->persist($acreedorVehiculo);
+                    $em->flush();
                     $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Ciudadano acreedor eliminado con éxto",
-            );
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Ciudadano acreedor eliminado con éxto",
+                    );
                         
                     }
                 }
@@ -221,12 +219,23 @@ class VehiculoAcreedorController extends Controller
                         $acreedorVehiculo->setEstado(false);
                         $em->persist($acreedorVehiculo);
                         $em->flush();
-                    $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Empresa acreedora eliminada con éxto",
-            );
+                        $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Empresa acreedora eliminada con éxto",
+                        );
                     }
+                }
+                if($params->ciudadanoNewId){
+                    $acreedorVehiculoNew = new VehiculoAcreedor();
+                    $usuario = $em->getRepository('UsuarioBundle:Usuario')->find($params->ciudadanoNewId);
+                    $acreedorVehiculoNew->setCiudadano($usuario->getCiudadano());
+                    $acreedorVehiculoNew->setVehiculo($acreedorVehiculo->getVehiculo());
+                    $acreedorVehiculoNew->setCfgTipoAlerta($acreedorVehiculo->getCfgTipoAlerta());
+                    $acreedorVehiculoNew->setGradoAlerta($acreedorVehiculo->getGradoAlerta());
+                    $acreedorVehiculoNew->setEstado(true);
+                    $em->persist($acreedorVehiculoNew);
+                    $em->flush();
                 }
 
         }else{
