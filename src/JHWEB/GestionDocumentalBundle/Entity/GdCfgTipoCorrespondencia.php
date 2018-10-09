@@ -94,4 +94,3 @@ class GdCfgTipoCorrespondencia
         return $this->activo;
     }
 }
-

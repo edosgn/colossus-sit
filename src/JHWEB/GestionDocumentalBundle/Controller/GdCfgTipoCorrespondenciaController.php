@@ -23,7 +23,9 @@ class GdCfgTipoCorrespondenciaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $GdCfgTipoCorrespondencias = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->findBy(
             array('activo'=>true)
         );
@@ -34,7 +36,7 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($GdCfgTipoCorrespondencias)." Registros encontrados", 
+                'message' => count($GdCfgTipoCorrespondencias)." Registros encontrados", 
                 'data'=> $GdCfgTipoCorrespondencias,
             );
         }
@@ -53,13 +55,15 @@ class GdCfgTipoCorrespondenciaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
+
         if($authCheck == true){
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
             $gdCfgTipoCorrespondencia = new GdCfgTipoCorrespondencia();
+
             $gdCfgTipoCorrespondencia->setNombre($params->nombre);
             $gdCfgTipoCorrespondencia->setActivo(true);
             
@@ -68,16 +72,17 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro creado con éxito",
+                'message' => "Registro creado con éxito",
             );
         
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorización no valida",
+                'message' => "Autorización no valida",
             );
         }
+        
         return $helpers->json($response);
     }
 
@@ -110,7 +115,7 @@ class GdCfgTipoCorrespondenciaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -157,7 +162,7 @@ class GdCfgTipoCorrespondenciaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if($authCheck == true){
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -169,13 +174,13 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro eliminado con éxito", 
+                    'message' => "Registro eliminado con éxito", 
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorización no valida", 
+                'message' => "Autorización no valida", 
             );
         }
         return $helpers->json($response);

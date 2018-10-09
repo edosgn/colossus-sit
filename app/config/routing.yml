@@ -1,7 +1,7 @@
 jhweb_gestion_documental:
     resource: "@JHWEBGestionDocumentalBundle/Controller/"
     type:     annotation
-    prefix:   /gestiondocuemntal
+    prefix:   /gestiondocumental
 
 jhweb_contravencional:
     resource: "@JHWEBContravencionalBundle/Controller/"
