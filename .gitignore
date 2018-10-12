@@ -35,3 +35,4 @@ npm-debug.log
 
 *.php~
 app.zip
+app/config/routing.yml

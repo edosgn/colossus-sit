@@ -33,7 +33,7 @@ class CiudadanoController extends Controller
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado ciudadanos", 
+                    'message' => "listado ciudadanos", 
                     'data'=> $ciudadanos,
             );
          
@@ -60,7 +60,7 @@ class CiudadanoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'message' => "los campos no pueden estar vacios", 
                 );
             }else{*/
                 $numeroIdentificacion = $params->numeroIdentificacionUsuario;
@@ -140,13 +140,14 @@ class CiudadanoController extends Controller
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "ciudadano creado con exito", 
+                        'message' => "Ciudadano creado con exito", 
+                        'data' => $usuario
                     );
                 }else{
                    $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'msj' => "Identificacion ya esta registrada en la base de datos", 
+                        'message' => "Identificacion ya esta registrada en la base de datos", 
                     ); 
                 }
             //}
@@ -154,7 +155,7 @@ class CiudadanoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
             } 
         return $helpers->json($response);
@@ -184,7 +185,7 @@ class CiudadanoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -275,21 +276,21 @@ class CiudadanoController extends Controller
                  $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'msj' => "Registro actualizado con exito", 
+                        'message' => "Registro actualizado con exito", 
                         'data'=> $ciudadano,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar ciudadano", 
+                    'message' => "Autorizacion no valida para editar ciudadano", 
                 );
         }
 
@@ -318,13 +319,13 @@ class CiudadanoController extends Controller
             $response = array(
                     'status' => 'success',
                         'code' => 200,
-                        'msj' => "ciudadano eliminado con exito", 
+                        'message' => "ciudadano eliminado con exito", 
                 );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -395,21 +396,21 @@ class CiudadanoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $usuario,
                 );
             }else{
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Identificacion no encontrada en la base de datos", 
+                    'message' => "Identificacion no encontrada en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -439,21 +440,21 @@ class CiudadanoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $edad,
                 );
             }else{
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "No se pudo calcular la edad", 
+                    'message' => "No se pudo calcular la edad", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -500,7 +501,7 @@ class CiudadanoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -532,7 +533,7 @@ class CiudadanoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Identificacion ya esta registrada en la base de datos", 
+                    'message' => "Identificacion ya esta registrada en la base de datos", 
                     'datos' => $usuario, 
                 );
                 return $helpers->json($response);
@@ -546,7 +547,7 @@ class CiudadanoController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);

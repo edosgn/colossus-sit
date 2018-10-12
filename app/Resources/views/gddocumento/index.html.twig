@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gddocumentos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecharegistro</th>
+                <th>Numeroradicado</th>
+                <th>Consecutivo</th>
+                <th>Folios</th>
+                <th>Numerooficio</th>
+                <th>Diasvigencia</th>
+                <th>Fechavencimiento</th>
+                <th>Descripcion</th>
+                <th>Url</th>
+                <th>Correocertificadollegada</th>
+                <th>Nombretransportadorallegada</th>
+                <th>Fechallegada</th>
+                <th>Numeroguiallegada</th>
+                <th>Correocertificadoenvio</th>
+                <th>Nombretransportadoraenvio</th>
+                <th>Fechaenvio</th>
+                <th>Medioenvio</th>
+                <th>Numeroguia</th>
+                <th>Numerocarpeta</th>
+                <th>Activo</th>
+                <th>Entidadnombre</th>
+                <th>Entidadcargo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gdDocumento in gdDocumentos %}
+            <tr>
+                <td><a href="{{ path('gddocumento_show', { 'id': gdDocumento.id }) }}">{{ gdDocumento.id }}</a></td>
+                <td>{% if gdDocumento.fechaRegistro %}{{ gdDocumento.fechaRegistro|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ gdDocumento.numeroRadicado }}</td>
+                <td>{{ gdDocumento.consecutivo }}</td>
+                <td>{{ gdDocumento.folios }}</td>
+                <td>{{ gdDocumento.numeroOficio }}</td>
+                <td>{{ gdDocumento.diasVigencia }}</td>
+                <td>{% if gdDocumento.fechaVencimiento %}{{ gdDocumento.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ gdDocumento.descripcion }}</td>
+                <td>{{ gdDocumento.url }}</td>
+                <td>{% if gdDocumento.correoCertificadoLlegada %}Yes{% else %}No{% endif %}</td>
+                <td>{{ gdDocumento.nombreTransportadoraLlegada }}</td>
+                <td>{% if gdDocumento.fechaLlegada %}{{ gdDocumento.fechaLlegada|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ gdDocumento.numeroGuiaLlegada }}</td>
+                <td>{% if gdDocumento.correoCertificadoEnvio %}Yes{% else %}No{% endif %}</td>
+                <td>{{ gdDocumento.nombreTransportadoraEnvio }}</td>
+                <td>{% if gdDocumento.fechaEnvio %}{{ gdDocumento.fechaEnvio|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ gdDocumento.medioEnvio }}</td>
+                <td>{{ gdDocumento.numeroGuia }}</td>
+                <td>{{ gdDocumento.numeroCarpeta }}</td>
+                <td>{% if gdDocumento.activo %}Yes{% else %}No{% endif %}</td>
+                <td>{{ gdDocumento.entidadNombre }}</td>
+                <td>{{ gdDocumento.entidadCargo }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gddocumento_show', { 'id': gdDocumento.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gddocumento_edit', { 'id': gdDocumento.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gddocumento_new') }}">Create a new gdDocumento</a>
+        </li>
+    </ul>
+{% endblock %}

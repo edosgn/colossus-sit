@@ -21,9 +21,6 @@ class Soat
      */
     private $id;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="soats") */
-    private $vehiculo;
-
     /**
      * @var \DateTime
      *
@@ -59,9 +56,6 @@ class Soat
      */
     private $nombreEmpresa;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipio") */
-    private $municipio;
-
     /**
      * @var bool
      *
@@ -75,6 +69,12 @@ class Soat
      * @ORM\Column(name="estado", type="string")
      */
     private $estado;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="soats") */
+    private $vehiculo;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipio") */
+    private $municipio;
 
     /**
      * Get id

@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+=======
+jhweb_gestion_documental:
+    resource: "@JHWEBGestionDocumentalBundle/Controller/"
+    type:     annotation
+    prefix:   /gestiondocumental
+
+>>>>>>> cb7572d598d27fb89b1ac7e30c4de7cbee2c4606
 jhweb_contravencional:
     resource: "@JHWEBContravencionalBundle/Controller/"
     type:     annotation

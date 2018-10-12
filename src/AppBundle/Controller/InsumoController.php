@@ -317,4 +317,70 @@ class InsumoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Lists all insumo entities.
+     *
+     * @Route("/isExistencia", name="insumo_isExistencia")
+     * @Method({"GET", "POST"})
+     */
+    public function isExistenciaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
+            array('tipo'=>'Sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen)
+        );
+
+        if (count($insumos) >= $params->cantidad) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => 'Total de registros encontrados',
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => 'la sede tiene '.count($insumos).' sustratos para reasignar',
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all insumo entities.
+     *
+     * @Route("/reasignacionSustrato", name="insumo_reasignacionSustrato")
+     * @Method({"GET", "POST"})
+     */
+    public function reasignacionSustratoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $sustratos = $em->getRepository('AppBundle:Insumo')->findBy(
+            array('tipo'=>'Sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen), 
+            array('id' => 'DESC'),$params->cantidad
+        );
+        foreach ($sustratos as $key => $sustrato) {
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeDestino);
+            // var_dump($sedeOperativa->getNombre());
+            // die();
+            $sustrato->setSedeOperativa($sedeOperativa);
+            $em->persist($sustrato);
+            $em->flush();
+        }
+        $response = array(
+            'status' => 'success',
+            'code' => 400,
+            'msj' => 'Sustratos reasignados:'.count($sustratos),
+        );
+        
+        return $helpers->json($response);
+    }
 }

@@ -94,7 +94,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
                 WHERE v.estado = true AND
                 v.id NOT IN
                 (SELECT IDENTITY(vm.vehiculo)
-                FROM AppBundle:VehiculoMaquinaria vm
+                FROM JHWEBVehiculoBundle:VhloMaquinaria vm
                 WHERE vm.vehiculo = v.id) AND v.id NOT IN
                 (SELECT IDENTITY(vr.vehiculo)
                 FROM AppBundle:VehiculoRemolque vr

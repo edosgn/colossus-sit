@@ -242,46 +242,6 @@ class LineaController extends Controller
         ;
     }
 
-     /**
-     *busca las lineas de una marca.
-     *
-     * @Route("/lin/mar/{marcaId}", name="linea_mar")
-     * @Method("POST")
-     */
-    public function LineaMarcaAction($marcaId,Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        
-        
-
-            $em = $this->getDoctrine()->getManager();
-            $Lineas = $em->getRepository('AppBundle:Linea')->findBy(
-                array('marca' => $marcaId)
-            );
-            $lineasArray[] = null;
-            foreach ($Lineas as $key => $linea) {
-            $lineasArray[$key] = array(
-                'value' => $linea->getId(),
-                'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
-                );
-            }
-
-         
-            $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Lineas encontradas", 
-                    'data'=> $lineasArray,
-            );
-           
-
-        
-        return $helpers->json($response);
-    }
-
-
     /**
      * datos para select 2
      *
@@ -290,17 +250,59 @@ class LineaController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $lineas = $em->getRepository('AppBundle:Linea')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($lineas as $key => $linea) {
-        $response[$key] = array(
-            'value' => $linea->getId(),
-            'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $lineas = $em->getRepository('AppBundle:Linea')->findBy(
+            array('estado' => 1)
+        );
+        foreach ($lineas as $key => $linea) {
+            $response[$key] = array(
+                'value' => $linea->getId(),
+                'label' => $linea->getCodigoMt()."_".$linea->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca las lineas por marca.
+     *
+     * @Route("/search/marca/select", name="linea_search_marca_select")
+     * @Method("POST")
+     */
+    public function searchByMarcaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $lineas = $em->getRepository('AppBundle:Linea')->findBy(
+                array('marca' => $params->idMarca)
+            );
+
+            $response = null;
+
+            foreach ($lineas as $key => $linea) {
+                $response[$key] = array(
+                    'value' => $linea->getId(),
+                    'label' => $linea->getCodigoMt()."_".$linea->getNombre()
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

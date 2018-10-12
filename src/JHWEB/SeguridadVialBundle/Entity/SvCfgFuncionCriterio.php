@@ -29,18 +29,18 @@ class SvCfgFuncionCriterio
     private $nombre;
 
     /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion", inversedBy="funciones")
-     */
-    private $funcion;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="SvCfgFuncion", inversedBy="funciones")
+     */
+    private $funcion;
 
     /**
      * Get id

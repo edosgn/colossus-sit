@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgcondicioningresos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgCondicionIngreso in vhloCfgCondicionIngresos %}
+            <tr>
+                <td><a href="{{ path('vhlocfgcondicioningreso_show', { 'id': vhloCfgCondicionIngreso.id }) }}">{{ vhloCfgCondicionIngreso.id }}</a></td>
+                <td>{{ vhloCfgCondicionIngreso.nombre }}</td>
+                <td>{% if vhloCfgCondicionIngreso.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgcondicioningreso_show', { 'id': vhloCfgCondicionIngreso.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfgcondicioningreso_edit', { 'id': vhloCfgCondicionIngreso.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgcondicioningreso_new') }}">Create a new vhloCfgCondicionIngreso</a>
+        </li>
+    </ul>
+{% endblock %}
