@@ -84,7 +84,7 @@ class CfgTipoClaseController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no valida",
+                'message' => "Autorización no válida",
             );
         }
         return $helpers->json($response);

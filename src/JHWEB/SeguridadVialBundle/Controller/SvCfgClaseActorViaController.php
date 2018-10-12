@@ -23,13 +23,23 @@ class SvCfgClaseActorViaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $clasesActor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->findBy(
+            array('activo' => true)
+        );
 
-        $svCfgClasesActoresVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->findAll();
+        $response['data'] = array();
 
-        return $this->render('svcfgclaseactorvia/index.html.twig', array(
-            'svCfgClasesActoresVia' => $svCfgClasesActoresVia,
-        ));
+        if ($clasesActor) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($clasesActor) . " registros encontrados",
+                'data' => $clasesActor,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -48,9 +58,11 @@ class SvCfgClaseActorViaController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             
+            $em = $this->getDoctrine()->getManager();
+
             $claseActorVia = new SvCfgClaseActorVia();
 
-            $claseActorVia->setNombreEmpresa($params->nombre);
+            $claseActorVia->setNombre($params->nombre);
             $claseActorVia->setActivo(true);
             $em->persist($claseActorVia);
             $em->flush();
@@ -89,46 +101,88 @@ class SvCfgClaseActorViaController extends Controller
     /**
      * Displays a form to edit an existing svCfgClaseActorVia entity.
      *
-     * @Route("/{id}/edit", name="svcfgclaseactorvia_edit")
+     * @Route("/edit", name="svcfgclaseactorvia_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgClaseActorVia $svCfgClaseActorVia)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgClaseActorVia);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgClaseActorViaType', $svCfgClaseActorVia);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgclaseactorvia_edit', array('id' => $svCfgClaseActorVia->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $claseActor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->find($params->id);
+
+            if ($claseActor != null) {
+                $claseActor->setNombre($params->nombre);
+
+                $em->persist($claseActor);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $claseActor,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
+        return $helpers->json($response);
 
-        return $this->render('svCfgClaseActorVia/edit.html.twig', array(
-            'svCfgClaseActorVia' => $svCfgClaseActorVia,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
      * Deletes a SvCfgClaseActorVia entity.
      *
-     * @Route("/{id}", name="svcfgclaseactorvia_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="svcfgclaseactorvia_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, SvCfgClaseActorVia $svCfgClaseActorVia)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($svCfgClaseActorVia);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($svCfgClaseActorVia);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('svcfgclaseactorvia_index');
+            $claseActor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->find($params->id);
+
+            $claseActor->setActivo(false);
+
+            $em->persist($claseActor);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**

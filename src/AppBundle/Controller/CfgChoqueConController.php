@@ -30,7 +30,7 @@ class CfgChoqueConController extends Controller
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "listado colores",
+            'message' => "listado choquesCon",
             'data' => $cfgChoquesCon,
         );
 
@@ -93,7 +93,7 @@ class CfgChoqueConController extends Controller
     /**
      * Finds and displays a cfgChoqueCon entity.
      *
-     * @Route("/show/{id}", name="cfgchoquecon_show")
+     * @Route("/show", name="cfgchoquecon_show")
      * @Method("POST")
      */
     public function showAction(Request $request,$id)

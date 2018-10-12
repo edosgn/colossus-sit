@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgcardinalidads list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgCardinalidad in svCfgCardinalidads %}
+            <tr>
+                <td><a href="{{ path('svcfgcardinalidad_show', { 'id': svCfgCardinalidad.id }) }}">{{ svCfgCardinalidad.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgcardinalidad_show', { 'id': svCfgCardinalidad.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
