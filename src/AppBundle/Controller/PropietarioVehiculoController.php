@@ -121,7 +121,7 @@ class PropietarioVehiculoController extends Controller
                     $em->persist($propietarioVehiculo);
                     $em->flush();
             }
-
+            
             foreach ($params->propietariosCiudadanos as $key => $ciudadano) {
 
                 $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
