@@ -24,13 +24,23 @@ class SvCfgFuncionController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $funciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->findBy(
+            array('activo' => true)
+        );
 
-        $svCfgFunciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->findAll();
+        $response['data'] = array();
 
-        return $this->render('svcfgfuncion/index.html.twig', array(
-            'svCfgFunciones' => $svCfgFunciones,
-        ));
+        if ($funciones) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($funciones) . " registros encontrados",
+                'data' => $funciones,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -53,9 +63,9 @@ class SvCfgFuncionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $soat->setNombre($params->nombre);
-            $soat->setActivo(true);
-            $em->persist($soat);
+            $funcion->setNombre($params->nombre);
+            $funcion->setActivo(true);
+            $em->persist($funcion);
             $em->flush();
 
             $response = array(
@@ -92,46 +102,88 @@ class SvCfgFuncionController extends Controller
     /**
      * Displays a form to edit an existing SvCfgFuncion entity.
      *
-     * @Route("/{id}/edit", name="svcfgfuncion_edit")
+     * @Route("/edit", name="svcfgfuncion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgFuncion $svCfgFuncion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgFuncion);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\SvCfgFuncionType', $svCfgFuncion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgfuncion_edit', array('id' => $svCfgFuncion->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->id);
+
+            if ($funcion != null) {
+                $funcion->setNombre($params->nombre);
+
+                $em->persist($funcion);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $funcion,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
-
-        return $this->render('svcfgfuncion/edit.html.twig', array(
-            'svcfgfuncion' => $svCfgFuncion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a svCfgFuncion entity.
      *
-     * @Route("/{id}", name="svcfgfuncion_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="svcfgfuncion_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, SvCfgFuncion $svCfgFuncion)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($svCfgFuncion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($svCfgFuncion);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('svcfgfuncion_index');
+            $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->id);
+
+            $funcion->setActivo(false);
+
+            $em->persist($funcion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
+
     }
 
     /**

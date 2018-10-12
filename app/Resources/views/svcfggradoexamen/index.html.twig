@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfggradoexamens list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgGradoExaman in svCfgGradoExamens %}
+            <tr>
+                <td><a href="{{ path('svcfggradoexamen_show', { 'id': svCfgGradoExaman.id }) }}">{{ svCfgGradoExaman.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfggradoexamen_show', { 'id': svCfgGradoExaman.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

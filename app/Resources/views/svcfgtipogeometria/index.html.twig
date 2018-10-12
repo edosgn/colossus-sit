@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgtipogeometrias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgTipoGeometrium in svCfgTipoGeometrias %}
+            <tr>
+                <td><a href="{{ path('svcfgtipogeometria_show', { 'id': svCfgTipoGeometrium.id }) }}">{{ svCfgTipoGeometrium.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgtipogeometria_show', { 'id': svCfgTipoGeometrium.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

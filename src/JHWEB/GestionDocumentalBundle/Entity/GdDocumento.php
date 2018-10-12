@@ -24,14 +24,14 @@ class GdDocumento
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaRegistro", type="datetime")
+     * @ORM\Column(name="fecha_registro", type="datetime")
      */
     private $fechaRegistro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroRadicado", type="string", length=10)
+     * @ORM\Column(name="numero_radicado", type="string", length=10)
      */
     private $numeroRadicado;
 
@@ -52,21 +52,21 @@ class GdDocumento
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroOficio", type="string", length=50, nullable=true)
+     * @ORM\Column(name="numero_oficio", type="string", length=50, nullable=true)
      */
     private $numeroOficio;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="diasVigencia", type="integer", nullable=true)
+     * @ORM\Column(name="dias_vigencia", type="integer", nullable=true)
      */
     private $diasVigencia;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaVencimiento", type="date", nullable=true)
+     * @ORM\Column(name="fecha_vencimiento", type="date", nullable=true)
      */
     private $fechaVencimiento;
 
@@ -85,74 +85,60 @@ class GdDocumento
     private $url;
 
     /**
-     * @var boolean
-     *
-     * @ORM\Column(name="correoCertificadoLlegada", type="boolean", nullable=true)
-     */
-    private $correoCertificadoLlegada = false;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nombreTransportadoraLlegada", type="string", length=255, nullable=true)
-     */
-    private $nombreTransportadoraLlegada;
-
-    /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaLlegada", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_llegada", type="datetime")
      */
     private $fechaLlegada;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroGuiaLlegada", type="string", length=20, nullable=true)
+     * @ORM\Column(name="detalle_llegada", type="text")
      */
-    private $numeroGuiaLlegada;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="correoCertificadoEnvio", type="boolean", nullable=true)
-     */
-    private $correoCertificadoEnvio;
+    private $detalleLlegada;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreTransportadoraEnvio", type="string", length=255, nullable=true)
+     * @ORM\Column(name="detalle_envio", type="text", nullable=true)
      */
-    private $nombreTransportadoraEnvio;
+    private $detalleEnvio;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaEnvio", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_envio", type="datetime", nullable=true)
      */
     private $fechaEnvio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="medioEnvio", type="string", length=255, nullable=true)
-     */
-    private $medioEnvio;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroGuia", type="string", length=20, nullable=true)
-     */
-    private $numeroGuia;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="numeroCarpeta", type="string", length=10, nullable=true)
+     * @ORM\Column(name="numero_carpeta", type="string", length=10, nullable=true)
      */
     private $numeroCarpeta;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=50, nullable=true)
+     */
+    private $estado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entidad_nombre", type="text", nullable=true)
+     */
+    private $entidadNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entidad_cargo", type="text", nullable=true)
+     */
+    private $entidadCargo;
 
     /**
      * @var boolean
@@ -160,20 +146,6 @@ class GdDocumento
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo = true;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="entidadNombre", type="text", nullable=true)
-     */
-    private $entidadNombre;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="entidadCargo", type="text", nullable=true)
-     */
-    private $entidadCargo;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="documentos")
@@ -187,6 +159,16 @@ class GdDocumento
      * @ORM\ManyToOne(targetEntity="GdCfgTipoCorrespondencia", inversedBy="documentos")
      **/
     protected $tipoCorrespondencia;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="GdCfgMedioCorrespondencia", inversedBy="documentos")
+     **/
+    protected $medioCorrespondenciaLlegada;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="GdCfgMedioCorrespondencia", inversedBy="documentos")
+     **/
+    protected $medioCorrespondenciaEnvio;
 
     /** @ORM\ManyToOne(targetEntity="GdRemitente", inversedBy="documentos") */
     protected $remitente;
@@ -223,6 +205,9 @@ class GdDocumento
      */
     public function getFechaRegistro()
     {
+        if ($this->fechaRegistro) {
+            return $this->fechaRegistro->format('Y-m-d');
+        }
         return $this->fechaRegistro;
     }
 
@@ -367,6 +352,9 @@ class GdDocumento
      */
     public function getFechaVencimiento()
     {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('Y-m-d');
+        }
         return $this->fechaVencimiento;
     }
 
@@ -419,54 +407,6 @@ class GdDocumento
     }
 
     /**
-     * Set correoCertificadoLlegada
-     *
-     * @param boolean $correoCertificadoLlegada
-     *
-     * @return GdDocumento
-     */
-    public function setCorreoCertificadoLlegada($correoCertificadoLlegada)
-    {
-        $this->correoCertificadoLlegada = $correoCertificadoLlegada;
-
-        return $this;
-    }
-
-    /**
-     * Get correoCertificadoLlegada
-     *
-     * @return boolean
-     */
-    public function getCorreoCertificadoLlegada()
-    {
-        return $this->correoCertificadoLlegada;
-    }
-
-    /**
-     * Set nombreTransportadoraLlegada
-     *
-     * @param string $nombreTransportadoraLlegada
-     *
-     * @return GdDocumento
-     */
-    public function setNombreTransportadoraLlegada($nombreTransportadoraLlegada)
-    {
-        $this->nombreTransportadoraLlegada = $nombreTransportadoraLlegada;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreTransportadoraLlegada
-     *
-     * @return string
-     */
-    public function getNombreTransportadoraLlegada()
-    {
-        return $this->nombreTransportadoraLlegada;
-    }
-
-    /**
      * Set fechaLlegada
      *
      * @param \DateTime $fechaLlegada
@@ -491,75 +431,51 @@ class GdDocumento
     }
 
     /**
-     * Set numeroGuiaLlegada
+     * Set detalleLlegada
      *
-     * @param string $numeroGuiaLlegada
+     * @param string $detalleLlegada
      *
      * @return GdDocumento
      */
-    public function setNumeroGuiaLlegada($numeroGuiaLlegada)
+    public function setDetalleLlegada($detalleLlegada)
     {
-        $this->numeroGuiaLlegada = $numeroGuiaLlegada;
+        $this->detalleLlegada = $detalleLlegada;
 
         return $this;
     }
 
     /**
-     * Get numeroGuiaLlegada
+     * Get detalleLlegada
      *
      * @return string
      */
-    public function getNumeroGuiaLlegada()
+    public function getDetalleLlegada()
     {
-        return $this->numeroGuiaLlegada;
+        return $this->detalleLlegada;
     }
 
     /**
-     * Set correoCertificadoEnvio
+     * Set detalleEnvio
      *
-     * @param boolean $correoCertificadoEnvio
+     * @param string $detalleEnvio
      *
      * @return GdDocumento
      */
-    public function setCorreoCertificadoEnvio($correoCertificadoEnvio)
+    public function setDetalleEnvio($detalleEnvio)
     {
-        $this->correoCertificadoEnvio = $correoCertificadoEnvio;
+        $this->detalleEnvio = $detalleEnvio;
 
         return $this;
     }
 
     /**
-     * Get correoCertificadoEnvio
-     *
-     * @return boolean
-     */
-    public function getCorreoCertificadoEnvio()
-    {
-        return $this->correoCertificadoEnvio;
-    }
-
-    /**
-     * Set nombreTransportadoraEnvio
-     *
-     * @param string $nombreTransportadoraEnvio
-     *
-     * @return GdDocumento
-     */
-    public function setNombreTransportadoraEnvio($nombreTransportadoraEnvio)
-    {
-        $this->nombreTransportadoraEnvio = $nombreTransportadoraEnvio;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreTransportadoraEnvio
+     * Get detalleEnvio
      *
      * @return string
      */
-    public function getNombreTransportadoraEnvio()
+    public function getDetalleEnvio()
     {
-        return $this->nombreTransportadoraEnvio;
+        return $this->detalleEnvio;
     }
 
     /**
@@ -587,54 +503,6 @@ class GdDocumento
     }
 
     /**
-     * Set medioEnvio
-     *
-     * @param string $medioEnvio
-     *
-     * @return GdDocumento
-     */
-    public function setMedioEnvio($medioEnvio)
-    {
-        $this->medioEnvio = $medioEnvio;
-
-        return $this;
-    }
-
-    /**
-     * Get medioEnvio
-     *
-     * @return string
-     */
-    public function getMedioEnvio()
-    {
-        return $this->medioEnvio;
-    }
-
-    /**
-     * Set numeroGuia
-     *
-     * @param string $numeroGuia
-     *
-     * @return GdDocumento
-     */
-    public function setNumeroGuia($numeroGuia)
-    {
-        $this->numeroGuia = $numeroGuia;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroGuia
-     *
-     * @return string
-     */
-    public function getNumeroGuia()
-    {
-        return $this->numeroGuia;
-    }
-
-    /**
      * Set numeroCarpeta
      *
      * @param string $numeroCarpeta
@@ -659,27 +527,27 @@ class GdDocumento
     }
 
     /**
-     * Set activo
+     * Set estado
      *
-     * @param boolean $activo
+     * @param string $estado
      *
      * @return GdDocumento
      */
-    public function setActivo($activo)
+    public function setEstado($estado)
     {
-        $this->activo = $activo;
+        $this->estado = $estado;
 
         return $this;
     }
 
     /**
-     * Get activo
+     * Get estado
      *
-     * @return boolean
+     * @return string
      */
-    public function getActivo()
+    public function getEstado()
     {
-        return $this->activo;
+        return $this->estado;
     }
 
     /**
@@ -728,6 +596,30 @@ class GdDocumento
     public function getEntidadCargo()
     {
         return $this->entidadCargo;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return GdDocumento
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 
     /**
@@ -800,6 +692,54 @@ class GdDocumento
     public function getTipoCorrespondencia()
     {
         return $this->tipoCorrespondencia;
+    }
+
+    /**
+     * Set medioCorrespondenciaLlegada
+     *
+     * @param \JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia $medioCorrespondenciaLlegada
+     *
+     * @return GdDocumento
+     */
+    public function setMedioCorrespondenciaLlegada(\JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia $medioCorrespondenciaLlegada = null)
+    {
+        $this->medioCorrespondenciaLlegada = $medioCorrespondenciaLlegada;
+
+        return $this;
+    }
+
+    /**
+     * Get medioCorrespondenciaLlegada
+     *
+     * @return \JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia
+     */
+    public function getMedioCorrespondenciaLlegada()
+    {
+        return $this->medioCorrespondenciaLlegada;
+    }
+
+    /**
+     * Set medioCorrespondenciaEnvio
+     *
+     * @param \JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia $medioCorrespondenciaEnvio
+     *
+     * @return GdDocumento
+     */
+    public function setMedioCorrespondenciaEnvio(\JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia $medioCorrespondenciaEnvio = null)
+    {
+        $this->medioCorrespondenciaEnvio = $medioCorrespondenciaEnvio;
+
+        return $this;
+    }
+
+    /**
+     * Get medioCorrespondenciaEnvio
+     *
+     * @return \JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia
+     */
+    public function getMedioCorrespondenciaEnvio()
+    {
+        return $this->medioCorrespondenciaEnvio;
     }
 
     /**

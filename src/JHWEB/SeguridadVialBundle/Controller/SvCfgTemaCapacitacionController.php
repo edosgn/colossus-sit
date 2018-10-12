@@ -25,18 +25,18 @@ class SvCfgTemaCapacitacionController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $svCfgTemaCapacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->findBy(
+        $temas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($svCfgTemaCapacitaciones) {
+        if ($temas) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($svCfgTemaCapacitaciones) . " registros encontrados",
-                'data' => $svCfgTemaCapacitaciones,
+                'message' => count($temas) . " registros encontrados",
+                'data' => $temas,
             );
         }
         return $helpers->json($response);
@@ -63,6 +63,8 @@ class SvCfgTemaCapacitacionController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $temaCapacitacion->setNombre($params->nombre);
+            $temaCapacitacion->setActivo(true);
+
             $em->persist($temaCapacitacion);
             $em->flush();
 
@@ -99,46 +101,89 @@ class SvCfgTemaCapacitacionController extends Controller
     /**
      * Displays a form to edit an existing svCfgTemaCapacitacion entity.
      *
-     * @Route("/{id}/edit", name="svcfgtemacapacitacion_edit")
+     * @Route("/edit", name="svcfgtemacapacitacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgTemaCapacitacion $svCfgTemaCapacitacion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgTemaCapacitacion);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\SvCfgTemaCapacitacionType', $svCfgTemaCapacitacion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgtemacapacitacion_edit', array('id' => $svCfgTemaCapacitacion->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $temaCapacitacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->find($params->id);
+
+            if ($temaCapacitacion != null) {
+                $temaCapacitacion->setNombre($params->nombre);
+
+                $em->persist($temaCapacitacion);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $temaCapacitacion,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
+        return $helpers->json($response);
 
-        return $this->render('svCfgTemaCapacitacion/edit.html.twig', array(
-            'svCfgTemaCapacitacion' => $svCfgTemaCapacitacion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
      * Deletes a SvCfgTemaCapacitacion entity.
      *
-     * @Route("/{id}/delete", name="svCfgTemaCapacitacion_delete")
+     * @Route("/delete", name="svCfgTemaCapacitacion_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request, SvCfgTemaCapacitacion $svCfgTemaCapacitacion)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($svCfgTemaCapacitacion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($svCfgTemaCapacitacion);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('svcfgtemacapacitacion_index');
+            $temaCapacitacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->find($params->id);
+
+            $temaCapacitacion->setActivo(false);
+
+            $em->persist($temaCapacitacion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
+
     }
 
     /**

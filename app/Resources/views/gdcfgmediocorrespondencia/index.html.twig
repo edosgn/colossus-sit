@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gdcfgmediocorrespondencias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Gestionable</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gdCfgMedioCorrespondencium in gdCfgMedioCorrespondencias %}
+            <tr>
+                <td><a href="{{ path('gdcfgmediocorrespondencia_show', { 'id': gdCfgMedioCorrespondencium.id }) }}">{{ gdCfgMedioCorrespondencium.id }}</a></td>
+                <td>{{ gdCfgMedioCorrespondencium.nombre }}</td>
+                <td>{% if gdCfgMedioCorrespondencium.gestionable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if gdCfgMedioCorrespondencium.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gdcfgmediocorrespondencia_show', { 'id': gdCfgMedioCorrespondencium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gdcfgmediocorrespondencia_edit', { 'id': gdCfgMedioCorrespondencium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gdcfgmediocorrespondencia_new') }}">Create a new gdCfgMedioCorrespondencium</a>
+        </li>
+    </ul>
+{% endblock %}

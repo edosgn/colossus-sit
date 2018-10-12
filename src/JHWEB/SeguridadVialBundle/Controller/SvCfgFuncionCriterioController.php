@@ -24,16 +24,27 @@ class SvCfgFuncionCriterioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $funcionCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->findBy(
+            array('activo' => true)
+        );
 
-        $svCfgFuncionCriterios = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->findAll();
+        $response['data'] = array();
 
-        return $this->render('svcfgfuncioncriterio/index.html.twig', array(
-            'svCfgFuncionCriterios' => $svCfgFuncionCriterios,
-        ));
+        if ($funcionCriterio) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($funcionCriterio) . " registros encontrados",
+                'data' => $funcionCriterio,
+            );
+        }
+        return $helpers->json($response);
+
     }
 
-/**
+    /**
      * Creates a new svCfgFuncionCriterio entity.
      *
      * @Route("/new", name="svcfgfuncioncriterio_new")
@@ -52,9 +63,8 @@ class SvCfgFuncionCriterioController extends Controller
             $funcionCriterio = new SvCfgFuncionCriterio();
 
             $em = $this->getDoctrine()->getManager();
-
             if ($params->funcionId) {
-                $funcion = $em->getRepository('JHWEBSeguridadVial:SvCfgFuncion')->find(
+                $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find(
                     $params->funcionId
                 );
                 $funcionCriterio->setFuncion($funcion);
@@ -98,46 +108,91 @@ class SvCfgFuncionCriterioController extends Controller
     /**
      * Displays a form to edit an existing SvCfgFuncionCriterio entity.
      *
-     * @Route("/{id}/edit", name="svcfgfuncioncriterio_edit")
+     * @Route("/edit", name="svcfgfuncioncriterio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgFuncionCriterio $svCfgFuncionCriterio)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgFuncionCriterio);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgFuncionCriterioType', $svCfgFuncionCriterio);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            $funcionCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->find($params->id);
 
-            return $this->redirectToRoute('svcfgfuncioncriterio_edit', array('id' => $svCfgFuncionCriterio->getId()));
+            $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->funcion);
+            if ($funcionCriterio != null) {
+                $funcionCriterio->setNombre($params->nombre);
+                $funcionCriterio->setFuncion($funcion);
+
+                $em->persist($funcionCriterio);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $funcionCriterio,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
+        return $helpers->json($response);
 
-        return $this->render('svCfgFuncionCriterio/edit.html.twig', array(
-            'svCfgFuncionCriterio' => $svCfgFuncionCriterio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
      * Deletes a svCfgFuncionCriterio entity.
      *
-     * @Route("/{id}", name="svcfgfuncioncriterio_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="svcfgfuncioncriterio_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, SvCfgFuncionCriterio $svCfgFuncionCriterio)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($svCfgFuncionCriterio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($svCfgFuncionCriterio);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('svcfgfuncioncriterio_index');
+            $funcionCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->find($params->id);
+
+            $funcionCriterio->setActivo(false);
+
+            $em->persist($funcionCriterio);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
+
     }
 
     /**
@@ -147,7 +202,7 @@ class SvCfgFuncionCriterioController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(SvCfgFuncion $svCfgFuncionCriterio)
+    private function createDeleteForm(SvCfgFuncionCriterio $svCfgFuncionCriterio)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('svcfgfuncioncriterio_delete', array('id' => $svCfgFuncionCriterio->getId())))

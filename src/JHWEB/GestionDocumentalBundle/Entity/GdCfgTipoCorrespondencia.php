@@ -29,6 +29,27 @@ class GdCfgTipoCorrespondencia
     private $nombre;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="dias_vigencia", type="integer")
+     */
+    private $diasVigencia;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="editable", type="boolean")
+     */
+    private $editable = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="prohibicion", type="boolean")
+     */
+    private $prohibicion = false;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -71,6 +92,78 @@ class GdCfgTipoCorrespondencia
     }
 
     /**
+     * Set diasVigencia
+     *
+     * @param integer $diasVigencia
+     *
+     * @return GdCfgTipoCorrespondencia
+     */
+    public function setDiasVigencia($diasVigencia)
+    {
+        $this->diasVigencia = $diasVigencia;
+
+        return $this;
+    }
+
+    /**
+     * Get diasVigencia
+     *
+     * @return integer
+     */
+    public function getDiasVigencia()
+    {
+        return $this->diasVigencia;
+    }
+
+    /**
+     * Set editable
+     *
+     * @param boolean $editable
+     *
+     * @return GdCfgTipoCorrespondencia
+     */
+    public function setEditable($editable)
+    {
+        $this->editable = $editable;
+
+        return $this;
+    }
+
+    /**
+     * Get editable
+     *
+     * @return boolean
+     */
+    public function getEditable()
+    {
+        return $this->editable;
+    }
+
+    /**
+     * Set prohibicion
+     *
+     * @param boolean $prohibicion
+     *
+     * @return GdCfgTipoCorrespondencia
+     */
+    public function setProhibicion($prohibicion)
+    {
+        $this->prohibicion = $prohibicion;
+
+        return $this;
+    }
+
+    /**
+     * Get prohibicion
+     *
+     * @return boolean
+     */
+    public function getProhibicion()
+    {
+        return $this->prohibicion;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -87,7 +180,7 @@ class GdCfgTipoCorrespondencia
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {

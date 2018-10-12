@@ -26,18 +26,18 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $GdCfgTipoCorrespondencias = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->findBy(
+        $tiposCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->findBy(
             array('activo'=>true)
         );
 
         $response['data'] = array();
 
-        if ($GdCfgTipoCorrespondencias) {
+        if ($tiposCorrespondencia) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($GdCfgTipoCorrespondencias)." Registros encontrados", 
-                'data'=> $GdCfgTipoCorrespondencias,
+                'message' => count($tiposCorrespondencia)." Registros encontrados", 
+                'data'=> $tiposCorrespondencia,
             );
         }
 
@@ -62,17 +62,18 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $gdCfgTipoCorrespondencia = new GdCfgTipoCorrespondencia();
+            $tipoCorrespondencia = new GdCfgTipoCorrespondencia();
 
-            $gdCfgTipoCorrespondencia->setNombre($params->nombre);
-            $gdCfgTipoCorrespondencia->setActivo(true);
+            $tipoCorrespondencia->setNombre($params->nombre);
+            $tipoCorrespondencia->setActivo(true);
             
-            $em->persist($gdCfgTipoCorrespondencia);
+            $em->persist($tipoCorrespondencia);
             $em->flush();
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con éxito",
+                'data' => $tipoCorrespondencia
             );
         
         }else{
@@ -89,17 +90,46 @@ class GdCfgTipoCorrespondenciaController extends Controller
     /**
      * Finds and displays a gdCfgTipoCorrespondencia entity.
      *
-     * @Route("/{id}", name="gdcfgtipocorrespondencia_show")
-     * @Method("GET")
+     * @Route("/show", name="gdcfgtipocorrespondencia_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(GdCfgTipoCorrespondencia $gdCfgTipoCorrespondencia)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($gdCfgTipoCorrespondencia);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('gdcfgtipocorrespondencia/show.html.twig', array(
-            'gdCfgTipoCorrespondencia' => $gdCfgTipoCorrespondencia,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->idTipoCorrespondencia);
+
+            if ($tipoCorrespondencia) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data'=> $tipoCorrespondencia,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -119,10 +149,10 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $gdCfgTipoCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia")->find($params->id);
+            $tipoCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia")->find($params->id);
 
-            if ($gdCfgTipoCorrespondencia!=null) {
-                $gdCfgTipoCorrespondencia->setNombre($params->nombre);
+            if ($tipoCorrespondencia) {
+                $tipoCorrespondencia->setNombre($params->nombre);
                 
                 $em->flush();
 
@@ -130,7 +160,7 @@ class GdCfgTipoCorrespondenciaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $gdCfgTipoCorrespondencia,
+                    'data'=> $tipoCorrespondencia,
                 );
             }else{
                 $response = array(
@@ -166,9 +196,9 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $gdCfgTipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
+            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
             
-            $gdCfgTipoCorrespondencia->setActivo(false);
+            $tipoCorrespondencia->setActivo(false);
             $em->flush();
 
             $response = array(
@@ -200,5 +230,31 @@ class GdCfgTipoCorrespondenciaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="gdcfgtipocorrespondencia_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $tiposCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($tiposCorrespondencia as $key => $tipoCorrespondencia) {
+            $response[$key] = array(
+                'value' => $tipoCorrespondencia->getId(),
+                'label' => $tipoCorrespondencia->getNombre()
+            );
+        }
+        return $helpers->json($response);
     }
 }

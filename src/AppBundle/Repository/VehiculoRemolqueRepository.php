@@ -16,8 +16,7 @@ class VehiculoRemolqueRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT vr
             FROM AppBundle:Vehiculo v, AppBundle:VehiculoRemolque vr
             WHERE ((v.id = vr.vehiculo)
-            AND (v.estado = :estado))
-            ";
+            AND (v.estado = :estado))";
         $consulta = $em->createQuery($dql);
         
         $consulta->setParameters(array(

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgvisualdisminuidas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgVisualDisminuida in svCfgVisualDisminuidas %}
+            <tr>
+                <td><a href="{{ path('svcfgvisualdisminuida_show', { 'id': svCfgVisualDisminuida.id }) }}">{{ svCfgVisualDisminuida.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgvisualdisminuida_show', { 'id': svCfgVisualDisminuida.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

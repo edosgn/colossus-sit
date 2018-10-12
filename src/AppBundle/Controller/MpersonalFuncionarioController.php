@@ -252,28 +252,22 @@ class MpersonalFuncionarioController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $em = $this->getDoctrine()->getManager();
-            
-            $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
-                array('activo' => true)
-            );
 
-            foreach ($funcionarios as $key => $funcionario) {
-                $response[$key] = array(
-                    'value' => $funcionario->getId(),
-                    'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
-                );
-            }
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida", 
+        $em = $this->getDoctrine()->getManager();
+        
+        $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
             );
         }
+        
         return $helpers->json($response);
     }
 
@@ -439,26 +433,23 @@ class MpersonalFuncionarioController extends Controller
     }
 
     /**
-     * Lists all mpersonalFuncionario entities.
+     * Busca el usuario logueado por identificación.
      *
      * @Route("/search/login", name="mpersonalfuncionario_search_login")
      * @Method({"GET", "POST"})
      */
     public function searchLoginAction(Request $request)
     {
-        
         $em = $this->getDoctrine()->getManager();
+
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-       // if ($authCheck == true) {
+        if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            
-            // var_dump($params);
-            // die();
-            
+
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
             );
@@ -471,6 +462,7 @@ class MpersonalFuncionarioController extends Controller
                             'activo' => true
                         )
                     );
+
                     if ($funcionario) {
                         $response = array(
                             'status' => 'success',
@@ -492,24 +484,21 @@ class MpersonalFuncionarioController extends Controller
                         'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
                     );
                 }
-
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
                 );
-            }
-
-
-            
-        /*}else{
+            } 
+        }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
-        }*/
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
         return $helpers->json($response);
     }
 
@@ -527,13 +516,10 @@ class MpersonalFuncionarioController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-       // if ($authCheck == true) {
+       if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-            
-            // var_dump($params);
-            // die();
-            
+
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
             );
@@ -575,17 +561,15 @@ class MpersonalFuncionarioController extends Controller
                     'code' => 400,
                     'message' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
                 );
-            }
-
-
-            
-        /*}else{
+            }            
+        }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Autorizacion no valida", 
                 );
-        }*/
+        }
+
         return $helpers->json($response);
     }
 

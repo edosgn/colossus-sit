@@ -28,6 +28,7 @@ class VehiculoRemolqueController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $remolques = $em->getRepository('AppBundle:VehiculoRemolque')->getVehiculoCampo();
+        
         $response = array(
                 'status' => 'success',
                 'code' => 200,

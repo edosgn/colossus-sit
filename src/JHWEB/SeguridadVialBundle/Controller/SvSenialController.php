@@ -96,7 +96,7 @@ class SvSenialController extends Controller
                 $file = $request->files->get('file');
                 $extension = $file->guessExtension();
                 $fileName = md5(rand().time()).".".$extension;
-                $dir=__DIR__.'/../../../web/uploads/seniales/files';
+                $dir=__DIR__.'/../../../../web/uploads/seniales/files';
 
                 $file->move($dir,$fileName);
                 $senial->setAdjunto($fileName);
@@ -106,7 +106,7 @@ class SvSenialController extends Controller
                 $logo = $request->files->get('logo');
                 $extension = $logo->guessExtension();
                 $logoName = md5(rand().time()).".".$extension;
-                $dir=__DIR__.'/../../../web/uploads/seniales/files';
+                $dir=__DIR__.'/../../../../web/uploads/seniales/files';
 
                 $logo->move($dir,$fileName);
                 $senial->setLogo($fileName);

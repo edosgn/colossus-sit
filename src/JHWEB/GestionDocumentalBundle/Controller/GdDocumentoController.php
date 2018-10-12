@@ -3,9 +3,14 @@
 namespace JHWEB\GestionDocumentalBundle\Controller;
 
 use JHWEB\GestionDocumentalBundle\Entity\GdDocumento;
+use JHWEB\GestionDocumentalBundle\Entity\GdTrazabilidad;
+use JHWEB\GestionDocumentalBundle\Entity\GdRemitente;
+use JHWEB\GestionDocumentalBundle\Entity\GdMedidaCautelar;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * Gddocumento controller.
@@ -62,11 +67,51 @@ class GdDocumentoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $usuario = $em->getRepository('AppBundle:Usuario')->findOneByIdentificacion(
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->peticionario->identificacion
             );
 
             if ($usuario) {
+                $remitente = $em->getRepository('JHWEBGestionDocumentalBundle:GdRemitente')->findOneByIdentificacion(
+                    $params->remitente->identificacion
+                );
+
+                if (!$remitente) {
+                    $remitente = new GdRemitente();
+
+                    $remitente->setPrimerNombre(strtoupper($params->remitente->primerNombre));
+                    if ($params->remitente->segundoNombre) {
+                        $remitente->setSegundoNombre(
+                            strtoupper($params->remitente->segundoNombre)
+                        );
+                    }
+                    $remitente->setPrimerApellido(
+                        strtoupper($params->remitente->primerApellido)
+                    );
+                    if ($params->remitente->segundoApellido) {
+                        $remitente->setSegundoApellido(
+                            strtoupper($params->remitente->segundoApellido)
+                        );
+                    }
+                    $remitente->setIdentificacion($params->remitente->identificacion);
+                    $remitente->setDireccion($params->remitente->direccion);
+                    $remitente->setTelefono($params->remitente->telefono);
+                    $remitente->setCorreoElectronico(
+                        $params->remitente->correoElectronico
+                    );
+                    $remitente->setActivo(true);
+                    
+                    if ($params->remitente->idTipoIdentificacion) {
+                        $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                            $params->remitente->idTipoIdentificacion
+                        );
+                        $remitente->setTipoIdentificacion($tipoIdentificacion);
+                    }
+
+                    $em->persist($remitente);
+                    $em->flush();
+                }
+
                 $peticionario = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
                     $usuario->getId()
                 );
@@ -76,7 +121,7 @@ class GdDocumentoController extends Controller
 
                     $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
 
-                    $consecutivo = $em->getRepository('AppBundle:MgdDocumento')->getMaximo(
+                    $consecutivo = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getMaximo(
                         $fechaRegistro->format('Y')
                     );
                     $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
@@ -91,20 +136,23 @@ class GdDocumentoController extends Controller
                     $documento->setFechaRegistro($fechaRegistro);
                     $documento->setDescripcion($params->documento->descripcion);
 
-                    if ($params->documento->correoCertificadoLlegada == 'true') {
-                        $documento->setCorreoCertificadoLlegada(true);
-                    }
-
-                    if ($params->documento->nombreTransportadoraLlegada) {
-                        $documento->setNombreTransportadoraLlegada($params->documento->nombreTransportadoraLlegada);
+                    if ($params->documento->detalleLlegada) {
+                        $documento->setDetalleLlegada(
+                            $params->documento->detalleLlegada
+                        );
                     }
 
                     if ($params->documento->fechaLlegada) {
-                        $documento->setFechaLlegada($params->documento->fechaLlegada);
+                        $documento->setFechaLlegada(
+                            new \Datetime($params->documento->fechaLlegada)
+                        );
                     }
 
-                    if ($params->documento->numeroGuiaLlegada) {
-                        $documento->setNumeroGuiaLlegada($params->documento->numeroGuiaLlegada);
+                    if ($params->documento->idMedioCorrespondenciaLlegada) {
+                        $medioCorrespondenciaLlegada = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
+                            $params->documento->idMedioCorrespondenciaLlegada
+                        );
+                        $documento->setMedioCorrespondenciaLlegada($medioCorrespondenciaLlegada);
                     }
 
                     if ($params->documento->idTipoCorrespondencia) {
@@ -120,6 +168,7 @@ class GdDocumentoController extends Controller
                     }else{
                         $vigencia = $tipoCorrespondencia->getDiasVigencia();
                     }
+
                     $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
                         $fechaActual,
                         $vigencia
@@ -134,27 +183,67 @@ class GdDocumentoController extends Controller
                     if ($file) {
                         $extension = $file->guessExtension();
                         $filename = md5(rand().time()).".".$extension;
-                        $dir=__DIR__.'/../../../web/docs';
+                        $dir=__DIR__.'/../../../../web/docs';
 
                         $file->move($dir,$filename);
                         $documento->setUrl($filename);
                     }
-                    $documento->setEstado('Pendiente');
-
-                    $em = $this->getDoctrine()->getManager();
-
-                    $tipoCorrespondencia = $em->getRepository('AppBundle:MgdTipoCorrespondencia')->find(
-                        $params->tipoCorrespondenciaId
-                    );
-                    $documento->setTipoCorrespondencia($tipoCorrespondencia);
+                    $documento->setEstado('PENDIENTE');
+                    $documento->setRemitente($remitente);
                     
                     $em->persist($documento);
                     $em->flush();
+
+                    if ($params->medidaCautelar) {
+                        $medidaCautelar = new GdMedidaCautelar();
+
+                        $medidaCautelar->setNumeroOficio(
+                            $params->medidaCautelar->numeroOficio
+                        );
+                        $medidaCautelar->setQuienOrdena(
+                            $params->medidaCautelar->quienOrdena
+                        );
+                        $medidaCautelar->setFechaInicio(
+                            new \Datetime($params->medidaCautelar->fechaInicio)
+                        );
+                        $medidaCautelar->setFechaFin(
+                            new \Datetime($params->medidaCautelar->fechaFin)
+                        );
+                        $medidaCautelar->setImplicadoidentificacion(
+                            $params->medidaCautelar->identificacionImplicado
+                        );
+                        $medidaCautelar->setDelito($params->medidaCautelar->delito);
+                        $medidaCautelar->setDocumento($documento);
+
+                        $em->persist($medidaCautelar);
+                        $em->flush();
+
+                        /*if (count($params->vehiculo)) {
+                            foreach ($params->vehiculo as $key => $vehiculo) {
+                                $mgdMedidaCautelarVehiculo = new MgdMedidaCautelarVehiculo();
+
+                                $mgdMedidaCautelarVehiculo->setLugar($params->vehiculo[0]->lugar);
+                                $mgdMedidaCautelarVehiculo->setPlaca($params->vehiculo[0]->placa);
+
+                                if ($params->vehiculo[0]->claseId) {
+                                    $clase = $em->getRepository('AppBundle:Clase')->find(
+                                        $params->vehiculo[0]->claseId
+                                    );
+                                    $mgdMedidaCautelarVehiculo->setClase($clase);
+                                }
+                                $mgdMedidaCautelarVehiculo->setMedidaCautelar($mgdMedidaCautelar);
+
+                                $em->persist($mgdMedidaCautelarVehiculo);
+                                $em->flush();
+                            }
+                        }*/
+                    }
 
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Registro creado con éxito",
+                        'data' => $documento
                     );
                 }else{
                     $response = array(
@@ -297,18 +386,89 @@ class GdDocumentoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado", 
+                    'message' => "No existen documentos registrados aún.", 
                 );
             }else{
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado", 
+                    'message' => count($documentos)." Documentos registrados.", 
                     'data'=> $documentos,
                 );
             }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Asigna el documento a un fiuncionario para que genere un respuesta.
+     *
+     * @Route("/assign", name="gddocumento_assign")
+     * @Method({"GET", "POST"})
+     */
+    public function assignAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->find(
+                $params->idDocumento
+            );
             
+            if ($documento) {
+                $documento->setEstado('ASIGNADO');
+
+                $trazabilidad = new GdTrazabilidad();
+
+                if ($params->observaciones) {
+                    $trazabilidad->setObservaciones($params->observaciones);
+                }
+
+                $trazabilidad->setEstado('PENDIENTE');
+                $trazabilidad->setFechaAsignacion(
+                    new \Datetime(date('Y-m-d h:i:s'))
+                );
+                $trazabilidad->setAceptada(false);
+                $trazabilidad->setActivo(true);
+
+                $trazabilidad->setDocumento($documento);
+
+                $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
+                    $params->idFuncionario
+                );
+                $trazabilidad->setResponsable($funcionario);
+
+                $em->persist($trazabilidad);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ha sido asignado y se encuentra ".$trazabilidad->getEstado(),
+                    'data' => $trazabilidad
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado"
+                );
+            }
         }else{
             $response = array(
                     'status' => 'error',
@@ -317,5 +477,118 @@ class GdDocumentoController extends Controller
                 );
         }
         return $helpers->json($response);
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/print", name="gddocumento_print")
+     * @Method({"GET", "POST"})
+     */
+    public function printAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('AppBundle:MgdDocumento')->find(
+                $params->documentoId
+            );
+            
+            if ($documento) {
+                if ($params->correoCertificadoEnvio == 'true') {
+                    $documento->setCorreoCertificadoEnvio(true);
+                    $documento->setNombreTransportadoraEnvio($params->nombreTransportadoraEnvio);
+                    $documento->setNumeroGuia($params->numeroGuia);
+                }else{
+                    $documento->setMedioEnvio($params->medioEnvio);
+                }
+                $documento->setFechaEnvio(new \Datetime(date('Y-m-d h:i:s')));
+                $documento->setNumeroCarpeta($params->numeroCarpeta);
+                $documento->setEstado('Finalizado');
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ".$documento->getEstado(),
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado"
+                );
+            }            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/{id}/pdf", name="gddocumento_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, MgdDocumento $mgdDocumento)
+    {
+        
+        $html = $this->renderView('@App/mgddocumento/pdf.template.html.twig', array(
+            'mgdDocumento'=>$mgdDocumento,
+        ));
+
+        $pdf = $this->container->get("white_october.tcpdf")->create(
+            'PORTRAIT',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('qweqwe');
+        $pdf->SetTitle('Prueba TCPDF');
+        $pdf->SetSubject('Your client');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->AddPage();
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+
+        $pdf->Output("example.pdf", 'I');
+        die();
     }
 }

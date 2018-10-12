@@ -34,7 +34,7 @@ class MsvTConsecutivoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($consecutivos)." Registros encontrados", 
+                'message' => count($consecutivos)." Registros encontrados", 
                 'data'=> $consecutivos,
             );
         }
@@ -77,14 +77,14 @@ class MsvTConsecutivoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito",  
+                    'message' => "Registro creado con exito",  
                 );
             //}
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);
@@ -193,21 +193,21 @@ class MsvTConsecutivoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado",
+                    'message' => "Registro encontrado",
                     'data' => $ipat,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado", 
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -237,21 +237,21 @@ class MsvTConsecutivoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado",
+                    'message' => "Registro encontrado",
                     'data' => $ipats,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado", 
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);

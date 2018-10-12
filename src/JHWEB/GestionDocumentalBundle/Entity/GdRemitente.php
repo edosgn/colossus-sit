@@ -70,7 +70,6 @@ class GdRemitente
      */
     private $identificacion;
 
-
     /**
      * @var string
      *
