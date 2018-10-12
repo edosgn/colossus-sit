@@ -27,7 +27,7 @@ class LoteInsumoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
-            array('estado' => 'registrado','sedeOperativa'=>!null)
+            array('estado' => 'REGISTRADO','tipo'=>'sustrato')
         );
 
         $response['data'] = array();
@@ -53,7 +53,7 @@ class LoteInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
-            array('estado' => 'registrado','sedeOperativa'=>null)
+            array('estado' => 'registrado','tipo'=>'insumo')
         );
 
         $response = array(
@@ -96,14 +96,15 @@ class LoteInsumoController extends Controller
             if ($sedeOperativaId) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
                 $loteInsumo->setSedeOperativa($sedeOperativa);
-                
+                $loteInsumo->setTipo('sustrato');
+            }else {
+                $loteInsumo->setTipo('insumo');
             }
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
-
             $loteInsumo->setNumeroActa($params->numeroActa);
             $loteInsumo->setEmpresa($empresa);
             $loteInsumo->setCasoInsumo($casoInsumo); 
-            $loteInsumo->setEstado('registrado');
+            $loteInsumo->setEstado('REGISTRADO');
             $loteInsumo->setRangoInicio($params->rangoInicio);
             $loteInsumo->setRangoFin($params->rangoFin);
             $loteInsumo->setCantidad($params->cantidad);

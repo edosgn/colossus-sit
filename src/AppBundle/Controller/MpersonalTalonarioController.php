@@ -70,16 +70,23 @@ class MpersonalTalonarioController extends Controller
 
                 $em = $this->getDoctrine()->getManager();
 
-                $talonario->setDesde($params->desde);
-                $talonario->setHasta($params->hasta);
-                $talonario->setRangos($params->rangos);
-                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
-                $talonario->setNumeroResolucion($params->numeroResolucion);
-                
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
                     $params->sedeOperativaId
                 );
                 $talonario->setSedeOperativa($sedeOperativa);
+
+                if ($sedeOperativa->getAsignacionRango()) {
+                    $talonario->setDesde($sedeOperativa->getCodigoDivipo().$params->desde);
+                    $talonario->setHasta($sedeOperativa->getCodigoDivipo().$params->hasta);
+                }else {
+                    $talonario->setDesde($params->desde);
+                    $talonario->setHasta($params->hasta);
+                }
+                
+                $talonario->setRangos($params->rangos);
+                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+                $talonario->setNumeroResolucion($params->numeroResolucion);
+                
 
                 $em->persist($talonario);
                 $em->flush();
