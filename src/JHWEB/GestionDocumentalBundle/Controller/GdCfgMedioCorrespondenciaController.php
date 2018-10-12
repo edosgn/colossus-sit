@@ -2,22 +2,22 @@
 
 namespace JHWEB\GestionDocumentalBundle\Controller;
 
-use JHWEB\GestionDocumentalBundle\Entity\GdCfgTipoCorrespondencia;
+use JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Gdcfgtipocorrespondencium controller.
+ * Gdcfgmediocorrespondencium controller.
  *
- * @Route("gdcfgtipocorrespondencia")
+ * @Route("gdcfgmediocorrespondencia")
  */
-class GdCfgTipoCorrespondenciaController extends Controller
+class GdCfgMedioCorrespondenciaController extends Controller
 {
     /**
-     * Lists all gdCfgTipoCorrespondencia entities.
+     * Lists all gdCfgMedioCorrespondencium entities.
      *
-     * @Route("/", name="gdcfgtipocorrespondencia_index")
+     * @Route("/", name="gdcfgmediocorrespondencia_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $tiposCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->findBy(
+        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
             array('activo'=>true)
         );
 
         $response['data'] = array();
 
-        if ($tiposCorrespondencia) {
+        if ($mediosCorrespondencia) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($tiposCorrespondencia)." Registros encontrados", 
-                'data'=> $tiposCorrespondencia,
+                'message' => count($mediosCorrespondencia)." Registros encontrados", 
+                'data'=> $mediosCorrespondencia,
             );
         }
 
@@ -45,9 +45,9 @@ class GdCfgTipoCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a new gdCfgTipoCorrespondencia entity.
+     * Creates a new gdCfgMedioCorrespondencium entity.
      *
-     * @Route("/new", name="gdcfgtipocorrespondencia_new")
+     * @Route("/new", name="gdcfgmediocorrespondencia_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -62,18 +62,18 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoCorrespondencia = new GdCfgTipoCorrespondencia();
+            $medioCorrespondencia = new GdCfgMedioCorrespondencia();
 
-            $tipoCorrespondencia->setNombre($params->nombre);
-            $tipoCorrespondencia->setActivo(true);
+            $medioCorrespondencia->setNombre($params->nombre);
+            $medioCorrespondencia->setGestionable($params->gestionable);
+            $medioCorrespondencia->setActivo(true);
             
-            $em->persist($tipoCorrespondencia);
+            $em->persist($medioCorrespondencia);
             $em->flush();
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con éxito",
-                'data' => $tipoCorrespondencia
             );
         
         }else{
@@ -88,10 +88,10 @@ class GdCfgTipoCorrespondenciaController extends Controller
     }
 
     /**
-     * Finds and displays a gdCfgTipoCorrespondencia entity.
+     * Finds and displays a gdCfgMedioCorrespondencium entity.
      *
-     * @Route("/show", name="gdcfgtipocorrespondencia_show")
-     * @Method({"GET", "POST"})
+     * @Route("/show", name="gdcfgmediocorrespondencia_show")
+     * @Method("GET")
      */
     public function showAction(Request $request)
     {
@@ -105,14 +105,14 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->idTipoCorrespondencia);
+            $medioCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find($params->idMedioCorrespondencia);
 
-            if ($tipoCorrespondencia) {
+            if ($medioCorrespondencia) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'data'=> $tipoCorrespondencia,
+                    'data'=> $medioCorrespondencia,
                 );
             }else{
                 $response = array(
@@ -123,23 +123,22 @@ class GdCfgTipoCorrespondenciaController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
         return $helpers->json($response);
     }
 
     /**
-     * Displays a form to edit an existing cfgCargo entity.
+     * Displays a form to edit an existing gdCfgMedioCorrespondencium entity.
      *
-     * @Route("/edit", name="gdcfgtipocorrespondencia_edit")
+     * @Route("/edit", name="gdcfgmediocorrespondencia_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request)
-    {
+    public function editAction(Request $request){
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -149,10 +148,11 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $tipoCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia")->find($params->id);
+            $medioCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia")->find($params->id);
 
-            if ($tipoCorrespondencia) {
-                $tipoCorrespondencia->setNombre($params->nombre);
+            if ($medioCorrespondencia) {
+                $medioCorrespondencia->setNombre($params->nombre);
+                $medioCorrespondencia->setGestionable($params->gestionable);
                 
                 $em->flush();
 
@@ -160,7 +160,7 @@ class GdCfgTipoCorrespondenciaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $tipoCorrespondencia,
+                    'data'=> $medioCorrespondencia,
                 );
             }else{
                 $response = array(
@@ -181,9 +181,9 @@ class GdCfgTipoCorrespondenciaController extends Controller
     }
 
     /**
-     * Deletes a cfgCargo entity.
+     * Deletes a gdCfgMedioCorrespondencium entity.
      *
-     * @Route("/delete", name="gdcfgtipocorrespondencia_delete")
+     * @Route("/delete", name="gdcfgmediocorrespondencia_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -197,8 +197,8 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
-            
             $tipoCorrespondencia->setActivo(false);
+
             $em->flush();
 
             $response = array(
@@ -217,16 +217,16 @@ class GdCfgTipoCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a form to delete a gdCfgTipoCorrespondencia entity.
+     * Creates a form to delete a gdCfgMedioCorrespondencium entity.
      *
-     * @param GdCfgTipoCorrespondencia $gdCfgTipoCorrespondencia The gdCfgTipoCorrespondencia entity
+     * @param GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium The gdCfgMedioCorrespondencium entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(GdCfgTipoCorrespondencia $gdCfgTipoCorrespondencia)
+    private function createDeleteForm(GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('gdcfgtipocorrespondencia_delete', array('id' => $gdCfgTipoCorrespondencia->getId())))
+            ->setAction($this->generateUrl('gdcfgmediocorrespondencia_delete', array('id' => $gdCfgMedioCorrespondencium->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -235,7 +235,7 @@ class GdCfgTipoCorrespondenciaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="gdcfgtipocorrespondencia_select")
+     * @Route("/select", name="gdcfgmediocorrespondencia_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -243,18 +243,19 @@ class GdCfgTipoCorrespondenciaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $tiposCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->findBy(
+        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($tiposCorrespondencia as $key => $tipoCorrespondencia) {
+        foreach ($mediosCorrespondencia as $key => $medioCorrespondencia) {
             $response[$key] = array(
-                'value' => $tipoCorrespondencia->getId(),
-                'label' => $tipoCorrespondencia->getNombre()
+                'value' => $medioCorrespondencia->getId(),
+                'label' => $medioCorrespondencia->getNombre()
             );
         }
+        
         return $helpers->json($response);
     }
 }

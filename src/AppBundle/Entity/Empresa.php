@@ -133,7 +133,6 @@ class Empresa
      */
     private $empresaPrestadora;
 
-
      /**
      * @var \DateTime
      *

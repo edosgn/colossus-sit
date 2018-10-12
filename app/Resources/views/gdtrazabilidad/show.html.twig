@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gdtrazabilidad</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ gdTrazabilidad.id }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ gdTrazabilidad.estado }}</td>
+            </tr>
+            <tr>
+                <th>Fechaasignacion</th>
+                <td>{% if gdTrazabilidad.fechaAsignacion %}{{ gdTrazabilidad.fechaAsignacion|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fecharespuesta</th>
+                <td>{% if gdTrazabilidad.fechaRespuesta %}{{ gdTrazabilidad.fechaRespuesta|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ gdTrazabilidad.url }}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{ gdTrazabilidad.observaciones }}</td>
+            </tr>
+            <tr>
+                <th>Aceptada</th>
+                <td>{% if gdTrazabilidad.aceptada %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if gdTrazabilidad.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gdtrazabilidad_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('gdtrazabilidad_edit', { 'id': gdTrazabilidad.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

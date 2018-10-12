@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gdremitentes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Primernombre</th>
+                <th>Segundonombre</th>
+                <th>Primerapellido</th>
+                <th>Segundoapellido</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Identificacion</th>
+                <th>Correoelectronico</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for gdRemitente in gdRemitentes %}
+            <tr>
+                <td><a href="{{ path('gdremitente_show', { 'id': gdRemitente.id }) }}">{{ gdRemitente.id }}</a></td>
+                <td>{{ gdRemitente.primerNombre }}</td>
+                <td>{{ gdRemitente.segundoNombre }}</td>
+                <td>{{ gdRemitente.primerApellido }}</td>
+                <td>{{ gdRemitente.segundoApellido }}</td>
+                <td>{{ gdRemitente.direccion }}</td>
+                <td>{{ gdRemitente.telefono }}</td>
+                <td>{{ gdRemitente.identificacion }}</td>
+                <td>{{ gdRemitente.correoElectronico }}</td>
+                <td>{% if gdRemitente.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('gdremitente_show', { 'id': gdRemitente.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('gdremitente_edit', { 'id': gdRemitente.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gdremitente_new') }}">Create a new gdRemitente</a>
+        </li>
+    </ul>
+{% endblock %}

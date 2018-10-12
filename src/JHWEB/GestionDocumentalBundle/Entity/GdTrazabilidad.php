@@ -30,14 +30,14 @@ class GdTrazabilidad
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaAsignacion", type="datetime")
+     * @ORM\Column(name="fecha_asignacion", type="datetime")
      */
     private $fechaAsignacion;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaRespuesta", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_respuesta", type="datetime", nullable=true)
      */
     private $fechaRespuesta;
 
@@ -54,6 +54,13 @@ class GdTrazabilidad
      * @ORM\Column(name="observaciones", type="text", nullable=true)
      */
     private $observaciones;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="aceptada", type="boolean")
+     */
+    private $aceptada;
 
     /**
      * @var bool
@@ -198,6 +205,30 @@ class GdTrazabilidad
     public function getObservaciones()
     {
         return $this->observaciones;
+    }
+
+    /**
+     * Set aceptada
+     *
+     * @param boolean $aceptada
+     *
+     * @return GdTrazabilidad
+     */
+    public function setAceptada($aceptada)
+    {
+        $this->aceptada = $aceptada;
+
+        return $this;
+    }
+
+    /**
+     * Get aceptada
+     *
+     * @return boolean
+     */
+    public function getAceptada()
+    {
+        return $this->aceptada;
     }
 
     /**

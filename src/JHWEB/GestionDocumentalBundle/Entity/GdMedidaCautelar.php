@@ -24,35 +24,35 @@ class GdMedidaCautelar
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroOficio", type="string", length=50)
+     * @ORM\Column(name="numero_oficio", type="string", length=50)
      */
     private $numeroOficio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="quienOrdena", type="string", length=255)
+     * @ORM\Column(name="quien_ordena", type="string", length=255)
      */
     private $quienOrdena;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaInicio", type="date")
+     * @ORM\Column(name="fecha_inicio", type="date")
      */
     private $fechaInicio;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaFin", type="date")
+     * @ORM\Column(name="fecha_fin", type="date")
      */
     private $fechaFin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="implicadoIdentificacion", type="string", length=20)
+     * @ORM\Column(name="implicado_identificacion", type="string", length=20)
      */
     private $implicadoIdentificacion;
 
