@@ -47,12 +47,15 @@ class SedeOperativa
      */
     private $estado;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="asignacion_rango", type="boolean")
+     */
+    private $asignacionRango;
+
+
     
-
-
-
-
-
 
     /**
      * Get id
@@ -134,6 +137,30 @@ class SedeOperativa
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set asignacionRango
+     *
+     * @param boolean $asignacionRango
+     *
+     * @return SedeOperativa
+     */
+    public function setAsignacionRango($asignacionRango)
+    {
+        $this->asignacionRango = $asignacionRango;
+
+        return $this;
+    }
+
+    /**
+     * Get asignacionRango
+     *
+     * @return boolean
+     */
+    public function getAsignacionRango()
+    {
+        return $this->asignacionRango;
     }
 
     /**

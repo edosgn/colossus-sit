@@ -1,3 +1,8 @@
+jhweb_insumo:
+    resource: "@JHWEBInsumoBundle/Controller/"
+    type:     annotation
+    prefix:   /insumo
+
 jhweb_gestion_documental:
     resource: "@JHWEBGestionDocumentalBundle/Controller/"
     type:     annotation

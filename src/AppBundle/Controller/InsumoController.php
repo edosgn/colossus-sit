@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Insumo;
+use JHWEB\InsumoBundle\Entity\ImoTrazabilidad;
+use JHWEB\InsumoBundle\Entity\ImoAsignacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -87,32 +89,48 @@ class InsumoController extends Controller
 
             $rangoInicio = (isset($params->rangoInicio)) ? $params->rangoInicio : null;
 
-            var_dump($params->sedeOperativaId);
-            die();
+            // var_dump($params->sedeOperativaId);
+            // die();
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
             $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->find($params->loteInsumoId);
 
-            $loteInsumo->setEstado('asignado');
+            $loteInsumo->setEstado('ASIGNADO');
             $em->persist($loteInsumo);
             $em->flush();
             
             if ($rangoInicio) {
+                $imoTrazabilidad = new ImoTrazabilidad();
+                $imoTrazabilidad->setSedeOperativa($sedeOperativa);
+                $imoTrazabilidad->setFecha($fecha);
+                $imoTrazabilidad->setEstado('asignacion');
+                $imoTrazabilidad->setActivo(1);
+                $em->persist($imoTrazabilidad);
+                $em->flush();
                 $desde = $params->rangoInicio;
                 $hasta = $params->rangoFin;
                 
                 while ($desde <= $hasta) {
+                    
+
                     $insumo = new Insumo();
                     $em = $this->getDoctrine()->getManager();
                     $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
                     
                     $insumo->setNumero($casoInsumo->getModulo()->getSiglaSustrato().$desde);
                     $insumo->setCasoInsumo($casoInsumo);
-                    $insumo->setSedeOperativa($sedeOperativa);
                     $insumo->setLoteInsumo($loteInsumo);
                     $insumo->setFecha($fecha);
                     $insumo->setTipo('sustrato');
                     $insumo->setEstado('disponible');
                     $em->persist($insumo);
+                    $em->flush();
+
+                    $imoAsignacion = new ImoAsignacion();
+
+                    $imoAsignacion->setImotrazabilidad($imoTrazabilidad);
+                    $imoAsignacion->setInsumo($insumo);
+                    $imoAsignacion->setActivo(true);
+                    $em->persist($imoAsignacion);
                     $em->flush();
                     $desde++;
                 }
@@ -126,11 +144,11 @@ class InsumoController extends Controller
             }else{
                 $insumo = new Insumo();
                 $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
-                $insumo->setSedeOperativa($sedeOperativa);
                 $insumo->setLoteInsumo($loteInsumo);
                 $insumo->setCasoInsumo($casoInsumo); 
                 $insumo->setEstado('disponible');
                 $insumo->setNumero($params->numero);
+                $insumo->setSedeOperativa($sedeOperativa);
                 $insumo->setFecha($fecha);
                 $insumo->setTipo('insumo');
                 $em->persist($insumo);
@@ -357,23 +375,49 @@ class InsumoController extends Controller
      * @Route("/reasignacionSustrato", name="insumo_reasignacionSustrato")
      * @Method({"GET", "POST"})
      */
-    public function reasignacionSustratoAction(Request $request)
+    public function reasignacionByTypeSustratoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager(); 
         $json = $request->get("json",null);
         $params = json_decode($json);
+
         $sustratos = $em->getRepository('AppBundle:Insumo')->findBy(
             array('tipo'=>'Sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen), 
             array('id' => 'DESC'),$params->cantidad
         );
+
+        $fecha = new \DateTime('now');
+
+        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeDestino);
+
+        $imoTrazabilidad = new ImoTrazabilidad();
+
+        $imoTrazabilidad->setSedeOperativa($sedeOperativa);
+        $imoTrazabilidad->setFecha($fecha);
+        $imoTrazabilidad->setEstado('REASIGNACION');
+        $imoTrazabilidad->setActivo(true);
+
+        $em->persist($imoTrazabilidad);
+        $em->flush();
+
+
         foreach ($sustratos as $key => $sustrato) {
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeDestino);
-            // var_dump($sedeOperativa->getNombre());
-            // die();
-            $sustrato->setSedeOperativa($sedeOperativa);
-            $em->persist($sustrato);
+            $imoAsignacionOld = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findOneByInsumo($sustrato->getId());
+            if ($imoAsignacionOld) {
+                $imoAsignacionOld->setActivo(false);
+                $em->flush();
+            }
+
+            $imoAsignacion = new ImoAsignacion();
+
+            $imoAsignacion->setImotrazabilidad($imoTrazabilidad); 
+            $imoAsignacion->setInsumo($sustrato);
+            $imoAsignacion->setActivo(true);
+
+            $em->persist($imoAsignacion);
             $em->flush();
+
         }
         $response = array(
             'status' => 'success',

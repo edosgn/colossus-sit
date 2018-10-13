@@ -64,6 +64,7 @@ class SedeOperativaController extends Controller
             $sedeOperativa->setNombre($nombre);
             $sedeOperativa->setCodigoDivipo($codigoDivipo);
             $sedeOperativa->setMunicipio($municipio);
+            $sedeOperativa->setAsignacionRango($params->asignacionRango);
             $sedeOperativa->setEstado(true);
 
             $em->persist($sedeOperativa);
@@ -143,6 +144,7 @@ class SedeOperativaController extends Controller
                 $sedeOperativa->setNombre($nombre);
                 $sedeOperativa->setCodigoDivipo($codigoDivipo);
                 $sedeOperativa->setMunicipio($municipio);
+                $sedeOperativa->setAsignacionRango($params->asignacionRango);
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($sedeOperativa);
                 $em->flush();

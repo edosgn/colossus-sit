@@ -64,6 +64,13 @@ class LoteInsumo
     private $referencia;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=255)
+     */
+    private $tipo;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="cantidad", type="integer")
@@ -84,6 +91,7 @@ class LoteInsumo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CasoInsumo")
      **/
     protected $casoInsumo;
+
 
 
 
@@ -166,7 +174,7 @@ class LoteInsumo
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        return $this->fecha;
     }
 
     /**
@@ -239,6 +247,30 @@ class LoteInsumo
     public function getReferencia()
     {
         return $this->referencia;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return LoteInsumo
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 
     /**
