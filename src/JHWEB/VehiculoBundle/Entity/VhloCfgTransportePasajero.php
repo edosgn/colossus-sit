@@ -5,12 +5,12 @@ namespace JHWEB\VehiculoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgTransporteEspecial
+ * VhloCfgTransportePasajero
  *
- * @ORM\Table(name="cfg_transporte_especial")
- * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\CfgTransporteEspecialRepository")
+ * @ORM\Table(name="vhlo_cfg_transporte_pasajero")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloCfgTransportePasajeroRepository")
  */
-class CfgTransporteEspecial
+class VhloCfgTransportePasajero
 {
     /**
      * @var int
@@ -31,12 +31,16 @@ class CfgTransporteEspecial
     /**
      * @var bool
      *
+     * @ORM\Column(name="gestionable", type="boolean")
+     */
+    private $gestionable;
+
+     /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
-
-    /** @ORM\ManyToOne(targetEntity="CfgTransportePasajero", inversedBy="transportesEspeciales") */
-    private $transportePasajero;
 
 
     /**
@@ -54,7 +58,7 @@ class CfgTransporteEspecial
      *
      * @param string $nombre
      *
-     * @return CfgTransporteEspecial
+     * @return VhloCfgTransportePasajero
      */
     public function setNombre($nombre)
     {
@@ -74,11 +78,35 @@ class CfgTransporteEspecial
     }
 
     /**
+     * Set gestionable
+     *
+     * @param boolean $gestionable
+     *
+     * @return VhloCfgTransportePasajero
+     */
+    public function setGestionable($gestionable)
+    {
+        $this->gestionable = $gestionable;
+
+        return $this;
+    }
+
+    /**
+     * Get gestionable
+     *
+     * @return bool
+     */
+    public function getGestionable()
+    {
+        return $this->gestionable;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return CfgTransporteEspecial
+     * @return VhloCfgTransportePasajero
      */
     public function setActivo($activo)
     {
@@ -90,34 +118,10 @@ class CfgTransporteEspecial
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set transportePasajero
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\CfgTransportePasajero $transportePasajero
-     *
-     * @return CfgTransporteEspecial
-     */
-    public function setTransportePasajero(\JHWEB\VehiculoBundle\Entity\CfgTransportePasajero $transportePasajero = null)
-    {
-        $this->transportePasajero = $transportePasajero;
-
-        return $this;
-    }
-
-    /**
-     * Get transportePasajero
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\CfgTransportePasajero
-     */
-    public function getTransportePasajero()
-    {
-        return $this->transportePasajero;
     }
 }

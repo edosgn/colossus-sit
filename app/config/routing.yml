@@ -1,3 +1,8 @@
+jhweb_personal:
+    resource: "@JHWEBPersonalBundle/Controller/"
+    type:     annotation
+    prefix:   /personal
+
 jhweb_insumo:
     resource: "@JHWEBInsumoBundle/Controller/"
     type:     annotation

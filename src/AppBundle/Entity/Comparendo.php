@@ -341,12 +341,12 @@ class Comparendo
     private $modalidadTransporte;
     
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\CfgTransportePasajero", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero", inversedBy="comparendos")
      **/
     private $transportePasajero;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial", inversedBy="comparendos")
      **/
     private $transporteEspecial;
 
@@ -389,13 +389,7 @@ class Comparendo
     {
         return $this->id;
     }
-    /*
-    if ($this->fecha) {
-        return $this->fecha->format('d/m/Y');
-        }
-        return $this->fecha;
-     */
-    
+
     /**
      * Set fecha
      *
@@ -441,9 +435,6 @@ class Comparendo
      */
     public function getHora()
     {
-        if ($this->hora) {
-            return $this->hora->format('H:i:s A');
-        }
         return $this->hora;
     }
 
@@ -1530,11 +1521,11 @@ class Comparendo
     /**
      * Set transportePasajero
      *
-     * @param \JHWEB\VehiculoBundle\Entity\CfgTransportePasajero $transportePasajero
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero $transportePasajero
      *
      * @return Comparendo
      */
-    public function setTransportePasajero(\JHWEB\VehiculoBundle\Entity\CfgTransportePasajero $transportePasajero = null)
+    public function setTransportePasajero(\JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero $transportePasajero = null)
     {
         $this->transportePasajero = $transportePasajero;
 
@@ -1544,7 +1535,7 @@ class Comparendo
     /**
      * Get transportePasajero
      *
-     * @return \JHWEB\VehiculoBundle\Entity\CfgTransportePasajero
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero
      */
     public function getTransportePasajero()
     {
@@ -1554,11 +1545,11 @@ class Comparendo
     /**
      * Set transporteEspecial
      *
-     * @param \JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial $transporteEspecial
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial $transporteEspecial
      *
      * @return Comparendo
      */
-    public function setTransporteEspecial(\JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial $transporteEspecial = null)
+    public function setTransporteEspecial(\JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial $transporteEspecial = null)
     {
         $this->transporteEspecial = $transporteEspecial;
 
@@ -1568,7 +1559,7 @@ class Comparendo
     /**
      * Get transporteEspecial
      *
-     * @return \JHWEB\VehiculoBundle\Entity\CfgTransporteEspecial
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial
      */
     public function getTransporteEspecial()
     {
