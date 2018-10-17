@@ -164,7 +164,7 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgRadioAccion", inversedBy="vehiculos") */
     private $radioAccion;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgModalidadTransporte", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="vehiculos") */
     private $modalidadTransporte;    
 
     /**
@@ -869,11 +869,11 @@ class Vehiculo
     /**
      * Set modalidadTransporte
      *
-     * @param \AppBundle\Entity\CfgModalidadTransporte $modalidadTransporte
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte
      *
      * @return Vehiculo
      */
-    public function setModalidadTransporte(\AppBundle\Entity\CfgModalidadTransporte $modalidadTransporte = null)
+    public function setModalidadTransporte(\JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte = null)
     {
         $this->modalidadTransporte = $modalidadTransporte;
 
@@ -883,15 +883,10 @@ class Vehiculo
     /**
      * Get modalidadTransporte
      *
-     * @return \AppBundle\Entity\CfgModalidadTransporte
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte
      */
     public function getModalidadTransporte()
     {
-        if ($this->modalidadTransporte) {
-            return $this->modalidadTransporte;
-        }else{
-            return "";
-        }
-        // return $this->modalidadTransporte;
+        return $this->modalidadTransporte;
     }
 }

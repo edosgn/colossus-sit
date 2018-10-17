@@ -315,7 +315,7 @@ class CarroceriaController extends Controller
         $response[$key] = array(
             'value' => $carroceria->getId(),
             'label' => $carroceria->getCodigoMt()."_".$carroceria->getNombre(),
-            );
+        );
       }
        return $helpers->json($response);
     }

@@ -97,7 +97,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
                 FROM JHWEBVehiculoBundle:VhloMaquinaria vm
                 WHERE vm.vehiculo = v.id) AND v.id NOT IN
                 (SELECT IDENTITY(vr.vehiculo)
-                FROM AppBundle:VehiculoRemolque vr
+                FROM JHWEBVehiculoBundle:VhloRemolque vr
                 WHERE vr.vehiculo = v.id)";
 
         $consulta = $em->createQuery($dql);

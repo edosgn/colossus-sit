@@ -185,6 +185,57 @@ class GdTrazabilidadController extends Controller
         return $helpers->json($response);
     }
 
+    /* ====================================================== */
+    /**
+     * Busca si existen documentos radicado y asignados a un funcionario.
+     *
+     * @Route("/search/response/documento", name="gdtrazabilidad_search_response_documento")
+     * @Method({"GET", "POST"})
+     */
+    public function searchResponseByDocumentoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+
+            $trazabilidades = $em->getRepository('JHWEBGestionDocumentalBundle:GdTrazabilidad')->findBy(
+                array(
+                    'documento' => $params->idDocumento,
+                    'estado' => 'RESPUESTA REALIZADA'
+                )
+            );
+            
+            if ($trazabilidades) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($trazabilidades)." Documentos registrados.", 
+                    'data'=> $trazabilidades,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No tiene documentos asignados aún.", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
     /**
      * Busca peticionario por cedula o por nombre entidad y numero de oficio.
      *
@@ -211,8 +262,10 @@ class GdTrazabilidadController extends Controller
                 if ($params->aceptada == 'true') {
                     $estado = 'EN TRAMITE';
                     $trazabilidad->setAceptada(true);
+                    $trazabilidad->getDocumento()->setEstado('EN TRAMITE');
                 }else{
                     $estado = 'RECHAZADO';
+                    $trazabilidad->getDocumento()->setEstado('RECHAZADO');
                 }
 
                 if ($params->observaciones) {
@@ -275,35 +328,49 @@ class GdTrazabilidadController extends Controller
                     new \Datetime(date('Y-m-d h:i:s'))
                 );
                 $trazabilidad->setEstado('RESPUESTA REALIZADA');
+                $trazabilidad->getDocumento()->setEstado('RESPUESTA REALIZADA');
 
                 $file = $request->files->get('file');
                    
                 if ($file) {
                     $extension = $file->guessExtension();
-                    $filename = md5(rand().time()).".".$extension;
-                    $dir=__DIR__.'/../../../../web/docs';
 
-                    $file->move($dir,$filename);
-                    $trazabilidad->setUrl($filename);
+                    if ($extension == 'pdf') {
+                        $filename = md5(rand().time()).".".$extension;
+                        $dir=__DIR__.'/../../../../web/docs';
+
+                        $file->move($dir,$filename);
+                        $trazabilidad->setUrl($filename);
+
+                        $em->flush();
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Radicado No. ".$trazabilidad->getDocumento()->getNumeroRadicado()." ".$trazabilidad->getEstado(),
+                            'data' => $trazabilidad
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "Solo se admiten documento de formato PDF"
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Ningún documento seleccionado"
+                    );
                 }
-
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Radicado No. ".$trazabilidad->getDocumento()->getNumeroRadicado()." ".$trazabilidad->getEstado(),
-                    'data' => $trazabilidad
-                );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Registro no encontrado"
                 );
-            }
-
-            
+            }           
         }else{
             $response = array(
                     'status' => 'error',
@@ -311,6 +378,7 @@ class GdTrazabilidadController extends Controller
                     'message' => "Autorizacion no valida", 
                 );
         }
+
         return $helpers->json($response);
     }
 }
