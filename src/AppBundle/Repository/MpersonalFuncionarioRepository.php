@@ -53,9 +53,16 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	        $consulta->setParameters(array(
 	            'numeroContrato' => $params->numeroContrato,
 	        ));
+        }elseif(isset($params->nombramiento)){
+        	$dql = "SELECT f
+            FROM AppBundle:MpersonalFuncionario f
+            WHERE f.tipoNombramiento = :nombramiento";
+	        $consulta = $em->createQuery($dql);
+	        $consulta->setParameters(array(
+	            'nombramiento' => $params->nombramiento,
+	        ));
         }elseif(isset($params->fechaInicio) && isset($params->fechaFin)){
-            // var_dump($params->fechaInicio);
-            // die();
+           
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f
             WHERE (f.fechaInicio BETWEEN :fechaInicio AND :fechaFin)
