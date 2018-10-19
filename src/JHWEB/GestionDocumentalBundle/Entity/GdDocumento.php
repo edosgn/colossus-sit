@@ -80,6 +80,13 @@ class GdDocumento
     /**
      * @var string
      *
+     * @ORM\Column(name="observaciones", type="text", nullable=true)
+     */
+    private $observaciones;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="url", type="string", length=255, nullable=true)
      */
     private $url;
@@ -380,6 +387,30 @@ class GdDocumento
     public function getDescripcion()
     {
         return $this->descripcion;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return GdDocumento
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
     }
 
     /**

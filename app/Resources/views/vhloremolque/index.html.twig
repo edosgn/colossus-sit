@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhloremolques list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Peso</th>
+                <th>Cargarutilmaxima</th>
+                <th>Numeroejes</th>
+                <th>Alto</th>
+                <th>Largo</th>
+                <th>Ancho</th>
+                <th>Referencia</th>
+                <th>Numerofth</th>
+                <th>Rut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloRemolque in vhloRemolques %}
+            <tr>
+                <td><a href="{{ path('vhloremolque_show', { 'id': vhloRemolque.id }) }}">{{ vhloRemolque.id }}</a></td>
+                <td>{{ vhloRemolque.peso }}</td>
+                <td>{{ vhloRemolque.cargarUtilMaxima }}</td>
+                <td>{{ vhloRemolque.numeroEjes }}</td>
+                <td>{{ vhloRemolque.alto }}</td>
+                <td>{{ vhloRemolque.largo }}</td>
+                <td>{{ vhloRemolque.ancho }}</td>
+                <td>{{ vhloRemolque.referencia }}</td>
+                <td>{{ vhloRemolque.numeroFth }}</td>
+                <td>{{ vhloRemolque.rut }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhloremolque_show', { 'id': vhloRemolque.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhloremolque_edit', { 'id': vhloRemolque.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhloremolque_new') }}">Create a new vhloRemolque</a>
+        </li>
+    </ul>
+{% endblock %}

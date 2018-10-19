@@ -5,12 +5,12 @@ namespace JHWEB\VehiculoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TecnoMecanica
+ * VhloTecnoMecanica
  *
- * @ORM\Table(name="tecno_mecanica")
- * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\TecnoMecanicaRepository")
+ * @ORM\Table(name="vhlo_tecno_mecanica")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloTecnoMecanicaRepository")
  */
-class TecnoMecanica
+class VhloTecnoMecanica
 {
     /**
      * @var int
@@ -49,7 +49,7 @@ class TecnoMecanica
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="CfgCda", inversedBy="tecnoMecanicas") */
+    /** @ORM\ManyToOne(targetEntity="VhloCfgCda", inversedBy="tecnoMecanicas") */
     private $cda;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tecnoMecanicas") */
@@ -70,7 +70,7 @@ class TecnoMecanica
      *
      * @param string $numeroControl
      *
-     * @return TecnoMecanica
+     * @return VhloTecnoMecanica
      */
     public function setNumeroControl($numeroControl)
     {
@@ -94,7 +94,7 @@ class TecnoMecanica
      *
      * @param \DateTime $fechaExpedicion
      *
-     * @return TecnoMecanica
+     * @return VhloTecnoMecanica
      */
     public function setFechaExpedicion($fechaExpedicion)
     {
@@ -110,9 +110,6 @@ class TecnoMecanica
      */
     public function getFechaExpedicion()
     {
-        if ($this->fechaExpedicion) {
-            return $this->fechaExpedicion->format('d/m/Y');
-        }
         return $this->fechaExpedicion;
     }
 
@@ -121,7 +118,7 @@ class TecnoMecanica
      *
      * @param \DateTime $fechaVencimiento
      *
-     * @return TecnoMecanica
+     * @return VhloTecnoMecanica
      */
     public function setFechaVencimiento($fechaVencimiento)
     {
@@ -137,9 +134,6 @@ class TecnoMecanica
      */
     public function getFechaVencimiento()
     {
-        if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('d/m/Y');
-        }
         return $this->fechaVencimiento;
     }
 
@@ -148,7 +142,7 @@ class TecnoMecanica
      *
      * @param boolean $activo
      *
-     * @return TecnoMecanica
+     * @return VhloTecnoMecanica
      */
     public function setActivo($activo)
     {
@@ -160,7 +154,7 @@ class TecnoMecanica
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -170,11 +164,11 @@ class TecnoMecanica
     /**
      * Set cda
      *
-     * @param \JHWEB\VehiculoBundle\Entity\CfgCda $cda
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgCda $cda
      *
-     * @return TecnoMecanica
+     * @return VhloTecnoMecanica
      */
-    public function setCda(\JHWEB\VehiculoBundle\Entity\CfgCda $cda = null)
+    public function setCda(\JHWEB\VehiculoBundle\Entity\VhloCfgCda $cda = null)
     {
         $this->cda = $cda;
 
@@ -184,7 +178,7 @@ class TecnoMecanica
     /**
      * Get cda
      *
-     * @return \JHWEB\VehiculoBundle\Entity\CfgCda
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgCda
      */
     public function getCda()
     {
@@ -196,7 +190,7 @@ class TecnoMecanica
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
      *
-     * @return TecnoMecanica
+     * @return VhloTecnoMecanica
      */
     public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
     {

@@ -5,12 +5,12 @@ namespace JHWEB\VehiculoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgCda
+ * VhloCfgTipoVehiculo
  *
- * @ORM\Table(name="cfg_cda")
- * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\CfgCdaRepository")
+ * @ORM\Table(name="vhlo_cfg_tipo_vehiculo")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloCfgTipoVehiculoRepository")
  */
-class CfgCda
+class VhloCfgTipoVehiculo
 {
     /**
      * @var int
@@ -27,13 +27,6 @@ class CfgCda
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nit", type="string", length=50)
-     */
-    private $nit;
 
     /**
      * @var bool
@@ -58,7 +51,7 @@ class CfgCda
      *
      * @param string $nombre
      *
-     * @return CfgCda
+     * @return VhloCfgTipoVehiculo
      */
     public function setNombre($nombre)
     {
@@ -78,35 +71,11 @@ class CfgCda
     }
 
     /**
-     * Set nit
-     *
-     * @param string $nit
-     *
-     * @return CfgCda
-     */
-    public function setNit($nit)
-    {
-        $this->nit = $nit;
-
-        return $this;
-    }
-
-    /**
-     * Get nit
-     *
-     * @return string
-     */
-    public function getNit()
-    {
-        return $this->nit;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return CfgCda
+     * @return VhloCfgTipoVehiculo
      */
     public function setActivo($activo)
     {

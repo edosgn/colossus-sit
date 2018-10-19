@@ -32,7 +32,10 @@ class GdDocumentoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->findBy(
-            array('activo'=>true)
+            array(
+                'estado' => array('PENDIENTE','RECHAZADO','RESPUESTA REALIZADA'),
+                'activo'=>true
+            )
         );
 
         $response['data'] = array();
@@ -493,26 +496,31 @@ class GdDocumentoController extends Controller
         $documentos = null;
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
 
-            $documento = $em->getRepository('AppBundle:MgdDocumento')->find(
-                $params->documentoId
+            $documento = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->find(
+                $params->idDocumento
             );
             
             if ($documento) {
-                if ($params->correoCertificadoEnvio == 'true') {
-                    $documento->setCorreoCertificadoEnvio(true);
-                    $documento->setNombreTransportadoraEnvio($params->nombreTransportadoraEnvio);
-                    $documento->setNumeroGuia($params->numeroGuia);
-                }else{
-                    $documento->setMedioEnvio($params->medioEnvio);
-                }
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->idSedeOperativa
+                );
+                $documento->setSedeOperativa($sedeOperativa);
+
+                $medioCorrespondenciaEnvio = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
+                    $params->idMedioCorrespondenciaEnvio
+                );
+                $documento->setMedioCorrespondenciaEnvio($medioCorrespondenciaEnvio);
+
                 $documento->setFechaEnvio(new \Datetime(date('Y-m-d h:i:s')));
+                $documento->setDetalleEnvio($params->detalleEnvio);
+                $documento->setObservaciones($params->observaciones);
                 $documento->setNumeroCarpeta($params->numeroCarpeta);
-                $documento->setEstado('Finalizado');
+                $documento->setEstado('FINALIZADO');
 
                 $em->flush();
 
@@ -540,16 +548,69 @@ class GdDocumentoController extends Controller
     }
 
     /**
+     * Asigna el documento a un fiuncionario para que genere un respuesta.
+     *
+     * @Route("/template", name="gddocumento_template")
+     * @Method({"GET", "POST"})
+     */
+    public function templateAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $file = $request->files->get('file');
+                   
+            if ($file) {
+                $extension = $file->guessExtension();
+                if ($extension == 'docx') {
+                    $filename = "template.".$extension;
+                    $dir=__DIR__.'/../../../../web/uploads';
+
+                    $file->move($dir,$filename);
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Plantilla cargada con exito.'
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Solo se admite formato .docx"
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún archivo seleccionado"
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca peticionario por cedula o por nombre entidad y numero de oficio.
      *
      * @Route("/{id}/pdf", name="gddocumento_pdf")
      * @Method({"GET", "POST"})
      */
-    public function pdfAction(Request $request, MgdDocumento $mgdDocumento)
+    public function pdfAction(Request $request, GdDocumento $gdDocumento)
     {
         
-        $html = $this->renderView('@App/mgddocumento/pdf.template.html.twig', array(
-            'mgdDocumento'=>$mgdDocumento,
+        $html = $this->renderView('@JHWEBGestionDocumental/gddocumento/pdf.template.html.twig', array(
+            'gdDocumento'=>$gdDocumento,
         ));
 
         $pdf = $this->container->get("white_october.tcpdf")->create(

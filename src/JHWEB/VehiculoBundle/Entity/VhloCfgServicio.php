@@ -5,12 +5,12 @@ namespace JHWEB\VehiculoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgTransportePasajero
+ * VhloCfgServicio
  *
- * @ORM\Table(name="cfg_transporte_pasajero")
- * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\CfgTransportePasajeroRepository")
+ * @ORM\Table(name="vhlo_cfg_servicio")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloCfgServicioRepository")
  */
-class CfgTransportePasajero
+class VhloCfgServicio
 {
     /**
      * @var int
@@ -29,11 +29,11 @@ class CfgTransportePasajero
     private $nombre;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="gestionable", type="boolean")
+     * @ORM\Column(name="codigo", type="integer")
      */
-    private $gestionable;
+    private $codigo;
 
     /**
      * @var bool
@@ -58,7 +58,7 @@ class CfgTransportePasajero
      *
      * @param string $nombre
      *
-     * @return CfgTransportePasajero
+     * @return VhloCfgServicio
      */
     public function setNombre($nombre)
     {
@@ -78,27 +78,27 @@ class CfgTransportePasajero
     }
 
     /**
-     * Set gestionable
+     * Set codigo
      *
-     * @param boolean $gestionable
+     * @param integer $codigo
      *
-     * @return CfgTransportePasajero
+     * @return VhloCfgServicio
      */
-    public function setGestionable($gestionable)
+    public function setCodigo($codigo)
     {
-        $this->gestionable = $gestionable;
+        $this->codigo = $codigo;
 
         return $this;
     }
 
     /**
-     * Get gestionable
+     * Get codigo
      *
-     * @return bool
+     * @return int
      */
-    public function getGestionable()
+    public function getCodigo()
     {
-        return $this->gestionable;
+        return $this->codigo;
     }
 
     /**
@@ -106,7 +106,7 @@ class CfgTransportePasajero
      *
      * @param boolean $activo
      *
-     * @return CfgTransportePasajero
+     * @return VhloCfgServicio
      */
     public function setActivo($activo)
     {
