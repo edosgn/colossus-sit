@@ -33,7 +33,7 @@ class TipoEmpresa
      *
      * @ORM\Column(name="estado", type="boolean")
      */
-    private $estado = true;
+    private $estado = true; 
    
 
     /**

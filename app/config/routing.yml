@@ -1,3 +1,7 @@
+jhweb_contravencional_cv_cfg_tipo_restriccion:
+    resource: "@JHWEBContravencionalBundle/Controller/CvCfgTipoRestriccionController.php"
+    type:     annotation
+
 jhweb_insumo:
     resource: "@JHWEBInsumoBundle/Controller/"
     type:     annotation

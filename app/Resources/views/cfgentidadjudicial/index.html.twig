@@ -8,7 +8,7 @@
             <tr>
                 <th>Id</th>
                 <th>Nombre</th>
-                <th>Codigodivipo</th>
+                <th>Codigo</th>
                 <th>Estado</th>
                 <th>Actions</th>
             </tr>
@@ -18,7 +18,7 @@
             <tr>
                 <td><a href="{{ path('cfgentidadjudicial_show', { 'id': cfgEntidadJudicial.id }) }}">{{ cfgEntidadJudicial.id }}</a></td>
                 <td>{{ cfgEntidadJudicial.nombre }}</td>
-                <td>{{ cfgEntidadJudicial.codigoDivipo }}</td>
+                <td>{{ cfgEntidadJudicial.codigo }}</td>
                 <td>{% if cfgEntidadJudicial.estado %}Yes{% else %}No{% endif %}</td>
                 <td>
                     <ul>

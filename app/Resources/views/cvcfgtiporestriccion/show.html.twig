@@ -1,35 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Cfgentidadjudicial</h1>
+    <h1>Cvcfgtiporestriccion</h1>
 
     <table>
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ cfgEntidadJudicial.id }}</td>
+                <td>{{ cvCfgTipoRestriccion.id }}</td>
             </tr>
             <tr>
                 <th>Nombre</th>
-                <td>{{ cfgEntidadJudicial.nombre }}</td>
+                <td>{{ cvCfgTipoRestriccion.nombre }}</td>
             </tr>
             <tr>
                 <th>Codigo</th>
-                <td>{{ cfgEntidadJudicial.codigo }}</td>
+                <td>{{ cvCfgTipoRestriccion.codigo }}</td>
             </tr>
             <tr>
-                <th>Estado</th>
-                <td>{% if cfgEntidadJudicial.estado %}Yes{% else %}No{% endif %}</td>
+                <th>Activo</th>
+                <td>{% if cvCfgTipoRestriccion.activo %}Yes{% else %}No{% endif %}</td>
             </tr>
         </tbody>
     </table>
 
     <ul>
         <li>
-            <a href="{{ path('cfgentidadjudicial_index') }}">Back to the list</a>
+            <a href="{{ path('cvcfgtiporestriccion_index') }}">Back to the list</a>
         </li>
         <li>
-            <a href="{{ path('cfgentidadjudicial_edit', { 'id': cfgEntidadJudicial.id }) }}">Edit</a>
+            <a href="{{ path('cvcfgtiporestriccion_edit', { 'id': cvCfgTipoRestriccion.id }) }}">Edit</a>
         </li>
         <li>
             {{ form_start(delete_form) }}
