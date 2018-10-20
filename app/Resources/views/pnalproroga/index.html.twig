@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnalprorogas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechainicio</th>
+                <th>Fechafin</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pnalProroga in pnalProrogas %}
+            <tr>
+                <td><a href="{{ path('pnalproroga_show', { 'id': pnalProroga.id }) }}">{{ pnalProroga.id }}</a></td>
+                <td>{% if pnalProroga.fechaInicio %}{{ pnalProroga.fechaInicio|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if pnalProroga.fechaFin %}{{ pnalProroga.fechaFin|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pnalproroga_show', { 'id': pnalProroga.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pnalproroga_edit', { 'id': pnalProroga.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnalproroga_new') }}">Create a new pnalProroga</a>
+        </li>
+    </ul>
+{% endblock %}
