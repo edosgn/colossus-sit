@@ -1,3 +1,11 @@
+jhweb_seguridad_vial_sv_cfg_tipo_controles_transito:
+    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgTipoControlesTransitoController.php"
+    type:     annotation
+
+jhweb_seguridad_vial_sv_cfg_controles_transito:
+    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgControlesTransitoController.php"
+    type:     annotation
+
 jhweb_insumo:
     resource: "@JHWEBInsumoBundle/Controller/"
     type:     annotation

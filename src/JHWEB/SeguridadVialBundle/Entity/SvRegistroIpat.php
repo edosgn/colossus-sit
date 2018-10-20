@@ -52,9 +52,23 @@ class SvRegistroIpat
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="hora_accidente", type="date")
+     */
+    private $horaAccidente;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="fecha_levantamiento", type="date")
      */
     private $fechaLevantamiento;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora_levantamiento", type="date")
+     */
+    private $horaLevantamiento;
 
 
     /**
@@ -281,13 +295,6 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroLicenciaTransito", type="string")
-     */
-    private $numeroLicenciaTransito;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="empresa", type="string")
      */
     private $empresa;
@@ -333,6 +340,13 @@ class SvRegistroIpat
      * @ORM\Column(name="revision_tecnomecanica", type="string")
      */
     private $revisionTecnoMecanica;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_tecnomecanica", type="string")
+     */
+    private $numeroTecnoMecanica;
 
     /**
      * @var string
@@ -575,7 +589,14 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     * @ORM\Column(name="direccion_residencia_conductor", type="string")
+     */
+    private $direccionResidenciaConductor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ciudad_residencia_conductor", type="string")
      */
     private $ciudadResidenciaConductor;
 
@@ -589,9 +610,9 @@ class SvRegistroIpat
     /**
      * @var bool
      *
-     * @ORM\Column(name="pratico_examen_conductor", type="boolean")
+     * @ORM\Column(name="practico_examen_conductor", type="boolean")
      */
-    private $praticoExamenConductor;
+    private $practicoExamenConductor;
 
     /**
      * @var bool
@@ -764,7 +785,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     * @ORM\Column(name="ciudad_residencia_victima", type="string")
      */
     private $ciudadResidenciaVictima;
 
@@ -785,9 +806,9 @@ class SvRegistroIpat
     /**
      * @var bool
      *
-     * @ORM\Column(name="pratico_examen_victima", type="boolean")
+     * @ORM\Column(name="practico_examen_victima", type="boolean")
      */
-    private $praticoExamenVictima;
+    private $practicoExamenVictima;
 
     /**
      * @var bool
@@ -886,6 +907,13 @@ class SvRegistroIpat
      * @ORM\Column(name="tipo_identificacion_testigo", type="string")
      */
     private $tipoIdentificacionTestigo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identificacion_testigo", type="string")
+     */
+    private $identificacionTestigo;
     
     /**
      * @var string
@@ -974,6 +1002,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set horaAccidente
+     *
+     * @param \DateTime $horaAccidente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setHoraAccidente($horaAccidente)
+    {
+        $this->horaAccidente = $horaAccidente;
+
+        return $this;
+    }
+
+    /**
+     * Get horaAccidente
+     *
+     * @return \DateTime
+     */
+    public function getHoraAccidente()
+    {
+        return $this->horaAccidente;
+    }
+
+    /**
      * Set fechaLevantamiento
      *
      * @param \DateTime $fechaLevantamiento
@@ -995,6 +1047,30 @@ class SvRegistroIpat
     public function getFechaLevantamiento()
     {
         return $this->fechaLevantamiento;
+    }
+
+    /**
+     * Set horaLevantamiento
+     *
+     * @param \DateTime $horaLevantamiento
+     *
+     * @return SvRegistroIpat
+     */
+    public function setHoraLevantamiento($horaLevantamiento)
+    {
+        $this->horaLevantamiento = $horaLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get horaLevantamiento
+     *
+     * @return \DateTime
+     */
+    public function getHoraLevantamiento()
+    {
+        return $this->horaLevantamiento;
     }
 
     /**
@@ -1286,30 +1362,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set numeroLicenciaTransito
-     *
-     * @param string $numeroLicenciaTransito
-     *
-     * @return SvRegistroIpat
-     */
-    public function setNumeroLicenciaTransito($numeroLicenciaTransito)
-    {
-        $this->numeroLicenciaTransito = $numeroLicenciaTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroLicenciaTransito
-     *
-     * @return string
-     */
-    public function getNumeroLicenciaTransito()
-    {
-        return $this->numeroLicenciaTransito;
-    }
-
-    /**
      * Set empresa
      *
      * @param string $empresa
@@ -1475,6 +1527,30 @@ class SvRegistroIpat
     public function getRevisionTecnoMecanica()
     {
         return $this->revisionTecnoMecanica;
+    }
+
+    /**
+     * Set numeroTecnoMecanica
+     *
+     * @param string $numeroTecnoMecanica
+     *
+     * @return SvRegistroIpat
+     */
+    public function setNumeroTecnoMecanica($numeroTecnoMecanica)
+    {
+        $this->numeroTecnoMecanica = $numeroTecnoMecanica;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroTecnoMecanica
+     *
+     * @return string
+     */
+    public function getNumeroTecnoMecanica()
+    {
+        return $this->numeroTecnoMecanica;
     }
 
     /**
@@ -2054,6 +2130,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set lugarImpacto
+     *
+     * @param array $lugarImpacto
+     *
+     * @return SvRegistroIpat
+     */
+    public function setLugarImpacto($lugarImpacto)
+    {
+        $this->lugarImpacto = $lugarImpacto;
+
+        return $this;
+    }
+
+    /**
+     * Get lugarImpacto
+     *
+     * @return array
+     */
+    public function getLugarImpacto()
+    {
+        return $this->lugarImpacto;
+    }
+
+    /**
      * Set nombresConductor
      *
      * @param string $nombresConductor
@@ -2222,6 +2322,54 @@ class SvRegistroIpat
     }
 
     /**
+     * Set direccionResidenciaConductor
+     *
+     * @param string $direccionResidenciaConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDireccionResidenciaConductor($direccionResidenciaConductor)
+    {
+        $this->direccionResidenciaConductor = $direccionResidenciaConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get direccionResidenciaConductor
+     *
+     * @return string
+     */
+    public function getDireccionResidenciaConductor()
+    {
+        return $this->direccionResidenciaConductor;
+    }
+
+    /**
+     * Set ciudadResidenciaConductor
+     *
+     * @param string $ciudadResidenciaConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setCiudadResidenciaConductor($ciudadResidenciaConductor)
+    {
+        $this->ciudadResidenciaConductor = $ciudadResidenciaConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadResidenciaConductor
+     *
+     * @return string
+     */
+    public function getCiudadResidenciaConductor()
+    {
+        return $this->ciudadResidenciaConductor;
+    }
+
+    /**
      * Set telefonoConductor
      *
      * @param string $telefonoConductor
@@ -2246,27 +2394,27 @@ class SvRegistroIpat
     }
 
     /**
-     * Set praticoExamenConductor
+     * Set practicoExamenConductor
      *
-     * @param boolean $praticoExamenConductor
+     * @param boolean $practicoExamenConductor
      *
      * @return SvRegistroIpat
      */
-    public function setPraticoExamenConductor($praticoExamenConductor)
+    public function setPracticoExamenConductor($practicoExamenConductor)
     {
-        $this->praticoExamenConductor = $praticoExamenConductor;
+        $this->practicoExamenConductor = $practicoExamenConductor;
 
         return $this;
     }
 
     /**
-     * Get praticoExamenConductor
+     * Get practicoExamenConductor
      *
      * @return boolean
      */
-    public function getPraticoExamenConductor()
+    public function getPracticoExamenConductor()
     {
-        return $this->praticoExamenConductor;
+        return $this->practicoExamenConductor;
     }
 
     /**
@@ -2774,6 +2922,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set ciudadResidenciaVictima
+     *
+     * @param string $ciudadResidenciaVictima
+     *
+     * @return SvRegistroIpat
+     */
+    public function setCiudadResidenciaVictima($ciudadResidenciaVictima)
+    {
+        $this->ciudadResidenciaVictima = $ciudadResidenciaVictima;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadResidenciaVictima
+     *
+     * @return string
+     */
+    public function getCiudadResidenciaVictima()
+    {
+        return $this->ciudadResidenciaVictima;
+    }
+
+    /**
      * Set telefonoVictima
      *
      * @param string $telefonoVictima
@@ -2798,27 +2970,27 @@ class SvRegistroIpat
     }
 
     /**
-     * Set praticoExamenVictima
+     * Set practicoExamenVictima
      *
-     * @param boolean $praticoExamenVictima
+     * @param boolean $practicoExamenVictima
      *
      * @return SvRegistroIpat
      */
-    public function setPraticoExamenVictima($praticoExamenVictima)
+    public function setPracticoExamenVictima($practicoExamenVictima)
     {
-        $this->praticoExamenVictima = $praticoExamenVictima;
+        $this->practicoExamenVictima = $practicoExamenVictima;
 
         return $this;
     }
 
     /**
-     * Get praticoExamenVictima
+     * Get practicoExamenVictima
      *
      * @return boolean
      */
-    public function getPraticoExamenVictima()
+    public function getPracticoExamenVictima()
     {
-        return $this->praticoExamenVictima;
+        return $this->practicoExamenVictima;
     }
 
     /**
@@ -3059,6 +3231,30 @@ class SvRegistroIpat
     public function getTipoIdentificacionTestigo()
     {
         return $this->tipoIdentificacionTestigo;
+    }
+
+    /**
+     * Set identificacionTestigo
+     *
+     * @param string $identificacionTestigo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setIdentificacionTestigo($identificacionTestigo)
+    {
+        $this->identificacionTestigo = $identificacionTestigo;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacionTestigo
+     *
+     * @return string
+     */
+    public function getIdentificacionTestigo()
+    {
+        return $this->identificacionTestigo;
     }
 
     /**
@@ -3662,30 +3858,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set lugarImpacto
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgLugarImpacto $lugarImpacto
-     *
-     * @return SvRegistroIpat
-     */
-    public function setLugarImpacto(\JHWEB\SeguridadVialBundle\Entity\SvCfgLugarImpacto $lugarImpacto = null)
-    {
-        $this->lugarImpacto = $lugarImpacto;
-
-        return $this;
-    }
-
-    /**
-     * Get lugarImpacto
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgLugarImpacto
-     */
-    public function getLugarImpacto()
-    {
-        return $this->lugarImpacto;
-    }
-
-    /**
      * Set gravedadConductor
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima $gravedadConductor
@@ -3707,30 +3879,6 @@ class SvRegistroIpat
     public function getGravedadConductor()
     {
         return $this->gravedadConductor;
-    }
-
-    /**
-     * Set ciudadResidenciaConductor
-     *
-     * @param \AppBundle\Entity\Municipio $ciudadResidenciaConductor
-     *
-     * @return SvRegistroIpat
-     */
-    public function setCiudadResidenciaConductor(\AppBundle\Entity\Municipio $ciudadResidenciaConductor = null)
-    {
-        $this->ciudadResidenciaConductor = $ciudadResidenciaConductor;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadResidenciaConductor
-     *
-     * @return \AppBundle\Entity\Municipio
-     */
-    public function getCiudadResidenciaConductor()
-    {
-        return $this->ciudadResidenciaConductor;
     }
 
     /**
@@ -3803,30 +3951,6 @@ class SvRegistroIpat
     public function getHospitalConductor()
     {
         return $this->hospitalConductor;
-    }
-
-    /**
-     * Set ciudadResidenciaVictima
-     *
-     * @param \AppBundle\Entity\Municipio $ciudadResidenciaVictima
-     *
-     * @return SvRegistroIpat
-     */
-    public function setCiudadResidenciaVictima(\AppBundle\Entity\Municipio $ciudadResidenciaVictima = null)
-    {
-        $this->ciudadResidenciaVictima = $ciudadResidenciaVictima;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadResidenciaVictima
-     *
-     * @return \AppBundle\Entity\Municipio
-     */
-    public function getCiudadResidenciaVictima()
-    {
-        return $this->ciudadResidenciaVictima;
     }
 
     /**
