@@ -1,20 +1,20 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\ConfigBundle\Controller;
 
-use AppBundle\Entity\CfgEntidadJudicial;
+use JHWEB\ConfigBundle\Entity\CfgEntidadJudicial;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cfgentidadjudicial controller.
  *
- * @Route("cfgEntidadJudicial")
+ * @Route("cfgentidadjudicial")
  */
 class CfgEntidadJudicialController extends Controller
 {
-    /**
+   /**
      * Lists all cfgEntidadJudicial entities.
      *
      * @Route("/", name="cfgentidadjudicial_index")
@@ -25,7 +25,7 @@ class CfgEntidadJudicialController extends Controller
         $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgEntidadesJudiciales = $em->getRepository('AppBundle:CfgEntidadJudicial')->findBy(
+        $cfgEntidadesJudiciales = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->findBy(
             array('estado' => 1)
         );
 
@@ -138,7 +138,7 @@ class CfgEntidadJudicialController extends Controller
             $em = $this->getDoctrine()->getManager();
             $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
 
-            $cfgEntidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($params->id);
+            $cfgEntidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find($params->id);
 
             if ($cfgEntidadJudicial != null) {
                 $cfgEntidadJudicial->setNombre($nombre);
@@ -233,7 +233,7 @@ class CfgEntidadJudicialController extends Controller
         $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgEntidadesJudiciales = $em->getRepository('AppBundle:CfgEntidadJudicial')->findBy(
+        $cfgEntidadesJudiciales = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->findBy(
             array('estado' => 1)
         );
         foreach ($cfgEntidadesJudiciales as $key => $cfgEntidadJudicial) {

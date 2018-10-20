@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhloremolque</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vhloRemolque.id }}</td>
+            </tr>
+            <tr>
+                <th>Peso</th>
+                <td>{{ vhloRemolque.peso }}</td>
+            </tr>
+            <tr>
+                <th>Cargarutilmaxima</th>
+                <td>{{ vhloRemolque.cargarUtilMaxima }}</td>
+            </tr>
+            <tr>
+                <th>Numeroejes</th>
+                <td>{{ vhloRemolque.numeroEjes }}</td>
+            </tr>
+            <tr>
+                <th>Alto</th>
+                <td>{{ vhloRemolque.alto }}</td>
+            </tr>
+            <tr>
+                <th>Largo</th>
+                <td>{{ vhloRemolque.largo }}</td>
+            </tr>
+            <tr>
+                <th>Ancho</th>
+                <td>{{ vhloRemolque.ancho }}</td>
+            </tr>
+            <tr>
+                <th>Referencia</th>
+                <td>{{ vhloRemolque.referencia }}</td>
+            </tr>
+            <tr>
+                <th>Numerofth</th>
+                <td>{{ vhloRemolque.numeroFth }}</td>
+            </tr>
+            <tr>
+                <th>Rut</th>
+                <td>{{ vhloRemolque.rut }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhloremolque_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vhloremolque_edit', { 'id': vhloRemolque.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

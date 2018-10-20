@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\ConfigBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CfgEntidadJudicial
  *
  * @ORM\Table(name="cfg_entidad_judicial")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgEntidadJudicialRepository")
+ * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgEntidadJudicialRepository")
  */
 class CfgEntidadJudicial
 {
@@ -32,9 +32,9 @@ class CfgEntidadJudicial
     /**
      * @var string
      *
-     * @ORM\Column(name="codigo_divipo", type="string", length=50)
+     * @ORM\Column(name="codigo", type="string", length=50)
      */
-    private $codigoDivipo;
+    private $codigo;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inmovilizaciones")
@@ -47,6 +47,8 @@ class CfgEntidadJudicial
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado = true;
+
+    
 
     /**
      * Get id
@@ -83,27 +85,27 @@ class CfgEntidadJudicial
     }
 
     /**
-     * Set codigoDivipo
+     * Set codigo
      *
-     * @param string $codigoDivipo
+     * @param string $codigo
      *
      * @return CfgEntidadJudicial
      */
-    public function setCodigoDivipo($codigoDivipo)
+    public function setCodigo($codigo)
     {
-        $this->codigoDivipo = $codigoDivipo;
+        $this->codigo = $codigo;
 
         return $this;
     }
 
     /**
-     * Get codigoDivipo
+     * Get codigo
      *
      * @return string
      */
-    public function getCodigoDivipo()
+    public function getCodigo()
     {
-        return $this->codigoDivipo;
+        return $this->codigo;
     }
 
     /**
@@ -119,8 +121,6 @@ class CfgEntidadJudicial
 
         return $this;
     }
-
-    
 
     /**
      * Get estado

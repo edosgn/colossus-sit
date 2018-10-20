@@ -13,8 +13,7 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	//Obtiene la lista de documentos por peticionario
     public function getSearch($params){   
         $em = $this->getEntityManager();
-
-        if (isset($params->nombre)) {
+        if (isset($params->nombre)) { 
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f, UsuarioBundle:Usuario u, AppBundle:Ciudadano c
             WHERE u.id = c.usuario
@@ -46,7 +45,35 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	        $consulta->setParameters(array(
 	            'cargo' => $params->cargo,
 	        ));
-        }elseif(isset($params->tipoContratoId)){
+        }elseif(isset($params->numeroContrato)){
+        	$dql = "SELECT f
+            FROM AppBundle:MpersonalFuncionario f
+            WHERE f.numeroContrato = :numeroContrato";
+	        $consulta = $em->createQuery($dql);
+	        $consulta->setParameters(array(
+	            'numeroContrato' => $params->numeroContrato,
+	        ));
+        }elseif(isset($params->nombramiento)){
+        	$dql = "SELECT f
+            FROM AppBundle:MpersonalFuncionario f
+            WHERE f.tipoNombramiento = :nombramiento";
+	        $consulta = $em->createQuery($dql);
+	        $consulta->setParameters(array(
+	            'nombramiento' => $params->nombramiento,
+	        ));
+        }elseif(isset($params->fechaInicio) && isset($params->fechaFin)){
+           
+        	$dql = "SELECT f
+            FROM AppBundle:MpersonalFuncionario f
+            WHERE (f.fechaInicio BETWEEN :fechaInicio AND :fechaFin)
+            OR (f.fechaFin BETWEEN :fechaInicio AND :fechaFin)";
+	        $consulta = $em->createQuery($dql);
+	        $consulta->setParameters(array(
+	            'fechaInicio' => $params->fechaInicio,
+	            'fechaFin' => $params->fechaFin,
+	        ));
+        } 
+        elseif(isset($params->tipoContratoId)){
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f, AppBundle:MpersonalTipoContrato tc
             WHERE tc.id = f.tipoContrato

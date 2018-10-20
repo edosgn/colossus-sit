@@ -25,6 +25,7 @@ class AppKernel extends Kernel
             new JHWEB\ContravencionalBundle\JHWEBContravencionalBundle(),
             new JHWEB\GestionDocumentalBundle\JHWEBGestionDocumentalBundle(),
             new JHWEB\InsumoBundle\JHWEBInsumoBundle(),
+            new JHWEB\PersonalBundle\JHWEBPersonalBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {

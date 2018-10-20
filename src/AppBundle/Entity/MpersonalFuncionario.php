@@ -80,6 +80,13 @@ class MpersonalFuncionario
     /**
      * @var string
      *
+     * @ORM\Column(name="objetoContrato", type="text", nullable=true)
+     */
+    private $objetoContrato;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="novedad", type="text", nullable=true)
      */
     private $novedad;
@@ -111,10 +118,12 @@ class MpersonalFuncionario
      **/
     protected $ciudadano;
 
+    
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -170,6 +179,30 @@ class MpersonalFuncionario
     }
 
     /**
+     * Set tipoNombramiento
+     *
+     * @param string $tipoNombramiento
+     *
+     * @return MpersonalFuncionario
+     */
+    public function setTipoNombramiento($tipoNombramiento)
+    {
+        $this->tipoNombramiento = $tipoNombramiento;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoNombramiento
+     *
+     * @return string
+     */
+    public function getTipoNombramiento()
+    {
+        return $this->tipoNombramiento;
+    }
+
+    /**
      * Set numeroContrato
      *
      * @param string $numeroContrato
@@ -214,6 +247,9 @@ class MpersonalFuncionario
      */
     public function getFechaInicio()
     {
+        if ($this->fechaInicio) {
+            return $this->fechaInicio->format('Y-m-d');
+        }
         return $this->fechaInicio;
     }
 
@@ -238,6 +274,9 @@ class MpersonalFuncionario
      */
     public function getFechaFin()
     {
+        if ($this->fechaFin) {
+            return $this->fechaFin->format('Y-m-d');
+        }
         return $this->fechaFin;
     }
 
@@ -290,6 +329,30 @@ class MpersonalFuncionario
     }
 
     /**
+     * Set objetoContrato
+     *
+     * @param string $objetoContrato
+     *
+     * @return MpersonalFuncionario
+     */
+    public function setObjetoContrato($objetoContrato)
+    {
+        $this->objetoContrato = $objetoContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get objetoContrato
+     *
+     * @return string
+     */
+    public function getObjetoContrato()
+    {
+        return $this->objetoContrato;
+    }
+
+    /**
      * Set novedad
      *
      * @param string $novedad
@@ -330,7 +393,7 @@ class MpersonalFuncionario
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -431,29 +494,5 @@ class MpersonalFuncionario
     public function getCiudadano()
     {
         return $this->ciudadano;
-    }
-
-    /**
-     * Set tipoNombramiento
-     *
-     * @param string $tipoNombramiento
-     *
-     * @return MpersonalFuncionario
-     */
-    public function setTipoNombramiento($tipoNombramiento)
-    {
-        $this->tipoNombramiento = $tipoNombramiento;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoNombramiento
-     *
-     * @return string
-     */
-    public function getTipoNombramiento()
-    {
-        return $this->tipoNombramiento;
     }
 }

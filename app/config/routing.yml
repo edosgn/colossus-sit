@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 jhweb_seguridad_vial_sv_cfg_tipo_controles_transito:
     resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgTipoControlesTransitoController.php"
     type:     annotation
@@ -5,6 +6,12 @@ jhweb_seguridad_vial_sv_cfg_tipo_controles_transito:
 jhweb_seguridad_vial_sv_cfg_controles_transito:
     resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgControlesTransitoController.php"
     type:     annotation
+=======
+jhweb_personal:
+    resource: "@JHWEBPersonalBundle/Controller/"
+    type:     annotation
+    prefix:   /personal
+>>>>>>> 0393c2c94d7d4148f60f81fd85534a4fc58f3e89
 
 jhweb_insumo:
     resource: "@JHWEBInsumoBundle/Controller/"

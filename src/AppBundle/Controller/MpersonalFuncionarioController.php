@@ -122,6 +122,9 @@ class MpersonalFuncionarioController extends Controller
                 if ($params->numeroContrato) {
                     $funcionario->setNumeroContrato($params->numeroContrato);
                 }
+                if ($params->objetoContrato) {
+                    $funcionario->setObjetoContrato($params->objetoContrato);
+                }
 
                 if ($params->numeroPlaca) {
                     $funcionario->setNumeroPlaca($params->numeroPlaca);
@@ -346,7 +349,7 @@ class MpersonalFuncionarioController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-           
+            
             $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearch($params);
                 
             if ($funcionarios) {
