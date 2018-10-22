@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfgmenu</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userCfgMenu.id }}</td>
+            </tr>
+            <tr>
+                <th>Titulo</th>
+                <td>{{ userCfgMenu.titulo }}</td>
+            </tr>
+            <tr>
+                <th>Url</th>
+                <td>{{ userCfgMenu.url }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userCfgMenu.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfgmenu_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('usercfgmenu_edit', { 'id': userCfgMenu.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

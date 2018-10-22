@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfgroles list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userCfgRole in userCfgRoles %}
+            <tr>
+                <td><a href="{{ path('usercfgrole_show', { 'id': userCfgRole.id }) }}">{{ userCfgRole.id }}</a></td>
+                <td>{{ userCfgRole.nombre }}</td>
+                <td>{% if userCfgRole.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('usercfgrole_show', { 'id': userCfgRole.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('usercfgrole_edit', { 'id': userCfgRole.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfgrole_new') }}">Create a new userCfgRole</a>
+        </li>
+    </ul>
+{% endblock %}

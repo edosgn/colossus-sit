@@ -24,16 +24,30 @@ class UserCfgMenu
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="titulo", type="string", length=255)
      */
-    private $nombre;
+    private $titulo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=255)
+     * @ORM\Column(name="tipo", type="string", length=50)
      */
-    private $url;
+    private $tipo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="abreviatura", type="string", length=50)
+     */
+    private $abreviatura;
 
     /**
      * @var bool
@@ -41,6 +55,9 @@ class UserCfgMenu
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /** @ORM\ManyToOne(targetEntity="UserCfgMenu", inversedBy="childrens") */
+    private $parent;
 
 
     /**
@@ -54,51 +71,99 @@ class UserCfgMenu
     }
 
     /**
-     * Set nombre
+     * Set titulo
      *
-     * @param string $nombre
+     * @param string $titulo
      *
      * @return UserCfgMenu
      */
-    public function setNombre($nombre)
+    public function setTitulo($titulo)
     {
-        $this->nombre = $nombre;
+        $this->titulo = $titulo;
 
         return $this;
     }
 
     /**
-     * Get nombre
+     * Get titulo
      *
      * @return string
      */
-    public function getNombre()
+    public function getTitulo()
     {
-        return $this->nombre;
+        return $this->titulo;
     }
 
     /**
-     * Set url
+     * Set tipo
      *
-     * @param string $url
+     * @param string $tipo
      *
      * @return UserCfgMenu
      */
-    public function setUrl($url)
+    public function setTipo($tipo)
     {
-        $this->url = $url;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get url
+     * Get tipo
      *
      * @return string
      */
-    public function getUrl()
+    public function getTipo()
     {
-        return $this->url;
+        return $this->tipo;
+    }
+
+    /**
+     * Set path
+     *
+     * @param string $path
+     *
+     * @return UserCfgMenu
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * Set abreviatura
+     *
+     * @param string $abreviatura
+     *
+     * @return UserCfgMenu
+     */
+    public function setAbreviatura($abreviatura)
+    {
+        $this->abreviatura = $abreviatura;
+
+        return $this;
+    }
+
+    /**
+     * Get abreviatura
+     *
+     * @return string
+     */
+    public function getAbreviatura()
+    {
+        return $this->abreviatura;
     }
 
     /**
@@ -118,11 +183,34 @@ class UserCfgMenu
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set parent
+     *
+     * @param \Repository\UsuarioBundle\Entity\UserCfgMenu $parent
+     *
+     * @return UserCfgMenu
+     */
+    public function setParent(\Repository\UsuarioBundle\Entity\UserCfgMenu $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Repository\UsuarioBundle\Entity\UserCfgMenu
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+}
