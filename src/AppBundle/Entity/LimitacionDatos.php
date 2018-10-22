@@ -78,9 +78,9 @@ class LimitacionDatos
     protected $tipoProceso;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgEntidadJudicial", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEntidadJudicial", inversedBy="facturas")
      **/
-    protected $entidadJudicial;
+    protected $entidadJudicial; 
 
     /**
      * @var string
@@ -104,6 +104,8 @@ class LimitacionDatos
     private $estado;
 
     
+
+
 
     /**
      * Get id
@@ -136,7 +138,7 @@ class LimitacionDatos
      */
     public function getFechaRadicacion()
     {
-        return $this->fechaRadicacion->format('Y-m-d');
+        return $this->fechaRadicacion;
     }
 
     /**
@@ -184,7 +186,7 @@ class LimitacionDatos
      */
     public function getFechaExpedicion()
     {
-        return $this->fechaExpedicion->format('Y-m-d');
+        return $this->fechaExpedicion;
     }
 
     /**
@@ -430,11 +432,11 @@ class LimitacionDatos
     /**
      * Set entidadJudicial
      *
-     * @param \AppBundle\Entity\CfgEntidadJudicial $entidadJudicial
+     * @param \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicial
      *
      * @return LimitacionDatos
      */
-    public function setEntidadJudicial(\AppBundle\Entity\CfgEntidadJudicial $entidadJudicial = null)
+    public function setEntidadJudicial(\JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicial = null)
     {
         $this->entidadJudicial = $entidadJudicial;
 
@@ -444,7 +446,7 @@ class LimitacionDatos
     /**
      * Get entidadJudicial
      *
-     * @return \AppBundle\Entity\CfgEntidadJudicial
+     * @return \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial
      */
     public function getEntidadJudicial()
     {

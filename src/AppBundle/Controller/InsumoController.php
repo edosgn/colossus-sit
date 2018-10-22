@@ -118,7 +118,7 @@ class InsumoController extends Controller
                     
                     $insumo->setNumero($casoInsumo->getModulo()->getSiglaSustrato().$desde);
                     $insumo->setCasoInsumo($casoInsumo);
-                    $insumo->setLoteInsumo($loteInsumo);
+                    $insumo->setLoteInsumo($loteInsumo); 
                     $insumo->setFecha($fecha);
                     $insumo->setTipo('sustrato');
                     $insumo->setEstado('disponible');

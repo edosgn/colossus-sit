@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class RepresentanteEmpresaController extends Controller
 {
     /**
-     * Lists all representanteEmpresa entities.
+     * Lists all representanteEmpresa   entities.
      *
      * @Route("/", name="representanteempresa_index")
      * @Method("GET")

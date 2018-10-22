@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvcfgtiporestriccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvCfgTipoRestriccion in cvCfgTipoRestriccions %}
+            <tr>
+                <td><a href="{{ path('cvcfgtiporestriccion_show', { 'id': cvCfgTipoRestriccion.id }) }}">{{ cvCfgTipoRestriccion.id }}</a></td>
+                <td>{{ cvCfgTipoRestriccion.nombre }}</td>
+                <td>{{ cvCfgTipoRestriccion.codigo }}</td>
+                <td>{% if cvCfgTipoRestriccion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvcfgtiporestriccion_show', { 'id': cvCfgTipoRestriccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvcfgtiporestriccion_edit', { 'id': cvCfgTipoRestriccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvcfgtiporestriccion_new') }}">Create a new cvCfgTipoRestriccion</a>
+        </li>
+    </ul>
+{% endblock %}

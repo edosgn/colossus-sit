@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\SeguridadVialBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TipoEmpresa
+ * SvCfgTipoControlesTransito
  *
- * @ORM\Table(name="tipo_empresa")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\TipoEmpresaRepository")
+ * @ORM\Table(name="sv_cfg_tipo_controles_transito")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgTipoControlesTransitoRepository")
  */
-class TipoEmpresa
+class SvCfgTipoControlesTransito
 {
     /**
      * @var int
@@ -24,22 +24,21 @@ class TipoEmpresa
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="nombre", type="string", nullable= true)
      */
     private $nombre;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean", nullable=true)
      */
-    private $estado = true; 
-   
+    private $activo;
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -51,7 +50,7 @@ class TipoEmpresa
      *
      * @param string $nombre
      *
-     * @return TipoEmpresa
+     * @return SvCfgTipoControlesTransito
      */
     public function setNombre($nombre)
     {
@@ -71,26 +70,26 @@ class TipoEmpresa
     }
 
     /**
-     * Set estado
+     * Set activo
      *
-     * @param boolean $estado
+     * @param boolean $activo
      *
-     * @return TipoEmpresa
+     * @return SvCfgTipoControlesTransito
      */
-    public function setEstado($estado)
+    public function setActivo($activo)
     {
-        $this->estado = $estado;
+        $this->activo = $activo;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get activo
      *
      * @return boolean
      */
-    public function getEstado()
+    public function getActivo()
     {
-        return $this->estado;
+        return $this->activo;
     }
 }
