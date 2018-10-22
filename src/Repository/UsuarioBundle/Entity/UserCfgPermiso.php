@@ -22,11 +22,25 @@ class UserCfgPermiso
     private $id;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="create", type="boolean")
      */
-    private $nombre;
+    private $create = true;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="update", type="boolean")
+     */
+    private $update = true;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="delete", type="boolean")
+     */
+    private $delete = true;
 
     /**
      * @var bool
@@ -34,6 +48,16 @@ class UserCfgPermiso
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /** @ORM\ManyToOne(targetEntity="UserCfgMenu", inversedBy="permisos") */
+    private $menu;
+
+    /** @ORM\ManyToOne(targetEntity="UserCfgRole", inversedBy="permisos") */
+    private $role;
+
+    /** @ORM\ManyToOne(targetEntity="Usuario", inversedBy="permisos") */
+    private $usuario;
+
 
 
     /**
@@ -47,27 +71,75 @@ class UserCfgPermiso
     }
 
     /**
-     * Set nombre
+     * Set create
      *
-     * @param string $nombre
+     * @param boolean $create
      *
      * @return UserCfgPermiso
      */
-    public function setNombre($nombre)
+    public function setCreate($create)
     {
-        $this->nombre = $nombre;
+        $this->create = $create;
 
         return $this;
     }
 
     /**
-     * Get nombre
+     * Get create
      *
-     * @return string
+     * @return boolean
      */
-    public function getNombre()
+    public function getCreate()
     {
-        return $this->nombre;
+        return $this->create;
+    }
+
+    /**
+     * Set update
+     *
+     * @param boolean $update
+     *
+     * @return UserCfgPermiso
+     */
+    public function setUpdate($update)
+    {
+        $this->update = $update;
+
+        return $this;
+    }
+
+    /**
+     * Get update
+     *
+     * @return boolean
+     */
+    public function getUpdate()
+    {
+        return $this->update;
+    }
+
+    /**
+     * Set delete
+     *
+     * @param boolean $delete
+     *
+     * @return UserCfgPermiso
+     */
+    public function setDelete($delete)
+    {
+        $this->delete = $delete;
+
+        return $this;
+    }
+
+    /**
+     * Get delete
+     *
+     * @return boolean
+     */
+    public function getDelete()
+    {
+        return $this->delete;
     }
 
     /**
@@ -87,11 +159,82 @@ class UserCfgPermiso
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set menu
+     *
+     * @param \Repository\UsuarioBundle\Entity\UserCfgMenu $menu
+     *
+     * @return UserCfgPermiso
+     */
+    public function setMenu(\Repository\UsuarioBundle\Entity\UserCfgMenu $menu = null)
+    {
+        $this->menu = $menu;
+
+        return $this;
+    }
+
+    /**
+     * Get menu
+     *
+     * @return \Repository\UsuarioBundle\Entity\UserCfgMenu
+     */
+    public function getMenu()
+    {
+        return $this->menu;
+    }
+
+    /**
+     * Set role
+     *
+     * @param \Repository\UsuarioBundle\Entity\UserCfgRole $role
+     *
+     * @return UserCfgPermiso
+     */
+    public function setRole(\Repository\UsuarioBundle\Entity\UserCfgRole $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \Repository\UsuarioBundle\Entity\UserCfgRole
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * Set usuario
+     *
+     * @param \Repository\UsuarioBundle\Entity\Usuario $usuario
+     *
+     * @return UserCfgPermiso
+     */
+    public function setUsuario(\Repository\UsuarioBundle\Entity\Usuario $usuario = null)
+    {
+        $this->usuario = $usuario;
+
+        return $this;
+    }
+
+    /**
+     * Get usuario
+     *
+     * @return \Repository\UsuarioBundle\Entity\Usuario
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+}
