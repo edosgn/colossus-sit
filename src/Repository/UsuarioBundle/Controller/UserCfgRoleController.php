@@ -3,6 +3,7 @@
 namespace Repository\UsuarioBundle\Controller;
 
 use Repository\UsuarioBundle\Entity\UserCfgRole;
+use Repository\UsuarioBundle\Entity\UserCfgRoleMenu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -71,12 +72,21 @@ class UserCfgRoleController extends Controller
             
             $em->persist($role);
             $em->flush();
+
+
+            foreach ($params->menus as $key => $idMenu) {
+                $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                    $idMenu
+                );
+
+                $this->createMenuAction($role, $menu);
+            }
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con éxito",
             );
-        
         }else{
             $response = array(
                 'status' => 'error',
@@ -154,6 +164,25 @@ class UserCfgRoleController extends Controller
 
             if ($role) {
                 $role->setNombre(strtoupper($params->nombre));
+
+                foreach ($params->menus as $key => $idMenu) {
+                    $roleMenu = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
+                        array(
+                            'menu' => $idMenu,
+                            'role' => $role->getId()
+                        )
+                    );
+
+                    if (!$roleMenu) {
+                        $roleMenu = new UserCfgRoleMenu();
+
+                        $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                            $idMenu
+                        );
+                        
+                        $this->createMenuAction($role, $menu);
+                    }
+                }
                 
                 $em->flush();
 
@@ -260,5 +289,31 @@ class UserCfgRoleController extends Controller
         }
         
         return $helpers->json($response);
+    }
+
+    /* ======================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/create/menu", name="usercfgrole_create_menu")
+     * @Method({"GET", "POST"})
+     */
+    public function createMenuAction($role, $menu)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $roleMenu = new UserCfgRoleMenu();
+
+        $roleMenu->setMenu($menu);
+        $roleMenu->setRole($role);
+        $roleMenu->setActivo(true);
+
+        $em->persist($roleMenu);
+        $em->flush();
+
+        if ($menu->getParent()) {
+            $this->createMenuAction($role, $menu->getParent());
+        }
     }
 }

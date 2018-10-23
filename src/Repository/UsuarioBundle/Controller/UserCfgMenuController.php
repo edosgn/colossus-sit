@@ -411,4 +411,92 @@ class UserCfgMenuController extends Controller
 
         return $tree;
     }
+
+    /**
+     * Lists all userCfgMenu entities by usuario.
+     *
+     * @Route("/generate/usuario", name="usercfgmenu_generate_usuario")
+     * @Method({"GET", "POST"})
+     */
+    public function generateByUsuarioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $menus = $this->multilevelMenuByUsuarioAction($params->idUsuario);
+
+            $response = null;
+
+            if (count($menus) > 0) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($menus)." Registros encontrados", 
+                    'data'=> $menus,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen registros para mostrar", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+
+        return $helpers->json($response);
+    }
+
+    public function multilevelMenuByUsuarioAction($idUsuario, $idParent = NULL){
+        $em = $this->getDoctrine()->getManager();
+
+        $menus = $em->getRepository('UsuarioBundle:UserCfgMenu')->findBy(
+            array(
+                'parent' => $idParent,
+                'activo' => true
+            )
+        );
+
+        $usuario = $em->getRepository('UsuarioBundle:Usuario')->find(
+            $idUsuario
+        );
+
+        $tree = null;
+
+        foreach ($menus as $key => $menu) {
+            $roleMenu = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
+                array(
+                    'menu' => $menu->getId(),
+                    'role' => $usuario->getCfgRole()->getId()
+                )
+            );
+
+            if ($roleMenu) {
+                $tree[] = array(
+                    'id' => $menu->getId(),
+                    'title' => $menu->getTitulo(),
+                    'tipo' => $menu->getTipo(),
+                    'path' => $menu->getPath(),
+                    'abbreviation' => $menu->getAbreviatura(),
+                    'childrens' => $this->multilevelMenuByUsuarioAction(
+                        $usuario->getId(), $menu->getId()
+                    )
+                );            
+            }
+
+        }
+
+        return $tree;
+    }
 }

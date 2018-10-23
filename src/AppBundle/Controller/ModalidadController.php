@@ -26,15 +26,19 @@ class ModalidadController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
             array('estado' => 1)
         );
+
+        $response['data'] = array();
+
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado modalidad", 
-                    'data'=> $modalidad,
-            );
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "listado modalidad", 
+                'data'=> $modalidad,
+        );
          
         return $helpers->json($response);
     }
@@ -54,42 +58,34 @@ class ModalidadController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
+            $nombre = $params->nombre;
+            $codigoMt = $params->codigoMt;
+            
+            $em = $this->getDoctrine()->getManager();
+            $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
+                array('codigoMt' => $codigoMt)
+            );
 
-            // if (count($params)==0) {
-            //     $response = array(
-            //         'status' => 'error',
-            //         'code' => 400,
-            //         'msj' => "los campos no pueden estar vacios", 
-            //     );
-            // }else{
-                $nombre = $params->nombre;
-                $codigoMt = $params->codigoMt;
+            if (!$modalidad) {
+                $modalidad = new Modalidad();
+                $modalidad->setNombre($nombre);
+                $modalidad->setEstado(true);
+                $modalidad->setCodigoMt($codigoMt);
                 $em = $this->getDoctrine()->getManager();
-                $modalidad = $em->getRepository('AppBundle:Modalidad')->findBy(
-                    array('codigoMt' => $codigoMt)
+                $em->persist($modalidad);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "modalidad creada con exito", 
                 );
-                    if ($modalidad == null) {
-                        $modalidad = new Modalidad();
-                        $modalidad->setNombre($nombre);
-                        $modalidad->setEstado(true);
-                        $modalidad->setCodigoMt($codigoMt);
-                        $em = $this->getDoctrine()->getManager();
-                        $em->persist($modalidad);
-                        $em->flush();
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "modalidad creada con exito", 
-                        );
-                    }else{
-                         $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'msj' => "Codigo de ministerio de transporte debe ser unico",
-                        ); 
-                    }
-                // }
-                
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Codigo de ministerio de transporte debe ser unico",
+                ); 
+            }             
         }else{
             $response = array(
                 'status' => 'error',

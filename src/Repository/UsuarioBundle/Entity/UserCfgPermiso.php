@@ -49,15 +49,8 @@ class UserCfgPermiso
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="UserCfgMenu", inversedBy="permisos") */
-    private $menu;
-
-    /** @ORM\ManyToOne(targetEntity="UserCfgRole", inversedBy="permisos") */
-    private $role;
-
     /** @ORM\ManyToOne(targetEntity="Usuario", inversedBy="permisos") */
     private $usuario;
-
 
 
     /**
@@ -164,54 +157,6 @@ class UserCfgPermiso
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set menu
-     *
-     * @param \Repository\UsuarioBundle\Entity\UserCfgMenu $menu
-     *
-     * @return UserCfgPermiso
-     */
-    public function setMenu(\Repository\UsuarioBundle\Entity\UserCfgMenu $menu = null)
-    {
-        $this->menu = $menu;
-
-        return $this;
-    }
-
-    /**
-     * Get menu
-     *
-     * @return \Repository\UsuarioBundle\Entity\UserCfgMenu
-     */
-    public function getMenu()
-    {
-        return $this->menu;
-    }
-
-    /**
-     * Set role
-     *
-     * @param \Repository\UsuarioBundle\Entity\UserCfgRole $role
-     *
-     * @return UserCfgPermiso
-     */
-    public function setRole(\Repository\UsuarioBundle\Entity\UserCfgRole $role = null)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return \Repository\UsuarioBundle\Entity\UserCfgRole
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 
     /**
