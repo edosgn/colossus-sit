@@ -71,6 +71,9 @@ class PnalProroga
      */
     public function getFechaInicio()
     {
+        if ($this->fechaInicio) {
+            return $this->fechaInicio->format('Y-m-d');
+        }
         return $this->fechaInicio;
     }
 
@@ -94,8 +97,13 @@ class PnalProroga
      * @return \DateTime
      */
     public function getFechaFin()
-    {
+    {   
+        if ($this->fechaFin) {
+            return $this->fechaFin->format('Y-m-d');
+        }
+
         return $this->fechaFin;
+        
     }
 
     /**

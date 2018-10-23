@@ -74,9 +74,14 @@ class PnalProrogaController extends Controller
 
             $fechaInicio = new \DateTime($params->fechaInicio);
             $fechaFin = new \DateTime($params->fechaFin);
+            $mPersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->mPersonalFuncionarioId);
+
+            $mPersonalFuncionario->setFechaFin($fechaFin);
+            $em->persist($mPersonalFuncionario);
 
             $pnalProroga->setFechaInicio($fechaInicio);
             $pnalProroga->setFechaFin($fechaFin);
+            $pnalProroga->setMPersonalFuncionario($mPersonalFuncionario);
             
             $em->persist($pnalProroga);
             $em->flush();
