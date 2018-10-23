@@ -623,4 +623,53 @@ class MpersonalFuncionarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/prorrogas", name="mpersonalfuncionario_record_prorrogas")
+     * @Method({"GET", "POST"})
+     */
+    public function recordProrrogaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+           
+           
+            $pnalProrogas = $em->getRepository('JHWEBPersonalBundle:PnalProroga')->findBy(
+                array(
+                    'mPersonalFuncionario' => $params->id
+                )
+            ); 
+                
+            if ($pnalProrogas) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados", 
+                    'data'=> $pnalProrogas,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",  
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
