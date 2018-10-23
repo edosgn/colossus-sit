@@ -128,6 +128,9 @@ class Ciudadano
      */
     public function getFechaExpedicionDocumento()
     {
+        if ($this->fechaExpedicionDocumento) {
+            return $this->fechaExpedicionDocumento->format('Y-m-d');
+        }
         return $this->fechaExpedicionDocumento;
     }
 

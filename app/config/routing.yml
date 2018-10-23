@@ -1,3 +1,7 @@
+jhweb_vehiculo_vhlo_cfg_modalidad_transporte:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgModalidadTransporteController.php"
+    type:     annotation
+
 jhweb_personal:
     resource: "@JHWEBPersonalBundle/Controller/"
     type:     annotation

@@ -76,7 +76,7 @@ class UserCfgMenuController extends Controller
                 $menu->setPath($params->path);
             }
 
-            if ($params->idParent) {
+            if (isset($params->idParent) && $params->idParent) {
                 $parentMenu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
                     $params->idParent
                 );
@@ -89,6 +89,9 @@ class UserCfgMenuController extends Controller
                         'code' => 200,
                         'message' => "Registro creado con éxito",
                     );
+
+                    $em->persist($menu);
+                    $em->flush();
                 }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
                     $menu->setTipo('TERCER_NIVEL');
                     $response = array(
@@ -96,6 +99,9 @@ class UserCfgMenuController extends Controller
                         'code' => 200,
                         'message' => "Registro creado con éxito",
                     );
+
+                    $em->persist($menu);
+                    $em->flush();
                 }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
                     $response = array(
                         'status' => 'error',
@@ -110,10 +116,10 @@ class UserCfgMenuController extends Controller
                     'code' => 200,
                     'message' => "Registro creado con éxito",
                 );
-            }
 
-            $em->persist($menu);
-            $em->flush();
+                $em->persist($menu);
+                $em->flush();
+            }
         }else{
             $response = array(
                 'status' => 'error',
@@ -315,10 +321,19 @@ class UserCfgMenuController extends Controller
         $response = null;
 
         foreach ($menus as $key => $menu) {
-            $response[$key] = array(
-                'value' => $menu->getId(),
-                'label' => $menu->getTitulo()
-            );
+            if ($menu->getParent()) {
+                $titulo = $menu->getParent()->getTitulo().' > '.$menu->getTitulo();
+            }else{
+                $titulo = $menu->getTitulo();
+            }
+
+            if ($menu->getTipo() != 'TERCER_NIVEL') {
+                $response[] = array(
+                    'value' => $menu->getId(),
+                    'label' => $titulo
+                );
+            }
+
         }
         
         return $helpers->json($response);
@@ -342,7 +357,7 @@ class UserCfgMenuController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $menus = $this->multilevelMenuAction($params->type);
+            $menus = $this->multilevelMenuAction($params->idRole);
 
             $response = null;
 
@@ -372,7 +387,7 @@ class UserCfgMenuController extends Controller
         return $helpers->json($response);
     }
 
-    public function multilevelMenuAction($type, $idParent = NULL){
+    public function multilevelMenuAction($idRole, $idParent = NULL){
         $em = $this->getDoctrine()->getManager();
 
         $menus = $em->getRepository('UsuarioBundle:UserCfgMenu')->findBy(
@@ -384,7 +399,36 @@ class UserCfgMenuController extends Controller
 
         $tree = null;
 
-        if ($type == 'create_menu') {
+        if ($idRole) {
+            $menusByRole = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
+                array(
+                    'role' => $idRole,
+                    'activo' => true
+                )
+            );
+
+            foreach ($menus as $key => $menu) {
+                $checked = false;
+
+                foreach ($menusByRole as $key => $menuByRole) {
+                    if ($menuByRole->getMenu()->getId() == $menu->getId()) {
+                        $checked = true;
+                    }
+                }
+
+                $tree[] = array(
+                    'id' => $menu->getId(),
+                    'title' => $menu->getTitulo(),
+                    'tipo' => $menu->getTipo(),
+                    'path' => $menu->getPath(),
+                    'abbreviation' => $menu->getAbreviatura(),
+                    'checked' => $checked,
+                    'childrens' => $this->multilevelMenuAction(
+                        $idRole, $menu->getId()
+                    )
+                );            
+            }
+        }else{
             foreach ($menus as $key => $menu) {
                 $tree[] = array(
                     'id' => $menu->getId(),
@@ -393,21 +437,15 @@ class UserCfgMenuController extends Controller
                     'path' => $menu->getPath(),
                     'abbreviation' => $menu->getAbreviatura(),
                     'childrens' => $this->multilevelMenuAction(
-                        'create_menu', $menu->getId()
-                    )
-                );            
-            }
-        }elseif ($type == 'create_treeview') {
-            foreach ($menus as $key => $menu) {
-                $tree[] = array(
-                    'id' => $menu->getId(),
-                    'name' => $menu->getTitulo(),
-                    'children' => $this->multilevelMenuAction(
-                        'create_treeview', $menu->getId()
+                        $idRole, $menu->getId()
                     )
                 );            
             }
         }
+
+
+        
+
 
         return $tree;
     }
@@ -450,7 +488,7 @@ class UserCfgMenuController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida para editar", 
+                'message' => "Autorizacion no valida", 
             );
         }
 
