@@ -232,15 +232,20 @@ class GrupoSanguineoController extends Controller
         $response = null;
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
         $gruposSanguineos = $em->getRepository('AppBundle:GrupoSanguineo')->findBy(
             array('estado' => 1)
         );
+
+        $response = null;
+
         foreach ($gruposSanguineos as $key => $grupoSanguineo) {
             $response[$key] = array(
                 'value' => $grupoSanguineo->getId(),
                 'label' => $grupoSanguineo->getSigla()."_".$grupoSanguineo->getNombre(),
             );
         }
+
         return $helpers->json($response);
     }
 }

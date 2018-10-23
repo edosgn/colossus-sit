@@ -246,7 +246,8 @@ class CfgClaseAccidenteController extends Controller
         foreach ($cfgClasesAccidente as $key => $cfgClaseAccidente) {
             $response[$key] = array(
                 'value' => $cfgClaseAccidente->getId(),
-                'label' => $cfgClaseAccidente->getNombre(),
+                'label' => $cfgClaseAccidente->getId().'_'.$cfgClaseAccidente->getNombre(),
+                //'label' => $cfgClaseAccidente->getNombre(),
             );
         }
         return $helpers->json($response);

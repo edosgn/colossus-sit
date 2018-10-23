@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfgmenus list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Url</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userCfgMenu in userCfgMenus %}
+            <tr>
+                <td><a href="{{ path('usercfgmenu_show', { 'id': userCfgMenu.id }) }}">{{ userCfgMenu.id }}</a></td>
+                <td>{{ userCfgMenu.titulo }}</td>
+                <td>{{ userCfgMenu.url }}</td>
+                <td>{% if userCfgMenu.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('usercfgmenu_show', { 'id': userCfgMenu.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('usercfgmenu_edit', { 'id': userCfgMenu.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfgmenu_new') }}">Create a new userCfgMenu</a>
+        </li>
+    </ul>
+{% endblock %}

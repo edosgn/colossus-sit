@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgmodalidadtransportes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Gestionable</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgModalidadTransporte in vhloCfgModalidadTransportes %}
+            <tr>
+                <td><a href="{{ path('vhlocfgmodalidadtransporte_show', { 'id': vhloCfgModalidadTransporte.id }) }}">{{ vhloCfgModalidadTransporte.id }}</a></td>
+                <td>{{ vhloCfgModalidadTransporte.nombre }}</td>
+                <td>{% if vhloCfgModalidadTransporte.gestionable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if vhloCfgModalidadTransporte.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgmodalidadtransporte_show', { 'id': vhloCfgModalidadTransporte.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfgmodalidadtransporte_edit', { 'id': vhloCfgModalidadTransporte.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgmodalidadtransporte_new') }}">Create a new vhloCfgModalidadTransporte</a>
+        </li>
+    </ul>
+{% endblock %}

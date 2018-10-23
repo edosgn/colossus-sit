@@ -1,23 +1,24 @@
 <?php
 
-namespace JHWEB\GestionDocumentalBundle\Controller;
+namespace Repository\UsuarioBundle\Controller;
 
-use JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia;
+use Repository\UsuarioBundle\Entity\UserCfgRole;
+use Repository\UsuarioBundle\Entity\UserCfgRoleMenu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Gdcfgmediocorrespondencium controller.
+ * Usercfgrole controller.
  *
- * @Route("gdcfgmediocorrespondencia")
+ * @Route("usercfgrole")
  */
-class GdCfgMedioCorrespondenciaController extends Controller
+class UserCfgRoleController extends Controller
 {
     /**
-     * Lists all gdCfgMedioCorrespondencium entities.
+     * Lists all userCfgRole entities.
      *
-     * @Route("/", name="gdcfgmediocorrespondencia_index")
+     * @Route("/", name="usercfgrole_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +27,20 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
-            array('activo'=>true)
+        $roles = $em->getRepository('UsuarioBundle:UserCfgRole')->findBy(
+            array(
+                'activo'=>true
+            )
         );
 
-        $response['data'] = array();
+        $response['data'] = null;
 
-        if ($mediosCorrespondencia) {
+        if (count($roles) > 0) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($mediosCorrespondencia)." Registros encontrados", 
-                'data'=> $mediosCorrespondencia,
+                'message' => count($roles)." Registros encontrados", 
+                'data'=> $roles,
             );
         }
 
@@ -45,9 +48,9 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a new gdCfgMedioCorrespondencium entity.
+     * Creates a new userCfgRole entity.
      *
-     * @Route("/new", name="gdcfgmediocorrespondencia_new")
+     * @Route("/new", name="usercfgrole_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -61,21 +64,31 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-
-            $medioCorrespondencia = new GdCfgMedioCorrespondencia();
-
-            $medioCorrespondencia->setNombre($params->nombre);
-            $medioCorrespondencia->setGestionable($params->gestionable);
-            $medioCorrespondencia->setActivo(true);
             
-            $em->persist($medioCorrespondencia);
+            $role = new UserCfgRole();
+
+            $role->setNombre(strtoupper($params->nombre));
+            $role->setActivo(true);
+            
+            $em->persist($role);
             $em->flush();
+
+            foreach ($params->menus as $key => $idMenu) {
+                $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                    $idMenu
+                );
+                
+                $this->createMenuAction($role, $menu);
+            }
+            
+            $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con éxito",
+                'message' => "Registro actualizado con exito", 
+                'data'=> $role,
             );
-        
         }else{
             $response = array(
                 'status' => 'error',
@@ -88,9 +101,9 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Finds and displays a gdCfgMedioCorrespondencium entity.
+     * Finds and displays a userCfgRole entity.
      *
-     * @Route("/show", name="gdcfgmediocorrespondencia_show")
+     * @Route("/show", name="usercfgrole_show")
      * @Method("GET")
      */
     public function showAction(Request $request)
@@ -105,14 +118,14 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $medioCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find($params->idMedioCorrespondencia);
+            $role = $em->getRepository('UsuarioBundle:UserCfgRole')->find($params->id);
 
-            if ($medioCorrespondencia) {
+            if ($role) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'data'=> $medioCorrespondencia,
+                    'data'=> $role,
                 );
             }else{
                 $response = array(
@@ -133,12 +146,13 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing gdCfgMedioCorrespondencium entity.
+     * Displays a form to edit an existing userCfgRole entity.
      *
-     * @Route("/edit", name="gdcfgmediocorrespondencia_edit")
+     * @Route("/edit", name="usercfgrole_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request){
+    public function editAction(Request $request)
+    {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -148,11 +162,19 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $medioCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia")->find($params->id);
 
-            if ($medioCorrespondencia) {
-                $medioCorrespondencia->setNombre($params->nombre);
-                $medioCorrespondencia->setGestionable($params->gestionable);
+            $role = $em->getRepository("UsuarioBundle:UserCfgRole")->find($params->id);
+
+            if ($role) {
+                $role->setNombre(strtoupper($params->nombre));
+
+                foreach ($params->menus as $key => $idMenu) {
+                    $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                        $idMenu
+                    );
+                    
+                    $this->createMenuAction($role, $menu);
+                }
                 
                 $em->flush();
 
@@ -160,7 +182,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $medioCorrespondencia,
+                    'data'=> $role,
                 );
             }else{
                 $response = array(
@@ -181,9 +203,9 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Deletes a gdCfgMedioCorrespondencium entity.
+     * Deletes a userCfgRole entity.
      *
-     * @Route("/delete", name="gdcfgmediocorrespondencia_delete")
+     * @Route("/delete", name="usercfgrole_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -197,15 +219,15 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
-            $tipoCorrespondencia->setActivo(false);
+            $role = $em->getRepository('UsuarioBundle:UserCfgRole')->find($params->id);
+            $role->setActivo(false);
 
             $em->flush();
 
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro eliminado con éxito", 
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito",
             );
         }else{
             $response = array(
@@ -219,16 +241,16 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a form to delete a gdCfgMedioCorrespondencium entity.
+     * Creates a form to delete a userCfgRole entity.
      *
-     * @param GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium The gdCfgMedioCorrespondencium entity
+     * @param UserCfgRole $userCfgRole The userCfgRole entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium)
+    private function createDeleteForm(UserCfgRole $userCfgRole)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('gdcfgmediocorrespondencia_delete', array('id' => $gdCfgMedioCorrespondencium->getId())))
+            ->setAction($this->generateUrl('usercfgrole_delete', array('id' => $userCfgRole->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -237,7 +259,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="gdcfgmediocorrespondencia_select")
+     * @Route("/select", name="usercfgrole_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -245,19 +267,54 @@ class GdCfgMedioCorrespondenciaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
+        $roles = $em->getRepository('UsuarioBundle:UserCfgRole')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($mediosCorrespondencia as $key => $medioCorrespondencia) {
+        foreach ($roles as $key => $role) {
             $response[$key] = array(
-                'value' => $medioCorrespondencia->getId(),
-                'label' => $medioCorrespondencia->getNombre()
+                'value' => $role->getId(),
+                'label' => $role->getNombre()
             );
         }
         
         return $helpers->json($response);
+    }
+
+    /* ======================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/create/menu", name="usercfgrole_create_menu")
+     * @Method({"GET", "POST"})
+     */
+    public function createMenuAction($role, $menu)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $roleMenu = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
+            array(
+                'menu' => $menu->getId(),
+                'role' => $role->getId()
+            )
+        );
+
+        if (!$roleMenu) {
+            $roleMenu = new UserCfgRoleMenu();
+
+            $roleMenu->setMenu($menu);
+            $roleMenu->setRole($role);
+            $roleMenu->setActivo(true);
+
+            $em->persist($roleMenu);
+            $em->flush();
+        }
+
+        if ($menu->getParent()) {
+            $this->createMenuAction($role, $menu->getParent());
+        }
     }
 }

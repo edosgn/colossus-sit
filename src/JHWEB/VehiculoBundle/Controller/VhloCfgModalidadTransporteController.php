@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\GestionDocumentalBundle\Controller;
+namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia;
+use JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Gdcfgmediocorrespondencium controller.
+ * Vhlocfgmodalidadtransporte controller.
  *
- * @Route("gdcfgmediocorrespondencia")
+ * @Route("vhlocfgmodalidadtransporte")
  */
-class GdCfgMedioCorrespondenciaController extends Controller
+class VhloCfgModalidadTransporteController extends Controller
 {
     /**
-     * Lists all gdCfgMedioCorrespondencium entities.
+     * Lists all vhloCfgModalidadTransporte entities.
      *
-     * @Route("/", name="gdcfgmediocorrespondencia_index")
+     * @Route("/", name="vhlocfgmodalidadtransporte_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
+        $modalidadesTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->findBy(
             array('activo'=>true)
         );
 
         $response['data'] = array();
 
-        if ($mediosCorrespondencia) {
+        if ($modalidadesTransporte) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($mediosCorrespondencia)." Registros encontrados", 
-                'data'=> $mediosCorrespondencia,
+                'message' => count($modalidadesTransporte)." Registros encontrados", 
+                'data'=> $modalidadesTransporte,
             );
         }
 
@@ -45,9 +45,9 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a new gdCfgMedioCorrespondencium entity.
+     * Creates a new vhloCfgModalidadTransporte entity.
      *
-     * @Route("/new", name="gdcfgmediocorrespondencia_new")
+     * @Route("/new", name="vhlocfgmodalidadtransporte_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -62,13 +62,13 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $medioCorrespondencia = new GdCfgMedioCorrespondencia();
+            $modalidadTransporte = new VhloCfgModalidadTransporte();
 
-            $medioCorrespondencia->setNombre($params->nombre);
-            $medioCorrespondencia->setGestionable($params->gestionable);
-            $medioCorrespondencia->setActivo(true);
+            $modalidadTransporte->setNombre(strtoupper($params->nombre));
+            $modalidadTransporte->setGestionable($params->gestionable);
+            $modalidadTransporte->setActivo(true);
             
-            $em->persist($medioCorrespondencia);
+            $em->persist($modalidadTransporte);
             $em->flush();
             $response = array(
                 'status' => 'success',
@@ -88,10 +88,10 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Finds and displays a gdCfgMedioCorrespondencium entity.
+     * Finds and displays a vhloCfgModalidadTransporte entity.
      *
-     * @Route("/show", name="gdcfgmediocorrespondencia_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlocfgmodalidadtransporte_show")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request)
     {
@@ -105,14 +105,14 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $medioCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find($params->idMedioCorrespondencia);
+            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->id);
 
-            if ($medioCorrespondencia) {
+            if ($modalidadTransporte) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'data'=> $medioCorrespondencia,
+                    'data'=> $modalidadTransporte,
                 );
             }else{
                 $response = array(
@@ -133,12 +133,13 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing gdCfgMedioCorrespondencium entity.
+     * Displays a form to edit an existing vhloCfgModalidadTransporte entity.
      *
-     * @Route("/edit", name="gdcfgmediocorrespondencia_edit")
+     * @Route("/edit", name="vhlocfgmodalidadtransporte_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request){
+    public function editAction(Request $request)
+    {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -148,11 +149,11 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $medioCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia")->find($params->id);
+            $modalidadTransporte = $em->getRepository("JHWEBVehiculoBundle:VhloCfgModalidadTransporte")->find($params->id);
 
-            if ($medioCorrespondencia) {
-                $medioCorrespondencia->setNombre($params->nombre);
-                $medioCorrespondencia->setGestionable($params->gestionable);
+            if ($modalidadTransporte) {
+                $modalidadTransporte->setNombre(strtoupper($params->nombre));
+                $modalidadTransporte->setGestionable($params->gestionable);
                 
                 $em->flush();
 
@@ -160,7 +161,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $medioCorrespondencia,
+                    'data'=> $modalidadTransporte,
                 );
             }else{
                 $response = array(
@@ -181,9 +182,9 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Deletes a gdCfgMedioCorrespondencium entity.
+     * Deletes a vhloCfgModalidadTransporte entity.
      *
-     * @Route("/delete", name="gdcfgmediocorrespondencia_delete")
+     * @Route("/delete", name="vhlocfgmodalidadtransporte_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -197,8 +198,8 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
-            $tipoCorrespondencia->setActivo(false);
+            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->id);
+            $modalidadTransporte->setActivo(false);
 
             $em->flush();
 
@@ -219,16 +220,16 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a form to delete a gdCfgMedioCorrespondencium entity.
+     * Creates a form to delete a vhloCfgModalidadTransporte entity.
      *
-     * @param GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium The gdCfgMedioCorrespondencium entity
+     * @param VhloCfgModalidadTransporte $vhloCfgModalidadTransporte The vhloCfgModalidadTransporte entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium)
+    private function createDeleteForm(VhloCfgModalidadTransporte $vhloCfgModalidadTransporte)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('gdcfgmediocorrespondencia_delete', array('id' => $gdCfgMedioCorrespondencium->getId())))
+            ->setAction($this->generateUrl('vhlocfgmodalidadtransporte_delete', array('id' => $vhloCfgModalidadTransporte->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -237,7 +238,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="gdcfgmediocorrespondencia_select")
+     * @Route("/select", name="vhlocfgmodalidadtransporte_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -245,16 +246,16 @@ class GdCfgMedioCorrespondenciaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
+        $modalidadesTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($mediosCorrespondencia as $key => $medioCorrespondencia) {
+        foreach ($modalidadesTransporte as $key => $modalidadTransporte) {
             $response[$key] = array(
-                'value' => $medioCorrespondencia->getId(),
-                'label' => $medioCorrespondencia->getNombre()
+                'value' => $modalidadTransporte->getId(),
+                'label' => $modalidadTransporte->getNombre()
             );
         }
         

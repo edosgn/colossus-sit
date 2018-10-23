@@ -2,50 +2,50 @@
 
 namespace JHWEB\SeguridadVialBundle\Controller;
 
-use JHWEB\SeguridadVialBundle\Entity\SvCfgHospital;
+use JHWEB\SeguridadVialBundle\Entity\SvCfgTipoControlesTransito;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Svcfghospital controller.
+ * Svcfgtipocontrolestransito controller.
  *
- * @Route("svcfghospital")
+ * @Route("svcfgtipocontrolestransito")
  */
-class SvCfgHospitalController extends Controller
+class SvCfgTipoControlesTransitoController extends Controller
 {
     /**
-     * Lists all svCfgHospital entities.
+     * Lists all svCfgTipoControlesTransito entities.
      *
-     * @Route("/", name="svcfghospital_index")
+     * @Route("/", name="svcfgtipocontrolestransito_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $hospitales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->findBy(
+        $tiposControlTransito = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControlesTransito')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($hospitales) {
+        if ($tiposControlTransito) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($hospitales) . " registros encontrados",
-                'data' => $hospitales,
+                'message' => count($tiposControlTransito) . " registros encontrados",
+                'data' => $tiposControlTransito,
             );
         }
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new svCfgHospital entity.
+     * Creates a new svCfgTipoControlesTransito entity.
      *
-     * @Route("/new", name="svcfghospital_new")
+     * @Route("/new", name="svcfgtipocontrolestransito_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,24 +57,14 @@ class SvCfgHospitalController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            
-            $hospital = new SvCfgHospital();
+
+            $tipoControlTransito = new SvCfgTipoControlesTransito();
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($params->sedeOperativa) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativa);
-                $hospital->setSedeOperativa($sedeOperativa);
-            }
-
-            if ($params->municipio) {
-                $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
-                $hospital->setMunicipio($municipio);
-            }
-
-            $hospital->setNombre($params->nombre);
-            $hospital->setActivo(true);
-            $em->persist($hospital);
+            $tipoControlTransito->setNombre($params->nombre);
+            $tipoControlTransito->setActivo(true);
+            $em->persist($tipoControlTransito);
             $em->flush();
 
             $response = array(
@@ -92,26 +82,25 @@ class SvCfgHospitalController extends Controller
         return $helpers->json($response);
     }
 
-
     /**
-     * Finds and displays a svCfgHospital entity.
+     * Finds and displays a svCfgTipoControlesTransito entity.
      *
-     * @Route("/{id}/show", name="svcfghospital_show")
+     * @Route("/{id}/show", name="svcfgtipocontrolestransito_show")
      * @Method("GET")
      */
-    public function showAction(SvCfgHospital $svCfgHospital)
+    public function showAction(SvCfgTipoControlesTransito $svCfgTipoControlesTransito)
     {
-        $deleteForm = $this->createDeleteForm($svCfgHospital);
-        return $this->render('svCfgHospital/show.html.twig', array(
-            'svCfgHospital' => $svCfgHospital,
+        $deleteForm = $this->createDeleteForm($svCfgTipoControlesTransito);
+        return $this->render('svCfgTipoControlesTransito/show.html.twig', array(
+            'svCfgTipoControlesTransito' => $svCfgTipoControlesTransito,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing svCfgHospital entity.
+     * Displays a form to edit an existing svCfgTipoControlesTransito entity.
      *
-     * @Route("/edit", name="svcfghospital_edit")
+     * @Route("/edit", name="svcfgtipocontrolestransito_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -125,22 +114,18 @@ class SvCfgHospitalController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $hospital = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find($params->id);
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativa);
-            
-            if ($hospital != null) {
-                $hospital->setNombre($params->nombre);
-                $hospital->setSedeOperativa($sedeOperativa);
-                $hospital->setMunicipio($municipio);
+            $tipoControlTransito = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControlesTransito')->find($params->id);
 
-                $em->persist($hospital);
+            if ($tipoControlTransito != null) {
+                $tipoControlTransito->setNombre($params->nombre);
+
+                $em->persist($tipoControlTransito);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con éxito",
-                    'data' => $hospital,
+                    'data' => $tipoControlTransito,
                 );
             } else {
                 $response = array(
@@ -160,9 +145,9 @@ class SvCfgHospitalController extends Controller
     }
 
     /**
-     * Deletes a svCfgHospital entity.
+     * Deletes a svCfgTipoControlesTransito entity.
      *
-     * @Route("/delete", name="svcfghospital_delete")
+     * @Route("/delete", name="svcfgtipocontrolestransito_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
@@ -176,11 +161,11 @@ class SvCfgHospitalController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $hospital = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find($params->id);
+            $tipoControlTransito = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControlesTransito')->find($params->id);
 
-            $hospital->setActivo(false);
+            $tipoControlTransito->setActivo(false);
 
-            $em->persist($hospital);
+            $em->persist($tipoControlTransito);
             $em->flush();
 
             $response = array(
@@ -200,39 +185,40 @@ class SvCfgHospitalController extends Controller
     }
 
     /**
-     * Creates a form to delete a SvCfgHospital entity.
+     * Creates a form to delete a svCfgTipoControlesTransito entity.
      *
-     * @param SvCfgHospital $svCfgHospital The SvCfgHospital entity
+     * @param SvCfgTipoControlesTransito $svCfgTipoControlesTransito The svCfgTipoControlesTransito entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(SvCfgHospital $svCfgHospital)
+    private function createDeleteForm(SvCfgTipoControlesTransito $svCfgTipoControlesTransito)
     {
         return $this->createFormBuilder()
-        ->setAction($this->generateUrl('svcfghospital_delete', array('id' => $svCfgHospital->getId())))
-        ->setMethod('DELETE')
-        ->getForm();
+            ->setAction($this->generateUrl('svcfgtipocontrolestransito_delete', array('id' => $svCfgTipoControlesTransito->getId())))
+            ->setMethod('DELETE')
+            ->getForm();
     }
 
     /**
      * datos para select 2
      *
-     * @Route("/select", name="hospital_select")
+     * @Route("/select", name="svcfgtipocontrolestransito_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $hospitales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->findBy(
+        $tiposControlTransito = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControlesTransito')->findBy(
             array('activo' => 1)
         );
-        foreach ($hospitales as $key => $hospital) {
+        foreach ($tiposControlTransito as $key => $tipoControlTransito) {
             $response[$key] = array(
-                'value' => $hospital->getId(),
-                'label' => $hospital->getId().'_'.$hospital->getNombre(),
+                'value' => $tipoControlTransito->getId(),
+                'label' => $tipoControlTransito->getNombre(),
             );
         }
         return $helpers->json($response);
     }
+
 }

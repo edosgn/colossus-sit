@@ -57,11 +57,11 @@ class UsuarioController extends Controller
      */
     public function newAction(Request $request)
     {
-         $data = array(
-                        "status" => "error",
-                        "code" => 400,
-                        "msg" => "Usuario no creado!"
-                    );
+        $data = array(
+            "status" => "error",
+            "code" => 400,
+            "msg" => "Usuario no creado!"
+        );
 
         $helpers = $this->get('app.helpers');
         $json = $request->get("json",null);
@@ -98,8 +98,8 @@ class UsuarioController extends Controller
             $usuario->setUpdatedAt();
 
             //Cifrar la password
-                $pwd = hash('sha256', $password);
-                $usuario->setPassword($pwd);
+            $pwd = hash('sha256', $password);
+            $usuario->setPassword($pwd);
 
             $em = $this->getDoctrine()->getManager();
                 $isset_user = $em->getRepository("UsuarioBundle:Usuario")->findBy(
