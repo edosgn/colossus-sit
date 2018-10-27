@@ -46,96 +46,104 @@ class MpersonalFuncionarioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $funcionario = new MpersonalFuncionario();
+            /*if (count($params)==0) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "los campos no pueden estar vacios", 
+                );
+            }else{*/
+                $funcionario = new MpersonalFuncionario();
 
-            $em = $this->getDoctrine()->getManager();
+                $em = $this->getDoctrine()->getManager();
 
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                $params->identificacion
-            );
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
-                $usuario->getId()
-            );
-            $funcionario->setCiudadano($ciudadano);
-
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                $params->sedeOperativaId
-            );
-            $funcionario->setSedeOperativa($sedeOperativa);
-
-            $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
-                $params->tipoContratoId
-            );
-            $funcionario->setTipoContrato($tipoContrato);
-
-            $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
-                $params->cargoId
-            );
-            $funcionario->setCargo($cargo);
-
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                $params->identificacion
-            );
-
-            if ($usuario) {
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                    $params->identificacion
+                );
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
                     $usuario->getId()
                 );
-            }
-            $funcionario->setCiudadano($ciudadano); 
+                $funcionario->setCiudadano($ciudadano);
 
-            if ($params->inhabilidad == 'true') {
-                $funcionario->setActivo(false);
-                $funcionario->setInhabilidad(true);
-            }else{
-                $funcionario->setActivo(true);
-                $funcionario->setInhabilidad(false);
-            }
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->sedeOperativaId
+                );
+                $funcionario->setSedeOperativa($sedeOperativa);
 
-            if ($params->actaPosesion) {
-                $funcionario->setActaPosesion($params->actaPosesion);
-            }
+                $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
+                    $params->tipoContratoId
+                );
+                $funcionario->setTipoContrato($tipoContrato);
 
-            if ($params->resolucion) {
-                $funcionario->setResolucion($params->resolucion);
-            }
+                $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
+                    $params->cargoId
+                );
+                $funcionario->setCargo($cargo);
 
-            if ($params->tipoNombramiento) {
-                $funcionario->setTipoNombramiento($params->tipoNombramiento);
-            }
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                    $params->identificacion
+                );
 
-            if ($params->fechaInicio) {
-                $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
-            }
+                if ($usuario) {
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
+                        $usuario->getId()
+                    );
+                }
+                $funcionario->setCiudadano($ciudadano); 
 
-            if ($params->fechaFin) {
-                $funcionario->setFechaFin(new \Datetime($params->fechaFin));
-            }
+                if ($params->inhabilidad == 'true') {
+                    $funcionario->setActivo(false);
+                    $funcionario->setInhabilidad(true);
+                }else{
+                    $funcionario->setActivo(true);
+                    $funcionario->setInhabilidad(false);
+                }
 
-            if ($params->numeroContrato) {
-                $funcionario->setNumeroContrato($params->numeroContrato);
-            }
-            if ($params->objetoContrato) {
-                $funcionario->setObjetoContrato($params->objetoContrato);
-            }
+                if ($params->actaPosesion) {
+                    $funcionario->setActaPosesion($params->actaPosesion);
+                }
 
-            if ($params->numeroPlaca) {
-                $funcionario->setNumeroPlaca($params->numeroPlaca);
-            }
+                if ($params->resolucion) {
+                    $funcionario->setResolucion($params->resolucion);
+                }
 
-            if ($params->novedad) {
-                $funcionario->setNovedad($params->novedad);
-            }
+                if ($params->tipoNombramiento) {
+                    $funcionario->setTipoNombramiento($params->tipoNombramiento);
+                }
 
-            $em->persist($funcionario);
-            $em->flush();
+                if ($params->fechaInicio) {
+                    $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
+                }
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito", 
-                'data' => $funcionario
-            );
+                if ($params->fechaFin) {
+                    $funcionario->setFechaFin(new \Datetime($params->fechaFin));
+                }
+
+                if ($params->numeroContrato) {
+                    $funcionario->setNumeroContrato($params->numeroContrato);
+                }
+                if ($params->objetoContrato) {
+                    $funcionario->setObjetoContrato($params->objetoContrato);
+                }
+
+                if ($params->numeroPlaca) {
+                    $funcionario->setNumeroPlaca($params->numeroPlaca);
+                }
+
+                if ($params->novedad) {
+                    $funcionario->setNovedad($params->novedad);
+                }
+
+                $em->persist($funcionario);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito", 
+                    'data' => $funcionario
+                );
+            //}
         }else{
             $response = array(
                 'status' => 'error',
@@ -521,19 +529,19 @@ class MpersonalFuncionarioController extends Controller
             
             if ($usuario) {
                 if ($usuario->getCiudadano()) {
-                    $funcionario = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                    $representante = $em->getRepository('AppBundle:Empresa')->findOneBy(
                         array(
                             'ciudadano' => $usuario->getCiudadano()->getId(),
                             'estado' => true,
                             'cfgEmpresaServicio' => 1
                         )
                     );
-                    if ($funcionario) {
+                    if ($representante) {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'message' => "Registro encontrado", 
-                            'data'=> $funcionario,
+                            'data'=> $representante,
                         );
                     }else{
                         $response = array(

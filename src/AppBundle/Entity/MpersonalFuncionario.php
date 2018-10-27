@@ -99,6 +99,13 @@ class MpersonalFuncionario
     private $activo;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="modificatorio", type="boolean")
+     */
+    private $modificatorio;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="funcionarios")
      **/
     protected $sedeOperativa;
@@ -118,7 +125,6 @@ class MpersonalFuncionario
      **/
     protected $ciudadano;
 
-    
 
     /**
      * Get id
@@ -247,10 +253,7 @@ class MpersonalFuncionario
      */
     public function getFechaInicio()
     {
-        if ($this->fechaInicio) {
-            return $this->fechaInicio->format('Y-m-d');
-        }
-        return $this->fechaInicio;
+        return $this->fechaInicio->format('Y-m-d');
     }
 
     /**
@@ -274,10 +277,7 @@ class MpersonalFuncionario
      */
     public function getFechaFin()
     {
-        if ($this->fechaFin) {
-            return $this->fechaFin->format('Y-m-d');
-        }
-        return $this->fechaFin;
+        return $this->fechaFin->format('Y-m-d');
     }
 
     /**
@@ -398,6 +398,30 @@ class MpersonalFuncionario
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set modificatorio
+     *
+     * @param boolean $modificatorio
+     *
+     * @return MpersonalFuncionario
+     */
+    public function setModificatorio($modificatorio)
+    {
+        $this->modificatorio = $modificatorio;
+
+        return $this;
+    }
+
+    /**
+     * Get modificatorio
+     *
+     * @return boolean
+     */
+    public function getModificatorio()
+    {
+        return $this->modificatorio;
     }
 
     /**
