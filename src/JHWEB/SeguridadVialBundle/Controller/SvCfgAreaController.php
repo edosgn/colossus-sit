@@ -3,9 +3,9 @@
 namespace JHWEB\SeguridadVialBundle\Controller;
 
 use JHWEB\SeguridadVialBundle\Entity\SvCfgArea;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -57,7 +57,7 @@ class SvCfgAreaController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            
+
             $area = new SvCfgArea();
 
             $em = $this->getDoctrine()->getManager();
@@ -91,10 +91,10 @@ class SvCfgAreaController extends Controller
     public function showAction(SvCfgArea $svCfgArea)
     {
         $deleteForm = $this->createDeleteForm($svCfgArea);
-            return $this->render('svcfgarea/show.html.twig', array(
-                'svCfgArea' => $svCfgArea,
-                'delete_form' => $deleteForm->createView(),
-            ));
+        return $this->render('svcfgarea/show.html.twig', array(
+            'svCfgArea' => $svCfgArea,
+            'delete_form' => $deleteForm->createView(),
+        ));
     }
 
     /**
@@ -118,7 +118,7 @@ class SvCfgAreaController extends Controller
 
             if ($params->tipoArea) {
                 $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find($params->tipoArea);
-                $area->setTipoArea($tipoArea);    
+                $area->setTipoArea($tipoArea);
             }
             if ($area != null) {
                 $area->setNombre($params->nombre);
@@ -206,22 +206,23 @@ class SvCfgAreaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="area_select")
+     * @Route("/selectarea", name="area_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $areas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgArea')->findBy(
-        array('activo' => 1)
-    );
-      foreach ($areas as $key => $area) {
-        $response[$key] = array(
-            'value' => $area->getId(),
-            'label' => $area->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $areas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgArea')->findBy(
+            array('activo' => 1)
+        );
+        $response = null;
+        foreach ($areas as $key => $area) {
+            $response[$key] = array(
+                'value' => $area->getId(),
+                'label' => $area->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+        return $helpers->json($response);
     }
 }

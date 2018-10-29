@@ -214,6 +214,8 @@ class SvCfgCondicionViaController extends Controller
     $condiciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCondicionVia')->findBy(
         array('activo' => 1)
     );
+        $response = null;
+
       foreach ($condiciones as $key => $condicionVia) {
         $response[$key] = array(
             'value' => $condicionVia->getId(),

@@ -214,6 +214,8 @@ class SvCfgEstadoConductorController extends Controller
     $estadosConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoConductor')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($estadosConductor as $key => $estadoConductor) {
         $response[$key] = array(
             'value' => $estadoConductor->getId(),

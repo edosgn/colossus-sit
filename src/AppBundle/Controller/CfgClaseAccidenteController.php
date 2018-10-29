@@ -109,14 +109,14 @@ class CfgClaseAccidenteController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "clase accidente encontrado",
+                'message' => "clase accidente encontrado",
                 'data' => $cfgClaseAccidente,
             );
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -245,8 +245,8 @@ class CfgClaseAccidenteController extends Controller
 
         foreach ($cfgClasesAccidente as $key => $cfgClaseAccidente) {
             $response[$key] = array(
-                'value' => $cfgClaseAccidente->getId(),
-                'label' => $cfgClaseAccidente->getId().'_'.$cfgClaseAccidente->getNombre(),
+                'value' => $cfgClaseAccidente->getNombre(),
+                'label' => $cfgClaseAccidente->getNombre(),
                 //'label' => $cfgClaseAccidente->getNombre(),
             );
         }

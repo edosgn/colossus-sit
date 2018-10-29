@@ -214,6 +214,8 @@ class SvCfgFallaController extends Controller
         $fallas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFalla')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($fallas as $key => $falla) {
             $response[$key] = array(
                 'value' => $falla->getId(),

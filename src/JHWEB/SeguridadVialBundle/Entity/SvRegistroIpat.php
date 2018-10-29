@@ -38,35 +38,35 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="lugar", type="string")
+     * @ORM\Column(name="lugar", type="string", nullable = true)
      */
     private $lugar;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_accidente", type="date")
+     * @ORM\Column(name="fecha_accidente", type="date", nullable = true)
      */
     private $fechaAccidente;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora_accidente", type="date")
+     * @ORM\Column(name="hora_accidente", type="time", nullable = true)
      */
     private $horaAccidente;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_levantamiento", type="date")
+     * @ORM\Column(name="fecha_levantamiento", type="date", nullable = true)
      */
     private $fechaLevantamiento;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora_levantamiento", type="date")
+     * @ORM\Column(name="hora_levantamiento", type="time", nullable = true)
      */
     private $horaLevantamiento;
 
@@ -81,7 +81,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="otro_clase_accidente", type="string")
+     * @ORM\Column(name="otro_clase_accidente", type="string", nullable = true)
      */
     private $otroClaseAccidente;
 
@@ -102,7 +102,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="otro_objeto_fijo", type="string")
+     * @ORM\Column(name="otro_objeto_fijo", type="string", nullable = true)
      */
     private $otroObjetoFijo;
 
@@ -135,9 +135,9 @@ class SvRegistroIpat
     private $disenio;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoTiempo", inversedBy="estadostiempo")
+     * @ORM\Column(name="estado_tiempo", type="array", nullable=true)
      */
     private $estadoTiempo;
 
@@ -218,364 +218,424 @@ class SvRegistroIpat
      */
     private $visualDisminuida;
 
-
-
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otra_visualDisminuida", type="string", nullable = true)
+     */
+    private $otraVisualDisminuida;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="placa", type="string")
+     * @ORM\Column(name="semaforo", type="string", nullable = true)
+     */
+    private $semaforo;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia", inversedBy="estadossemaforo")
+     */
+    private $estadoSemaforo;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="senial_vertical", type="array", nullable=true)
+     */
+    private $senialVertical;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="senial_horizontal", type="array", nullable=true)
+     */
+    private $senialHorizontal;
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="reductor_velocidad", type="array", nullable=true)
+     */
+    private $reductorVelocidad;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otro_reductor_velocidad", type="string", nullable=true)
+     */
+    private $otroReductorVelocidad;
+
+    /**
+     * @var array
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia", inversedBy="delineadores_piso")
+     */
+    private $delineadorPiso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otro_delineador_piso", type="string", nullable=true)
+     */
+    private $otroDelineadorPiso;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="placa", type="string", nullable = true)
      */
     private $placa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="placa_remolque", type="string")
+     * @ORM\Column(name="placa_remolque", type="string", nullable = true)
      */
     private $placaRemolque;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nacionalidadVehiculo", type="string")
+     * @ORM\Column(name="nacionalidadVehiculo", type="string", nullable = true)
      */
     private $nacionalidadVehiculo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="marca", type="string")
+     * @ORM\Column(name="marca", type="string", nullable = true)
      */
     private $marca;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="linea", type="string")
+     * @ORM\Column(name="linea", type="string", nullable = true)
      */
     private $linea;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="color", type="string")
+     * @ORM\Column(name="color", type="string", nullable = true)
      */
     private $color;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="modelo", type="string")
+     * @ORM\Column(name="modelo", type="string", nullable = true)
      */
     private $modelo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="carroceria", type="string")
+     * @ORM\Column(name="carroceria", type="string", nullable = true)
      */
     private $carroceria;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ton", type="string")
+     * @ORM\Column(name="ton", type="string", nullable = true)
      */
     private $ton;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="pasajeros", type="string")
+     * @ORM\Column(name="pasajeros", type="string", nullable = true)
      */
     private $pasajeros;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="empresa", type="string")
+     * @ORM\Column(name="empresa", type="string", nullable = true)
      */
     private $empresa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nitEmpresa", type="string")
+     * @ORM\Column(name="nitEmpresa", type="string", nullable = true)
      */
     private $nitEmpresa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="matriculado_en", type="string")
+     * @ORM\Column(name="matriculado_en", type="string", nullable = true)
      */
     private $matriculadoEn;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="inmovilizado_en", type="string")
+     * @ORM\Column(name="inmovilizado_en", type="string", nullable = true)
      */
     private $inmovilizadoEn;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="a_disposicion_de", type="string")
+     * @ORM\Column(name="a_disposicion_de", type="string", nullable = true)
      */
     private $aDisposicionDe;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tarjeta_registro", type="string")
+     * @ORM\Column(name="tarjeta_registro", type="string", nullable = true)
      */
     private $tarjetaRegistro;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="revision_tecnomecanica", type="string")
+     * @ORM\Column(name="revision_tecnomecanica", type="string", nullable = true)
      */
     private $revisionTecnoMecanica;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_tecnomecanica", type="string")
+     * @ORM\Column(name="numero_tecnomecanica", type="string", nullable = true)
      */
     private $numeroTecnoMecanica;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cantidad_acompaniantes", type="string")
+     * @ORM\Column(name="cantidad_acompaniantes", type="string", nullable = true)
      */
     private $cantidadAcompaniantes;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="portaSoat", type="string")
+     * @ORM\Column(name="portaSoat", type="string", nullable = true)
      */
     private $portaSoat;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="soat", type="integer")
+     * @ORM\Column(name="soat", type="integer", nullable = true)
      */
     private $soat;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroPoliza", type="integer")
+     * @ORM\Column(name="numeroPoliza", type="integer", nullable = true)
      */
     private $numeroPoliza;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aseguradora_soat", type="string")
+     * @ORM\Column(name="aseguradora_soat", type="string", nullable = true)
      */
     private $aseguradoraSoat;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento_soat", type="date")
+     * @ORM\Column(name="fecha_vencimiento_soat", type="date", nullable = true)
      */
     private $fechaVencimientoSoat;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="porta_seguro_responsabilidad_civil", type="boolean")
+     * @ORM\Column(name="porta_seguro_responsabilidad_civil", type="boolean", nullable = true)
      */
     private $portaSeguroResponsabilidadCivil;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_seguro_responsabilidad_civil", type="integer")
+     * @ORM\Column(name="numero_seguro_responsabilidad_civil", type="integer", nullable = true)
      */
     private $numeroSeguroResponsabilidadCivil;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aseguradora_seguro_responsabilidad_civil", type="string")
+     * @ORM\Column(name="aseguradora_seguro_responsabilidad_civil", type="string", nullable = true)
      */
     private $aseguradoraSeguroResponsabilidadCivil;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento_seguro_responsabilidad_civil", type="date")
+     * @ORM\Column(name="fecha_vencimiento_seguro_responsabilidad_civil", type="date", nullable = true)
      */
     private $fechaVencimientoSeguroResponsabilidadCivil;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="porta_seguro_extracontractual", type="boolean")
+     * @ORM\Column(name="porta_seguro_extracontractual", type="boolean", nullable = true)
      */
     private $portaSeguroExtracontractual;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_seguro_extracontractual", type="integer")
+     * @ORM\Column(name="numero_seguro_extracontractual", type="integer", nullable = true)
      */
     private $numeroSeguroExtracontractual;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="aseguradora_seguro_extracontractual", type="string")
+     * @ORM\Column(name="aseguradora_seguro_extracontractual", type="string", nullable = true)
      */
     private $aseguradoraSeguroExtracontractual;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento_seguro_extracontractual", type="date")
+     * @ORM\Column(name="fecha_vencimiento_seguro_extracontractual", type="date", nullable = true)
      */
     private $fechaVencimientoSeguroExtracontractual;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="mismo_conductor", type="boolean")
+     * @ORM\Column(name="mismo_conductor", type="boolean", nullable = true)
      */
     private $mismoConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombres_propietario", type="string")
+     * @ORM\Column(name="nombres_propietario", type="string", nullable = true)
      */
     private $nombresPropietario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos_propietario", type="string")
+     * @ORM\Column(name="apellidos_propietario", type="string", nullable = true)
      */
     private $apellidosPropietario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo_identificacion_propietario", type="string")
+     * @ORM\Column(name="tipo_identificacion_propietario", type="string", nullable = true)
      */
     private $tipoIdentificacionPropietario;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="identificacion_propietario", type="integer")
+     * @ORM\Column(name="identificacion_propietario", type="integer", nullable = true)
      */
     private $identificacionPropietario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="clase", type="string")
+     * @ORM\Column(name="clase", type="string", nullable = true)
      */
     private $clase;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="servicio", type="string")
+     * @ORM\Column(name="servicio", type="string", nullable = true)
      */
     private $servicio;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="modalidad_transporte", type="string")
+     * @ORM\Column(name="modalidad_transporte", type="string", nullable = true)
      */
     private $modalidadTransporte;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="radio_accion", type="string")
+     * @ORM\Column(name="radio_accion", type="string", nullable = true)
      */
     private $radioAccion;
 
      /**
      * @var string
      *
-     * @ORM\Column(name="descripcion_danios", type="string")
+     * @ORM\Column(name="descripcion_danios", type="string", nullable = true)
      */
     private $descripcionDanios;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFalla", inversedBy="fallas")
+     * @ORM\Column(name="falla", type="array", nullable=true)
      */
     private $falla;
+    
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgLugarImpacto", inversedBy="lugaresImpacto")
+     * @ORM\Column(name="lugar_impacto", type="array", nullable=true)
      */
     private $lugarImpacto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombres_conductor", type="string")
+     * @ORM\Column(name="nombres_conductor", type="string", nullable = true)
      */
     private $nombresConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos_conductor", type="string")
+     * @ORM\Column(name="apellidos_conductor", type="string", nullable = true)
      */
     private $apellidosConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo_identificacion_conductor", type="string")
+     * @ORM\Column(name="tipo_identificacion_conductor", type="string", nullable = true)
      */
     private $tipoIdentificacionConductor;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="identificacion_conductor", type="integer")
+     * @ORM\Column(name="identificacion_conductor", type="integer", nullable = true)
      */
     private $identificacionConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nacionalidad_conductor", type="string")
+     * @ORM\Column(name="nacionalidad_conductor", type="string", nullable = true)
      */
     private $nacionalidadConductor;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_nacimiento_conductor", type="date")
+     * @ORM\Column(name="fecha_nacimiento_conductor", type="date", nullable = true)
      */
     private $fechaNacimientoConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sexo_conductor", type="string")
+     * @ORM\Column(name="sexo_conductor", type="string", nullable = true)
      */
     private $sexoConductor;
 
@@ -589,35 +649,35 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion_residencia_conductor", type="string")
+     * @ORM\Column(name="direccion_residencia_conductor", type="string", nullable = true)
      */
     private $direccionResidenciaConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudad_residencia_conductor", type="string")
+     * @ORM\Column(name="ciudad_residencia_conductor", type="string", nullable = true)
      */
     private $ciudadResidenciaConductor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono_conductor", type="string")
+     * @ORM\Column(name="telefono_conductor", type="string", nullable = true)
      */
     private $telefonoConductor;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="practico_examen_conductor", type="boolean")
+     * @ORM\Column(name="practico_examen_conductor", type="boolean", nullable = true)
      */
     private $practicoExamenConductor;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="autorizo_onductor", type="boolean")
+     * @ORM\Column(name="autorizo_onductor", type="boolean", nullable = true)
      */
     private $autorizoConductor;
     
@@ -638,70 +698,77 @@ class SvRegistroIpat
     /**
      * @var bool
      *
-     * @ORM\Column(name="sustancias_psicoactivas_conductor", type="boolean")
+     * @ORM\Column(name="sustancias_psicoactivas_conductor", type="boolean", nullable = true)
      */
     private $sustanciasPsicoactivasConductor;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="porta_licencia", type="boolean")
+     * @ORM\Column(name="porta_licencia", type="boolean", nullable = true)
      */
     private $portaLicencia;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_licencia_conduccion", type="integer")
+     * @ORM\Column(name="numero_licencia_conduccion", type="integer", nullable = true)
      */
     private $numeroLicenciaConduccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="categoria_licencia_conduccion", type="string")
+     * @ORM\Column(name="categoria_licencia_conduccion", type="string", nullable = true)
      */
     private $categoriaLicenciaConduccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="restriccion_conductor", type="string")
+     * @ORM\Column(name="restriccion_conductor", type="string", nullable = true)
      */
     private $restriccionConductor;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_expedicion_licencia_conduccion", type="date")
+     * @ORM\Column(name="fecha_expedicion_licencia_conduccion", type="date", nullable = true)
      */
     private $fechaExpedicionLicenciaConduccion;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento_licencia_conduccion", type="date")
+     * @ORM\Column(name="fecha_vencimiento_licencia_conduccion", type="date", nullable = true)
      */
     private $fechaVencimientoLicenciaConduccion;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="organismo_transito", type="string", nullable = true)
+     */
+    private $organismoTransito;
+
+    /**
      * @var bool
      *
-     * @ORM\Column(name="chaleco_conductor", type="boolean")
+     * @ORM\Column(name="chaleco_conductor", type="boolean", nullable = true)
      */
     private $chalecoConductor;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="casco_conductor", type="boolean")
+     * @ORM\Column(name="casco_conductor", type="boolean", nullable = true)
      */
     private $cascoConductor;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="cinturon_conductor", type="boolean")
+     * @ORM\Column(name="cinturon_conductor", type="boolean", nullable = true)
      */
     private $cinturonConductor;
 
@@ -715,84 +782,84 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion_lesion", type="string")
+     * @ORM\Column(name="descripcion_lesion", type="string", nullable = true)
      */
     private $descripcionLesion;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="victima", type="boolean")
+     * @ORM\Column(name="victima", type="boolean", nullable = true)
      */
     private $victima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombres_victima", type="string")
+     * @ORM\Column(name="nombres_victima", type="string", nullable = true)
      */
     private $nombresVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos_victima", type="string")
+     * @ORM\Column(name="apellidos_victima", type="string", nullable = true)
      */
     private $apellidosVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo_identificacion_victima", type="string")
+     * @ORM\Column(name="tipo_identificacion_victima", type="string", nullable = true)
      */
     private $tipoIdentificacionVictima;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="identificacion_victima", type="integer")
+     * @ORM\Column(name="identificacion_victima", type="integer", nullable = true)
      */
     private $identificacionVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nacionalidad_victima", type="string")
+     * @ORM\Column(name="nacionalidad_victima", type="string", nullable = true)
      */
     private $nacionalidadVictima;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_nacimiento_victima", type="date")
+     * @ORM\Column(name="fecha_nacimiento_victima", type="date", nullable = true)
      */
     private $fechaNacimientoVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sexo_victima", type="string")
+     * @ORM\Column(name="sexo_victima", type="string", nullable = true)
      */
     private $sexoVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion_residencia_victima", type="string")
+     * @ORM\Column(name="direccion_residencia_victima", type="string", nullable = true)
      */
     private $direccionResidenciaVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudad_residencia_victima", type="string")
+     * @ORM\Column(name="ciudad_residencia_victima", type="string", nullable = true)
      */
     private $ciudadResidenciaVictima;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono_victima", type="string")
+     * @ORM\Column(name="telefono_victima", type="string", nullable = true)
      */
     private $telefonoVictima;
 
@@ -804,16 +871,23 @@ class SvRegistroIpat
     private $hospitalVictima;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="placa_vehiculo_victima", type="string", nullable = true)
+     */
+    private $plavaVehiculoVictima;
+
+    /**
      * @var bool
      *
-     * @ORM\Column(name="practico_examen_victima", type="boolean")
+     * @ORM\Column(name="practico_examen_victima", type="boolean", nullable = true)
      */
     private $practicoExamenVictima;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="autorizo_victima", type="boolean")
+     * @ORM\Column(name="autorizo_victima", type="boolean", nullable = true)
      */
     private $autorizoVictima;
     
@@ -834,28 +908,28 @@ class SvRegistroIpat
     /**
      * @var bool
      *
-     * @ORM\Column(name="sustancias_psicoactivas_victima", type="boolean")
+     * @ORM\Column(name="sustancias_psicoactivas_victima", type="boolean", nullable = true)
      */
     private $sustanciasPsicoactivasVictima;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="chaleco_victima", type="boolean")
+     * @ORM\Column(name="chaleco_victima", type="boolean", nullable = true)
      */
     private $chalecoVictima;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="casco_victima", type="boolean")
+     * @ORM\Column(name="casco_victima", type="boolean", nullable = true)
      */
     private $cascoVictima;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="cinturon_victima", type="boolean")
+     * @ORM\Column(name="cinturon_victima", type="boolean", nullable = true)
      */
     private $cinturonVictima;
     
@@ -876,58 +950,116 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones", type="string")
+     * @ORM\Column(name="observaciones", type="string", nullable = true)
      */
     private $observaciones;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="grado_testigo", type="string")
-     */
-    private $gradoTestigo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="nombres_testigo", type="string")
+     * @ORM\Column(name="nombres_testigo", type="string", nullable = true)
      */
     private $nombresTestigo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos_testigo", type="string")
+     * @ORM\Column(name="apellidos_testigo", type="string", nullable = true)
      */
     private $apellidosTestigo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo_identificacion_testigo", type="string")
+     * @ORM\Column(name="tipo_identificacion_testigo", type="string", nullable = true)
      */
     private $tipoIdentificacionTestigo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="identificacion_testigo", type="string")
+     * @ORM\Column(name="identificacion_testigo", type="string", nullable = true)
      */
     private $identificacionTestigo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="placa_testigo", type="string")
+     * @ORM\Column(name="departamento_residencia_testigo", type="string", nullable = true)
      */
-    private $placaTestigo;
+    private $departamentoResidenciaTestigo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="entidad_testigo", type="string")
+     * @ORM\Column(name="direccion_residencia_testigo", type="string", nullable = true)
      */
-    private $entidadTestigo;
+    private $direccionResidenciaTestigo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ciudad_residencia_testigo", type="string", nullable = true)
+     */
+    private $ciudadResidenciaTestigo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono_testigo", type="string", nullable = true)
+     */
+    private $telefonoTestigo;
+
+
+    //datos del agente de transito
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="grado_agente", type="string", nullable = true)
+     */
+    private $gradoAgente;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombres_agente", type="string", nullable = true)
+     */
+    private $nombresAgente;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apellidos_agente", type="string", nullable = true)
+     */
+    private $apellidosAgente;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_identificacion_agente", type="string", nullable = true)
+     */
+    private $tipoIdentificacionAgente;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identificacion_agente", type="string", nullable = true)
+     */
+    private $identificacionAgente;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="placa_agente", type="string", nullable = true)
+     */
+    private $placaAgente;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entidad_agente", type="string", nullable = true)
+     */
+    private $entidadAgente;
 
     /**
      * @var string
@@ -1119,6 +1251,198 @@ class SvRegistroIpat
     public function getOtroObjetoFijo()
     {
         return $this->otroObjetoFijo;
+    }
+
+    /**
+     * Set estadoTiempo
+     *
+     * @param array $estadoTiempo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setEstadoTiempo($estadoTiempo)
+    {
+        $this->estadoTiempo = $estadoTiempo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoTiempo
+     *
+     * @return array
+     */
+    public function getEstadoTiempo()
+    {
+        return $this->estadoTiempo;
+    }
+
+    /**
+     * Set otraVisualDisminuida
+     *
+     * @param string $otraVisualDisminuida
+     *
+     * @return SvRegistroIpat
+     */
+    public function setOtraVisualDisminuida($otraVisualDisminuida)
+    {
+        $this->otraVisualDisminuida = $otraVisualDisminuida;
+
+        return $this;
+    }
+
+    /**
+     * Get otraVisualDisminuida
+     *
+     * @return string
+     */
+    public function getOtraVisualDisminuida()
+    {
+        return $this->otraVisualDisminuida;
+    }
+
+    /**
+     * Set semaforo
+     *
+     * @param string $semaforo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setSemaforo($semaforo)
+    {
+        $this->semaforo = $semaforo;
+
+        return $this;
+    }
+
+    /**
+     * Get semaforo
+     *
+     * @return string
+     */
+    public function getSemaforo()
+    {
+        return $this->semaforo;
+    }
+
+    /**
+     * Set senialVertical
+     *
+     * @param array $senialVertical
+     *
+     * @return SvRegistroIpat
+     */
+    public function setSenialVertical($senialVertical)
+    {
+        $this->senialVertical = $senialVertical;
+
+        return $this;
+    }
+
+    /**
+     * Get senialVertical
+     *
+     * @return array
+     */
+    public function getSenialVertical()
+    {
+        return $this->senialVertical;
+    }
+
+    /**
+     * Set senialHorizontal
+     *
+     * @param array $senialHorizontal
+     *
+     * @return SvRegistroIpat
+     */
+    public function setSenialHorizontal($senialHorizontal)
+    {
+        $this->senialHorizontal = $senialHorizontal;
+
+        return $this;
+    }
+
+    /**
+     * Get senialHorizontal
+     *
+     * @return array
+     */
+    public function getSenialHorizontal()
+    {
+        return $this->senialHorizontal;
+    }
+
+    /**
+     * Set reductorVelocidad
+     *
+     * @param array $reductorVelocidad
+     *
+     * @return SvRegistroIpat
+     */
+    public function setReductorVelocidad($reductorVelocidad)
+    {
+        $this->reductorVelocidad = $reductorVelocidad;
+
+        return $this;
+    }
+
+    /**
+     * Get reductorVelocidad
+     *
+     * @return array
+     */
+    public function getReductorVelocidad()
+    {
+        return $this->reductorVelocidad;
+    }
+
+    /**
+     * Set otroReductorVelocidad
+     *
+     * @param string $otroReductorVelocidad
+     *
+     * @return SvRegistroIpat
+     */
+    public function setOtroReductorVelocidad($otroReductorVelocidad)
+    {
+        $this->otroReductorVelocidad = $otroReductorVelocidad;
+
+        return $this;
+    }
+
+    /**
+     * Get otroReductorVelocidad
+     *
+     * @return string
+     */
+    public function getOtroReductorVelocidad()
+    {
+        return $this->otroReductorVelocidad;
+    }
+
+    /**
+     * Set otroDelineadorPiso
+     *
+     * @param string $otroDelineadorPiso
+     *
+     * @return SvRegistroIpat
+     */
+    public function setOtroDelineadorPiso($otroDelineadorPiso)
+    {
+        $this->otroDelineadorPiso = $otroDelineadorPiso;
+
+        return $this;
+    }
+
+    /**
+     * Get otroDelineadorPiso
+     *
+     * @return string
+     */
+    public function getOtroDelineadorPiso()
+    {
+        return $this->otroDelineadorPiso;
     }
 
     /**
@@ -2130,6 +2454,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set falla
+     *
+     * @param array $falla
+     *
+     * @return SvRegistroIpat
+     */
+    public function setFalla($falla)
+    {
+        $this->falla = $falla;
+
+        return $this;
+    }
+
+    /**
+     * Get falla
+     *
+     * @return array
+     */
+    public function getFalla()
+    {
+        return $this->falla;
+    }
+
+    /**
      * Set lugarImpacto
      *
      * @param array $lugarImpacto
@@ -2610,6 +2958,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set organismoTransito
+     *
+     * @param string $organismoTransito
+     *
+     * @return SvRegistroIpat
+     */
+    public function setOrganismoTransito($organismoTransito)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return string
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
+    }
+
+    /**
      * Set chalecoConductor
      *
      * @param boolean $chalecoConductor
@@ -2970,6 +3342,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set plavaVehiculoVictima
+     *
+     * @param string $plavaVehiculoVictima
+     *
+     * @return SvRegistroIpat
+     */
+    public function setPlavaVehiculoVictima($plavaVehiculoVictima)
+    {
+        $this->plavaVehiculoVictima = $plavaVehiculoVictima;
+
+        return $this;
+    }
+
+    /**
+     * Get plavaVehiculoVictima
+     *
+     * @return string
+     */
+    public function getPlavaVehiculoVictima()
+    {
+        return $this->plavaVehiculoVictima;
+    }
+
+    /**
      * Set practicoExamenVictima
      *
      * @param boolean $practicoExamenVictima
@@ -3138,30 +3534,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set gradoTestigo
-     *
-     * @param string $gradoTestigo
-     *
-     * @return SvRegistroIpat
-     */
-    public function setGradoTestigo($gradoTestigo)
-    {
-        $this->gradoTestigo = $gradoTestigo;
-
-        return $this;
-    }
-
-    /**
-     * Get gradoTestigo
-     *
-     * @return string
-     */
-    public function getGradoTestigo()
-    {
-        return $this->gradoTestigo;
-    }
-
-    /**
      * Set nombresTestigo
      *
      * @param string $nombresTestigo
@@ -3258,51 +3630,267 @@ class SvRegistroIpat
     }
 
     /**
-     * Set placaTestigo
+     * Set departamentoResidenciaTestigo
      *
-     * @param string $placaTestigo
+     * @param string $departamentoResidenciaTestigo
      *
      * @return SvRegistroIpat
      */
-    public function setPlacaTestigo($placaTestigo)
+    public function setDepartamentoResidenciaTestigo($departamentoResidenciaTestigo)
     {
-        $this->placaTestigo = $placaTestigo;
+        $this->departamentoResidenciaTestigo = $departamentoResidenciaTestigo;
 
         return $this;
     }
 
     /**
-     * Get placaTestigo
+     * Get departamentoResidenciaTestigo
      *
      * @return string
      */
-    public function getPlacaTestigo()
+    public function getDepartamentoResidenciaTestigo()
     {
-        return $this->placaTestigo;
+        return $this->departamentoResidenciaTestigo;
     }
 
     /**
-     * Set entidadTestigo
+     * Set direccionResidenciaTestigo
      *
-     * @param string $entidadTestigo
+     * @param string $direccionResidenciaTestigo
      *
      * @return SvRegistroIpat
      */
-    public function setEntidadTestigo($entidadTestigo)
+    public function setDireccionResidenciaTestigo($direccionResidenciaTestigo)
     {
-        $this->entidadTestigo = $entidadTestigo;
+        $this->direccionResidenciaTestigo = $direccionResidenciaTestigo;
 
         return $this;
     }
 
     /**
-     * Get entidadTestigo
+     * Get direccionResidenciaTestigo
      *
      * @return string
      */
-    public function getEntidadTestigo()
+    public function getDireccionResidenciaTestigo()
     {
-        return $this->entidadTestigo;
+        return $this->direccionResidenciaTestigo;
+    }
+
+    /**
+     * Set ciudadResidenciaTestigo
+     *
+     * @param string $ciudadResidenciaTestigo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setCiudadResidenciaTestigo($ciudadResidenciaTestigo)
+    {
+        $this->ciudadResidenciaTestigo = $ciudadResidenciaTestigo;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadResidenciaTestigo
+     *
+     * @return string
+     */
+    public function getCiudadResidenciaTestigo()
+    {
+        return $this->ciudadResidenciaTestigo;
+    }
+
+    /**
+     * Set telefonoTestigo
+     *
+     * @param string $telefonoTestigo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTelefonoTestigo($telefonoTestigo)
+    {
+        $this->telefonoTestigo = $telefonoTestigo;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonoTestigo
+     *
+     * @return string
+     */
+    public function getTelefonoTestigo()
+    {
+        return $this->telefonoTestigo;
+    }
+
+    /**
+     * Set gradoAgente
+     *
+     * @param string $gradoAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setGradoAgente($gradoAgente)
+    {
+        $this->gradoAgente = $gradoAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get gradoAgente
+     *
+     * @return string
+     */
+    public function getGradoAgente()
+    {
+        return $this->gradoAgente;
+    }
+
+    /**
+     * Set nombresAgente
+     *
+     * @param string $nombresAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setNombresAgente($nombresAgente)
+    {
+        $this->nombresAgente = $nombresAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get nombresAgente
+     *
+     * @return string
+     */
+    public function getNombresAgente()
+    {
+        return $this->nombresAgente;
+    }
+
+    /**
+     * Set apellidosAgente
+     *
+     * @param string $apellidosAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setApellidosAgente($apellidosAgente)
+    {
+        $this->apellidosAgente = $apellidosAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get apellidosAgente
+     *
+     * @return string
+     */
+    public function getApellidosAgente()
+    {
+        return $this->apellidosAgente;
+    }
+
+    /**
+     * Set tipoIdentificacionAgente
+     *
+     * @param string $tipoIdentificacionAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTipoIdentificacionAgente($tipoIdentificacionAgente)
+    {
+        $this->tipoIdentificacionAgente = $tipoIdentificacionAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionAgente
+     *
+     * @return string
+     */
+    public function getTipoIdentificacionAgente()
+    {
+        return $this->tipoIdentificacionAgente;
+    }
+
+    /**
+     * Set identificacionAgente
+     *
+     * @param string $identificacionAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setIdentificacionAgente($identificacionAgente)
+    {
+        $this->identificacionAgente = $identificacionAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacionAgente
+     *
+     * @return string
+     */
+    public function getIdentificacionAgente()
+    {
+        return $this->identificacionAgente;
+    }
+
+    /**
+     * Set placaAgente
+     *
+     * @param string $placaAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setPlacaAgente($placaAgente)
+    {
+        $this->placaAgente = $placaAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get placaAgente
+     *
+     * @return string
+     */
+    public function getPlacaAgente()
+    {
+        return $this->placaAgente;
+    }
+
+    /**
+     * Set entidadAgente
+     *
+     * @param string $entidadAgente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setEntidadAgente($entidadAgente)
+    {
+        $this->entidadAgente = $entidadAgente;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadAgente
+     *
+     * @return string
+     */
+    public function getEntidadAgente()
+    {
+        return $this->entidadAgente;
     }
 
     /**
@@ -3543,30 +4131,6 @@ class SvRegistroIpat
     public function getDisenio()
     {
         return $this->disenio;
-    }
-
-    /**
-     * Set estadoTiempo
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoTiempo $estadoTiempo
-     *
-     * @return SvRegistroIpat
-     */
-    public function setEstadoTiempo(\JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoTiempo $estadoTiempo = null)
-    {
-        $this->estadoTiempo = $estadoTiempo;
-
-        return $this;
-    }
-
-    /**
-     * Get estadoTiempo
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoTiempo
-     */
-    public function getEstadoTiempo()
-    {
-        return $this->estadoTiempo;
     }
 
     /**
@@ -3834,27 +4398,51 @@ class SvRegistroIpat
     }
 
     /**
-     * Set falla
+     * Set estadoSemaforo
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgFalla $falla
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $estadoSemaforo
      *
      * @return SvRegistroIpat
      */
-    public function setFalla(\JHWEB\SeguridadVialBundle\Entity\SvCfgFalla $falla = null)
+    public function setEstadoSemaforo(\JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $estadoSemaforo = null)
     {
-        $this->falla = $falla;
+        $this->estadoSemaforo = $estadoSemaforo;
 
         return $this;
     }
 
     /**
-     * Get falla
+     * Get estadoSemaforo
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgFalla
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia
      */
-    public function getFalla()
+    public function getEstadoSemaforo()
     {
-        return $this->falla;
+        return $this->estadoSemaforo;
+    }
+
+    /**
+     * Set delineadorPiso
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $delineadorPiso
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDelineadorPiso(\JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $delineadorPiso = null)
+    {
+        $this->delineadorPiso = $delineadorPiso;
+
+        return $this;
+    }
+
+    /**
+     * Get delineadorPiso
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia
+     */
+    public function getDelineadorPiso()
+    {
+        return $this->delineadorPiso;
     }
 
     /**

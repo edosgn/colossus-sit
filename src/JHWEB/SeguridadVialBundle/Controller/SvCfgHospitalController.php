@@ -227,6 +227,8 @@ class SvCfgHospitalController extends Controller
         $hospitales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($hospitales as $key => $hospital) {
             $response[$key] = array(
                 'value' => $hospital->getId(),

@@ -214,6 +214,8 @@ class SvCfgDisenioController extends Controller
     $disenios = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgDisenio')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($disenios as $key => $disenio) {
         $response[$key] = array(
             'value' => $disenio->getId(),

@@ -215,6 +215,8 @@ class SvCfgFuncionController extends Controller
     $funciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($funciones as $key => $funcion) {
         $response[$key] = array(
             'value' => $funcion->getId(),

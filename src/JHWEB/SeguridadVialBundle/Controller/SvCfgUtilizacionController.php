@@ -244,6 +244,8 @@ class SvCfgUtilizacionController extends Controller
         $utilizaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUtilizacion')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($utilizaciones as $key => $utilizacion) {
             $response[$key] = array(
                 'value' => $utilizacion->getId(),

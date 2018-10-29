@@ -214,6 +214,7 @@ class SvCfgClaseActorViaController extends Controller
     $clases = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->findBy(
         array('activo' => 1)
     );
+        $response = null;
       foreach ($clases as $key => $clase) {
         $response[$key] = array(
             'value' => $clase->getId(),

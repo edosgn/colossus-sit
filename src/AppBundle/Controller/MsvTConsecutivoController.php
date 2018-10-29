@@ -93,7 +93,7 @@ class MsvTConsecutivoController extends Controller
     /**
      * Finds and displays a msvTConsecutivo entity.
      *
-     * @Route("/{id}", name="msvtconsecutivo_show")
+     * @Route("/{id}/show", name="msvtconsecutivo_show")
      * @Method("GET")
      */
     public function showAction(MsvTConsecutivo $msvTConsecutivo)

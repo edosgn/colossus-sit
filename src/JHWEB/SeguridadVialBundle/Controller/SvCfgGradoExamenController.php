@@ -213,6 +213,8 @@ class SvCfgGradoExamenController extends Controller
         $gradosExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($gradosExamen as $key => $gradoExamen) {
             $response[$key] = array(
                 'value' => $gradoExamen->getId(),

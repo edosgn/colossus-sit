@@ -214,6 +214,8 @@ class SvCfgSectorController extends Controller
         $sectores = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSector')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($sectores as $key => $sector) {
             $response[$key] = array(
                 'value' => $sector->getId(),

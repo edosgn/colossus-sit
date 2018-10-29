@@ -215,6 +215,8 @@ class SvCfgTipoControlController extends Controller
     $tiposControl = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControl')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($tiposControl as $key => $tipoControl) {
         $response[$key] = array(
             'value' => $tipoControl->getId(),

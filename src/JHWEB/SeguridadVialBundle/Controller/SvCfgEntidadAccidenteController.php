@@ -214,6 +214,8 @@ class SvCfgEntidadAccidenteController extends Controller
     $entidadesAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($entidadesAccidente as $key => $entidadAccidente) {
         $response[$key] = array(
             'value' => $entidadAccidente->getId(),

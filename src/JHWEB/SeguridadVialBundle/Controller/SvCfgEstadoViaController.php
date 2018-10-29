@@ -215,6 +215,8 @@ class SvCfgEstadoViaController extends Controller
     $estadosVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoVia')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($estadosVia as $key => $estadoVia) {
         $response[$key] = array(
             'value' => $estadoVia->getId(),

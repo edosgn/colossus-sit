@@ -239,9 +239,11 @@ class SvCfgTipoVictimaController extends Controller
         $tiposVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($tiposVictima as $key => $tipoVictima) {
             $response[$key] = array(
-                'value' => $tipoVictima->getId(),
+                'value' => $tipoVictima->getNombre(),
                 'label' => $tipoVictima->getNombre(),
             );
         }

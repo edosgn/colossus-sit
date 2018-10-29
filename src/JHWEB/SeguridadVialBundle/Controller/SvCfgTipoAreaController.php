@@ -213,6 +213,8 @@ class SvCfgTipoAreaController extends Controller
         $tiposAreas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($tiposAreas as $key => $tipoArea) {
             $response[$key] = array(
                 'value' => $tipoArea->getId(),

@@ -43,7 +43,7 @@ class Inmovilizacion
     private $fecha;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Comparendo")
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="comparendos")
      **/
     protected $comparendo;
 

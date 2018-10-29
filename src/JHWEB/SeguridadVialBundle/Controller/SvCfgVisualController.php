@@ -240,9 +240,11 @@ class SvCfgVisualController extends Controller
         $visuales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisual')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($visuales as $key => $visual) {
             $response[$key] = array(
-                'value' => $visual->getId(),
+                'value' => $visual->getNombre(),
                 'label' => $visual->getNombre(),
             );
         }
