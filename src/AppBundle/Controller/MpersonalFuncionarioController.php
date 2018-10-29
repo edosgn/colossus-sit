@@ -529,19 +529,19 @@ class MpersonalFuncionarioController extends Controller
             
             if ($usuario) {
                 if ($usuario->getCiudadano()) {
-                    $funcionario = $em->getRepository('AppBundle:Empresa')->findOneBy(
+                    $representante = $em->getRepository('AppBundle:Empresa')->findOneBy(
                         array(
                             'ciudadano' => $usuario->getCiudadano()->getId(),
                             'estado' => true,
                             'cfgEmpresaServicio' => 1
                         )
                     );
-                    if ($funcionario) {
+                    if ($representante) {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
                             'message' => "Registro encontrado", 
-                            'data'=> $funcionario,
+                            'data'=> $representante,
                         );
                     }else{
                         $response = array(

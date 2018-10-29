@@ -77,10 +77,12 @@ class PnalProrogaController extends Controller
             $mPersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->mPersonalFuncionarioId);
 
             $mPersonalFuncionario->setFechaFin($fechaFin);
+            $mPersonalFuncionario->setModificatorio(true);
             $em->persist($mPersonalFuncionario);
 
             $pnalProroga->setFechaInicio($fechaInicio);
             $pnalProroga->setFechaFin($fechaFin);
+            $pnalProroga->setNumeroModificatorio($params->numeroModificatorio);
             $pnalProroga->setMPersonalFuncionario($mPersonalFuncionario);
             
             $em->persist($pnalProroga);

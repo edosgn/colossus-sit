@@ -35,8 +35,16 @@ class PnalProroga
      */
     private $fechaFin;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroModificatorio", type="string", length=255)
+     */
+    private $numeroModificatorio;
+
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="soats") */
     private $mPersonalFuncionario;
+
 
 
 
@@ -71,10 +79,7 @@ class PnalProroga
      */
     public function getFechaInicio()
     {
-        if ($this->fechaInicio) {
-            return $this->fechaInicio->format('Y-m-d');
-        }
-        return $this->fechaInicio;
+        return $this->fechaInicio->format('Y-m-d');
     }
 
     /**
@@ -97,13 +102,32 @@ class PnalProroga
      * @return \DateTime
      */
     public function getFechaFin()
-    {   
-        if ($this->fechaFin) {
-            return $this->fechaFin->format('Y-m-d');
-        }
+    {
+        return $this->fechaFin->format('Y-m-d');
+    }
 
-        return $this->fechaFin;
-        
+    /**
+     * Set numeroModificatorio
+     *
+     * @param string $numeroModificatorio
+     *
+     * @return PnalProroga
+     */
+    public function setNumeroModificatorio($numeroModificatorio)
+    {
+        $this->numeroModificatorio = $numeroModificatorio;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroModificatorio
+     *
+     * @return string
+     */
+    public function getNumeroModificatorio()
+    {
+        return $this->numeroModificatorio;
     }
 
     /**
