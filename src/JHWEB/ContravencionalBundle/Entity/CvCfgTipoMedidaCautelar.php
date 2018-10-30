@@ -5,12 +5,12 @@ namespace JHWEB\ContravencionalBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CvCfgTipoRestriccion
+ * CvCfgTipoMedidaCautelar
  *
- * @ORM\Table(name="cv_cfg_tipo_restriccion")
- * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCfgTipoRestriccionRepository")
+ * @ORM\Table(name="cv_cfg_tipo_medida_cautelar")
+ * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCfgTipoMedidaCautelarRepository")
  */
-class CvCfgTipoRestriccion
+class CvCfgTipoMedidaCautelar
 {
     /**
      * @var int
@@ -29,9 +29,9 @@ class CvCfgTipoRestriccion
     private $nombre;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="codigo", type="integer")
+     * @ORM\Column(name="codigo", type="string", length=255)
      */
     private $codigo;
 
@@ -42,8 +42,9 @@ class CvCfgTipoRestriccion
      */
     private $activo;
 
-    
 
+
+    
 
     /**
      * Get id
@@ -60,7 +61,7 @@ class CvCfgTipoRestriccion
      *
      * @param string $nombre
      *
-     * @return CvCfgTipoRestriccion
+     * @return CvCfgTipoMedidaCautelar
      */
     public function setNombre($nombre)
     {
@@ -82,9 +83,9 @@ class CvCfgTipoRestriccion
     /**
      * Set codigo
      *
-     * @param integer $codigo
+     * @param string $codigo
      *
-     * @return CvCfgTipoRestriccion
+     * @return CvCfgTipoMedidaCautelar
      */
     public function setCodigo($codigo)
     {
@@ -96,7 +97,7 @@ class CvCfgTipoRestriccion
     /**
      * Get codigo
      *
-     * @return integer
+     * @return string
      */
     public function getCodigo()
     {
@@ -108,7 +109,7 @@ class CvCfgTipoRestriccion
      *
      * @param boolean $activo
      *
-     * @return CvCfgTipoRestriccion
+     * @return CvCfgTipoMedidaCautelar
      */
     public function setActivo($activo)
     {
