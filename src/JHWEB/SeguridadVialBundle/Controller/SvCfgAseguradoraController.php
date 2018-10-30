@@ -213,6 +213,7 @@ class SvCfgAseguradoraController extends Controller
         $aseguradoras = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgAseguradora')->findBy(
             array('activo' => 1)
         );
+        $response = null;
         foreach ($aseguradoras as $key => $aseguradora) {
             $response[$key] = array(
                 'value' => $aseguradora->getId(),

@@ -87,7 +87,7 @@ class SvCfgMaterialController extends Controller
      * Finds and displays a svCfgMaterial entity.
      *
      * @Route("/{id}/show", name="svcfgmaterial_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function showAction(SvCfgMaterial $svCfgMaterial)
     {
@@ -214,9 +214,11 @@ class SvCfgMaterialController extends Controller
         $materiales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMaterial')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($materiales as $key => $material) {
             $response[$key] = array(
-                'value' => $material->getId(),
+                'value' => $material->getNombre(),
                 'label' => $material->getNombre(),
             );
         }

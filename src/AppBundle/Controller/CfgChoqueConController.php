@@ -93,10 +93,10 @@ class CfgChoqueConController extends Controller
     /**
      * Finds and displays a cfgChoqueCon entity.
      *
-     * @Route("/show", name="cfgchoquecon_show")
+     * @Route("/{id}/show", name="cfgchoquecon_show")
      * @Method("POST")
      */
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -104,7 +104,7 @@ class CfgChoqueConController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $cfgChoqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->find($id);
+            $cfgChoqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->find($params->id);
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -244,7 +244,7 @@ class CfgChoqueConController extends Controller
 
         foreach ($cfgChoquesCon as $key => $cfgChoqueCon) {
             $response[$key] = array(
-                'value' => $cfgChoqueCon->getId(),
+                'value' => $cfgChoqueCon->getNombre(),
                 'label' => $cfgChoqueCon->getNombre(),
             );
         }

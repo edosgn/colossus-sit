@@ -214,6 +214,8 @@ class SvCfgLugarImpactoController extends Controller
         $lugaresImpacto = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgLugarImpacto')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($lugaresImpacto as $key => $lugarImpacto) {
             $response[$key] = array(
                 'value' => $lugarImpacto->getId(),

@@ -54,15 +54,15 @@ class SvRegistroIpatController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        $response = null;
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
             $ipat = new SvRegistroIpat();
 
             $em = $this->getDoctrine()->getManager();
-
-            if ($params[0]->datosLimitacion->idSedeOperativa) {
+            
+            /*if ($params[0]->datosLimitacion->idSedeOperativa) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params[0]->datosLimitacion->idSedeOperativa);
                 $ipat->setSedeOperativa($sedeOperativa);
             }
@@ -72,37 +72,65 @@ class SvRegistroIpatController extends Controller
             }
 
             $ipat->setLugar($params[0]->datosLimitacion->lugar);
-
-            $fechaAccidente = new \Datetime($params[0]->datosLimitacion->fechaAccidente);
-            $ipat->setFechaAccidente($fechaAccidente);
+ 
+            $fechaAccidenteDatetime = new \Datetime($params[0]->datosLimitacion->fechaAccidente);            
+            $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d');
             
-            $horaAccidente = new \Datetime($params[0]->datosLimitacion->horaAccidente);
-            $ipat->setHoraAccidente($horaAccidente);
+            $horaAccidenteDatetime = new \Datetime($params[0]->datosLimitacion->horaAccidente);            
+            $horaAccidente = $horaAccidenteDatetime->format('H:i:s');
             
-            $fechaLevantamiento = new \Datetime($params[0]->datosLimitacion->fechaLevantamiento);
-            $ipat->setFechaLevantamiento($fechaLevantamiento);
+            $fechaLevantamientoDatetime = new \Datetime($params[0]->datosLimitacion->fechaLevantamiento);            
+            $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d');
             
-            $horaLevantamiento = new \Datetime($params[0]->datosLimitacion->horaLevantamiento);
-            $ipat->setHoraLevantamiento($horaLevantamiento);
+            $horaLevantamientoDatetime = new \Datetime($params[0]->datosLimitacion->horaLevantamiento); 
+            $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s');
+           
+
+            $fechaActualDatetime = new \Datetime();
+            $fechaActual = $fechaActualDatetime->format('Y-m-d');
             
-            $fechaActual = new \Datetime();
+            if( $fechaLevantamiento <= $fechaActual && $fechaLevantamiento > $fechaAccidente ) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "La fecha de levantamiento es válida.",
+                );
+                $ipat->setFechaAccidente($fechaAccidenteDatetime);
+                $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
+                $ipat->setHoraAccidente($horaAccidenteDatetime);
+                $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
 
-            $accidente = $this->validarCamposAccidente(
-                $fechaLevantamiento,
-                $horaLevantamiento,
-                $fechaAccidente,
-                $horaAccidente,
-                $fechaActual,
-                $params[0]->datosLimitacion->cantidadAcompaniantes
-            );
-
-            if ($accidente) {
-
-                if ($params[0]->datosLimitacion->idClaseAccidente) {
-                    $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find(
-                        $params[0]->datosLimitacion->idClaseAccidente
+            } elseif ( $fechaLevantamiento == $fechaAccidente ) {
+                if($horaLevantamiento > $horaAccidente) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Las hora de levantamiento y accidente son válidas.",
                     );
-                    $ipat->setClaseAccidente($claseAccidente);
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Hora de levantamiento o accidente incorrectas.",
+                    );
+                    $ipat->setFechaAccidente($fechaAccidenteDatetime);
+                    $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
+                    $ipat->setHoraAccidente($horaAccidenteDatetime);
+                    $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
+                }
+            } else {
+                $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "La fecha de levantamiento debe ser menor o igual a la fecha del sistema y mayor o igual a la fecha del accidente.",
+                );
+            } 
+            
+            if ($params[0]->datosLimitacion->idClaseAccidente) {
+                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find(
+                    $params[0]->datosLimitacion->idClaseAccidente
+                );
+                $ipat->setClaseAccidente($claseAccidente);
                 }
                 $ipat->setOtroClaseAccidente($params[0]->datosLimitacion->otroClaseAccidente);
 
@@ -147,13 +175,6 @@ class SvRegistroIpatController extends Controller
                         $params[0]->datosLimitacion->idDisenio
                     );
                     $ipat->setDisenio($disenio);
-                }
-
-                if ($params[0]->datosLimitacion->idEstadoTiempo) {
-                    $estadoTiempo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoTiempo')->find(
-                        $params[0]->datosLimitacion->idEstadoTiempo
-                    );
-                    $ipat->setEstadoTiempo($estadoTiempo);
                 }
 
                 if ($params[0]->datosLimitacion->idGeometria) {
@@ -233,6 +254,31 @@ class SvRegistroIpatController extends Controller
                     $ipat->setVisualDisminuida($visualDisminuida);
                 }
 
+                $ipat->setOtraVisualDisminuida($params[0]->datosLimitacion->otraVisualDisminuida);
+                $ipat->setSemaforo($params[0]->datosLimitacion->semaforo);
+
+                if ($params[0]->datosLimitacion->idEstadoSemaforo) {
+                    $estadoSemaforo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
+                        $params[0]->datosLimitacion->idEstadoSemaforo
+                    );
+                    $ipat->setEstadoSemaforo($estadoSemaforo);
+                }
+                
+                $ipat->setSenialVertical($params[5]->senialesVerticales);
+                $ipat->setSenialHorizontal($params[6]->senialesHorizontales);
+                $ipat->setReductorVelocidad($params[7]->reductoresVelocidad);
+                $ipat->setOtroReductorVelocidad($params[0]->datosLimitacion->otroReductorVelocidad);
+                
+                if ($params[0]->datosLimitacion->idDelineadorPiso) {
+                    $delineadorPiso = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
+                        $params[0]->datosLimitacion->idDelineadorPiso
+                    );
+                    $ipat->setDelineadorPiso($delineadorPiso);
+                }
+                
+                $ipat->setDelineadorPiso($params[0]->datosLimitacion->otroDelineadorPiso);
+                
+
                 $ipat->setNombresConductor($params[0]->datosLimitacion->nombresConductor);
                 $ipat->setApellidosConductor($params[0]->datosLimitacion->apellidosConductor);
                 $ipat->setTipoIdentificacionConductor($params[0]->datosLimitacion->tipoIdentificacionConductor);
@@ -275,6 +321,7 @@ class SvRegistroIpatController extends Controller
                 $ipat->setRestriccionConductor($params[0]->datosLimitacion->restriccionConductor);
                 $ipat->setFechaExpedicionLicenciaConduccion(new \Datetime($params[0]->datosLimitacion->fechaExpedicionLicenciaConduccion));
                 $ipat->setFechaVencimientoLicenciaConduccion(new \Datetime($params[0]->datosLimitacion->fechaVencimientoLicenciaConduccion));
+                $ipat->setOrganismoTransito($params[0]->datosLimitacion->organismoTransito);
                 $ipat->setChalecoConductor($params[0]->datosLimitacion->chalecoConductor);
                 $ipat->setCascoConductor($params[0]->datosLimitacion->cascoConductor);
                 $ipat->setCinturonConductor($params[0]->datosLimitacion->cinturonConductor);
@@ -298,7 +345,6 @@ class SvRegistroIpatController extends Controller
                 $ipat->setCarroceria($params[0]->datosLimitacion->carroceria);
                 $ipat->setTon($params[0]->datosLimitacion->ton);
                 $ipat->setPasajeros($params[0]->datosLimitacion->pasajeros);
-                $ipat->setNumeroLicenciaTransito($params[0]->datosLimitacion->numeroLicenciaTransito);
                 $ipat->setEmpresa($params[0]->datosLimitacion->empresa);
                 $ipat->setNitEmpresa($params[0]->datosLimitacion->nitEmpresa);
                 $ipat->setmatriculadoEn($params[0]->datosLimitacion->matriculadoEn);
@@ -307,7 +353,26 @@ class SvRegistroIpatController extends Controller
                 $ipat->setTarjetaRegistro($params[0]->datosLimitacion->tarjetaRegistro);
                 $ipat->setRevisionTecnomecanica($params[0]->datosLimitacion->revisionTecnomecanica);
                 $ipat->setNumeroTecnoMecanica($params[0]->datosLimitacion->numeroTecnoMecanica);
-                $ipat->setCantidadAcompaniantes($params[0]->datosLimitacion->cantidadAcompaniantes);
+                
+                $cantidadAcompaniantes = $params[0]->datosLimitacion->cantidadAcompaniantes;
+                if ($cantidadAcompaniantes) {
+                    if (intval($cantidadAcompaniantes) >= 0) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "La cantidad de acompañantes al momento del accidente es válida.",
+                        );
+                        $ipat->setCantidadAcompaniantes($cantidadAcompaniantes);
+                    } else {
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La cantidad de acompañantes debe ser mayor o igual a 0.",
+                        );
+                        return $helpers->json($response);
+                    }
+                }
+                
                 $ipat->setPortaSoat($params[0]->datosLimitacion->portaSoat);
                 $ipat->setSoat($params[0]->datosLimitacion->soat);
                 $ipat->setNumeroPoliza($params[0]->datosLimitacion->numeroPoliza);
@@ -331,25 +396,24 @@ class SvRegistroIpatController extends Controller
                 $ipat->setModalidadTransporte($params[0]->datosLimitacion->modalidadTransporte);
                 $ipat->setRadioAccion($params[0]->datosLimitacion->radioAccion);
                 $ipat->setDescripcionDanios($params[0]->datosLimitacion->descripcionDanios);
-                if ($params[0]->datosLimitacion->idFalla) {
-                    $falla = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFalla')->find(
-                        $params[0]->datosLimitacion->idFalla
-                    );
-                    $ipat->setFalla($falla);
-                }
-
-                foreach ($params[0]->lugaresImpacto as $key => $lugarImpactoNombre) {
-                    $lugarImpacto = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgLugarImpacto')->find($lugarImpactoNombre);
-                    $ipat->setLugarImpacto($lugarImpacto);
-                }
-
-                $ipat->setGradoTestigo($params[0]->datosLimitacion->gradoTestigo);
-                $ipat->setNombresTestigo($params[0]->datosLimitacion->nombresTestigo);
-                $ipat->setApellidosTestigo($params[0]->datosLimitacion->apellidosTestigo);
+                
+                $ipat->setFalla($params[8]->fallas);
+                $ipat->setLugarImpacto($params[3]->lugaresImpacto);
+                
                 $ipat->setTipoIdentificacionTestigo($params[0]->datosLimitacion->tipoIdentificacionTestigo);
                 $ipat->setIdentificacionTestigo($params[0]->datosLimitacion->identificacionTestigo);
-                $ipat->setPlacaTestigo($params[0]->datosLimitacion->placaTestigo);
-                $ipat->setEntidadTestigo($params[0]->datosLimitacion->entidadTestigo);
+                $ipat->setDepartamentoResidenciaTestigo($params[0]->datosLimitacion->departamentoResidenciaTestigo);
+                $ipat->setDireccionResidenciaTestigo($params[0]->datosLimitacion->direccionTestigo);
+                $ipat->setCiudadResidenciaTestigo($params[0]->datosLimitacion->ciudadResidenciaTestigo);
+                $ipat->setTelefonoTestigo($params[0]->datosLimitacion->telefonoTestigo);
+                
+                $ipat->setGradoAgente($params[0]->datosLimitacion->gradoAgente);
+                $ipat->setTipoIdentificacionAgente($params[0]->datosLimitacion->tipoIdentificacionAgente);
+                $ipat->setIdentificacionAgente($params[0]->datosLimitacion->identificacionAgente);
+                $ipat->setNombresAgente($params[0]->datosLimitacion->nombresAgente);
+                $ipat->setApellidosAgente($params[0]->datosLimitacion->apellidosAgente);
+                $ipat->setPlacaAgente($params[0]->datosLimitacion->placaAgente);
+                $ipat->setEntidadAgente($params[0]->datosLimitacion->entidadAgente);
 
                 $ipat->setVictima($params[0]->datosLimitacion->victima);
                 $ipat->setnombresVictima($params[0]->datosLimitacion->nombresVictima);
@@ -405,11 +469,17 @@ class SvRegistroIpatController extends Controller
                     );
                     $ipat->setGravedadVictima($gravedadVictima);
                 }
-
+                */
                 $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[2]->consecutivo->consecutivo));
+                $ipat->setConsecutivo($consecutivo);
+
                 if ($consecutivo != null) {
                     $fechaAsignacion = new \Datetime();
                     $consecutivo->setFechaAsignacion($fechaAsignacion);
+                    $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(array('usuario' => $usuario));
+                    $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
+                    $consecutivo->setFuncionario($funcionario);
                     $consecutivo->setEstado('En Registro');
                     $em->persist($consecutivo);
                     $em->flush();
@@ -426,27 +496,12 @@ class SvRegistroIpatController extends Controller
                         'code' => 400,
                         'message' => "no se pudo modificar el consecutivo",
                     );
-
                 }
 
                 $ipat->setObservaciones($params[0]->datosLimitacion->observaciones);
-
                 $ipat->setActivo(true);
                 $em->persist($ipat);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Los datos han sido registrados exitosamente.",
-                );
-            } else {
-                $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "No se pudieron validar los campos del accidente",
-            );
-            }
+                $em->flush();                
         } else {
             $response = array(
                 'status' => 'error',
@@ -454,6 +509,7 @@ class SvRegistroIpatController extends Controller
                 'message' => "Autorización no válida",
             );
         }
+        
         return $helpers->json($response);
     }
 
@@ -555,7 +611,169 @@ class SvRegistroIpatController extends Controller
         return $helpers->json($response);
     }
 
-    public function validarCamposAccidente($fechaLevantamiento, $horaLevantamiento, $fechaAccidente, $horaAccidente, $fechaActual, $cantidadAcompaniantes)
+    /**
+     * Search vehiculo entity.
+     *
+     * @Route("/get/datos/licenciaconduccion", name="datos_licencia__conduccion_conductor")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarLicenciaConductorAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $licenciaConduccion = $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('numero' => $params->numero));
+            if ($licenciaConduccion) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "licencia conducción encontrada",
+                    'data' => $licenciaConduccion,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La licencia de conducción no se encuentra en la Base de Datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Search agente entity.
+     *
+     * @Route("/get/datos/agente", name="datos_agente")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarAgenteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $agente = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacionAgente));
+            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(array('id' => $agente));
+            if ($funcionario) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "agente encontrado",
+                    'data' => $funcionario,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El agente no se encuentra en la Base de Datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Search victima entity.
+     *
+     * @Route("/get/datos/victima", name="datos_victima")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarVictimaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $victima = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacionVictima));
+            if ($victima) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "victima encontrada",
+                    'data' => $victima,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La victima no se encuentra en la Base de Datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Search testigo entity.
+     *
+     * @Route("/get/datos/testigo", name="datos_testigo")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarTestigoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $testigo = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacionTestigo));
+            if ($testigo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "testigo encontrada",
+                    'data' => $testigo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La testigo no se encuentra en la Base de Datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /*public function validarCamposAccidente($fechaLevantamiento, $horaLevantamiento, $fechaAccidente, $horaAccidente, $fechaActual, $cantidadAcompaniantes)
     {
         $helpers = $this->get("app.helpers");
 
@@ -604,5 +822,5 @@ class SvRegistroIpatController extends Controller
             );
             return $helpers->json($response);
         }
-    }
+    }*/
 }

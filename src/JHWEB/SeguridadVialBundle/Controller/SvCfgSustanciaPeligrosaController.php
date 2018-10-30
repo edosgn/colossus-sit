@@ -212,6 +212,8 @@ class SvCfgSustanciaPeligrosaController extends Controller
         $sustanciaPeligrosas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgsustanciaPeligrosa')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($sustanciaPeligrosas as $key => $sustanciaPeligrosa) {
             $response[$key] = array(
                 'value' => $sustanciaPeligrosa->getId(),

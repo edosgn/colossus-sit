@@ -214,7 +214,8 @@ class SvCfgCalzadaCarrilController extends Controller
     $calzadas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCalzadaCarril')->findBy(
         array('activo' => 1)
     );
-      foreach ($calzadas as $key => $calzada) {
+        $response = null;
+        foreach ($calzadas as $key => $calzada) {
         $response[$key] = array(
             'value' => $calzada->getId(),
             'label' => $calzada->getNombre(),

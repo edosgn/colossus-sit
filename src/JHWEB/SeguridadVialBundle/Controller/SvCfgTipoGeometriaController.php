@@ -215,6 +215,8 @@ class SvCfgTipoGeometriaController extends Controller
         $tiposGeometria = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoGeometria')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($tiposGeometria as $key => $tipoGeometria) {
             $response[$key] = array(
                 'value' => $tipoGeometria->getId(),

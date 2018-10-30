@@ -245,7 +245,7 @@ class CfgGravedadController extends Controller
     
     foreach ($cfgGravedades as $key => $cfgGravedad) {
         $response[$key] = array(
-            'value' => $cfgGravedad->getId(),
+            'value' => $cfgGravedad->getNombre(),
             'label' => $cfgGravedad->getNombre(),
         );
       }
