@@ -62,7 +62,7 @@ class SvRegistroIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            if ($params[0]->datosLimitacion->idSedeOperativa) {
+            /*if ($params[0]->datosLimitacion->idSedeOperativa) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params[0]->datosLimitacion->idSedeOperativa);
                 $ipat->setSedeOperativa($sedeOperativa);
             }
@@ -469,13 +469,15 @@ class SvRegistroIpatController extends Controller
                     );
                     $ipat->setGravedadVictima($gravedadVictima);
                 }
-                
+                */
                 $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[2]->consecutivo->consecutivo));
+                $ipat->setConsecutivo($consecutivo);
+
                 if ($consecutivo != null) {
                     $fechaAsignacion = new \Datetime();
                     $consecutivo->setFechaAsignacion($fechaAsignacion);
                     $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
-                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(array('usuario' => $usuario->getId()));
+                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(array('usuario' => $usuario));
                     $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
                     $consecutivo->setFuncionario($funcionario);
                     $consecutivo->setEstado('En Registro');

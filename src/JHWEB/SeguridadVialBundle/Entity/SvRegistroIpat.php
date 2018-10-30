@@ -20,6 +20,13 @@ class SvRegistroIpat
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MsvTConsecutivo", inversedBy="consecutivos")
+     */
+    private $consecutivo;
     
     /**
      * @var string
@@ -3915,6 +3922,30 @@ class SvRegistroIpat
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param \AppBundle\Entity\MsvTConsecutivo $consecutivo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConsecutivo(\AppBundle\Entity\MsvTConsecutivo $consecutivo = null)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return \AppBundle\Entity\MsvTConsecutivo
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
