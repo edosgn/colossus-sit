@@ -245,15 +245,13 @@ class UsuarioController extends Controller
                     }
                     
                     $em = $this->getDoctrine()->getManager();
-                   
-
                     
-                        $em->persist($usuario);
-                        $em->flush();
+                    $em->persist($usuario);
+                    $em->flush();
 
-                        $data["status"] = 'success';
-                        $data["code"] = 200;
-                        $data["msg"] = 'User updated !!';
+                    $data["status"] = 'success';
+                    $data["code"] = 200;
+                    $data["msg"] = 'User updated !!';
                    
                 }
             } else {

@@ -462,19 +462,22 @@ class FacturaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash); 
-        $mflRetefuenteArray=[];
+        $authCheck = $helpers->authCheck($hash);
 
         $json = $request->get("json",null);
         $params = json_decode($json);
+
         $em = $this->getDoctrine()->getManager();
+
         $facturas = $em->getRepository('AppBundle:Factura')->findByEstado(true);
-        $consecutivo = count($facturas)."-".date('y');
+        $consecutivo = count($facturas)."-".date('Y');
 
         $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
             $params->factura->sedeOperativaId
         );
+
         $factura = new Factura();
+
         if ($params->factura->vehiculoId) {
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
                 $params->factura->vehiculoId
@@ -485,11 +488,19 @@ class FacturaController extends Controller
         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
             $params->factura->ciudadanoId
         );
+
         $factura->setNumero($params->factura->numero);
         $factura->setConsecutivo(0);
         $factura->setEstado('Emitida');
-        $factura->setFechaCreacion(new \DateTime($params->factura->fechaCreacion));
-        $factura->setFechaVencimiento(new \DateTime($params->factura->fechaCreacion));
+
+        $factura->setFechaCreacion(new \DateTime(
+            $params->factura->fechaCreacion
+        ));
+
+        $factura->setFechaVencimiento(new \DateTime(
+            $params->factura->fechaCreacion
+        ));
+
         if ($params->factura->valorBruto) {
             $factura->setValorBruto($params->factura->valorBruto);
         }
@@ -499,7 +510,7 @@ class FacturaController extends Controller
         $factura->setCiudadano($ciudadano);
         $tramitesFacturaArray = false;
 
-      
+        $mflRetefuenteArray=[];
         
         foreach ($params->tramitesValor as $key => $tramiteValor) {
             $tramiteFactura = new TramiteFactura();

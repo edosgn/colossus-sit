@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\ConfigBundle\Entity;
+namespace JHWEB\SeguridadVialBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgSvSenialColor
+ * SvCfgSenialColor
  *
- * @ORM\Table(name="cfg_sv_senial_color")
- * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgSvSenialColorRepository")
+ * @ORM\Table(name="sv_cfg_senial_color")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgSenialColorRepository")
  */
-class CfgSvSenialColor
+class SvCfgSenialColor
 {
     /**
      * @var int
@@ -27,13 +27,6 @@ class CfgSvSenialColor
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="hexadecimal", type="string", length=10)
-     */
-    private $hexadecimal;
 
     /**
      * @var bool
@@ -58,7 +51,7 @@ class CfgSvSenialColor
      *
      * @param string $nombre
      *
-     * @return CfgSvSenialColor
+     * @return SvCfgSenialColor
      */
     public function setNombre($nombre)
     {
@@ -78,35 +71,11 @@ class CfgSvSenialColor
     }
 
     /**
-     * Set hexadecimal
-     *
-     * @param string $hexadecimal
-     *
-     * @return CfgSvSenialColor
-     */
-    public function setHexadecimal($hexadecimal)
-    {
-        $this->hexadecimal = $hexadecimal;
-
-        return $this;
-    }
-
-    /**
-     * Get hexadecimal
-     *
-     * @return string
-     */
-    public function getHexadecimal()
-    {
-        return $this->hexadecimal;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return CfgSvSenialColor
+     * @return SvCfgSenialColor
      */
     public function setActivo($activo)
     {
@@ -118,10 +87,11 @@ class CfgSvSenialColor
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
+

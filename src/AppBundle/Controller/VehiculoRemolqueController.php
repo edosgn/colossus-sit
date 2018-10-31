@@ -27,7 +27,7 @@ class VehiculoRemolqueController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $remolques = $em->getRepository('AppBundle:VehiculoRemolque')->getVehiculoCampo();
+        $remolques = $em->getRepository('AppBundle:VehiculoRemolque')->findAll();
         
         $response = array(
                 'status' => 'success',
@@ -89,8 +89,8 @@ class VehiculoRemolqueController extends Controller
                 
                 $carroceriaNew = $em->getRepository('AppBundle:Carroceria')->find($carroceria);
                 $marcaNew = $em->getRepository('AppBundle:Marca')->find($marca);
-                $origenRegistroNew = $em->getRepository('AppBundle:CfgOrigenRegistro')->find($origenRegistro);
-                $condicionIngresoNew = $em->getRepository('AppBundle:CondicionIngreso')->find($condicionIngreso);
+                $origenRegistroNew = $em->getRepository('JHWEBVehiculoBundle:VhloCfgOrigenRegistro')->find($origenRegistro);
+                $condicionIngresoNew = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCondicionIngreso')->find($condicionIngreso);
                 $claseNew = $em->getRepository('AppBundle:Clase')->find($clase);
                 $lineaNew = $em->getRepository('AppBundle:Linea')->findOneByMarca($marca);
                 
