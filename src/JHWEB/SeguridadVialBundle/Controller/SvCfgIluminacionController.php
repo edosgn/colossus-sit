@@ -212,6 +212,8 @@ class SvCfgIluminacionController extends Controller
         $iluminaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgIluminacion')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($iluminaciones as $key => $iluminacion) {
             $response[$key] = array(
                 'value' => $iluminacion->getId(),

@@ -223,6 +223,8 @@ class SvCfgClaseChoqueController extends Controller
     $clasesChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->findBy(
         array('activo' => 1)
     );
+         $response = null;
+
       foreach ($clasesChoque as $key => $claseChoque) {
         $response[$key] = array(
             'value' => $claseChoque->getId(),

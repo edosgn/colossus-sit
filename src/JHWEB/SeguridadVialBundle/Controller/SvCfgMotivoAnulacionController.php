@@ -213,6 +213,8 @@ class SvCfgMotivoAnulacionController extends Controller
         $motivosAnulacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMotivoAnulacion')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($motivosAnulacion as $key => $motivoAnulacion) {
             $response[$key] = array(
                 'value' => $motivoAnulacion->getId(),

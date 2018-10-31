@@ -213,7 +213,9 @@ class SvCfgTemaCapacitacionController extends Controller
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
     $temasCapacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->findBy(array('activo' => true));
-      foreach ($temasCapacitaciones as $key => $temaCapacitacion) {
+    $response = null;
+  
+    foreach ($temasCapacitaciones as $key => $temaCapacitacion) {
         $response[$key] = array(
             'value' => $temaCapacitacion->getId(),
             'label' => $temaCapacitacion->getNombre(),

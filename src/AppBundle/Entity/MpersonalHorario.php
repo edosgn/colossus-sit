@@ -21,13 +21,13 @@ class MpersonalHorario
      */
     private $id;
 
-    /**
-     * @var int
+     /**
+     * @var \DateTime
      *
-     * @ORM\Column(name="dia", type="smallint")
+     * @ORM\Column(name="fecha", type="date", nullable=true)
      */
-    private $dia;
-
+    private $fecha;
+    
     /**
      * @var \DateTime
      *
@@ -50,6 +50,13 @@ class MpersonalHorario
     private $jornada;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="lugar", type="string", length=100)
+     */
+    private $lugar;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -59,13 +66,16 @@ class MpersonalHorario
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="horarios")
      **/
+
     protected $funcionario;
+   
+
 
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -73,28 +83,27 @@ class MpersonalHorario
     }
 
     /**
-     * Set dia
+     * Set fecha
      *
-     * @param integer $dia
+     * @param \DateTime $fecha
      *
      * @return MpersonalHorario
      */
-    public function setDia($dia)
+    public function setFecha($fecha)
     {
-        $this->dia = $dia;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get dia
+     * Get fecha
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getDia()
+    public function getFecha()
     {
-        return date('l',$this->dia);
-
+        return $this->fecha->format('Y-m-d');
     }
 
     /**
@@ -118,7 +127,7 @@ class MpersonalHorario
      */
     public function getHoraInicio()
     {
-        return $this->horaInicio->format('h:m a');
+        return $this->horaInicio->format('H:m:s');
     }
 
     /**
@@ -142,7 +151,7 @@ class MpersonalHorario
      */
     public function getHoraFin()
     {
-        return $this->horaFin->format('h:m a');
+        return $this->horaFin->format('H:m:s');
     }
 
     /**
@@ -167,6 +176,30 @@ class MpersonalHorario
     public function getJornada()
     {
         return $this->jornada;
+    }
+
+    /**
+     * Set lugar
+     *
+     * @param string $lugar
+     *
+     * @return MpersonalHorario
+     */
+    public function setLugar($lugar)
+    {
+        $this->lugar = $lugar;
+
+        return $this;
+    }
+
+    /**
+     * Get lugar
+     *
+     * @return string
+     */
+    public function getLugar()
+    {
+        return $this->lugar;
     }
 
     /**

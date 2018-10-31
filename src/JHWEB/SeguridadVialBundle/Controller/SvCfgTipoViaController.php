@@ -223,6 +223,8 @@ class SvCfgTipoViaController extends Controller
         $tiposVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVia')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($tiposVia as $key => $tipoVia) {
             $response[$key] = array(
                 'value' => $tipoVia->getId(),

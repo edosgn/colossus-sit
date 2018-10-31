@@ -250,6 +250,8 @@ class SvCfgRequiereEmpresaController extends Controller
         $requierenEmpresa = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgRequiereEmpresa')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($requierenEmpresa as $key => $requiereEmpresa) {
             $response[$key] = array(
                 'value' => $requiereEmpresa->getId(),

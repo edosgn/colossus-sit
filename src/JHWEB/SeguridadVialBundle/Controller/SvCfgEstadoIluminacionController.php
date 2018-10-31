@@ -214,6 +214,8 @@ class SvCfgEstadoIluminacionController extends Controller
     $estadosIluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoIluminacion')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($estadosIluminacion as $key => $estadoIluminacion) {
         $response[$key] = array(
             'value' => $estadoIluminacion->getId(),

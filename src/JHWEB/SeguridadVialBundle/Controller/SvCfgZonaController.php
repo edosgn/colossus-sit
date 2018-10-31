@@ -239,6 +239,8 @@ class SvCfgZonaController extends Controller
         $zonas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgZona')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($zonas as $key => $zona) {
             $response[$key] = array(
                 'value' => $zona->getId(),

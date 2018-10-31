@@ -214,6 +214,7 @@ class SvCfgCardinalidadController extends Controller
     $cardinalidades = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCardinalidad')->findBy(
         array('activo' => 1)
     );
+        $response = null;
       foreach ($cardinalidades as $key => $cardinalidad) {
         $response[$key] = array(
             'value' => $cardinalidad->getId(),

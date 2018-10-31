@@ -42,13 +42,8 @@ class CvCfgTipoRestriccion
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="notificaciones") */
-    private $vehiculo;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="notificaciones") */
-    private $ciudadano;
-
     
+
 
     /**
      * Get id
@@ -130,53 +125,5 @@ class CvCfgTipoRestriccion
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return CvCfgTipoRestriccion
-     */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \AppBundle\Entity\Vehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
-    }
-
-    /**
-     * Set ciudadano
-     *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
-     *
-     * @return CvCfgTipoRestriccion
-     */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
-    {
-        $this->ciudadano = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadano
-     *
-     * @return \AppBundle\Entity\Ciudadano
-     */
-    public function getCiudadano()
-    {
-        return $this->ciudadano;
     }
 }

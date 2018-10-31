@@ -214,6 +214,8 @@ class SvCfgEstadoTiempoController extends Controller
     $estadosTiempo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoTiempo')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($estadosTiempo as $key => $estadoTiempo) {
         $response[$key] = array(
             'value' => $estadoTiempo->getId(),

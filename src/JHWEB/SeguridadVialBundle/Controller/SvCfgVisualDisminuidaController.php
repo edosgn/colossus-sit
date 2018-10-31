@@ -87,20 +87,22 @@ class SvCfgVisualDisminuidaController extends Controller
      * Finds and displays a svCfgVisualDisminuida entity.
      *
      * @Route("/{id}/show", name="svcfgvisualdisminuida_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
+    /*public function showAction(SvCfgVisualDisminuida $svCfgVisualDisminuida)
+    {
+        $deleteForm = $this->createDeleteForm($svCfgVisualDisminuida);
+    }*/
     public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
-
             $visualDisminuida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisualDisminuida')->find(
                 $params->id
             );
@@ -176,7 +178,7 @@ class SvCfgVisualDisminuidaController extends Controller
      * Deletes a svCfgVisualDisminuida entity.
      *
      * @Route("/delete", name="svcfgvisualdisminuida_delete")
-     * @Method({"GET", "POST"})
+     * @Method("POST")
      */
     public function deleteAction(Request $request)
     {
@@ -213,9 +215,9 @@ class SvCfgVisualDisminuidaController extends Controller
     }
 
     /**
-     * Creates a form to delete a SvCfgVisualDisminuida entity.
+     * Creates a form to delete a svCfgVisualDisminuida entity.
      *
-     * @param SvCfgVisualDisminuida $svCfgVisualDisminuida The SvCfgVisualDisminuida entity
+     * @param SvCfgVisualDisminuida $svCfgVisualDisminuida The svCfgVisualDisminuida entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
@@ -224,7 +226,8 @@ class SvCfgVisualDisminuidaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('svcfgvisualdisminuida_delete', array('id' => $svCfgVisualDisminuida->getId())))
             ->setMethod('DELETE')
-            ->getForm();
+            ->getForm()
+        ;
     }
 
     /**
@@ -240,9 +243,11 @@ class SvCfgVisualDisminuidaController extends Controller
         $visualesDisminuidas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisualDisminuida')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($visualesDisminuidas as $key => $visualDisminuida) {
             $response[$key] = array(
-                'value' => $visualDisminuida->getId(),
+                'value' => $visualDisminuida->getNombre(),
                 'label' => $visualDisminuida->getNombre(),
             );
         }

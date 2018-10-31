@@ -214,6 +214,8 @@ class SvCfgGravedadVictimaController extends Controller
         $gravedadesVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($gravedadesVictima as $key => $gravedadVictima) {
             $response[$key] = array(
                 'value' => $gravedadVictima->getId(),

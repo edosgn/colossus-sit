@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\SeguridadVialBundle\Entity;
+namespace JHWEB\ContravencionalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SvCfgTipoControlesTransito
+ * CvCfgTipoMedidaCautelar
  *
- * @ORM\Table(name="sv_cfg_tipo_controles_transito")
- * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgTipoControlesTransitoRepository")
+ * @ORM\Table(name="cv_cfg_tipo_medida_cautelar")
+ * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCfgTipoMedidaCautelarRepository")
  */
-class SvCfgTipoControlesTransito
+class CvCfgTipoMedidaCautelar
 {
     /**
      * @var int
@@ -24,21 +24,32 @@ class SvCfgTipoControlesTransito
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", nullable= true)
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="codigo", type="string", length=255)
+     */
+    private $codigo;
+
+    /**
      * @var bool
      *
-     * @ORM\Column(name="activo", type="boolean", nullable=true)
+     * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+
+
+    
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -50,7 +61,7 @@ class SvCfgTipoControlesTransito
      *
      * @param string $nombre
      *
-     * @return SvCfgTipoControlesTransito
+     * @return CvCfgTipoMedidaCautelar
      */
     public function setNombre($nombre)
     {
@@ -70,11 +81,35 @@ class SvCfgTipoControlesTransito
     }
 
     /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return CvCfgTipoMedidaCautelar
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return string
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return SvCfgTipoControlesTransito
+     * @return CvCfgTipoMedidaCautelar
      */
     public function setActivo($activo)
     {

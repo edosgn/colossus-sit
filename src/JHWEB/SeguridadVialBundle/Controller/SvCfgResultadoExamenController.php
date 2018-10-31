@@ -214,6 +214,8 @@ class SvCfgResultadoExamenController extends Controller
         $resultadosExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($resultadosExamen as $key => $resultadoExamen) {
             $response[$key] = array(
                 'value' => $resultadoExamen->getId(),

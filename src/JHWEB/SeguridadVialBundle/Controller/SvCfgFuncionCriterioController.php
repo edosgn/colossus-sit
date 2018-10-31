@@ -224,6 +224,8 @@ class SvCfgFuncionCriterioController extends Controller
     $criterios = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->findBy(
         array('activo' => 1)
     );
+    $response = null;
+
       foreach ($criterios as $key => $criterio) {
         $response[$key] = array(
             'value' => $criterio->getId(),

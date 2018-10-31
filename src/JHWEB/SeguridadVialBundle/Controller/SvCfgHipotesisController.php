@@ -212,6 +212,8 @@ class SvCfgHipotesisController extends Controller
         $svCfgHipotesis = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHipotesis')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($svCfgHipotesis as $key => $hipotesis) {
             $response[$key] = array(
                 'value' => $hipotesis->getId(),

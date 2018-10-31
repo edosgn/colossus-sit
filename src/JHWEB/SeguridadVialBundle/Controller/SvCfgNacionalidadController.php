@@ -214,6 +214,8 @@ class SvCfgNacionalidadController extends Controller
         $nacionalidades = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->findBy(
             array('activo' => 1)
         );
+        $response = null;
+
         foreach ($nacionalidades as $key => $nacionalidad) {
             $response[$key] = array(
                 'value' => $nacionalidad->getId(),

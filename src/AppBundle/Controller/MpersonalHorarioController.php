@@ -59,43 +59,45 @@ class MpersonalHorarioController extends Controller
                     $params->funcionarioId
                 );
 
-                foreach ($params->dias as $key => $dias) {
-                    foreach ($dias as $numero => $dia) {
-                        $horario = new MpersonalHorario();
+                
 
+               
                         
-                        if ($params->manana) {
-                            $horario->setHoraInicio(new \Datetime($params->horaInicioManana));
-                            $horario->setHoraFin(new \Datetime($params->horaFinManana));
-                            $horario->setDia($numero);
-                            $horario->setJornada('Mañana');
-                            $horario->setFuncionario($funcionario);
-                            $em->persist($horario);
-                            $em->flush();
-                        }
+                if ($params->manana) {
+                    $horarioMañana = new MpersonalHorario();
+                    $horarioMañana->setHoraInicio(new \Datetime($params->horaInicioManana));
+                    $horarioMañana->setHoraFin(new \Datetime($params->horaFinManana));
+                    $horarioMañana->setFecha(new \Datetime($params->fecha));
+                    $horarioMañana->setJornada('Mañana');
+                    $horarioMañana->setFuncionario($funcionario);
+                    $horarioMañana->setLugar($params->lugarManana);
+                    $em->persist($horarioMañana);
+                    $em->flush();
+                }
 
-                        if ($params->tarde) {
-                            $horario->setHoraInicio(new \Datetime($params->horaInicioTarde));
-                            $horario->setHoraFin(new \Datetime($params->horaFinTarde));
-                            $horario->setDia($numero);
-                            $horario->setJornada('Tarde');
-                            $horario->setFuncionario($funcionario);
-                            $em->persist($horario);
-                            $em->flush();
-                        }
-                        
-                        if ($params->noche) {
-                            $horario->setHoraInicio(new \Datetime($params->horaInicioNoche));
-                            $horario->setHoraFin(new \Datetime($params->horaFinNoche));
-                            $horario->setDia($numero);
-                            $horario->setJornada('Noche');
-                            $horario->setFuncionario($funcionario);
-                            $em->persist($horario);
-                            $em->flush();
-                        }
-                    }
+                if ($params->tarde) {
+                    $horarioTarde = new MpersonalHorario();
+                    $horarioTarde->setHoraInicio(new \Datetime($params->horaInicioTarde));
+                    $horarioTarde->setHoraFin(new \Datetime($params->horaFinTarde));
+                    $horarioTarde->setFecha(new \Datetime($params->fecha));
+                    $horarioTarde->setJornada('Tarde');
+                    $horarioTarde->setFuncionario($funcionario);
+                    $horarioTarde->setLugar($params->lugarTarde);
+                    $em->persist($horarioTarde);
+                    $em->flush();
                 }
                 
+                if ($params->noche) {
+                    $horarioNoche = new MpersonalHorario();
+                    $horarioNoche->setHoraInicio(new \Datetime($params->horaInicioNoche));
+                    $horarioNoche->setHoraFin(new \Datetime($params->horaFinNoche));
+                    $horarioNoche->setFecha(new \Datetime($params->fecha));
+                    $horarioNoche->setJornada('Noche');
+                    $horarioNoche->setFuncionario($funcionario);
+                    $horarioNoche->setLugar($params->lugarNoche);
+                    $em->persist($horarioNoche);
+                    $em->flush();
+                }
 
                 $response = array(
                     'status' => 'success',
