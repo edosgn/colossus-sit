@@ -773,54 +773,30 @@ class SvRegistroIpatController extends Controller
         return $helpers->json($response);
     }
 
-    /*public function validarCamposAccidente($fechaLevantamiento, $horaLevantamiento, $fechaAccidente, $horaAccidente, $fechaActual, $cantidadAcompaniantes)
+    /**
+     * Exporta ipats.
+     *
+     * @Route("/export", name="ipat_export")
+     * @Method("GET")
+     */
+    public function exportAction()
     {
         $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findAll();
 
-        if ($cantidadAcompaniantes) {
-            if ($cantidadAcompaniantes >= 0) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "La cantidad de acompañantes al momento del accidente es válida.",
-                );
-            }
-            else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "La cantidad de acompañantes debe ser mayor o igual a 0.",
-                );
-            }
-        }
-        // Validación fecha de Levantamiento
-        if ($fechaLevantamiento <= $fechaActual && $fechaLevantamiento >= $fechaAccidente ) {
+        $response['data'] = array();
+
+        if ($ipats) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "La fecha de levantamiento es válida.",
+                'message' => count($ipats) . " registros encontrados",
+                'data' => $ipats,
             );
-        } elseif ($fechaLevantamiento == $fechaAccidente) {
-            if ( $horaLevantamiento > $horaAccidente ) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "La hora de levantamiento es válida.",
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "La hora de levantamiento debe ser mayor a la hora del accidente.",
-                );
-            }
-        } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "La fecha de levantamiento debe ser menor o igual a la fecha del sistema y mayor o igual a la fecha del accidente.",
-            );
-            return $helpers->json($response);
         }
-    }*/
+        return $helpers->json($response);
+    }
+
+
 }
