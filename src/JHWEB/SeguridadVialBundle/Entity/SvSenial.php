@@ -76,11 +76,8 @@ class SvSenial
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialEstado", inversedBy="seniales") */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialColor", inversedBy="seniales") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialColor", inversedBy="seniales") */
     private $color;
-
-    /** @ORM\ManyToOne(targetEntity="SvSenialInventarioBodega", inversedBy="seniales") */
-    private $inventario;
 
     /**
      * Get id
@@ -311,11 +308,11 @@ class SvSenial
     /**
      * Set color
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgSvSenialColor $color
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor $color
      *
      * @return SvSenial
      */
-    public function setColor(\JHWEB\ConfigBundle\Entity\CfgSvSenialColor $color = null)
+    public function setColor(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor $color = null)
     {
         $this->color = $color;
 
@@ -325,34 +322,10 @@ class SvSenial
     /**
      * Get color
      *
-     * @return \JHWEB\ConfigBundle\Entity\CfgSvSenialColor
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor
      */
     public function getColor()
     {
         return $this->color;
-    }
-
-    /**
-     * Set inventario
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega $inventario
-     *
-     * @return SvSenial
-     */
-    public function setInventario(\JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega $inventario = null)
-    {
-        $this->inventario = $inventario;
-
-        return $this;
-    }
-
-    /**
-     * Get inventario
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega
-     */
-    public function getInventario()
-    {
-        return $this->inventario;
     }
 }

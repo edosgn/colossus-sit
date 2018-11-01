@@ -112,14 +112,11 @@ class SvSenialUbicacion
      */
     private $cantidad;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvConector", inversedBy="senialesUbicacion") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialConector", inversedBy="ubicaciones") */
     private $conector;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialEstado", inversedBy="senialesUbicacion") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
-
-    /** @ORM\ManyToOne(targetEntity="SvSenialInventarioMunicipio", inversedBy="senialesUbicacion") */
-    private $inventario;
 
     /** @ORM\ManyToOne(targetEntity="SvSenial", inversedBy="senialesUbicacion") */
     private $senial;
@@ -247,7 +244,7 @@ class SvSenialUbicacion
     /**
      * Get numero1
      *
-     * @return int
+     * @return integer
      */
     public function getNumero1()
     {
@@ -295,7 +292,7 @@ class SvSenialUbicacion
     /**
      * Get numero2
      *
-     * @return int
+     * @return integer
      */
     public function getNumero2()
     {
@@ -343,35 +340,11 @@ class SvSenialUbicacion
     /**
      * Get numero3
      *
-     * @return int
+     * @return integer
      */
     public function getNumero3()
     {
         return $this->numero3;
-    }
-
-    /**
-     * Set codigo
-     *
-     * @param string $codigo
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setCodigo($codigo)
-    {
-        $this->codigo = $codigo;
-
-        return $this;
-    }
-
-    /**
-     * Get codigo
-     *
-     * @return string
-     */
-    public function getCodigo()
-    {
-        return $this->codigo;
     }
 
     /**
@@ -423,102 +396,6 @@ class SvSenialUbicacion
     }
 
     /**
-     * Set cantidad
-     *
-     * @param integer $cantidad
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setCantidad($cantidad)
-    {
-        $this->cantidad = $cantidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidad
-     *
-     * @return int
-     */
-    public function getCantidad()
-    {
-        return $this->cantidad;
-    }
-
-    /**
-     * Set conector
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgSvConector $conector
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setConector(\JHWEB\ConfigBundle\Entity\CfgSvConector $conector = null)
-    {
-        $this->conector = $conector;
-
-        return $this;
-    }
-
-    /**
-     * Get conector
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgSvConector
-     */
-    public function getConector()
-    {
-        return $this->conector;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgSvSenialEstado $estado
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setEstado(\JHWEB\ConfigBundle\Entity\CfgSvSenialEstado $estado = null)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgSvSenialEstado
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
-
-    /**
-     * Set inventario
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioMunicipio $inventario
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setInventario(\JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioMunicipio $inventario = null)
-    {
-        $this->inventario = $inventario;
-
-        return $this;
-    }
-
-    /**
-     * Get inventario
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioMunicipio
-     */
-    public function getInventario()
-    {
-        return $this->inventario;
-    }
-
-    /**
      * Set adjunto
      *
      * @param string $adjunto
@@ -540,6 +417,78 @@ class SvSenialUbicacion
     public function getAdjunto()
     {
         return $this->adjunto;
+    }
+
+    /**
+     * Set cantidad
+     *
+     * @param integer $cantidad
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
+     * Set conector
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector $conector
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setConector(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector $conector = null)
+    {
+        $this->conector = $conector;
+
+        return $this;
+    }
+
+    /**
+     * Get conector
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector
+     */
+    public function getConector()
+    {
+        return $this->conector;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialEstado $estado
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setEstado(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialEstado $estado = null)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialEstado
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

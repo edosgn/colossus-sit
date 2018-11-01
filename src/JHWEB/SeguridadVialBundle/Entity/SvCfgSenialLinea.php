@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\ConfigBundle\Entity;
+namespace JHWEB\SeguridadVialBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgSvConector
+ * SvCfgSenialLinea
  *
- * @ORM\Table(name="cfg_sv_conector")
- * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgSvConectorRepository")
+ * @ORM\Table(name="sv_cfg_senial_linea")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgSenialLineaRepository")
  */
-class CfgSvConector
+class SvCfgSenialLinea
 {
     /**
      * @var int
@@ -51,7 +51,7 @@ class CfgSvConector
      *
      * @param string $nombre
      *
-     * @return CfgSvConector
+     * @return SvCfgSenialLinea
      */
     public function setNombre($nombre)
     {
@@ -75,7 +75,7 @@ class CfgSvConector
      *
      * @param boolean $activo
      *
-     * @return CfgSvConector
+     * @return SvCfgSenialLinea
      */
     public function setActivo($activo)
     {
