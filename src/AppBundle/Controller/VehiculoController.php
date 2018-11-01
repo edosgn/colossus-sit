@@ -78,7 +78,7 @@ class VehiculoController extends Controller
 
             $vin = $params->vehiculo->vin;
             $numeroPasajeros = $params->vehiculo->numeroPasajeros;
-            $municipioId = $params->vehiculo->municipioId;
+
             $lineaId = $params->vehiculo->lineaId;
             $servicioId = $params->vehiculo->servicioId;
             $colorId = $params->vehiculo->colorId;
@@ -89,8 +89,9 @@ class VehiculoController extends Controller
             $pignorado = (isset($params->vehiculo->pignorado)) ? $params->vehiculo->pignorado : false;
             $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
             $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
+
             $em = $this->getDoctrine()->getManager();
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+
             $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
             $servicio = $em->getRepository('AppBundle:Servicio')->find($servicioId);
             $color = $em->getRepository('AppBundle:Color')->find($colorId);
@@ -145,7 +146,14 @@ class VehiculoController extends Controller
             $vehiculo->setSerie($serie);
             $vehiculo->setVin($vin);
             $vehiculo->setNumeroPasajeros($numeroPasajeros);
-            $vehiculo->setMunicipio($municipio);
+
+            if (isset($params->vehiculo->municipioId)) {
+                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                    $params->vehiculo->municipioId
+                );
+                $vehiculo->setMunicipio($municipio);
+            }
+            
             $vehiculo->setLinea($linea);
             $vehiculo->setServicio($servicio);
             $vehiculo->setColor($color);

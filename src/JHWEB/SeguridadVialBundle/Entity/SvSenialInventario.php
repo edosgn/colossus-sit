@@ -5,12 +5,12 @@ namespace JHWEB\SeguridadVialBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SvSenialInventarioBodega
+ * SvSenialInventario
  *
- * @ORM\Table(name="sv_senial_inventario_bodega")
- * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvSenialInventarioBodegaRepository")
+ * @ORM\Table(name="sv_senial_inventario")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvSenialInventarioRepository")
  */
-class SvSenialInventarioBodega
+class SvSenialInventario
 {
     /**
      * @var int
@@ -35,8 +35,19 @@ class SvSenialInventarioBodega
      */
     private $consecutivo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialTipo", inversedBy="inventariosBodega") */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipoInventario", type="string", length=50)
+     */
+    private $tipoInventario;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialTipo", inversedBy="seniales") */
     private $tipoSenial;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inventarios") */
+    private $municipio;
+
 
     /**
      * Get id
@@ -53,7 +64,7 @@ class SvSenialInventarioBodega
      *
      * @param \DateTime $fecha
      *
-     * @return SvSenialInventarioBodega
+     * @return SvSenialInventario
      */
     public function setFecha($fecha)
     {
@@ -69,9 +80,6 @@ class SvSenialInventarioBodega
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-        }
         return $this->fecha;
     }
 
@@ -80,7 +88,7 @@ class SvSenialInventarioBodega
      *
      * @param string $consecutivo
      *
-     * @return SvSenialInventarioBodega
+     * @return SvSenialInventario
      */
     public function setConsecutivo($consecutivo)
     {
@@ -98,28 +106,5 @@ class SvSenialInventarioBodega
     {
         return $this->consecutivo;
     }
-
-    /**
-     * Set tipoSenial
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgSvSenialTipo $tipoSenial
-     *
-     * @return SvSenialInventarioBodega
-     */
-    public function setTipoSenial(\JHWEB\ConfigBundle\Entity\CfgSvSenialTipo $tipoSenial = null)
-    {
-        $this->tipoSenial = $tipoSenial;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoSenial
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgSvSenialTipo
-     */
-    public function getTipoSenial()
-    {
-        return $this->tipoSenial;
-    }
 }
+

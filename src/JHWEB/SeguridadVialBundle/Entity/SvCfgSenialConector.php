@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\ContravencionalBundle\Entity;
+namespace JHWEB\SeguridadVialBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CvCfgTipoRestriccion
+ * SvCfgSenialConector
  *
- * @ORM\Table(name="cv_cfg_tipo_restriccion")
- * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCfgTipoRestriccionRepository")
+ * @ORM\Table(name="sv_cfg_senial_conector")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvCfgSenialConectorRepository")
  */
-class CvCfgTipoRestriccion
+class SvCfgSenialConector
 {
     /**
      * @var int
@@ -29,26 +29,17 @@ class CvCfgTipoRestriccion
     private $nombre;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="codigo", type="integer")
-     */
-    private $codigo;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
 
-    
-
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -60,7 +51,7 @@ class CvCfgTipoRestriccion
      *
      * @param string $nombre
      *
-     * @return CvCfgTipoRestriccion
+     * @return SvCfgSenialConector
      */
     public function setNombre($nombre)
     {
@@ -80,35 +71,11 @@ class CvCfgTipoRestriccion
     }
 
     /**
-     * Set codigo
-     *
-     * @param integer $codigo
-     *
-     * @return CvCfgTipoRestriccion
-     */
-    public function setCodigo($codigo)
-    {
-        $this->codigo = $codigo;
-
-        return $this;
-    }
-
-    /**
-     * Get codigo
-     *
-     * @return integer
-     */
-    public function getCodigo()
-    {
-        return $this->codigo;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return CvCfgTipoRestriccion
+     * @return SvCfgSenialConector
      */
     public function setActivo($activo)
     {
@@ -120,10 +87,11 @@ class CvCfgTipoRestriccion
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
+

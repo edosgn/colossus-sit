@@ -15,9 +15,12 @@
     <table>
         <tr>
             <td  width="15%" style="font-weight:bold;">Fecha de EX</td>
-            <td> {{factura.fechaCreacion | date('Y-md-')}}</td>
+            {# <td> {{ factura.fechaCreacion|date('d/m/Y') }}</td> #}
+            <td> {{ 'now'|date('d/m/Y') }}</td>
             <td style="font-weight:bold;">Fecha Vencimiento</td>
-            <td>{{factura.fechaVencimiento| date('Y-md-')}}</td>
+            {# <td>{{ factura.fechaVencimiento|date('d/m/Y') }}</td>
+                     #}        
+            <td> {{ 'now'|date('d/m/Y') }}</td>
         </tr>
         <tr>
             <td  width="15%" style="font-weight:bold;">Valor</td>
