@@ -103,6 +103,30 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         $consulta = $em->createQuery($dql);
         return $consulta->getResult();
     }
+ 
+    //Busca un solo vehiculo que no sean ni maquinaria ni remolques
+    public function getOnlyVehiculo($id)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT v
+                FROM AppBundle:Vehiculo v
+                WHERE v.estado = true 
+                AND v.id = :id
+                AND
+                v.id NOT IN
+                (SELECT IDENTITY(vm.vehiculo)
+                FROM JHWEBVehiculoBundle:VhloMaquinaria vm
+                WHERE vm.vehiculo = v.id) AND v.id NOT IN
+                (SELECT IDENTITY(vr.vehiculo)
+                FROM JHWEBVehiculoBundle:VhloRemolque vr
+                WHERE vr.vehiculo = v.id)";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'id' => $id,
+        ));
+        return $consulta->getOneOrNullResult();
+    }
 
     //Obtiene el vehículo según un numero de placa
     public function getByPlaca($placa)

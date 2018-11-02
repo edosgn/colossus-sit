@@ -189,27 +189,172 @@ class VehiculoController extends Controller
     /**
      * Finds and displays a Vehiculo entity.
      *
-     * @Route("/show/{id}", name="vehiculo_show")
+     * @Route("/show/rna", name="vehiculo_show_rna")
      * @Method("POST")
      */
-    public function showAction(Request $request, $id)
+    public function showRnaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck == true) {
+            $vehiculoRna = null;
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+          
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($id);
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "vehiculo",
-                'data' => $vehiculo,
-            );
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
+            if ($vehiculo) {
+                $vehiculoRna = $em->getRepository('AppBundle:Vehiculo')->getOnlyVehiculo($vehiculo->getId());
+            }
+
+            if ($vehiculoRna) {
+                $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                        'estado' => 1,
+                        'estadoPropiedad' => '1',
+                        'permisoTramite' => '1'
+                    )
+                );
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculo",
+                    'propietarios' => $propietarioVehiculo,
+                    'vehiculo' => $vehiculoRna,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                );
+            } 
+
+            
         } else {
             $response = array(
-                'status' => 'error',
+                'status' => 'error', 
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a Vehiculo entity.
+     *
+     * @Route("/show/rnma", name="vehiculo_show_rnma")
+     * @Method("POST")
+     */
+    public function showRnmaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $vehiculoMaquinaria = null;
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+          
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
+            if ($vehiculo) {
+                $vehiculoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->findBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                    )
+                );
+            } 
+
+            if ($vehiculoMaquinaria) {
+                $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                        'estado' => 1,
+                        'estadoPropiedad' => '1',
+                        'permisoTramite' => '1'
+                    )
+                );
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculo",
+                    'propietarios' => $propietarioVehiculo,
+                    'vehiculo' => $vehiculo,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                );
+            } 
+
+            
+        } else {
+            $response = array(
+                'status' => 'error', 
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a Vehiculo entity.
+     *
+     * @Route("/show/rnrs", name="vehiculo_show_rnrs")
+     * @Method("POST")
+     */
+    public function showRnrsAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $vehiculoRemolque = null;
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+          
+            $em = $this->getDoctrine()->getManager();
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
+            if ($vehiculo) {
+                $vehiculoRemolque = $em->getRepository('AppBundle:VehiculoRemolque')->findBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                    )
+                );
+            } 
+
+            if ($vehiculoRemolque) {
+                $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId(),
+                        'estado' => 1,
+                        'estadoPropiedad' => '1',
+                        'permisoTramite' => '1'
+                    )
+                );
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "vehiculo",
+                    'propietarios' => $propietarioVehiculo,
+                    'vehiculo' => $vehiculo,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                );
+            } 
+
+            
+        } else {
+            $response = array(
+                'status' => 'error', 
                 'code' => 400,
                 'msj' => "Autorizacion no valida",
             );
