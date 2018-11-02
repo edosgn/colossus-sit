@@ -62,7 +62,7 @@ class SvRegistroIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            /*if ($params[0]->datosLimitacion->idSedeOperativa) {
+            if ($params[0]->datosLimitacion->idSedeOperativa) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params[0]->datosLimitacion->idSedeOperativa);
                 $ipat->setSedeOperativa($sedeOperativa);
             }
@@ -469,7 +469,7 @@ class SvRegistroIpatController extends Controller
                     );
                     $ipat->setGravedadVictima($gravedadVictima);
                 }
-                */
+                
                 $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[2]->consecutivo->consecutivo));
                 $ipat->setConsecutivo($consecutivo);
 
@@ -798,5 +798,89 @@ class SvRegistroIpatController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Exporta ipats.
+     *
+     * @Route("/buscaripat", name="buscar_ipat")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarIpatAction(Request $request) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            
+            $horaInicioDatetime = new \Datetime($params->horaInicio);
+            //$horaInicio = $horaInicioDatetime->format('H:i:s');
+            $fechaInicioDatetime = new \Datetime($params->fechaInicio);
+            //$fechaInicio = $fechaInicioDatetime->format('Y-m-d');
+            if ($params->idGravedad) {
+                $gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params->idGravedad);
+            }
+            if ($params->idTipoVictima) {
+                $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->find($params->idTipoVictima);
+            }
+            if ($params->idMunicipio) {
+                $municipio = $em->getRepository('AppBundle:Municipio')->find($params->idMunicipio);
+            }
+            if ($params->idGenero) {
+                $genero = $em->getRepository('AppBundle:Genero')->find($params->idGenero);
+            }
+            if ($params->idClase) {
+                $clase = $em->getRepository('AppBundle:Clase')->find($params->idClase);
+            }
+            if ($params->idClaseAccidente) {
+                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find($params->idClaseAccidente);
+            }
+            if ($params->idChoqueCon) {
+                $choqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->find($params->idChoqueCon);
+            }
+            if ($params->idObjetoFijo) {
+                $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->idObjetoFijo);
+            }
+
+            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
+                array(
+                    'gravedad' => $gravedad,
+                    'tipoVictima' => $tipoVictima,
+                    'horaAccidente' => $horaInicioDatetime,
+                    'fechaAccidente' => $fechaInicioDatetime,
+                    'ciudadResidenciaConductor' => $municipio->getNombre(),
+                    'sexoConductor' => $genero->getSigla(),
+                    'clase' => $clase->getNombre(),
+                    'claseAccidente' => $claseAccidente,
+                    'choqueCon' => $choqueCon,
+                    'objetoFijo' => $objetoFijo,
+                )
+            );
+            if ($ipats) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($ipats)." ipats encontrado(s)",
+                    'data' => $ipats,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron registros en la Base de Datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 
 }
