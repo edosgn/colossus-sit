@@ -821,10 +821,18 @@ class SvRegistroIpatController extends Controller
             $fechaInicioDatetime = new \Datetime($params->fechaInicio);
             //$fechaInicio = $fechaInicioDatetime->format('Y-m-d');
             if ($params->idGravedad) {
-                $gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params->idGravedad);
+                $gravedad = $em->getRepository('AppBundle:CfgGravedad')->findBy(
+                    array(
+                        'nombre'=>$params->idGravedad
+                    )
+                );
             }
             if ($params->idTipoVictima) {
-                $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->find($params->idTipoVictima);
+                $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
+                    array(
+                        'nombre'=>$params->idTipoVictima
+                    )
+                );
             }
             if ($params->idMunicipio) {
                 $municipio = $em->getRepository('AppBundle:Municipio')->find($params->idMunicipio);
@@ -832,18 +840,30 @@ class SvRegistroIpatController extends Controller
             if ($params->idGenero) {
                 $genero = $em->getRepository('AppBundle:Genero')->find($params->idGenero);
             }
+            
             if ($params->idClase) {
                 $clase = $em->getRepository('AppBundle:Clase')->find($params->idClase);
             }
             if ($params->idClaseAccidente) {
-                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find($params->idClaseAccidente);
+                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findBy(
+                    array(
+                        'nombre'=>$params->idClaseAccidente
+                    )
+                );
             }
             if ($params->idChoqueCon) {
-                $choqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->find($params->idChoqueCon);
+                $choqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->findBy(
+                    array(
+                        'nombre'=>$params->idChoqueCon
+                    )
+                );
             }
             if ($params->idObjetoFijo) {
                 $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->idObjetoFijo);
             }
+
+            $fechaAccidente = $fechaInicioDatetime->format('EEEE');
+            var_dump($fechaAccidente);
 
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
                 array(
@@ -859,12 +879,14 @@ class SvRegistroIpatController extends Controller
                     'objetoFijo' => $objetoFijo,
                 )
             );
+
             if ($ipats) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($ipats)." ipats encontrado(s)",
                     'data' => $ipats,
+                    'diasemana' => $fechaInicioDatetime->format('EEEE'),
                 );
             } else {
                 $response = array(
