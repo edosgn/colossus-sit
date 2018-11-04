@@ -1137,6 +1137,9 @@ class SvRegistroIpat
      */
     public function getFechaAccidente()
     {
+        if ($this->fechaAccidente) {
+            return $this->fechaAccidente->format('d/m/Y');
+        }
         return $this->fechaAccidente;
     }
 
@@ -1161,6 +1164,9 @@ class SvRegistroIpat
      */
     public function getHoraAccidente()
     {
+        if ($this->horaAccidente) {
+            return $this->horaAccidente->format('H:i:s');
+        }
         return $this->horaAccidente;
     }
 
@@ -1185,6 +1191,9 @@ class SvRegistroIpat
      */
     public function getFechaLevantamiento()
     {
+        if ($this->fechaLevantamiento) {
+            return $this->fechaLevantamiento->format('d/m/Y');
+        }
         return $this->fechaLevantamiento;
     }
 
@@ -1209,6 +1218,9 @@ class SvRegistroIpat
      */
     public function getHoraLevantamiento()
     {
+        if ($this->horaLevantamiento) {
+            return $this->horaLevantamiento->format('H:i:s');
+        }
         return $this->horaLevantamiento;
     }
 
@@ -2649,6 +2661,9 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoConductor()
     {
+        if ($this->fechaNacimientoConductor) {
+            return $this->fechaNacimientoConductor->format('d/m/Y');
+        }
         return $this->fechaNacimientoConductor;
     }
 
@@ -3249,6 +3264,9 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoVictima()
     {
+        if ($this->fechaNacimientoVictima) {
+            return $this->fechaNacimientoVictima->format('d/m/Y');
+        }
         return $this->fechaNacimientoVictima;
     }
 

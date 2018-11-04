@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvmedidacautelar</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cvMedidaCautelar.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecharegistro</th>
+                <td>{% if cvMedidaCautelar.fechaRegistro %}{{ cvMedidaCautelar.fechaRegistro|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechainico</th>
+                <td>{% if cvMedidaCautelar.fechaInico %}{{ cvMedidaCautelar.fechaInico|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechaexpiracion</th>
+                <td>{% if cvMedidaCautelar.fechaExpiracion %}{{ cvMedidaCautelar.fechaExpiracion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechalevantamiento</th>
+                <td>{% if cvMedidaCautelar.fechaLevantamiento %}{{ cvMedidaCautelar.fechaLevantamiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numerooficioinscripcion</th>
+                <td>{{ cvMedidaCautelar.numeroOficioInscripcion }}</td>
+            </tr>
+            <tr>
+                <th>Numerooficiolevantamiento</th>
+                <td>{{ cvMedidaCautelar.numeroOficioLevantamiento }}</td>
+            </tr>
+            <tr>
+                <th>Numeroradicado</th>
+                <td>{{ cvMedidaCautelar.numeroRadicado }}</td>
+            </tr>
+            <tr>
+                <th>Observacionesinscripcion</th>
+                <td>{{ cvMedidaCautelar.observacionesInscripcion }}</td>
+            </tr>
+            <tr>
+                <th>Observacioneslevantamiento</th>
+                <td>{{ cvMedidaCautelar.observacionesLevantamiento }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvmedidacautelar_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cvmedidacautelar_edit', { 'id': cvMedidaCautelar.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

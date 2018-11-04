@@ -43,11 +43,25 @@ class CvMedidaCautelar
     private $fechaExpiracion;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaLevantamiento", type="date", nullable=true)
+     */
+    private $fechaLevantamiento;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="numeroOficio", type="integer")
+     * @ORM\Column(name="numeroOficioInscripcion", type="integer", nullable=true)
      */
-    private $numeroOficio;
+    private $numeroOficioInscripcion;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numeroOficioLevantamiento", type="integer")
+     */
+    private $numeroOficioLevantamiento;
 
     /**
      * @var int
@@ -59,24 +73,37 @@ class CvMedidaCautelar
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones", type="text")
+     * @ORM\Column(name="observacionesInscripcion", type="text")
      */
-    private $observaciones;
+    private $observacionesInscripcion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacionesLevantamiento", type="text", nullable=true)
+     */
+    private $observacionesLevantamiento;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="notificaciones") */
-    private $municipio;
+    private $municipioInscripcion;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="notificaciones") */
+    private $municipioLevantamiento;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEntidadJudicial", inversedBy="facturas")
      **/
-    protected $entidadJudicial; 
+    protected $entidadJudicialInscripcion; 
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEntidadJudicial", inversedBy="facturas")
+     **/
+    protected $entidadJudicialLevantamiento; 
 
     /**
      * @ORM\ManyToOne(targetEntity="CvCfgTipoMedidaCautelar", inversedBy="facturas")
      **/
     protected $tipoMedidaCautelar; 
-
-
     
 
     /**
@@ -162,27 +189,75 @@ class CvMedidaCautelar
     }
 
     /**
-     * Set numeroOficio
+     * Set fechaLevantamiento
      *
-     * @param integer $numeroOficio
+     * @param \DateTime $fechaLevantamiento
      *
      * @return CvMedidaCautelar
      */
-    public function setNumeroOficio($numeroOficio)
+    public function setFechaLevantamiento($fechaLevantamiento)
     {
-        $this->numeroOficio = $numeroOficio;
+        $this->fechaLevantamiento = $fechaLevantamiento;
 
         return $this;
     }
 
     /**
-     * Get numeroOficio
+     * Get fechaLevantamiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaLevantamiento()
+    {
+        return $this->fechaLevantamiento;
+    }
+
+    /**
+     * Set numeroOficioInscripcion
+     *
+     * @param integer $numeroOficioInscripcion
+     *
+     * @return CvMedidaCautelar
+     */
+    public function setNumeroOficioInscripcion($numeroOficioInscripcion)
+    {
+        $this->numeroOficioInscripcion = $numeroOficioInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroOficioInscripcion
      *
      * @return integer
      */
-    public function getNumeroOficio()
+    public function getNumeroOficioInscripcion()
     {
-        return $this->numeroOficio;
+        return $this->numeroOficioInscripcion;
+    }
+
+    /**
+     * Set numeroOficioLevantamiento
+     *
+     * @param integer $numeroOficioLevantamiento
+     *
+     * @return CvMedidaCautelar
+     */
+    public function setNumeroOficioLevantamiento($numeroOficioLevantamiento)
+    {
+        $this->numeroOficioLevantamiento = $numeroOficioLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroOficioLevantamiento
+     *
+     * @return integer
+     */
+    public function getNumeroOficioLevantamiento()
+    {
+        return $this->numeroOficioLevantamiento;
     }
 
     /**
@@ -210,75 +285,147 @@ class CvMedidaCautelar
     }
 
     /**
-     * Set observaciones
+     * Set observacionesInscripcion
      *
-     * @param string $observaciones
+     * @param string $observacionesInscripcion
      *
      * @return CvMedidaCautelar
      */
-    public function setObservaciones($observaciones)
+    public function setObservacionesInscripcion($observacionesInscripcion)
     {
-        $this->observaciones = $observaciones;
+        $this->observacionesInscripcion = $observacionesInscripcion;
 
         return $this;
     }
 
     /**
-     * Get observaciones
+     * Get observacionesInscripcion
      *
      * @return string
      */
-    public function getObservaciones()
+    public function getObservacionesInscripcion()
     {
-        return $this->observaciones;
+        return $this->observacionesInscripcion;
     }
 
     /**
-     * Set municipio
+     * Set observacionesLevantamiento
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param string $observacionesLevantamiento
      *
      * @return CvMedidaCautelar
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setObservacionesLevantamiento($observacionesLevantamiento)
     {
-        $this->municipio = $municipio;
+        $this->observacionesLevantamiento = $observacionesLevantamiento;
 
         return $this;
     }
 
     /**
-     * Get municipio
+     * Get observacionesLevantamiento
+     *
+     * @return string
+     */
+    public function getObservacionesLevantamiento()
+    {
+        return $this->observacionesLevantamiento;
+    }
+
+    /**
+     * Set municipioInscripcion
+     *
+     * @param \AppBundle\Entity\Municipio $municipioInscripcion
+     *
+     * @return CvMedidaCautelar
+     */
+    public function setMunicipioInscripcion(\AppBundle\Entity\Municipio $municipioInscripcion = null)
+    {
+        $this->municipioInscripcion = $municipioInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get municipioInscripcion
      *
      * @return \AppBundle\Entity\Municipio
      */
-    public function getMunicipio()
+    public function getMunicipioInscripcion()
     {
-        return $this->municipio;
+        return $this->municipioInscripcion;
     }
 
     /**
-     * Set entidadJudicial
+     * Set municipioLevantamiento
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicial
+     * @param \AppBundle\Entity\Municipio $municipioLevantamiento
      *
      * @return CvMedidaCautelar
      */
-    public function setEntidadJudicial(\JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicial = null)
+    public function setMunicipioLevantamiento(\AppBundle\Entity\Municipio $municipioLevantamiento = null)
     {
-        $this->entidadJudicial = $entidadJudicial;
+        $this->municipioLevantamiento = $municipioLevantamiento;
 
         return $this;
     }
 
     /**
-     * Get entidadJudicial
+     * Get municipioLevantamiento
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipioLevantamiento()
+    {
+        return $this->municipioLevantamiento;
+    }
+
+    /**
+     * Set entidadJudicialInscripcion
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicialInscripcion
+     *
+     * @return CvMedidaCautelar
+     */
+    public function setEntidadJudicialInscripcion(\JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicialInscripcion = null)
+    {
+        $this->entidadJudicialInscripcion = $entidadJudicialInscripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadJudicialInscripcion
      *
      * @return \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial
      */
-    public function getEntidadJudicial()
+    public function getEntidadJudicialInscripcion()
     {
-        return $this->entidadJudicial;
+        return $this->entidadJudicialInscripcion;
+    }
+
+    /**
+     * Set entidadJudicialLevantamiento
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicialLevantamiento
+     *
+     * @return CvMedidaCautelar
+     */
+    public function setEntidadJudicialLevantamiento(\JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicialLevantamiento = null)
+    {
+        $this->entidadJudicialLevantamiento = $entidadJudicialLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadJudicialLevantamiento
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial
+     */
+    public function getEntidadJudicialLevantamiento()
+    {
+        return $this->entidadJudicialLevantamiento;
     }
 
     /**

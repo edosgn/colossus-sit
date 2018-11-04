@@ -389,7 +389,7 @@ class FacturaController extends Controller
                     'msj' => "Factura", 
                     'data'=> $selectFactura,
             );
-            }else{
+            }else{ 
                 $response = array(
                     'status' => 'error',
                     'code' => 400,

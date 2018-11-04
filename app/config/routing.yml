@@ -1,3 +1,7 @@
+jhweb_contravencional_cv_medida_cautelar:
+    resource: "@JHWEBContravencionalBundle/Controller/CvMedidaCautelarController.php"
+    type:     annotation
+
 jhweb_personal:
     resource: "@JHWEBPersonalBundle/Controller/"
     type:     annotation
