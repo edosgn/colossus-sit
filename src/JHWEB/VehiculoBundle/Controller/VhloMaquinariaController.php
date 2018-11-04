@@ -7,7 +7,8 @@ use AppBundle\Entity\CfgPlaca;
 use AppBundle\Entity\Vehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlomaquinarium controller.
@@ -69,7 +70,7 @@ class VhloMaquinariaController extends Controller
                 $placa = new CfgPlaca();
                 $placa->setNumero($params->placa);
 
-                $cfgTipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->findOneByModulo(4);
+                $cfgTipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->findOneByModulo(3);
                 $placa->setTipoVehiculo($cfgTipoVehiculo);
 
                 $placa->setSedeOperativa($sedeOperativa);

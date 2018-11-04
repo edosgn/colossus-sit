@@ -22,6 +22,13 @@ class VhloRemolque
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fechaIngreso", type="datetime")
+     */
+    private $fechaIngreso;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="peso", type="string", length=255)
@@ -80,9 +87,9 @@ class VhloRemolque
     /**
      * @var string
      *
-     * @ORM\Column(name="rut", type="string", length=255)
+     * @ORM\Column(name="numero_runt", type="string", length=255)
      */
-    private $rut;
+    private $numeroRunt;
 
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
@@ -103,6 +110,30 @@ class VhloRemolque
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set fechaIngreso
+     *
+     * @param \DateTime $fechaIngreso
+     *
+     * @return VhloRemolque
+     */
+    public function setFechaIngreso($fechaIngreso)
+    {
+        $this->fechaIngreso = $fechaIngreso;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaIngreso
+     *
+     * @return \DateTime
+     */
+    public function getFechaIngreso()
+    {
+        return $this->fechaIngreso;
     }
 
     /**
@@ -298,27 +329,27 @@ class VhloRemolque
     }
 
     /**
-     * Set rut
+     * Set numeroRunt
      *
-     * @param string $rut
+     * @param string $numeroRunt
      *
      * @return VhloRemolque
      */
-    public function setRut($rut)
+    public function setNumeroRunt($numeroRunt)
     {
-        $this->rut = $rut;
+        $this->numeroRunt = $numeroRunt;
 
         return $this;
     }
 
     /**
-     * Get rut
+     * Get numeroRunt
      *
      * @return string
      */
-    public function getRut()
+    public function getNumeroRunt()
     {
-        return $this->rut;
+        return $this->numeroRunt;
     }
 
     /**
