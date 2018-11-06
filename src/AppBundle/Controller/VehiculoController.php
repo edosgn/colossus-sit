@@ -304,7 +304,7 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'error', 
                     'code' => 400,
-                    'message' => "El vehiculo no exite.",
+                    'message' => "El vehiculo no existe.",
                 );
             }
         } else {
@@ -382,7 +382,7 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'error', 
                     'code' => 400,
-                    'message' => "El vehiculo no exite.",
+                    'message' => "El vehiculo no existe.",
                 );
             }
         }else {
@@ -492,7 +492,7 @@ class VehiculoController extends Controller
             );
         }
         return $helpers->json($response);
-    }
+    } 
 
     /**
      * Displays a form to edit an existing Vehiculo entity.
@@ -606,12 +606,12 @@ class VehiculoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Vehiculo entity.
+     * Displays a form to update an existing Vehiculo entity.
      *
-     * @Route("/edit/color", name="vehiculo_edit_color")
+     * @Route("/update", name="vehiculo_update")
      * @Method({"GET", "POST"})
      */
-    public function editColorAction(Request $request)
+    public function updateAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -620,17 +620,32 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('AppBundle:Color')->find($params->colorId);
+            
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            switch ($params->type) {
+                case 'cambioColor': 
+                    $color = $em->getRepository('AppBundle:Color')->find($params->idColor);
+                    $vehiculo->setColor($color);
+                    break;
+                
+                case 'cambioCombustible':
+                    $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustibleCambio);
+                    $vehiculo->setCombustible($combustible);
+                    break;
+                case 'cambioSedeOperativa':
+                    $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->idSedeOperativa);
+                    $vehiculo->setSedeOperativa($sedeOperativa);
+                    break;
+            }
 
-            if ($vehiculo != null) {
-                $vehiculo->setColor($color);
+            if ($vehiculo) {
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Vehiculo editado con éxito",
+                    'message' => "Vehiculo actualizado con éxito",
                 );
             } else {
                 $response = array(
@@ -643,99 +658,7 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida para editar vehiculo",
-            );
-        }
-
-        return $helpers->json($response);
-    }
-
-    /**
-     * Displays a form to edit an existing Vehiculo entity.
-     *
-     * @Route("/edit/combustible", name="vehiculo_edit_combustible")
-     * @Method({"GET", "POST"})
-     */
-    public function editCombustibleAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck == true) {
-            $json = $request->get("json", null);
-            $params = json_decode($json);
-            $em = $this->getDoctrine()->getManager();
-            $combustible = $em->getRepository('AppBundle:Combustible')->find($params->combustibleCambioId);
-            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->vehiculoId);
-
-            if ($vehiculo != null) {
-                $vehiculo->setCombustible($combustible);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Vehiculo editado con éxito",
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "El vehiculo no se encuentra en la base de datos",
-                );
-            }
-        } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida para editar vehiculo",
-            );
-        }
-
-        return $helpers->json($response);
-    }
-
-    /**
-     * Displays a form to edit an existing Vehiculo entity.
-     *
-     * @Route("/edit/sedeOperativa", name="vehiculo_edit_sedeOperativa")
-     * @Method({"GET", "POST"})
-     */
-    public function editSedeOperativaAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck == true) {
-            $json = $request->get("json", null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-
-            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
-            $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->sedeOperativaId);
-
-            if ($vehiculo != null) {
-                $vehiculo->setSedeOperativa($sedeOperativa);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Vehiculo editado con exito",
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "El vehiculo no se encuentra en la base de datos",
-                );
-            }
-        } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorización no válida para editar vehiculo",
             );
         }
 

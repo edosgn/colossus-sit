@@ -889,4 +889,100 @@ class Vehiculo
     {
         return $this->modalidadTransporte;
     }
+
+    /**
+     * Set tipoBlindaje
+     *
+     * @param string $tipoBlindaje
+     *
+     * @return Vehiculo
+     */
+    public function setTipoBlindaje($tipoBlindaje)
+    {
+        $this->tipoBlindaje = $tipoBlindaje;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoBlindaje
+     *
+     * @return string
+     */
+    public function getTipoBlindaje()
+    {
+        return $this->tipoBlindaje;
+    }
+
+    /**
+     * Set nivelBlindaje
+     *
+     * @param string $nivelBlindaje
+     *
+     * @return Vehiculo
+     */
+    public function setNivelBlindaje($nivelBlindaje)
+    {
+        $this->nivelBlindaje = $nivelBlindaje;
+
+        return $this;
+    }
+
+    /**
+     * Get nivelBlindaje
+     *
+     * @return string
+     */
+    public function getNivelBlindaje()
+    {
+        return $this->nivelBlindaje;
+    }
+
+    /**
+     * Set empresaBlindadora
+     *
+     * @param string $empresaBlindadora
+     *
+     * @return Vehiculo
+     */
+    public function setEmpresaBlindadora($empresaBlindadora)
+    {
+        $this->empresaBlindadora = $empresaBlindadora;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaBlindadora
+     *
+     * @return string
+     */
+    public function getEmpresaBlindadora()
+    {
+        return $this->empresaBlindadora;
+    }
+
+    /**
+     * Set nacionalidad
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidad
+     *
+     * @return Vehiculo
+     */
+    public function setNacionalidad(\JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidad = null)
+    {
+        $this->nacionalidad = $nacionalidad;
+
+        return $this;
+    }
+
+    /**
+     * Get nacionalidad
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad
+     */
+    public function getNacionalidad()
+    {
+        return $this->nacionalidad;
+    }
 }
