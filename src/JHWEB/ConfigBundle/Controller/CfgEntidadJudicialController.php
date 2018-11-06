@@ -52,20 +52,20 @@ class CfgEntidadJudicialController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            // var_dump($params);
-            // die();
-            $municipioId = $params->municipioId;
-            $nombre = $params->nombre;
-            $codigoDivipo = $params->codigoDivipo;
+
             $em = $this->getDoctrine()->getManager();
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+            
 
             $cfgEntidadJudicial = new CfgEntidadJudicial();
 
-            $cfgEntidadJudicial->setNombre($nombre);
-            $cfgEntidadJudicial->setCodigoDivipo($codigoDivipo);
-            $cfgEntidadJudicial->setMunicipio($municipio);
+            $cfgEntidadJudicial->setNombre(strtoupper($params->nombre));
+            $cfgEntidadJudicial->setCodigo($params->codigo);
             $cfgEntidadJudicial->setEstado(true);
+
+            $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                $params->municipioId
+            );
+            $cfgEntidadJudicial->setMunicipio($municipio);
 
             $em->persist($cfgEntidadJudicial);
             $em->flush();
@@ -132,19 +132,19 @@ class CfgEntidadJudicialController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigoDivipo = $params->codigoDivipo;
-            $municipioId = $params->municipioId;
             $em = $this->getDoctrine()->getManager();
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
 
             $cfgEntidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find($params->id);
 
             if ($cfgEntidadJudicial != null) {
-                $cfgEntidadJudicial->setNombre($nombre);
-                $cfgEntidadJudicial->setCodigoDivipo($codigoDivipo);
+                $cfgEntidadJudicial->setNombre(strtoupper($params->nombre));
+                $cfgEntidadJudicial->setCodigo($params->codigo);
+
+                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                    $params->municipioId
+                );
                 $cfgEntidadJudicial->setMunicipio($municipio);
-                $em = $this->getDoctrine()->getManager();
+
                 $em->persist($cfgEntidadJudicial);
                 $em->flush();
 

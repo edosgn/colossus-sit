@@ -5,12 +5,12 @@ namespace JHWEB\ContravencionalBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CvCfgTipoRestriccion
+ * CvLcCfgMotivo
  *
- * @ORM\Table(name="cv_cfg_tipo_restriccion")
- * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCfgTipoRestriccionRepository")
+ * @ORM\Table(name="cv_lc_cfg_motivo")
+ * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvLcCfgMotivoRepository")
  */
-class CvCfgTipoRestriccion
+class CvLcCfgMotivo
 {
     /**
      * @var int
@@ -24,28 +24,29 @@ class CvCfgTipoRestriccion
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", length=255)
+     * @ORM\Column(name="descripcion", type="text")
      */
-    private $nombre;
+    private $descripcion;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="codigo", type="integer")
+     * @ORM\Column(name="tipo", type="string", length=255)
      */
-    private $codigo;
+    private $tipo;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo;  
+    private $activo;
+
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -53,51 +54,51 @@ class CvCfgTipoRestriccion
     }
 
     /**
-     * Set nombre
+     * Set descripcion
      *
-     * @param string $nombre
+     * @param string $descripcion
      *
-     * @return CvCfgTipoRestriccion
+     * @return CvLcCfgMotivo
      */
-    public function setNombre($nombre)
+    public function setDescripcion($descripcion)
     {
-        $this->nombre = $nombre;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
 
     /**
-     * Get nombre
+     * Get descripcion
      *
      * @return string
      */
-    public function getNombre()
+    public function getDescripcion()
     {
-        return $this->nombre;
+        return $this->descripcion;
     }
 
     /**
-     * Set codigo
+     * Set tipo
      *
-     * @param integer $codigo
+     * @param string $tipo
      *
-     * @return CvCfgTipoRestriccion
+     * @return CvLcCfgMotivo
      */
-    public function setCodigo($codigo)
+    public function setTipo($tipo)
     {
-        $this->codigo = $codigo;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get codigo
+     * Get tipo
      *
-     * @return integer
+     * @return string
      */
-    public function getCodigo()
+    public function getTipo()
     {
-        return $this->codigo;
+        return $this->tipo;
     }
 
     /**
@@ -105,7 +106,7 @@ class CvCfgTipoRestriccion
      *
      * @param boolean $activo
      *
-     * @return CvCfgTipoRestriccion
+     * @return CvLcCfgMotivo
      */
     public function setActivo($activo)
     {

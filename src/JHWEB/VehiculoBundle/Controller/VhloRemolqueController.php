@@ -180,7 +180,7 @@ class VhloRemolqueController extends Controller
     /**
      * Finds and displays a vhloRemolque entity.
      *
-     * @Route("/{id}", name="vhloremolque_show")
+     * @Route("/{id}/show", name="vhloremolque_show")
      * @Method("GET")
      */
     public function showAction(VhloRemolque $vhloRemolque)
@@ -221,7 +221,7 @@ class VhloRemolqueController extends Controller
     /**
      * Deletes a vhloRemolque entity.
      *
-     * @Route("/{id}", name="vhloremolque_delete")
+     * @Route("/{id}/delete", name="vhloremolque_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, VhloRemolque $vhloRemolque)

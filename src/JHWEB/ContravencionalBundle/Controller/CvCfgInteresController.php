@@ -84,7 +84,8 @@ class CvCfgInteresController extends Controller
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
             );
-        } 
+        }
+
         return $helpers->json($response);
     }
 
@@ -125,7 +126,8 @@ class CvCfgInteresController extends Controller
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
             );
-        } 
+        }
+        
         return $helpers->json($response);
     }
 

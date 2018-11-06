@@ -24,6 +24,7 @@ class LicenciaConduccionController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        
         $licencias = $em->getRepository('AppBundle:LicenciaConduccion')->findAll();
 
         $response['data'] = array();

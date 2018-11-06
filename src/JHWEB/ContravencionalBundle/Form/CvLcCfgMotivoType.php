@@ -1,27 +1,26 @@
 <?php
 
-namespace AppBundle\Form;
+namespace JHWEB\ContravencionalBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class VehiculoRemolqueType extends AbstractType
+class CvLcCfgMotivoType extends AbstractType
 {
-    
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('pesoBrutoVehiculo')->add('cargaUtilMaxima')->add('rodaje')->add('numeroEjes')->add('numeroLlantas')->add('fichaTecnica')->add('altoTotal')->add('largoTotal')->add('anchoTotal')->add('vehiculo');
+        $builder->add('descripcion')->add('tipo')->add('activo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\VehiculoRemolque'
+            'data_class' => 'JHWEB\ContravencionalBundle\Entity\CvLcCfgMotivo'
         ));
     }
 
@@ -30,7 +29,7 @@ class VehiculoRemolqueType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_vehiculoremolque';
+        return 'jhweb_contravencionalbundle_cvlccfgmotivo';
     }
 
 

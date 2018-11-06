@@ -33,14 +33,14 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "listado vehiculo",
+                'message' => "listado vehiculo",
                 'data' => $vehiculos,
             );
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "No existen registros",
+                'message' => "No existen registros",
             );
         }
 
@@ -115,7 +115,7 @@ class VehiculoController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 200,
-                        'msj' => "La placa ".$params->vehiculo->placa.' ya se encontra registrada'.'para la sede '.$CfgPlacaBd->getSedeOperativa()->getNombre(),
+                        'message' => "La placa ".$params->vehiculo->placa.' ya se encontra registrada'.'para la sede '.$CfgPlacaBd->getSedeOperativa()->getNombre(),
                     );
                     return $helpers->json($response);
                 }else{
@@ -172,7 +172,7 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Vehiculo creado con exito",
+                'message' => "Vehiculo creado con exito",
             );
  
             // }
@@ -180,7 +180,7 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -220,7 +220,7 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "vehiculo",
+                    'message' => "vehiculo",
                     'propietarios' => $propietarioVehiculo,
                     'vehiculo' => $vehiculoRna,
                 );
@@ -230,13 +230,11 @@ class VehiculoController extends Controller
                     'code' => 200,
                 );
             } 
-
-            
         } else {
             $response = array(
                 'status' => 'error', 
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -260,45 +258,63 @@ class VehiculoController extends Controller
           
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
+
             if ($vehiculo) {
                 $vehiculoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->findBy(
                     array(
                         'vehiculo' => $vehiculo->getId(),
                     )
                 );
-            } 
 
-            if ($vehiculoMaquinaria) {
-                $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
-                    array(
-                        'vehiculo' => $vehiculo->getId(),
-                        'estado' => 1,
-                        'estadoPropiedad' => '1',
-                        'permisoTramite' => '1'
-                    )
-                );
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "vehiculo",
-                    'propietarios' => $propietarioVehiculo,
-                    'vehiculo' => $vehiculo,
-                );
+                if ($vehiculoMaquinaria) {
+                    $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                        array(
+                            'vehiculo' => $vehiculo->getId(),
+                            'estado' => 1,
+                            'estadoPropiedad' => '1',
+                            'permisoTramite' => '1'
+                        )
+                    );
+
+                    if ($propietariosVehiculo) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Vehiculo y propietarios encontrados.",
+                            'propietarios' => $propietariosVehiculo,
+                            'vehiculo' => $vehiculo,
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Vehiculo encontrado pero aún no tiene propietarios registrados, la factura debe tener una matricula inicial por tramitar.",
+                            'propietarios' => null,
+                            'vehiculo' => $vehiculo,
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 200,
+                        'message' => "El vehiculo no es de tipo RNMA."
+                    );
+                }
             }else{
                 $response = array(
-                    'status' => 'error',
-                    'code' => 200,
+                    'status' => 'error', 
+                    'code' => 400,
+                    'message' => "El vehiculo no exite.",
                 );
-            } 
-
-            
+            }
         } else {
             $response = array(
                 'status' => 'error', 
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
+
         return $helpers->json($response);
     }
 
@@ -320,45 +336,63 @@ class VehiculoController extends Controller
           
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
-            if ($vehiculo) {
-                $vehiculoRemolque = $em->getRepository('AppBundle:VehiculoRemolque')->findBy(
-                    array(
-                        'vehiculo' => $vehiculo->getId(),
-                    )
-                );
-            } 
 
-            if ($vehiculoRemolque) {
-                $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+            if ($vehiculo) {
+                $vehiculoRemolque = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->findBy(
                     array(
                         'vehiculo' => $vehiculo->getId(),
-                        'estado' => 1,
-                        'estadoPropiedad' => '1',
-                        'permisoTramite' => '1'
                     )
                 );
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "vehiculo",
-                    'propietarios' => $propietarioVehiculo,
-                    'vehiculo' => $vehiculo,
-                );
+
+                if ($vehiculoRemolque) {
+                    $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
+                        array(
+                            'vehiculo' => $vehiculo->getId(),
+                            'estado' => 1,
+                            'estadoPropiedad' => '1',
+                            'permisoTramite' => '1'
+                        )
+                    );
+
+                    if ($propietariosVehiculo) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Vehiculo y propietarios encontrados.",
+                            'propietarios' => $propietariosVehiculo,
+                            'vehiculo' => $vehiculo,
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Vehiculo encontrado pero aún no tiene propietarios registrados, la factura debe tener una matricula inicial por tramitar.",
+                            'propietarios' => null,
+                            'vehiculo' => $vehiculo,
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El vehiculo no es de tipo RNRS."
+                    );
+                }
             }else{
                 $response = array(
-                    'status' => 'error',
-                    'code' => 200,
+                    'status' => 'error', 
+                    'code' => 400,
+                    'message' => "El vehiculo no exite.",
                 );
-            } 
-
-            
-        } else {
+            }
+        }else {
             $response = array(
                 'status' => 'error', 
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
+
         return $helpers->json($response);
     }
 
@@ -433,21 +467,21 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado",
+                    'message' => "Registro encontrado",
                     'data' => $vehiculo,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado", 
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -544,20 +578,20 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con exito",
+                    'message' => "Vehiculo editado con exito",
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                    'message' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
@@ -589,20 +623,20 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con éxito",
+                    'message' => "Vehiculo editado con éxito",
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                    'message' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
@@ -634,20 +668,20 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con éxito",
+                    'message' => "Vehiculo editado con éxito",
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                    'message' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
@@ -681,20 +715,20 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con exito",
+                    'message' => "Vehiculo editado con exito",
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                    'message' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
@@ -724,13 +758,13 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "vehiculo eliminado con exito",
+                'message' => "vehiculo eliminado con exito",
             );
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -850,7 +884,7 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'notFound',
                     'code' => 600,
-                    'msj' => "No se encontraron registros con los parametros seleccionados",
+                    'message' => "No se encontraron registros con los parametros seleccionados",
                 );
             }
 
@@ -858,7 +892,7 @@ class VehiculoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no validaaaaaaa",
+                'message' => "Autorizacion no validaaaaaaa",
             );
         }
 
@@ -904,20 +938,20 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con exito",
+                    'message' => "Vehiculo editado con exito",
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                    'message' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
@@ -949,20 +983,20 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehiculo editado con éxito",
+                    'message' => "Vehiculo editado con éxito",
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El vehiculo no se encuentra en la base de datos",
+                    'message' => "El vehiculo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar vehiculo",
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
@@ -990,21 +1024,21 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Vehículo encontrado.",
+                    'message' => "Vehículo encontrado.",
                     'data' => $vehiculo,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehículo no encontrado.",
+                    'message' => "Vehículo no encontrado.",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 401,
-                'msj' => "Autorización no valida.",
+                'message' => "Autorización no valida.",
             );
         }
         return $helpers->json($response);
@@ -1031,14 +1065,14 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Pesado",
+                    'message' => "Pesado",
                     'data' => $vehiculoPesado,
                 );
             } else if ($vehiculoMaquinaria != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Maquinaria",
+                    'message' => "Maquinaria",
                     'data' => $vehiculoMaquinaria,
                 );
 
@@ -1046,14 +1080,14 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Vehículo no encontrado en maquinaria ni pesado.",
+                    'message' => "Vehículo no encontrado en maquinaria ni pesado.",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 401,
-                'msj' => "Autorización no valida.",
+                'message' => "Autorización no valida.",
             );
         }
         return $helpers->json($response);

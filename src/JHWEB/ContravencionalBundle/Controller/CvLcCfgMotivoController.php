@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\GestionDocumentalBundle\Controller;
+namespace JHWEB\ContravencionalBundle\Controller;
 
-use JHWEB\GestionDocumentalBundle\Entity\GdCfgMedioCorrespondencia;
+use JHWEB\ContravencionalBundle\Entity\CvLcCfgMotivo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Gdcfgmediocorrespondencium controller.
+ * Cvlccfgmotivo controller.
  *
- * @Route("gdcfgmediocorrespondencia")
+ * @Route("cvlccfgmotivo")
  */
-class GdCfgMedioCorrespondenciaController extends Controller
+class CvLcCfgMotivoController extends Controller
 {
     /**
-     * Lists all gdCfgMedioCorrespondencium entities.
+     * Lists all cvLcCfgMotivo entities.
      *
-     * @Route("/", name="gdcfgmediocorrespondencia_index")
+     * @Route("/", name="cvlccfgmotivo_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -25,19 +25,21 @@ class GdCfgMedioCorrespondenciaController extends Controller
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
-
-        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
-            array('activo'=>true)
+        
+        $motivos = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgMotivo')->findBy(
+            array(
+                'activo' => true
+            )
         );
 
         $response['data'] = array();
 
-        if ($mediosCorrespondencia) {
+        if ($motivos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($mediosCorrespondencia)." Registros encontrados", 
-                'data'=> $mediosCorrespondencia,
+                'message' => count($motivos)." registros encontrados", 
+                'data'=> $motivos,
             );
         }
 
@@ -45,42 +47,41 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a new gdCfgMedioCorrespondencium entity.
+     * Creates a new cvLcCfgMotivo entity.
      *
-     * @Route("/new", name="gdcfgmediocorrespondencia_new")
+     * @Route("/new", name="cvlccfgmotivo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization",null);
+        $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if($authCheck == true){
+        if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+           
+            $motivo = new CvLcCfgMotivo();
+
+            $motivo->setDescripcion($params->descripcion);
+            $motivo->setTipo($params->tipo);
+            $motivo->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-
-            $medioCorrespondencia = new GdCfgMedioCorrespondencia();
-
-            $medioCorrespondencia->setNombre($params->nombre);
-            $medioCorrespondencia->setGestionable($params->gestionable);
-            $medioCorrespondencia->setActivo(true);
-            
-            $em->persist($medioCorrespondencia);
+            $em->persist($motivo);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con éxito",
+                'message' => "Registro creado con exito",
             );
-        
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no valida",
+                'message' => "Autorizacion no valida", 
             );
         }
         
@@ -88,10 +89,10 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Finds and displays a gdCfgMedioCorrespondencium entity.
+     * Finds and displays a cvLcCfgMotivo entity.
      *
-     * @Route("/show", name="gdcfgmediocorrespondencia_show")
-     * @Method("GET")
+     * @Route("/show", name="cvlccfgmotivo_show")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request)
     {
@@ -105,14 +106,14 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $medioCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find($params->idMedioCorrespondencia);
+            $motivo = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgMotivo')->find($params->id);
 
-            if ($medioCorrespondencia) {
+            if ($motivo) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'data'=> $medioCorrespondencia,
+                    'data'=> $motivo,
                 );
             }else{
                 $response = array(
@@ -128,17 +129,18 @@ class GdCfgMedioCorrespondenciaController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         }
-
+        
         return $helpers->json($response);
     }
 
     /**
-     * Displays a form to edit an existing gdCfgMedioCorrespondencium entity.
+     * Displays a form to edit an existing cvLcCfgMotivo entity.
      *
-     * @Route("/edit", name="gdcfgmediocorrespondencia_edit")
+     * @Route("/edit", name="cvlccfgmotivo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request){
+    public function editAction(Request $request)
+    {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -148,11 +150,11 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $medioCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia")->find($params->id);
+            $motivo = $em->getRepository("JHWEBContravencionalBundle:CvLcCfgMotivo")->find($params->id);
 
-            if ($medioCorrespondencia) {
-                $medioCorrespondencia->setNombre($params->nombre);
-                $medioCorrespondencia->setGestionable($params->gestionable);
+            if ($motivo) {
+                $motivo->setDescripcion($params->descripcion);
+                $motivo->setTipo($params->tipo);
                 
                 $em->flush();
 
@@ -160,7 +162,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $medioCorrespondencia,
+                    'data'=> $motivo,
                 );
             }else{
                 $response = array(
@@ -181,9 +183,9 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Deletes a gdCfgMedioCorrespondencium entity.
+     * Deletes a cvLcCfgMotivo entity.
      *
-     * @Route("/delete", name="gdcfgmediocorrespondencia_delete")
+     * @Route("/delete", name="cvlccfgmotivo_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -197,8 +199,8 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
-            $tipoCorrespondencia->setActivo(false);
+            $motivo = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgMotivo')->find($params->id);
+            $motivo->setActivo(false);
 
             $em->flush();
 
@@ -219,44 +221,50 @@ class GdCfgMedioCorrespondenciaController extends Controller
     }
 
     /**
-     * Creates a form to delete a gdCfgMedioCorrespondencium entity.
+     * Creates a form to delete a cvLcCfgMotivo entity.
      *
-     * @param GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium The gdCfgMedioCorrespondencium entity
+     * @param CvLcCfgMotivo $cvLcCfgMotivo The cvLcCfgMotivo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(GdCfgMedioCorrespondencia $gdCfgMedioCorrespondencium)
+    private function createDeleteForm(CvLcCfgMotivo $cvLcCfgMotivo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('gdcfgmediocorrespondencia_delete', array('id' => $gdCfgMedioCorrespondencium->getId())))
+            ->setAction($this->generateUrl('cvlccfgmotivo_delete', array('id' => $cvLcCfgMotivo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
 
-    /* =============================================== */
+    /* ============================================== */
 
     /**
      * datos para select 2
      *
-     * @Route("/select", name="gdcfgmediocorrespondencia_select")
+     * @Route("/select", name="cvlccfgmotivo_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
         
-        $mediosCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->findBy(
-            array('activo' => true)
+        $motivos = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgMotivo')->findBy(
+            array(
+                'tipo' => $params->tipo,
+                'activo' => true
+            )
         );
 
         $response = null;
 
-        foreach ($mediosCorrespondencia as $key => $medioCorrespondencia) {
+        foreach ($motivos as $key => $motivo) {
             $response[$key] = array(
-                'value' => $medioCorrespondencia->getId(),
-                'label' => $medioCorrespondencia->getNombre()
+                'value' => $motivo->getId(),
+                'label' => $motivo->getDescripcion()
             );
         }
         

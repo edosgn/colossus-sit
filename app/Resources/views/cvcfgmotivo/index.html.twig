@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvcfgmotivos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descripcion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvCfgMotivo in cvCfgMotivos %}
+            <tr>
+                <td><a href="{{ path('cvcfgmotivo_show', { 'id': cvCfgMotivo.id }) }}">{{ cvCfgMotivo.id }}</a></td>
+                <td>{{ cvCfgMotivo.descripcion }}</td>
+                <td>{% if cvCfgMotivo.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvcfgmotivo_show', { 'id': cvCfgMotivo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvcfgmotivo_edit', { 'id': cvCfgMotivo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvcfgmotivo_new') }}">Create a new cvCfgMotivo</a>
+        </li>
+    </ul>
+{% endblock %}
