@@ -167,7 +167,7 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="vehiculos") */
     private $modalidadTransporte;    
 
-    /**
+    /** 
      * Get id
      *
      * @return integer

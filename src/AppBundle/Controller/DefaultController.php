@@ -34,9 +34,11 @@ class DefaultController extends Controller
             1
         );
         
-        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
-            $placaId
+        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
+            $placaId 
         ); 
+        // var_dump($vehiculo->getId());
+        // die();
         
 
         $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
