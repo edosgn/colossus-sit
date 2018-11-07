@@ -618,36 +618,43 @@ class VehiculoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
             
-            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->idVehiculo);
+
             
-            switch ($params->type) {
-                case 'cambioColor': 
-                    $color = $em->getRepository('AppBundle:Color')->find($params->idColor);
-                    $vehiculo->setColor($color);
-                    break;
-                
-                case 'cambioCombustible':
-                    $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustibleCambio);
-                    $vehiculo->setCombustible($combustible);
-                    break;
-                case 'cambioSedeOperativa':
-                    $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->idSedeOperativa);
-                    $vehiculo->setSedeOperativa($sedeOperativa);
-                    break;
-            }
+
+            
 
             if ($vehiculo) {
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Vehiculo actualizado con éxito",
-                );
+                foreach ($params->campos as $key => $campo) {
+                switch ($campo) {
+                    case 'color': 
+                        $color = $em->getRepository('AppBundle:Color')->find($params->idColor);
+                        $vehiculo->setColor($color);
+                        break;
+                    
+                    case 'combustible':
+                        $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
+                        $vehiculo->setCombustible($combustible);
+                        break;
+                        
+                    case 'sedeOperativa':
+                        $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->idSedeOperativa);
+                        $vehiculo->setSedeOperativa($sedeOperativa);
+                        break;
+                }
+            }
+                
+            $em->flush();
+            $response = array(
+                                'status' => 'success',
+                                'code' => 400,
+                                'message' => "El vehiculo no se encuentra en la base de datos",
+                            );
             } else {
                 $response = array(
                     'status' => 'error',

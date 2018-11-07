@@ -27,7 +27,9 @@
     <table>
         <tr>
             <td  width="15%" style="font-weight:bold;">Clase</td>
+            {% if vehiculo.clase  %}
             <td> {{vehiculo.clase.nombre}}</td>
+            {% endif  %}
             <td style="font-weight:bold;">No.serie</td>
             <td>{{vehiculo.serie}}</td>
         </tr>
@@ -53,7 +55,9 @@
             <td  width="15%" style="font-weight:bold;">Color</td>
             <td> {{vehiculo.color.nombre}}</td>
             <td style="font-weight:bold;">Servicio</td>
+            {% if vehiculo.servicio  %}
             <td>{{vehiculo.servicio.nombre}}</td>
+            {% endif  %}
         </tr>
         <tr>
             <td  width="15%" style="font-weight:bold;">Modelo</td>

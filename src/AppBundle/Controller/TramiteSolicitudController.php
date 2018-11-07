@@ -136,9 +136,9 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setVehiculo($vehiculo);
             }
 
-            if ($datos->facturaId && $datos->tramiteFormulario) {
+            if ($datos->idFactura && $datos->tramiteFormulario) {
                 $factura = $em->getRepository('AppBundle:Factura')->find(
-                    $datos->facturaId
+                    $datos->idFactura
                 );
 
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
