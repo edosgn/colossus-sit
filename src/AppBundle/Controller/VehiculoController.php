@@ -624,6 +624,7 @@ class VehiculoController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->id);
+            
             switch ($params->type) {
                 case 'cambioColor': 
                     $color = $em->getRepository('AppBundle:Color')->find($params->idColor);
