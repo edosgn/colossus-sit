@@ -165,7 +165,30 @@ class Vehiculo
     private $radioAccion;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="vehiculos") */
-    private $modalidadTransporte;    
+    private $modalidadTransporte;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_blindaje", type="string", length=255, nullable= true)
+     */
+    private $tipoBlindaje;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nivel_blindaje", type="string", length=255, nullable= true)
+     */
+    private $nivelBlindaje;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="empresa_blindadora", type="string", length=255, nullable= true)
+     */
+    private $empresaBlindadora;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad", inversedBy="nacionalidades") */
+    private $nacionalidad;    
 
     /** 
      * Get id
