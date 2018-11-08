@@ -556,17 +556,15 @@ class PropietarioVehiculoController extends Controller
             $propietarioVehiculoNew = new PropietarioVehiculo();
             $propietarioVehiculoNew->setLicenciaTransito($propietarioVehiculo->getLicenciaTransito());
             $propietarioVehiculoNew->setFechaPropiedadInicial($propietarioVehiculo->getFechaPropiedadInicial());
-            $propietarioVehiculoNew->setFechaPropiedadFinal($propietarioVehiculo->getFechaPropiedadInicial());
-            $propietarioVehiculoNew->setEstadoPropiedad($propietarioVehiculo->getFechaPropiedadInicial());
-            $propietarioVehiculoNew->setVehiculo($propietarioVehiculo->getFechaPropiedadInicial());
+            $propietarioVehiculoNew->setEstadoPropiedad($propietarioVehiculo->getEstadoPropiedad());
+            $propietarioVehiculoNew->setVehiculo($propietarioVehiculo->getVehiculo());
+            $propietarioVehiculoNew->setPermisoTramite(false); 
 
             $propietarioVehiculoNew->setEstado(true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($propietarioVehiculoNew);
             $em->flush();
             
-            $em = $this->getDoctrine()->getManager();
-            // $em->flush();
             $response = array(
                     'status' => 'success',
                         'code' => 200,
