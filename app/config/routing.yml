@@ -1,3 +1,7 @@
+jhweb_vehiculo_vhlo_acta_traspaso:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloActaTraspasoController.php"
+    type:     annotation
+
 jhweb_personal:
     resource: "@JHWEBPersonalBundle/Controller/"
     type:     annotation

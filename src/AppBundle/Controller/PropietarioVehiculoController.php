@@ -552,8 +552,21 @@ class PropietarioVehiculoController extends Controller
                 $propietarioVehiculo->setFechaPropiedadFinal(new \DateTime(date('Y-m-d')));
             }
             $propietarioVehiculo->setEstado(0);
+
+            $propietarioVehiculoNew = new PropietarioVehiculo();
+            $propietarioVehiculoNew->setLicenciaTransito($propietarioVehiculo->getLicenciaTransito());
+            $propietarioVehiculoNew->setFechaPropiedadInicial($propietarioVehiculo->getFechaPropiedadInicial());
+            $propietarioVehiculoNew->setFechaPropiedadFinal($propietarioVehiculo->getFechaPropiedadInicial());
+            $propietarioVehiculoNew->setEstadoPropiedad($propietarioVehiculo->getFechaPropiedadInicial());
+            $propietarioVehiculoNew->setVehiculo($propietarioVehiculo->getFechaPropiedadInicial());
+
+            $propietarioVehiculoNew->setEstado(true);
             $em = $this->getDoctrine()->getManager();
+            $em->persist($propietarioVehiculoNew);
             $em->flush();
+            
+            $em = $this->getDoctrine()->getManager();
+            // $em->flush();
             $response = array(
                     'status' => 'success',
                         'code' => 200,
