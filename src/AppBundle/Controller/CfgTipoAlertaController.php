@@ -23,17 +23,22 @@ class CfgTipoAlertaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
-        $alerta = $em->getRepository('AppBundle:CfgTipoAlerta')->findBy(
-            array('estado' => 1)
-        );
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado alerta", 
-                    'data'=> $alerta,
+        
+        $tiposAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->findAll();
+
+        $response['data'] = array();
+
+        if ($tiposAlerta) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tiposAlerta)." registros encontrados", 
+                'data'=> $tiposAlerta,
             );
-         
+        }
+
         return $helpers->json($response);
     }
 
@@ -45,38 +50,85 @@ class CfgTipoAlertaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgTipoAlertum = new Cfgtipoalertum();
-        $form = $this->createForm('AppBundle\Form\CfgTipoAlertaType', $cfgTipoAlertum);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $tipoAlerta = new CfgTipoAlerta();
+
+            $tipoAlerta->setNombre(strtoupper($params->nombre));
+            $tipoAlerta->setActivo(true);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgTipoAlertum);
+
+            $em->persist($tipoAlerta);
             $em->flush();
 
-            return $this->redirectToRoute('cfgtipoalerta_show', array('id' => $cfgTipoAlertum->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cfgtipoalerta/new.html.twig', array(
-            'cfgTipoAlertum' => $cfgTipoAlertum,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a cfgTipoAlertum entity.
      *
-     * @Route("/show/{id}", name="cfgtipoalerta_show")
+     * @Route("/show", name="cfgtipoalerta_show")
      * @Method("POST")
      */
-    public function showAction(CfgTipoAlerta $cfgTipoAlertum)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgTipoAlertum);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cfgtipoalerta/show.html.twig', array(
-            'cfgTipoAlertum' => $cfgTipoAlertum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->find(
+                $params->id
+            );
+
+            if ($tipoAlerta) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data'=> $tipoAlerta,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -85,23 +137,48 @@ class CfgTipoAlertaController extends Controller
      * @Route("/edit", name="cfgtipoalerta_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgTipoAlerta $cfgTipoAlertum)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgTipoAlertum);
-        $editForm = $this->createForm('AppBundle\Form\CfgTipoAlertaType', $cfgTipoAlertum);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cfgtipoalerta_edit', array('id' => $cfgTipoAlertum->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $tipoAlerta = $em->getRepository("AppBundle:CfgTipoAlerta")->find(
+                $params->id
+            );
+
+            if ($tipoAlerta) {
+                $tipoAlerta->setNombre(strtoupper($params->nombre));
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $tipoAlerta,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('cfgtipoalerta/edit.html.twig', array(
-            'cfgTipoAlertum' => $cfgTipoAlertum,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -148,18 +225,23 @@ class CfgTipoAlertaController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $alertas = $em->getRepository('AppBundle:CfgTipoAlerta')->findBy(
-        array('estado' => 1)
-    );
-    $response= null;
-      foreach ($alertas as $key => $alerta) {
-        $response[$key] = array(
-            'value' => $alerta->getId(),
-            'label' => $alerta->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+        
+        $tiposAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->findAll();
+
+        $response = null;
+
+        foreach ($tiposAlerta as $key => $tipoAlerta) {
+            $response[$key] = array(
+                'value' => $tipoAlerta->getId(),
+                'label' => $tipoAlerta->getNombre()
             );
-      }
-       return $helpers->json($response);
+        }
+        
+        return $helpers->json($response);
     }
 }

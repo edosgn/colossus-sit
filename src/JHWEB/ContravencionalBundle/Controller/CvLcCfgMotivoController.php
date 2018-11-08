@@ -69,6 +69,7 @@ class CvLcCfgMotivoController extends Controller
             $motivo->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
+            
             $em->persist($motivo);
             $em->flush();
 

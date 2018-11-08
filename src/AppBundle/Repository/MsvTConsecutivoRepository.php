@@ -11,20 +11,19 @@ namespace AppBundle\Repository;
 class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
         //Obtiene el vehículo según un numero de placa y módulo
-     public function getByConsecutivoSede($nroIpat, $identificacionUsuario)
+     public function getLastBySede($idSedeOperativa)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT msc
+        $dql = "SELECT MAX(msc.consecutivo) AS consecutivo, msc.estado
             FROM AppBundle:MsvTConsecutivo msc, UsuarioBundle:Usuario u, AppBundle:MpersonalFuncionario mpf
-            WHERE u.identificacion = :identificacionUsuario
-            AND u.ciudadano = mpf.ciudadano
+            WHERE u.ciudadano = mpf.ciudadano
             AND mpf.sedeOperativa = msc.sedeOperativa
-            AND msc.consecutivo = :nroIpat";
+            AND msc.sedeOperativa = :idSedeOperativa
+            AND msc.estado = 'Disponible'";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'nroIpat' => $nroIpat,
-            'identificacionUsuario' => $identificacionUsuario,
+            'idSedeOperativa' => $idSedeOperativa
         ));
 
         return $consulta->getOneOrNullResult();
