@@ -228,8 +228,6 @@ class CfgTipoAlertaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $json = $request->get("data",null);
-        $params = json_decode($json);
         
         $tiposAlerta = $em->getRepository('AppBundle:CfgTipoAlerta')->findAll();
 

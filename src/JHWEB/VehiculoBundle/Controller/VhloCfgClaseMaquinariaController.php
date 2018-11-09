@@ -44,55 +44,55 @@ class VhloCfgClaseMaquinariaController extends Controller
         return $helpers->json($response);
     }
 
-    /**
-     * Creates a new vhloCfgClaseMaquinarium entity.
-     *
-     * @Route("/new", name="vhlocfgclasemaquinaria_new")
-     * @Method({"GET", "POST"})
-     */
-    public function newAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
+        /**
+         * Creates a new vhloCfgClaseMaquinarium entity.
+         *
+         * @Route("/new", name="vhlocfgclasemaquinaria_new")
+         * @Method({"GET", "POST"})
+         */
+        public function newAction(Request $request)
+        {
+            $helpers = $this->get("app.helpers");
+            $hash = $request->get("authorization", null);
+            $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("data",null);
-            $params = json_decode($json);
-           
-            $claseMaquinaria = new VhloCfgClaseMaquinaria();
-
-            $claseMaquinaria->setNombre($params->nombre);
-            $claseMaquinaria->setCodigo($params->codigo);
-            $claseMaquinaria->setActivo(true);
-
-            $em = $this->getDoctrine()->getManager();
+            if ($authCheck== true) {
+                $json = $request->get("data",null);
+                $params = json_decode($json);
             
-            if ($params->idTipoMaquinaria) {
-                $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
-                    $params->idTipoMaquinaria
+                $claseMaquinaria = new VhloCfgClaseMaquinaria();
+
+                $claseMaquinaria->setNombre($params->nombre);
+                $claseMaquinaria->setCodigo($params->codigo);
+                $claseMaquinaria->setActivo(true);
+
+                $em = $this->getDoctrine()->getManager();
+                
+                if ($params->idTipoMaquinaria) {
+                    $tipoMaquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoMaquinaria')->find(
+                        $params->idTipoMaquinaria
+                    );
+                    $claseMaquinaria->setTipoMaquinaria($tipoMaquinaria);
+                }
+
+                $em->persist($claseMaquinaria);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
                 );
-                $claseMaquinaria->setTipoMaquinaria($tipoMaquinaria);
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
             }
-
-            $em->persist($claseMaquinaria);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-            );
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida", 
-            );
+            
+            return $helpers->json($response);
         }
-        
-        return $helpers->json($response);
-    }
 
     /**
      * Finds and displays a vhloCfgClaseMaquinarium entity.

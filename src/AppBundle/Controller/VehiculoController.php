@@ -459,16 +459,10 @@ class VehiculoController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            // var_dump($params->placa);
-            // var_dump($params->moduloId);
-            // die();
- 
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlacaModulo(
                 $params->placa,
                 $params->moduloId
             );
-
-
 
             if ($vehiculo != null) {
                 $response = array(
