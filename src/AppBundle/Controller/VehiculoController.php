@@ -2,9 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Vehiculo;
-use AppBundle\Entity\PropietarioVehiculo;
 use AppBundle\Entity\CfgPlaca;
+use AppBundle\Entity\Vehiculo;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -115,10 +114,10 @@ class VehiculoController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 200,
-                        'message' => "La placa ".$params->vehiculo->placa.' ya se encontra registrada'.'para la sede '.$CfgPlacaBd->getSedeOperativa()->getNombre(),
+                        'message' => "La placa " . $params->vehiculo->placa . ' ya se encontra registrada' . 'para la sede ' . $CfgPlacaBd->getSedeOperativa()->getNombre(),
                     );
                     return $helpers->json($response);
-                }else{
+                } else {
                     $cfgPlaca = new CfgPlaca();
                     $sedeOperativaCfgPlaca = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
                     $cfgPlaca->setClase($clase);
@@ -153,7 +152,7 @@ class VehiculoController extends Controller
                 );
                 $vehiculo->setMunicipio($municipio);
             }
-            
+
             $vehiculo->setLinea($linea);
             $vehiculo->setServicio($servicio);
             $vehiculo->setColor($color);
@@ -174,7 +173,7 @@ class VehiculoController extends Controller
                 'code' => 200,
                 'message' => "Vehiculo creado con exito",
             );
- 
+
             // }
         } else {
             $response = array(
@@ -201,7 +200,7 @@ class VehiculoController extends Controller
             $vehiculoRna = null;
             $json = $request->get("data", null);
             $params = json_decode($json);
-          
+
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
             if ($vehiculo) {
@@ -214,7 +213,7 @@ class VehiculoController extends Controller
                         'vehiculo' => $vehiculo->getId(),
                         'estado' => 1,
                         'estadoPropiedad' => '1',
-                        'permisoTramite' => '1'
+                        'permisoTramite' => '1',
                     )
                 );
                 $response = array(
@@ -224,15 +223,15 @@ class VehiculoController extends Controller
                     'propietarios' => $propietarioVehiculo,
                     'vehiculo' => $vehiculoRna,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 200,
                 );
-            } 
+            }
         } else {
             $response = array(
-                'status' => 'error', 
+                'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",
             );
@@ -255,7 +254,7 @@ class VehiculoController extends Controller
             $vehiculoMaquinaria = null;
             $json = $request->get("data", null);
             $params = json_decode($json);
-          
+
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
 
@@ -272,7 +271,7 @@ class VehiculoController extends Controller
                             'vehiculo' => $vehiculo->getId(),
                             'estado' => 1,
                             'estadoPropiedad' => '1',
-                            'permisoTramite' => '1'
+                            'permisoTramite' => '1',
                         )
                     );
 
@@ -284,7 +283,7 @@ class VehiculoController extends Controller
                             'propietarios' => $propietariosVehiculo,
                             'vehiculo' => $vehiculo,
                         );
-                    }else{
+                    } else {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
@@ -293,23 +292,23 @@ class VehiculoController extends Controller
                             'vehiculo' => $vehiculo,
                         );
                     }
-                }else{
+                } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 200,
-                        'message' => "El vehiculo no es de tipo RNMA."
+                        'message' => "El vehiculo no es de tipo RNMA.",
                     );
                 }
-            }else{
+            } else {
                 $response = array(
-                    'status' => 'error', 
+                    'status' => 'error',
                     'code' => 400,
                     'message' => "El vehiculo no existe.",
                 );
             }
         } else {
             $response = array(
-                'status' => 'error', 
+                'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",
             );
@@ -333,7 +332,7 @@ class VehiculoController extends Controller
             $vehiculoRemolque = null;
             $json = $request->get("data", null);
             $params = json_decode($json);
-          
+
             $em = $this->getDoctrine()->getManager();
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
 
@@ -350,7 +349,7 @@ class VehiculoController extends Controller
                             'vehiculo' => $vehiculo->getId(),
                             'estado' => 1,
                             'estadoPropiedad' => '1',
-                            'permisoTramite' => '1'
+                            'permisoTramite' => '1',
                         )
                     );
 
@@ -362,7 +361,7 @@ class VehiculoController extends Controller
                             'propietarios' => $propietariosVehiculo,
                             'vehiculo' => $vehiculo,
                         );
-                    }else{
+                    } else {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
@@ -371,23 +370,23 @@ class VehiculoController extends Controller
                             'vehiculo' => $vehiculo,
                         );
                     }
-                }else{
+                } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "El vehiculo no es de tipo RNRS."
+                        'message' => "El vehiculo no es de tipo RNRS.",
                     );
                 }
-            }else{
+            } else {
                 $response = array(
-                    'status' => 'error', 
+                    'status' => 'error',
                     'code' => 400,
                     'message' => "El vehiculo no existe.",
                 );
             }
-        }else {
+        } else {
             $response = array(
-                'status' => 'error', 
+                'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",
             );
@@ -413,7 +412,7 @@ class VehiculoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            
+
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlaca(
                 $params->placa
             );
@@ -429,10 +428,10 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado",
                 );
             }
-        }else {
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
@@ -462,13 +461,11 @@ class VehiculoController extends Controller
             // var_dump($params->placa);
             // var_dump($params->moduloId);
             // die();
- 
+
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getByPlacaModulo(
                 $params->placa,
                 $params->moduloId
             );
-
-
 
             if ($vehiculo != null) {
                 $response = array(
@@ -481,7 +478,7 @@ class VehiculoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado", 
+                    'message' => "Registro no encontrado",
                 );
             }
         } else {
@@ -492,7 +489,7 @@ class VehiculoController extends Controller
             );
         }
         return $helpers->json($response);
-    } 
+    }
 
     /**
      * Displays a form to edit an existing Vehiculo entity.
@@ -622,39 +619,57 @@ class VehiculoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            
+
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->idVehiculo);
-
-            
-
-            
 
             if ($vehiculo) {
                 foreach ($params->campos as $key => $campo) {
-                switch ($campo) {
-                    case 'color': 
-                        $color = $em->getRepository('AppBundle:Color')->find($params->idColor);
-                        $vehiculo->setColor($color);
-                        break;
-                    
-                    case 'combustible':
-                        $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
-                        $vehiculo->setCombustible($combustible);
-                        break;
-                        
-                    case 'sedeOperativa':
-                        $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->idSedeOperativa);
-                        $vehiculo->setSedeOperativa($sedeOperativa);
-                        break;
+                    switch ($campo) {
+                        case 'color':
+                            $color = $em->getRepository('AppBundle:Color')->find($params->idColor);
+                            $vehiculo->setColor($color);
+                            break;
+
+                        case 'combustible':
+                            $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
+                            $vehiculo->setCombustible($combustible);
+                            break;
+
+                        case 'sedeOperativa':
+                            $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->idSedeOperativa);
+                            $vehiculo->setSedeOperativa($sedeOperativa);
+                            break;
+
+                        case 'blindaje':
+                            $vehiculo->setBlindaje($params->idBlindaje);
+                            break;
+
+                        case 'carroceria':
+                            $carroceria = $em->getRepository("AppBundle:Carroceria")->find($params->idCarroceria);
+                            $vehiculo->setCarroceria($carroceria);
+                            break;
+
+                        case 'motor':
+                            $vehiculo->setMotor($params->idMotor);
+                            break;
+
+                        case 'placa':
+                            $placa = $em->getRepository("AppBundle:CfgPlaca")->find($params->idPlaca);
+                            $vehiculo->setPlaca($placa);
+                            break;
+
+                        case 'regrabarvin':
+                            $vehiculo->setVin($params->vin);
+                            break;
+                    }
                 }
-            }
-                
-            $em->flush();
-            $response = array(
-                                'status' => 'success',
-                                'code' => 400,
-                                'message' => "El vehiculo no se encuentra en la base de datos",
-                            );
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 400,
+                    'message' => "El vehiculo se actualizó con éxito",
+                );
             } else {
                 $response = array(
                     'status' => 'error',
