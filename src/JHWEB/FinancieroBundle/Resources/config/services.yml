@@ -1,0 +1,4 @@
+services:
+#    jhweb_financiero.example:
+#        class: JHWEB\FinancieroBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

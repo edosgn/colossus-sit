@@ -56,8 +56,7 @@ class MsvTConsecutivoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-// var_dump($params);
-// die();
+            
                 $consecutivo = new MsvTConsecutivo();
 
                 $consecutivo->setInicio($params->incio);
@@ -134,7 +133,7 @@ class MsvTConsecutivoController extends Controller
     /**
      * Deletes a msvTConsecutivo entity.
      *
-     * @Route("/{id}", name="msvtconsecutivo_delete")
+     * @Route("/{id}/delete", name="msvtconsecutivo_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, MsvTConsecutivo $msvTConsecutivo)
@@ -168,28 +167,35 @@ class MsvTConsecutivoController extends Controller
     }
 
      /**
-     * busca ipat por numero de consecutivo.
+     * busca ipat por numero de consecutivo mas reciente.
      *
-     * @Route("/sede/consecutivo", name="sede_search_consecutivo")
+     * @Route("/search/last/sede", name="msvtconsecutivo_search_last_sede")
      * @Method({"GET", "POST"})
      */
-    public function searchByConsecutivoSedeAction(Request $request)
+    public function searchLastBySedeAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            // var_dump($params);die();
-            $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->getByConsecutivoSede(
-                $params->nroIpat,
-                $params->identificacionUsuario
+        
+            $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->getLastBySede(
+                $params->sedeOperativa->id
             );
 
-            if ($ipat != null) {
+            $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->find(
+                $ipat['id']
+            );
+
+            if ($ipat) {
+                $ipat->setEstado("EN TRAMITE");
+
+                $em->flush();
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -210,6 +216,7 @@ class MsvTConsecutivoController extends Controller
                 'message' => "Autorizacion no valida",
             );
         }
+
         return $helpers->json($response);
     }
      /**
@@ -227,10 +234,15 @@ class MsvTConsecutivoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            // var_dump($params);die();
-            $ipats = $em->getRepository('AppBundle:MsvTConsecutivo')->getBySede(
+
+            /*$ipats = $em->getRepository('AppBundle:MsvTConsecutivo')->getBySede(
                 $params->identificacionUsuario
+            );*/
+
+            $ipats = $em->getRepository('AppBundle:MsvTConsecutivo')->findById(
+                1
             );
 
             if ($ipats != null) {

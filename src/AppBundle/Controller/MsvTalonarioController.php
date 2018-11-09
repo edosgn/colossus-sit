@@ -100,7 +100,7 @@ class MsvTalonarioController extends Controller
                     $msvTConsecutivo->setConsecutivo($nuevoConsecutivo);
                     $msvTConsecutivo->setSedeOperativa($sedeOperativa);
                     $msvTConsecutivo->setActivo(true);
-                    $msvTConsecutivo->setEstado("Disponible");
+                    $msvTConsecutivo->setEstado("DISPONIBLE");
 
                     $em->persist($msvTConsecutivo);
                     $em->flush();
