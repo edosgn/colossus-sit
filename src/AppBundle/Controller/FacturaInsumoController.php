@@ -59,12 +59,12 @@ class FacturaInsumoController extends Controller
 
             $insumoId = (isset($params->insumoId)) ? $params->insumoId : null;
             $ciudadanoId = (isset($params->ciudadanoId)) ? $params->ciudadanoId : null;
-            $facturaId = (isset($params->facturaId)) ? $params->facturaId : null;
+            $idFactura = (isset($params->idFactura)) ? $params->idFactura : null;
 
             $em = $this->getDoctrine()->getManager();
             $insumo = $em->getRepository("AppBundle:Insumo")->find($insumoId);
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion($ciudadanoId);
-            $factura = $em->getRepository('AppBundle:Factura')->find($facturaId);
+            $factura = $em->getRepository('AppBundle:Factura')->find($idFactura);
 
             $insumo->setEstado('usado');
             $em->persist($insumo);

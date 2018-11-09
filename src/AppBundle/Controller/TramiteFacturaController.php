@@ -288,13 +288,13 @@ class TramiteFacturaController extends Controller
         $params = json_decode($json);
 
         $moduloId = $params->moduloId;
-        $facturaId = $params->facturaId;
+        $idFactura = $params->idFactura;
         $vehiculoId = $params->vehiculoId;
 
         $em = $this->getDoctrine()->getManager();
 
         $tramitesFactura = $em->getRepository('AppBundle:TramiteFactura')->getFacturaModulo(
-            $moduloId, $facturaId, $vehiculoId
+            $moduloId, $idFactura, $vehiculoId
         );
 
         return $helpers->json($tramitesFactura);

@@ -10,38 +10,38 @@ namespace AppBundle\Repository;
  */
 class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
 {
-    // public function getFacturaModulo($moduloId, $facturaId, $vehiculoId)
+    // public function getFacturaModulo($moduloId, $idFactura, $vehiculoId)
     // {
     //     $em = $this->getEntityManager();
     //     $dql = "SELECT tf
     //         FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
     //         WHERE tf.factura = f.id
-    //         AND f.id = :facturaId";
+    //         AND f.id = :idFactura";
     //     $consulta = $em->createQuery($dql);
 
     //     $consulta->setParameters(array(
-    //         'facturaId' => $facturaId,
+    //         'idFactura' => $idFactura,
     //     ));
     //     return $consulta->getResult();
 
     // }
-    public function getFacturaModulo($moduloId, $facturaId, $vehiculoId)
+    public function getFacturaModulo($moduloId, $idFactura, $vehiculoId)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT tf
             FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
             WHERE tf.factura = f.id
-            AND f.numero = :facturaId"; 
+            AND f.numero = :idFactura"; 
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'facturaId' => $facturaId,
+            'idFactura' => $idFactura,
         ));
         return $consulta->getResult();
 
     }
 
-    public function getByFacturaAndTramite($facturaId, $tramiteId)
+    public function getByFacturaAndTramite($idFactura, $tramiteId)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT tf
@@ -50,11 +50,11 @@ class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND tf.tramitePrecio = tp.id
             AND tp.tramite = t.id
             AND t.id = :tramiteId
-            AND f.id = :facturaId"; 
+            AND f.id = :idFactura"; 
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'facturaId' => $facturaId,
+            'idFactura' => $idFactura,
             'tramiteId' => $tramiteId,
         ));
         return $consulta->getOneOrNullResult();
