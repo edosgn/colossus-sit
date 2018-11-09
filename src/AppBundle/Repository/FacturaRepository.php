@@ -10,7 +10,19 @@ namespace AppBundle\Repository;
  */
 class FacturaRepository extends \Doctrine\ORM\EntityRepository
 {
-        public function getFacturaModulo($moduloId, $id, $vehiculoId)
+    //Obtiene el numero maximo de documentos por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(f.consecutivo) AS maximo
+            FROM AppBundle:Factura f
+            WHERE YEAR(f.fechaCreacion) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getFacturaModulo($moduloId, $id, $vehiculoId)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT tf

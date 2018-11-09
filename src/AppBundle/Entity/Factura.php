@@ -26,7 +26,7 @@ class Factura
      *
      * @ORM\Column(name="numero", type="string", length=45)
      */
-    private $numero;
+    private $numero; 
 
     /**
      * @var string
@@ -34,13 +34,6 @@ class Factura
      * @ORM\Column(name="consecutivo", type="string", length=5)
      */
     private $consecutivo;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="anio", type="integer", nullable=true)
-     */
-    private $anio;
 
     /**
      * @var string
@@ -94,6 +87,11 @@ class Factura
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="facturas")
      **/
     protected $vehiculo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="facturas")
+     **/
+    protected $modulo;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
@@ -157,30 +155,6 @@ class Factura
     public function getConsecutivo()
     {
         return $this->consecutivo;
-    }
-
-    /**
-     * Set anio
-     *
-     * @param integer $anio
-     *
-     * @return Factura
-     */
-    public function setAnio($anio)
-    {
-        $this->anio = $anio;
-
-        return $this;
-    }
-
-    /**
-     * Get anio
-     *
-     * @return integer
-     */
-    public function getAnio()
-    {
-        return $this->anio;
     }
 
     /**
@@ -373,6 +347,30 @@ class Factura
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set modulo
+     *
+     * @param \AppBundle\Entity\Modulo $modulo
+     *
+     * @return Factura
+     */
+    public function setModulo(\AppBundle\Entity\Modulo $modulo = null)
+    {
+        $this->modulo = $modulo;
+
+        return $this;
+    }
+
+    /**
+     * Get modulo
+     *
+     * @return \AppBundle\Entity\Modulo
+     */
+    public function getModulo()
+    {
+        return $this->modulo;
     }
 
     /**

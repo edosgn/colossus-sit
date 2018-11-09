@@ -14,12 +14,13 @@ class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
      public function getLastBySede($idSedeOperativa)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT MAX(msc.consecutivo) AS consecutivo, msc.estado
+        $dql = "SELECT MAX(msc.consecutivo) AS consecutivo, msc.estado, msc.id
             FROM AppBundle:MsvTConsecutivo msc, UsuarioBundle:Usuario u, AppBundle:MpersonalFuncionario mpf
             WHERE u.ciudadano = mpf.ciudadano
             AND mpf.sedeOperativa = msc.sedeOperativa
             AND msc.sedeOperativa = :idSedeOperativa
-            AND msc.estado = 'Disponible'";
+            AND (msc.estado = 'DISPONIBLE'
+            OR msc.estado = 'EN TRAMITE'";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

@@ -56,8 +56,7 @@ class MsvTConsecutivoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-// var_dump($params);
-// die();
+            
                 $consecutivo = new MsvTConsecutivo();
 
                 $consecutivo->setInicio($params->incio);
@@ -188,7 +187,15 @@ class MsvTConsecutivoController extends Controller
                 $params->sedeOperativa->id
             );
 
-            if ($ipat != null) {
+            $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->find(
+                $ipat['id']
+            );
+
+            if ($ipat) {
+                $ipat->setEstado("EN TRAMITE");
+
+                $em->flush();
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -209,6 +216,7 @@ class MsvTConsecutivoController extends Controller
                 'message' => "Autorizacion no valida",
             );
         }
+
         return $helpers->json($response);
     }
      /**

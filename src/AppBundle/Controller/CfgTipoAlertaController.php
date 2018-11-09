@@ -61,7 +61,7 @@ class CfgTipoAlertaController extends Controller
             $tipoAlerta = new CfgTipoAlerta();
 
             $tipoAlerta->setNombre(strtoupper($params->nombre));
-            $tipoAlerta->setActivo(true);
+            $tipoAlerta->setEstado(true);
 
             $em = $this->getDoctrine()->getManager();
 
