@@ -20,7 +20,7 @@ class CfgEntidadJudicialController extends Controller
      * @Route("/", name="cfgentidadjudicial_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction() 
     {
         $response = null;
         $helpers = $this->get("app.helpers");
@@ -237,10 +237,10 @@ class CfgEntidadJudicialController extends Controller
             array('estado' => 1)
         );
         foreach ($cfgEntidadesJudiciales as $key => $cfgEntidadJudicial) {
-            $consecutive = substr($cfgEntidadJudicial->getCodigoDivipo(), 0, 12);
+            $consecutive = substr($cfgEntidadJudicial->getCodigo(), 0, 12);
             $response[$key] = array(
                 'value' => $cfgEntidadJudicial->getId(),
-                'label' => $cfgEntidadJudicial->getCodigoDivipo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $cfgEntidadJudicial->getMunicipio(),
+                'label' => $cfgEntidadJudicial->getCodigo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $cfgEntidadJudicial->getMunicipio(),
                 'consecutive' => $consecutive,
             );
         }
