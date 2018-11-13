@@ -52,7 +52,7 @@ class VhloActaTraspasoController extends Controller
                 $vhloActaTraspaso->setNumero($params->numero);
 
                 $tramiteSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->find(
-                    $params->idTramiteSolicitud
+                    $params->tramiteSolicitud
                 );
                 $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
 

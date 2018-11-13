@@ -166,6 +166,7 @@ class TramiteSolicitudController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'msj' => "Registro creado con exito",
+                'idTramiteSolicitud' => $tramiteSolicitud->getId(),
             );
             //}
         } else {
