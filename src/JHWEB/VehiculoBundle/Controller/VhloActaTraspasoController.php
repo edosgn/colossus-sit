@@ -47,7 +47,9 @@ class VhloActaTraspasoController extends Controller
                 $json = $request->get("data",null);
                 $params = json_decode($json);
             
-                $vhloActaTraspaso = new VhloCfgClaseMaquinaria();
+                $vhloActaTraspaso = new VhloActaTraspaso();
+                $em = $this->getDoctrine()->getManager();
+
 
                 $vhloActaTraspaso->setNumero($params->numero);
 
@@ -57,11 +59,13 @@ class VhloActaTraspasoController extends Controller
                 $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
 
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                    $params->idEntidadJudicial
+                    $params->entidadJudicial
                 );
-                $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
 
-                $em = $this->getDoctrine()->getManager();
+                $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
+                $vhloActaTraspaso->setFecha(new \DateTime($params->fecha));
+                $vhloActaTraspaso->setNumero($params->numero);
+
 
                 $em->persist($vhloActaTraspaso);
                 $em->flush();
