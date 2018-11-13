@@ -37,15 +37,13 @@ class DefaultController extends Controller
         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
             $placaId 
         ); 
-        // var_dump($vehiculo->getId());
-        // die();
-        
+              
 
         $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
             $vehiculo->getId()
         );
 
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo(7);
+        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($vehiculo->getId());
 
         $tramitesSolicitudArray = false;
         
