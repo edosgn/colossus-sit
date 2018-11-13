@@ -20,7 +20,7 @@ class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
             AND mpf.sedeOperativa = msc.sedeOperativa
             AND msc.sedeOperativa = :idSedeOperativa
             AND (msc.estado = 'DISPONIBLE'
-            OR msc.estado = 'EN TRAMITE'";
+            OR msc.estado = 'EN TRAMITE')";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
