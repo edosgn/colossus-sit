@@ -237,12 +237,16 @@ class MpersonalComparendoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->getLastByFuncionario($params->funcionario->id);
                 
             if ($comparendo) {
+                $comparendo->setEstado('EN TRAMITE');
+
+                $em->flush();
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -253,7 +257,7 @@ class MpersonalComparendoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El número de comparendo no existe o no ha sido asignado al agente de transito seleccionado.",
+                    'message' => "Ningún número de comparendo disponible para el agente de transito seleccionado.",
                 );
             }
         }else{

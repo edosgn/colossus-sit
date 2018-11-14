@@ -24,7 +24,7 @@ class MpersonalComparendoRepository extends \Doctrine\ORM\EntityRepository
 
         $consulta->setParameters(array(
             'idFuncionario' => $idFuncionario,
-            'estado' => 'DISPONIBLE',
+            'estado' => 'ASIGNADO',
         ));
 
         return $consulta->getOneOrNullResult();

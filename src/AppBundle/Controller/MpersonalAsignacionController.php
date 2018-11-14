@@ -60,62 +60,50 @@ class MpersonalAsignacionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+            $asignacion = new MpersonalAsignacion();
+
+            $em = $this->getDoctrine()->getManager();
+
+            $fechaAsignacion = new \Datetime($params->fechaAsignacion);
+
+            $asignacion->setDesde($params->desde);
+            $asignacion->setHasta($params->hasta);
+            $asignacion->setRangos(($params->hasta + 1) - $params->desde);
+            $asignacion->setFechaAsignacion($fechaAsignacion);
+
+            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
+                $params->funcionarioId
+            );
+            $asignacion->setFuncionario($funcionario);
+
+            $em->persist($asignacion);
+            $em->flush();
+
+            $divipo = $funcionario->getSedeOperativa()->getCodigoDivipo();
+
+            for ($consecutivo=$asignacion->getDesde(); $consecutivo <= $asignacion->getHasta(); $consecutivo++) {
+               
+                $numeroComparendo = $divipo.$consecutivo;
+                
+                $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneByConsecutivo(
+                    $numeroComparendo
                 );
-            }else{*/
-                $asignacion = new MpersonalAsignacion();
 
-                $em = $this->getDoctrine()->getManager();
+                if ($comparendo) {
+                    $comparendo->setFechaAsignacion($fechaAsignacion);
+                    $comparendo->setFuncionario($funcionario);
+                    $comparendo->setEstado('ASIGNADO');
 
-                $fechaAsignacion = new \Datetime($params->fechaAsignacion);
-
-                $asignacion->setDesde($params->desde);
-                $asignacion->setHasta($params->hasta);
-                $asignacion->setRangos(($params->hasta + 1) - $params->desde);
-                $asignacion->setFechaAsignacion($fechaAsignacion);
-
-                $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
-                    $params->funcionarioId
-                );
-                $asignacion->setFuncionario($funcionario);
-
-                $em->persist($asignacion);
-                $em->flush();
-
-                $divipo = $funcionario->getSedeOperativa()->getCodigoDivipo();
-                for ($consecutivo=$asignacion->getDesde(); $consecutivo <= $asignacion->getHasta(); $consecutivo++) {
-
-                    $longitud = (20 - (strlen($divipo)+strlen($consecutivo)));
-                    if ($longitud < 20) {
-                        $numeroComparendo = $divipo.str_pad($consecutivo, $longitud, '0', STR_PAD_LEFT);
-                    }else{
-                        $numeroComparendo = $divipo.$consecutivo;
-                    }
-                    
-                    $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->findOneByConsecutivo(
-                        $numeroComparendo
-                    );
-
-                    if ($comparendo) {
-                        $comparendo->setFechaAsignacion($fechaAsignacion);
-                        $comparendo->setFuncionario($funcionario);
-                        $comparendo->setEstado('Asignado');
-
-                        $em->flush();
-                    }
-
+                    $em->flush();
                 }
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito",  
-                );
-            //}
+            }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito",  
+            );
         }else{
             $response = array(
                 'status' => 'error',
