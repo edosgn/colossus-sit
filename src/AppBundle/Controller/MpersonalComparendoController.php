@@ -243,6 +243,9 @@ class MpersonalComparendoController extends Controller
             $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->getLastByFuncionario($params->funcionario->id);
                 
             if ($comparendo) {
+                $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->find(
+                    $comparendo['id']
+                );
                 $comparendo->setEstado('EN TRAMITE');
 
                 $em->flush();
