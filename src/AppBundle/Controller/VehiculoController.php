@@ -673,6 +673,15 @@ class VehiculoController extends Controller
                             
                             $vehiculo->setEstado(false);
                             break;
+
+                        case 'regrabarchasis':
+                            $vehiculo->setChasis($params->idChasis);
+                            break;
+
+                        case 'regrabarserie':
+                            $vehiculo->setSerie($params->nuevoNumero);
+                            break;
+
                     }
                 }
 
