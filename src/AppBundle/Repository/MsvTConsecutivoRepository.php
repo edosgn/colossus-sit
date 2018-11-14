@@ -18,7 +18,6 @@ class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
             FROM AppBundle:MsvTConsecutivo msc
             WHERE msc.sedeOperativa = :idSedeOperativa
             AND msc.estado = 'DISPONIBLE'
-            OR msc.estado = 'EN TRAMITE'
             GROUP BY msc.sedeOperativa";
         $consulta = $em->createQuery($dql);
 

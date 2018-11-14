@@ -61,23 +61,22 @@ class MsvTalonarioController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
+            $talonario = new MsvTalonario();
+
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
-           
-            $msvTalonario = new MsvTalonario();
-            
-            $talonario = $em->getRepository('AppBundle:MsvTalonario')->findOneBySedeOperativa(
-                $sedeOperativaId
-            );
 
             $talonario->setSedeOperativa($sedeOperativa);
+
             $talonario->setrangoini($params->rangoini);
             $talonario->setrangofin($params->rangofin);
             $talonario->setTotal($params->total);
-            $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+            $talonario->setFechaAsignacion(
+                new \Datetime($params->fechaAsignacion)
+            );
             $talonario->setNResolucion($params->nResolucion);
             $talonario->setEstado(true);
-            
-            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($talonario);
             $em->flush();
 
             $divipo = $sedeOperativa->getCodigoDivipo();
