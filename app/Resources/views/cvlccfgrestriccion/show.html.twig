@@ -1,31 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>TramiteEspecifico</h1>
+    <h1>Cvlccfgrestriccion</h1>
 
     <table>
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ tramiteEspecifico.id }}</td>
+                <td>{{ cvLcCfgRestriccion.id }}</td>
             </tr>
             <tr>
-                <th>Valor</th>
-                <td>{{ tramiteEspecifico.valor }}</td>
+                <th>Descripcion</th>
+                <td>{{ cvLcCfgRestriccion.descripcion }}</td>
             </tr>
             <tr>
-                <th>Datos</th>
-                <td>{% if tramiteEspecifico.datos %}{{ tramiteEspecifico.datos|join(', ') }}{% endif %}</td>
+                <th>Activo</th>
+                <td>{% if cvLcCfgRestriccion.activo %}Yes{% else %}No{% endif %}</td>
             </tr>
         </tbody>
     </table>
 
     <ul>
         <li>
-            <a href="{{ path('tramiteespecifico_index') }}">Back to the list</a>
+            <a href="{{ path('cvlccfgrestriccion_index') }}">Back to the list</a>
         </li>
         <li>
-            <a href="{{ path('tramiteespecifico_edit', { 'id': tramiteEspecifico.id }) }}">Edit</a>
+            <a href="{{ path('cvlccfgrestriccion_edit', { 'id': cvLcCfgRestriccion.id }) }}">Edit</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

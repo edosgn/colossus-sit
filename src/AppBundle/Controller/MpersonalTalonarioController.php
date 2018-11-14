@@ -59,59 +59,51 @@ class MpersonalTalonarioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $talonario = new MpersonalTalonario();
+            $talonario = new MpersonalTalonario();
 
-                $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->sedeOperativaId
-                );
-                $talonario->setSedeOperativa($sedeOperativa);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                $params->sedeOperativaId
+            );
+            $talonario->setSedeOperativa($sedeOperativa);
 
-                if ($sedeOperativa->getAsignacionRango()) {
-                    $talonario->setDesde($sedeOperativa->getCodigoDivipo().$params->desde);
-                    $talonario->setHasta($sedeOperativa->getCodigoDivipo().$params->hasta);
-                }else {
-                    $talonario->setDesde($params->desde);
-                    $talonario->setHasta($params->hasta);
-                }
+            if ($sedeOperativa->getAsignacionRango()) {
+                $talonario->setDesde($sedeOperativa->getCodigoDivipo().$params->desde);
+                $talonario->setHasta($sedeOperativa->getCodigoDivipo().$params->hasta);
+            }else {
+                $talonario->setDesde($params->desde);
+                $talonario->setHasta($params->hasta);
+            }
+            
+            $talonario->setRangos($params->rangos);
+            $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+            $talonario->setNumeroResolucion($params->numeroResolucion);
+            
+            $em->persist($talonario);
+            $em->flush();
+
+            $divipo = $sedeOperativa->getCodigoDivipo();
+            
+            for ($consecutivo = $talonario->getDesde(); $consecutivo <= $talonario->getHasta(); $consecutivo++) {
                 
-                $talonario->setRangos($params->rangos);
-                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
-                $talonario->setNumeroResolucion($params->numeroResolucion);
-                
+                $comparendo = new MpersonalComparendo();
 
-                $em->persist($talonario);
+                $comparendo->setTalonario($talonario);
+                $comparendo->setConsecutivo($divipo.$consecutivo);
+                $comparendo->setSedeOperativa($sedeOperativa);
+                $comparendo->setEstado('DISPONIBLE');
+                $comparendo->setActivo(true);
+
+                $em->persist($comparendo);
                 $em->flush();
+            }
 
-                $divipo = $sedeOperativa->getCodigoDivipo();
-                
-                for ($consecutivo = $talonario->getDesde(); $consecutivo <= $talonario->getHasta(); $consecutivo++) {
-                    $comparendo = new MpersonalComparendo();
-
-                    $comparendo->setTalonario($talonario);
-                    $comparendo->setConsecutivo($consecutivo);
-                    $comparendo->setSedeOperativa($sedeOperativa);
-                    $comparendo->setEstado('Disponible');
-                    $comparendo->setActivo(true);
-
-                    $em->persist($comparendo);
-                    $em->flush();
-                }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "El registro se ha realizado con exito",
-                );
-            //}
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "El registro se ha realizado con exito",
+            );
         }else{
             $response = array(
                 'status' => 'error',

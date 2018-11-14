@@ -1,0 +1,4 @@
+services:
+#    jhweb_usuario.example:
+#        class: JHWEB\UsuarioBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

@@ -187,26 +187,34 @@ class MsvTConsecutivoController extends Controller
                 $params->sedeOperativa->id
             );
 
-            $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->find(
-                $ipat['id']
-            );
-
             if ($ipat) {
-                $ipat->setEstado("EN TRAMITE");
-
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro encontrado",
-                    'data' => $ipat,
+                $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->find(
+                    $ipat['id']
                 );
-            } else {
+
+                if ($ipat) {
+                    $ipat->setEstado("EN TRAMITE");
+
+                    $em->flush();
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro encontrado",
+                        'data' => $ipat,
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Registro no encontrado", 
+                    );
+                }
+            }else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado", 
+                    'message' => "No existe ningún IPAT disponible para la sede.", 
                 );
             }
         } else {

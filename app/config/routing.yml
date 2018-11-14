@@ -1,3 +1,8 @@
+jhweb_usuario:
+    resource: "@JHWEBUsuarioBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 jhweb_financiero:
     resource: "@JHWEBFinancieroBundle/Controller/"
     type:     annotation

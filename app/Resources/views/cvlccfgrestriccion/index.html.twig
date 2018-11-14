@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvlccfgrestriccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Descripcion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvLcCfgRestriccion in cvLcCfgRestriccions %}
+            <tr>
+                <td><a href="{{ path('cvlccfgrestriccion_show', { 'id': cvLcCfgRestriccion.id }) }}">{{ cvLcCfgRestriccion.id }}</a></td>
+                <td>{{ cvLcCfgRestriccion.descripcion }}</td>
+                <td>{% if cvLcCfgRestriccion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvlccfgrestriccion_show', { 'id': cvLcCfgRestriccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvlccfgrestriccion_edit', { 'id': cvLcCfgRestriccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvlccfgrestriccion_new') }}">Create a new cvLcCfgRestriccion</a>
+        </li>
+    </ul>
+{% endblock %}
