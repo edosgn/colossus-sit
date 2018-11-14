@@ -53,7 +53,9 @@
         </tr>
         <tr> 
             <td  width="15%" style="font-weight:bold;">Color</td>
-            <td> {{vehiculo.color.nombre}}</td>
+            {% if vehiculo.color  %}
+            <td>{{vehiculo.color.nombre}}</td>
+            {% endif  %}
             <td style="font-weight:bold;">Servicio</td>
             {% if vehiculo.servicio  %}
             <td>{{vehiculo.servicio.nombre}}</td>
@@ -89,7 +91,7 @@
         {% endfor %}
     </table>
 
-    <p style="text-align:center;">
+    <p style="text-align:center;"> 
         <b>tramites</b>
         <br>      
     </p>
