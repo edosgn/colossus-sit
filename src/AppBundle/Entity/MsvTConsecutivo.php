@@ -21,11 +21,10 @@ class MsvTConsecutivo
      */
     private $id;
 
-
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="consecutivo", type="string", length=255)
+     * @ORM\Column(name="consecutivo", type="bigint")
      */
     private $consecutivo;
 
@@ -78,7 +77,7 @@ class MsvTConsecutivo
     /**
      * Set consecutivo
      *
-     * @param string $consecutivo
+     * @param integer $consecutivo
      *
      * @return MsvTConsecutivo
      */
@@ -92,7 +91,7 @@ class MsvTConsecutivo
     /**
      * Get consecutivo
      *
-     * @return string
+     * @return integer
      */
     public function getConsecutivo()
     {
