@@ -82,7 +82,6 @@ class TramiteSolicitud
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tramitesSolicitud")
      **/
     protected $vehiculo;
-    
 
 
     /**

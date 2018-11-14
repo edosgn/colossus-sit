@@ -60,70 +60,47 @@ class MsvTalonarioController extends Controller
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
-            $sedeOperativaId = $params->sedeOperativaId;
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
+
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
            
             $msvTalonario = new MsvTalonario();
             
-
             $talonario = $em->getRepository('AppBundle:MsvTalonario')->findOneBySedeOperativa(
                 $sedeOperativaId
             );
 
-            if ($talonario) {
-                $talonario->setSedeOperativa($sedeOperativa);
-                $talonario->setrangoini($params->rangoini);
-                $talonario->setrangofin($params->rangofin);
-                $talonario->setTotal($params->total);
-                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
-                $talonario->setNResolucion($params->nResolucion);
-                $talonario->setEstado(true);
-                
+            $talonario->setSedeOperativa($sedeOperativa);
+            $talonario->setrangoini($params->rangoini);
+            $talonario->setrangofin($params->rangofin);
+            $talonario->setTotal($params->total);
+            $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+            $talonario->setNResolucion($params->nResolucion);
+            $talonario->setEstado(true);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->flush();
 
-                $em = $this->getDoctrine()->getManager();
+            $divipo = $sedeOperativa->getCodigoDivipo();
+
+            for ($consecutivo = $talonario->getRangoini(); $consecutivo <= $talonario->getRangoFin(); $consecutivo++) {
+
+                $msvTConsecutivo = new MsvTConsecutivo();
+
+                $msvTConsecutivo->setMsvTalonario($talonario);
+                $msvTConsecutivo->setConsecutivo($divipo.$consecutivo);
+                $msvTConsecutivo->setSedeOperativa($sedeOperativa);
+                $msvTConsecutivo->setActivo(true);
+                $msvTConsecutivo->setEstado("DISPONIBLE");
+
+                $em->persist($msvTConsecutivo);
                 $em->flush();
-
-                $divipo = $sedeOperativa->getCodigoDivipo();
-
-                for ($consecutivo = $talonario->getRangoini(); $consecutivo <= $talonario->getRangoFin(); $consecutivo++) { 
-
-                    $longitud = (20 - (strlen($divipo)+strlen($consecutivo)));
-                    if ($longitud < 20) {
-                        $nuevoConsecutivo = $divipo.str_pad($consecutivo, $longitud, '0', STR_PAD_LEFT);
-                    }else{
-                        $nuevoConsecutivo = $divipo.$consecutivo;
-                    }
-                
-                    $msvTConsecutivo = new MsvTConsecutivo();
-
-                    $msvTConsecutivo->setMsvTalonario($talonario);
-                    $msvTConsecutivo->setConsecutivo($nuevoConsecutivo);
-                    $msvTConsecutivo->setSedeOperativa($sedeOperativa);
-                    $msvTConsecutivo->setActivo(true);
-                    $msvTConsecutivo->setEstado("DISPONIBLE");
-
-                    $em->persist($msvTConsecutivo);
-                    $em->flush();
-                }
-            }else{
-                $msvTalonario->setSedeOperativa($sedeOperativa);
-                $msvTalonario->setrangoini($params->rangoini);
-                $msvTalonario->setrangofin($params->rangofin);
-                $msvTalonario->setTotal($params->total);
-                $msvTalonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
-                $msvTalonario->setNResolucion($params->nResolucion);
-                $msvTalonario->setEstado(true);
-                
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($msvTalonario);
-                $em->flush();              
             }
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito", 
-                );
-            // }
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito", 
+            );
         }else{
             $response = array(
                 'status' => 'error',
