@@ -189,7 +189,7 @@ class VehiculoController extends Controller
      * Finds and displays a Vehiculo entity.
      *
      * @Route("/show/rna", name="vehiculo_show_rna")
-     * @Method("POST")
+     * @Method({"GET","POST"})
      */
     public function showRnaAction(Request $request)
     {
@@ -243,7 +243,7 @@ class VehiculoController extends Controller
      * Finds and displays a Vehiculo entity.
      *
      * @Route("/show/rnma", name="vehiculo_show_rnma")
-     * @Method("POST")
+     * @Method({"GET","POST"})
      */
     public function showRnmaAction(Request $request)
     {
@@ -641,7 +641,9 @@ class VehiculoController extends Controller
                             break;
 
                         case 'blindaje':
-                            $vehiculo->setBlindaje($params->idBlindaje);
+                            $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
+                            $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
+                            $vehiculo->setEmpresaBlindadora($params->empresaBlindadora);
                             break;
 
                         case 'carroceria':
@@ -651,6 +653,7 @@ class VehiculoController extends Controller
 
                         case 'motor':
                             $vehiculo->setMotor($params->idMotor);
+
                             break;
 
                         case 'placa':
@@ -660,6 +663,15 @@ class VehiculoController extends Controller
 
                         case 'regrabarvin':
                             $vehiculo->setVin($params->vin);
+                            break;
+                            
+                        case 'servicio':
+                            $vehiculo->setServicio($params->idServicio);
+                            break;
+                            
+                        case 'cancelacionmatricula':
+                            
+                            $vehiculo->setEstado(false);
                             break;
                     }
                 }
