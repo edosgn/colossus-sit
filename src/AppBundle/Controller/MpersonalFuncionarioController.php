@@ -165,6 +165,7 @@ class MpersonalFuncionarioController extends Controller
         $helpers = $this->get("app.helpers");
         
         $em = $this->getDoctrine()->getManager();
+        
         $mpersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($id);
 
         if ($mpersonalFuncionario) {

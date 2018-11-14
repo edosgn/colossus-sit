@@ -166,7 +166,7 @@ class MsvTConsecutivoController extends Controller
         ;
     }
 
-     /**
+    /**
      * busca ipat por numero de consecutivo mas reciente.
      *
      * @Route("/search/last/sede", name="msvtconsecutivo_search_last_sede")
@@ -227,7 +227,8 @@ class MsvTConsecutivoController extends Controller
 
         return $helpers->json($response);
     }
-     /**
+
+    /**
      * busca ipats por sede Operativa.
      *
      * @Route("/operativasede", name="operativasede_search_consecutivos")

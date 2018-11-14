@@ -220,7 +220,9 @@ class SvCfgAreaController extends Controller
         $areas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgArea')->findBy(
             array('activo' => 1)
         );
+        
         $response = null;
+
         foreach ($areas as $key => $area) {
             $response[$key] = array(
                 'value' => $area->getId(),

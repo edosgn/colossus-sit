@@ -58,7 +58,10 @@ class SvRegistroIpatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+
             $ipat = new SvRegistroIpat();
+
+
 
             $em = $this->getDoctrine()->getManager();
             
@@ -473,14 +476,15 @@ class SvRegistroIpatController extends Controller
                 $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[2]->consecutivo->consecutivo));
                 $ipat->setConsecutivo($consecutivo);
 
-                if ($consecutivo != null) {
+                if ($consecutivo) {
                     $fechaAsignacion = new \Datetime();
                     $consecutivo->setFechaAsignacion($fechaAsignacion);
                     $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
                     $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(array('usuario' => $usuario));
                     $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
                     $consecutivo->setFuncionario($funcionario);
-                    $consecutivo->setEstado('En Registro');
+                    $consecutivo->setEstado('UTILIZADO');
+
                     $em->persist($consecutivo);
                     $em->flush();
 

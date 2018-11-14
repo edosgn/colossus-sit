@@ -22,9 +22,9 @@ class MpersonalComparendo
     private $id;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="consecutivo", type="string", length=100)
+     * @ORM\Column(name="consecutivo", type="bigint")
      */
     private $consecutivo;
 
@@ -76,6 +76,54 @@ class MpersonalComparendo
     }
 
     /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return MpersonalComparendo
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set fechaAsignacion
+     *
+     * @param \DateTime $fechaAsignacion
+     *
+     * @return MpersonalComparendo
+     */
+    public function setFechaAsignacion($fechaAsignacion)
+    {
+        $this->fechaAsignacion = $fechaAsignacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaAsignacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaAsignacion()
+    {
+        return $this->fechaAsignacion;
+    }
+
+    /**
      * Set estado
      *
      * @param string $estado
@@ -116,7 +164,7 @@ class MpersonalComparendo
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -169,54 +217,6 @@ class MpersonalComparendo
     public function getFuncionario()
     {
         return $this->funcionario;
-    }
-
-    /**
-     * Set consecutivo
-     *
-     * @param string $consecutivo
-     *
-     * @return MpersonalComparendo
-     */
-    public function setConsecutivo($consecutivo)
-    {
-        $this->consecutivo = $consecutivo;
-
-        return $this;
-    }
-
-    /**
-     * Get consecutivo
-     *
-     * @return string
-     */
-    public function getConsecutivo()
-    {
-        return $this->consecutivo;
-    }
-
-    /**
-     * Set fechaAsignacion
-     *
-     * @param \DateTime $fechaAsignacion
-     *
-     * @return MpersonalComparendo
-     */
-    public function setFechaAsignacion($fechaAsignacion)
-    {
-        $this->fechaAsignacion = $fechaAsignacion;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaAsignacion
-     *
-     * @return \DateTime
-     */
-    public function getFechaAsignacion()
-    {
-        return $this->fechaAsignacion->format('d/m/Y');
     }
 
     /**

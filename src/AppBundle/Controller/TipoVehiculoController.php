@@ -228,17 +228,22 @@ class TipoVehiculoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $tiposVehiculo = $em->getRepository('AppBundle:TipoVehiculo')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($tiposVehiculo as $key => $tipoVehiculo) {
-        $response[$key] = array(
-            'value' => $tipoVehiculo->getId(),
-            'label' => $tipoVehiculo->getNombre(),
+        $helpers = $this->get("app.helpers");
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $tiposVehiculo = $em->getRepository('AppBundle:TipoVehiculo')->findBy(
+            array('estado' => 1)
+        );
+
+        $response = null;
+        
+        foreach ($tiposVehiculo as $key => $tipoVehiculo) {
+            $response[$key] = array(
+                'value' => $tipoVehiculo->getId(),
+                'label' => $tipoVehiculo->getNombre(),
             );
-      }
+        }
        return $helpers->json($response);
     }
 }

@@ -10,4 +10,23 @@ namespace AppBundle\Repository;
  */
 class MpersonalComparendoRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene el maximo consecutivo disponible según la sede operativa
+    public function getLastByFuncionario($idFuncionario)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(c.consecutivo) AS consecutivo, c.id
+            FROM AppBundle:MpersonalComparendo c
+            WHERE c.funcionario = :idFuncionario
+            AND c.estado = :estado
+            GROUP BY c.funcionario";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idFuncionario' => $idFuncionario,
+            'estado' => 'DISPONIBLE',
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

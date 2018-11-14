@@ -10,8 +10,8 @@ namespace AppBundle\Repository;
  */
 class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
-        //Obtiene el vehículo según un numero de placa y módulo
-     public function getLastBySede($idSedeOperativa)
+    //Obtiene el maximo consecutivo disponible según la sede operativa
+    public function getLastBySede($idSedeOperativa)
     {
         $em = $this->getEntityManager();
 
