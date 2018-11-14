@@ -681,6 +681,7 @@ class VehiculoController extends Controller
                         case 'regrabarserie':
                             $vehiculo->setSerie($params->nuevoNumero);
                             break;
+
                     }
                 }
 
