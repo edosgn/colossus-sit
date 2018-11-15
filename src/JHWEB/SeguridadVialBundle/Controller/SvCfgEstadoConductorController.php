@@ -63,7 +63,9 @@ class SvCfgEstadoConductorController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $estadoConductor->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $estadoConductor->setNombre($nombre);
             $estadoConductor->setActivo(true);
             $em->persist($estadoConductor);
             $em->flush();

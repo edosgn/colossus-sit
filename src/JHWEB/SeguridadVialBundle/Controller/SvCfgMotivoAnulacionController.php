@@ -63,7 +63,9 @@ class SvCfgMotivoAnulacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $motivoAnulacion->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $motivoAnulacion->setNombre($nombre);
             $motivoAnulacion->setActivo(true);
             $em->persist($motivoAnulacion);
             $em->flush();

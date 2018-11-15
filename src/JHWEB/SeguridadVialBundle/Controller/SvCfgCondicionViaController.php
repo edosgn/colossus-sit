@@ -63,7 +63,9 @@ class SvCfgCondicionViaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $condicionVia->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $condicionVia->setNombre($nombre);
             $condicionVia->setActivo(true);
             $em->persist($condicionVia);
             $em->flush();

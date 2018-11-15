@@ -63,7 +63,9 @@ class SvCfgEstadoTiempoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $estadoTiempo->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $estadoTiempo->setNombre($nombre);
             $estadoTiempo->setActivo(true);
             $em->persist($estadoTiempo);
             $em->flush();

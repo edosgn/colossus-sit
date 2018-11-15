@@ -68,30 +68,30 @@ class LicenciaConduccionController extends Controller
             $licenciaConduccion->setFechaVencimiento(new \Datetime($fechaVencimiento));
             $licenciaConduccion->setActivo(true);
 
-            if ($params->sedeOperativaId) {
+            if ($params->idSedeOperativa) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->sedeOperativaId
+                    $params->idSedeOperativa
                 );
                 $licenciaConduccion->setSedeOperativa($sedeOperativa);
             }
 
-            if ($params->categoriaId) {
+            if ($params->idCategoria) {
                 $categoria = $em->getRepository('AppBundle:CfgLicenciaConduccionCategoria')->find(
-                    $params->categoriaId
+                    $params->idCategoria
                 );
                 $licenciaConduccion->setCategoria($categoria);
             }
 
-            if ($params->claseId) {
+            if ($params->idClase) {
                 $clase = $em->getRepository('AppBundle:Clase')->find(
-                    $params->claseId
+                    $params->idClase
                 );
                 $licenciaConduccion->setClase($clase);
             }
 
-            if ($params->servicioId) {
+            if ($params->idServicio) {
                 $servicio = $em->getRepository('AppBundle:Servicio')->find(
-                    $params->servicioId
+                    $params->idServicio
                 );
                 $licenciaConduccion->setServicio($servicio);
             }
@@ -126,9 +126,9 @@ class LicenciaConduccionController extends Controller
                 }
             }
 
-            if (isset($params->paisId)) {
+            if (isset($params->idPais)) {
                 $pais = $em->getRepository('AppBundle:Pais')->find(
-                    $params->paisId
+                    $params->idPais
                 );
                 $licenciaConduccion->setPais($pais);
             }

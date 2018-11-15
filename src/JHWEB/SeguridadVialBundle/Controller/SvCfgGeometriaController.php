@@ -69,7 +69,9 @@ class SvCfgGeometriaController extends Controller
                 $geometria->setTipoGeometria($tipoGeometria);
             }
 
-            $geometria->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $geometria->setNombre($nombre);
             $geometria->setActivo(true);
             $em->persist($geometria);
             $em->flush();

@@ -63,7 +63,9 @@ class SvCfgZonaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $zona->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $zona->setNombre($nombre);
             $zona->setActivo(true);
             $em->persist($zona);
             $em->flush();

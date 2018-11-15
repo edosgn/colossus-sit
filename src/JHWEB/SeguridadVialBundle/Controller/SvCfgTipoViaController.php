@@ -70,7 +70,9 @@ class SvCfgTipoViaController extends Controller
                 $tipoVia->setTipoArea($tipoArea);
             }
 
-            $tipoVia->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $tipoVia->setNombre($nombre);
             $tipoVia->setActivo(true);
             $em->persist($tipoVia);
             $em->flush();

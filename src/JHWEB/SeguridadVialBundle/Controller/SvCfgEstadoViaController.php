@@ -64,7 +64,9 @@ class SvCfgEstadoViaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $estadoVia->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $estadoVia->setNombre($nombre);
             $estadoVia->setActivo(true);
             $em->persist($estadoVia);
             $em->flush();

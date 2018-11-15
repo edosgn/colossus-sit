@@ -63,7 +63,9 @@ class SvCfgTipoGeometriaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoGeometria->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $tipoGeometria->setNombre($nombre);
             $tipoGeometria->setActivo(true);
             $em->persist($tipoGeometria);
             $em->flush();

@@ -62,8 +62,8 @@ class SvCfgCalzadaCarrilController extends Controller
             $calzada = new SvCfgCalzadaCarril();
 
             $em = $this->getDoctrine()->getManager();
-
-            $calzada->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+            $calzada->setNombre($nombre);
             $calzada->setActivo(true);
             $em->persist($calzada);
             $em->flush();

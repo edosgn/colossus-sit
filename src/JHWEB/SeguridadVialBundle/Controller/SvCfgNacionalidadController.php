@@ -63,7 +63,9 @@ class SvCfgNacionalidadController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nacionalidad->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $nacionalidad->setNombre($nombre);
             $nacionalidad->setActivo(true);
             $em->persist($nacionalidad);
             $em->flush();

@@ -62,8 +62,8 @@ class SvCfgCardinalidadController extends Controller
             $cardinalidad = new SvCfgCardinalidad();
 
             $em = $this->getDoctrine()->getManager();
-
-            $cardinalidad->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+            $cardinalidad->setNombre($nombre);
             $cardinalidad->setActivo(true);
             $em->persist($cardinalidad);
             $em->flush();

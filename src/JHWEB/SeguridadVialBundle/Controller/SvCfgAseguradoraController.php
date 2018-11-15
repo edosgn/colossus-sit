@@ -61,8 +61,8 @@ class SvCfgAseguradoraController extends Controller
             $aseguradora = new SvCfgAseguradora();
 
             $em = $this->getDoctrine()->getManager();
-
-            $aseguradora->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+            $aseguradora->setNombre($nombre);
             $aseguradora->setActivo(true);
             $em->persist($aseguradora);
             $em->flush();

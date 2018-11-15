@@ -63,7 +63,9 @@ class SvCfgDisenioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $disenio->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $disenio->setNombre($nombre);
             $disenio->setActivo(true);
             $em->persist($disenio);
             $em->flush();

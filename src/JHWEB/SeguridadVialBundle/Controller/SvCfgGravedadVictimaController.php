@@ -63,7 +63,9 @@ class SvCfgGravedadVictimaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $gravedadVictima->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $gravedadVictima->setNombre($nombre);
             $gravedadVictima->setActivo(true);
             $em->persist($gravedadVictima);
             $em->flush();

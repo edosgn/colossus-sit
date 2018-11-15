@@ -63,7 +63,9 @@ class SvCfgEntidadAccidenteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $entidadAccidente->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $entidadAccidente->setNombre($nombre);
             $entidadAccidente->setActivo(true);
             $em->persist($entidadAccidente);
             $em->flush();

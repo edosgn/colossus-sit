@@ -63,7 +63,9 @@ class SvCfgResultadoExamenController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $resultadoExamen->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $resultadoExamen->setNombre($nombre);
             $resultadoExamen->setActivo(true);
             $em->persist($resultadoExamen);
             $em->flush();

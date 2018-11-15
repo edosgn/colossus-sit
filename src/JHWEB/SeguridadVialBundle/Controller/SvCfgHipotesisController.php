@@ -62,7 +62,8 @@ class SvCfgHipotesisController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $hipotesis->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+            $hipotesis->setNombre($nombre);
             $hipotesis->setActivo(true);
             $em->persist($hipotesis);
             $em->flush();

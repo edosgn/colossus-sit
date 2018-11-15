@@ -62,7 +62,9 @@ class SvCfgSustanciaPeligrosaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $sustanciaPeligrosa->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $sustanciaPeligrosa->setNombre($nombre);
             $sustanciaPeligrosa->setActivo(true);
             $em->persist($sustanciaPeligrosa);
             $em->flush();
