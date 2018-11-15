@@ -670,7 +670,6 @@ class VehiculoController extends Controller
                             break;
                             
                         case 'cancelacionmatricula':
-                            
                             $vehiculo->setEstado(false);
                             break;
 
@@ -682,6 +681,13 @@ class VehiculoController extends Controller
                             $vehiculo->setSerie($params->nuevoNumero);
                             break;
 
+                        case 'conjunto':
+                            $vehiculo->setModelo($params->modelo);
+                            break;
+
+                        case 'repotenciacion':
+                            $vehiculo->setModelo($params->modelo);
+                            break;
                     }
                 }
 
