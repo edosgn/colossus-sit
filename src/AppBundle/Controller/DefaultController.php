@@ -80,7 +80,6 @@ class DefaultController extends Controller
         $pdf->SetSubject('Your client');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
         $pdf->setFontSubsetting(true);
-
         $pdf->SetFont('helvetica', '', 11, '', true);
         $pdf->SetMargins('25', '25', '25');
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
