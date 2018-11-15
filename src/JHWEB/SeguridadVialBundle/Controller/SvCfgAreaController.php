@@ -60,7 +60,8 @@ class SvCfgAreaController extends Controller
 
             $area = new SvCfgArea();
             $em = $this->getDoctrine()->getManager();
-            $area->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+            $area->setNombre($nombre);
             if ($params->tipoAreaId) {
                 $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find(
                     $params->tipoAreaId

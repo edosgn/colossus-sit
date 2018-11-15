@@ -195,7 +195,9 @@ class SvCfgControlViaController extends Controller
                 $controlVia->setTipoControl($tipoControl);
             }
 
-            $controlVia->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $controlVia->setNombre($nombre);
             $controlVia->setActivo(true);
             $em->persist($controlVia);
             $em->flush();

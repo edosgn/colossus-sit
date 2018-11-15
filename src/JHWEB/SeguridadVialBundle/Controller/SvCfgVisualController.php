@@ -63,7 +63,9 @@ class SvCfgVisualController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $visual->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $visual->setNombre($nombre);
             $visual->setActivo(true);
             $em->persist($visual);
             $em->flush();

@@ -63,7 +63,9 @@ class SvCfgFallaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $falla->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $falla->setNombre($nombre);
             $falla->setActivo(true);
             $em->persist($falla);
             $em->flush();

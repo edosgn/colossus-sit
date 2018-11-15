@@ -63,7 +63,9 @@ class SvCfgMaterialController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $material->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $material->setNombre($nombre);
             $material->setActivo(true);
             $em->persist($material);
             $em->flush();

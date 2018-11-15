@@ -63,7 +63,9 @@ class SvCfgLugarImpactoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $lugarImpacto->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $lugarImpacto->setNombre($nombre);
             $lugarImpacto->setActivo(true);
             $em->persist($lugarImpacto);
             $em->flush();

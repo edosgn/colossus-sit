@@ -72,7 +72,9 @@ class SvCfgHospitalController extends Controller
                 $hospital->setMunicipio($municipio);
             }
 
-            $hospital->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $hospital->setNombre($nombre);
             $hospital->setActivo(true);
             $em->persist($hospital);
             $em->flush();

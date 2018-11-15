@@ -80,7 +80,9 @@ class SvCfgTipoAreaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoArea->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $tipoArea->setNombre($nombre);
             $tipoArea->setActivo(true);
             $em->persist($tipoArea);
             $em->flush();

@@ -64,7 +64,9 @@ class SvCfgTipoControlController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoControl->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $tipoControl->setNombre($nombre);
             $tipoControl->setActivo(true);
             $em->persist($tipoControl);
             $em->flush();

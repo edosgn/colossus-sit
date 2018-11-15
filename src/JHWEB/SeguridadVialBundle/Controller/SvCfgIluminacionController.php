@@ -62,7 +62,8 @@ class SvCfgIluminacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $iluminacion->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+            $iluminacion->setNombre($nombre);
             $iluminacion->setActivo(true);
             $em->persist($iluminacion);
             $em->flush();

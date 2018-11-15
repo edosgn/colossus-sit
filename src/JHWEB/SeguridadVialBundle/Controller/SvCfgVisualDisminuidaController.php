@@ -63,7 +63,9 @@ class SvCfgVisualDisminuidaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $visualDisminuida->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $visualDisminuida->setNombre($nombre);
             $visualDisminuida->setActivo(true);
             $em->persist($visualDisminuida);
             $em->flush();

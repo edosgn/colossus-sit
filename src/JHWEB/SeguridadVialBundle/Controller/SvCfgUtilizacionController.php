@@ -67,7 +67,9 @@ class SvCfgUtilizacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $utilizacion->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $utilizacion->setNombre($nombre);
             $utilizacion->setActivo(true);
             $em->persist($utilizacion);
             $em->flush();

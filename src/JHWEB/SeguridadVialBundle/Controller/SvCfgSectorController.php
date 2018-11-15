@@ -63,7 +63,9 @@ class SvCfgSectorController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $sector->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $sector->setNombre($nombre);
             $sector->setActivo(true);
             $em->persist($sector);
             $em->flush();

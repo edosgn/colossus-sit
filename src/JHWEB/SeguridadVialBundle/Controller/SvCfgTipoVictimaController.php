@@ -63,7 +63,9 @@ class SvCfgTipoVictimaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoVictima->setNombre($params->nombre);
+            $nombre = strtoupper($params->nombre);
+
+            $tipoVictima->setNombre($nombre);
             $tipoVictima->setActivo(true);
             $em->persist($tipoVictima);
             $em->flush();
