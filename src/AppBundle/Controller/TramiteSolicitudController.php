@@ -94,20 +94,13 @@ class TramiteSolicitudController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-            $response = array(
-            'status' => 'error',
-            'code' => 400,
-            'msj' => "Los campos no pueden estar vacios",
-            );
-            }else{*/
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
             $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
             $datos = $params->datos->foraneas; 
+            
             $em = $this->getDoctrine()->getManager();
-            // var_dump($params);
-            // die();
+
             $tramiteSolicitud = new TramiteSolicitud();
 
             if ($params->vehiculoId) {
