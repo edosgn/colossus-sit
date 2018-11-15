@@ -127,7 +127,9 @@ class SvCfgGeometriaController extends Controller
 
             $tipoGeometria = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoGeometria')->find($params->tipoGeometria);
             if ($geometria != null) {
-                $geometria->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $geometria->setNombre($nombre);
                 $geometria->setTipoGeometria($tipoGeometria);
 
                 $em->persist($geometria);

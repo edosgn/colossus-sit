@@ -121,7 +121,9 @@ class SvCfgNacionalidadController extends Controller
             $nacionalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->id);
 
             if ($nacionalidad != null) {
-                $nacionalidad->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $nacionalidad->setNombre($nombre);
 
                 $em->persist($nacionalidad);
                 $em->flush();

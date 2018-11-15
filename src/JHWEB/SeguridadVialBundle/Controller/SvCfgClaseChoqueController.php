@@ -126,7 +126,9 @@ class SvCfgClaseChoqueController extends Controller
             $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find($params->claseAccidente);
             
             if ($claseChoque != null) {
-                $claseChoque->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $claseChoque->setNombre($nombre);
                 $claseChoque->setClaseAccidente($claseAccidente);
 
                 $em->persist($claseChoque);

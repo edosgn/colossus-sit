@@ -120,7 +120,9 @@ class SvCfgEstadoIluminacionController extends Controller
             $estadoIluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoIluminacion')->find($params->id);
 
             if ($estadoIluminacion != null) {
-                $estadoIluminacion->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $estadoIluminacion->setNombre($nombre);
 
                 $em->persist($estadoIluminacion);
                 $em->flush();

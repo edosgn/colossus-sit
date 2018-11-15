@@ -118,7 +118,9 @@ class SvCfgHipotesisController extends Controller
             $hipotesis = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHipotesis')->find($params->id);
 
             if ($hipotesis != null) {
-                $hipotesis->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $hipotesis->setNombre($nombre);
 
                 $em->persist($hipotesis);
                 $em->flush();

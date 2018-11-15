@@ -120,7 +120,9 @@ class SvCfgDisenioController extends Controller
             $disenio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgDisenio')->find($params->id);
 
             if ($disenio != null) {
-                $disenio->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $disenio->setNombre($nombre);
 
                 $em->persist($disenio);
                 $em->flush();

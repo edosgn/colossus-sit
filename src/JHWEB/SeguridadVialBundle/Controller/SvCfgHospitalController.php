@@ -132,7 +132,9 @@ class SvCfgHospitalController extends Controller
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativa);
             
             if ($hospital != null) {
-                $hospital->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $hospital->setNombre($nombre);
                 $hospital->setSedeOperativa($sedeOperativa);
                 $hospital->setMunicipio($municipio);
 

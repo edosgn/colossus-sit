@@ -120,7 +120,9 @@ class SvCfgGradoExamenController extends Controller
             $gradoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->find($params->id);
 
             if ($gradoExamen != null) {
-                $gradoExamen->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $gradoExamen->setNombre($nombre);
 
                 $em->persist($gradoExamen);
                 $em->flush();

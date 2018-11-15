@@ -119,7 +119,9 @@ class SvCfgSustanciaPeligrosaController extends Controller
             $sustanciaPeligrosa = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSustanciaPeligrosa')->find($params->id);
 
             if ($sustanciaPeligrosa != null) {
-                $sustanciaPeligrosa->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $sustanciaPeligrosa->setNombre($nombre);
 
                 $em->persist($sustanciaPeligrosa);
                 $em->flush();

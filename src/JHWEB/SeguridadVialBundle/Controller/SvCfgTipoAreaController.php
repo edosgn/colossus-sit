@@ -121,7 +121,9 @@ class SvCfgTipoAreaController extends Controller
             $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find($params->id);
 
             if ($tipoArea != null) {
-                $tipoArea->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $tipoArea->setNombre($nombre);
 
                 $em->persist($tipoArea);
                 $em->flush();

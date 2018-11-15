@@ -121,7 +121,9 @@ class SvCfgSectorController extends Controller
             $sector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSector')->find($params->id);
 
             if ($sector != null) {
-                $sector->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $sector->setNombre($nombre);
 
                 $em->persist($sector);
                 $em->flush();

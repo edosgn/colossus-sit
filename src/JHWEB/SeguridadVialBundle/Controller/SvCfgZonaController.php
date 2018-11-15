@@ -146,7 +146,9 @@ class SvCfgZonaController extends Controller
             $zona = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgZona')->find($params->id);
 
             if ($zona != null) {
-                $zona->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $zona->setNombre($nombre);
 
                 $em->persist($zona);
                 $em->flush();

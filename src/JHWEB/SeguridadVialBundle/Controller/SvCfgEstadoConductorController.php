@@ -120,7 +120,9 @@ class SvCfgEstadoConductorController extends Controller
             $estadoConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoConductor')->find($params->id);
 
             if ($estadoConductor != null) {
-                $estadoConductor->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $estadoConductor->setNombre($nombre);
 
                 $em->persist($estadoConductor);
                 $em->flush();

@@ -151,7 +151,9 @@ class SvCfgUtilizacionController extends Controller
             $utilizacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUtilizacion')->find($params->id);
 
             if ($utilizacion != null) {
-                $utilizacion->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $utilizacion->setNombre($nombre);
 
                 $em->persist($utilizacion);
                 $em->flush();

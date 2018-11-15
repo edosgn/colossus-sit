@@ -121,7 +121,9 @@ class SvCfgMaterialController extends Controller
             $material = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMaterial')->find($params->id);
 
             if ($material != null) {
-                $material->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $material->setNombre($nombre);
 
                 $em->persist($material);
                 $em->flush();

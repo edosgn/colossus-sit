@@ -121,7 +121,9 @@ class SvCfgFallaController extends Controller
             $falla = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFalla')->find($params->id);
 
             if ($falla != null) {
-                $falla->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $falla->setNombre($nombre);
 
                 $em->persist($falla);
                 $em->flush();

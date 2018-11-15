@@ -121,7 +121,9 @@ class SvCfgEstadoViaController extends Controller
             $estadoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoVia')->find($params->id);
 
             if ($estadoVia != null) {
-                $estadoVia->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $estadoVia->setNombre($nombre);
 
                 $em->persist($estadoVia);
                 $em->flush();

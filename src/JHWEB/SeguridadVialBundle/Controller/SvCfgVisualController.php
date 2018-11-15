@@ -147,7 +147,9 @@ class SvCfgVisualController extends Controller
             $visual = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisual')->find($params->id);
 
             if ($visual != null) {
-                $visual->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $visual->setNombre($nombre);
 
                 $em->persist($visual);
                 $em->flush();

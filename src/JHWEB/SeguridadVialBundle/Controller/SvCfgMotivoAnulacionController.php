@@ -120,7 +120,9 @@ class SvCfgMotivoAnulacionController extends Controller
             $motivoAnulacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMotivoAnulacion')->find($params->id);
 
             if ($motivoAnulacion != null) {
-                $motivoAnulacion->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $motivoAnulacion->setNombre($nombre);
 
                 $em->persist($motivoAnulacion);
                 $em->flush();

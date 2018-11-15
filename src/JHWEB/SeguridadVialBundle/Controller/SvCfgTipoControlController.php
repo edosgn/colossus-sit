@@ -121,7 +121,9 @@ class SvCfgTipoControlController extends Controller
             $tipoControl = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControl')->find($params->id);
 
             if ($tipoControl != null) {
-                $tipoControl->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $tipoControl->setNombre($nombre);
 
                 $em->persist($tipoControl);
                 $em->flush();

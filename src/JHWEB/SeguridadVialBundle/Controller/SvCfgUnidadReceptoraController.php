@@ -166,7 +166,9 @@ class SvCfgUnidadReceptoraController extends Controller
             $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
 
             if ($unidadReceptora != null) {
-                $unidadReceptora->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $unidadReceptora->setNombre($nombre);
                 $unidadReceptora->setEntidadAccidente($entidadAccidente);
                 $unidadReceptora->setMunicipio($municipio);
 

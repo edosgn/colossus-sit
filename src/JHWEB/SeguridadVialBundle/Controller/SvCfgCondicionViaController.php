@@ -120,7 +120,9 @@ class SvCfgCondicionViaController extends Controller
             $condicionVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCondicionVia')->find($params->id);
 
             if ($condicionVia != null) {
-                $condicionVia->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $condicionVia->setNombre($nombre);
 
                 $em->persist($condicionVia);
                 $em->flush();

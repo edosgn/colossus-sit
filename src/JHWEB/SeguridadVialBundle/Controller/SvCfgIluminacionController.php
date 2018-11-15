@@ -119,7 +119,9 @@ class SvCfgIluminacionController extends Controller
             $iluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgIluminacion')->find($params->id);
 
             if ($iluminacion != null) {
-                $iluminacion->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $iluminacion->setNombre($nombre);
 
                 $em->persist($iluminacion);
                 $em->flush();

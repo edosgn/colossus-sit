@@ -121,7 +121,9 @@ class SvCfgResultadoExamenController extends Controller
             $resultadoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find($params->id);
 
             if ($resultadoExamen != null) {
-                $resultadoExamen->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $resultadoExamen->setNombre(nombre);
 
                 $em->persist($resultadoExamen);
                 $em->flush();

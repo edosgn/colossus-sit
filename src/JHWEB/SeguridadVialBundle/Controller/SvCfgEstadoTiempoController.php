@@ -120,7 +120,9 @@ class SvCfgEstadoTiempoController extends Controller
             $estadoTiempo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoTiempo')->find($params->id);
 
             if ($estadoTiempo != null) {
-                $estadoTiempo->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $estadoTiempo->setNombre($nombre);
 
                 $em->persist($estadoTiempo);
                 $em->flush();

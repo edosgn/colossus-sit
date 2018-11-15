@@ -146,7 +146,9 @@ class SvCfgTipoVictimaController extends Controller
             $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->find($params->id);
 
             if ($tipoVictima != null) {
-                $tipoVictima->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $tipoVictima->setNombre($nombre);
 
                 $em->persist($tipoVictima);
                 $em->flush();

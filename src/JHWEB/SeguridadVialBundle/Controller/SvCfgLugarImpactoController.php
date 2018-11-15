@@ -121,7 +121,9 @@ class SvCfgLugarImpactoController extends Controller
             $lugarImpacto = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgLugarImpacto')->find($params->id);
 
             if ($lugarImpacto != null) {
-                $lugarImpacto->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $lugarImpacto->setNombre($nombre);
 
                 $em->persist($lugarImpacto);
                 $em->flush();

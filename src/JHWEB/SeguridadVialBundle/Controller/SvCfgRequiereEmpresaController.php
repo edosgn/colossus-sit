@@ -156,7 +156,9 @@ class SvCfgRequiereEmpresaController extends Controller
             
 
             if ($requiereEmpresa != null) {
-                $requiereEmpresa->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $requiereEmpresa->setNombre($nombre);
                 $requiereEmpresa->setCarroceria($carroceria);
 
                 $em->persist($requiereEmpresa);

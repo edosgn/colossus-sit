@@ -126,7 +126,9 @@ class SvCfgAreaController extends Controller
                 $area->setTipoArea($tipoArea);
             }
             if ($area != null) {
-                $area->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $area->setNombre($nombre);
                 $em->persist($area);
                 $em->flush();
                 $response = array(

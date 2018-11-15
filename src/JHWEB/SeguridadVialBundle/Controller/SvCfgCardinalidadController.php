@@ -118,7 +118,9 @@ class SvCfgCardinalidadController extends Controller
             $cardinalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCardinalidad')->find($params->id);
 
             if ($cardinalidad != null) {
-                $cardinalidad->setNombre($params->nombre);
+                $nombre = strtoupper($params->nombre);
+
+                $cardinalidad->setNombre($nombre);
 
                 $em->persist($cardinalidad);
                 $em->flush();
