@@ -76,7 +76,7 @@ class Comparendo
      * @ORM\Column(name="infractor_numero_licencia_conduccion", type="bigint", length=30, nullable=true)
      */
     private $infractorNumeroLicenciaConduccion;
-
+  
     /**
      * @var string
      *

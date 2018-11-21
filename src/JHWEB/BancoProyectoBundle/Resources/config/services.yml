@@ -1,0 +1,4 @@
+services:
+#    jhweb_banco_proyecto.example:
+#        class: JHWEB\BancoProyectoBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

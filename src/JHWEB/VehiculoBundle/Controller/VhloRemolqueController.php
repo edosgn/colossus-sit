@@ -219,6 +219,85 @@ class VhloRemolqueController extends Controller
     }
 
     /**
+     * Displays a form to edit an existing VehiculoRemolque entity.
+     *
+     * @Route("/transformacion", name="vhloremolque_transformacion")
+     * @Method({"GET", "POST"})
+     */
+    public function transformacionVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find($params->idVehiculo);
+
+            $vehiculoRemolque = $em->getRepository("JHWEBVehiculoBundle:VhloRemolque")->findOneByVehiculo(
+                $vehiculo->getId()
+            );
+            
+            if ($vehiculoRemolque) {
+                $numeroEjes = $vehiculoRemolque->getNumeroEjes();
+                if($numeroEjes == $params->nuevoNumeroEjes){
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'msj' => "El vehiculo tiene el mismo número de ejes", 
+                    );
+                }else{
+                    $vehiculoRemolque->setVehiculo($vehiculo);
+
+                    $condicionIngreso = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCondicionIngreso")->find(
+                        $vehiculoRemolque->getCondicionIngreso()->getId()
+                    );
+                    $vehiculoRemolque->setCondicionIngreso($condicionIngreso);
+
+                    $origenRegistro = $em->getRepository("JHWEBVehiculoBundle:VhloCfgOrigenRegistro")->find(
+                        $vehiculoRemolque->getOrigenRegistro()->getId()
+                    );
+                    $vehiculoRemolque->setOrigenRegistro($origenRegistro);
+                    $vehiculoRemolque->setNumeroEjes($params->nuevoNumeroEjes);
+                    $vehiculoRemolque->setNumeroFth($params->numeroFTH);
+                    $vehiculoRemolque->setPeso($params->pesoVacio);
+                    $vehiculoRemolque->setCargarUtilMaxima($params->cargaUtil);
+                    $vehiculoRemolque->setReferencia($vehiculoRemolque->getReferencia());
+                    $vehiculoRemolque->setNumeroFth($vehiculoRemolque->getNumeroFth());
+                    $vehiculoRemolque->setNumeroRunt($vehiculoRemolque->getNumeroRunt());
+                    $vehiculoRemolque->setAlto($vehiculoRemolque->getAlto());
+                    $vehiculoRemolque->setLargo($vehiculoRemolque->getLargo());
+                    $vehiculoRemolque->setAncho($vehiculoRemolque->getAncho());
+                    $em->flush();
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro realizado con exito", 
+                    );
+                }
+
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehiculo no es un remolque o semiremolque", 
+                );
+            }
+        
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar vehiculo", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Deletes a vhloRemolque entity.
      *
      * @Route("/{id}/delete", name="vhloremolque_delete")
