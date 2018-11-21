@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bpproyectos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numero</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Numerocuota</th>
+                <th>Nombrecuota</th>
+                <th>Costovalor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bpProyecto in bpProyectos %}
+            <tr>
+                <td><a href="{{ path('bpproyecto_show', { 'id': bpProyecto.id }) }}">{{ bpProyecto.id }}</a></td>
+                <td>{{ bpProyecto.numero }}</td>
+                <td>{{ bpProyecto.nombre }}</td>
+                <td>{% if bpProyecto.fecha %}{{ bpProyecto.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ bpProyecto.numeroCuota }}</td>
+                <td>{{ bpProyecto.nombreCuota }}</td>
+                <td>{{ bpProyecto.costoValor }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('bpproyecto_show', { 'id': bpProyecto.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('bpproyecto_edit', { 'id': bpProyecto.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bpproyecto_new') }}">Create a new bpProyecto</a>
+        </li>
+    </ul>
+{% endblock %}
