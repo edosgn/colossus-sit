@@ -63,22 +63,17 @@ class Helpers
 	    return $edad->y;
 	}
 
-	public function comparendoState($params,$comparendo){
+	public function comparendoState($params){
  
 		$em = $this->em;
 
-		if ($params->comparendo->ciudadanoId) {
-            $infractor = $em->getRepository('AppBundle:Ciudadano')->find(
-                $params->comparendo->ciudadanoId
-            );
-            $comparendo->setCiudadanoInfractor($infractor);
-
+		if ($params->infractor->identificacion) {
             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
-                'Inhibitorio'
+                'INHIBITORIO'
             );
         }
 
-        $fecha = $params->comparendo->fecha." ".$params->comparendo->hora;
+        $fecha = $params->comparendo->fecha." ".$params->comparendo->horas.':'.$params->comparendo->minutos.':00';
 
         $fechaInicio = '2002-01-01 00:00:00';
         $fechaFin = '2017-07-13 23:59:00';
@@ -86,7 +81,7 @@ class Helpers
 
 		if ($caducidad) {
 			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
-                'Caducidad'
+                'CADUCIDAD'
             );
 		}
 
@@ -96,7 +91,7 @@ class Helpers
 
 		if ($caducidad) {
 			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
-                'Caducidad'
+                'CADUCIDAD'
             );
 		}
 	   

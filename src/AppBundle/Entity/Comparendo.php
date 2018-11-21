@@ -59,11 +59,9 @@ class Comparendo
     /*************************DATOS INFRACTOR***************************/
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="infractor_tipo_docmento", type="string", length=255, nullable=true)
-     */
-    private $infractorTipoDocumento;
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="comparendos")
+     **/
+    protected $infractorTipoIdentificacion;
 
     /**
      * @var int
@@ -75,7 +73,7 @@ class Comparendo
     /**
      * @var int
      *
-     * @ORM\Column(name="infractor_numero_licencia_conduccion", type="bigint", length=30)
+     * @ORM\Column(name="infractor_numero_licencia_conduccion", type="bigint", length=30, nullable=true)
      */
     private $infractorNumeroLicenciaConduccion;
   
@@ -124,14 +122,14 @@ class Comparendo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="infractor_fecha_nacimiento", type="date")
+     * @ORM\Column(name="infractor_fecha_nacimiento", type="date", nullable=true)
      */
     private $infractorFechaNacimiento;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="infractor_telefono", type="integer", length=255)
+     * @ORM\Column(name="infractor_telefono", type="integer", length=255, nullable=true)
      */
     private $infractorTelefono;
 
@@ -162,13 +160,11 @@ class Comparendo
     private $numeroLicenciaTransito;
 
     /**************************DATOS PROPIETARIO************************/
-    
+
     /**
-     * @var string
-     *
-     * @ORM\Column(name="propietario_tipo_documento", type="string", length=255, nullable=true)
-     */
-    private $propietarioTipoDocumento;
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="comparendos")
+     **/
+    protected $propietarioTipoIdentificacion;
 
     /**
      * @var int
@@ -225,35 +221,35 @@ class Comparendo
      *
      * @ORM\Column(name="ciudadano_testigo_nombres", type="string", nullable=true)
      */
-    private $ciudadanoTestigoNombres;
+    private $testigoNombres;
     
     /**
      * @var string
      *
      * @ORM\Column(name="ciudadano_testigo_apellidos", type="string", nullable=true)
      */
-    private $ciudadanoTestigoApellidos;
+    private $testigoApellidos;
     
     /**
      * @var string
      *
      * @ORM\Column(name="ciudadano_testigo_identificacion", type="string", nullable=true)
      */
-    private $ciudadanoTestigoIdentificacion;
+    private $testigoIdentificacion;
     
     /**
      * @var string
      *
      * @ORM\Column(name="ciudadano_testigo_direccion", type="string", nullable=true)
      */
-    private $ciudadanoTestigoDireccion;
+    private $testigoDireccion;
     
     /**
      * @var string
      *
      * @ORM\Column(name="ciudadano_testigo_telefono", type="string", nullable=true)
      */
-    private $ciudadanoTestigoTelefono;
+    private $testigoTelefono;
 
     /**
      * @var bool
@@ -282,7 +278,6 @@ class Comparendo
      * @ORM\Column(name="valor_infraccion", type="integer", nullable=true)
      */
     private $valorInfraccion;
-
 
     /**
      * @var string
@@ -323,31 +318,45 @@ class Comparendo
     protected $matriculadoEn;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="comparendos")
-     **/
+     * @var string
+     *
+     * @ORM\Column(name="servicio", type="string", length=255)
+     */
     protected $servicio;
     
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="comparendos")
-     **/
+     * @var string
+     *
+     * @ORM\Column(name="clase", type="string", length=255)
+     */
     protected $clase;
     
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgRadioAccion", inversedBy="comparendos")
-     **/
+     * @var string
+     *
+     * @ORM\Column(name="radio_accion", type="string", length=255)
+     */
     private $radioAccion;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgModalidadTransporte", inversedBy="comparendos") */
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modalidadTransporte", type="string", length=255)
+     */   
     private $modalidadTransporte;
     
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero", inversedBy="comparendos")
-     **/
+     * @var string
+     *
+     * @ORM\Column(name="trasnportePasajero", type="string", length=255)
+     */
     private $transportePasajero;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial", inversedBy="comparendos")
-     **/
+     * @var string
+     *
+     * @ORM\Column(name="transporteEspecial", type="string", length=255, nullable=true)
+     */
     private $transporteEspecial;
 
     /**
@@ -389,6 +398,7 @@ class Comparendo
     {
         return $this->id;
     }
+
 
     /**
      * Set fecha
@@ -508,30 +518,6 @@ class Comparendo
     public function getPlaca()
     {
         return $this->placa;
-    }
-
-    /**
-     * Set infractorTipoDocumento
-     *
-     * @param string $infractorTipoDocumento
-     *
-     * @return Comparendo
-     */
-    public function setInfractorTipoDocumento($infractorTipoDocumento)
-    {
-        $this->infractorTipoDocumento = $infractorTipoDocumento;
-
-        return $this;
-    }
-
-    /**
-     * Get infractorTipoDocumento
-     *
-     * @return string
-     */
-    public function getInfractorTipoDocumento()
-    {
-        return $this->infractorTipoDocumento;
     }
 
     /**
@@ -847,30 +833,6 @@ class Comparendo
     }
 
     /**
-     * Set propietarioTipoDocumento
-     *
-     * @param string $propietarioTipoDocumento
-     *
-     * @return Comparendo
-     */
-    public function setPropietarioTipoDocumento($propietarioTipoDocumento)
-    {
-        $this->propietarioTipoDocumento = $propietarioTipoDocumento;
-
-        return $this;
-    }
-
-    /**
-     * Get propietarioTipoDocumento
-     *
-     * @return string
-     */
-    public function getPropietarioTipoDocumento()
-    {
-        return $this->propietarioTipoDocumento;
-    }
-
-    /**
      * Set propietarioIdentificacion
      *
      * @param integer $propietarioIdentificacion
@@ -1039,123 +1001,123 @@ class Comparendo
     }
 
     /**
-     * Set ciudadanoTestigoNombres
+     * Set testigoNombres
      *
-     * @param string $ciudadanoTestigoNombres
+     * @param string $testigoNombres
      *
      * @return Comparendo
      */
-    public function setCiudadanoTestigoNombres($ciudadanoTestigoNombres)
+    public function setTestigoNombres($testigoNombres)
     {
-        $this->ciudadanoTestigoNombres = $ciudadanoTestigoNombres;
+        $this->testigoNombres = $testigoNombres;
 
         return $this;
     }
 
     /**
-     * Get ciudadanoTestigoNombres
+     * Get testigoNombres
      *
      * @return string
      */
-    public function getCiudadanoTestigoNombres()
+    public function getTestigoNombres()
     {
-        return $this->ciudadanoTestigoNombres;
+        return $this->testigoNombres;
     }
 
     /**
-     * Set ciudadanoTestigoApellidos
+     * Set testigoApellidos
      *
-     * @param string $ciudadanoTestigoApellidos
+     * @param string $testigoApellidos
      *
      * @return Comparendo
      */
-    public function setCiudadanoTestigoApellidos($ciudadanoTestigoApellidos)
+    public function setTestigoApellidos($testigoApellidos)
     {
-        $this->ciudadanoTestigoApellidos = $ciudadanoTestigoApellidos;
+        $this->testigoApellidos = $testigoApellidos;
 
         return $this;
     }
 
     /**
-     * Get ciudadanoTestigoApellidos
+     * Get testigoApellidos
      *
      * @return string
      */
-    public function getCiudadanoTestigoApellidos()
+    public function getTestigoApellidos()
     {
-        return $this->ciudadanoTestigoApellidos;
+        return $this->testigoApellidos;
     }
 
     /**
-     * Set ciudadanoTestigoIdentificacion
+     * Set testigoIdentificacion
      *
-     * @param string $ciudadanoTestigoIdentificacion
+     * @param string $testigoIdentificacion
      *
      * @return Comparendo
      */
-    public function setCiudadanoTestigoIdentificacion($ciudadanoTestigoIdentificacion)
+    public function setTestigoIdentificacion($testigoIdentificacion)
     {
-        $this->ciudadanoTestigoIdentificacion = $ciudadanoTestigoIdentificacion;
+        $this->testigoIdentificacion = $testigoIdentificacion;
 
         return $this;
     }
 
     /**
-     * Get ciudadanoTestigoIdentificacion
+     * Get testigoIdentificacion
      *
      * @return string
      */
-    public function getCiudadanoTestigoIdentificacion()
+    public function getTestigoIdentificacion()
     {
-        return $this->ciudadanoTestigoIdentificacion;
+        return $this->testigoIdentificacion;
     }
 
     /**
-     * Set ciudadanoTestigoDireccion
+     * Set testigoDireccion
      *
-     * @param string $ciudadanoTestigoDireccion
+     * @param string $testigoDireccion
      *
      * @return Comparendo
      */
-    public function setCiudadanoTestigoDireccion($ciudadanoTestigoDireccion)
+    public function setTestigoDireccion($testigoDireccion)
     {
-        $this->ciudadanoTestigoDireccion = $ciudadanoTestigoDireccion;
+        $this->testigoDireccion = $testigoDireccion;
 
         return $this;
     }
 
     /**
-     * Get ciudadanoTestigoDireccion
+     * Get testigoDireccion
      *
      * @return string
      */
-    public function getCiudadanoTestigoDireccion()
+    public function getTestigoDireccion()
     {
-        return $this->ciudadanoTestigoDireccion;
+        return $this->testigoDireccion;
     }
 
     /**
-     * Set ciudadanoTestigoTelefono
+     * Set testigoTelefono
      *
-     * @param string $ciudadanoTestigoTelefono
+     * @param string $testigoTelefono
      *
      * @return Comparendo
      */
-    public function setCiudadanoTestigoTelefono($ciudadanoTestigoTelefono)
+    public function setTestigoTelefono($testigoTelefono)
     {
-        $this->ciudadanoTestigoTelefono = $ciudadanoTestigoTelefono;
+        $this->testigoTelefono = $testigoTelefono;
 
         return $this;
     }
 
     /**
-     * Get ciudadanoTestigoTelefono
+     * Get testigoTelefono
      *
      * @return string
      */
-    public function getCiudadanoTestigoTelefono()
+    public function getTestigoTelefono()
     {
-        return $this->ciudadanoTestigoTelefono;
+        return $this->testigoTelefono;
     }
 
     /**
@@ -1327,6 +1289,174 @@ class Comparendo
     }
 
     /**
+     * Set servicio
+     *
+     * @param string $servicio
+     *
+     * @return Comparendo
+     */
+    public function setServicio($servicio)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return string
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param string $clase
+     *
+     * @return Comparendo
+     */
+    public function setClase($clase)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return string
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+
+    /**
+     * Set radioAccion
+     *
+     * @param string $radioAccion
+     *
+     * @return Comparendo
+     */
+    public function setRadioAccion($radioAccion)
+    {
+        $this->radioAccion = $radioAccion;
+
+        return $this;
+    }
+
+    /**
+     * Get radioAccion
+     *
+     * @return string
+     */
+    public function getRadioAccion()
+    {
+        return $this->radioAccion;
+    }
+
+    /**
+     * Set modalidadTransporte
+     *
+     * @param string $modalidadTransporte
+     *
+     * @return Comparendo
+     */
+    public function setModalidadTransporte($modalidadTransporte)
+    {
+        $this->modalidadTransporte = $modalidadTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadTransporte
+     *
+     * @return string
+     */
+    public function getModalidadTransporte()
+    {
+        return $this->modalidadTransporte;
+    }
+
+    /**
+     * Set transportePasajero
+     *
+     * @param string $transportePasajero
+     *
+     * @return Comparendo
+     */
+    public function setTransportePasajero($transportePasajero)
+    {
+        $this->transportePasajero = $transportePasajero;
+
+        return $this;
+    }
+
+    /**
+     * Get transportePasajero
+     *
+     * @return string
+     */
+    public function getTransportePasajero()
+    {
+        return $this->transportePasajero;
+    }
+
+    /**
+     * Set transporteEspecial
+     *
+     * @param string $transporteEspecial
+     *
+     * @return Comparendo
+     */
+    public function setTransporteEspecial($transporteEspecial)
+    {
+        $this->transporteEspecial = $transporteEspecial;
+
+        return $this;
+    }
+
+    /**
+     * Get transporteEspecial
+     *
+     * @return string
+     */
+    public function getTransporteEspecial()
+    {
+        return $this->transporteEspecial;
+    }
+
+    /**
+     * Set infractorTipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $infractorTipoIdentificacion
+     *
+     * @return Comparendo
+     */
+    public function setInfractorTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $infractorTipoIdentificacion = null)
+    {
+        $this->infractorTipoIdentificacion = $infractorTipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get infractorTipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getInfractorTipoIdentificacion()
+    {
+        return $this->infractorTipoIdentificacion;
+    }
+
+    /**
      * Set organismoTransito
      *
      * @param \AppBundle\Entity\SedeOperativa $organismoTransito
@@ -1348,6 +1478,30 @@ class Comparendo
     public function getOrganismoTransito()
     {
         return $this->organismoTransito;
+    }
+
+    /**
+     * Set propietarioTipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $propietarioTipoIdentificacion
+     *
+     * @return Comparendo
+     */
+    public function setPropietarioTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $propietarioTipoIdentificacion = null)
+    {
+        $this->propietarioTipoIdentificacion = $propietarioTipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get propietarioTipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getPropietarioTipoIdentificacion()
+    {
+        return $this->propietarioTipoIdentificacion;
     }
 
     /**
@@ -1420,150 +1574,6 @@ class Comparendo
     public function getMatriculadoEn()
     {
         return $this->matriculadoEn;
-    }
-
-    /**
-     * Set servicio
-     *
-     * @param \AppBundle\Entity\Servicio $servicio
-     *
-     * @return Comparendo
-     */
-    public function setServicio(\AppBundle\Entity\Servicio $servicio = null)
-    {
-        $this->servicio = $servicio;
-
-        return $this;
-    }
-
-    /**
-     * Get servicio
-     *
-     * @return \AppBundle\Entity\Servicio
-     */
-    public function getServicio()
-    {
-        return $this->servicio;
-    }
-
-    /**
-     * Set clase
-     *
-     * @param \AppBundle\Entity\Clase $clase
-     *
-     * @return Comparendo
-     */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
-    {
-        $this->clase = $clase;
-
-        return $this;
-    }
-
-    /**
-     * Get clase
-     *
-     * @return \AppBundle\Entity\Clase
-     */
-    public function getClase()
-    {
-        return $this->clase;
-    }
-
-    /**
-     * Set radioAccion
-     *
-     * @param \AppBundle\Entity\CfgRadioAccion $radioAccion
-     *
-     * @return Comparendo
-     */
-    public function setRadioAccion(\AppBundle\Entity\CfgRadioAccion $radioAccion = null)
-    {
-        $this->radioAccion = $radioAccion;
-
-        return $this;
-    }
-
-    /**
-     * Get radioAccion
-     *
-     * @return \AppBundle\Entity\CfgRadioAccion
-     */
-    public function getRadioAccion()
-    {
-        return $this->radioAccion;
-    }
-
-    /**
-     * Set modalidadTransporte
-     *
-     * @param \AppBundle\Entity\CfgModalidadTransporte $modalidadTransporte
-     *
-     * @return Comparendo
-     */
-    public function setModalidadTransporte(\AppBundle\Entity\CfgModalidadTransporte $modalidadTransporte = null)
-    {
-        $this->modalidadTransporte = $modalidadTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidadTransporte
-     *
-     * @return \AppBundle\Entity\CfgModalidadTransporte
-     */
-    public function getModalidadTransporte()
-    {
-        return $this->modalidadTransporte;
-    }
-
-    /**
-     * Set transportePasajero
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero $transportePasajero
-     *
-     * @return Comparendo
-     */
-    public function setTransportePasajero(\JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero $transportePasajero = null)
-    {
-        $this->transportePasajero = $transportePasajero;
-
-        return $this;
-    }
-
-    /**
-     * Get transportePasajero
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero
-     */
-    public function getTransportePasajero()
-    {
-        return $this->transportePasajero;
-    }
-
-    /**
-     * Set transporteEspecial
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial $transporteEspecial
-     *
-     * @return Comparendo
-     */
-    public function setTransporteEspecial(\JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial $transporteEspecial = null)
-    {
-        $this->transporteEspecial = $transporteEspecial;
-
-        return $this;
-    }
-
-    /**
-     * Get transporteEspecial
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial
-     */
-    public function getTransporteEspecial()
-    {
-        return $this->transporteEspecial;
     }
 
     /**

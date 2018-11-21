@@ -10,4 +10,11 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function findByRango($params) {
+        $horaInicioDatetime = new \Datetime($params->horaInicio);
+        $horaFinDatetime = new \Datetime($params->horaFin);
+        $fechaInicioDatetime = new \Datetime($params->fechaInicio);
+        $fechaFinDatetime = new \Datetime($params->fechaFin);
+    }
 }

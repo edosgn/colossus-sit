@@ -630,6 +630,7 @@ class SvRegistroIpatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
             $licenciaConduccion = $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('numero' => $params->numero));
             if ($licenciaConduccion) {
@@ -821,9 +822,9 @@ class SvRegistroIpatController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $horaInicioDatetime = new \Datetime($params->horaInicio);
-            //$horaInicio = $horaInicioDatetime->format('H:i:s');
+            $horaFinDatetime = new \Datetime($params->horaFin);
             $fechaInicioDatetime = new \Datetime($params->fechaInicio);
-            //$fechaInicio = $fechaInicioDatetime->format('Y-m-d');
+            $fechaFinDatetime = new \Datetime($params->fechaFin);
             if ($params->idGravedad) {
                 $gravedad = $em->getRepository('AppBundle:CfgGravedad')->findBy(
                     array(
@@ -866,9 +867,6 @@ class SvRegistroIpatController extends Controller
                 $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->idObjetoFijo);
             }
 
-            $fechaAccidente = $fechaInicioDatetime->format('EEEE');
-            var_dump($fechaAccidente);
-
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
                 array(
                     'gravedad' => $gravedad,
@@ -877,12 +875,22 @@ class SvRegistroIpatController extends Controller
                     'fechaAccidente' => $fechaInicioDatetime,
                     'ciudadResidenciaConductor' => $municipio->getNombre(),
                     'sexoConductor' => $genero->getSigla(),
+                    //'sexoVictima' => $genero->getSigla(),
                     'clase' => $clase->getNombre(),
                     'claseAccidente' => $claseAccidente,
                     'choqueCon' => $choqueCon,
                     'objetoFijo' => $objetoFijo,
                 )
             );
+            
+            /*foreach ($ipats as $key => $ipat) {
+                $fechaIpat = new \Datetime($ipat->getFechaAccidente());
+                $fechaDate = $fechaInicioDatetime->format('l');
+                $fechaAccidenteIpat = $fechaIpat->format('l');
+                if($fechaAccidenteIpat == $fechaDate) {
+                    var_dump("sakljdalsjdalkdjsaldksajdlkasjdald");
+                }
+            }*/
 
             if ($ipats) {
                 $response = array(
@@ -890,7 +898,7 @@ class SvRegistroIpatController extends Controller
                     'code' => 200,
                     'message' => count($ipats)." ipats encontrado(s)",
                     'data' => $ipats,
-                    'diasemana' => $fechaInicioDatetime->format('EEEE'),
+                    'diasemana' => $fechaInicioDatetime->format('l'),
                 );
             } else {
                 $response = array(
