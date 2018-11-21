@@ -57,6 +57,14 @@ class SvRegistroIpat
     private $fechaAccidente;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="dia_accidente", type="string", nullable = true)
+     */
+    private $diaAccidente;
+
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="hora_accidente", type="time", nullable = true)
@@ -640,6 +648,13 @@ class SvRegistroIpat
     private $fechaNacimientoConductor;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="edad_conductor", type="integer", nullable = true)
+     */
+    private $edadConductor;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="sexo_conductor", type="string", nullable = true)
@@ -841,6 +856,13 @@ class SvRegistroIpat
      * @ORM\Column(name="fecha_nacimiento_victima", type="date", nullable = true)
      */
     private $fechaNacimientoVictima;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="edad_victima", type="integer", nullable = true)
+     */
+    private $edadVictima;
 
     /**
      * @var string
@@ -1140,7 +1162,6 @@ class SvRegistroIpat
         if ($this->fechaAccidente) {
             return $this->fechaAccidente->format('d/m/Y');
         }
-        return $this->fechaAccidente;
     }
 
     /**
@@ -2668,6 +2689,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set edadConductor
+     *
+     * @param integer $edadConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setEdadConductor($edadConductor)
+    {
+        $this->edadConductor = $edadConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get edadConductor
+     *
+     * @return integer
+     */
+    public function getEdadConductor()
+    {
+        return $this->edadConductor;
+    }
+
+    /**
      * Set sexoConductor
      *
      * @param string $sexoConductor
@@ -3268,6 +3313,30 @@ class SvRegistroIpat
             return $this->fechaNacimientoVictima->format('d/m/Y');
         }
         return $this->fechaNacimientoVictima;
+    }
+
+    /**
+     * Set edadVictima
+     *
+     * @param integer $edadVictima
+     *
+     * @return SvRegistroIpat
+     */
+    public function setEdadVictima($edadVictima)
+    {
+        $this->edadVictima = $edadVictima;
+
+        return $this;
+    }
+
+    /**
+     * Get edadVictima
+     *
+     * @return integer
+     */
+    public function getEdadVictima()
+    {
+        return $this->edadVictima;
     }
 
     /**
@@ -4732,5 +4801,29 @@ class SvRegistroIpat
     public function getHipotesis()
     {
         return $this->hipotesis;
+    }
+
+    /**
+     * Set diaAccidente
+     *
+     * @param string $diaAccidente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDiaAccidente($diaAccidente)
+    {
+        $this->diaAccidente = $diaAccidente;
+
+        return $this;
+    }
+
+    /**
+     * Get diaAccidente
+     *
+     * @return string
+     */
+    public function getDiaAccidente()
+    {
+        return $this->diaAccidente;
     }
 }

@@ -11,10 +11,101 @@ namespace JHWEB\SeguridadVialBundle\Repository;
 class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function findByRango($params) {
-        $horaInicioDatetime = new \Datetime($params->horaInicio);
-        $horaFinDatetime = new \Datetime($params->horaFin);
+    public function getIpatByRango($params) {
+        $em = $this->getEntityManager();
+        
+        $horaInicioDatetime = $params->horaInicio;
+        $horaFinDatetime = $params->horaFin;
         $fechaInicioDatetime = new \Datetime($params->fechaInicio);
         $fechaFinDatetime = new \Datetime($params->fechaFin);
+        
+        if ($params->idGravedad) {
+            $gravedad = $em->getRepository('AppBundle:CfgGravedad')->findBy(
+                array(
+                    'nombre' => $params->idGravedad,
+                    )
+                );
+            }
+        if ($params->idTipoVictima) {
+            $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
+                array(
+                    'nombre' => $params->idTipoVictima,
+                )
+            );
+        }
+        if ($params->idMunicipio) {
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->idMunicipio);
+        }
+        $municipioNombre = $municipio->getNombre();
+
+        if ($params->idGenero) {
+            $genero = $em->getRepository('AppBundle:Genero')->find($params->idGenero);
+        }
+        $sexoConductor = $genero->getSigla();
+
+        if ($params->idClase) {
+            $clase = $em->getRepository('AppBundle:Clase')->find($params->idClase);
+        }
+        $claseNombre = $clase->getNombre();
+
+        if ($params->idClaseAccidente) {
+            $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findBy(
+                array(
+                    'nombre' => $params->idClaseAccidente,
+                )
+            );
+        }
+        if ($params->idChoqueCon) {
+            $choqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->findBy(
+                array(
+                    'nombre' => $params->idChoqueCon,
+                )
+            );
+        }
+        if ($params->idObjetoFijo) {
+            $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->idObjetoFijo);
+        }
+
+        $edadInicioConductor = intval($params->idGrupoEdad);
+        $edadFinConductor = $edadInicioConductor + 4;
+        $diaAccidente = $params->idDiaSemana;
+        
+        $dql = "SELECT ri
+            FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
+            WHERE ri.fechaAccidente BETWEEN :fechaInicioDatetime AND :fechaFinDatetime
+            AND ri.diaAccidente = :diaAccidente
+            AND ri.horaAccidente BETWEEN :horaInicioDatetime AND :horaFinDatetime
+            AND ri.gravedad = :gravedad
+            AND ri.tipoVictima = :tipoVictima
+            AND ri.ciudadResidenciaConductor = :municipioNombre
+            AND ri.sexoConductor = :sexoConductor
+            AND ri.sexoVictima = :sexoConductor
+            AND ri.edadConductor BETWEEN :edadInicioConductor AND :edadFinConductor
+            AND ri.edadVictima BETWEEN :edadInicioConductor AND :edadFinConductor
+            AND ri.clase = :claseNombre
+            AND ri.claseAccidente = :claseAccidente
+            AND ri.choqueCon = :choqueCon
+            AND ri.objetoFijo = :objetoFijo";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicioDatetime' => $fechaInicioDatetime,
+            'fechaFinDatetime' => $fechaFinDatetime,
+            'diaAccidente' => $diaAccidente,
+            'horaInicioDatetime' => $horaInicioDatetime,
+            'horaFinDatetime' => $horaFinDatetime,
+            'gravedad' => $gravedad,
+            'tipoVictima' => $tipoVictima,
+            'municipioNombre' => $municipioNombre,
+            'sexoConductor' => $sexoConductor,
+            'edadInicioConductor' => $edadInicioConductor,
+            'edadFinConductor' => $edadFinConductor,
+            'claseNombre' => $claseNombre,
+            'claseAccidente' => $claseAccidente,
+            'choqueCon' => $choqueCon,
+            'objetoFijo' => $objetoFijo,
+        ));
+
+        return $consulta->getResult();
     }
 }
