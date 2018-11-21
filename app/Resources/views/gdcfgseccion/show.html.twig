@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gdcfgseccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ gdCfgSeccion.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ gdCfgSeccion.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if gdCfgSeccion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('gdcfgseccion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('gdcfgseccion_edit', { 'id': gdCfgSeccion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

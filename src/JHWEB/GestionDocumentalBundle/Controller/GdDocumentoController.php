@@ -130,8 +130,7 @@ class GdDocumentoController extends Controller
                     $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
                     $documento->setConsecutivo($consecutivo);
 
-                    $documento->setNumeroRadicado(
-                        str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaRegistro->format('Y')
+                    $documento->setNumeroRadicado(str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaRegistro->format('Y')
                     );
 
                     $documento->setNumeroOficio($params->documento->numeroOficio);
@@ -462,7 +461,7 @@ class GdDocumentoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ha sido asignado y se encuentra ".$trazabilidad->getEstado(),
+                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ha sido derivado y se encuentra ".$trazabilidad->getEstado(),
                     'data' => $trazabilidad
                 );
             }else{

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bpactividad</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bpActividad.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ bpActividad.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Unidadmedida</th>
+                <td>{{ bpActividad.unidadMedida }}</td>
+            </tr>
+            <tr>
+                <th>Cantidad</th>
+                <td>{{ bpActividad.cantidad }}</td>
+            </tr>
+            <tr>
+                <th>Costounitario</th>
+                <td>{{ bpActividad.costoUnitario }}</td>
+            </tr>
+            <tr>
+                <th>Costototal</th>
+                <td>{{ bpActividad.costoTotal }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if bpActividad.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bpactividad_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('bpactividad_edit', { 'id': bpActividad.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

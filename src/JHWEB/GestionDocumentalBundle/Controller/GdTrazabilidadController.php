@@ -156,7 +156,7 @@ class GdTrazabilidadController extends Controller
             $trazabilidades = $em->getRepository('JHWEBGestionDocumentalBundle:GdTrazabilidad')->findBy(
                 array(
                     'responsable' => $params->idFuncionario,
-                    'estado' => array('PENDIENTE','EN TRAMITE')
+                    'estado' => array('PENDIENTE','EN TRAMITE','ASIGNADO')
                 )
             );
             
@@ -263,6 +263,19 @@ class GdTrazabilidadController extends Controller
                     $estado = 'EN TRAMITE';
                     $trazabilidad->setAceptada(true);
                     $trazabilidad->getDocumento()->setEstado('EN TRAMITE');
+
+                    $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
+
+                    $consecutivo = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getMaximo(
+                        $fechaRegistro->format('Y')
+                    );
+                    $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+
+                    $trazabilidad->getDocumento()->setNumeroSalida('SH-STTD-'.
+                        str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaRegistro->format('Y')
+                    );
+
+                    $em->flush();
                 }else{
                     $estado = 'RECHAZADO';
                     $trazabilidad->getDocumento()->setEstado('RECHAZADO');

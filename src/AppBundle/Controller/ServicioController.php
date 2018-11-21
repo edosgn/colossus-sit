@@ -54,43 +54,36 @@ class ServicioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
+            $nombre = $params->nombre;
+            $codigo = $params->codigo;
+
+            $em = $this->getDoctrine()->getManager();
+            $servicio = $em->getRepository('AppBundle:Servicio')->findBy(
+                array('codigo' => $codigo)
+            );
+
+            if ($servicio==null) {
+                $servicio = new Servicio();
+
+                $servicio->setNombre(strtoupper($nombre));
+                $servicio->setCodigo($codigo);
+                $servicio->setEstado(true);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($servicio);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "servicio creado con exito", 
+                ); 
+            }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'msj' => "codigo no puede ser repetido", 
                 );
-            }else{*/
-                $nombre = $params->nombre;
-                $codigo = $params->codigo;
-
-                $em = $this->getDoctrine()->getManager();
-                $servicio = $em->getRepository('AppBundle:Servicio')->findBy(
-                    array('codigo' => $codigo)
-                );
-                if ($servicio==null) {
-                    $servicio = new Servicio();
-                    $servicio->setNombre($nombre);
-                    $servicio->setCodigo($codigo);
-                    $servicio->setEstado(true);
-                    $em = $this->getDoctrine()->getManager();
-                    $em->persist($servicio);
-                    $em->flush();
-
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "servicio creado con exito", 
-                    ); 
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "codigo no puede ser repetido", 
-                    );
-                }
-            //}
-                
+            }
         }else{
             $response = array(
                 'status' => 'error',
@@ -156,7 +149,7 @@ class ServicioController extends Controller
             $servicio = $em->getRepository("AppBundle:Servicio")->find($params->id);
 
             if ($servicio!=null) {
-                $servicio->setNombre($nombre);
+                $servicio->setNombre(strtoupper($nombre));
                 $servicio->setCodigo($codigo);
                 $servicio->setEstado(true);
                 $em = $this->getDoctrine()->getManager();

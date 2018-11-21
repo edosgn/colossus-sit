@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgtransporteespecials list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgTransporteEspecial in vhloCfgTransporteEspecials %}
+            <tr>
+                <td><a href="{{ path('vhlocfgtransporteespecial_show', { 'id': vhloCfgTransporteEspecial.id }) }}">{{ vhloCfgTransporteEspecial.id }}</a></td>
+                <td>{{ vhloCfgTransporteEspecial.nombre }}</td>
+                <td>{% if vhloCfgTransporteEspecial.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgtransporteespecial_show', { 'id': vhloCfgTransporteEspecial.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfgtransporteespecial_edit', { 'id': vhloCfgTransporteEspecial.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgtransporteespecial_new') }}">Create a new vhloCfgTransporteEspecial</a>
+        </li>
+    </ul>
+{% endblock %}

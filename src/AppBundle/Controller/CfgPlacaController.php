@@ -76,7 +76,7 @@ class CfgPlacaController extends Controller
 
             if ($cfgPlaca == null) {
                     $cfgPlaca = new CfgPlaca();
-                    $cfgPlaca->setNumero($numero);
+                    $cfgPlaca->setNumero(strtoupper($numero));
                     $cfgPlaca->setEstado('Disponible');
                     $cfgPlaca->setClase($clase);
                     $cfgPlaca->setSedeOperativa($sedeOperativa);
@@ -149,7 +149,7 @@ class CfgPlacaController extends Controller
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
             if ($cfgPlaca != null) {
-                $cfgPlaca->setNumero($numero);
+                $cfgPlaca->setNumero(strtoupper($numero));
                 $cfgPlaca->setEstado($estado);
                 $cfgPlaca->setClase($clase);
                 $cfgPlaca->setSedeOperativa($sedeOperativa);

@@ -61,29 +61,81 @@ class ComparendoController extends Controller
 
             $comparendo = new Comparendo();
 
+            if (isset($params->comparendo->vehiculoPlaca)) {
+                $comparendo->setPlaca($params->comparendo->vehiculoPlaca);
+            }
+
+            if (isset($params->comparendo->vehiculoClase)) {
+                $clase = $em->getRepository('AppBundle:Clase')->find(
+                    $params->comparendo->vehiculoClase
+                );
+                $comparendo->setClase($clase->getNombre());
+            }
+
+            if (isset($params->comparendo->vehiculoServicio)) {
+                $servicio = $em->getRepository('AppBundle:Servicio')->find(
+                    $params->comparendo->vehiculoServicio
+                );
+                $comparendo->setServicio($servicio->getNombre());
+            }
+
+            if (isset($params->comparendo->vehiculoRadioAccion)) {
+                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
+                    $params->comparendo->vehiculoRadioAccion
+                );
+                $comparendo->setRadioAccion($radioAccion->getNombre());
+            }
+
+            if (isset($params->comparendo->vehiculoModalidadTransporte)) {
+                $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find(
+                    $params->comparendo->vehiculoModalidadTransporte
+                );
+                $comparendo->setModalidadTransporte(
+                    $modalidadTransporte->getNombre()
+                );
+            }
+
+            if (isset($params->comparendo->vehiculoTransportePasajero)) {
+                $transportePasajero = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTransportePasajero')->find(
+                    $params->comparendo->vehiculoTransportePasajero
+                );
+                $comparendo->setTransportePasajero(
+                    $transportePasajero->getNombre()
+                );
+            }
+
+            if (isset($params->comparendo->vehiculoTransporteEspecial)) {
+                $transporteEspecial = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTransporteEspecial')->find(
+                    $params->comparendo->vehiculoTransporteEspecial
+                );
+                $comparendo->setTransporteEspecial(
+                    $transporteEspecial->getNombre()
+                );
+            }
+
             $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
             $horas = $params->comparendo->horas;
             $minutos = $params->comparendo->minutos;
             
-            $comparendo->setHora(new \DateTime($horas.':'.$minutos));
+            $comparendo->setHora(new \DateTime($horas.':'.$minutos.':00'));
             
-
             $comparendo->setDireccion($params->comparendo->direccion);
             $comparendo->setLocalidad($params->comparendo->localidad);
             $comparendo->setInmovilizacion($params->comparendo->inmovilizacion);
             $comparendo->setFuga($params->comparendo->fuga);
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
-            $comparendo->setFotomulta($params->comparendo->fotomulta);
+            //$comparendo->setFotomulta(false);
             //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
-            $comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
-            $comparendo->setObservacionesAgente($params->comparendo->observacionesAgente);
-            $comparendo->setValorAdicional($params->comparendo->infraccionValorAdicional);
+            //$comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
+            $comparendo->setObservacionesAgente(
+                $params->comparendo->observacionesAgente
+            );
+            //$comparendo->setValorAdicional(0);
 
             if (isset($params->fechaNotificacion)) {
                 $comparendo->setFechaNotificacion(new \DateTime($params->fechaNotificacion));
             }
-            //$comparendo->setUrlDocumento($urlDocumento);
 
             $agenteTransito = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
                 $params->comparendo->funcionarioId
@@ -100,11 +152,6 @@ class ComparendoController extends Controller
             );
             $comparendo->setMunicipio($municipio);
 
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
-                $params->comparendo->vehiculoId
-            );
-            $comparendo->setVehiculo($vehiculo);
-
             $estado = $helpers->comparendoState($params,$comparendo);
             $comparendo->setEstado($estado);
 
@@ -115,13 +162,139 @@ class ComparendoController extends Controller
                 $comparendo->setTipoInfractor($tipoInfractor);
             }
 
-            if (isset($params->comparendo->testigoId)) {
-                $testigo = $em->getRepository('AppBundle:Ciudadano')->find(
-                    $params->comparendo->testigoId
+            /* INFRACTOR */
+            if ($params->infractor->idTipoIdentificacion) {
+                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                    $params->infractor->idTipoIdentificacion
                 );
-                $comparendo->setCiudadanoTestigo($testigo);
+                $comparendo->setInfractorTipoIdentificacion(
+                    $tipoIdentificacion
+                );
             }
 
+            if ($params->infractor->idCategoriaLicenciaConduccion) {
+                $categoria = $em->getRepository('AppBundle:CfgLicenciaConduccionCategoria')->find(
+                    $params->infractor->idCategoriaLicenciaConduccion
+                );
+                $comparendo->setCategoria($categoria->getNombre());
+            }
+
+            $comparendo->setInfractorIdentificacion(
+                $params->infractor->identificacion
+            );
+
+            $comparendo->setFechaExpedicion(
+                new \Datetime($params->infractor->fechaExpedicion)
+            );
+
+            $comparendo->setFechaVencimiento(
+                new \Datetime($params->infractor->fechaVencimiento)
+            );
+
+            $comparendo->setInfractorNombres(
+                $params->infractor->nombres
+            );
+
+            if ($params->infractor->direccion) {
+                $comparendo->setInfractorDireccion(
+                    $params->infractor->direccion
+                );
+            }
+
+            if ($params->infractor->telefono) {
+                $comparendo->setInfractorTelefono(
+                    $params->infractor->telefono
+                );
+            }
+
+            if ($params->infractor->correo) {
+                $comparendo->setInfractorEmail(
+                    $params->infractor->correo
+                );
+            }
+
+            if ($params->comparendo->idSedeOperativaExpide) {
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->comparendo->idSedeOperativaExpide
+                );
+                $comparendo->setOrganismoTransito(
+                    $sedeOperativa
+                );
+            }
+
+            if ($params->comparendo->licenciaTransitoNumero) {
+                $comparendo->setNumeroLicenciaTransito(
+                    $params->comparendo->licenciaTransitoNumero
+                );
+            }
+
+            /* PROPIETARIO */
+            if ($params->propietario->idTipoIdentificacion) {
+                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                    $params->propietario->idTipoIdentificacion
+                );
+                $comparendo->setPropietarioTipoIdentificacion(
+                    $tipoIdentificacion
+                );
+            }
+
+            if ($params->propietario->identificacion) {
+                $comparendo->setPropietarioIdentificacion(
+                    $params->propietario->identificacion
+                );
+            }
+
+            if ($params->propietario->nombres) {
+                $comparendo->setPropietarioNombre(
+                    $params->propietario->nombres
+                );
+            }
+
+            /* EMPRESA */
+            if ($params->empresa->nombre) {
+                $comparendo->setEmpresaNombre(
+                    $params->empresa->nombre
+                );
+            }
+
+            if ($params->empresa->nit) {
+                $comparendo->setEmpresaNit(
+                    $params->empresa->nit
+                );
+            }
+
+            if ($params->empresa->tarjeta) {
+                $comparendo->setEmpresaTarjeta(
+                    $params->empresa->tarjeta
+                );
+            }
+
+            /* TESTIGO */
+            if ($params->testigo->nombres) {
+                $comparendo->setTestigoNombres(
+                    $params->testigo->nombres
+                );
+            }
+
+            if ($params->testigo->identificacion) {
+                $comparendo->setTestigoIdentificacion(
+                    $params->testigo->identificacion
+                );
+            }
+
+            if ($params->testigo->direccion) {
+                $comparendo->setTestigoDireccion(
+                    $params->testigo->direccion
+                );
+            }
+
+            if ($params->testigo->telefono) {
+                $comparendo->setTestigoTelefono(
+                    $params->testigo->telefono
+                );
+            }
+
+            /* INFRACCION */
             $infraccion = $em->getRepository('AppBundle:MflInfraccion')->find(
                 $params->comparendo->infraccionId
             );
@@ -137,8 +310,6 @@ class ComparendoController extends Controller
 
             $em->persist($comparendo);
             $em->flush();
-            var_dump($comparendo->getHora());
-            die();
 
             if ($params->comparendo->inmovilizacion) {
                 $inmovilizacion = new Inmovilizacion();
@@ -173,7 +344,6 @@ class ComparendoController extends Controller
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
-            //}
         } else {
             $response = array(
                 'status' => 'error',
@@ -254,7 +424,7 @@ class ComparendoController extends Controller
             $agenteTransito = $em->getRepository('AppBundle:AgenteTransito')->find($agenteTransitoId);
             $seguimientoEntrega = $em->getRepository('AppBundle:SeguimientoEntrega')->find($seguimientoEntregaId);
 
-            if ($comparendo != null) {
+            if ($comparendo) {
                 $comparendo->setNumeroOrden($numeroOrden);
                 $comparendo->setFechaDiligenciamiento($fechaDiligenciamientoDateTime);
                 $comparendo->setLugarInfraccion($lugarInfraccion);

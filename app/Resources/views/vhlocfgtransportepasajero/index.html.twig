@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgtransportepasajeros list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Gestionable</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgTransportePasajero in vhloCfgTransportePasajeros %}
+            <tr>
+                <td><a href="{{ path('vhlocfgtransportepasajero_show', { 'id': vhloCfgTransportePasajero.id }) }}">{{ vhloCfgTransportePasajero.id }}</a></td>
+                <td>{{ vhloCfgTransportePasajero.nombre }}</td>
+                <td>{% if vhloCfgTransportePasajero.gestionable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if vhloCfgTransportePasajero.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgtransportepasajero_show', { 'id': vhloCfgTransportePasajero.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfgtransportepasajero_edit', { 'id': vhloCfgTransportePasajero.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgtransportepasajero_new') }}">Create a new vhloCfgTransportePasajero</a>
+        </li>
+    </ul>
+{% endblock %}

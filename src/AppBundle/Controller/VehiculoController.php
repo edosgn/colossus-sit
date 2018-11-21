@@ -97,10 +97,10 @@ class VehiculoController extends Controller
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-            $radioAccion = $em->getRepository('AppBundle:CfgRadioAccion')->find(
+            $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
                 $params->vehiculo->radioAccionId
             );
-            $modalidadTransporte = $em->getRepository('AppBundle:CfgModalidadTransporte')->find(
+            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find(
                 $params->vehiculo->modalidadTransporteId
             );
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
@@ -122,7 +122,7 @@ class VehiculoController extends Controller
                     $sedeOperativaCfgPlaca = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
                     $cfgPlaca->setClase($clase);
                     $cfgPlaca->setSedeOperativa($sedeOperativaCfgPlaca);
-                    $cfgPlaca->setNumero($params->vehiculo->placa);
+                    $cfgPlaca->setNumero(strtoupper($params->vehiculo->placa));
                     $cfgPlaca->setEstado('asignado');
                     $em->persist($cfgPlaca);
                     $em->flush();

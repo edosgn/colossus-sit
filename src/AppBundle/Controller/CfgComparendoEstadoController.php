@@ -59,28 +59,20 @@ class CfgComparendoEstadoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $estado = new CfgComparendoEstado();
+            $estado = new CfgComparendoEstado();
 
-                $estado->setNombre($params->nombre);
-                $estado->setActivo(true);
+            $estado->setNombre(strtoupper($params->nombre));
+            $estado->setActivo(true);
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($estado);
-                $em->flush();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($estado);
+            $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con exito",
-                );
-            //}
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
         }else{
             $response = array(
                 'status' => 'error',
@@ -127,7 +119,7 @@ class CfgComparendoEstadoController extends Controller
             $estado = $em->getRepository("AppBundle:CfgComparendoEstado")->find($params->id);
 
             if ($estado!=null) {
-                $estado->setNombre($params->nombre);
+                $estado->setNombre(strtoupper($params->nombre));
                 
                 $em->flush();
 

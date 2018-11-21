@@ -161,11 +161,12 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
     private $sedeOperativa;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgRadioAccion", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion", inversedBy="vehiculos") */
     private $radioAccion;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="vehiculos") */
     private $modalidadTransporte;
+    
     /**
      * @var string
      *
@@ -245,11 +246,7 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        if ($this->fechaFactura) {
-            return $this->fechaFactura->format('Y-m-d');
-        }else{
-            return $this->fechaFactura;
-        }
+        return $this->fechaFactura;
     }
 
     /**
@@ -321,12 +318,7 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        if ($this->fechaManifiesto) {
-            return $this->fechaManifiesto->format('Y-m-d');
-        }else{
-            return $this->fechaManifiesto;
-        }
-        
+        return $this->fechaManifiesto;
     }
 
     /**
@@ -590,327 +582,7 @@ class Vehiculo
      */
     public function getCancelado()
     {
-        if ($this->cancelado) {
-            return $this->cancelado;
-        }else{
-            return "";
-        }
-        // return $this->cancelado;
-    }
-
-    /**
-     * Set municipio
-     *
-     * @param \AppBundle\Entity\Municipio $municipio
-     *
-     * @return Vehiculo
-     */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
-    {
-        $this->municipio = $municipio;
-
-        return $this;
-    }
-
-    /**
-     * Get municipio
-     *
-     * @return \AppBundle\Entity\Municipio
-     */
-    public function getMunicipio()
-    {
-        if ($this->municipio) {
-            return $this->municipio;
-        }else{
-            return "";
-        }
-
-        // return $this->municipio;
-    }
-
-    /**
-     * Set linea
-     *
-     * @param \AppBundle\Entity\Linea $linea
-     *
-     * @return Vehiculo
-     */
-    public function setLinea(\AppBundle\Entity\Linea $linea = null)
-    {
-        $this->linea = $linea;
-
-        return $this;
-    }
-
-    /**
-     * Get linea
-     *
-     * @return \AppBundle\Entity\Linea
-     */
-    public function getLinea()
-    {
-        if ($this->linea) {
-            return $this->linea;
-        }else{
-            return "";
-        }
-        // return $this->linea;
-    }
-
-    /**
-     * Set servicio
-     *
-     * @param \AppBundle\Entity\Servicio $servicio
-     *
-     * @return Vehiculo
-     */
-    public function setServicio(\AppBundle\Entity\Servicio $servicio = null)
-    {
-        $this->servicio = $servicio;
-
-        return $this;
-    }
-
-    /**
-     * Get servicio
-     *
-     * @return \AppBundle\Entity\Servicio
-     */
-    public function getServicio()
-    {
-        if ($this->servicio) {
-            return $this->servicio;
-        }else{
-            return "";
-        }
-
-        // return $this->servicio;
-    }
-
-    /**
-     * Set color
-     *
-     * @param \AppBundle\Entity\Color $color
-     *
-     * @return Vehiculo
-     */
-    public function setColor(\AppBundle\Entity\Color $color = null)
-    {
-        $this->color = $color;
-
-        return $this;
-    }
-
-    /**
-     * Get color
-     *
-     * @return \AppBundle\Entity\Color
-     */
-    public function getColor()
-    {
-        if ($this->color) {
-            return $this->color;
-        }else{
-            return "";
-        }
-        // return $this->color;
-    }
-
-    /**
-     * Set combustible
-     *
-     * @param \AppBundle\Entity\Combustible $combustible
-     *
-     * @return Vehiculo
-     */
-    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
-    {
-        $this->combustible = $combustible;
-
-        return $this;
-    }
-
-    /**
-     * Get combustible
-     *
-     * @return \AppBundle\Entity\Combustible
-     */
-    public function getCombustible()
-    {
-        if ($this->combustible) {
-            return $this->combustible;
-        }else{
-            return "";
-        }
-        // return $this->combustible;
-    }
-
-    /**
-     * Set carroceria
-     *
-     * @param \AppBundle\Entity\Carroceria $carroceria
-     *
-     * @return Vehiculo
-     */
-    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
-    {
-        $this->carroceria = $carroceria;
-
-        return $this;
-    }
-
-    /**
-     * Get carroceria
-     *
-     * @return \AppBundle\Entity\Carroceria
-     */
-    public function getCarroceria()
-    {
-        if ($this->carroceria) {
-            return $this->carroceria;
-        }else{
-            return "";
-        }
-        // return $this->carroceria;
-    }
-
-    /**
-     * Set clase
-     *
-     * @param \AppBundle\Entity\Clase $clase
-     *
-     * @return Vehiculo
-     */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
-    {
-        $this->clase = $clase;
-
-        return $this;
-    }
-
-    /**
-     * Get clase
-     *
-     * @return \AppBundle\Entity\Clase
-     */
-    public function getClase()
-    {
-        if ($this->clase) {
-            return $this->clase;
-        }else{
-            return "";
-        }
-        // return $this->clase;
-    }
-
-    /**
-     * Set placa
-     *
-     * @param \AppBundle\Entity\CfgPlaca $placa
-     *
-     * @return Vehiculo
-     */
-    public function setPlaca(\AppBundle\Entity\CfgPlaca $placa = null)
-    {
-        $this->placa = $placa;
-
-        return $this;
-    }
-
-    /**
-     * Get placa
-     *
-     * @return \AppBundle\Entity\CfgPlaca
-     */
-    public function getPlaca()
-    {
-        if ($this->placa) {
-            return $this->placa;
-        }else{
-            return "";
-        }
-        // return $this->placa;
-    }
-
-    /**
-     * Set sedeOperativa
-     *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
-     *
-     * @return Vehiculo
-     */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
-    {
-        $this->sedeOperativa = $sedeOperativa;
-
-        return $this;
-    }
-
-    /**
-     * Get sedeOperativa
-     *
-     * @return \AppBundle\Entity\SedeOperativa
-     */
-    public function getSedeOperativa()
-    {
-        if ($this->sedeOperativa) {
-            return $this->sedeOperativa;
-        }else{
-            return "";
-        }
-    }
-
-    /**
-     * Set radioAccion
-     *
-     * @param \AppBundle\Entity\CfgRadioAccion $radioAccion
-     *
-     * @return Vehiculo
-     */
-    public function setRadioAccion(\AppBundle\Entity\CfgRadioAccion $radioAccion = null)
-    {
-        $this->radioAccion = $radioAccion;
-
-        return $this;
-    }
-
-    /**
-     * Get radioAccion
-     *
-     * @return \AppBundle\Entity\CfgRadioAccion
-     */
-    public function getRadioAccion()
-    {
-        if ($this->radioAccion) {
-            return $this->radioAccion;
-        }else{
-            return "";
-        }
-        // return $this->radioAccion;
-    }
-
-    /**
-     * Set modalidadTransporte
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte
-     *
-     * @return Vehiculo
-     */
-    public function setModalidadTransporte(\JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte = null)
-    {
-        $this->modalidadTransporte = $modalidadTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidadTransporte
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte
-     */
-    public function getModalidadTransporte()
-    {
-        return $this->modalidadTransporte;
+        return $this->cancelado;
     }
 
     /**
@@ -983,6 +655,270 @@ class Vehiculo
     public function getEmpresaBlindadora()
     {
         return $this->empresaBlindadora;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \AppBundle\Entity\Municipio $municipio
+     *
+     * @return Vehiculo
+     */
+    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \AppBundle\Entity\Linea $linea
+     *
+     * @return Vehiculo
+     */
+    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \AppBundle\Entity\Linea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
+    }
+
+    /**
+     * Set servicio
+     *
+     * @param \AppBundle\Entity\Servicio $servicio
+     *
+     * @return Vehiculo
+     */
+    public function setServicio(\AppBundle\Entity\Servicio $servicio = null)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return \AppBundle\Entity\Servicio
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
+    }
+
+    /**
+     * Set color
+     *
+     * @param \AppBundle\Entity\Color $color
+     *
+     * @return Vehiculo
+     */
+    public function setColor(\AppBundle\Entity\Color $color = null)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return \AppBundle\Entity\Color
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set combustible
+     *
+     * @param \AppBundle\Entity\Combustible $combustible
+     *
+     * @return Vehiculo
+     */
+    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
+    {
+        $this->combustible = $combustible;
+
+        return $this;
+    }
+
+    /**
+     * Get combustible
+     *
+     * @return \AppBundle\Entity\Combustible
+     */
+    public function getCombustible()
+    {
+        return $this->combustible;
+    }
+
+    /**
+     * Set carroceria
+     *
+     * @param \AppBundle\Entity\Carroceria $carroceria
+     *
+     * @return Vehiculo
+     */
+    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
+    {
+        $this->carroceria = $carroceria;
+
+        return $this;
+    }
+
+    /**
+     * Get carroceria
+     *
+     * @return \AppBundle\Entity\Carroceria
+     */
+    public function getCarroceria()
+    {
+        return $this->carroceria;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return Vehiculo
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+
+    /**
+     * Set placa
+     *
+     * @param \AppBundle\Entity\CfgPlaca $placa
+     *
+     * @return Vehiculo
+     */
+    public function setPlaca(\AppBundle\Entity\CfgPlaca $placa = null)
+    {
+        $this->placa = $placa;
+
+        return $this;
+    }
+
+    /**
+     * Get placa
+     *
+     * @return \AppBundle\Entity\CfgPlaca
+     */
+    public function getPlaca()
+    {
+        return $this->placa;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     *
+     * @return Vehiculo
+     */
+    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
+    }
+
+    /**
+     * Set radioAccion
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion $radioAccion
+     *
+     * @return Vehiculo
+     */
+    public function setRadioAccion(\JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion $radioAccion = null)
+    {
+        $this->radioAccion = $radioAccion;
+
+        return $this;
+    }
+
+    /**
+     * Get radioAccion
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion
+     */
+    public function getRadioAccion()
+    {
+        return $this->radioAccion;
+    }
+
+    /**
+     * Set modalidadTransporte
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte
+     *
+     * @return Vehiculo
+     */
+    public function setModalidadTransporte(\JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte = null)
+    {
+        $this->modalidadTransporte = $modalidadTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadTransporte
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte
+     */
+    public function getModalidadTransporte()
+    {
+        return $this->modalidadTransporte;
     }
 
     /**
