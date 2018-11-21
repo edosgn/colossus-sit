@@ -361,23 +361,26 @@ class EmpresaController extends Controller
      /**
      * busca empresas por nit.
      *
-     * @Route("/show/empresa/{nit}", name="empresa_show_empresa")
+     * @Route("/show/empresa", name="empresa_show_empresa")
      * @Method("POST")
      */
-    public function showNitAction(Request $request,$nit)
+    public function showNitAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         $json = $request->get("json",null);
         $params = json_decode($json);
-        //$nit = $params->nit;
+        
+        $nit = $params->nit;
        
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
             $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(
-            array('nit' => $nit,
-            'estado' => 1)
+                array(
+                    'nit' => $nit,
+                    'estado' => 1
+                )
             );
 
             if ($empresa!=null) {

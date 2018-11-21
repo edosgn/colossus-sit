@@ -64,7 +64,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
 
             $medioCorrespondencia = new GdCfgMedioCorrespondencia();
 
-            $medioCorrespondencia->setNombre($params->nombre);
+            $medioCorrespondencia->setNombre(strtoupper($params->nombre));
             $medioCorrespondencia->setGestionable($params->gestionable);
             $medioCorrespondencia->setActivo(true);
             
@@ -151,7 +151,7 @@ class GdCfgMedioCorrespondenciaController extends Controller
             $medioCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia")->find($params->id);
 
             if ($medioCorrespondencia) {
-                $medioCorrespondencia->setNombre($params->nombre);
+                $medioCorrespondencia->setNombre(strtoupper($params->nombre));
                 $medioCorrespondencia->setGestionable($params->gestionable);
                 
                 $em->flush();

@@ -64,18 +64,20 @@ class GdCfgTipoCorrespondenciaController extends Controller
 
             $tipoCorrespondencia = new GdCfgTipoCorrespondencia();
 
-            $tipoCorrespondencia->setNombre($params->nombre);
+            $tipoCorrespondencia->setNombre(strtoupper($params->nombre));
+            $tipoCorrespondencia->setDiasVigencia($params->diasVigencia);
+            $tipoCorrespondencia->setEditable($params->editable);
             $tipoCorrespondencia->setActivo(true);
             
             $em->persist($tipoCorrespondencia);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con éxito",
                 'data' => $tipoCorrespondencia
             );
-        
         }else{
             $response = array(
                 'status' => 'error',
@@ -152,7 +154,9 @@ class GdCfgTipoCorrespondenciaController extends Controller
             $tipoCorrespondencia = $em->getRepository("JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia")->find($params->id);
 
             if ($tipoCorrespondencia) {
-                $tipoCorrespondencia->setNombre($params->nombre);
+                $tipoCorrespondencia->setNombre(strtoupper($params->nombre));
+                $tipoCorrespondencia->setDiasVigencia($params->diasVigencia);
+                $tipoCorrespondencia->setEditable($params->editable);
                 
                 $em->flush();
 

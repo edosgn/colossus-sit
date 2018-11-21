@@ -36,6 +36,13 @@ class GdDocumento
     private $numeroRadicado;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_salida", type="string", length=50, nullable=true)
+     */
+    private $numeroSalida;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="consecutivo", type="integer")
@@ -795,5 +802,29 @@ class GdDocumento
     public function getRemitente()
     {
         return $this->remitente;
+    }
+
+    /**
+     * Set numeroSalida
+     *
+     * @param string $numeroSalida
+     *
+     * @return GdDocumento
+     */
+    public function setNumeroSalida($numeroSalida)
+    {
+        $this->numeroSalida = $numeroSalida;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroSalida
+     *
+     * @return string
+     */
+    public function getNumeroSalida()
+    {
+        return $this->numeroSalida;
     }
 }
