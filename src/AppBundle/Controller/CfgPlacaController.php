@@ -77,7 +77,7 @@ class CfgPlacaController extends Controller
             if ($cfgPlaca == null) {
                     $cfgPlaca = new CfgPlaca();
                     $cfgPlaca->setNumero(strtoupper($numero));
-                    $cfgPlaca->setEstado('Disponible');
+                    $cfgPlaca->setEstado('FABRICADA');
                     $cfgPlaca->setClase($clase);
                     $cfgPlaca->setSedeOperativa($sedeOperativa);
                     $em = $this->getDoctrine()->getManager();
@@ -290,7 +290,7 @@ class CfgPlacaController extends Controller
         $placas = $em->getRepository('AppBundle:CfgPlaca')->findBy(
             array(
                 'sedeOperativa' => $id,
-                'estado' => 'Disponible'
+                'estado' => 'FABRICADA'
             )
         );
         foreach ($placas as $key => $placa) {
