@@ -70,10 +70,7 @@ class SvSenial
      */
     private $logo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvUnidadMedida", inversedBy="seniales") */
-    private $unidadMedida;
-
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgSvSenialEstado", inversedBy="seniales") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="seniales") */
     private $estado;
 
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialColor", inversedBy="seniales") */

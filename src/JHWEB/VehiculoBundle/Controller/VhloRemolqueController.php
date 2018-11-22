@@ -65,7 +65,7 @@ class VhloRemolqueController extends Controller
             
             $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(array('numero' => $params->placa));
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->idSedeOperativa);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(1);
             
             if (!$cfgPlaca) {
                 $placa = new CfgPlaca();

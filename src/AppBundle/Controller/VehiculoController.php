@@ -458,7 +458,7 @@ class VehiculoController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            // var_dump($params->placa);
+            // var_dump($params->placa); 
             // var_dump($params->moduloId);
             // die();
 

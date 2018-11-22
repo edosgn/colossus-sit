@@ -84,7 +84,7 @@ class FacturaController extends Controller
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
             $factura->setConsecutivo($consecutivo);
-
+            
             $factura->setNumero(
                 '770'.str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaCreacion->format('Y')
             );
@@ -500,7 +500,7 @@ class FacturaController extends Controller
             $params->factura->ciudadanoId
         );
 
-        $factura->setNumero($params->factura->numero);
+        $factura->setNumero($params->factura->numero); 
         $factura->setConsecutivo(0);
         $factura->setEstado('EMITIDA');
 

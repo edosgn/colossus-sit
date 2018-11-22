@@ -152,7 +152,7 @@ class VehiculoRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT v
             FROM AppBundle:Vehiculo v, AppBundle:CfgPlaca p, AppBundle:Clase c, AppBundle:Modulo m
             WHERE v.placa = p.id
-            AND p.numero = :placa
+            AND p.numero = :placa 
             AND v.clase = c.id
             AND c.modulo = m.id
             AND m.id = :moduloId";

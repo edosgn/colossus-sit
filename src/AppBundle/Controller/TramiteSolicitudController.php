@@ -151,7 +151,7 @@ class TramiteSolicitudController extends Controller
             $tramiteSolicitud->setEstado(true);
             $tramiteSolicitud->setDatos($datos);
             $tramiteSolicitud->setResumen($params->datos->resumen);
-            $em = $this->getDoctrine()->getManager();
+
             $em->persist($tramiteSolicitud);
             $em->flush();
 
@@ -160,6 +160,7 @@ class TramiteSolicitudController extends Controller
                 'code' => 200,
                 'msj' => "Registro creado con exito",
                 'idTramiteSolicitud' => $tramiteSolicitud->getId(),
+                'tramiteSolitud' => $tramiteSolicitud
             );
             //}
         } else {
