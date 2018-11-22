@@ -1,12 +1,12 @@
 <?php
 
-namespace JHWEB\ConfigBundle\Form;
+namespace JHWEB\SeguridadVialBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CfgSvSenialDestinoType extends AbstractType
+class SvCfgSenialColorType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -20,7 +20,7 @@ class CfgSvSenialDestinoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JHWEB\ConfigBundle\Entity\CfgSvSenialDestino'
+            'data_class' => 'JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor'
         ));
     }
 
@@ -29,7 +29,7 @@ class CfgSvSenialDestinoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jhweb_configbundle_cfgsvsenialdestino';
+        return 'jhweb_seguridadvialbundle_svcfgsenialcolor';
     }
 
 
