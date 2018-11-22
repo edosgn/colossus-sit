@@ -95,7 +95,6 @@ class CfgPlacaController extends Controller
                     'msj' => "Error al crear la placa",
                 );
             }
-
         }else{
             $response = array(
                 'status' => 'error',
@@ -153,7 +152,6 @@ class CfgPlacaController extends Controller
                 $cfgPlaca->setEstado($estado);
                 $cfgPlaca->setClase($clase);
                 $cfgPlaca->setSedeOperativa($sedeOperativa);
-
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($cfgPlaca);
                 $em->flush();
@@ -271,8 +269,7 @@ class CfgPlacaController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('cfgplaca_delete', array('id' => $cfgPlaca->getId())))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 
     /**
