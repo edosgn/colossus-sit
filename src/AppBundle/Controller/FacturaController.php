@@ -88,8 +88,6 @@ class FacturaController extends Controller
             $factura->setNumero(
                 '770'.str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaCreacion->format('Y')
             );
-            var_dump( '770'.str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaCreacion->format('Y'));
-            die(); 
 
             $factura->setEstado('EMITIDA');
             $factura->setFechaCreacion(
