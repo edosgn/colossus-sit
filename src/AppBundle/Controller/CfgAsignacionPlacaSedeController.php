@@ -101,7 +101,7 @@ class CfgAsignacionPlacaSedeController extends Controller
 
                         $cfgPlaca = new CfgPlaca();
                         $cfgPlaca->setNumero($numero);
-                        $cfgPlaca->setEstado('Fabricada');
+                        $cfgPlaca->setEstado('FABRICADA');
                         $cfgPlaca->setTipoVehiculo($tipoVehiculo);
                         $cfgPlaca->setSedeOperativa($sedeOperativa);
 
@@ -127,7 +127,7 @@ class CfgAsignacionPlacaSedeController extends Controller
                        
                             $cfgPlaca = new CfgPlaca();
                             $cfgPlaca->setNumero($numero);
-                            $cfgPlaca->setEstado('Fabricada');
+                            $cfgPlaca->setEstado('FABRICADA');
                             $cfgPlaca->setTipoVehiculo($tipoVehiculo);
                             $cfgPlaca->setSedeOperativa($sedeOperativa);
 
@@ -156,7 +156,7 @@ class CfgAsignacionPlacaSedeController extends Controller
 
                         $cfgPlaca = new CfgPlaca();
                         $cfgPlaca->setNumero($numero);
-                        $cfgPlaca->setEstado('Fabricada');
+                        $cfgPlaca->setEstado('FABRICADA');
                         $cfgPlaca->setTipoVehiculo($tipoVehiculo);
                         $cfgPlaca->setSedeOperativa($sedeOperativa);
 
@@ -178,7 +178,7 @@ class CfgAsignacionPlacaSedeController extends Controller
 
                         $cfgPlaca = new CfgPlaca();
                         $cfgPlaca->setNumero($numero);
-                        $cfgPlaca->setEstado('Fabricada');
+                        $cfgPlaca->setEstado('FABRICADA');
                         $cfgPlaca->setTipoVehiculo($tipoVehiculo);
                         $cfgPlaca->setSedeOperativa($sedeOperativa);
 
