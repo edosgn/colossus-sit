@@ -26,7 +26,7 @@ class SvCfgSenialLineaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $lineas = $em->getRepository('JHWEBSeguridadVialBundle:CfgSvSenialLinea')->findBy(
+        $lineas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->findBy(
             array('activo' => true)
         );
 
@@ -57,12 +57,12 @@ class SvCfgSenialLineaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
             $linea = new SvCfgSenialLinea();
 
-            $linea->setNombre($params->nombre);
+            $linea->setNombre(strtoupper($params->nombre));
             $linea->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -104,26 +104,48 @@ class SvCfgSenialLineaController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenialLinea entity.
      *
-     * @Route("/{id}/edit", name="svcfgseniallinea_edit")
+     * @Route("/edit", name="svcfgseniallinea_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenialLinea $svCfgSenialLinea)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialLinea);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialLineaType', $svCfgSenialLinea);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgseniallinea_edit', array('id' => $svCfgSenialLinea->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find($params->id);
+
+            if ($linea) {
+                $linea->setNombre(strtoupper($params->nombre));
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $linea,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgseniallinea/edit.html.twig', array(
-            'svCfgSenialLinea' => $svCfgSenialLinea,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

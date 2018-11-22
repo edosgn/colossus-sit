@@ -26,7 +26,7 @@ class SvCfgSenialTipoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $tipos = $em->getRepository('JHWEBSeguridadVialBundle:CfgSvSenialTipo')->findBy(
+        $tipos = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialTipo')->findBy(
             array('activo' => true)
         );
 
@@ -57,12 +57,12 @@ class SvCfgSenialTipoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
             $tipo = new SvCfgSenialTipo();
 
-            $tipo->setNombre($params->nombre);
+            $tipo->setNombre(strtoupper($params->nombre));
             $tipo->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -104,26 +104,48 @@ class SvCfgSenialTipoController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenialTipo entity.
      *
-     * @Route("/{id}/edit", name="svcfgsenialtipo_edit")
+     * @Route("/edit", name="svcfgsenialtipo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenialTipo $svCfgSenialTipo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialTipo);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialTipoType', $svCfgSenialTipo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgsenialtipo_edit', array('id' => $svCfgSenialTipo->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $tipo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialTipo')->find($params->id);
+
+            if ($tipo) {
+                $tipo->setNombre(strtoupper($params->nombre));
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $tipo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgsenialtipo/edit.html.twig', array(
-            'svCfgSenialTipo' => $svCfgSenialTipo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

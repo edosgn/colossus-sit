@@ -26,7 +26,7 @@ class SvCfgSenialEstadoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $estados = $em->getRepository('JHWEBSeguridadVialBundle:CfgSvSenialEstado')->findBy(
+        $estados = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->findBy(
             array('activo' => true)
         );
 
@@ -57,12 +57,12 @@ class SvCfgSenialEstadoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
             $estado = new SvCfgSenialEstado();
 
-            $estado->setNombre($params->nombre);
+            $estado->setNombre(strtoupper($params->nombre));
             $estado->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -104,26 +104,48 @@ class SvCfgSenialEstadoController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenialEstado entity.
      *
-     * @Route("/{id}/edit", name="svcfgsenialestado_edit")
+     * @Route("/edit", name="svcfgsenialestado_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenialEstado $svCfgSenialEstado)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialEstado);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialEstadoType', $svCfgSenialEstado);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgsenialestado_edit', array('id' => $svCfgSenialEstado->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $estado = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->find($params->id);
+
+            if ($estado) {
+                $estado->setNombre(strtoupper($params->nombre));
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $estado,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgsenialestado/edit.html.twig', array(
-            'svCfgSenialEstado' => $svCfgSenialEstado,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

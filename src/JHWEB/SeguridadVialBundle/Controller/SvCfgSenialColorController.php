@@ -26,7 +26,7 @@ class SvCfgSenialColorController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $colores = $em->getRepository('JHWEBSeguridadVialBundle:CfgSvSenialColor')->findBy(
+        $colores = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialColor')->findBy(
             array('activo' => true)
         );
 
@@ -62,7 +62,7 @@ class SvCfgSenialColorController extends Controller
            
             $color = new SvCfgSenialColor();
 
-            $color->setNombre($params->nombre);
+            $color->setNombre(strtoupper($params->nombre));
             $color->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -109,21 +109,43 @@ class SvCfgSenialColorController extends Controller
      */
     public function editAction(Request $request, SvCfgSenialColor $svCfgSenialColor)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialColor);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialColorType', $svCfgSenialColor);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgsenialcolor_edit', array('id' => $svCfgSenialColor->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $color = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialColor')->find($params->id);
+
+            if ($color) {
+                $color->setNombre(strtoupper($params->nombre));
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $color,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgsenialcolor/edit.html.twig', array(
-            'svCfgSenialColor' => $svCfgSenialColor,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

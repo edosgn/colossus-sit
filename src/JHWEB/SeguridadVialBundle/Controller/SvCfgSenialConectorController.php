@@ -26,7 +26,7 @@ class SvCfgSenialConectorController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $conectores = $em->getRepository('JHWEBSeguridadVialBundle:CfgSvSenialConector')->findBy(
+        $conectores = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialConector')->findBy(
             array('activo' => true)
         );
 
@@ -57,12 +57,12 @@ class SvCfgSenialConectorController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
            
             $conector = new SvCfgSenialConector();
 
-            $conector->setNombre($params->nombre);
+            $conector->setNombre(strtoupper($params->nombre));
             $conector->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -88,7 +88,7 @@ class SvCfgSenialConectorController extends Controller
     /**
      * Finds and displays a svCfgSenialConector entity.
      *
-     * @Route("/{id}", name="svcfgsenialconector_show")
+     * @Route("/{id}/show", name="svcfgsenialconector_show")
      * @Method("GET")
      */
     public function showAction(SvCfgSenialConector $svCfgSenialConector)
@@ -104,26 +104,48 @@ class SvCfgSenialConectorController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenialConector entity.
      *
-     * @Route("/{id}/edit", name="svcfgsenialconector_edit")
+     * @Route("/edit", name="svcfgsenialconector_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenialConector $svCfgSenialConector)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialConector);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialConectorType', $svCfgSenialConector);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgsenialconector_edit', array('id' => $svCfgSenialConector->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $conector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialConector')->find($params->id);
+
+            if ($conector) {
+                $conector->setNombre(strtoupper($params->nombre));
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $conector,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgsenialconector/edit.html.twig', array(
-            'svCfgSenialConector' => $svCfgSenialConector,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
