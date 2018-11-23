@@ -184,8 +184,7 @@ class SvRegistroIpatController extends Controller
                 );
                 $ipat->setObjetoFijo($objetoFijo);
             }
-            var_dump($params);
-            die();
+            
             $ipat->setOtroObjetoFijo($params[0]->datosLimitacion->otroObjetoFijo);
 
             if ($params[0]->datosLimitacion->idArea) {
@@ -864,6 +863,9 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
+            var_dump($params);
+            die();
+            
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
 
             if ($ipats) {
