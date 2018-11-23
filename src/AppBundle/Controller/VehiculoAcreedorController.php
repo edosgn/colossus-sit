@@ -187,6 +187,7 @@ class VehiculoAcreedorController extends Controller
             if ($params->acreedoresCiudadanos) {
                 
                 foreach ($params->acreedoresCiudadanos as $key => $ciudadano) {
+                    
                     $acreedorVehiculo = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
                         array(
                             'estado' => 1,
@@ -209,6 +210,7 @@ class VehiculoAcreedorController extends Controller
                 if ($params->acreedoresEmpresas) {
                 
                 foreach ($params->acreedoresEmpresas as $key => $empresa) {
+                  
                     $acreedorVehiculo = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
                         array(
                             'estado' => 1,
@@ -226,16 +228,17 @@ class VehiculoAcreedorController extends Controller
                         );
                     }
                 }
-                if($params->ciudadanoNewId){
+                $ciudadanoNewId = (isset($params->ciudadanoNewId)) ? $params->ciudadanoNewId : null;
+                if($ciudadanoNewId){
                     $acreedorVehiculoNew = new VehiculoAcreedor();
                     $usuario = $em->getRepository('UsuarioBundle:Usuario')->find($params->ciudadanoNewId);
                     $acreedorVehiculoNew->setCiudadano($usuario->getCiudadano());
                     $acreedorVehiculoNew->setVehiculo($acreedorVehiculo->getVehiculo());
                     $acreedorVehiculoNew->setCfgTipoAlerta($acreedorVehiculo->getCfgTipoAlerta());
                     $acreedorVehiculoNew->setGradoAlerta($acreedorVehiculo->getGradoAlerta());
-                    $acreedorVehiculoNew->setEstado(true);
+                    $acreedorVehiculoNew->setEstado(1);
                     $em->persist($acreedorVehiculoNew);
-                    $em->flush();
+                    $em->flush(); 
                 }
 
         }else{
