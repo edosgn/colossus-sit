@@ -88,7 +88,7 @@ class SvCfgSenialEstadoController extends Controller
     /**
      * Finds and displays a svCfgSenialEstado entity.
      *
-     * @Route("/{id}", name="svcfgsenialestado_show")
+     * @Route("/{id}/show", name="svcfgsenialestado_show")
      * @Method("GET")
      */
     public function showAction(SvCfgSenialEstado $svCfgSenialEstado)

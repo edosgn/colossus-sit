@@ -31,6 +31,13 @@ class SvCfgSenialTipo
     /**
      * @var bool
      *
+     * @ORM\Column(name="gestionable", type="boolean")
+     */
+    private $gestionable;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -71,6 +78,30 @@ class SvCfgSenialTipo
     }
 
     /**
+     * Set gestionable
+     *
+     * @param boolean $gestionable
+     *
+     * @return SvCfgSenialTipo
+     */
+    public function setGestionable($gestionable)
+    {
+        $this->gestionable = $gestionable;
+
+        return $this;
+    }
+
+    /**
+     * Get gestionable
+     *
+     * @return boolean
+     */
+    public function getGestionable()
+    {
+        return $this->gestionable;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -87,11 +118,10 @@ class SvCfgSenialTipo
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-

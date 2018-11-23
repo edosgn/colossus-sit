@@ -42,8 +42,18 @@ class SvCfgSenial
      */
     private $logo;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialTipo", inversedBy="seniales") */
     private $tipoSenial;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialColor", inversedBy="seniales") */
+    private $color;
 
 
     /**
@@ -127,5 +137,76 @@ class SvCfgSenial
     {
         return $this->logo;
     }
-}
 
+    /**
+     * Set tipoSenial
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo $tipoSenial
+     *
+     * @return SvCfgSenial
+     */
+    public function setTipoSenial(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo $tipoSenial = null)
+    {
+        $this->tipoSenial = $tipoSenial;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoSenial
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo
+     */
+    public function getTipoSenial()
+    {
+        return $this->tipoSenial;
+    }
+
+    /**
+     * Set color
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor $color
+     *
+     * @return SvCfgSenial
+     */
+    public function setColor(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor $color = null)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialColor
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return SvCfgSenial
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+}

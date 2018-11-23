@@ -88,7 +88,7 @@ class SvCfgSenialColorController extends Controller
     /**
      * Finds and displays a svCfgSenialColor entity.
      *
-     * @Route("/{id}", name="svcfgsenialcolor_show")
+     * @Route("/{id}/show", name="svcfgsenialcolor_show")
      * @Method("GET")
      */
     public function showAction(SvCfgSenialColor $svCfgSenialColor)
@@ -104,10 +104,10 @@ class SvCfgSenialColorController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenialColor entity.
      *
-     * @Route("/{id}/edit", name="svcfgsenialcolor_edit")
+     * @Route("/edit", name="svcfgsenialcolor_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenialColor $svCfgSenialColor)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -151,7 +151,7 @@ class SvCfgSenialColorController extends Controller
     /**
      * Deletes a svCfgSenialColor entity.
      *
-     * @Route("/{id}", name="svcfgsenialcolor_delete")
+     * @Route("/{id}/delete", name="svcfgsenialcolor_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, SvCfgSenialColor $svCfgSenialColor)

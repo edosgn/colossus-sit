@@ -63,6 +63,7 @@ class SvCfgSenialTipoController extends Controller
             $tipo = new SvCfgSenialTipo();
 
             $tipo->setNombre(strtoupper($params->nombre));
+            $tipo->setGestionable($params->gestionable);
             $tipo->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -88,7 +89,7 @@ class SvCfgSenialTipoController extends Controller
     /**
      * Finds and displays a svCfgSenialTipo entity.
      *
-     * @Route("/{id}", name="svcfgsenialtipo_show")
+     * @Route("/{id}/show", name="svcfgsenialtipo_show")
      * @Method("GET")
      */
     public function showAction(SvCfgSenialTipo $svCfgSenialTipo)
@@ -122,6 +123,7 @@ class SvCfgSenialTipoController extends Controller
 
             if ($tipo) {
                 $tipo->setNombre(strtoupper($params->nombre));
+                $tipo->setGestionable($params->gestionable);
 
                 $em->flush();
                 $response = array(
@@ -182,5 +184,32 @@ class SvCfgSenialTipoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ================================================== */
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgsenialtipo_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $tipos = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialTipo')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
+            $response[$key] = array(
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

@@ -29,6 +29,13 @@ class SvSenialUbicacion
     private $fecha;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora", type="time")
+     */
+    private $hora;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="latitud", type="string", length=100)
@@ -101,9 +108,12 @@ class SvSenialUbicacion
     /**
      * @var string
      *
-     * @ORM\Column(name="adjunto", type="string", length=255)
+     * @ORM\Column(name="adjunto", type="string", length=255, nullable=true)
      */
     private $adjunto;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialConector", inversedBy="ubicaciones") */
+    private $conector;
 
     /**
      * @var int
@@ -112,14 +122,14 @@ class SvSenialUbicacion
      */
     private $cantidad;
 
-    /** @ORM\ManyToOne(targetEntity="SvCfgSenialConector", inversedBy="ubicaciones") */
-    private $conector;
-
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
 
     /** @ORM\ManyToOne(targetEntity="SvSenial", inversedBy="senialesUbicacion") */
     private $senial;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inventarios") */
+    private $municipio;
 
     /**
      * Get id

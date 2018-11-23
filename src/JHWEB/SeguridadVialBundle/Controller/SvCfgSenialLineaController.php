@@ -88,7 +88,7 @@ class SvCfgSenialLineaController extends Controller
     /**
      * Finds and displays a svCfgSenialLinea entity.
      *
-     * @Route("/{id}", name="svcfgseniallinea_show")
+     * @Route("/{id}/show", name="svcfgseniallinea_show")
      * @Method("GET")
      */
     public function showAction(SvCfgSenialLinea $svCfgSenialLinea)

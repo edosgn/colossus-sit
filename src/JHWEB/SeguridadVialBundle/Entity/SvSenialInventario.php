@@ -42,13 +42,6 @@ class SvSenialInventario
      */
     private $tipoInventario;
 
-    /** @ORM\ManyToOne(targetEntity="SvCfgSenialTipo", inversedBy="seniales") */
-    private $tipoSenial;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inventarios") */
-    private $municipio;
-
-
     /**
      * Get id
      *
@@ -57,54 +50,6 @@ class SvSenialInventario
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return SvSenialInventario
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set consecutivo
-     *
-     * @param string $consecutivo
-     *
-     * @return SvSenialInventario
-     */
-    public function setConsecutivo($consecutivo)
-    {
-        $this->consecutivo = $consecutivo;
-
-        return $this;
-    }
-
-    /**
-     * Get consecutivo
-     *
-     * @return string
-     */
-    public function getConsecutivo()
-    {
-        return $this->consecutivo;
     }
 }
 

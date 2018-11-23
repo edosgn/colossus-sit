@@ -24,9 +24,16 @@ class SvSenialBodega
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="time")
+     */
+    private $hora;
 
     /**
      * @var int
@@ -45,11 +52,14 @@ class SvSenialBodega
     /**
      * @var string
      *
-     * @ORM\Column(name="adjunto", type="string", length=255)
+     * @ORM\Column(name="adjunto", type="string", length=255, nullable=true)
      */
     private $adjunto;
 
-    /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="seniales") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenial", inversedBy="inventarios") */
+    private $senial;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="inventarios") */
     private $estado;
 
 
@@ -61,102 +71,6 @@ class SvSenialBodega
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return SvSenialBodega
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set cantidad
-     *
-     * @param integer $cantidad
-     *
-     * @return SvSenialBodega
-     */
-    public function setCantidad($cantidad)
-    {
-        $this->cantidad = $cantidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidad
-     *
-     * @return int
-     */
-    public function getCantidad()
-    {
-        return $this->cantidad;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param float $valor
-     *
-     * @return SvSenialBodega
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return float
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
-     * Set adjunto
-     *
-     * @param string $adjunto
-     *
-     * @return SvSenialBodega
-     */
-    public function setAdjunto($adjunto)
-    {
-        $this->adjunto = $adjunto;
-
-        return $this;
-    }
-
-    /**
-     * Get adjunto
-     *
-     * @return string
-     */
-    public function getAdjunto()
-    {
-        return $this->adjunto;
     }
 }
 
