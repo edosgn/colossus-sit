@@ -76,19 +76,20 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             $ipat -> setFechaAccidente(new \Datetime($dato[2]));
             $ipat -> setHoraAccidente(new \Datetime($dato[3]));
             $ipat -> setDiaAccidente($dato[4]);
-            $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' =>$dato[11]));
-            $ipat -> setGravedad($gravedadFile->getId());
-            //$tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneByTipoVictima($dato[21]);
-            //$ipat -> setTipoVictima($tipoVictimaFile);
-            //$municipioResidenciaConductorFile = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneByCiudadResidenciaConductor($dato[0]);
-            //$ipat -> setCiudadResidenciaConductor($municipioResidenciaConductorFile);
-            //$generoFile = $em->getRepository('AppBundle:Genero')->find($dato[6]);
-            //$ipat -> setSexoConductor($generoFile->getSigla());
+            $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
+            $ipat -> setGravedad($gravedadFile);
+            $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
+            $ipat -> setTipoVictima($tipoVictimaFile->getId());
+            $ipat -> setCiudadResidenciaConductor($dato[0]);
+            $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
+            $ipat -> setSexoConductor($sexoConductorFile->getSigla());
             $ipat -> setEdadConductor($dato[10]);
-            //$claseAccidenteFile = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneByClaseAccidente($dato[12]);
-            //$ipat -> setClaseAccidente($claseAccidenteFile);
-            var_dump($gravedadFile->getId());
-            die();
+            $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
+            $ipat -> setClaseAccidente($claseAccidenteFile->getId());
+            
+            if($ipat->fechaAccidente >= $fechaInicioDatetime && $ipat->fechaAccidente >= $fechaFinDatetime) {
+                
+            }
         }
 
         $dql = "SELECT ri
