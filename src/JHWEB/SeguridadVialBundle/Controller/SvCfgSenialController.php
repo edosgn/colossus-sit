@@ -72,7 +72,7 @@ class SvCfgSenialController extends Controller
             if ($file) {
                 $extension = $file->guessExtension();
                 $filename = md5(rand().time()).".".$extension;
-                $dir=__DIR__.'/../../../../web/uploads/seniales';
+                $dir=__DIR__.'/../../../../web/uploads/seniales/logos';
 
                 $file->move($dir,$filename);
                 $senial->setLogo($filename);
@@ -86,7 +86,7 @@ class SvCfgSenialController extends Controller
             }
 
             if ($params->idColor) {
-                $color = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgColor')->find(
+                $color = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialColor')->find(
                     $params->idColor
                 );
                 $senial->setColor($color);
@@ -116,17 +116,46 @@ class SvCfgSenialController extends Controller
     /**
      * Finds and displays a svCfgSenial entity.
      *
-     * @Route("/{id}", name="svcfgsenial_show")
-     * @Method("GET")
+     * @Route("/show", name="svcfgsenial_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(SvCfgSenial $svCfgSenial)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenial);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('svcfgsenial/show.html.twig', array(
-            'svCfgSenial' => $svCfgSenial,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find($params->id);
+
+            if ($senial) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data'=> $senial,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -157,7 +186,7 @@ class SvCfgSenialController extends Controller
     /**
      * Deletes a svCfgSenial entity.
      *
-     * @Route("/{id}", name="svcfgsenial_delete")
+     * @Route("/{id}/delete", name="svcfgsenial_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, SvCfgSenial $svCfgSenial)
@@ -188,5 +217,75 @@ class SvCfgSenialController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* =================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgsenial_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($seniales as $key => $senial) {
+            $response[$key] = array(
+                'value' => $senial->getId(),
+                'label' => $senial->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/tipo", name="svsenial_select_tipo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectTipoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+           
+            $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->findByTipoSenial(
+                $params->idTipoSenial
+            );
+            
+            $response = null;
+
+            foreach ($seniales as $key => $senial) {
+                $response[$key] = array(
+                    'value' => $senial->getId(),
+                    'label' => $senial->getNombre()
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

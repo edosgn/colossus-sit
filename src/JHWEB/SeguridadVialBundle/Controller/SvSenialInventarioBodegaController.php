@@ -148,7 +148,7 @@ class SvSenialInventarioBodegaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventarioBodega')->findByTipoSenial($params->idTipoSenial);

@@ -183,4 +183,33 @@ class SvCfgSenialColorController extends Controller
             ->getForm()
         ;
     }
+
+    /* ================================================== */
+    
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgsenialcolor_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $colores = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialColor')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($colores as $key => $color) {
+            $response[$key] = array(
+                'value' => $color->getId(),
+                'label' => $color->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

@@ -29,9 +29,9 @@ class Factura
     private $numero; 
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="consecutivo", type="string", length=5)
+     * @ORM\Column(name="consecutivo", type="integer")
      */
     private $consecutivo;
 
@@ -136,7 +136,7 @@ class Factura
     /**
      * Set consecutivo
      *
-     * @param string $consecutivo
+     * @param integer $consecutivo
      *
      * @return Factura
      */
@@ -150,7 +150,7 @@ class Factura
     /**
      * Get consecutivo
      *
-     * @return string
+     * @return integer
      */
     public function getConsecutivo()
     {
@@ -202,7 +202,7 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion->format('d/m/Y');
+        return $this->fechaCreacion;
     }
 
     /**

@@ -183,4 +183,33 @@ class SvCfgSenialEstadoController extends Controller
             ->getForm()
         ;
     }
+
+    /* =================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgsenialestado_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $estados = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($estados as $key => $estado) {
+            $response[$key] = array(
+                'value' => $estado->getId(),
+                'label' => $estado->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

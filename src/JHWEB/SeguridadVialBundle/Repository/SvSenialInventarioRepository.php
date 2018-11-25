@@ -10,4 +10,51 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene las señales por tipo de señal en inventario de bodega
+    public function getByDateAndTipoAndDestino($fechaInicial, $fechaFinal, $idTipoSenial, $tipoDestino, $idMunicipio)
+    {
+        $em = $this->getEntityManager();
+
+        if ($idMunicipio) {
+	        $dql = "SELECT si
+            FROM JHWEBSeguridadVialBundle:SvSenialInventario si,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
+            AppBundle:Municipio m
+            WHERE si.tipoDestino = :tipoDestino
+            AND si.municipio = m.id
+            AND si.idMunicipio = :idMunicipio
+            AND si.tipoSenial = st.id
+            AND si.tipoSenial = :idTipoSenial
+            AND si.fecha BETWEEN :fechaInicial AND :fechaFinal";
+
+            $consulta = $em->createQuery($dql);
+
+	        $consulta->setParameters(array(
+	            'fechaInicial' => $fechaInicial,
+	            'fechaFinal' => $fechaFinal,
+	            'idTipoSenial' => $idTipoSenial,
+	            'tipoDestino' => $tipoDestino,
+	            'idMunicipio' => $idMunicipio,
+	        ));
+        }else{
+        	$dql = "SELECT si
+            FROM JHWEBSeguridadVialBundle:SvSenialInventario si,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo st
+            WHERE si.tipoDestino = :tipoDestino
+            AND si.tipoSenial = st.id
+            AND si.tipoSenial = :idTipoSenial
+            AND si.fecha BETWEEN :fechaInicial AND :fechaFinal";
+
+            $consulta = $em->createQuery($dql);
+
+	        $consulta->setParameters(array(
+	            'fechaInicial' => $fechaInicial,
+	            'fechaFinal' => $fechaFinal,
+	            'idTipoSenial' => $idTipoSenial,
+	            'tipoDestino' => $tipoDestino,
+	        ));
+        }
+
+        return $consulta->getResult();
+    }
 }
