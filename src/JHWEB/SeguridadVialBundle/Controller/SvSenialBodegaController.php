@@ -3,39 +3,39 @@
 namespace JHWEB\SeguridadVialBundle\Controller;
 
 use JHWEB\SeguridadVialBundle\Entity\SvSenialInventario;
-use JHWEB\SeguridadVialBundle\Entity\SvSenialUbicacion;
+use JHWEB\SeguridadVialBundle\Entity\SvSenialBodega;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Svsenialubicacion controller.
+ * Svsenialbodega controller.
  *
- * @Route("svsenialubicacion")
+ * @Route("svsenialbodega")
  */
-class SvSenialUbicacionController extends Controller
+class SvSenialBodegaController extends Controller
 {
     /**
-     * Lists all svSenialUbicacion entities.
+     * Lists all svSenialBodega entities.
      *
-     * @Route("/", name="svsenialubicacion_index")
+     * @Route("/", name="svsenialbodega_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
 
-        $svSenialUbicacions = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->findAll();
+        $svSenialBodegas = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->findAll();
 
-        return $this->render('svsenialubicacion/index.html.twig', array(
-            'svSenialUbicacions' => $svSenialUbicacions,
+        return $this->render('svsenialbodega/index.html.twig', array(
+            'svSenialBodegas' => $svSenialBodegas,
         ));
     }
 
     /**
-     * Creates a new svSenialUbicacion entity.
+     * Creates a new svSenialBodega entity.
      *
-     * @Route("/new", name="svsenialubicacion_new")
+     * @Route("/new", name="svsenialbodega_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -91,14 +91,14 @@ class SvSenialUbicacionController extends Controller
             }
 
 
-            $ubicacion = new SvSenialUbicacion();
+            $bodega = new SvSenialBodega();
 
-            $ubicacion->setInventario($inventario);
+            $bodega->setInventario($inventario);
 
-            $ubicacion->setFecha(new \Datetime($params->fecha));
-            $ubicacion->setHora(new \Datetime($params->hora));
-            $ubicacion->setCantidad($params->cantidad);
-            $ubicacion->setValor($params->valor);
+            $bodega->setFecha(new \Datetime($params->fecha));
+            $bodega->setHora(new \Datetime($params->hora));
+            $bodega->setCantidad($params->cantidad);
+            $bodega->setValor($params->valor);
 
             if ($request->files->get('file')) {
                 $file = $request->files->get('file');
@@ -107,24 +107,24 @@ class SvSenialUbicacionController extends Controller
                 $dir=__DIR__.'/../../../../web/uploads/seniales/files';
 
                 $file->move($dir,$fileName);
-                $ubicacion->setAdjunto($fileName);
+                $bodega->setAdjunto($fileName);
             }
 
             if ($params->idEstado) {
                 $estado = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->find(
                     $params->idEstado
                 );
-                $ubicacion->setEstado($estado);
+                $bodega->setEstado($estado);
             }
 
             if ($params->idSenial) {
                 $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find(
                     $params->idSenial
                 );
-                $ubicacion->setSenial($senial);
+                $bodega->setSenial($senial);
             }
 
-            $em->persist($ubicacion);
+            $em->persist($bodega);
             $em->flush();
 
             $response = array(
@@ -144,132 +144,79 @@ class SvSenialUbicacionController extends Controller
     }
 
     /**
-     * Finds and displays a svSenialUbicacion entity.
+     * Finds and displays a svSenialBodega entity.
      *
-     * @Route("/{id}/show", name="svsenialubicacion_show")
+     * @Route("/{id}", name="svsenialbodega_show")
      * @Method("GET")
      */
-    public function showAction(SvSenialUbicacion $svSenialUbicacion)
+    public function showAction(SvSenialBodega $svSenialBodega)
     {
-        $deleteForm = $this->createDeleteForm($svSenialUbicacion);
+        $deleteForm = $this->createDeleteForm($svSenialBodega);
 
-        return $this->render('svsenialubicacion/show.html.twig', array(
-            'svSenialUbicacion' => $svSenialUbicacion,
+        return $this->render('svsenialbodega/show.html.twig', array(
+            'svSenialBodega' => $svSenialBodega,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing svSenialUbicacion entity.
+     * Displays a form to edit an existing svSenialBodega entity.
      *
-     * @Route("/{id}/edit", name="svsenialubicacion_edit")
+     * @Route("/{id}/edit", name="svsenialbodega_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvSenialUbicacion $svSenialUbicacion)
+    public function editAction(Request $request, SvSenialBodega $svSenialBodega)
     {
-        $deleteForm = $this->createDeleteForm($svSenialUbicacion);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvSenialUbicacionType', $svSenialUbicacion);
+        $deleteForm = $this->createDeleteForm($svSenialBodega);
+        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvSenialBodegaType', $svSenialBodega);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('svsenialubicacion_edit', array('id' => $svSenialUbicacion->getId()));
+            return $this->redirectToRoute('svsenialbodega_edit', array('id' => $svSenialBodega->getId()));
         }
 
-        return $this->render('svsenialubicacion/edit.html.twig', array(
-            'svSenialUbicacion' => $svSenialUbicacion,
+        return $this->render('svsenialbodega/edit.html.twig', array(
+            'svSenialBodega' => $svSenialBodega,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a svSenialUbicacion entity.
+     * Deletes a svSenialBodega entity.
      *
-     * @Route("/{id}/delete", name="svsenialubicacion_delete")
+     * @Route("/{id}", name="svsenialbodega_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, SvSenialUbicacion $svSenialUbicacion)
+    public function deleteAction(Request $request, SvSenialBodega $svSenialBodega)
     {
-        $form = $this->createDeleteForm($svSenialUbicacion);
+        $form = $this->createDeleteForm($svSenialBodega);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($svSenialUbicacion);
+            $em->remove($svSenialBodega);
             $em->flush();
         }
 
-        return $this->redirectToRoute('svsenialubicacion_index');
+        return $this->redirectToRoute('svsenialbodega_index');
     }
 
     /**
-     * Creates a form to delete a svSenialUbicacion entity.
+     * Creates a form to delete a svSenialBodega entity.
      *
-     * @param SvSenialUbicacion $svSenialUbicacion The svSenialUbicacion entity
+     * @param SvSenialBodega $svSenialBodega The svSenialBodega entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(SvSenialUbicacion $svSenialUbicacion)
+    private function createDeleteForm(SvSenialBodega $svSenialBodega)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('svsenialubicacion_delete', array('id' => $svSenialUbicacion->getId())))
+            ->setAction($this->generateUrl('svsenialbodega_delete', array('id' => $svSenialBodega->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
-
-    /**
-     * Creates a new svSenialInventario entity.
-     *
-     * @Route("/search/destino", name="svsenialinventario_search_destino")
-     * @Method({"GET", "POST"})
-     */
-    public function searchByDestinoAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-
-            $em = $this->getDoctrine()->getManager();
-        
-            $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->findBy(
-                array(
-                    'inventario' => $params->inventario->id
-                )
-            );
-
-            $response['data'] = array();
-
-            if ($ubicaciones) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($ubicaciones)." registros encontrados", 
-                    'data'=> $ubicaciones,
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Ningún registro encontrado."
-                );
-            }
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida", 
-            );
-        } 
-        return $helpers->json($response);
-    }
-
-
 }
