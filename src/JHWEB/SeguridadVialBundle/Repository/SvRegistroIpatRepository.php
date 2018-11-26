@@ -19,14 +19,14 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         $horaFinDatetime = $params->datos->horaFin;
         $fechaInicioDatetime = new \Datetime($params->datos->fechaInicio);
         $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
-        
+    
         if ($params->datos->idGravedad) {
             $gravedad = $em->getRepository('AppBundle:CfgGravedad')->findBy(
                 array(
                     'nombre' => $params->datos->idGravedad,
                     )
-                );
-            }
+            );
+        }
         if ($params->datos->idTipoVictima) {
             $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
                 array(
@@ -66,31 +66,10 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         if ($params->datos->idObjetoFijo) {
             $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->datos->idObjetoFijo);
         }
-
+        
         $edadInicioConductor = intval($params->datos->idGrupoEdad);
         $edadFinConductor = $edadInicioConductor + 4;
         $diaAccidente = $params->datos->idDiaSemana;
-        
-        $ipat = new SvRegistroIpat();
-        foreach($params->file as $key => $dato) {
-            $ipat -> setFechaAccidente(new \Datetime($dato[2]));
-            $ipat -> setHoraAccidente(new \Datetime($dato[3]));
-            $ipat -> setDiaAccidente($dato[4]);
-            $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
-            $ipat -> setGravedad($gravedadFile);
-            $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
-            $ipat -> setTipoVictima($tipoVictimaFile->getId());
-            $ipat -> setCiudadResidenciaConductor($dato[0]);
-            $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
-            $ipat -> setSexoConductor($sexoConductorFile->getSigla());
-            $ipat -> setEdadConductor($dato[10]);
-            $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
-            $ipat -> setClaseAccidente($claseAccidenteFile->getId());
-            
-            if($ipat->fechaAccidente >= $fechaInicioDatetime && $ipat->fechaAccidente >= $fechaFinDatetime) {
-                
-            }
-        }
 
         $dql = "SELECT ri
             FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
@@ -108,6 +87,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             AND ri.claseAccidente = :claseAccidente
             AND ri.choqueCon = :choqueCon
             AND ri.objetoFijo = :objetoFijo";
+
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
