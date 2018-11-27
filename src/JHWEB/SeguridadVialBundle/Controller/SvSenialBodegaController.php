@@ -52,10 +52,17 @@ class SvSenialBodegaController extends Controller
 
             $fecha = new \Datetime($params->fecha);
 
+            if ($params->idSenial) {
+                $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find(
+                    $params->idSenial
+                );
+            }
+
             $inventario = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->findOneBy(
                 array(
                     'fecha' => $fecha,
-                    'tipoSenial' => $params->idTipoSenial
+                    'tipoDestino' => 'BODEGA',
+                    'tipoSenial' => $senial->getTipoSenial()->getId()
                 )
             );
 
@@ -64,25 +71,15 @@ class SvSenialBodegaController extends Controller
 
                 $inventario->setFecha($fecha);
 
-                $inventario->setTipoDestino($params->tipoDestino);
+                $inventario->setTipoDestino('BODEGA');
 
-                if ($params->idMunicipio) {
-                    $municipio = $em->getRepository('AppBundle:Municipio')->find(
-                        $params->idMunicipio
-                    );
-                    $inventario->setMunicipio($municipio);
+                if ($senial) {
+                    $inventario->setTipoSenial($senial->getTipoSenial());
                 }
 
-                if ($params->idTipoSenial) {
-                    $tipoSenial = $em->getRepository('JHWEBConfigBundle:CfgSvSenialTipo')->find(
-                        $params->idTipoSenial
-                    );
-                    $inventario->setTipoSenial($tipoSenial);
-                }
+                $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getMaximo(
+                    $fecha->format('Y'));
 
-                $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->findMaximo(
-                    $fecha->format('Y')
-                );
                 $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
                 $inventario->setConsecutivo($consecutivo);
 
@@ -110,18 +107,17 @@ class SvSenialBodegaController extends Controller
                 $bodega->setAdjunto($fileName);
             }
 
-            if ($params->idEstado) {
-                $estado = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->find(
-                    $params->idEstado
-                );
-                $bodega->setEstado($estado);
+            if ($senial) {
+                $bodega->setSenial($senial);
+
+                $senial->setCantidad($senial->getCantidad() + $params->cantidad);
+                $em->flush();
             }
 
-            if ($params->idSenial) {
-                $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find(
-                    $params->idSenial
-                );
-                $bodega->setSenial($senial);
+            if ($params->idEstado) {
+                $estado = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->find(
+                    $params->idEstado);
+                $bodega->setEstado($estado);
             }
 
             $em->persist($bodega);

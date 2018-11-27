@@ -97,6 +97,9 @@ class SvSenialBodega
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
     }
 
@@ -121,6 +124,9 @@ class SvSenialBodega
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('h:m:i A');
+        }
         return $this->hora;
     }
 

@@ -66,6 +66,7 @@ class SvCfgSenialController extends Controller
 
             $senial->setCodigo($params->codigo);
             $senial->setNombre(strtoupper($params->nombre));
+            $senial->setCantidad(0);
 
             $file = $request->files->get('file');
                    
@@ -275,7 +276,7 @@ class SvCfgSenialController extends Controller
             foreach ($seniales as $key => $senial) {
                 $response[$key] = array(
                     'value' => $senial->getId(),
-                    'label' => $senial->getNombre()
+                    'label' => $senial->getCodigo().' - '.$senial->getNombre()
                 );
             }
         }else{

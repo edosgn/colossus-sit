@@ -272,4 +272,64 @@ class SvSenialInventarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Creates a new svSenialInventario entity.
+     *
+     * @Route("/search/destino", name="svsenialinventario_search_destino")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByDestinoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->tipoDestino == 'BODEGA') {
+                $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->findBy(
+                    array(
+                        'inventario' => $params->inventario->id
+                    )
+                ); 
+            }else{
+                $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->findBy(
+                    array(
+                        'inventario' => $params->inventario->id
+                    )
+                ); 
+            }
+        
+
+            $response['data'] = array();
+
+            if ($seniales) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($seniales)." registros encontrados", 
+                    'data'=> $seniales,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado."
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        return $helpers->json($response);
+    }
 }

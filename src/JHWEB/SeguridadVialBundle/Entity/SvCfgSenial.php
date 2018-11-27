@@ -36,6 +36,13 @@ class SvCfgSenial
     private $nombre;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
+     */
+    private $cantidad;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="logo", type="string", length=255, nullable=true)
@@ -115,6 +122,30 @@ class SvCfgSenial
     }
 
     /**
+     * Set cantidad
+     *
+     * @param integer $cantidad
+     *
+     * @return SvCfgSenial
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad = $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
+    }
+
+    /**
      * Set logo
      *
      * @param string $logo
@@ -136,6 +167,30 @@ class SvCfgSenial
     public function getLogo()
     {
         return $this->logo;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return SvCfgSenial
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 
     /**
@@ -184,29 +239,5 @@ class SvCfgSenial
     public function getColor()
     {
         return $this->color;
-    }
-
-    /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return SvCfgSenial
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return boolean
-     */
-    public function getActivo()
-    {
-        return $this->activo;
     }
 }

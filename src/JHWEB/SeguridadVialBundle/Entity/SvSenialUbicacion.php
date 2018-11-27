@@ -118,7 +118,7 @@ class SvSenialUbicacion
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="SvSenial", inversedBy="ubicaciones") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenial", inversedBy="ubicaciones") */
     private $senial;
 
     /** @ORM\ManyToOne(targetEntity="SvSenialInventario", inversedBy="ubicaciones") */
@@ -126,6 +126,9 @@ class SvSenialUbicacion
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ubicaciones") */
     private $municipio;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialLinea", inversedBy="ubicaciones") */
+    private $linea;
 
     /**
      * Get id
@@ -158,6 +161,9 @@ class SvSenialUbicacion
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
     }
 
@@ -182,6 +188,9 @@ class SvSenialUbicacion
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('h:m:s A');
+        }
         return $this->hora;
     }
 
@@ -500,11 +509,11 @@ class SvSenialUbicacion
     /**
      * Set senial
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenial $senial
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenial $senial
      *
      * @return SvSenialUbicacion
      */
-    public function setSenial(\JHWEB\SeguridadVialBundle\Entity\SvSenial $senial = null)
+    public function setSenial(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenial $senial = null)
     {
         $this->senial = $senial;
 
@@ -514,7 +523,7 @@ class SvSenialUbicacion
     /**
      * Get senial
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenial
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenial
      */
     public function getSenial()
     {
@@ -567,5 +576,29 @@ class SvSenialUbicacion
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialLinea $linea
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setLinea(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialLinea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialLinea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
     }
 }
