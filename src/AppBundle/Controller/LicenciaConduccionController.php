@@ -296,11 +296,14 @@ class LicenciaConduccionController extends Controller
         $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
         if($authCheck == true){
-            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("json",null);
+            $params = json_decode($json);
 
+            $em = $this->getDoctrine()->getManager();
             $licencia = $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(
                 array(
-                    'activo' => true
+                    'activo' => true,
+                    'ciudadano' => $params->idSolicitante 
                 )
             );
 
@@ -309,7 +312,7 @@ class LicenciaConduccionController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "El ciudadano si tiene al menos una licencia de conducción vigente",
-                    'data' => $licencias,
+                    'data' => $licencia,
                 );
             }else{
                 $response = array(

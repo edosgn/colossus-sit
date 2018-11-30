@@ -76,7 +76,8 @@ class LimitacionDatosController extends Controller
             $limitacion = $em->getRepository('AppBundle:CfgLimitacion')->find($limitacionId);
             $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->find($tipoProcesoId);
             $causalLimitacion = $em->getRepository('AppBundle:CfgCausalLimitacion')->find($causalLimitacionId);
-            $entidadJudicial = $em->getRepository('AppBundle:CfgEntidadJudicial')->find($entidadJudicialId);
+            $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find($entidadJudicialId);
+            
             $limitaciondatos = new LimitacionDatos();
 
             $limitaciondatos->setFechaRadicacion(new \Datetime($fechaRadicacion));

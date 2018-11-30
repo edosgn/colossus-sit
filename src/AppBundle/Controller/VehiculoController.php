@@ -65,8 +65,8 @@ class VehiculoController extends Controller
             // die();
 
             $numeroFactura = $params->vehiculo->numeroFactura;
-            $fechaFactura = $params->vehiculo->fechaFactura;
             $valor = $params->vehiculo->valor;
+            $fechaFactura = $params->vehiculo->fechaFactura;
             $numeroManifiesto = $params->vehiculo->numeroManifiesto;
             $cilindraje = $params->vehiculo->cilindraje;
             $modelo = $params->vehiculo->modelo;
@@ -87,6 +87,7 @@ class VehiculoController extends Controller
             $claseId = $params->vehiculo->claseId;
             $pignorado = (isset($params->vehiculo->pignorado)) ? $params->vehiculo->pignorado : false;
             $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
+            $radioAccionId = (isset($params->vehiculo->radioAccionId)) ? $params->vehiculo->radioAccionId : false;
             $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
 
             $em = $this->getDoctrine()->getManager();
@@ -97,13 +98,18 @@ class VehiculoController extends Controller
             $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
             $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-            $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
-                $params->vehiculo->radioAccionId
-            );
+            if ($radioAccionId) {
+                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
+                    $params->vehiculo->radioAccionId
+                );
+                $vehiculo->setRadioAccion($radioAccion);
+
+            }
             $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find(
                 $params->vehiculo->modalidadTransporteId
             );
             $clase = $em->getRepository('AppBundle:Clase')->find($claseId);
+          
             $vehiculo = new Vehiculo();
 
             $fechaFactura = new \DateTime($fechaFactura);
@@ -120,7 +126,6 @@ class VehiculoController extends Controller
                 } else {
                     $cfgPlaca = new CfgPlaca();
                     $sedeOperativaCfgPlaca = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
-                    $cfgPlaca->setClase($clase);
                     $cfgPlaca->setSedeOperativa($sedeOperativaCfgPlaca);
                     $cfgPlaca->setNumero(strtoupper($params->vehiculo->placa));
                     $cfgPlaca->setEstado('asignado');
@@ -139,7 +144,6 @@ class VehiculoController extends Controller
             $vehiculo->setMotor($motor);
             $vehiculo->setChasis($chasis);
             $vehiculo->setSerie($serie);
-            $vehiculo->setRadioAccion($radioAccion);
             $vehiculo->setModalidadTransporte($modalidadTransporte);
             $vehiculo->setSerie($serie);
             $vehiculo->setSerie($serie);

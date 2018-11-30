@@ -27,7 +27,9 @@ class VehiculoLimitacionController extends Controller
         $json = $request->get("json", null);
         $params = json_decode($json);
 
-        $vehiculosLimitaciones = $em->getRepository('AppBundle:VehiculoLimitacion')->getByModulo($params->moduloId);
+        $vehiculosLimitaciones = $em->getRepository('AppBundle:VehiculoLimitacion')->findBy(
+            array('estado' => 1)
+        );
         $response = array(
             'status' => 'success',
             'code' => 200,

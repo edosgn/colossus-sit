@@ -89,7 +89,6 @@ class TramiteSolicitudController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
@@ -137,15 +136,11 @@ class TramiteSolicitudController extends Controller
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
                     $datos->tramiteFormulario
                 );
-                // var_dump($factura->getId());
-                // var_dump($datos->tramiteFormulario);
-                // die();
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(),$tramite->getId());
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                 $tramiteFactura->setRealizado(true);
                 $em->flush();
             }
-
             $tramiteSolicitud->setObservacion($observacion);
             $tramiteSolicitud->setDocumentacion($documentacionCompleta);
             $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
@@ -163,7 +158,6 @@ class TramiteSolicitudController extends Controller
                 'idTramiteSolicitud' => $tramiteSolicitud->getId(),
                 'tramiteSolitud' => $tramiteSolicitud
             );
-            //}
         } else {
             $response = array(
                 'status' => 'error',
