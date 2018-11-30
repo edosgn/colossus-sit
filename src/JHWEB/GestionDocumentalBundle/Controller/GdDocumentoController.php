@@ -75,46 +75,6 @@ class GdDocumentoController extends Controller
             );
 
             if ($usuario) {
-                $remitente = $em->getRepository('JHWEBGestionDocumentalBundle:GdRemitente')->findOneByIdentificacion(
-                    $params->remitente->identificacion
-                );
-
-                if (!$remitente) {
-                    $remitente = new GdRemitente();
-
-                    $remitente->setPrimerNombre(strtoupper($params->remitente->primerNombre));
-                    if ($params->remitente->segundoNombre) {
-                        $remitente->setSegundoNombre(
-                            strtoupper($params->remitente->segundoNombre)
-                        );
-                    }
-                    $remitente->setPrimerApellido(
-                        strtoupper($params->remitente->primerApellido)
-                    );
-                    if ($params->remitente->segundoApellido) {
-                        $remitente->setSegundoApellido(
-                            strtoupper($params->remitente->segundoApellido)
-                        );
-                    }
-                    $remitente->setIdentificacion($params->remitente->identificacion);
-                    $remitente->setDireccion($params->remitente->direccion);
-                    $remitente->setTelefono($params->remitente->telefono);
-                    $remitente->setCorreoElectronico(
-                        $params->remitente->correoElectronico
-                    );
-                    $remitente->setActivo(true);
-                    
-                    if ($params->remitente->idTipoIdentificacion) {
-                        $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
-                            $params->remitente->idTipoIdentificacion
-                        );
-                        $remitente->setTipoIdentificacion($tipoIdentificacion);
-                    }
-
-                    $em->persist($remitente);
-                    $em->flush();
-                }
-
                 $peticionario = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
                     $usuario->getId()
                 );
@@ -133,7 +93,14 @@ class GdDocumentoController extends Controller
                     $documento->setNumeroRadicado(str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaRegistro->format('Y')
                     );
 
-                    $documento->setNumeroOficio($params->documento->numeroOficio);
+                    if ($params->documento->numeroOficio) {
+                        $documento->setNumeroOficio(
+                            $params->documento->numeroOficio
+                        );
+                    }else{
+                        $documento->setNumeroOficio('No registra');
+                    }
+
                     $documento->setFolios($params->documento->folios);
                     $documento->setFechaRegistro($fechaRegistro);
                     $documento->setDescripcion($params->documento->descripcion);
@@ -191,7 +158,6 @@ class GdDocumentoController extends Controller
                         $documento->setUrl($filename);
                     }
                     $documento->setEstado('PENDIENTE');
-                    $documento->setRemitente($remitente);
                     
                     $em->persist($documento);
                     $em->flush();

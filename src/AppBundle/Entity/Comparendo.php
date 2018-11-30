@@ -148,9 +148,9 @@ class Comparendo
     private $infractorEmail;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="comparendos")
      **/
-    protected $organismoTransito;
+    protected $organismoTransitoLicencia;
     
     /**
      * @var string
@@ -208,13 +208,19 @@ class Comparendo
      */
     private $tarjetaOperacion;
 
-
     /**
      * @var string
      *
      * @ORM\Column(name="observaciones_agente", type="text", nullable=true)
      */
     private $observacionesAgente;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones_digitador", type="text", nullable=true)
+     */
+    private $observacionesDigitador;
 
     /**
      * @var string
@@ -280,6 +286,20 @@ class Comparendo
     private $valorInfraccion;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="interes_mora", type="integer", nullable=true)
+     */
+    private $interesMora;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_adicional", type="integer", nullable=true)
+     */
+    private $valorAdicional;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="url_documento", type="string", nullable=true)
@@ -299,6 +319,27 @@ class Comparendo
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo = true;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="pagado", type="boolean")
+     */
+    private $pagado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="curso", type="boolean")
+     */
+    private $curso;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="porcentaje_descuento", type="integer")
+     */
+    private $porcentajeDescuento;
     
     /****************************Llaves foraneas****************************/
 
@@ -313,9 +354,9 @@ class Comparendo
     protected $infraccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="comparendos")
      **/
-    protected $matriculadoEn;
+    protected $organismoTransitoMatriculado;
 
     /**
      * @var string
@@ -368,6 +409,11 @@ class Comparendo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
      **/
     protected $agenteTransito;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
+     **/
+    protected $sedeOperativa;
     
     /**
      * @ORM\OneToOne(targetEntity="AppBundle\Entity\Inmovilizacion")
@@ -399,7 +445,6 @@ class Comparendo
         return $this->id;
     }
 
-
     /**
      * Set fecha
      *
@@ -421,6 +466,9 @@ class Comparendo
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
     }
 
@@ -1001,6 +1049,30 @@ class Comparendo
     }
 
     /**
+     * Set observacionesDigitador
+     *
+     * @param string $observacionesDigitador
+     *
+     * @return Comparendo
+     */
+    public function setObservacionesDigitador($observacionesDigitador)
+    {
+        $this->observacionesDigitador = $observacionesDigitador;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionesDigitador
+     *
+     * @return string
+     */
+    public function getObservacionesDigitador()
+    {
+        return $this->observacionesDigitador;
+    }
+
+    /**
      * Set testigoNombres
      *
      * @param string $testigoNombres
@@ -1217,6 +1289,54 @@ class Comparendo
     }
 
     /**
+     * Set interesMora
+     *
+     * @param integer $interesMora
+     *
+     * @return Comparendo
+     */
+    public function setInteresMora($interesMora)
+    {
+        $this->interesMora = $interesMora;
+
+        return $this;
+    }
+
+    /**
+     * Get interesMora
+     *
+     * @return integer
+     */
+    public function getInteresMora()
+    {
+        return $this->interesMora;
+    }
+
+    /**
+     * Set valorAdicional
+     *
+     * @param integer $valorAdicional
+     *
+     * @return Comparendo
+     */
+    public function setValorAdicional($valorAdicional)
+    {
+        $this->valorAdicional = $valorAdicional;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAdicional
+     *
+     * @return integer
+     */
+    public function getValorAdicional()
+    {
+        return $this->valorAdicional;
+    }
+
+    /**
      * Set urlDocumento
      *
      * @param string $urlDocumento
@@ -1286,6 +1406,78 @@ class Comparendo
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set pagado
+     *
+     * @param boolean $pagado
+     *
+     * @return Comparendo
+     */
+    public function setPagado($pagado)
+    {
+        $this->pagado = $pagado;
+
+        return $this;
+    }
+
+    /**
+     * Get pagado
+     *
+     * @return boolean
+     */
+    public function getPagado()
+    {
+        return $this->pagado;
+    }
+
+    /**
+     * Set curso
+     *
+     * @param boolean $curso
+     *
+     * @return Comparendo
+     */
+    public function setCurso($curso)
+    {
+        $this->curso = $curso;
+
+        return $this;
+    }
+
+    /**
+     * Get curso
+     *
+     * @return boolean
+     */
+    public function getCurso()
+    {
+        return $this->curso;
+    }
+
+    /**
+     * Set porcentajeDescuento
+     *
+     * @param integer $porcentajeDescuento
+     *
+     * @return Comparendo
+     */
+    public function setPorcentajeDescuento($porcentajeDescuento)
+    {
+        $this->porcentajeDescuento = $porcentajeDescuento;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeDescuento
+     *
+     * @return integer
+     */
+    public function getPorcentajeDescuento()
+    {
+        return $this->porcentajeDescuento;
     }
 
     /**
@@ -1457,27 +1649,27 @@ class Comparendo
     }
 
     /**
-     * Set organismoTransito
+     * Set organismoTransitoLicencia
      *
-     * @param \AppBundle\Entity\SedeOperativa $organismoTransito
+     * @param \AppBundle\Entity\OrganismoTransito $organismoTransitoLicencia
      *
      * @return Comparendo
      */
-    public function setOrganismoTransito(\AppBundle\Entity\SedeOperativa $organismoTransito = null)
+    public function setOrganismoTransitoLicencia(\AppBundle\Entity\OrganismoTransito $organismoTransitoLicencia = null)
     {
-        $this->organismoTransito = $organismoTransito;
+        $this->organismoTransitoLicencia = $organismoTransitoLicencia;
 
         return $this;
     }
 
     /**
-     * Get organismoTransito
+     * Get organismoTransitoLicencia
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \AppBundle\Entity\OrganismoTransito
      */
-    public function getOrganismoTransito()
+    public function getOrganismoTransitoLicencia()
     {
-        return $this->organismoTransito;
+        return $this->organismoTransitoLicencia;
     }
 
     /**
@@ -1553,27 +1745,27 @@ class Comparendo
     }
 
     /**
-     * Set matriculadoEn
+     * Set organismoTransitoMatriculado
      *
-     * @param \AppBundle\Entity\Municipio $matriculadoEn
+     * @param \AppBundle\Entity\OrganismoTransito $organismoTransitoMatriculado
      *
      * @return Comparendo
      */
-    public function setMatriculadoEn(\AppBundle\Entity\Municipio $matriculadoEn = null)
+    public function setOrganismoTransitoMatriculado(\AppBundle\Entity\OrganismoTransito $organismoTransitoMatriculado = null)
     {
-        $this->matriculadoEn = $matriculadoEn;
+        $this->organismoTransitoMatriculado = $organismoTransitoMatriculado;
 
         return $this;
     }
 
     /**
-     * Get matriculadoEn
+     * Get organismoTransitoMatriculado
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \AppBundle\Entity\OrganismoTransito
      */
-    public function getMatriculadoEn()
+    public function getOrganismoTransitoMatriculado()
     {
-        return $this->matriculadoEn;
+        return $this->organismoTransitoMatriculado;
     }
 
     /**
@@ -1622,6 +1814,30 @@ class Comparendo
     public function getAgenteTransito()
     {
         return $this->agenteTransito;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     *
+     * @return Comparendo
+     */
+    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \AppBundle\Entity\SedeOperativa
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
     }
 
     /**
