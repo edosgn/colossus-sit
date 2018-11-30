@@ -64,47 +64,62 @@ class Helpers
 	}
 
 	public function comparendoState($params){
- 
 		$em = $this->em;
 
-		if ($params->infractor->identificacion) {
-            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
-                'INHIBITORIO'
+		//Pendiente
+		$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+            1
+        );
+
+		if (!$params->infractor->identificacion || !$params->comparendo->idInfraccion) {
+			//Inhibitorio
+            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                6
             );
         }
 
-        $fecha = $params->comparendo->fecha." ".$params->comparendo->horas.':'.$params->comparendo->minutos.':00';
+        /*$fecha = $params->comparendo->fecha." ".$params->comparendo->horas.':'.$params->comparendo->minutos.':00';
 
         $fechaInicio = '2002-01-01 00:00:00';
         $fechaFin = '2017-07-13 23:59:00';
-		$caducidad = $this->checkRangeDates($fechaInicio, $fechaFin, $fecha);
+		$caducidad = $this->checkRangeDates($fechaInicio, $fechaFin, $fecha, 6);
 
 		if ($caducidad) {
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
-                'CADUCIDAD'
+			//Caducidad
+			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                7
             );
 		}
 
 		$fechaInicio = '2017-07-14 00:00:00';
         $fechaFin = date('Y-m-d h:i:s');
-		$caducidad = $this->checkRangeDates($fechaInicio, $fechaFin, $fecha);
+		$caducidad = $this->checkRangeDates($fechaInicio, $fechaFin, $fecha, 12);
 
 		if ($caducidad) {
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->findOneByNombre(
-                'CADUCIDAD'
+			//Caducidad
+			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                7
             );
-		}
+		}*/
 	   
 	    return $estado;
 	}
 
-	protected function checkRangeDates($fechaInicio, $fechaFin, $fecha){
+	protected function checkRangeDates($fechaInicio, $fechaFin, $fecha, $meses){
 		$fechaInicio = strtotime($fechaInicio);
 		$fechaFin = strtotime($fechaFin);
 		$fecha = strtotime($fecha);
 
 		if(($fecha >= $fechaInicio) && ($fecha <= $fechaFin)) {
-			return true;
+			$fechaComparendo = new DateTime($fecha);
+			$fechaActual = new DateTime(date('Y-m-d h:i:s'));
+			$interval = $fechaComparendo->diff($fechaActual);
+
+			if ($interval->format('m') > $meses) {
+				return true;
+			}else {
+				return false;
+			}
 		}else {
 			return false;
 		}

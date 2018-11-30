@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SvSenialInventarioBodegaType extends AbstractType
+class SvSenialBodegaType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('fecha')->add('consecutivo');
+        $builder->add('fecha')->add('hora')->add('cantidad')->add('valor')->add('adjunto')->add('senial')->add('estado');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JHWEB\SeguridadVialBundle\Entity\SvSenialInventarioBodega'
+            'data_class' => 'JHWEB\SeguridadVialBundle\Entity\SvSenialBodega'
         ));
     }
 
@@ -29,7 +29,7 @@ class SvSenialInventarioBodegaType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jhweb_seguridadvialbundle_svsenialinventariobodega';
+        return 'jhweb_seguridadvialbundle_svsenialbodega';
     }
 
 

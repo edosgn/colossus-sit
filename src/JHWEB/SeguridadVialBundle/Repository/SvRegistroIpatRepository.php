@@ -2,6 +2,8 @@
 
 namespace JHWEB\SeguridadVialBundle\Repository;
 
+use JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat;
+
 /**
  * SvRegistroIpatRepository
  *
@@ -13,63 +15,62 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
 
     public function getIpatByRango($params) {
         $em = $this->getEntityManager();
-        
-        $horaInicioDatetime = $params->horaInicio;
-        $horaFinDatetime = $params->horaFin;
-        $fechaInicioDatetime = new \Datetime($params->fechaInicio);
-        $fechaFinDatetime = new \Datetime($params->fechaFin);
-        
-        if ($params->idGravedad) {
+        $horaInicioDatetime = $params->datos->horaInicio;
+        $horaFinDatetime = $params->datos->horaFin;
+        $fechaInicioDatetime = new \Datetime($params->datos->fechaInicio);
+        $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
+    
+        if ($params->datos->idGravedad) {
             $gravedad = $em->getRepository('AppBundle:CfgGravedad')->findBy(
                 array(
-                    'nombre' => $params->idGravedad,
+                    'nombre' => $params->datos->idGravedad,
                     )
-                );
-            }
-        if ($params->idTipoVictima) {
+            );
+        }
+        if ($params->datos->idTipoVictima) {
             $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
                 array(
-                    'nombre' => $params->idTipoVictima,
+                    'nombre' => $params->datos->idTipoVictima,
                 )
             );
         }
-        if ($params->idMunicipio) {
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->idMunicipio);
+        if ($params->datos->idMunicipio) {
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->datos->idMunicipio);
         }
         $municipioNombre = $municipio->getNombre();
 
-        if ($params->idGenero) {
-            $genero = $em->getRepository('AppBundle:Genero')->find($params->idGenero);
+        if ($params->datos->idGenero) {
+            $genero = $em->getRepository('AppBundle:Genero')->find($params->datos->idGenero);
         }
         $sexoConductor = $genero->getSigla();
 
-        if ($params->idClase) {
-            $clase = $em->getRepository('AppBundle:Clase')->find($params->idClase);
+        if ($params->datos->idClase) {
+            $clase = $em->getRepository('AppBundle:Clase')->find($params->datos->idClase);
         }
         $claseNombre = $clase->getNombre();
 
-        if ($params->idClaseAccidente) {
+        if ($params->datos->idClaseAccidente) {
             $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findBy(
                 array(
-                    'nombre' => $params->idClaseAccidente,
+                    'nombre' => $params->datos->idClaseAccidente,
                 )
             );
         }
-        if ($params->idChoqueCon) {
+        if ($params->datos->idChoqueCon) {
             $choqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->findBy(
                 array(
-                    'nombre' => $params->idChoqueCon,
+                    'nombre' => $params->datos->idChoqueCon,
                 )
             );
         }
-        if ($params->idObjetoFijo) {
-            $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->idObjetoFijo);
+        if ($params->datos->idObjetoFijo) {
+            $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->datos->idObjetoFijo);
         }
-
-        $edadInicioConductor = intval($params->idGrupoEdad);
-        $edadFinConductor = $edadInicioConductor + 4;
-        $diaAccidente = $params->idDiaSemana;
         
+        $edadInicioConductor = intval($params->datos->idGrupoEdad);
+        $edadFinConductor = $edadInicioConductor + 4;
+        $diaAccidente = $params->datos->idDiaSemana;
+
         $dql = "SELECT ri
             FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
             WHERE ri.fechaAccidente BETWEEN :fechaInicioDatetime AND :fechaFinDatetime
@@ -86,6 +87,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             AND ri.claseAccidente = :claseAccidente
             AND ri.choqueCon = :choqueCon
             AND ri.objetoFijo = :objetoFijo";
+
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

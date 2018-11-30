@@ -2,6 +2,7 @@
 
 namespace JHWEB\SeguridadVialBundle\Controller;
 
+use JHWEB\SeguridadVialBundle\Entity\SvSenialInventario;
 use JHWEB\SeguridadVialBundle\Entity\SvSenialUbicacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -39,22 +40,144 @@ class SvSenialUbicacionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $svSenialUbicacion = new Svsenialubicacion();
-        $form = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvSenialUbicacionType', $svSenialUbicacion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($svSenialUbicacion);
+
+            $fecha = new \Datetime($params->fecha);
+
+            if ($params->idSenial) {
+                $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find(
+                    $params->idSenial
+                );
+            }
+
+            $inventario = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->findOneBy(
+                array(
+                    'fecha' => $fecha,
+                    'tipoDestino' => 'MUNICIPIO',
+                    'tipoSenial' => $senial->getTipoSenial()->getId()
+                )
+            );
+
+            if (!$inventario) {
+                $inventario = new SvSenialInventario();
+
+                $inventario->setFecha($fecha);
+
+                $inventario->setTipoDestino('MUNICIPIO');
+
+                if ($senial) {
+                    $inventario->setTipoSenial($senial->getTipoSenial());
+                }
+
+                if ($params->idMunicipio) {
+                    $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                        $params->idMunicipio
+                    );
+                    $inventario->setMunicipio($municipio);
+                }
+
+                $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getMaximo(
+                    $fecha->format('Y')
+                );
+                $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+                $inventario->setConsecutivo($consecutivo);
+
+                $em->persist($inventario);
+                $em->flush();
+            }
+
+
+            $ubicacion = new SvSenialUbicacion();
+
+            $ubicacion->setInventario($inventario);
+            $ubicacion->setMunicipio($inventario->getMunicipio());
+
+            $ubicacion->setFecha(new \Datetime($params->fecha));
+            $ubicacion->setHora(new \Datetime($params->hora));
+            $ubicacion->setLatitud($params->latitud);
+            $ubicacion->setLongitud($params->longitud);
+
+            if ($params->via1) {
+                $ubicacion->setVia1($params->via1);
+            }
+            if ($params->no1) {
+                $ubicacion->setNumero1($params->no1);
+            }
+
+            if ($params->via2) {
+                $ubicacion->setVia2($params->via2);
+            }
+            if ($params->no2) {
+                $ubicacion->setNumero2($params->no2);
+            }
+
+            if ($params->via3) {
+                $ubicacion->setVia3($params->via3);
+            }
+            if ($params->no3) {
+                $ubicacion->setNumero3($params->no3);
+            }
+
+            $ubicacion->setDireccion($params->direccion);
+
+            if ($params->idConector) {
+                $conector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialConector')->find(
+                    $params->idConector
+                );
+                $ubicacion->setConector($conector);
+            }
+
+            $ubicacion->setCantidad($params->cantidad);
+
+            if ($senial) {
+                $ubicacion->setSenial($senial);
+
+                $senial->setCantidad($senial->getCantidad() - $params->cantidad);
+                $em->flush();
+            }
+
+            if ($params->idEstado) {
+                $estado = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->find(
+                    $params->idEstado
+                );
+                $ubicacion->setEstado($estado);
+            }
+
+            if ($request->files->get('file')) {
+                $file = $request->files->get('file');
+                $extension = $file->guessExtension();
+                $fileName = md5(rand().time()).".".$extension;
+                $dir=__DIR__.'/../../../../web/uploads/seniales/files';
+
+                $file->move($dir,$fileName);
+                $ubicacion->setAdjunto($fileName);
+            }
+
+            $em->persist($ubicacion);
             $em->flush();
 
-            return $this->redirectToRoute('svsenialubicacion_show', array('id' => $svSenialUbicacion->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
-        return $this->render('svsenialubicacion/new.html.twig', array(
-            'svSenialUbicacion' => $svSenialUbicacion,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -133,57 +256,4 @@ class SvSenialUbicacionController extends Controller
             ->getForm()
         ;
     }
-
-    /**
-     * Creates a new svSenialInventario entity.
-     *
-     * @Route("/search/destino", name="svsenialinventario_search_destino")
-     * @Method({"GET", "POST"})
-     */
-    public function searchByDestinoAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-
-            $em = $this->getDoctrine()->getManager();
-        
-            $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->findBy(
-                array(
-                    'inventario' => $params->inventario->id
-                )
-            );
-
-            $response['data'] = array();
-
-            if ($ubicaciones) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($ubicaciones)." registros encontrados", 
-                    'data'=> $ubicaciones,
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Ningún registro encontrado."
-                );
-            }
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida", 
-            );
-        } 
-        return $helpers->json($response);
-    }
-
-
 }

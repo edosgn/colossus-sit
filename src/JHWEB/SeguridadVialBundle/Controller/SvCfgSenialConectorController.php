@@ -183,4 +183,31 @@ class SvCfgSenialConectorController extends Controller
             ->getForm()
         ;
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgsenialconector_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $conectores = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialConector')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($conectores as $key => $conector) {
+            $response[$key] = array(
+                'value' => $conector->getId(),
+                'label' => $conector->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

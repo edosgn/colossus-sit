@@ -99,11 +99,11 @@ class SvSenialUbicacion
     private $direccion;
 
     /**
-     * @var float
+     * @var int
      *
-     * @ORM\Column(name="valor", type="float")
+     * @ORM\Column(name="cantidad", type="integer", nullable=true)
      */
-    private $valor;
+    private $cantidad;
 
     /**
      * @var string
@@ -115,21 +115,20 @@ class SvSenialUbicacion
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialConector", inversedBy="ubicaciones") */
     private $conector;
 
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cantidad", type="integer", nullable=true)
-     */
-    private $cantidad;
-
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="SvSenial", inversedBy="senialesUbicacion") */
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenial", inversedBy="ubicaciones") */
     private $senial;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inventarios") */
+    /** @ORM\ManyToOne(targetEntity="SvSenialInventario", inversedBy="ubicaciones") */
+    private $inventario;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ubicaciones") */
     private $municipio;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialLinea", inversedBy="ubicaciones") */
+    private $linea;
 
     /**
      * Get id
@@ -162,7 +161,37 @@ class SvSenialUbicacion
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
+    }
+
+    /**
+     * Set hora
+     *
+     * @param \DateTime $hora
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setHora($hora)
+    {
+        $this->hora = $hora;
+
+        return $this;
+    }
+
+    /**
+     * Get hora
+     *
+     * @return \DateTime
+     */
+    public function getHora()
+    {
+        if ($this->hora) {
+            return $this->hora->format('h:m:s A');
+        }
+        return $this->hora;
     }
 
     /**
@@ -382,27 +411,27 @@ class SvSenialUbicacion
     }
 
     /**
-     * Set valor
+     * Set cantidad
      *
-     * @param float $valor
+     * @param integer $cantidad
      *
      * @return SvSenialUbicacion
      */
-    public function setValor($valor)
+    public function setCantidad($cantidad)
     {
-        $this->valor = $valor;
+        $this->cantidad = $cantidad;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get cantidad
      *
-     * @return float
+     * @return integer
      */
-    public function getValor()
+    public function getCantidad()
     {
-        return $this->valor;
+        return $this->cantidad;
     }
 
     /**
@@ -427,30 +456,6 @@ class SvSenialUbicacion
     public function getAdjunto()
     {
         return $this->adjunto;
-    }
-
-    /**
-     * Set cantidad
-     *
-     * @param integer $cantidad
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setCantidad($cantidad)
-    {
-        $this->cantidad = $cantidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidad
-     *
-     * @return integer
-     */
-    public function getCantidad()
-    {
-        return $this->cantidad;
     }
 
     /**
@@ -504,11 +509,11 @@ class SvSenialUbicacion
     /**
      * Set senial
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenial $senial
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenial $senial
      *
      * @return SvSenialUbicacion
      */
-    public function setSenial(\JHWEB\SeguridadVialBundle\Entity\SvSenial $senial = null)
+    public function setSenial(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenial $senial = null)
     {
         $this->senial = $senial;
 
@@ -518,10 +523,82 @@ class SvSenialUbicacion
     /**
      * Get senial
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenial
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenial
      */
     public function getSenial()
     {
         return $this->senial;
+    }
+
+    /**
+     * Set inventario
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenialInventario $inventario
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setInventario(\JHWEB\SeguridadVialBundle\Entity\SvSenialInventario $inventario = null)
+    {
+        $this->inventario = $inventario;
+
+        return $this;
+    }
+
+    /**
+     * Get inventario
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenialInventario
+     */
+    public function getInventario()
+    {
+        return $this->inventario;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \AppBundle\Entity\Municipio $municipio
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialLinea $linea
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setLinea(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialLinea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialLinea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
     }
 }

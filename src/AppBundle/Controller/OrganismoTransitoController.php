@@ -25,10 +25,15 @@ class OrganismoTransitoController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $organismoTransito = $em->getRepository('AppBundle:OrganismoTransito')->findBy(
             array('estado' => 1)
         );
+
+        $response['data'] = array();
+
         $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -228,18 +233,24 @@ class OrganismoTransitoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $organismoTransitos = $em->getRepository('AppBundle:OrganismoTransito')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($organismoTransitos as $key => $organismoTransito) {
-        $response[$key] = array(
-            'value' => $organismoTransito->getId(),
-            'label' => $organismoTransito->getNombre(),
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $organismoTransitos = $em->getRepository('AppBundle:OrganismoTransito')->findBy(
+            array('estado' => 1)
+        );
+
+        $response = null;
+
+        foreach ($organismoTransitos as $key => $organismoTransito) {
+            $response[$key] = array(
+                'value' => $organismoTransito->getId(),
+                'label' => $organismoTransito->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+
+        return $helpers->json($response);
     }
 
      /**

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Comparendo;
 use AppBundle\Entity\Inmovilizacion;
+use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -65,6 +66,15 @@ class ComparendoController extends Controller
                 $comparendo->setPlaca($params->comparendo->vehiculoPlaca);
             }
 
+            if ($params->comparendo->idOrganismoTransitoMatriculado) {
+                $organismoTransitoMatriculado = $em->getRepository('AppBundle:OrganismoTransito')->find(
+                    $params->comparendo->idOrganismoTransitoMatriculado
+                );
+                $comparendo->setOrganismoTransitoMatriculado(
+                    $organismoTransitoMatriculado
+                );
+            }
+
             if (isset($params->comparendo->vehiculoClase)) {
                 $clase = $em->getRepository('AppBundle:Clase')->find(
                     $params->comparendo->vehiculoClase
@@ -114,50 +124,56 @@ class ComparendoController extends Controller
             }
 
             $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
-            $horas = $params->comparendo->horas;
+            $hora = $params->comparendo->hora;
             $minutos = $params->comparendo->minutos;
             
-            $comparendo->setHora(new \DateTime($horas.':'.$minutos.':00'));
+            $comparendo->setHora(new \DateTime($hora.':'.$minutos.':00'));
             
             $comparendo->setDireccion($params->comparendo->direccion);
             $comparendo->setLocalidad($params->comparendo->localidad);
             $comparendo->setInmovilizacion($params->comparendo->inmovilizacion);
             $comparendo->setFuga($params->comparendo->fuga);
             $comparendo->setAccidente($params->comparendo->accidente);
-            $comparendo->setRetencionLicencia($params->comparendo->retencionLicencia);
+            $comparendo->setRetencionLicencia(
+                $params->comparendo->retencionLicencia
+            );
             //$comparendo->setFotomulta(false);
             //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
-            //$comparendo->setObservacionesDigitador($params->comparendo->observacionesDigitador);
+            
+            $comparendo->setObservacionesDigitador(
+                $params->comparendo->observacionesDigitador
+            );
+
             $comparendo->setObservacionesAgente(
                 $params->comparendo->observacionesAgente
             );
             //$comparendo->setValorAdicional(0);
 
             if (isset($params->fechaNotificacion)) {
-                $comparendo->setFechaNotificacion(new \DateTime($params->fechaNotificacion));
+                $comparendo->setFechaNotificacion(
+                    new \DateTime($params->fechaNotificacion)
+                );
             }
 
             $agenteTransito = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
-                $params->comparendo->funcionarioId
+                $params->comparendo->idFuncionario
             );
             $comparendo->setAgenteTransito($agenteTransito);
+            $comparendo->setSedeOperativa($agenteTransito->getSedeOperativa());
 
             $consecutivo = $em->getRepository('AppBundle:MpersonalComparendo')->find(
-                $params->comparendo->consecutivoId
+                $params->comparendo->idConsecutivo
             );
             $comparendo->setConsecutivo($consecutivo);
 
             $municipio = $em->getRepository('AppBundle:Municipio')->find(
-                $params->comparendo->municipioId
+                $params->comparendo->idMunicipioLugar
             );
             $comparendo->setMunicipio($municipio);
 
-            $estado = $helpers->comparendoState($params,$comparendo);
-            $comparendo->setEstado($estado);
-
-            if (isset( $params->comparendo->tipoInfractorId)) {
+            if (isset( $params->infractor->idTipoInfractor)) {
                 $tipoInfractor = $em->getRepository('AppBundle:CfgTipoInfractor')->find(
-                    $params->comparendo->tipoInfractorId
+                    $params->infractor->idTipoInfractor
                 );
                 $comparendo->setTipoInfractor($tipoInfractor);
             }
@@ -213,12 +229,12 @@ class ComparendoController extends Controller
                 );
             }
 
-            if ($params->comparendo->idSedeOperativaExpide) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->comparendo->idSedeOperativaExpide
+            if ($params->comparendo->idOrganismoTransitoLicencia) {
+                $organismoTransitoLicencia = $em->getRepository('AppBundle:OrganismoTransito')->find(
+                    $params->comparendo->idOrganismoTransitoLicencia
                 );
-                $comparendo->setOrganismoTransito(
-                    $sedeOperativa
+                $comparendo->setOrganismoTransitoLicencia(
+                    $organismoTransitoLicencia
                 );
             }
 
@@ -264,7 +280,7 @@ class ComparendoController extends Controller
             }
 
             if ($params->empresa->tarjeta) {
-                $comparendo->setEmpresaTarjeta(
+                $comparendo->setTarjetaOperacion(
                     $params->empresa->tarjeta
                 );
             }
@@ -296,7 +312,7 @@ class ComparendoController extends Controller
 
             /* INFRACCION */
             $infraccion = $em->getRepository('AppBundle:MflInfraccion')->find(
-                $params->comparendo->infraccionId
+                $params->comparendo->idInfraccion
             );
             $comparendo->setInfraccion($infraccion);
 
@@ -305,46 +321,82 @@ class ComparendoController extends Controller
                 true
             );
 
-            $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
-            $comparendo->setValorInfraccion($valorInfraccion);
+            if ($smlmv) {
+                $valorInfraccion = round(($smlmv->getValor() / 30) * $infraccion->getCategoria()->getSmldv());
 
-            $em->persist($comparendo);
-            $em->flush();
+                //Valida si hay fuga el valor de la infracción se duplica
+                if ($params->comparendo->fuga) {
+                    $valorInfraccion = $valorInfraccion * 2;
+                }
+                $comparendo->setValorInfraccion($valorInfraccion);
 
-            if ($params->comparendo->inmovilizacion) {
-                $inmovilizacion = new Inmovilizacion();
+                $comparendo->setPagado(false);
+                $comparendo->setCurso(false);
+                $comparendo->setPorcentajeDescuento(0);
 
-                $inmovilizacion->setNumero(123);
-                $inmovilizacion->setConsecutivo(0);
-                $inmovilizacion->setFecha(new \Datetime($params->comparendo->fecha));
-
-                $grua = $em->getRepository('AppBundle:MparqGrua')->find(
-                    $params->inmovilizacion->gruaId
-                );
-                $inmovilizacion->setGrua($grua);
-
-                $patio = $em->getRepository('AppBundle:MparqPatio')->find(
-                    $params->inmovilizacion->patioId
-                );
-                $inmovilizacion->setPatio($patio);
-                $inmovilizacion->setComparendo($comparendo);
-
-                $em->persist($inmovilizacion);
+                $estado = $helpers->comparendoState($params);
+                $comparendo->setEstado($estado);
+                
+                $em->persist($comparendo);
                 $em->flush();
+
+
+                $trazabilidad = new CvCdoTrazabilidad();
+
+                $trazabilidad->setFecha(
+                    new \Datetime($params->comparendo->fecha)
+                );
+                $trazabilidad->setActivo(true);
+                $trazabilidad->setComparendo($comparendo);
+                $trazabilidad->setEstado($estado);
+
+                $em->persist($trazabilidad);
+                $em->flush();
+
+                if ($params->comparendo->inmovilizacion) {
+                    $inmovilizacion = new Inmovilizacion();
+
+                    $inmovilizacion->setNumero(123);
+                    $inmovilizacion->setConsecutivo(0);
+                    $inmovilizacion->setFecha(
+                        new \Datetime($params->comparendo->fecha)
+                    );
+
+                    $grua = $em->getRepository('AppBundle:MparqGrua')->find(
+                        $params->inmovilizacion->idGrua
+                    );
+                    $inmovilizacion->setGrua($grua);
+
+                    $patio = $em->getRepository('AppBundle:MparqPatio')->find(
+                        $params->inmovilizacion->idPatio
+                    );
+                    $inmovilizacion->setPatio($patio);
+                    $inmovilizacion->setComparendo($comparendo);
+
+                    $em->persist($inmovilizacion);
+                    $em->flush();
+                }
+
+                if ($consecutivo) {
+                    $consecutivo->setEstado('UTILIZADO');
+                    $consecutivo->setActivo(false);
+                    $em->flush();
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se ha registrado el valor del SMLMV.",
+                );
             }
 
-            if ($consecutivo) {
-                $consecutivo->setEstado('Utilizado');
-                $consecutivo->setActivo(false);
-                $em->flush();
-            }
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-            );
-        } else {
+        }else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
@@ -626,32 +678,37 @@ class ComparendoController extends Controller
     /**
      * Busca comparendo por ciudadano.
      *
-     * @Route("/ciudadano/search", name="ciudadano_infractor_comparendo_search")
+     * @Route("/search/infractor", name="comparendo_search_infractor")
      * @Method({"GET", "POST"})
      */
-    public function searchByCiudadanoAction(Request $request)
+    public function searchByInfractorAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
 
-            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByCiudadanoInfractor($params->ciudadanoId);
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
+                array(
+                    'infractorIdentificacion' => $params->infractorIdentificacion
+                )
+            );
 
-            if ($comparendos != null) {
+            if ($comparendos) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "El ciudadano tiene ".count($comparendos)." comparendos",
+                    'message' => "El infractor tiene ".count($comparendos)." comparendos",
                     'data' => $comparendos,
                 );
             } else {
                 $response = array(
-                    'status' => 'success',
+                    'status' => 'error',
                     'code' => 400,
                     'message' => "El ciudadano no tiene comparendos en la base de datos",
                 );

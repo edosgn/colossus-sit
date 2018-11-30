@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svsenialbodegas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Cantidad</th>
+                <th>Valor</th>
+                <th>Adjunto</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svSenialBodega in svSenialBodegas %}
+            <tr>
+                <td><a href="{{ path('svsenialbodega_show', { 'id': svSenialBodega.id }) }}">{{ svSenialBodega.id }}</a></td>
+                <td>{% if svSenialBodega.fecha %}{{ svSenialBodega.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svSenialBodega.hora %}{{ svSenialBodega.hora|date('H:i:s') }}{% endif %}</td>
+                <td>{{ svSenialBodega.cantidad }}</td>
+                <td>{{ svSenialBodega.valor }}</td>
+                <td>{{ svSenialBodega.adjunto }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svsenialbodega_show', { 'id': svSenialBodega.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svsenialbodega_edit', { 'id': svSenialBodega.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svsenialbodega_new') }}">Create a new svSenialBodega</a>
+        </li>
+    </ul>
+{% endblock %}

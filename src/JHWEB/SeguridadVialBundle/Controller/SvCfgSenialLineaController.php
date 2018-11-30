@@ -183,4 +183,33 @@ class SvCfgSenialLineaController extends Controller
             ->getForm()
         ;
     }
+
+    /* =================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgseniallinea_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $lineas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($lineas as $key => $linea) {
+            $response[$key] = array(
+                'value' => $linea->getId(),
+                'label' => $linea->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

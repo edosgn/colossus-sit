@@ -1,33 +1,26 @@
 <?php
 
-namespace JHWEB\SeguridadVialBundle\Form;
+namespace JHWEB\ContravencionalBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SvSenialType extends AbstractType
+class CvCdoTrazabilidadType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-        ->add('fecha')
-        ->add('cantidad')
-        ->add('valor')
-        ->add('adjunto')
-        ->add('codigo')
-        ->add('nombre')
-        ->add('logo');
+        $builder->add('fecha')->add('activo')->add('comparendo')->add('actoAdministrativo')->add('estado');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JHWEB\SeguridadVialBundle\Entity\SvSenial'
+            'data_class' => 'JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad'
         ));
     }
 
@@ -36,7 +29,7 @@ class SvSenialType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jhweb_seguridadvialbundle_svsenial';
+        return 'jhweb_contravencionalbundle_cvcdotrazabilidad';
     }
 
 

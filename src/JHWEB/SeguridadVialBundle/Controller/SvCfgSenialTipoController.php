@@ -187,6 +187,7 @@ class SvCfgSenialTipoController extends Controller
     }
 
     /* ================================================== */
+    
     /**
      * datos para select 2
      *

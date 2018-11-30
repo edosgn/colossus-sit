@@ -863,10 +863,33 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            var_dump($params);
-            die();
-            
+            $ipat = new SvRegistroIpat();
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
+
+            $datafile = array();
+            foreach($params->file as $key => $dato) {
+                /* if( $dato[2] == $params->datos->fechaInicio) {
+                var_dump($dato[2]);
+
+                } */
+                $ipat -> setFechaAccidente(new \Datetime($dato[2]));
+                var_dump($dato[2]);
+                $ipat -> setHoraAccidente(new \Datetime($dato[3]));
+                $ipat -> setDiaAccidente($dato[4]);
+                $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
+                $ipat -> setGravedad($gravedadFile);
+                $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
+                $ipat -> setTipoVictima($tipoVictimaFile);
+                $ipat -> setCiudadResidenciaConductor($dato[0]);
+                $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
+                $ipat -> setSexoConductor($sexoConductorFile->getSigla());
+                $ipat -> setEdadConductor($dato[10]);
+                $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
+                $ipat -> setClaseAccidente($claseAccidenteFile);
+                $ipat->setActivo(true);
+                $em->persist($ipat);
+                $em->flush();
+            }
 
             if ($ipats) {
                 $response = array(

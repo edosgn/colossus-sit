@@ -10,4 +10,64 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    //Obtiene el numero maximo de inventarios por año, tipo de señial y destino
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(si.consecutivo) AS maximo
+            FROM JHWEBSeguridadVialBundle:SvSenialInventario si
+            WHERE YEAR(si.fecha) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
+
+	//Obtiene las señales por tipo de señal en inventario de bodega
+    public function getByDateAndTipoAndDestino($fechaInicial, $fechaFinal, $idTipoSenial, $tipoDestino, $idMunicipio)
+    {
+        $em = $this->getEntityManager();
+
+        if ($idMunicipio) {
+	        $dql = "SELECT si
+            FROM JHWEBSeguridadVialBundle:SvSenialInventario si,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
+            AppBundle:Municipio m
+            WHERE si.tipoDestino = :tipoDestino
+            AND si.municipio = m.id
+            AND si.municipio = :idMunicipio
+            AND si.tipoSenial = st.id
+            AND si.tipoSenial = :idTipoSenial
+            AND si.fecha BETWEEN :fechaInicial AND :fechaFinal";
+
+            $consulta = $em->createQuery($dql);
+
+	        $consulta->setParameters(array(
+	            'fechaInicial' => $fechaInicial,
+	            'fechaFinal' => $fechaFinal,
+	            'idTipoSenial' => $idTipoSenial,
+	            'tipoDestino' => $tipoDestino,
+	            'idMunicipio' => $idMunicipio,
+	        ));
+        }else{
+        	$dql = "SELECT si
+            FROM JHWEBSeguridadVialBundle:SvSenialInventario si,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo st
+            WHERE si.tipoDestino = :tipoDestino
+            AND si.tipoSenial = st.id
+            AND si.tipoSenial = :idTipoSenial
+            AND si.fecha BETWEEN :fechaInicial AND :fechaFinal";
+
+            $consulta = $em->createQuery($dql);
+
+	        $consulta->setParameters(array(
+	            'fechaInicial' => $fechaInicial,
+	            'fechaFinal' => $fechaFinal,
+	            'idTipoSenial' => $idTipoSenial,
+	            'tipoDestino' => $tipoDestino,
+	        ));
+        }
+
+        return $consulta->getResult();
+    }
 }

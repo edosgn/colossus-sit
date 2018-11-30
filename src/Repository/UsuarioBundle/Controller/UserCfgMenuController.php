@@ -199,55 +199,52 @@ class UserCfgMenuController extends Controller
                 $menu->setTitulo($params->titulo);
                 $menu->setAbreviatura($params->abreviatura);
                 $menu->setActivo(true);
+                $menu->setPath($params->path);
 
-                if ($params->path) {
-                    $menu->setPath($params->path);
-                }
+                if (isset($params->idParent) && $params->idParent) {
+                $parentMenu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                    $params->idParent
+                );
+                $menu->setParent($parentMenu);
 
-                if ($params->parent) {
-                    $parentMenu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
-                        $params->parent
-                    );
-                    $menu->setParent($parentMenu);
-
-                    if ($parentMenu->getTipo() == 'PRIMER_NIVEL') {
-                        $menu->setTipo('SEGUNDO_NIVEL');
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => "Registro creado con éxito",
-                        );
-                    }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
-                        $menu->setTipo('TERCER_NIVEL');
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => "Registro creado con éxito",
-                        );
-                    }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => "Debe seleccionar maximo un padre de segundo nivel",
-                        );
-                    }
-                }else{
-                    $menu->setTipo('PRIMER_NIVEL');
+                if ($parentMenu->getTipo() == 'PRIMER_NIVEL') {
+                    $menu->setTipo('SEGUNDO_NIVEL');
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Registro creado con éxito",
                     );
-                }
-                
-                $em->flush();
 
+                    $em->persist($menu);
+                    $em->flush();
+                }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
+                    $menu->setTipo('TERCER_NIVEL');
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                    );
+
+                    $em->persist($menu);
+                    $em->flush();
+                }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Debe seleccionar maximo un padre de segundo nivel",
+                    );
+                }
+            }else{
+                $menu->setTipo('PRIMER_NIVEL');
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro actualizado con exito", 
-                    'data'=> $menu,
+                    'message' => "Registro creado con éxito",
                 );
+
+                $em->persist($menu);
+                $em->flush();
+            }
             }else{
                 $response = array(
                     'status' => 'error',
