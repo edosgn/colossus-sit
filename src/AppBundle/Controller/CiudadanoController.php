@@ -401,7 +401,6 @@ class CiudadanoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
                 array('identificacion' => $params->numeroIdentificacion)
