@@ -184,9 +184,6 @@ class GdDocumento
      **/
     protected $medioCorrespondenciaEnvio;
 
-    /** @ORM\ManyToOne(targetEntity="GdRemitente", inversedBy="documentos") */
-    protected $remitente;
-
 
     /**
      * Get id
@@ -220,7 +217,7 @@ class GdDocumento
     public function getFechaRegistro()
     {
         if ($this->fechaRegistro) {
-            return $this->fechaRegistro->format('Y-m-d');
+            return $this->fechaRegistro->format('d/m/Y h:i:s A');
         }
         return $this->fechaRegistro;
     }
@@ -247,6 +244,30 @@ class GdDocumento
     public function getNumeroRadicado()
     {
         return $this->numeroRadicado;
+    }
+
+    /**
+     * Set numeroSalida
+     *
+     * @param string $numeroSalida
+     *
+     * @return GdDocumento
+     */
+    public function setNumeroSalida($numeroSalida)
+    {
+        $this->numeroSalida = $numeroSalida;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroSalida
+     *
+     * @return string
+     */
+    public function getNumeroSalida()
+    {
+        return $this->numeroSalida;
     }
 
     /**
@@ -367,7 +388,7 @@ class GdDocumento
     public function getFechaVencimiento()
     {
         if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('Y-m-d');
+            return $this->fechaVencimiento->format('d/m/Y');
         }
         return $this->fechaVencimiento;
     }
@@ -778,53 +799,5 @@ class GdDocumento
     public function getMedioCorrespondenciaEnvio()
     {
         return $this->medioCorrespondenciaEnvio;
-    }
-
-    /**
-     * Set remitente
-     *
-     * @param \JHWEB\GestionDocumentalBundle\Entity\GdRemitente $remitente
-     *
-     * @return GdDocumento
-     */
-    public function setRemitente(\JHWEB\GestionDocumentalBundle\Entity\GdRemitente $remitente = null)
-    {
-        $this->remitente = $remitente;
-
-        return $this;
-    }
-
-    /**
-     * Get remitente
-     *
-     * @return \JHWEB\GestionDocumentalBundle\Entity\GdRemitente
-     */
-    public function getRemitente()
-    {
-        return $this->remitente;
-    }
-
-    /**
-     * Set numeroSalida
-     *
-     * @param string $numeroSalida
-     *
-     * @return GdDocumento
-     */
-    public function setNumeroSalida($numeroSalida)
-    {
-        $this->numeroSalida = $numeroSalida;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroSalida
-     *
-     * @return string
-     */
-    public function getNumeroSalida()
-    {
-        return $this->numeroSalida;
     }
 }
