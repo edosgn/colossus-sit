@@ -22,34 +22,56 @@ class GdDocumentoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-	//Obtiene la lista de documentos por peticionario
-    public function getByPeticionario($tipoPeticionario, $identificacion = null, $entidadNombre = null, $numeroOficio = null){   
+	//Obtiene la lista de documentos por tipo de filtro
+    public function getByFilter($params){  
         $em = $this->getEntityManager();
 
-        if ($tipoPeticionario == "Persona") {
-        	$dql = "SELECT d
-            FROM JHWEBGestionDocumentalBundle:GdDocumento d, AppBundle:Ciudadano c,
-            UsuarioBundle:Usuario u
-            WHERE d.peticionario = c.id
-            AND c.usuario = u.id
-            AND u.identificacion = :identificacion";
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT d
+                FROM JHWEBGestionDocumentalBundle:GdDocumento d
+                WHERE d.peticionarioNombres LIKE :nombres
+                OR d.peticionarioNombres LIKE :apellidos";
 
-	        $consulta = $em->createQuery($dql);
-	        $consulta->setParameters(array(
-	            'identificacion' => $identificacion,
-	        ));
-        }else{
-        	$dql = "SELECT d
-            FROM JHWEBGestionDocumentalBundle:GdDocumento d, AppBundle:Ciudadano c
-            WHERE d.peticionario = c.id
-            AND d.entidadNombre = :entidadNombre
-            AND d.numeroOficio = :numeroOficio";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'nombres' => '%'.$params->filtro.'%',
+                    'apellidos' => '%'.$params->filtro.'%',
+                ));
+                break;
 
-	        $consulta = $em->createQuery($dql);
-	        $consulta->setParameters(array(
-	            'entidadNombre' => $entidadNombre,
-	            'numeroOficio' => $numeroOficio,
-	        ));
+            case 2:
+                $dql = "SELECT d
+                FROM JHWEBGestionDocumentalBundle:GdDocumento d
+                WHERE d.identificacion = :identificacion";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'identificacion' => $params->filtro,
+                ));
+                break;
+
+            case 3:
+                $dql = "SELECT d
+                FROM JHWEBGestionDocumentalBundle:GdDocumento d
+                WHERE d.entidadNombre LIKE :entidadNombre";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'entidadNombre' => '%'.$params->filtro.'%',
+                ));
+                break;
+
+            case 4:
+                $dql = "SELECT d
+                FROM JHWEBGestionDocumentalBundle:GdDocumento d
+                WHERE d.numeroRadicado = :numeroRadicado";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'numeroRadicado' => $params->filtro,
+                ));
+                break;
         }
 
         return $consulta->getResult();

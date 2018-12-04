@@ -237,6 +237,9 @@ class GdDocumento
      */
     public function getFechaRegistro()
     {
+        if ($this->fechaRegistro) {
+            return $this->fechaRegistro->format('d/m/Y');
+        }
         return $this->fechaRegistro;
     }
 
@@ -405,6 +408,9 @@ class GdDocumento
      */
     public function getFechaVencimiento()
     {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('d/m/Y');
+        }
         return $this->fechaVencimiento;
     }
 
