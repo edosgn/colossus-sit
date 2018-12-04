@@ -41,22 +41,6 @@ class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
-    public function getFacturaModulo($moduloId, $idFactura)
-    {
-        $em = $this->getEntityManager();
-        $dql = "SELECT tf
-            FROM AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
-            WHERE tf.factura = f.id
-            AND f.numero = :idFactura"; 
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameters(array(
-            'idFactura' => $idFactura,
-        ));
-        return $consulta->getResult();
-
-    }
-
     public function getByFacturaAndTramite($idFactura, $tramiteId)
     {
         $em = $this->getEntityManager();
