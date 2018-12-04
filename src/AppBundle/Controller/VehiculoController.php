@@ -65,31 +65,62 @@ class VehiculoController extends Controller
 
             if($params->campo){
                 $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
-                $lineaId = $params->vehiculo->lineaId;
-                $claseId = $params->vehiculo->claseId;
-                $colorId = $params->vehiculo->colorId;
-
-                $modelo = $params->vehiculo->modelo;
-                $motor = $params->vehiculo->motor;
-                $chasis = $params->vehiculo->chasis;
-                $serie = $params->vehiculo->serie;
-                $vin = $params->vehiculo->vin;
-
-                $vehiculo = new Vehiculo();
-                $vehiculo->setClase($clase);
+                $linea = $em->getRepository('AppBundle:Linea')->find($params->vehiculo->lineaId);
+                $color = $em->getRepository('AppBundle:Color')->find($params->vehiculo->colorId);
+                $clase = $em->getRepository('AppBundle:Clase')->find($params->vehiculo->claseId);
+                $paisRegistro = $em->getRepository('AppBundle:Pais')->find($params->vehiculo->paisRegistro);
 
                 $cfgPlaca = new CfgPlaca();
                 $cfgPlaca->setNumero(strtoupper($params->vehiculo->placa));
                 $cfgPlaca->setEstado('asignado');
                 $em->persist($cfgPlaca);
                 $em->flush();
+                
+                //nuevo vehiculo para tramite de importación temporal
+                $vehiculo = new Vehiculo();
+                $vehiculo->setPaisRegistro($paisRegistro);
+                $vehiculo->setLinea($linea);
+                $vehiculo->setClase($clase);
+                $vehiculo->setColor($color);
+                $vehiculo->setModelo($params->vehiculo->modelo);
+                $vehiculo->setMotor($params->vehiculo->motor);
+                $vehiculo->setChasis($params->vehiculo->chasis);
+                $vehiculo->setSerie($params->vehiculo->serie);
+                $vehiculo->setVin($params->vehiculo->vin);
                 $vehiculo->setPlaca($cfgPlaca);
+                $vehiculo->setEstado(1);
+                $em->persist($vehiculo);
+                $em->flush();
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Vehiculo creado con exito",
-                );
+                if($cfgPlaca) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Placa creada con éxito para importación temporal.",
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No se pudo crear la placa con éxito para importación temporal.",
+                    );
+                }
+
+                if($vehiculo) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Vehículo creado con exito para importación temporal.",
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No se pudo crear el vehículo para la importación temporal.",
+                    );
+                }
+
+
 
             } else {
                 $numeroFactura = $params->vehiculo->numeroFactura;

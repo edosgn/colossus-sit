@@ -380,7 +380,6 @@ class FacturaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-
             $facturas = $em->getRepository('AppBundle:Factura')->findBy(
                 array('vehiculo' => $params->vehiculo, 'estado'=>'EMITIDA')
             );
