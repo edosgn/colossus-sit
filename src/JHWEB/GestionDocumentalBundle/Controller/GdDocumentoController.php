@@ -70,163 +70,60 @@ class GdDocumentoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                $params->peticionario->identificacion
+            $documento = new GdDocumento();
+
+            $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
+
+            $consecutivo = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getMaximo(
+                $fechaRegistro->format('Y')
+            );
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            $documento->setConsecutivo($consecutivo);
+
+            $documento->setNumeroRadicado(str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaRegistro->format('Y')
             );
 
-            if ($usuario) {
-                $peticionario = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
-                    $usuario->getId()
-                );
+            $documento->setFolios($params->folios);
+            $documento->setFechaRegistro($fechaRegistro);
 
-                if ($peticionario) {
-                    $documento = new GdDocumento();
-
-                    $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
-
-                    $consecutivo = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getMaximo(
-                        $fechaRegistro->format('Y')
-                    );
-                    $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-                    $documento->setConsecutivo($consecutivo);
-
-                    $documento->setNumeroRadicado(str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaRegistro->format('Y')
-                    );
-
-                    if ($params->documento->numeroOficio) {
-                        $documento->setNumeroOficio(
-                            $params->documento->numeroOficio
-                        );
-                    }else{
-                        $documento->setNumeroOficio('No registra');
-                    }
-
-                    $documento->setFolios($params->documento->folios);
-                    $documento->setFechaRegistro($fechaRegistro);
-                    $documento->setDescripcion($params->documento->descripcion);
-
-                    if ($params->documento->detalleLlegada) {
-                        $documento->setDetalleLlegada(
-                            $params->documento->detalleLlegada
-                        );
-                    }
-
-                    if ($params->documento->fechaLlegada) {
-                        $documento->setFechaLlegada(
-                            new \Datetime($params->documento->fechaLlegada)
-                        );
-                    }
-
-                    if ($params->documento->idMedioCorrespondenciaLlegada) {
-                        $medioCorrespondenciaLlegada = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
-                            $params->documento->idMedioCorrespondenciaLlegada
-                        );
-                        $documento->setMedioCorrespondenciaLlegada($medioCorrespondenciaLlegada);
-                    }
-
-                    if ($params->documento->idTipoCorrespondencia) {
-                        $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find(
-                            $params->documento->idTipoCorrespondencia
-                        );
-                        $documento->setTipoCorrespondencia($tipoCorrespondencia);
-                    }
-
-                    $fechaActual = new \Datetime(date('Y-m-d'));
-                    if ($params->documento->vigencia) {
-                        $vigencia = $params->documento->vigencia;
-                    }else{
-                        $vigencia = $tipoCorrespondencia->getDiasVigencia();
-                    }
-
-                    $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
-                        $fechaActual,
-                        $vigencia
-                    );
-                    $documento->setFechaVencimiento($fechaVencimiento);
-                    $documento->setDiasVigencia($vigencia);
-
-                    $documento->setPeticionario($peticionario);
-
-                    $file = $request->files->get('file');
-                   
-                    if ($file) {
-                        $extension = $file->guessExtension();
-                        $filename = md5(rand().time()).".".$extension;
-                        $dir=__DIR__.'/../../../../web/docs';
-
-                        $file->move($dir,$filename);
-                        $documento->setUrl($filename);
-                    }
-                    $documento->setEstado('PENDIENTE');
-                    
-                    $em->persist($documento);
-                    $em->flush();
-
-                    if ($params->medidaCautelar) {
-                        $medidaCautelar = new GdMedidaCautelar();
-
-                        $medidaCautelar->setNumeroOficio(
-                            $params->medidaCautelar->numeroOficio
-                        );
-                        $medidaCautelar->setQuienOrdena(
-                            $params->medidaCautelar->quienOrdena
-                        );
-                        $medidaCautelar->setFechaInicio(
-                            new \Datetime($params->medidaCautelar->fechaInicio)
-                        );
-                        $medidaCautelar->setFechaFin(
-                            new \Datetime($params->medidaCautelar->fechaFin)
-                        );
-                        $medidaCautelar->setImplicadoidentificacion(
-                            $params->medidaCautelar->identificacionImplicado
-                        );
-                        $medidaCautelar->setDelito($params->medidaCautelar->delito);
-                        $medidaCautelar->setDocumento($documento);
-
-                        $em->persist($medidaCautelar);
-                        $em->flush();
-
-                        /*if (count($params->vehiculo)) {
-                            foreach ($params->vehiculo as $key => $vehiculo) {
-                                $mgdMedidaCautelarVehiculo = new MgdMedidaCautelarVehiculo();
-
-                                $mgdMedidaCautelarVehiculo->setLugar($params->vehiculo[0]->lugar);
-                                $mgdMedidaCautelarVehiculo->setPlaca($params->vehiculo[0]->placa);
-
-                                if ($params->vehiculo[0]->claseId) {
-                                    $clase = $em->getRepository('AppBundle:Clase')->find(
-                                        $params->vehiculo[0]->claseId
-                                    );
-                                    $mgdMedidaCautelarVehiculo->setClase($clase);
-                                }
-                                $mgdMedidaCautelarVehiculo->setMedidaCautelar($mgdMedidaCautelar);
-
-                                $em->persist($mgdMedidaCautelarVehiculo);
-                                $em->flush();
-                            }
-                        }*/
-                    }
-
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Registro creado con éxito",
-                        'data' => $documento
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El usuario encontrado no tiene datos regostrados como ciudadano",
-                    );
-                }
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Ningún usuario encontrado",
+            if ($params->peticionarioNombres) {
+                $documento->setPeticionarioNombres(
+                    strtoupper($params->peticionarioNombres)
                 );
             }
+
+            if ($params->peticionarioApellidos) {
+                $documento->setPeticionarioApellidos(
+                    strtoupper($params->peticionarioApellidos)
+                );
+            }
+
+            if ($params->identificacion) {
+                $documento->setIdentificacion($params->identificacion);
+            }
+
+            if ($params->entidadNombre) {
+                $documento->setEntidadNombre(strtoupper($params->entidadNombre));
+            }
+
+            if (isset($params->idTipoIdentificacion)) {
+                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                    $params->idTipoIdentificacion
+                );
+                $documento->setTipoIdentificacion($tipoIdentificacion);
+            }
+
+            $documento->setEstado('PENDIENTE');
+            
+            $em->persist($documento);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito, su número de radicado es: ".$documento->getNumeroRadicado(),
+                'data' => $documento
+            );
         }else{
             $response = array(
                 'status' => 'error',
@@ -335,33 +232,22 @@ class GdDocumentoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $tipoPeticionario = $params->idTipoPeticionario;
+            $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getByFilter(
+                $params
+            );
 
-            if ($tipoPeticionario == "Persona") {
-                $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getByPeticionario(
-                    $tipoPeticionario,
-                    $params->identificacion
-                );
-            }else{
-                $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getByPeticionario(
-                    $tipoPeticionario,
-                    $params->entidadNombre,
-                    $params->numeroOficio
-                );
-            }
-            
-            if ($documentos == null) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No existen documentos registrados aún.", 
-                );
-            }else{
+            if ($documentos) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($documentos)." Documentos registrados.", 
                     'data'=> $documentos,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún resultado encontrado.", 
                 );
             }
         }else{
@@ -395,10 +281,71 @@ class GdDocumentoController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $documento = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->find(
-                $params->idDocumento
+                $params->documento->id
             );
             
             if ($documento) {
+                $fechaActual = new \Datetime(date('Y-m-d'));
+                if ($params->documento->vigencia) {
+                    $vigencia = $params->documento->vigencia;
+                }else{
+                    $vigencia = $tipoCorrespondencia->getDiasVigencia();
+                }
+
+                $fechaVencimiento = $this->get('app.gestion.documental')->getFechaVencimiento(
+                    $fechaActual,
+                    $vigencia
+                );
+                $documento->setFechaVencimiento($fechaVencimiento);
+                $documento->setDiasVigencia($vigencia);
+
+                if ($params->documento->numeroOficio) {
+                    $documento->setNumeroOficio(
+                        $params->documento->numeroOficio
+                    );
+                }else{
+                    $documento->setNumeroOficio('No registra');
+                }
+
+                $documento->setDescripcion($params->documento->descripcion);
+
+                if ($params->documento->detalleLlegada) {
+                    $documento->setDetalleLlegada(
+                        $params->documento->detalleLlegada
+                    );
+                }
+
+                if ($params->documento->fechaLlegada) {
+                    $documento->setFechaLlegada(
+                        new \Datetime($params->documento->fechaLlegada)
+                    );
+                }
+
+                if ($params->documento->idMedioCorrespondenciaLlegada) {
+                    $medioCorrespondenciaLlegada = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
+                        $params->documento->idMedioCorrespondenciaLlegada
+                    );
+                    $documento->setMedioCorrespondenciaLlegada($medioCorrespondenciaLlegada);
+                }
+
+                if ($params->documento->idTipoCorrespondencia) {
+                    $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find(
+                        $params->documento->idTipoCorrespondencia
+                    );
+                    $documento->setTipoCorrespondencia($tipoCorrespondencia);
+                }
+
+                $file = $request->files->get('file');
+               
+                if ($file) {
+                    $extension = $file->guessExtension();
+                    $filename = md5(rand().time()).".".$extension;
+                    $dir=__DIR__.'/../../../../web/docs';
+
+                    $file->move($dir,$filename);
+                    $documento->setUrl($filename);
+                }
+
                 $documento->setEstado('ASIGNADO');
 
                 $trazabilidad = new GdTrazabilidad();
