@@ -275,11 +275,40 @@ class CfgPlacaController extends Controller
     /**
      * datos para select 2 por modulo
      *
+     * @Route("/select/placas/por/sedeOperativa/rnrs", name="cfgplaca_select_sedeOperativa_rnrs")
+     * @Method({"GET", "POST"})
+     */
+
+    public function selectPlacaBySedeOperativaRnrs(Request $request)
+    {
+        $json = $request->get("data", null);
+        $params = json_decode($json);
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $placas = $em->getRepository('AppBundle:CfgPlaca')->findBy(
+            array(
+                'sedeOperativa' => $params->idSedeOperativa,
+                'tipoVehiculo' => 4,
+                'estado' => 'FABRICADA'
+            )
+        );
+        foreach ($placas as $key => $placa) {
+            $response[$key] = array(
+                'value' => $placa->getNumero(),
+                'label' => $placa->getNumero(),
+            );
+        }
+        return $helpers->json($response);
+    }
+    /**
+     * datos para select 2 por modulo
+     *
      * @Route("/select/placas/por/sedeOperativa/{id}", name="cfgplaca_select_sedeOperativa")
      * @Method({"GET", "POST"})
      */
 
-    public function selectPlacaBySedeOperativa( $id)
+    public function selectPlacaBySedeOperativa($id)
     {
         $response = null;
         $helpers = $this->get("app.helpers");
