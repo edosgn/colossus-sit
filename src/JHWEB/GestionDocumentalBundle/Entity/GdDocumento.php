@@ -101,14 +101,14 @@ class GdDocumento
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_llegada", type="datetime")
+     * @ORM\Column(name="fecha_llegada", type="datetime", nullable=true)
      */
     private $fechaLlegada;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="detalle_llegada", type="text")
+     * @ORM\Column(name="detalle_llegada", type="text", nullable=true)
      */
     private $detalleLlegada;
 
@@ -143,14 +143,35 @@ class GdDocumento
     /**
      * @var string
      *
-     * @ORM\Column(name="entidad_nombre", type="text", nullable=true)
+     * @ORM\Column(name="peticionario_nombres", type="string", length=255, nullable=true)
+     */
+    private $peticionarioNombres;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="peticionario_apellidos", type="string", length=255, nullable=true)
+     */
+    private $peticionarioApellidos;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="identificacion", type="bigint", nullable=true)
+     */
+    private $identificacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="entidad_nombre", type="string", length=255, nullable=true)
      */
     private $entidadNombre;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="entidad_cargo", type="text", nullable=true)
+     * @ORM\Column(name="entidad_cargo", type="string", length=255, nullable=true)
      */
     private $entidadCargo;
 
@@ -161,13 +182,13 @@ class GdDocumento
      */
     private $activo = true;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="documentos") */
+    private $tipoIdentificacion;
+
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="documentos")
      **/
     protected $sedeOperativa;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="documentos") */
-    protected $peticionario;
 
     /**
      * @ORM\ManyToOne(targetEntity="GdCfgTipoCorrespondencia", inversedBy="documentos")
@@ -217,7 +238,7 @@ class GdDocumento
     public function getFechaRegistro()
     {
         if ($this->fechaRegistro) {
-            return $this->fechaRegistro->format('d/m/Y h:i:s A');
+            return $this->fechaRegistro->format('d/m/Y');
         }
         return $this->fechaRegistro;
     }
@@ -610,6 +631,78 @@ class GdDocumento
     }
 
     /**
+     * Set peticionarioNombres
+     *
+     * @param string $peticionarioNombres
+     *
+     * @return GdDocumento
+     */
+    public function setPeticionarioNombres($peticionarioNombres)
+    {
+        $this->peticionarioNombres = $peticionarioNombres;
+
+        return $this;
+    }
+
+    /**
+     * Get peticionarioNombres
+     *
+     * @return string
+     */
+    public function getPeticionarioNombres()
+    {
+        return $this->peticionarioNombres;
+    }
+
+    /**
+     * Set peticionarioApellidos
+     *
+     * @param string $peticionarioApellidos
+     *
+     * @return GdDocumento
+     */
+    public function setPeticionarioApellidos($peticionarioApellidos)
+    {
+        $this->peticionarioApellidos = $peticionarioApellidos;
+
+        return $this;
+    }
+
+    /**
+     * Get peticionarioApellidos
+     *
+     * @return string
+     */
+    public function getPeticionarioApellidos()
+    {
+        return $this->peticionarioApellidos;
+    }
+
+    /**
+     * Set identificacion
+     *
+     * @param integer $identificacion
+     *
+     * @return GdDocumento
+     */
+    public function setIdentificacion($identificacion)
+    {
+        $this->identificacion = $identificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacion
+     *
+     * @return integer
+     */
+    public function getIdentificacion()
+    {
+        return $this->identificacion;
+    }
+
+    /**
      * Set entidadNombre
      *
      * @param string $entidadNombre
@@ -682,6 +775,30 @@ class GdDocumento
     }
 
     /**
+     * Set tipoIdentificacion
+     *
+     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
+     *
+     * @return GdDocumento
+     */
+    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    {
+        $this->tipoIdentificacion = $tipoIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacion
+     *
+     * @return \AppBundle\Entity\TipoIdentificacion
+     */
+    public function getTipoIdentificacion()
+    {
+        return $this->tipoIdentificacion;
+    }
+
+    /**
      * Set sedeOperativa
      *
      * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
@@ -703,30 +820,6 @@ class GdDocumento
     public function getSedeOperativa()
     {
         return $this->sedeOperativa;
-    }
-
-    /**
-     * Set peticionario
-     *
-     * @param \AppBundle\Entity\Ciudadano $peticionario
-     *
-     * @return GdDocumento
-     */
-    public function setPeticionario(\AppBundle\Entity\Ciudadano $peticionario = null)
-    {
-        $this->peticionario = $peticionario;
-
-        return $this;
-    }
-
-    /**
-     * Get peticionario
-     *
-     * @return \AppBundle\Entity\Ciudadano
-     */
-    public function getPeticionario()
-    {
-        return $this->peticionario;
     }
 
     /**
