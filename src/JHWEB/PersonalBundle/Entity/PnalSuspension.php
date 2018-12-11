@@ -5,12 +5,12 @@ namespace JHWEB\PersonalBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * PnalProroga
+ * PnalSuspension
  *
- * @ORM\Table(name="pnal_proroga")
- * @ORM\Entity(repositoryClass="JHWEB\PersonalBundle\Repository\PnalProrogaRepository")
+ * @ORM\Table(name="pnal_suspension")
+ * @ORM\Entity(repositoryClass="JHWEB\PersonalBundle\Repository\PnalSuspensionRepository")
  */
-class PnalProroga
+class PnalSuspension
 {
     /**
      * @var int
@@ -38,12 +38,13 @@ class PnalProroga
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroModificatorio", type="string", length=255)
+     * @ORM\Column(name="observacion", type="string", length=255)
      */
-    private $numeroModificatorio;
+    private $observacion;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="soats") */
     private $mPersonalFuncionario;
+
 
 
     /**
@@ -61,7 +62,7 @@ class PnalProroga
      *
      * @param \DateTime $fechaInicio
      *
-     * @return PnalProroga
+     * @return PnalSuspension
      */
     public function setFechaInicio($fechaInicio)
     {
@@ -85,7 +86,7 @@ class PnalProroga
      *
      * @param \DateTime $fechaFin
      *
-     * @return PnalProroga
+     * @return PnalSuspension
      */
     public function setFechaFin($fechaFin)
     {
@@ -105,27 +106,27 @@ class PnalProroga
     }
 
     /**
-     * Set numeroModificatorio
+     * Set observacion
      *
-     * @param string $numeroModificatorio
+     * @param string $observacion
      *
-     * @return PnalProroga
+     * @return PnalSuspension
      */
-    public function setNumeroModificatorio($numeroModificatorio)
+    public function setObservacion($observacion)
     {
-        $this->numeroModificatorio = $numeroModificatorio;
+        $this->observacion = $observacion;
 
         return $this;
     }
 
     /**
-     * Get numeroModificatorio
+     * Get observacion
      *
      * @return string
      */
-    public function getNumeroModificatorio()
+    public function getObservacion()
     {
-        return $this->numeroModificatorio;
+        return $this->observacion;
     }
 
     /**
@@ -133,7 +134,7 @@ class PnalProroga
      *
      * @param \AppBundle\Entity\MpersonalFuncionario $mPersonalFuncionario
      *
-     * @return PnalProroga
+     * @return PnalSuspension
      */
     public function setMPersonalFuncionario(\AppBundle\Entity\MpersonalFuncionario $mPersonalFuncionario = null)
     {

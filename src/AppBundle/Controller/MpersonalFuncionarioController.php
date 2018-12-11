@@ -673,4 +673,53 @@ class MpersonalFuncionarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/suspensiones", name="mpersonalfuncionario_record_suspensiones")
+     * @Method({"GET", "POST"})
+     */
+    public function recordSuspensionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+           
+           
+            $pnalSuspensions = $em->getRepository('JHWEBPersonalBundle:PnalSuspension')->findBy(
+                array(
+                    'mPersonalFuncionario' => $params->id
+                )
+            ); 
+                
+            if ($pnalSuspensions) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados", 
+                    'data'=> $pnalSuspensions,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",  
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }

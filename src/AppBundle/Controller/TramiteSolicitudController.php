@@ -82,42 +82,52 @@ class TramiteSolicitudController extends Controller
      * @Method({"GET", "POST"})
      */ 
     public function showFacturaFormularioAction(Request $request)
-    {$em = $this->getDoctrine()->getManager();
+    {
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
-        
-        
-        
+   
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
 
+            $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
+                $params->idFormulario
+            );
+
+            $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($params->idFactura,$tramite->getId());
+
             $tramiteSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findOneBy(
                 array(
                     'estado' => 1, 
-                    'tramiteFactura'=> $params->idTramiteFactura
-                    )
+                    'tramiteFactura'=> $tramiteFactura->getId(),
+                )
             );
+            
+            $tramiteSolicitud->setDatos($helpers->json($tramiteSolicitud->getDatos()));
 
-            // foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
-            //     var_dump($tramiteSolicitud->getDatos()->tramiteFormulario);
-                    
-            // }
-            $tramiteSolicitud->setResumen((array) $tramiteSolicitud->getResumen());
             $em = $this->getDoctrine()->getManager();
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Registro encontrado",
-                'data' => $tramiteSolicitud,
-            );
+            if ($tramiteSolicitud) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado",
+                    'data' => $tramiteSolicitud,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Tramite no realizado",
+                    'data' => $tramite->getNombre(),
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -190,8 +200,8 @@ class TramiteSolicitudController extends Controller
             $tramiteSolicitud->setDocumentacion($documentacionCompleta);
             $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
             $tramiteSolicitud->setEstado(true);
-            $tramiteSolicitud->setDatos($datos);
-            $tramiteSolicitud->setResumen($params->datos->resumen);
+            $tramiteSolicitud->setDatos((array)$datos);
+            $tramiteSolicitud->setResumen((array)$params->datos->resumen);
 
             $em->persist($tramiteSolicitud);
             $em->flush();
