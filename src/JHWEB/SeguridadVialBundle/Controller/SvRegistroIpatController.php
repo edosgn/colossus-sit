@@ -373,7 +373,7 @@ class SvRegistroIpatController extends Controller
                 $ipat->setHospitalConductor($hospitalConductor);
             }
 
-            $ipat->setDescripcionLesion($params[0]->datosLimitacion->descripcionLesion);
+            $ipat->setDescripcionLesionConductor($params[0]->datosLimitacion->descripcionLesionConductor);
 
             $ipat->setPlaca($params[0]->datosLimitacion->placa);
             $ipat->setPlacaRemolque($params[0]->datosLimitacion->placaRemolque);
@@ -543,6 +543,7 @@ class SvRegistroIpatController extends Controller
                 );
             }
 
+            $ipat->setDescripcionLesionVictima($params[0]->datosLimitacion->descripcionLesionVictima);
             $ipat->setObservaciones($params[0]->datosLimitacion->observaciones);
             $ipat->setActivo(true);
             $em->persist($ipat);
@@ -864,7 +865,6 @@ class SvRegistroIpatController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
-            var_dump($params->file);
             
             if($params->file == null) {
                 $response = array(
