@@ -1021,13 +1021,6 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="departamento_residencia_testigo", type="string", nullable = true)
-     */
-    private $departamentoResidenciaTestigo;
-    
-    /**
-     * @var string
-     *
      * @ORM\Column(name="direccion_residencia_testigo", type="string", nullable = true)
      */
     private $direccionResidenciaTestigo;
@@ -1103,6 +1096,47 @@ class SvRegistroIpat
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis", inversedBy="hipotesis")
      */
     private $hipotesis;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_peaton", type="string", nullable = true)
+     */
+    private $totalPeaton;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_acompaniante", type="string", nullable = true)
+     */
+    private $totalAcompaniante;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_pasajero", type="string", nullable = true)
+     */
+    private $totalPasajero;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_conductor", type="string", nullable = true)
+     */
+    private $totalConductor;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_herido", type="string", nullable = true)
+     */
+    private $totalHerido;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_muerto", type="string", nullable = true)
+     */
+    private $totalMuerto;
 
     /**
      * @var bool
@@ -3707,30 +3741,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set departamentoResidenciaTestigo
-     *
-     * @param string $departamentoResidenciaTestigo
-     *
-     * @return SvRegistroIpat
-     */
-    public function setDepartamentoResidenciaTestigo($departamentoResidenciaTestigo)
-    {
-        $this->departamentoResidenciaTestigo = $departamentoResidenciaTestigo;
-
-        return $this;
-    }
-
-    /**
-     * Get departamentoResidenciaTestigo
-     *
-     * @return string
-     */
-    public function getDepartamentoResidenciaTestigo()
-    {
-        return $this->departamentoResidenciaTestigo;
-    }
-
-    /**
      * Set direccionResidenciaTestigo
      *
      * @param string $direccionResidenciaTestigo
@@ -4856,5 +4866,149 @@ class SvRegistroIpat
     public function getDescripcionLesionVictima()
     {
         return $this->descripcionLesionVictima;
+    }
+
+    /**
+     * Set totalPeaton
+     *
+     * @param string $totalPeaton
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalPeaton($totalPeaton)
+    {
+        $this->totalPeaton = $totalPeaton;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPeaton
+     *
+     * @return string
+     */
+    public function getTotalPeaton()
+    {
+        return $this->totalPeaton;
+    }
+
+    /**
+     * Set totalAcompaniante
+     *
+     * @param string $totalAcompaniante
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalAcompaniante($totalAcompaniante)
+    {
+        $this->totalAcompaniante = $totalAcompaniante;
+
+        return $this;
+    }
+
+    /**
+     * Get totalAcompaniante
+     *
+     * @return string
+     */
+    public function getTotalAcompaniante()
+    {
+        return $this->totalAcompaniante;
+    }
+
+    /**
+     * Set totalPasajero
+     *
+     * @param string $totalPasajero
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalPasajero($totalPasajero)
+    {
+        $this->totalPasajero = $totalPasajero;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPasajero
+     *
+     * @return string
+     */
+    public function getTotalPasajero()
+    {
+        return $this->totalPasajero;
+    }
+
+    /**
+     * Set totalConductor
+     *
+     * @param string $totalConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalConductor($totalConductor)
+    {
+        $this->totalConductor = $totalConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get totalConductor
+     *
+     * @return string
+     */
+    public function getTotalConductor()
+    {
+        return $this->totalConductor;
+    }
+
+    /**
+     * Set totalHerido
+     *
+     * @param string $totalHerido
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalHerido($totalHerido)
+    {
+        $this->totalHerido = $totalHerido;
+
+        return $this;
+    }
+
+    /**
+     * Get totalHerido
+     *
+     * @return string
+     */
+    public function getTotalHerido()
+    {
+        return $this->totalHerido;
+    }
+
+    /**
+     * Set totalMuerto
+     *
+     * @param string $totalMuerto
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalMuerto($totalMuerto)
+    {
+        $this->totalMuerto = $totalMuerto;
+
+        return $this;
+    }
+
+    /**
+     * Get totalMuerto
+     *
+     * @return string
+     */
+    public function getTotalMuerto()
+    {
+        return $this->totalMuerto;
     }
 }
