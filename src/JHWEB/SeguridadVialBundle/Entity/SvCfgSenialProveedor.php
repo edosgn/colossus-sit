@@ -31,10 +31,9 @@ class SvCfgSenialProveedor
     /**
      * @var string
      *
-     * @ORM\Column(name="nit", type="string", length=20)
+     * @ORM\Column(name="nit", type="string", length=20, nullable=true)
      */
     private $nit;
-
 
     /**
      * Get id

@@ -253,7 +253,10 @@ class MpersonalFuncionario
      */
     public function getFechaInicio()
     {
-        return $this->fechaInicio->format('Y-m-d');
+        if ($this->fechaInicio) {
+            return $this->fechaInicio->format('Y-m-d');
+        }
+        return $this->fechaInicio;
     }
 
     /**
@@ -277,7 +280,10 @@ class MpersonalFuncionario
      */
     public function getFechaFin()
     {
-        return $this->fechaFin->format('Y-m-d');
+        if ($this->fechaFin) {
+            return $this->fechaFin->format('Y-m-d');
+        }
+        return $this->fechaFin;
     }
 
     /**

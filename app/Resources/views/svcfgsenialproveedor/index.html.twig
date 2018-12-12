@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgsenialproveedors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Nit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgSenialProveedor in svCfgSenialProveedors %}
+            <tr>
+                <td><a href="{{ path('svcfgsenialproveedor_show', { 'id': svCfgSenialProveedor.id }) }}">{{ svCfgSenialProveedor.id }}</a></td>
+                <td>{{ svCfgSenialProveedor.nombre }}</td>
+                <td>{{ svCfgSenialProveedor.nit }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgsenialproveedor_show', { 'id': svCfgSenialProveedor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svcfgsenialproveedor_edit', { 'id': svCfgSenialProveedor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svcfgsenialproveedor_new') }}">Create a new svCfgSenialProveedor</a>
+        </li>
+    </ul>
+{% endblock %}
