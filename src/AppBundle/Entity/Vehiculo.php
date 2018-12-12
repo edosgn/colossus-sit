@@ -189,7 +189,10 @@ class Vehiculo
     private $empresaBlindadora;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad", inversedBy="nacionalidades") */
-    private $nacionalidad;    
+    private $nacionalidad;   
+    
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pais", inversedBy="paises") */
+    private $paisRegistro;   
 
     /** 
      * Get id
@@ -943,5 +946,29 @@ class Vehiculo
     public function getNacionalidad()
     {
         return $this->nacionalidad;
+    }
+
+    /**
+     * Set paisRegistro
+     *
+     * @param \AppBundle\Entity\Pais $paisRegistro
+     *
+     * @return Vehiculo
+     */
+    public function setPaisRegistro(\AppBundle\Entity\Pais $paisRegistro = null)
+    {
+        $this->paisRegistro = $paisRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get paisRegistro
+     *
+     * @return \AppBundle\Entity\Pais
+     */
+    public function getPaisRegistro()
+    {
+        return $this->paisRegistro;
     }
 }

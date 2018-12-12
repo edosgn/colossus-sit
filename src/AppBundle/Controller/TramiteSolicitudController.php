@@ -47,7 +47,7 @@ class TramiteSolicitudController extends Controller
      *
      * @Route("/{tramiteSolicitudId}/show/tramiteSolicitud", name="tramite_solicitud_tramiteFactura")
      * @Method({"GET", "POST"})
-     */
+     */ 
     public function showAction(Request $request, $tramiteSolicitudId)
     {$em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
@@ -57,10 +57,55 @@ class TramiteSolicitudController extends Controller
 
         $tramiteSolicitud->setDatos((array) $tramiteSolicitud->getDatos());
 
-        // var_dump($helpers->json((array)$tramiteSolicitud->getDatos()));
-        // die();
-
         if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro encontrado",
+                'data' => $tramiteSolicitud,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a seguimientoEntrega entity.
+     *
+     * @Route("/tramiteSolicitud/search/idFactura/formulario", name="tramite_solicitud_tramiteFactura_formulario")
+     * @Method({"GET", "POST"})
+     */ 
+    public function showFacturaFormularioAction(Request $request)
+    {$em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        
+        
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $tramiteSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findOneBy(
+                array(
+                    'estado' => 1, 
+                    'tramiteFactura'=> $params->idTramiteFactura
+                    )
+            );
+
+            // foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
+            //     var_dump($tramiteSolicitud->getDatos()->tramiteFormulario);
+                    
+            // }
+            $tramiteSolicitud->setResumen((array) $tramiteSolicitud->getResumen());
             $em = $this->getDoctrine()->getManager();
             $response = array(
                 'status' => 'success',
@@ -89,7 +134,6 @@ class TramiteSolicitudController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
@@ -137,15 +181,11 @@ class TramiteSolicitudController extends Controller
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
                     $datos->tramiteFormulario
                 );
-                // var_dump($factura->getId());
-                // var_dump($datos->tramiteFormulario);
-                // die();
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(),$tramite->getId());
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                 $tramiteFactura->setRealizado(true);
                 $em->flush();
             }
-
             $tramiteSolicitud->setObservacion($observacion);
             $tramiteSolicitud->setDocumentacion($documentacionCompleta);
             $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
@@ -163,7 +203,6 @@ class TramiteSolicitudController extends Controller
                 'idTramiteSolicitud' => $tramiteSolicitud->getId(),
                 'tramiteSolitud' => $tramiteSolicitud
             );
-            //}
         } else {
             $response = array(
                 'status' => 'error',

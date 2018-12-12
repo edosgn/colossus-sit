@@ -25,7 +25,7 @@ class TramiteFacturaRepository extends \Doctrine\ORM\EntityRepository
     //     return $consulta->getResult();
 
     // }
-    public function getFacturaModulo($moduloId, $idFactura, $vehiculoId)
+    public function getFacturaModuloVehiculo($moduloId, $idFactura, $vehiculoId)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT tf

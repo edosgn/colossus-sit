@@ -373,7 +373,7 @@ class SvRegistroIpatController extends Controller
                 $ipat->setHospitalConductor($hospitalConductor);
             }
 
-            $ipat->setDescripcionLesion($params[0]->datosLimitacion->descripcionLesion);
+            $ipat->setDescripcionLesionConductor($params[0]->datosLimitacion->descripcionLesionConductor);
 
             $ipat->setPlaca($params[0]->datosLimitacion->placa);
             $ipat->setPlacaRemolque($params[0]->datosLimitacion->placaRemolque);
@@ -543,6 +543,7 @@ class SvRegistroIpatController extends Controller
                 );
             }
 
+            $ipat->setDescripcionLesionVictima($params[0]->datosLimitacion->descripcionLesionVictima);
             $ipat->setObservaciones($params[0]->datosLimitacion->observaciones);
             $ipat->setActivo(true);
             $em->persist($ipat);
@@ -863,34 +864,42 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $ipat = new SvRegistroIpat();
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
+            
+            if($params->file == null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Por favor seleccione un archivo para subir",
+                );
+            } else {
+                foreach($params->file as $key => $dato) {
+                    
+                    $ipat = new SvRegistroIpat();
+                    if($ipat -> getNombresConductor() != $dato[7] && $ipat -> getApellidosConductor() != $dato[8] && $ipat -> getFechaAccidente() != $dato[2] && $ipat -> getHoraAccidente() != $dato[3]) {
 
-            $datafile = array();
-            foreach($params->file as $key => $dato) {
-                /* if( $dato[2] == $params->datos->fechaInicio) {
-                var_dump($dato[2]);
+                        $ipat -> setFechaAccidente(new \Datetime($dato[2]));
+                        $ipat -> setHoraAccidente(new \Datetime($dato[3]));
+                        $ipat -> setDiaAccidente($dato[4]);
+                        $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
+                        $ipat -> setGravedad($gravedadFile);
+                        $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
+                        $ipat -> setTipoVictima($tipoVictimaFile);
+                        $ipat -> setNombresConductor($dato[7]);
+                        $ipat -> setApellidosConductor($dato[8]);
+                        $ipat -> setCiudadResidenciaConductor($dato[0]);
+                        $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
+                        $ipat -> setSexoConductor($sexoConductorFile->getSigla());
+                        $ipat -> setEdadConductor($dato[10]);
+                        $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
+                        $ipat -> setClaseAccidente($claseAccidenteFile);
+                        $ipat->setActivo(true);
 
-                } */
-                $ipat -> setFechaAccidente(new \Datetime($dato[2]));
-                var_dump($dato[2]);
-                $ipat -> setHoraAccidente(new \Datetime($dato[3]));
-                $ipat -> setDiaAccidente($dato[4]);
-                $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
-                $ipat -> setGravedad($gravedadFile);
-                $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
-                $ipat -> setTipoVictima($tipoVictimaFile);
-                $ipat -> setCiudadResidenciaConductor($dato[0]);
-                $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
-                $ipat -> setSexoConductor($sexoConductorFile->getSigla());
-                $ipat -> setEdadConductor($dato[10]);
-                $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
-                $ipat -> setClaseAccidente($claseAccidenteFile);
-                $ipat->setActivo(true);
-                $em->persist($ipat);
-                $em->flush();
+                        $em->persist($ipat);
+                        $em->flush();
+                    }
+                }
             }
-
             if ($ipats) {
                 $response = array(
                     'status' => 'success',

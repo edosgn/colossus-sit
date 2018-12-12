@@ -71,6 +71,11 @@ class VhloRemolqueController extends Controller
                 $placa = new CfgPlaca();
                 $placa->setNumero($params->placa);
 
+                $numeroFactura = $params->vehiculo->numeroFactura;
+                $valor = $params->vehiculo->valor;
+                $fechaFactura = $params->vehiculo->fechaFactura;
+                $fechaFactura = new \DateTime($fechaFactura);
+
                 $cfgTipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->findOneByModulo(4);
                 $placa->setTipoVehiculo($cfgTipoVehiculo);
 
@@ -80,6 +85,11 @@ class VhloRemolqueController extends Controller
                 $em->flush();
 
                 $vehiculo = new Vehiculo();
+                
+                $vehiculo->setNumeroFactura($numeroFactura);
+                $vehiculo->setfechaFactura($fechaFactura);
+                $vehiculo->setValor($valor);
+
 
                 $vehiculo->setPlaca($placa);
                 $vehiculo->setSedeOperativa($sedeOperativa);
@@ -117,6 +127,16 @@ class VhloRemolqueController extends Controller
                 if (isset($params->idCombustible)) {
                     $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
                     $vehiculo->setCombustible($combustible);
+                }
+
+                if (isset($params->idCombustible)) {
+                    $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
+                    $vehiculo->setCombustible($combustible);
+                }
+                 
+                if (isset($params->idSedeOperativa)) {
+                    $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->idSedeOperativa);
+                    $vehiculo->setSedeOperativa($sedeOperativa);
                 }
 
                 $vehiculo->setEstado(true);

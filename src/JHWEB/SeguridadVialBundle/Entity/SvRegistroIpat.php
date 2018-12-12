@@ -804,9 +804,9 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion_lesion", type="string", nullable = true)
+     * @ORM\Column(name="descripcion_lesion_conductor", type="string", nullable = true)
      */
-    private $descripcionLesion;
+    private $descripcionLesionConductor;
 
     /**
      * @var bool
@@ -975,6 +975,13 @@ class SvRegistroIpat
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima", inversedBy="gravedades")
      */
     private $gravedadVictima;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion_lesion_victima", type="string", nullable = true)
+     */
+    private $descripcionLesionVictima;
 
     /**
      * @var string
@@ -3121,30 +3128,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set descripcionLesion
-     *
-     * @param string $descripcionLesion
-     *
-     * @return SvRegistroIpat
-     */
-    public function setDescripcionLesion($descripcionLesion)
-    {
-        $this->descripcionLesion = $descripcionLesion;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcionLesion
-     *
-     * @return string
-     */
-    public function getDescripcionLesion()
-    {
-        return $this->descripcionLesion;
-    }
-
-    /**
      * Set victima
      *
      * @param boolean $victima
@@ -4825,5 +4808,53 @@ class SvRegistroIpat
     public function getDiaAccidente()
     {
         return $this->diaAccidente;
+    }
+
+    /**
+     * Set descripcionLesionConductor
+     *
+     * @param string $descripcionLesionConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDescripcionLesionConductor($descripcionLesionConductor)
+    {
+        $this->descripcionLesionConductor = $descripcionLesionConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcionLesionConductor
+     *
+     * @return string
+     */
+    public function getDescripcionLesionConductor()
+    {
+        return $this->descripcionLesionConductor;
+    }
+
+    /**
+     * Set descripcionLesionVictima
+     *
+     * @param string $descripcionLesionVictima
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDescripcionLesionVictima($descripcionLesionVictima)
+    {
+        $this->descripcionLesionVictima = $descripcionLesionVictima;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcionLesionVictima
+     *
+     * @return string
+     */
+    public function getDescripcionLesionVictima()
+    {
+        return $this->descripcionLesionVictima;
     }
 }

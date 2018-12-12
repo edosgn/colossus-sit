@@ -78,10 +78,21 @@ class VhloMaquinariaController extends Controller
                 $em->persist($placa);
                 $em->flush();
 
+                $numeroFactura = $params->vehiculo->numeroFactura;
+                $valor = $params->vehiculo->valor;
+                $fechaFactura = $params->vehiculo->fechaFactura;
+                $fechaFactura = new \DateTime($fechaFactura);
+
+
                 $vehiculo = new Vehiculo();
 
                 $vehiculo->setPlaca($placa);
                 $vehiculo->setSedeOperativa($sedeOperativa);
+                
+                $vehiculo->setNumeroFactura($numeroFactura);
+                $vehiculo->setfechaFactura($fechaFactura);
+                $vehiculo->setValor($valor);
+
 
                 $vehiculo->setSerie($params->serie);
                 $vehiculo->setVin($params->vin);
