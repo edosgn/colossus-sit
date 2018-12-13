@@ -274,7 +274,7 @@ class SvCfgUnidadReceptoraController extends Controller
         foreach ($unidadesReceptoras as $key => $unidadReceptora) {
             $response[$key] = array(
                 'value' => $unidadReceptora->getId(),
-                'label' => $unidadReceptora->getValor().' %'
+                'label' => $unidadReceptora->getCodigo().'_'. $unidadReceptora->getNombre(),
             );
         }
         return $helpers->json($response);

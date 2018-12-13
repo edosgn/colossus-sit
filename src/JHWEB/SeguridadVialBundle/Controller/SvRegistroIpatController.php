@@ -969,4 +969,56 @@ class SvRegistroIpatController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Obtener Correspondio.
+     *
+     * @Route("/getCorrespondio", name="get_correspondio")
+     * @Method({"GET", "POST"})
+     */
+    public function getCorrespondioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $em = $this->getDoctrine()->getManager();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->idMunicipio);
+            $entidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
+            $unidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
+            $anio = $params->idAnio;
+            $consecutivo = $params->consecutivo;
+            $municipioDane = 0;
+            if(strlen($municipio->getCodigoDane()) <= 4){
+                $municipioDane = "0" . $municipio->getCodigoDane();
+            }
+            $correspondio = $municipioDane . $entidad->getCodigo() . $unidad->getCodigo() . $anio . $consecutivo;
+
+            if ($correspondio) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "correspondió generado.",
+                    'data' => $correspondio,
+                );
+            } else {
+
+            }
+        }
+        else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
 }
