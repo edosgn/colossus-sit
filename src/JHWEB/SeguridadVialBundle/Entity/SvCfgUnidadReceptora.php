@@ -22,6 +22,13 @@ class SvCfgUnidadReceptora
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer", nullable= true)
+     */
+    private $codigo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", nullable= true)
@@ -153,5 +160,29 @@ class SvCfgUnidadReceptora
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return SvCfgUnidadReceptora
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 }

@@ -317,15 +317,26 @@ class SvRegistroIpatController extends Controller
 
             $ipat->setNombresConductor($params[0]->datosLimitacion->nombresConductor);
             $ipat->setApellidosConductor($params[0]->datosLimitacion->apellidosConductor);
-            $ipat->setTipoIdentificacionConductor($params[0]->datosLimitacion->tipoIdentificacionConductor);
+
+            
+            $tipoIdentificacionConductor = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionConductor);
+            //$ipat->setTipoIdentificacionConductor($params[0]->datosLimitacion->tipoIdentificacionConductor);
+            $ipat->setTipoIdentificacionConductor($tipoIdentificacionConductor->getNombre());
+
             $ipat->setIdentificacionConductor($params[0]->datosLimitacion->identificacionConductor);
-            $ipat->setNacionalidadConductor($params[0]->datosLimitacion->nacionalidadConductor);
+            
+            $nacionalidadConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params[0]->datosLimitacion->nacionalidadConductor);
+            //$ipat->setNacionalidadConductor($params[0]->datosLimitacion->nacionalidadConductor);
+            $ipat->setNacionalidadConductor($nacionalidadConductor->getNombre());
+
             $ipat->setFechaNacimientoConductor(new \Datetime($params[0]->datosLimitacion->fechaNacimientoConductor));
 
             $edadConductor = $this->get("app.helpers")->calculateAge($params[0]->datosLimitacion->fechaNacimientoConductor);
             $ipat->setEdadConductor($edadConductor);
 
-            $ipat->setSexoConductor($params[0]->datosLimitacion->sexoConductor);
+
+            $sexoConductor = $em->getRepository('AppBundle:Genero')->find($params[0]->datosLimitacion->sexoConductor);
+            $ipat->setSexoConductor($sexoConductor->getSigla());
 
             if ($params[0]->datosLimitacion->idGravedadConductor) {
                 $gravedadConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find(
@@ -335,7 +346,10 @@ class SvRegistroIpatController extends Controller
             }
 
             $ipat->setDireccionResidenciaConductor($params[0]->datosLimitacion->direccionResidenciaConductor);
-            $ipat->setCiudadResidenciaConductor($params[0]->datosLimitacion->ciudadResidenciaConductor);
+
+            $ciudadResidenciaConductor = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->ciudadResidenciaConductor);
+            $ipat->setCiudadResidenciaConductor($ciudadResidenciaConductor->getNombre());
+
             $ipat->setTelefonoConductor($params[0]->datosLimitacion->telefonoConductor);
             $ipat->setPracticoExamenConductor($params[0]->datosLimitacion->practicoExamenConductor);
             $ipat->setAutorizoConductor($params[0]->datosLimitacion->autorizoConductor);
@@ -429,7 +443,10 @@ class SvRegistroIpatController extends Controller
             $ipat->setMismoConductor($params[0]->datosLimitacion->mismoConductor);
             $ipat->setNombresPropietario($params[0]->datosLimitacion->nombresPropietario);
             $ipat->setApellidosPropietario($params[0]->datosLimitacion->apellidosPropietario);
-            $ipat->setTipoIdentificacionPropietario($params[0]->datosLimitacion->tipoIdentificacionPropietario);
+
+            $tipoIdentificacionPropietario = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionPropietario);
+            $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
+            
             $ipat->setIdentificacionPropietario($params[0]->datosLimitacion->identificacionPropietario);
             $ipat->setClase($params[0]->datosLimitacion->clase);
             $ipat->setServicio($params[0]->datosLimitacion->servicio);
@@ -440,15 +457,23 @@ class SvRegistroIpatController extends Controller
             $ipat->setFalla($params[8]->fallas);
             $ipat->setLugarImpacto($params[3]->lugaresImpacto);
 
-            $ipat->setTipoIdentificacionTestigo($params[0]->datosLimitacion->tipoIdentificacionTestigo);
+            
+            $tipoIdentificacionTestigo = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionTestigo);
+            $ipat->setTipoIdentificacionTestigo($tipoIdentificacionTestigo->getNombre());
+            
             $ipat->setIdentificacionTestigo($params[0]->datosLimitacion->identificacionTestigo);
-            $ipat->setDepartamentoResidenciaTestigo($params[0]->datosLimitacion->departamentoResidenciaTestigo);
+            
             $ipat->setDireccionResidenciaTestigo($params[0]->datosLimitacion->direccionTestigo);
-            $ipat->setCiudadResidenciaTestigo($params[0]->datosLimitacion->ciudadResidenciaTestigo);
+            
+            $ciudadResidenciaTestigo = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->ciudadResidenciaTestigo);
+            $ipat->setCiudadResidenciaTestigo($ciudadResidenciaTestigo->getNombre());
             $ipat->setTelefonoTestigo($params[0]->datosLimitacion->telefonoTestigo);
-
+            
             $ipat->setGradoAgente($params[0]->datosLimitacion->gradoAgente);
-            $ipat->setTipoIdentificacionAgente($params[0]->datosLimitacion->tipoIdentificacionAgente);
+            
+            $tipoIdentificacionAgente = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionAgente);
+            $ipat->setTipoIdentificacionAgente($tipoIdentificacionAgente->getNombre());
+
             $ipat->setIdentificacionAgente($params[0]->datosLimitacion->identificacionAgente);
             $ipat->setNombresAgente($params[0]->datosLimitacion->nombresAgente);
             $ipat->setApellidosAgente($params[0]->datosLimitacion->apellidosAgente);
@@ -458,17 +483,28 @@ class SvRegistroIpatController extends Controller
             $ipat->setVictima($params[0]->datosLimitacion->victima);
             $ipat->setnombresVictima($params[0]->datosLimitacion->nombresVictima);
             $ipat->setApellidosVictima($params[0]->datosLimitacion->apellidosVictima);
-            $ipat->setTipoIdentificacionVictima($params[0]->datosLimitacion->tipoIdentificacionVictima);
+
+            $tipoIdentificacionVictima = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionVictima);
+            $ipat->setTipoIdentificacionVictima($tipoIdentificacionVictima->getNombre());
+
             $ipat->setIdentificacionVictima($params[0]->datosLimitacion->identificacionVictima);
-            $ipat->setNacionalidadVictima($params[0]->datosLimitacion->nacionalidadVictima);
+
+            $nacionalidadVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params[0]->datosLimitacion->nacionalidadVictima);
+            $ipat->setNacionalidadVictima($nacionalidadVictima->getNombre());
+
             $ipat->setFechaNacimientoVictima(new \Datetime($params[0]->datosLimitacion->fechaNacimientoVictima));
 
             $edadVictima = $this->get("app.helpers")->calculateAge($params[0]->datosLimitacion->fechaNacimientoVictima);
             $ipat->setEdadVictima($edadVictima);
 
-            $ipat->setSexoVictima($params[0]->datosLimitacion->sexoVictima);
+            $sexoVictima = $em->getRepository('AppBundle:Genero')->find($params[0]->datosLimitacion->sexoVictima);
+            $ipat->setSexoVictima($sexoVictima->getSigla());
+
             $ipat->setDireccionResidenciaVictima($params[0]->datosLimitacion->direccionResidenciaVictima);
-            $ipat->setCiudadResidenciaVictima($params[0]->datosLimitacion->ciudadResidenciaVictima);
+
+            $ciudadResidenciaVictima = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->ciudadResidenciaVictima);
+            $ipat->setCiudadResidenciaVictima($ciudadResidenciaVictima->getNombre());
+
             $ipat->setTelefonoVictima($params[0]->datosLimitacion->telefonoVictima);
 
             if ($params[0]->datosLimitacion->idHospitalVictima) {
@@ -545,6 +581,27 @@ class SvRegistroIpatController extends Controller
 
             $ipat->setDescripcionLesionVictima($params[0]->datosLimitacion->descripcionLesionVictima);
             $ipat->setObservaciones($params[0]->datosLimitacion->observaciones);
+            
+            $ipat->setTotalPeaton($params[0]->datosLimitacion->totalPeatones);
+            $ipat->setTotalAcompaniante($params[0]->datosLimitacion->totalAcompaniantes);
+            $ipat->setTotalPasajero($params[0]->datosLimitacion->totalPasajeros);
+            $ipat->setTotalConductor($params[0]->datosLimitacion->totalConductores);
+            $ipat->setTotalHerido($params[0]->datosLimitacion->totalHeridos);
+            $ipat->setTotalHerido($params[0]->datosLimitacion->totalHeridos);
+            $ipat->setTotalMuerto($params[0]->datosLimitacion->totalMuertos);
+            
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->idMunicipio);
+            $ipat->setMunicipioCorrespondio($municipio);
+
+            $entidadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params[0]->datosLimitacion->idEntidad);
+            $ipat->setEntidadCorrespondio($entidadAccidente);
+
+            $unidadReceptora = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params[0]->datosLimitacion->idUnidad);
+            $ipat->setUnidadCorrespondio($unidadReceptora);
+            $ipat->setAnioCorrespondio($params[0]->datosLimitacion->idAnio);
+            $ipat->setConsecutivoCorrespondio($params[0]->datosLimitacion->consecutivo);
+            $ipat->setCorrespondio($params[0]->datosLimitacion->correspondio);
+
             $ipat->setActivo(true);
             $em->persist($ipat);
             $em->flush();
@@ -924,4 +981,58 @@ class SvRegistroIpatController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Obtener Correspondio.
+     *
+     * @Route("/getCorrespondio", name="get_correspondio")
+     * @Method({"GET", "POST"})
+     */
+    public function getCorrespondioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $em = $this->getDoctrine()->getManager();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->idMunicipio);
+            $entidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
+            $unidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
+            $anio = $params->idAnio;
+            $consecutivo = $params->consecutivo;
+            $municipioDane = 0;
+            if(strlen($municipio->getCodigoDane()) <= 4){
+                $municipioDane = "0" . $municipio->getCodigoDane();
+            }
+            $correspondio = $municipioDane . $entidad->getCodigo() . $unidad->getCodigo() . $anio . $consecutivo;
+
+            if ($correspondio) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "correspondió generado.",
+                    'data' => $correspondio,
+                );
+            } else {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "no se pudo calcular el número de correspondió",
+                );
+            }
+        }
+        else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

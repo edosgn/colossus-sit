@@ -22,6 +22,13 @@ class SvCfgHipotesis
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer", nullable= true)
+     */
+    private $codigo;    
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", nullable= true)
@@ -43,6 +50,30 @@ class SvCfgHipotesis
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return SvCfgHipotesis
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**
