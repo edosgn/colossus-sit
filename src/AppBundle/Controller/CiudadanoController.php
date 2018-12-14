@@ -56,7 +56,7 @@ class CiudadanoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            if($params->campo){
+            if($params->campo == 'importacion-temporal'){
                 $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($params->ciudadano->tipoIdentificacionUsuarioId);
                 $fechaNacimiento = (isset($params->ciudadano->fechaNacimiento)) ? $params->ciudadano->fechaNacimiento : null;
                 $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
@@ -114,33 +114,32 @@ class CiudadanoController extends Controller
                         'message' => "Ciudadano creado con éxito para importación temporal.",
                     );
             } else {            
-                $numeroIdentificacion = $params->numeroIdentificacionUsuario;
-                $tipoIdentificacionUsuarioId = $params->tipoIdentificacionUsuarioId;
-                $primerNombre = strtoupper($params->primerNombreUsuario);
-                $segundoNombre = strtoupper($params->segundoNombreUsuario);
-                $primerApellido = strtoupper($params->primerApellidoUsuario);
-                $segundoApellido = strtoupper($params->segundoApellidoUsuario);
-                $direccion = (isset($params->direccion)) ? $params->direccion : null;
-                $telefonoUsuario = (isset($params->telefonoUsuario)) ? $params->telefonoUsuario : null;
-                $correoUsuario = (isset($params->correoUsuario)) ? $params->correoUsuario : null;
-                $fechaNacimiento = (isset($params->fechaNacimiento)) ? $params->fechaNacimiento : null;
+                $numeroIdentificacion = $params->ciudadano->numeroIdentificacionUsuario;
+                $tipoIdentificacionUsuarioId = $params->ciudadano->tipoIdentificacionUsuarioId;
+                $primerNombre = strtoupper($params->ciudadano->primerNombreUsuario);
+                $segundoNombre = strtoupper($params->ciudadano->segundoNombreUsuario);
+                $primerApellido = strtoupper($params->ciudadano->primerApellidoUsuario);
+                $segundoApellido = strtoupper($params->ciudadano->segundoApellidoUsuario);
+                $direccion = (isset($params->ciudadano->direccion)) ? $params->ciudadano->direccion : null;
+                $telefonoUsuario = (isset($params->ciudadano->telefonoUsuario)) ? $params->ciudadano->telefonoUsuario : null;
+                $correoUsuario = (isset($params->ciudadano->correoUsuario)) ? $params->ciudadano->correoUsuario : null;
+                $fechaNacimiento = (isset($params->ciudadano->fechaNacimiento)) ? $params->ciudadano->fechaNacimiento : null;
                 $fechaNacimientoDateTime = new \DateTime($fechaNacimiento);
                 
 
-                $fechaExpedicionDocumento = (isset($params->fechaExpedicionDocumento)) ? $params->fechaExpedicionDocumento : null;
+                $fechaExpedicionDocumento = (isset($params->ciudadano->fechaExpedicionDocumento)) ? $params->ciudadano->fechaExpedicionDocumento : null;
                 $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
                 
-                $direccionTrabajo = (isset($params->direccionTrabajo)) ? $params->direccionTrabajo : null;
+                $direccionTrabajo = (isset($params->ciudadano->direccionTrabajo)) ? $params->ciudadano->direccionTrabajo : null;
             
                 $usuario = $em->getRepository('UsuarioBundle:Usuario')->findBy(
                     array('identificacion' => $numeroIdentificacion,'tipoIdentificacion'=>$tipoIdentificacionUsuarioId)
                 ); 
-
                 if (!$usuario) {
-                    $generoId = (isset($params->generoId)) ? $params->generoId : null;
-                    $grupoSanguineoId = (isset($params->grupoSanguineoId)) ? $params->grupoSanguineoId : null;
-                    $municipioNacimientoId = (isset($params->municipioNacimientoId)) ? $params->municipioNacimientoId : null;
-                    $municipioResidenciaId = (isset($params->municipioResidenciaId)) ? $params->municipioResidenciaId : null;
+                    $generoId = (isset($params->ciudadano->generoId)) ? $params->ciudadano->generoId : null;
+                    $grupoSanguineoId = (isset($params->ciudadano->grupoSanguineoId)) ? $params->ciudadano->grupoSanguineoId : null;
+                    $municipioNacimientoId = (isset($params->ciudadano->municipioNacimientoId)) ? $params->ciudadano->municipioNacimientoId : null;
+                    $municipioResidenciaId = (isset($params->ciudadano->municipioResidenciaId)) ? $params->ciudadano->municipioResidenciaId : null;
 
                     $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionUsuarioId);
                     
@@ -176,9 +175,9 @@ class CiudadanoController extends Controller
                     $usuario->setCreatedAt();
                     $usuario->setUpdatedAt();
 
-                    if ($params->idRole) {
+                    if ($params->ciudadano->idRole) {
                         $cfgRole = $em->getRepository('UsuarioBundle:UserCfgRole')->find(
-                            $params->idRole
+                            $params->ciudadano->idRole
                         );
                         $usuario->setCfgRole($cfgRole);
                     }

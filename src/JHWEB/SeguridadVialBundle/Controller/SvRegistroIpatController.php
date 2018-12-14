@@ -588,7 +588,19 @@ class SvRegistroIpatController extends Controller
             $ipat->setTotalConductor($params[0]->datosLimitacion->totalConductores);
             $ipat->setTotalHerido($params[0]->datosLimitacion->totalHeridos);
             $ipat->setTotalHerido($params[0]->datosLimitacion->totalHeridos);
-            $ipat->setTotalMuerto($params[0]->datosLimitacion->totalHMuertos);
+            $ipat->setTotalMuerto($params[0]->datosLimitacion->totalMuertos);
+            
+            $municipio = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->idMunicipio);
+            $ipat->setMunicipioCorrespondio($municipio);
+
+            $entidadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params[0]->datosLimitacion->idEntidad);
+            $ipat->setEntidadCorrespondio($entidadAccidente);
+
+            $unidadReceptora = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params[0]->datosLimitacion->idUnidad);
+            $ipat->setUnidadCorrespondio($unidadReceptora);
+            $ipat->setAnioCorrespondio($params[0]->datosLimitacion->idAnio);
+            $ipat->setConsecutivoCorrespondio($params[0]->datosLimitacion->consecutivo);
+            $ipat->setCorrespondio($params[0]->datosLimitacion->correspondio);
 
             $ipat->setActivo(true);
             $em->persist($ipat);
@@ -1007,7 +1019,11 @@ class SvRegistroIpatController extends Controller
                     'data' => $correspondio,
                 );
             } else {
-
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "no se pudo calcular el número de correspondió",
+                );
             }
         }
         else {
@@ -1017,8 +1033,6 @@ class SvRegistroIpatController extends Controller
                 'message' => "Autorización no válida",
             );
         }
-        
         return $helpers->json($response);
     }
-
 }

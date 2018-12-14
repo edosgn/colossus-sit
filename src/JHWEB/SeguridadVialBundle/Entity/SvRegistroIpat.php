@@ -1131,12 +1131,57 @@ class SvRegistroIpat
      * @ORM\Column(name="total_herido", type="string", nullable = true)
      */
     private $totalHerido;
+
     /**
      * @var string
      *
      * @ORM\Column(name="total_muerto", type="string", nullable = true)
      */
     private $totalMuerto;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     */
+    private $municipioCorrespondio;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente", inversedBy="entidadesaccidente")
+     */
+    private $entidadCorrespondio;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora", inversedBy="unidadesreceptoras")
+     */
+    private $unidadCorrespondio;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="anio_correspondio", type="integer", nullable = true)
+     */
+    private $anioCorrespondio;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo_correspondio", type="integer", nullable = true)
+     */
+    private $consecutivoCorrespondio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correspondio", type="string", nullable = true)
+     */
+    private $correspondio;
+
 
     /**
      * @var bool
@@ -5010,5 +5055,149 @@ class SvRegistroIpat
     public function getTotalMuerto()
     {
         return $this->totalMuerto;
+    }
+
+    /**
+     * Set anioCorrespondio
+     *
+     * @param integer $anioCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setAnioCorrespondio($anioCorrespondio)
+    {
+        $this->anioCorrespondio = $anioCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get anioCorrespondio
+     *
+     * @return integer
+     */
+    public function getAnioCorrespondio()
+    {
+        return $this->anioCorrespondio;
+    }
+
+    /**
+     * Set consecutivoCorrespondio
+     *
+     * @param integer $consecutivoCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConsecutivoCorrespondio($consecutivoCorrespondio)
+    {
+        $this->consecutivoCorrespondio = $consecutivoCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivoCorrespondio
+     *
+     * @return integer
+     */
+    public function getConsecutivoCorrespondio()
+    {
+        return $this->consecutivoCorrespondio;
+    }
+
+    /**
+     * Set correspondio
+     *
+     * @param string $correspondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setCorrespondio($correspondio)
+    {
+        $this->correspondio = $correspondio;
+
+        return $this;
+    }
+
+    /**
+     * Get correspondio
+     *
+     * @return string
+     */
+    public function getCorrespondio()
+    {
+        return $this->correspondio;
+    }
+
+    /**
+     * Set municipioCorrespondio
+     *
+     * @param \AppBundle\Entity\Municipio $municipioCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setMunicipioCorrespondio(\AppBundle\Entity\Municipio $municipioCorrespondio = null)
+    {
+        $this->municipioCorrespondio = $municipioCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipioCorrespondio
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipioCorrespondio()
+    {
+        return $this->municipioCorrespondio;
+    }
+
+    /**
+     * Set entidadCorrespondio
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente $entidadCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setEntidadCorrespondio(\JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente $entidadCorrespondio = null)
+    {
+        $this->entidadCorrespondio = $entidadCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCorrespondio
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente
+     */
+    public function getEntidadCorrespondio()
+    {
+        return $this->entidadCorrespondio;
+    }
+
+    /**
+     * Set unidadCorrespondio
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora $unidadCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setUnidadCorrespondio(\JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora $unidadCorrespondio = null)
+    {
+        $this->unidadCorrespondio = $unidadCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get unidadCorrespondio
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora
+     */
+    public function getUnidadCorrespondio()
+    {
+        return $this->unidadCorrespondio;
     }
 }
