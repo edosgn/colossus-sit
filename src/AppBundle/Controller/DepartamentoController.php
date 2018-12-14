@@ -296,17 +296,20 @@ class DepartamentoController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($departamentos as $key => $departamento) {
-        $response[$key] = array(
-            'value' => $departamento->getId(),
-            'label' => $departamento->getCodigoDane()."_".$departamento->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $departamentos = $em->getRepository('AppBundle:Departamento')->findBy(
+            array('estado' => 1)
+        );
+
+        $response = null;
+
+        foreach ($departamentos as $key => $departamento) {
+            $response[$key] = array(
+                'value' => $departamento->getId(),
+                'label' => $departamento->getCodigoDane()."_".$departamento->getNombre(),
             );
-      }
+        }
        return $helpers->json($response);
     }
 

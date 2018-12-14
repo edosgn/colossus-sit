@@ -176,6 +176,27 @@ class GdDocumento
     private $entidadCargo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="direccion", type="string", length=255, nullable=true)
+     */
+    private $direccion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono", type="string", length=50, nullable=true)
+     */
+    private $telefono;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correo", type="string", length=100, nullable=true)
+     */
+    private $correo;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -184,6 +205,9 @@ class GdDocumento
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="documentos") */
     private $tipoIdentificacion;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="documentos") */
+    private $municipio;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="documentos")
@@ -751,6 +775,78 @@ class GdDocumento
     }
 
     /**
+     * Set direccion
+     *
+     * @param string $direccion
+     *
+     * @return GdDocumento
+     */
+    public function setDireccion($direccion)
+    {
+        $this->direccion = $direccion;
+
+        return $this;
+    }
+
+    /**
+     * Get direccion
+     *
+     * @return string
+     */
+    public function getDireccion()
+    {
+        return $this->direccion;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return GdDocumento
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Set correo
+     *
+     * @param string $correo
+     *
+     * @return GdDocumento
+     */
+    public function setCorreo($correo)
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get correo
+     *
+     * @return string
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -796,6 +892,30 @@ class GdDocumento
     public function getTipoIdentificacion()
     {
         return $this->tipoIdentificacion;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \AppBundle\Entity\Municipio $municipio
+     *
+     * @return GdDocumento
+     */
+    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
     }
 
     /**
