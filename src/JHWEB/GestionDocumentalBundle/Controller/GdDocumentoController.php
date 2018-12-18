@@ -264,10 +264,10 @@ class GdDocumentoController extends Controller
     /**
      * Asigna el documento a un fiuncionario para que genere un respuesta.
      *
-     * @Route("/assign", name="gddocumento_assign")
+     * @Route("/update", name="gddocumento_update")
      * @Method({"GET", "POST"})
      */
-    public function assignAction(Request $request)
+    public function updateAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -285,6 +285,31 @@ class GdDocumentoController extends Controller
             );
             
             if ($documento) {
+                if ($params->documento->direccion) {
+                    $documento->setDireccion(
+                        $params->documento->direccion
+                    );
+                }
+
+                if ($params->documento->telefono) {
+                    $documento->setTelefono(
+                        $params->documento->telefono
+                    );
+                }
+
+                if ($params->documento->correo) {
+                    $documento->setCorreo(
+                        $params->documento->correo
+                    );
+                }
+
+                if ($params->documento->municipio) {
+                    $medioCorrespondenciaLlegada = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
+                        $params->documento->municipio
+                    );
+                    $documento->setMedioCorrespondenciaLlegada($medioCorrespondenciaLlegada);
+                }
+
                 $fechaActual = new \Datetime(date('Y-m-d'));
                 if ($params->documento->vigencia) {
                     $vigencia = $params->documento->vigencia;
@@ -321,6 +346,13 @@ class GdDocumentoController extends Controller
                     );
                 }
 
+                if ($params->documento->municipio) {
+                    $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                        $params->documento->municipio
+                    );
+                    $documento->setMunicipio($municipio);
+                }
+
                 if ($params->documento->idMedioCorrespondenciaLlegada) {
                     $medioCorrespondenciaLlegada = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
                         $params->documento->idMedioCorrespondenciaLlegada
@@ -346,11 +378,60 @@ class GdDocumentoController extends Controller
                     $documento->setUrl($filename);
                 }
 
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ha registrado la información complementaria",
+                    'data' => $documento
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado"
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Asigna el documento a un fiuncionario para que genere un respuesta.
+     *
+     * @Route("/assign", name="gddocumento_assign")
+     * @Method({"GET", "POST"})
+     */
+    public function assignAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->find(
+                $params->idDocumento
+            );
+            
+            if ($documento) {
                 $documento->setEstado('ASIGNADO');
 
                 $trazabilidad = new GdTrazabilidad();
 
-                if ($params->observaciones) {
+                if (isset($params->observaciones)) {
                     $trazabilidad->setObservaciones($params->observaciones);
                 }
 
@@ -374,7 +455,7 @@ class GdDocumentoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Radicado No. ".$documento->getNumeroRadicado()." ha sido derivado y se encuentra ".$trazabilidad->getEstado(),
+                    'message' => "Radicado No. ".$trazabilidad->getDocumento()->getNumeroRadicado()." se encuentra ".$trazabilidad->getDocumento()->getEstado(),
                     'data' => $trazabilidad
                 );
             }else{
