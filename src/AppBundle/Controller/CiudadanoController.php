@@ -77,6 +77,7 @@ class CiudadanoController extends Controller
                 $ciudadano->setFechaExpedicionDocumento($fechaExpedicionDocumentoDateTime);
                 $ciudadano->setDireccion($params->ciudadano->direccion);
                 $ciudadano->setEstado(true);
+                $ciudadano->setEnrolado(false);
 
 
                 $usuario = new Usuario();
@@ -338,7 +339,6 @@ class CiudadanoController extends Controller
                     $pwd = hash('sha256', $params->password);
                     $usuario->setPassword($pwd);
                 }
-
 
                 $em->flush();
                 
