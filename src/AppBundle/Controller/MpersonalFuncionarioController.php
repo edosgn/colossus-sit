@@ -134,6 +134,8 @@ class MpersonalFuncionarioController extends Controller
                     $funcionario->setNovedad($params->novedad);
                 }
 
+                $funcionario->setModificatorio(false);
+
                 $em->persist($funcionario);
                 $em->flush();
 

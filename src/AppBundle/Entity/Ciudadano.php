@@ -31,7 +31,7 @@ class Ciudadano
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_expedicion_documento", type="datetime")
+     * @ORM\Column(name="fecha_expedicion_documento", type="datetime", nullable=true)
      */
     private $fechaExpedicionDocumento;
 
@@ -66,7 +66,12 @@ class Ciudadano
      */
     private $usuario;
    
-
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="enrolado", type="boolean", nullable=true)
+     */
+    private $enrolado;
     
     public function __toString()
     {
@@ -300,5 +305,29 @@ class Ciudadano
     public function getUsuario()
     {
         return $this->usuario;
+    }
+
+    /**
+     * Set enrolado
+     *
+     * @param boolean $enrolado
+     *
+     * @return Ciudadano
+     */
+    public function setEnrolado($enrolado)
+    {
+        $this->enrolado = $enrolado;
+
+        return $this;
+    }
+
+    /**
+     * Get enrolado
+     *
+     * @return boolean
+     */
+    public function getEnrolado()
+    {
+        return $this->enrolado;
     }
 }

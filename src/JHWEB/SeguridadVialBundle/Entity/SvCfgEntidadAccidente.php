@@ -22,6 +22,13 @@ class SvCfgEntidadAccidente
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer", nullable= true)
+     */
+    private $codigo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", nullable= true)
@@ -91,5 +98,29 @@ class SvCfgEntidadAccidente
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return SvCfgEntidadAccidente
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 }

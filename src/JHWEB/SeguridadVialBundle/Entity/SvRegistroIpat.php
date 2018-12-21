@@ -1021,13 +1021,6 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="departamento_residencia_testigo", type="string", nullable = true)
-     */
-    private $departamentoResidenciaTestigo;
-    
-    /**
-     * @var string
-     *
      * @ORM\Column(name="direccion_residencia_testigo", type="string", nullable = true)
      */
     private $direccionResidenciaTestigo;
@@ -1103,6 +1096,115 @@ class SvRegistroIpat
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis", inversedBy="hipotesis")
      */
     private $hipotesis;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_peaton", type="string", nullable = true)
+     */
+    private $totalPeaton;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_acompaniante", type="string", nullable = true)
+     */
+    private $totalAcompaniante;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_pasajero", type="string", nullable = true)
+     */
+    private $totalPasajero;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_conductor", type="string", nullable = true)
+     */
+    private $totalConductor;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_herido", type="string", nullable = true)
+     */
+    private $totalHerido;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="total_muerto", type="string", nullable = true)
+     */
+    private $totalMuerto;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     */
+    private $municipioCorrespondio;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente", inversedBy="entidadesaccidente")
+     */
+    private $entidadCorrespondio;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora", inversedBy="unidadesreceptoras")
+     */
+    private $unidadCorrespondio;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="anio_correspondio", type="integer", nullable = true)
+     */
+    private $anioCorrespondio;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo_correspondio", type="integer", nullable = true)
+     */
+    private $consecutivoCorrespondio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="correspondio", type="string", nullable = true)
+     */
+    private $correspondio;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="conductores", type="array", nullable=true)
+     */
+    private $conductores;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="vehiculos", type="array", nullable=true)
+     */
+    private $vehiculos;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="victimas", type="array", nullable=true)
+     */
+    private $victimas;
 
     /**
      * @var bool
@@ -3707,30 +3809,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set departamentoResidenciaTestigo
-     *
-     * @param string $departamentoResidenciaTestigo
-     *
-     * @return SvRegistroIpat
-     */
-    public function setDepartamentoResidenciaTestigo($departamentoResidenciaTestigo)
-    {
-        $this->departamentoResidenciaTestigo = $departamentoResidenciaTestigo;
-
-        return $this;
-    }
-
-    /**
-     * Get departamentoResidenciaTestigo
-     *
-     * @return string
-     */
-    public function getDepartamentoResidenciaTestigo()
-    {
-        return $this->departamentoResidenciaTestigo;
-    }
-
-    /**
      * Set direccionResidenciaTestigo
      *
      * @param string $direccionResidenciaTestigo
@@ -4856,5 +4934,365 @@ class SvRegistroIpat
     public function getDescripcionLesionVictima()
     {
         return $this->descripcionLesionVictima;
+    }
+
+    /**
+     * Set totalPeaton
+     *
+     * @param string $totalPeaton
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalPeaton($totalPeaton)
+    {
+        $this->totalPeaton = $totalPeaton;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPeaton
+     *
+     * @return string
+     */
+    public function getTotalPeaton()
+    {
+        return $this->totalPeaton;
+    }
+
+    /**
+     * Set totalAcompaniante
+     *
+     * @param string $totalAcompaniante
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalAcompaniante($totalAcompaniante)
+    {
+        $this->totalAcompaniante = $totalAcompaniante;
+
+        return $this;
+    }
+
+    /**
+     * Get totalAcompaniante
+     *
+     * @return string
+     */
+    public function getTotalAcompaniante()
+    {
+        return $this->totalAcompaniante;
+    }
+
+    /**
+     * Set totalPasajero
+     *
+     * @param string $totalPasajero
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalPasajero($totalPasajero)
+    {
+        $this->totalPasajero = $totalPasajero;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPasajero
+     *
+     * @return string
+     */
+    public function getTotalPasajero()
+    {
+        return $this->totalPasajero;
+    }
+
+    /**
+     * Set totalConductor
+     *
+     * @param string $totalConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalConductor($totalConductor)
+    {
+        $this->totalConductor = $totalConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get totalConductor
+     *
+     * @return string
+     */
+    public function getTotalConductor()
+    {
+        return $this->totalConductor;
+    }
+
+    /**
+     * Set totalHerido
+     *
+     * @param string $totalHerido
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalHerido($totalHerido)
+    {
+        $this->totalHerido = $totalHerido;
+
+        return $this;
+    }
+
+    /**
+     * Get totalHerido
+     *
+     * @return string
+     */
+    public function getTotalHerido()
+    {
+        return $this->totalHerido;
+    }
+
+    /**
+     * Set totalMuerto
+     *
+     * @param string $totalMuerto
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalMuerto($totalMuerto)
+    {
+        $this->totalMuerto = $totalMuerto;
+
+        return $this;
+    }
+
+    /**
+     * Get totalMuerto
+     *
+     * @return string
+     */
+    public function getTotalMuerto()
+    {
+        return $this->totalMuerto;
+    }
+
+    /**
+     * Set anioCorrespondio
+     *
+     * @param integer $anioCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setAnioCorrespondio($anioCorrespondio)
+    {
+        $this->anioCorrespondio = $anioCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get anioCorrespondio
+     *
+     * @return integer
+     */
+    public function getAnioCorrespondio()
+    {
+        return $this->anioCorrespondio;
+    }
+
+    /**
+     * Set consecutivoCorrespondio
+     *
+     * @param integer $consecutivoCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConsecutivoCorrespondio($consecutivoCorrespondio)
+    {
+        $this->consecutivoCorrespondio = $consecutivoCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivoCorrespondio
+     *
+     * @return integer
+     */
+    public function getConsecutivoCorrespondio()
+    {
+        return $this->consecutivoCorrespondio;
+    }
+
+    /**
+     * Set correspondio
+     *
+     * @param string $correspondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setCorrespondio($correspondio)
+    {
+        $this->correspondio = $correspondio;
+
+        return $this;
+    }
+
+    /**
+     * Get correspondio
+     *
+     * @return string
+     */
+    public function getCorrespondio()
+    {
+        return $this->correspondio;
+    }
+
+    /**
+     * Set municipioCorrespondio
+     *
+     * @param \AppBundle\Entity\Municipio $municipioCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setMunicipioCorrespondio(\AppBundle\Entity\Municipio $municipioCorrespondio = null)
+    {
+        $this->municipioCorrespondio = $municipioCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipioCorrespondio
+     *
+     * @return \AppBundle\Entity\Municipio
+     */
+    public function getMunicipioCorrespondio()
+    {
+        return $this->municipioCorrespondio;
+    }
+
+    /**
+     * Set entidadCorrespondio
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente $entidadCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setEntidadCorrespondio(\JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente $entidadCorrespondio = null)
+    {
+        $this->entidadCorrespondio = $entidadCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadCorrespondio
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente
+     */
+    public function getEntidadCorrespondio()
+    {
+        return $this->entidadCorrespondio;
+    }
+
+    /**
+     * Set unidadCorrespondio
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora $unidadCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setUnidadCorrespondio(\JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora $unidadCorrespondio = null)
+    {
+        $this->unidadCorrespondio = $unidadCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get unidadCorrespondio
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora
+     */
+    public function getUnidadCorrespondio()
+    {
+        return $this->unidadCorrespondio;
+    }
+
+    /**
+     * Set conductores
+     *
+     * @param array $conductores
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConductores($conductores)
+    {
+        $this->conductores = $conductores;
+
+        return $this;
+    }
+
+    /**
+     * Get conductores
+     *
+     * @return array
+     */
+    public function getConductores()
+    {
+        return $this->conductores;
+    }
+
+    /**
+     * Set vehiculos
+     *
+     * @param array $vehiculos
+     *
+     * @return SvRegistroIpat
+     */
+    public function setVehiculos($vehiculos)
+    {
+        $this->vehiculos = $vehiculos;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculos
+     *
+     * @return array
+     */
+    public function getVehiculos()
+    {
+        return $this->vehiculos;
+    }
+
+    /**
+     * Set victimas
+     *
+     * @param array $victimas
+     *
+     * @return SvRegistroIpat
+     */
+    public function setVictimas($victimas)
+    {
+        $this->victimas = $victimas;
+
+        return $this;
+    }
+
+    /**
+     * Get victimas
+     *
+     * @return array
+     */
+    public function getVictimas()
+    {
+        return $this->victimas;
     }
 }

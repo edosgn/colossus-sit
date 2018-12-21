@@ -220,7 +220,7 @@ class SvCfgHipotesisController extends Controller
         foreach ($svCfgHipotesis as $key => $hipotesis) {
             $response[$key] = array(
                 'value' => $hipotesis->getId(),
-                'label' => $hipotesis->getId().'_'. $hipotesis->getNombre(),
+                'label' => $hipotesis->getCodigo().'_'. $hipotesis->getNombre(),
             );
         }
         return $helpers->json($response);

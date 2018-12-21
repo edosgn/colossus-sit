@@ -223,7 +223,7 @@ class SvCfgEntidadAccidenteController extends Controller
       foreach ($entidadesAccidente as $key => $entidadAccidente) {
         $response[$key] = array(
             'value' => $entidadAccidente->getId(),
-            'label' => $entidadAccidente->getNombre(),
+            'label' => $entidadAccidente->getCodigo().'_'.$entidadAccidente->getNombre(),
             );
       }
        return $helpers->json($response);

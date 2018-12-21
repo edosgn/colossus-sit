@@ -1,6 +1,3 @@
-jhweb_personal_pnal_suspension:
-    resource: "@JHWEBPersonalBundle/Controller/PnalSuspensionController.php"
-    type:     annotation
 
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
