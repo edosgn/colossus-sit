@@ -19,7 +19,7 @@ class ConceptoParametroTramiteController extends Controller
      *
      * @Route("/", name="conceptoparametrotramite_index")
      * @Method("GET")
-     */
+     */ 
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
@@ -57,10 +57,10 @@ class ConceptoParametroTramiteController extends Controller
 
             
             $em = $this->getDoctrine()->getManager();
-            foreach ($params->trmites as $key => $tramitePrecioNombre) {
+            foreach ($params->trmites as $key => $idTramitePrecio) {
                 $conceptoParametroTramite = new ConceptoParametroTramite;
                 
-                $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->findOneByNombre($tramitePrecioNombre);
+                $tramitePrecio = $em->getRepository('AppBundle:TramitePrecio')->find($idTramitePrecio);
                 $conceptoParametro = $em->getRepository('AppBundle:ConceptoParametro')->find($params->concepto);
                 $conceptoParametroTramite->setTramitePrecio($tramitePrecio);
                 $conceptoParametroTramite->setConceptoParametro($conceptoParametro);
@@ -69,10 +69,10 @@ class ConceptoParametroTramiteController extends Controller
                 $em->persist($conceptoParametroTramite);
                 $em->flush();
 
-            }
-
+            } 
+ 
             $response = array(
-                'status' => 'success',
+                'status' => 'success', 
                 'code' => 200,
                 'msj' => "concepto creado con exito", 
             );

@@ -520,6 +520,11 @@ class FacturaController extends Controller
         $tramitesFacturaArray = false;
 
         $mflRetefuenteArray=[];
+        $conceptosArray=[];
+        $conceptosTotal=0;
+        $tramiteTotal=0;
+
+       
         
         foreach ($params->tramitesValor as $key => $tramiteValor) {
             $tramiteFactura = new TramiteFactura();
@@ -558,22 +563,42 @@ class FacturaController extends Controller
                 }
             }
 
+            $conceptosParametroTramite = $em->getRepository('AppBundle:ConceptoParametroTramite')->findBy(
+                array('tramitePrecio' => $tramitePrecio->getId(), 'estado'=>true)
+            );
+
+            foreach ($conceptosParametroTramite as $key => $conceptoParametroTramite) {
+                $conceptosArray[$key]= array(
+                    'valor' => $conceptoParametroTramite->getConceptoParametro()->getValor(),
+                    'nombre' => $conceptoParametroTramite->getConceptoParametro()->getNombre()
+                );
+                $conceptosTotal = $conceptosTotal + $conceptoParametroTramite->getConceptoParametro()->getValor();
+            }
+            
+            
             $tramiteFactura->setFactura($factura);
             $tramiteFactura->setTramitePrecio($tramitePrecio);
             $tramiteFactura->setEstado(true);
             $tramiteFactura->setRealizado(false);
             $tramiteFactura->setCantidad(1);
-
-            $tramitesFacturaArray[]= array(
-                $tramiteFactura
+            
+            $tramiteTotal = $tramiteTotal + $tramiteFactura->getTramitePrecio()->getValor();
+            $tramitesFacturaArray[$key]= array(
+                'valor' => $tramiteFactura->getTramitePrecio()->getValor(),
+                'nombre' => $tramiteFactura->getTramitePrecio()->getNombre()
             );
         }
-        
+        // var_dump($conceptosArray);
+        //     die();
+       
      
         $html = $this->renderView('@App/factura/pdfFactura.html.twig', array(
             'factura'=>$factura,
             'tramitesFacturaArray'=>$tramitesFacturaArray,
             'mflRetefuenteArray'=>$mflRetefuenteArray,
+            'conceptosArray'=>$conceptosArray,
+            'conceptosTotal'=>$conceptosTotal,
+            'tramiteTotal'=>$tramiteTotal,
         ));
 
         $nombrePdf = ($this->get('app.pdf.factura')->templateSummary($html,$factura));
