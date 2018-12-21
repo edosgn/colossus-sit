@@ -1184,6 +1184,29 @@ class SvRegistroIpat
 
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="conductores", type="array", nullable=true)
+     */
+    private $conductores;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="vehiculos", type="array", nullable=true)
+     */
+    private $vehiculos;
+
+
+    /**
+     * @var array
+     *
+     * @ORM\Column(name="victimas", type="array", nullable=true)
+     */
+    private $victimas;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -5199,5 +5222,77 @@ class SvRegistroIpat
     public function getUnidadCorrespondio()
     {
         return $this->unidadCorrespondio;
+    }
+
+    /**
+     * Set conductores
+     *
+     * @param array $conductores
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConductores($conductores)
+    {
+        $this->conductores = $conductores;
+
+        return $this;
+    }
+
+    /**
+     * Get conductores
+     *
+     * @return array
+     */
+    public function getConductores()
+    {
+        return $this->conductores;
+    }
+
+    /**
+     * Set vehiculos
+     *
+     * @param array $vehiculos
+     *
+     * @return SvRegistroIpat
+     */
+    public function setVehiculos($vehiculos)
+    {
+        $this->vehiculos = $vehiculos;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculos
+     *
+     * @return array
+     */
+    public function getVehiculos()
+    {
+        return $this->vehiculos;
+    }
+
+    /**
+     * Set victimas
+     *
+     * @param array $victimas
+     *
+     * @return SvRegistroIpat
+     */
+    public function setVictimas($victimas)
+    {
+        $this->victimas = $victimas;
+
+        return $this;
+    }
+
+    /**
+     * Get victimas
+     *
+     * @return array
+     */
+    public function getVictimas()
+    {
+        return $this->victimas;
     }
 }
