@@ -418,4 +418,26 @@ class TramitePrecioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="tramite_precio_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectTramitePrecioAction()
+    {
+        $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $tramitesPrecio = $em->getRepository('AppBundle:TramitePrecio')->findAll();
+        foreach ($tramitesPrecio as $key => $tramitePrecio) {
+            $response[$key] = array(
+                'value' => $tramitePrecio->getId(),
+                'label' => $tramitePrecio->getNombre(),
+            );
+        }
+        return $helpers->json($response);
+    }
 }

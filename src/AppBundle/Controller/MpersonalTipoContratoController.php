@@ -69,6 +69,7 @@ class MpersonalTipoContratoController extends Controller
 
                 $tipoContrato->setNombre($params->nombre);
                 $tipoContrato->setHorarios($params->horarios);
+                $tipoContrato->setProrroga($params->prorroga);
                 $tipoContrato->setActivo(true);
 
                 $em = $this->getDoctrine()->getManager();
@@ -129,6 +130,7 @@ class MpersonalTipoContratoController extends Controller
             if ($tipoContrato!=null) {
                 $tipoContrato->setNombre($params->nombre);
                 $tipoContrato->setHorarios($params->horarios);
+                $tipoContrato->setProrroga($params->prorroga);
                 
                 $em->flush();
 

@@ -42,11 +42,19 @@ class MpersonalTipoContrato
      */
     private $horarios;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="prorroga", type="boolean")
+     */
+    private $prorroga;
+
+
 
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -94,7 +102,7 @@ class MpersonalTipoContrato
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -123,5 +131,29 @@ class MpersonalTipoContrato
     public function getHorarios()
     {
         return $this->horarios;
+    }
+
+    /**
+     * Set prorroga
+     *
+     * @param boolean $prorroga
+     *
+     * @return MpersonalTipoContrato
+     */
+    public function setProrroga($prorroga)
+    {
+        $this->prorroga = $prorroga;
+
+        return $this;
+    }
+
+    /**
+     * Get prorroga
+     *
+     * @return boolean
+     */
+    public function getProrroga()
+    {
+        return $this->prorroga;
     }
 }

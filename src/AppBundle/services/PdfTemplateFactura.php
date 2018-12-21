@@ -37,13 +37,13 @@ class PdfTemplateFactura extends TCPDF{
         // var_dump($factura->getNumero());
         // die();
         $barcode = new BarcodeGenerator();
-        $barcode->setText($factura->getFechaCreacion().$factura->getNumero());
+        $barcode->setText($factura->getFechaCreacion()->format('Y-m-d').$factura->getNumero());
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setScale(2);
         $barcode->setThickness(25);
-        $barcode->setFontSize(10);
+        $barcode->setFontSize(5);
         $code = $barcode->generate();
 
         $imgDescuento = \base64_decode($code);
@@ -65,7 +65,7 @@ class PdfTemplateFactura extends TCPDF{
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // set margins
-        $pdf->SetMargins('30', '25', '30');
+        $pdf->SetMargins('5', '10', '5');
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -84,7 +84,7 @@ class PdfTemplateFactura extends TCPDF{
         // ---------------------------------------------------------
 
         // set font
-        $pdf->SetFont('helvetica', '', 10, '', true);
+        $pdf->SetFont('helvetica', '', 9, '', true);
 
         // Add a page
         // This method has several options, check the source code documentation for more information.

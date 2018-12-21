@@ -1,6 +1,3 @@
-jhweb_seguridad_vial_sv_cfg_senial_proveedor:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgSenialProveedorController.php"
-    type:     annotation
 
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"

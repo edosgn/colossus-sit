@@ -3,101 +3,88 @@
   </header>
   <body>
     <p class="text-justify">
-    	Numero factura, {{ factura.numero }}.
+    	<br>
     	<br>
     	<br>
     	<br>
     </p>
-    <p style="text-align:center;">
-        <b>Subsecretaria de transito y transporte departamental de nariño</b>
-        <br>      
+    <table style="padding:8px;background-color:#e7e7e7">
+        <tr>
+            <td><b>Ciudad:</b>  {{ factura.sedeOperativa.municipio.nombre }}</td> 
+            <td><b>Fecha Genera:</b> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
+            <td><b>Fecha Vence:</b> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
+            <td><b>Cuenta bancaria:</b> 039-8756-5</td>
+        </tr>
+        <tr>
+            <td colspan="3"><b>Nombre usuario:</b> {{ factura.ciudadano.usuario.primerNombre }} {{ factura.ciudadano.usuario.segundoNombre }} {{ factura.ciudadano.usuario.primerApellido }} {{ factura.ciudadano.usuario.segundoApellido }}</td> 
+            <td><b>Identificacion:</b> {{ factura.ciudadano.usuario.identificacion }}</td>
+        </tr>
+    </table>
+    
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
     </p>
+
+    
+
+
     <table>
         <tr>
-            <td  width="15%" style="font-weight:bold;">Fecha de EX</td>
-            {# <td> {{ factura.fechaCreacion|date('d/m/Y') }}</td> #}
-            <td> {{ 'now'|date('d/m/Y') }}</td>
-            <td style="font-weight:bold;">Fecha Vencimiento</td>
-            {# <td>{{ factura.fechaVencimiento|date('d/m/Y') }}</td>
-                     #}        
-            <td> {{ 'now'|date('d/m/Y') }}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Valor</td>
-            <td> {{factura.valorNeto}}</td>
-        </tr>
-    </table>
-    <p style="text-align:center;">
-        <b>Vehículo</b>
-    </p>
-    <table>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Clase</td>
-            <td> {{factura.vehiculo.clase.nombre}}</td>
-            <td style="font-weight:bold;">No.serie</td>
-            <td>{{factura.vehiculo.serie}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Marca</td>
-            <td> {{factura.vehiculo.linea.marca.nombre}}</td>
-            <td style="font-weight:bold;">No.Chasis</td>
-            <td>{{factura.vehiculo.chasis}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Carrocería</td>
-            <td> {{factura.vehiculo.carroceria.nombre}}</td>
-            <td style="font-weight:bold;">Cilindraje</td>
-            <td>{{factura.vehiculo.cilindraje}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">linea</td>
-            <td> {{factura.vehiculo.linea.nombre}}</td>
-            <td style="font-weight:bold;">Pasajeros</td>
-            <td>{{factura.vehiculo.numeroPasajeros}}</td>
-        </tr>
-        <tr> 
-            <td  width="15%" style="font-weight:bold;">Color</td>
-            <td> {{factura.vehiculo.color.nombre}}</td>
-            <td style="font-weight:bold;">Servicio</td>
-            <td>{{factura.vehiculo.servicio.nombre}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Modelo</td>
-            <td> {{factura.vehiculo.modelo}}</td>
-            <td style="font-weight:bold;">No.motor</td>
-            <td>{{factura.vehiculo.motor}}</td>
+            <td width="400">
+                <table >
+                    <thead border="1" cellpadding="2" cellspacing="1">
+                    <tr style="background-color:#e7e7e7;">
+                    <td width="300" align="center"><b>Concepto</b></td>
+                    <td width="100" align="center"><b>Valor</b></td>
+                    </tr>
+                    </thead>
+                    {% for tramiteFactura in tramitesFacturaArray %}
+                        <tr>
+                            <td width="300">{{ tramiteFactura.nombre }}</td>
+                            <td width="100">{{ tramiteFactura.valor }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="background-color:#e7e7e7;">
+                        <td width="300">Total</td>
+                        <td width="100">{{ tramiteTotal }}</td>
+                    </tr>
+                </table>
+            </td>
+            <td width="200" style="padding-left: 10%;padding-right: 150px;">
+                <table >
+                    <thead border="1" cellpadding="2" cellspacing="1">
+                    <tr >
+                    <td width="50" style="background-color:#ffffff;" align="center"></td>
+                    <td width="150" style="background-color:#e7e7e7;" align="center"><b>Destino</b></td>
+                    <td width="80" style="background-color:#e7e7e7;" align="center"><b>Valor</b></td>
+                    </tr>
+                    </thead>
+                    {% for concepto in conceptosArray %}
+                        <tr>
+                            <td width="50" style="background-color:#ffffff;" align="center"></td>
+                            <td width="150">{{ concepto.nombre }}</td>
+                            <td width="80">{{ concepto.valor }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr style="background-color:#e7e7e7;">
+                        <td width="50" style="background-color:#ffffff;" align="center"></td>
+                        <td width="150"> Total </td>
+                        <td width="80">{{ conceptosTotal }}</td>
+                    </tr>
+                </table>
+            </td>
         </tr>
     </table>
-    <p style="text-align:center;">
-        <b>Solicitante</b>
-    </p>
-    <table border="1">
-      <tr>
-        <td>{{ factura.ciudadano.usuario.identificacion }}</td>
-        <td>{{ factura.ciudadano.usuario.PrimerNombre }} {{ factura.ciudadano.usuario.SegundoNombre }}</td>
-        <td>{{ factura.ciudadano.usuario.PrimerApellido }} {{ factura.ciudadano.usuario.SegundoApellido }}</td>
-        <td>{{ factura.ciudadano.direccion }}</td>
-      </tr>    
-    </table>
-    <p style="text-align:center;">
-        <b>Tramites</b>
-    </p>
-    <table border="1">
-        <tr>
-            <td>Tramite</td>
-            <td>Valor</td>
-        </tr>
-        {% for tramiteFactura in tramitesFacturaArray[0] %}
-            <tr>
-                <td>{{ tramiteFactura.tramitePrecio.nombre }}</td>
-                <td>{{ tramiteFactura.tramitePrecio.valor }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+
+
+
     <p style="text-align:center;">
         <b>Retefuente</b>
     </p>
-    <table border="1">
+    <table style="background-color:#e7e7e7;">
         <tr>
             <td>Propietario</td>
             <td>Valor</td>
@@ -109,6 +96,84 @@
             </tr>
         {% endfor %}
     </table>
+
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <table style="padding:8px;background-color:#e7e7e7">
+        <tr>
+            <td><b>Ciudad:</b>  {{ factura.sedeOperativa.municipio.nombre }}</td> 
+            <td><b>Fecha Genera:</b> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
+            <td><b>Fecha Vence:</b> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
+            <td><b>Cuenta bancaria:</b> 039-8756-5</td>
+        </tr>
+        <tr>
+            <td colspan="3"><b>Nombre usuario:</b> {{ factura.ciudadano.usuario.primerNombre }} {{ factura.ciudadano.usuario.segundoNombre }} {{ factura.ciudadano.usuario.primerApellido }} {{ factura.ciudadano.usuario.segundoApellido }}</td> 
+            <td><b>Identificacion:</b> {{ factura.ciudadano.usuario.identificacion }}</td>
+        </tr>
+    </table>
+    
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    </p>
+
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <table style="padding:8px;background-color:#e7e7e7">
+        <tr>
+            <td><b>Ciudad:</b>  {{ factura.sedeOperativa.municipio.nombre }}</td> 
+            <td><b>Fecha Genera:</b> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
+            <td><b>Fecha Vence:</b> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
+            <td><b>Cuenta bancaria:</b> 039-8756-5</td>
+        </tr>
+        <tr>
+            <td colspan="3"><b>Nombre usuario:</b> {{ factura.ciudadano.usuario.primerNombre }} {{ factura.ciudadano.usuario.segundoNombre }} {{ factura.ciudadano.usuario.primerApellido }} {{ factura.ciudadano.usuario.segundoApellido }}</td> 
+            <td><b>Identificacion:</b> {{ factura.ciudadano.usuario.identificacion }}</td>
+        </tr>
+    </table>
+    
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    </p>
+
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <table style="padding:8px;background-color:#e7e7e7">
+        <tr>
+            <td><b>Ciudad:</b>  {{ factura.sedeOperativa.municipio.nombre }}</td> 
+            <td><b>Fecha Genera:</b> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
+            <td><b>Fecha Vence:</b> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
+            <td><b>Cuenta bancaria:</b> 039-8756-5</td>
+        </tr>
+        <tr>
+            <td colspan="3"><b>Nombre usuario:</b> {{ factura.ciudadano.usuario.primerNombre }} {{ factura.ciudadano.usuario.segundoNombre }} {{ factura.ciudadano.usuario.primerApellido }} {{ factura.ciudadano.usuario.segundoApellido }}</td> 
+            <td><b>Identificacion:</b> {{ factura.ciudadano.usuario.identificacion }}</td>
+        </tr>
+    </table>
+    
+    <p class="text-justify">
+    	<br>
+    	<br>
+    	<br>
+    	<br>
+    </p>
     
   </body>
 </html>

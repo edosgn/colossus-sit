@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnalsuspensions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechainicio</th>
+                <th>Fechafin</th>
+                <th>Observacion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pnalSuspension in pnalSuspensions %}
+            <tr>
+                <td><a href="{{ path('pnalsuspension_show', { 'id': pnalSuspension.id }) }}">{{ pnalSuspension.id }}</a></td>
+                <td>{% if pnalSuspension.fechaInicio %}{{ pnalSuspension.fechaInicio|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if pnalSuspension.fechaFin %}{{ pnalSuspension.fechaFin|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ pnalSuspension.observacion }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pnalsuspension_show', { 'id': pnalSuspension.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pnalsuspension_edit', { 'id': pnalSuspension.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnalsuspension_new') }}">Create a new pnalSuspension</a>
+        </li>
+    </ul>
+{% endblock %}
