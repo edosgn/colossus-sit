@@ -159,16 +159,19 @@ class MpersonalFuncionarioController extends Controller
     /**
      * Finds and displays a mpersonalFuncionario entity.
      *
-     * @Route("/{id}/show", name="mpersonalfuncionario_show")
+     * @Route("/show", name="mpersonalfuncionario_show")
      * @Method({"GET", "POST"})
      */
-    public function showAction($id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         
         $em = $this->getDoctrine()->getManager();
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
         
-        $mpersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($id);
+        $mpersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->id);
 
         if ($mpersonalFuncionario) {
             $response = array(
