@@ -156,7 +156,7 @@ class ConceptoParametroTramiteController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'msj' => "Autorización no valida", 
                 );
         }
         return $helpers->json($response);
