@@ -132,6 +132,9 @@ class GdTrazabilidad
      */
     public function getFechaAsignacion()
     {
+        if ($this->fechaAsignacion) {
+            return $this->fechaAsignacion->format('d/m/Y');
+        }
         return $this->fechaAsignacion;
     }
 
@@ -156,6 +159,9 @@ class GdTrazabilidad
      */
     public function getFechaRespuesta()
     {
+        if ($this->fechaRespuesta) {
+            return $this->fechaRespuesta->format('d/m/Y');
+        }
         return $this->fechaRespuesta;
     }
 
