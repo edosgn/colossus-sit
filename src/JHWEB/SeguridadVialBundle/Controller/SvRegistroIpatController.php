@@ -63,7 +63,7 @@ class SvRegistroIpatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
+            var_dump($params);
             $ipat = new SvRegistroIpat();
 
             $em = $this->getDoctrine()->getManager();
@@ -74,7 +74,6 @@ class SvRegistroIpatController extends Controller
             }
             
             if ($params[0]->datosLimitacion->idGravedad) {
-                //$gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params[0]->datosLimitacion->idGravedad);
                 $gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params[0]->datosLimitacion->idGravedad);
                 $ipat->setGravedad($gravedad);
             }
@@ -318,7 +317,7 @@ class SvRegistroIpatController extends Controller
 
             $ipat->setConductores($params[9]->dataConductores);
 
-            /* $ipat->setNombresConductor($params[0]->datosLimitacion->nombresConductor);
+            $ipat->setNombresConductor($params[0]->datosLimitacion->nombresConductor);
             $ipat->setApellidosConductor($params[0]->datosLimitacion->apellidosConductor);
 
             
@@ -390,9 +389,9 @@ class SvRegistroIpatController extends Controller
                 $ipat->setHospitalConductor($hospitalConductor);
             }
 
-            $ipat->setDescripcionLesionConductor($params[0]->datosLimitacion->descripcionLesionConductor); */
+            $ipat->setDescripcionLesionConductor($params[0]->datosLimitacion->descripcionLesionConductor);
             $ipat->setVehiculos($params[10]);
-            /* $ipat->setPlaca($params[0]->datosLimitacion->placa);
+            $ipat->setPlaca($params[0]->datosLimitacion->placa);
             $ipat->setPlacaRemolque($params[0]->datosLimitacion->placaRemolque);
 
             if ($params[0]->datosLimitacion->nacionalidadVehiculo) {
@@ -446,7 +445,7 @@ class SvRegistroIpatController extends Controller
             $ipat->setPortaSeguroExtracontractual($params[0]->datosLimitacion->portaSeguroExtracontractual);
             $ipat->setNumeroSeguroExtracontractual($params[0]->datosLimitacion->numeroSeguroExtracontractual);
             $ipat->setAseguradoraSeguroExtracontractual($params[0]->datosLimitacion->idAseguradoraSeguroExtracontractual);
-            $ipat->setFechaVencimientoSeguroExtracontractual(new \Datetime($params[0]->datosLimitacion->fechaVencimientoSeguroExtracontractual)); */
+            $ipat->setFechaVencimientoSeguroExtracontractual(new \Datetime($params[0]->datosLimitacion->fechaVencimientoSeguroExtracontractual));
             $ipat->setMismoConductor($params[0]->datosLimitacion->mismoConductor);
             $ipat->setNombresPropietario($params[0]->datosLimitacion->nombresPropietario);
             $ipat->setApellidosPropietario($params[0]->datosLimitacion->apellidosPropietario);
@@ -455,10 +454,18 @@ class SvRegistroIpatController extends Controller
             $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
             
             $ipat->setIdentificacionPropietario($params[0]->datosLimitacion->identificacionPropietario);
-            $ipat->setClase($params[0]->datosLimitacion->clase);
-            $ipat->setServicio($params[0]->datosLimitacion->servicio);
-            $ipat->setModalidadTransporte($params[0]->datosLimitacion->modalidadTransporte);
-            $ipat->setRadioAccion($params[0]->datosLimitacion->radioAccion);
+            $claseVehiculo = $em->getRepository('AppBundle:Clase')->find($params[0]->datosLimitacion->clase);
+            $ipat->setClase($claseVehiculo->getNombre());
+
+            $servicio = $em->getRepository('AppBundle:Servicio')->find($params[0]->datosLimitacion->servicio);
+            $ipat->setServicio($servicio->getNombre());
+
+            $modalidadTransporte = $em->getRepository('JHWEBSeguridadVialBundle:VhloCfgModalidadTransporte')->find($params[0]->datosLimitacion->modalidadTransporte);
+            $ipat->setModalidadTransporte($modalidadTransporte->getNombre());
+
+            $radioAccion = $em->getRepository('JHWEBSeguridadVialBundle:VhloCfgRadioAccion')->find($params[0]->datosLimitacion->radioAccion);
+            $ipat->setRadioAccion($radioAccion);
+
             $ipat->setDescripcionDanios($params[0]->datosLimitacion->descripcionDanios);
 
             $ipat->setFalla($params[8]->fallas);
@@ -488,6 +495,7 @@ class SvRegistroIpatController extends Controller
             $ipat->setEntidadAgente($params[0]->datosLimitacion->entidadAgente);
 
             $ipat->setVictima($params[0]->datosLimitacion->victima);
+            $ipat->setVictimas($params[11]->dataVictimas);
             $ipat->setnombresVictima($params[0]->datosLimitacion->nombresVictima);
             $ipat->setApellidosVictima($params[0]->datosLimitacion->apellidosVictima);
 
@@ -975,7 +983,7 @@ class SvRegistroIpatController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se encontraron registros en la Base de Datos",
+                    'message' => "No se encontraron coincidencias en la Base de Datos",
                 );
             }
         } else {
