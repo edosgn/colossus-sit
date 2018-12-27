@@ -120,8 +120,6 @@ class VehiculoController extends Controller
                     );
                 }
  
-
-
             } else {
                 $numeroFactura = $params->vehiculo->numeroFactura;
                 $fechaFactura = $params->vehiculo->fechaFactura;

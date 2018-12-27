@@ -138,17 +138,47 @@ class GdDocumentoController extends Controller
     /**
      * Finds and displays a gdDocumento entity.
      *
-     * @Route("/{id}/show", name="gddocumento_show")
-     * @Method("GET")
+     * @Route("/show", name="gddocumento_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(GdDocumento $gdDocumento)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($gdDocumento);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('gddocumento/show.html.twig', array(
-            'gdDocumento' => $gdDocumento,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $documento = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->find($params->id);
+
+            if ($documento) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data'=> $documento,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
+
     }
 
     /**
@@ -234,6 +264,53 @@ class GdDocumentoController extends Controller
 
             $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->getByFilter(
                 $params
+            );
+
+            if ($documentos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($documentos)." Documentos registrados.", 
+                    'data'=> $documentos,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún resultado encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca si existen documentos radicado por el estado.
+     *
+     * @Route("/search/state", name="gddocumento_search_state")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByStateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->findByEstado(
+                $params->state
             );
 
             if ($documentos) {
