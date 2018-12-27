@@ -103,7 +103,10 @@ class MpersonalHorario
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        if ($this->fecha) {
+            return $this->fecha->format('Y-m-d');
+        }
+        return $this->fecha;
     }
 
     /**

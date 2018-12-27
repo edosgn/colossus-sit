@@ -11,7 +11,10 @@ namespace AppBundle\Repository;
 class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 {
 	//Obtiene la lista de documentos por peticionario
-    public function getSearch($params){   
+    public function getSearch($params){ 
+
+		
+		
         $em = $this->getEntityManager();
         if (isset($params->nombre)) { 
         	$dql = "SELECT f
@@ -25,6 +28,8 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	            'nombre' => $params->nombre,
 	        ));
         }elseif(isset($params->identificacion)){
+		// 	var_dump($params);
+	    // die();  
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f, UsuarioBundle:Usuario u, AppBundle:Ciudadano c
             WHERE u.id = c.usuario
@@ -36,6 +41,7 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	            'identificacion' => $params->identificacion,
 	        )); 
         }elseif(isset($params->cargo)){
+			
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f, AppBundle:CfgCargo c
             WHERE f.cargo = c.id
@@ -72,8 +78,9 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	            'fechaInicio' => $params->fechaInicio,
 	            'fechaFin' => $params->fechaFin,
 	        ));
-        } 
+		} 
         elseif(isset($params->tipoContratoId)){
+			
         	$dql = "SELECT f
             FROM AppBundle:MpersonalFuncionario f, AppBundle:MpersonalTipoContrato tc
             WHERE tc.id = f.tipoContrato
@@ -94,7 +101,7 @@ class MpersonalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	            'sedeOperativa' => $params->sedeOperativaId,
 	        ));
         }
-
+		
         return $consulta->getResult();
     }
 }
