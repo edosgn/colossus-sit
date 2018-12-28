@@ -135,6 +135,7 @@ class GdTrazabilidadController extends Controller
     }
 
     /* ====================================================== */
+    
     /**
      * Busca si existen documentos radicado y asignados a un funcionario.
      *
@@ -390,6 +391,54 @@ class GdTrazabilidadController extends Controller
                     'code' => 400,
                     'message' => "Autorizacion no valida", 
                 );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca si existen trazabilidades por id de documento.
+     *
+     * @Route("/record/documento", name="gdtrazabilidad_record_documento")
+     * @Method({"GET", "POST"})
+     */
+    public function recordByDocumentoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $trazabilidades = $em->getRepository('JHWEBGestionDocumentalBundle:GdTrazabilidad')->findBy(
+                array(
+                    'documento' => $params->id
+                )
+            );
+            
+            if ($trazabilidades) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($trazabilidades)." Documentos registrados.", 
+                    'data'=> $trazabilidades,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El documento no tiene trazabilidades aún.", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
         return $helpers->json($response);

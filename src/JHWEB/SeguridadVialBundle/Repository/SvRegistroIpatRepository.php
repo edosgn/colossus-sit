@@ -21,11 +21,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
     
         if ($params->datos->idGravedad) {
-            $gravedad = $em->getRepository('AppBundle:CfgGravedad')->findBy(
-                array(
-                    'nombre' => $params->datos->idGravedad,
-                    )
-            );
+            $gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params->datos->idGravedad);
         }
         if ($params->datos->idTipoVictima) {
             $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
@@ -80,15 +76,16 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             AND ri.tipoVictima = :tipoVictima
             AND ri.ciudadResidenciaConductor = :municipioNombre
             AND ri.sexoConductor = :sexoConductor
+            AND ri.sexoVictima = :sexoConductor
             AND ri.edadConductor BETWEEN :edadInicioConductor AND :edadFinConductor
+            AND ri.edadVictima BETWEEN :edadInicioConductor AND :edadFinConductor
             AND ri.clase = :claseNombre
             AND ri.claseAccidente = :claseAccidente
             AND ri.choqueCon = :choqueCon
             AND ri.objetoFijo = :objetoFijo
             AND ri.activo = 1";
-
+        
         $consulta = $em->createQuery($dql);
-
         $consulta->setParameters(array(
             'fechaInicioDatetime' => $fechaInicioDatetime,
             'fechaFinDatetime' => $fechaFinDatetime,

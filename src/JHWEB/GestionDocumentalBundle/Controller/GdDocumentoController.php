@@ -292,6 +292,53 @@ class GdDocumentoController extends Controller
     }
 
     /**
+     * Busca si existen documentos radicado por el estado.
+     *
+     * @Route("/search/state", name="gddocumento_search_state")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByStateAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $documentos = null;
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $documentos = $em->getRepository('JHWEBGestionDocumentalBundle:GdDocumento')->findByEstado(
+                $params->state
+            );
+
+            if ($documentos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($documentos)." Documentos registrados.", 
+                    'data'=> $documentos,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún resultado encontrado.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Asigna el documento a un fiuncionario para que genere un respuesta.
      *
      * @Route("/update", name="gddocumento_update")
