@@ -426,7 +426,7 @@ class EmpresaController extends Controller
         if ($authCheck == true) {
         $empresa = $em->getRepository('AppBundle:Empresa')->findByNitOrNombre($params); 
         if($empresa){        
-        if (count($empresa)==1) {
+        if (count($empresa)==1) { 
                $response = array(
                     'status' => 'success',
                     'code' => 200,
