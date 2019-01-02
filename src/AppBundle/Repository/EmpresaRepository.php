@@ -20,14 +20,14 @@ class EmpresaRepository extends \Doctrine\ORM\EntityRepository
         WHERE (e.nombre = :nombre)"; 
         
         if($parametro->parametro2){
-            $condicion .= "AND e.nit = '" .$parametro->parametro2."'";
+            $condicion .= "OR e.nit = '" .$parametro->parametro2."'";
         }
         if($condicion){
             $sql .= $condicion;
-        }
+        } 
         $consulta = $em->createQuery($sql);
         $consulta->setParameters(array('nombre' => $parametro->parametro));
-        return $consulta->getResult();
+        return $consulta->getOneOrNullResult();
     }
 
 }

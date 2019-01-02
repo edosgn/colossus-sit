@@ -18,10 +18,10 @@ class DefaultController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/pdf/certificadoTradicion/{placaId}", name="pdf")
+     * @Route("/pdf/certificadoTradicion/{placaId}/{tipo}", name="pdf")
      * @Method({"GET", "POST"})
      */
-    public function pdfAction(Request $request,$placaId)
+    public function pdfAction(Request $request,$placaId,$tipo)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
@@ -45,6 +45,7 @@ class DefaultController extends Controller
 
         $tramitesSolicitudArray = false;
         
+        $data = null;
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
 
             foreach ((array)$tramiteSolicitud->getResumen() as $key => $value) {
@@ -58,12 +59,21 @@ class DefaultController extends Controller
             );
         }
         
-        $html = $this->renderView('@App/default/pdfCertificadoTradicion.html.twig', array(
-            'vehiculo'=>$vehiculo,
-            'propietariosVehiculo' => $propietariosVehiculo,
-            'fechaActual' => $fechaActual,
-            'tramitesSolicitudArray'=>$tramitesSolicitudArray
-        ));
+        if($tipo == 'OFICIAL'){
+            $html = $this->renderView('@App/default/pdfCertificadoTradicionOficial.html.twig', array(
+                'vehiculo'=>$vehiculo,
+                'propietariosVehiculo' => $propietariosVehiculo,
+                'fechaActual' => $fechaActual,
+                'tramitesSolicitudArray'=>$tramitesSolicitudArray
+            ));
+        }else{
+            $html = $this->renderView('@App/default/pdfCertificadoTradicion.html.twig', array(
+                'vehiculo'=>$vehiculo,
+                'propietariosVehiculo' => $propietariosVehiculo,
+                'fechaActual' => $fechaActual,
+                'tramitesSolicitudArray'=>$tramitesSolicitudArray
+            ));
+        }
 
         $pdf = $this->container->get("white_october.tcpdf")->create(
             'PORTRAIT',
@@ -84,6 +94,11 @@ class DefaultController extends Controller
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->AddPage();
 
+        
+        $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
+        
+        $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0);
+ 
         $pdf->writeHTMLCell(
             $w = 0,
             $h = 0,

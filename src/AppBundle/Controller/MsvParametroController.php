@@ -43,9 +43,12 @@ class MsvParametroController extends Controller
         $em = $this->getDoctrine()->getManager();
         $hash = $request->get("authorization", null);
         $categoriaId = $request->get("json", null);
-        $authCheck = $helpers->authCheck($hash);
-        $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
 
+        $authCheck = $helpers->authCheck($hash);
+        // var_dump($categoriaId);
+        // die();
+        $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
+        $msvParametrosArray = null;
         foreach ($msvParametros as $keyParametro => $msvParametro) {
             $msvParametrosArray[$keyParametro] = array(
                 'id'=>$msvParametro->getId(),

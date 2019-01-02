@@ -71,9 +71,9 @@ class VhloRemolqueController extends Controller
                 $placa = new CfgPlaca();
                 $placa->setNumero($params->placa);
 
-                $numeroFactura = $params->vehiculo->numeroFactura;
-                $valor = $params->vehiculo->valor;
-                $fechaFactura = $params->vehiculo->fechaFactura;
+                $numeroFactura = $params->numeroFactura;
+                $valor = $params->valor;
+                $fechaFactura = $params->fechaFactura;
                 $fechaFactura = new \DateTime($fechaFactura);
 
                 $cfgTipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->findOneByModulo(4);
