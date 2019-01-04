@@ -19,12 +19,12 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
         $condicion = null;
 
 
-    $em = $this->getEntityManager();
+        $em = $this->getEntityManager();
 
-    $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
-                WHERE c.agenteTransito = m.id
-                AND m.id = :agenteId
-                AND c.fechaNotificacion BETWEEN :fechaDesde AND :fechaHasta";
+        $dql = "SELECT c from AppBundle:Comparendo c, AppBundle:MpersonalFuncionario m
+        WHERE c.agenteTransito = m.id
+        AND m.id = :agenteId
+        AND c.fecha BETWEEN :fechaDesde AND :fechaHasta";
         $i=0;
 
         foreach ($comparendosId as $keyComparendo => $comparendo) {
@@ -44,6 +44,61 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
             'fechaDesde' => $fechaDesde,
             'fechaHasta' => $fechaHasta,
         ));
+
+        return $consulta->getResult();
+    }
+
+    public function getByFilter($params){
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c
+                WHERE c.infractorNombres LIKE :nombres
+                OR c.infractorApellidos LIKE :apellidos";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'nombres' => '%'.$params->filtro.'%',
+                    'apellidos' => '%'.$params->filtro.'%',
+                ));
+                break;
+
+            case 2:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c
+                WHERE c.infractorIdentificacion = :identificacion";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'identificacion' => $params->filtro,
+                ));
+                break;
+
+            case 3:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c
+                WHERE c.placa LIKE :placa";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'placa' => '%'.$params->filtro.'%',
+                ));
+                break;
+
+            case 4:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c, AppBundle:MpersonalComparendo pc
+                WHERE pc.consecutivo = :consecutivo
+                AND c.consecutivo = pc.id";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'consecutivo' => $params->filtro,
+                ));
+                break;
+        }
 
         return $consulta->getResult();
     }

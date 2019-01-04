@@ -78,6 +78,7 @@ class PnalProrogaController extends Controller
 
             $mPersonalFuncionario->setFechaFin($fechaFin);
             $mPersonalFuncionario->setModificatorio(true);
+            $mPersonalFuncionario->setActivo(true);
             $em->persist($mPersonalFuncionario);
 
             $pnalProroga->setFechaInicio($fechaInicio);
@@ -87,6 +88,7 @@ class PnalProrogaController extends Controller
             
             $em->persist($pnalProroga);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,

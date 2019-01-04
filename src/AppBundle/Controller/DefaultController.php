@@ -15,15 +15,13 @@ use Symfony\Component\HttpFoundation\Request;
  */ 
 class DefaultController extends Controller
 {
-
-    
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/pdf/certificadoTradicion/{placaId}", name="pdf")
+     * @Route("/pdf/certificadoTradicion/{placaId}/{tipo}", name="pdf")
      * @Method({"GET", "POST"})
      */
-    public function pdfAction(Request $request,$placaId)
+    public function pdfAction(Request $request,$placaId,$tipo)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
@@ -32,12 +30,13 @@ class DefaultController extends Controller
         
         $asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
             1
-        );
+        ); 
         
         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
             $placaId 
         ); 
-              
+             
+        
 
         $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
             $vehiculo->getId()
@@ -47,6 +46,7 @@ class DefaultController extends Controller
 
         $tramitesSolicitudArray = false;
         
+        $data = null;
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
 
             foreach ((array)$tramiteSolicitud->getResumen() as $key => $value) {
@@ -75,6 +75,7 @@ class DefaultController extends Controller
             'UTF-8',
             false
         );
+
         $pdf->SetAuthor('qweqwe');
         $pdf->SetTitle('Planilla');
         $pdf->SetSubject('Your client');
@@ -86,6 +87,11 @@ class DefaultController extends Controller
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
         $pdf->AddPage();
 
+        if($tipo == 'OFICIAL'){
+            $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
+            $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0);
+        }
+ 
         $pdf->writeHTMLCell(
             $w = 0,
             $h = 0,
