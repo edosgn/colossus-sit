@@ -340,7 +340,6 @@ class ComparendoController extends Controller
                 $em->persist($comparendo);
                 $em->flush();
 
-
                 $trazabilidad = new CvCdoTrazabilidad();
 
                 $trazabilidad->setFecha(
@@ -798,14 +797,63 @@ class ComparendoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 200,
-                    'msj' => "Lista de Comparendos", 
+                    'message' => count($comparendos)." Comparendos encontrados.", 
                     'data' => $comparendos,
             );
             }else{
                  $response = array(
                     'status' => 'success',
                     'code' => 400,
-                    'msj' => "No existe comparendos para esos parametros de busqueda", 
+                    'message' => "No existe comparendos para esos parametros de busqueda", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca comparendos por parametros (nombres, identificacion, placa o numero).
+     *
+     * @Route("/search/filtros", name="comparendo_search_filtros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByFilter(
+                $params
+            );
+
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($comparendos)." Comparendos encontrados", 
+                    'data' => $comparendos,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen comparendos para esos filtros de búsqueda", 
                 );
             }
 
