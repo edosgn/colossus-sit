@@ -91,7 +91,7 @@ class TramiteSolicitudController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
-
+            //var_dump($params);
             $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
                 $params->idFormulario
             );
