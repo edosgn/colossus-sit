@@ -281,6 +281,7 @@ class VehiculoController extends Controller
             } else {
                 $response = array(
                     'status' => 'error',
+                    'message' => 'El vehiculo no pertenece a RNA',
                     'code' => 200,
                 );
             }
@@ -1127,5 +1128,4 @@ class VehiculoController extends Controller
         }
         return $helpers->json($response);
     }
-
 }
