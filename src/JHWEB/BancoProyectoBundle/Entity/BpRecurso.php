@@ -38,7 +38,7 @@ class BpRecurso
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidadMedida", type="integer")
+     * @ORM\Column(name="cantidad_medida", type="integer")
      */
     private $cantidadMedida;
 
@@ -52,21 +52,16 @@ class BpRecurso
     /**
      * @var int
      *
-     * @ORM\Column(name="valorUnitario", type="integer")
+     * @ORM\Column(name="valor_unitario", type="integer")
      */
     private $valorUnitario;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="valorTotal", type="string", length=255)
+     * @ORM\Column(name="valor_total", type="string", length=255)
      */
     private $valorTotal;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="BpActividad")
-     **/
-    protected $BpActividad;
 
     /**
      * @var bool
@@ -74,6 +69,11 @@ class BpRecurso
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="BpActividad")
+     **/
+    protected $actividad;
 
     /**
      * Get id
