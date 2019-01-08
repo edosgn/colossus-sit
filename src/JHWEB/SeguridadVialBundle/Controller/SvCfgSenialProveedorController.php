@@ -52,31 +52,47 @@ class SvCfgSenialProveedorController extends Controller
      */
     public function newAction(Request $request)
     {
-        $svCfgSenialProveedor = new Svcfgsenialproveedor();
-        $form = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialProveedorType', $svCfgSenialProveedor);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $proveedor = new SvCfgSenialProveedor();
+
+            $proveedor->setNombre(strtoupper($params->nombre));
+            $proveedor->setNit($params->nit);
+            $proveedor->setActivo(true);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($svCfgSenialProveedor);
+            $em->persist($proveedor);
             $em->flush();
 
-            return $this->redirectToRoute('svcfgsenialproveedor_show', array('id' => $svCfgSenialProveedor->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('svcfgsenialproveedor/new.html.twig', array(
-            'svCfgSenialProveedor' => $svCfgSenialProveedor,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a svCfgSenialProveedor entity.
      *
-     * @Route("/{id}", name="svcfgsenialproveedor_show")
+     * @Route("/show", name="svcfgsenialproveedor_show")
      * @Method("GET")
      */
-    public function showAction(SvCfgSenialProveedor $svCfgSenialProveedor)
+    public function showAction(Request $request)
     {
         $deleteForm = $this->createDeleteForm($svCfgSenialProveedor);
 
@@ -89,32 +105,55 @@ class SvCfgSenialProveedorController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenialProveedor entity.
      *
-     * @Route("/{id}/edit", name="svcfgsenialproveedor_edit")
+     * @Route("/edit", name="svcfgsenialproveedor_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenialProveedor $svCfgSenialProveedor)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialProveedor);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialProveedorType', $svCfgSenialProveedor);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgsenialproveedor_edit', array('id' => $svCfgSenialProveedor->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find($params->id);
+
+            if ($proveedor) {
+                $proveedor->setNombre(strtoupper($params->nombre));
+                $proveedor->setNit($params->nit);
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $proveedor,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgsenialproveedor/edit.html.twig', array(
-            'svCfgSenialProveedor' => $svCfgSenialProveedor,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a svCfgSenialProveedor entity.
      *
-     * @Route("/{id}", name="svcfgsenialproveedor_delete")
+     * @Route("/{id}/delete", name="svcfgsenialproveedor_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, SvCfgSenialProveedor $svCfgSenialProveedor)
@@ -145,5 +184,34 @@ class SvCfgSenialProveedorController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* =================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgsenialproveedor_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $proveedores = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($proveedores as $key => $proveedor) {
+            $response[$key] = array(
+                'value' => $proveedor->getId(),
+                'label' => $proveedor->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
     }
 }
