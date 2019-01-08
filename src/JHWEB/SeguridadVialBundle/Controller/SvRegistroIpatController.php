@@ -1039,22 +1039,38 @@ class SvRegistroIpatController extends Controller
                 }
             }
 
-            foreach ($ipats as $key => $ipatExport) {
+            $conductoresArray = false;
+            $victimassArray = false;
+            $dataNombresConductores = null;
+            $dataApellidosConductores = null;
+            $dataNombresVictimas = null;
+            $dataApellidosVictimas = null;
+            foreach ($ipats as $ipatExport) {
                 foreach ((array)$ipatExport->getConductores() as $key => $value) {
-                    $data[] = $key . ':' . $value;
+                    $dataNombresConductores[] = $value->nombres;
+                    $dataApellidosConductores[] = $value->apellidos;
                 }
-                $conductorArray = array(
-                    'datos' => $data
+                $conductoresArray = array(
+                    'nombres' => $dataNombresConductores,
+                    'apellidos' => $dataApellidosConductores,
+                );
+                foreach ((array)$ipatExport->getVictimas() as $key => $value) {
+                    $dataNombresVictimas[] = $value->nombres;
+                    $dataApellidosVictimas[] = $value->apellidos;
+                }
+                $victimasArray = array(
+                    'nombres' => $dataNombresVictimas,
+                    'apellidos' => $dataApellidosVictimas,
                 );
             }
-            
             if ($ipats) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($ipats) . " ipats encontrado(s)",
                     'data' => $ipats,
-                    'conductores' => $conductorArray,
+                    'conductores' => $conductoresArray,
+                    'victimas' => $victimasArray,
                 );
             } else {
                 $response = array(
