@@ -94,7 +94,6 @@ class SvSenialUbicacionController extends Controller
                 $em->flush();
             }
 
-
             $ubicacion = new SvSenialUbicacion();
 
             $ubicacion->setInventario($inventario);
