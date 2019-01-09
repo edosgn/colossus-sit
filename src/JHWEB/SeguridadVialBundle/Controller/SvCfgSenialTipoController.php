@@ -64,6 +64,7 @@ class SvCfgSenialTipoController extends Controller
 
             $tipo->setNombre(strtoupper($params->nombre));
             $tipo->setGestionable($params->gestionable);
+            $tipo->setColor($params->color);
             $tipo->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -124,6 +125,7 @@ class SvCfgSenialTipoController extends Controller
             if ($tipo) {
                 $tipo->setNombre(strtoupper($params->nombre));
                 $tipo->setGestionable($params->gestionable);
+                $tipo->setColor($params->color);
 
                 $em->flush();
                 $response = array(
