@@ -120,6 +120,12 @@ class SvSenialBodegaController extends Controller
                 $bodega->setEstado($estado);
             }
 
+            if ($params->idProveedor) {
+                $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
+                    $params->idProveedor);
+                $bodega->setProveedor($proveedor);
+            }
+
             $em->persist($bodega);
             $em->flush();
 

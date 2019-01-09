@@ -100,7 +100,7 @@ class SvSenialUbicacionController extends Controller
             $ubicacion->setMunicipio($inventario->getMunicipio());
 
             $ubicacion->setFecha(new \Datetime($params->fecha));
-            $ubicacion->setHora(new \Datetime($params->hora));
+            $ubicacion->setHora(new \Datetime(date('h:i:s A')));
             $ubicacion->setLatitud($params->latitud);
             $ubicacion->setLongitud($params->longitud);
 
