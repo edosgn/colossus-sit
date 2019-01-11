@@ -49,7 +49,7 @@ class CfgAdmFormato
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormatoTipo", inversedBy="formatos") */
+    /** @ORM\ManyToOne(targetEntity="CfgAdmFormatoTipo", inversedBy="formatos") */
     private $tipo;
 
 

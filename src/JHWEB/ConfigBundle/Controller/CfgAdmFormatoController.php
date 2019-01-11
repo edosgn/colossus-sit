@@ -22,13 +22,26 @@ class CfgAdmFormatoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $formatos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->findBy(
+            array('activo' => true)
+        );
 
-        $cfgAdmFormatos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->findAll();
+        $response['data'] = array();
 
-        return $this->render('cfgadmformato/index.html.twig', array(
-            'cfgAdmFormatos' => $cfgAdmFormatos,
-        ));
+        if ($formatos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($formatos)." registros encontrados", 
+                'data'=> $formatos,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,28 +52,53 @@ class CfgAdmFormatoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgAdmFormato = new Cfgadmformato();
-        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgAdmFormatoType', $cfgAdmFormato);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgAdmFormato);
+
+            $formato = new CfgAdmFormato();
+
+            $formato->setCodigo($params->codigo);
+            $formato->setNombre(strtoupper($params->nombre));
+            $formato->setCuerpo($params->cuerpo);
+            $formato->setActivo(true);
+
+            if ($params->idTipo) {
+                $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findOneByTipo(
+                    $params->idTipo
+                );
+                $formato->setTipo($params->idTipo);
+            }
+
+            $em->persist($formato);
             $em->flush();
 
-            return $this->redirectToRoute('cfgadmformato_show', array('id' => $cfgAdmFormato->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cfgadmformato/new.html.twig', array(
-            'cfgAdmFormato' => $cfgAdmFormato,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a cfgAdmFormato entity.
      *
-     * @Route("/{id}", name="cfgadmformato_show")
+     * @Route("/{id}/show", name="cfgadmformato_show")
      * @Method("GET")
      */
     public function showAction(CfgAdmFormato $cfgAdmFormato)
@@ -76,26 +114,59 @@ class CfgAdmFormatoController extends Controller
     /**
      * Displays a form to edit an existing cfgAdmFormato entity.
      *
-     * @Route("/{id}/edit", name="cfgadmformato_edit")
+     * @Route("/edit", name="cfgadmformato_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgAdmFormato $cfgAdmFormato)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgAdmFormato);
-        $editForm = $this->createForm('JHWEB\ConfigBundle\Form\CfgAdmFormatoType', $cfgAdmFormato);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cfgadmformato_edit', array('id' => $cfgAdmFormato->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                $params->id
+            );
+
+            if ($formato) {
+                $formato->setCodigo($params->codigo);
+                $formato->setNombre(strtoupper($params->nombre));
+                $formato->setCuerpo($params->cuerpo);
+
+                if ($params->idTipo) {
+                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findOneByTipo(
+                        $params->tipo->id
+                    );
+                    $formato->setTipo($params->idTipo);
+                }
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $formato,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('cfgadmformato/edit.html.twig', array(
-            'cfgAdmFormato' => $cfgAdmFormato,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
