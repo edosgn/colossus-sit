@@ -30,7 +30,7 @@ class MsvCaracterizacionController extends Controller
             'status' => 'succes',
             'code' => 200,
             'msj' => "listado festivos",
-            'data' => $cfgFestivos,
+            //'data' => $cfgFestivos,
         );
         return $helpers -> json($response);
     }
