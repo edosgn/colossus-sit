@@ -31,7 +31,7 @@ class BpActividad
     /**
      * @var string
      *
-     * @ORM\Column(name="unidadMedida", type="string", length=255)
+     * @ORM\Column(name="unidad_medida", type="string", length=255)
      */
     private $unidadMedida;
 
@@ -45,21 +45,16 @@ class BpActividad
     /**
      * @var int
      *
-     * @ORM\Column(name="costoUnitario", type="integer")
+     * @ORM\Column(name="costo_unitario", type="integer")
      */
     private $costoUnitario;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="costoTotal", type="integer")
+     * @ORM\Column(name="costo_total", type="integer")
      */
     private $costoTotal;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="BpProyecto")
-     **/
-    protected $BpProyecto;
 
     /**
      * @var bool
@@ -68,7 +63,10 @@ class BpActividad
      */
     private $activo;
 
-
+    /**
+     * @ORM\ManyToOne(targetEntity="BpProyecto")
+     **/
+    protected $proyecto;
 
 
     /**

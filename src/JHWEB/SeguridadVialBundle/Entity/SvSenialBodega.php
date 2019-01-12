@@ -65,6 +65,9 @@ class SvSenialBodega
     /** @ORM\ManyToOne(targetEntity="SvSenialInventario", inversedBy="bodegas") */
     private $inventario;
 
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialProveedor", inversedBy="bodegas") */
+    private $proveedor;
+
 
     /**
      * Get id
@@ -272,5 +275,29 @@ class SvSenialBodega
     public function getInventario()
     {
         return $this->inventario;
+    }
+
+    /**
+     * Set proveedor
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor
+     *
+     * @return SvSenialBodega
+     */
+    public function setProveedor(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor = null)
+    {
+        $this->proveedor = $proveedor;
+
+        return $this;
+    }
+
+    /**
+     * Get proveedor
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor
+     */
+    public function getProveedor()
+    {
+        return $this->proveedor;
     }
 }

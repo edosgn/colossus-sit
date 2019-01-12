@@ -45,21 +45,21 @@ class BpProyecto
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroCuota", type="integer")
+     * @ORM\Column(name="numero_cuota", type="integer")
      */
     private $numeroCuota;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombreCuota", type="string", length=255)
+     * @ORM\Column(name="nombre_cuota", type="string", length=255)
      */
     private $nombreCuota;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="costoValor", type="integer")
+     * @ORM\Column(name="costo_valor", type="integer")
      */
     private $costoValor;
 

@@ -239,7 +239,6 @@ class CfgTipoAlertaController extends Controller
                 'label' => $tipoAlerta->getNombre()
             );
         }
-        
         return $helpers->json($response);
     }
 }

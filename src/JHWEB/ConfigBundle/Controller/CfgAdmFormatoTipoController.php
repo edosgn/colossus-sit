@@ -22,13 +22,26 @@ class CfgAdmFormatoTipoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $tipos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findBy(
+            array('activo' => true)
+        );
 
-        $cfgAdmFormatoTipos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findAll();
+        $response['data'] = array();
 
-        return $this->render('cfgadmformatotipo/index.html.twig', array(
-            'cfgAdmFormatoTipos' => $cfgAdmFormatoTipos,
-        ));
+        if ($tipos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tipos)." registros encontrados", 
+                'data'=> $tipos,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,28 +52,43 @@ class CfgAdmFormatoTipoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgAdmFormatoTipo = new Cfgadmformatotipo();
-        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgAdmFormatoTipoType', $cfgAdmFormatoTipo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $tipo = new CfgAdmFormatoTipo();
+
+            $tipo->setNombre(strtoupper($params->nombre));
+            $tipo->setActivo(true);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgAdmFormatoTipo);
+            $em->persist($tipo);
             $em->flush();
 
-            return $this->redirectToRoute('cfgadmformatotipo_show', array('id' => $cfgAdmFormatoTipo->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cfgadmformatotipo/new.html.twig', array(
-            'cfgAdmFormatoTipo' => $cfgAdmFormatoTipo,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a cfgAdmFormatoTipo entity.
      *
-     * @Route("/{id}", name="cfgadmformatotipo_show")
+     * @Route("/{id}/show", name="cfgadmformatotipo_show")
      * @Method("GET")
      */
     public function showAction(CfgAdmFormatoTipo $cfgAdmFormatoTipo)
@@ -76,32 +104,58 @@ class CfgAdmFormatoTipoController extends Controller
     /**
      * Displays a form to edit an existing cfgAdmFormatoTipo entity.
      *
-     * @Route("/{id}/edit", name="cfgadmformatotipo_edit")
+     * @Route("/edit", name="cfgadmformatotipo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgAdmFormatoTipo $cfgAdmFormatoTipo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgAdmFormatoTipo);
-        $editForm = $this->createForm('JHWEB\ConfigBundle\Form\CfgAdmFormatoTipoType', $cfgAdmFormatoTipo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cfgadmformatotipo_edit', array('id' => $cfgAdmFormatoTipo->getId()));
+            $em = $this->getDoctrine()->getManager();
+            
+            $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->find(
+                $params->id
+            );
+
+            if ($tipo) {
+                $tipo->setNombre(strtoupper($params->nombre));
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $tipo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('cfgadmformatotipo/edit.html.twig', array(
-            'cfgAdmFormatoTipo' => $cfgAdmFormatoTipo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a cfgAdmFormatoTipo entity.
      *
-     * @Route("/{id}", name="cfgadmformatotipo_delete")
+     * @Route("/{id}/delete", name="cfgadmformatotipo_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgAdmFormatoTipo $cfgAdmFormatoTipo)
@@ -132,5 +186,34 @@ class CfgAdmFormatoTipoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* =================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="cfgadminformatotipo_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $tipos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
+            $response[$key] = array(
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

@@ -15,6 +15,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
 
     public function getIpatByRango($params) {
         $em = $this->getEntityManager();
+
         $horaInicioDatetime = $params->datos->horaInicio;
         $horaFinDatetime = $params->datos->horaFin;
         $fechaInicioDatetime = new \Datetime($params->datos->fechaInicio);
@@ -82,7 +83,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             AND ri.clase = :claseNombre
             AND ri.claseAccidente = :claseAccidente
             AND ri.choqueCon = :choqueCon
-            AND ri.objetoFijo = :objetoFijo
+            OR ri.objetoFijo = :objetoFijo
             AND ri.activo = 1";
         
         $consulta = $em->createQuery($dql);
@@ -105,5 +106,5 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         ));
 
         return $consulta->getResult();
-    }
+    } 
 }

@@ -38,6 +38,13 @@ class SvCfgSenialTipo
     /**
      * @var bool
      *
+     * @ORM\Column(name="color", type="boolean")
+     */
+    private $color;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -99,6 +106,30 @@ class SvCfgSenialTipo
     public function getGestionable()
     {
         return $this->gestionable;
+    }
+
+    /**
+     * Set color
+     *
+     * @param boolean $color
+     *
+     * @return SvCfgSenialTipo
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return boolean
+     */
+    public function getColor()
+    {
+        return $this->color;
     }
 
     /**

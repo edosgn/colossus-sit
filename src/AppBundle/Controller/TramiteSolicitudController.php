@@ -93,7 +93,7 @@ class TramiteSolicitudController extends Controller
             $params = json_decode($json);
 
             $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
-                $params->idFormulario
+                $params->tramiteFormulario
             );
 
             $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($params->idFactura,$tramite->getId());

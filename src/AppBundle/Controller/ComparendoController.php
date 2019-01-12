@@ -900,4 +900,62 @@ class ComparendoController extends Controller
         );
         return $helpers->json($response);
     }
+
+    /**
+     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     *
+     * @Route("/pazysalvo/{idUsuario}/pdf", name="mpersonalasignacion_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $idUsuario)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $usuario = $em->getRepository('UsuarioBundle:Usuario')->find($idUsuario);
+
+        $html = $this->renderView('@App/comparendo/pdf.template.html.twig', array(
+            'usuario'=>$usuario,
+            'fechaActual' => $fechaActual
+        ));
+
+        $pdf = $this->container->get("white_october.tcpdf")->create(
+            'PORTRAIT',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('qweqwe');
+        $pdf->SetTitle('Planilla');
+        $pdf->SetSubject('Your client');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->AddPage();
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+
+        $pdf->Output("example.pdf", 'I');
+        die();
+    }
 }

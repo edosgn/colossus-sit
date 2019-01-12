@@ -38,58 +38,16 @@ class SvSenialUbicacion
     /**
      * @var string
      *
-     * @ORM\Column(name="latitud", type="string", length=100)
+     * @ORM\Column(name="latitud", type="string", length=100, nullable=true)
      */
     private $latitud;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="longitud", type="string", length=100)
+     * @ORM\Column(name="longitud", type="string", length=100, nullable=true)
      */
     private $longitud;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="via_1", type="string", length=50)
-     */
-    private $via1;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero_1", type="integer")
-     */
-    private $numero1;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="via_2", type="string", length=50)
-     */
-    private $via2;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero_2", type="integer")
-     */
-    private $numero2;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="via_3", type="string", length=50, nullable=true)
-     */
-    private $via3;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero_3", type="integer", nullable=true)
-     */
-    private $numero3;
 
     /**
      * @var string
@@ -240,150 +198,6 @@ class SvSenialUbicacion
     public function getLongitud()
     {
         return $this->longitud;
-    }
-
-    /**
-     * Set via1
-     *
-     * @param string $via1
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setVia1($via1)
-    {
-        $this->via1 = $via1;
-
-        return $this;
-    }
-
-    /**
-     * Get via1
-     *
-     * @return string
-     */
-    public function getVia1()
-    {
-        return $this->via1;
-    }
-
-    /**
-     * Set numero1
-     *
-     * @param integer $numero1
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setNumero1($numero1)
-    {
-        $this->numero1 = $numero1;
-
-        return $this;
-    }
-
-    /**
-     * Get numero1
-     *
-     * @return integer
-     */
-    public function getNumero1()
-    {
-        return $this->numero1;
-    }
-
-    /**
-     * Set via2
-     *
-     * @param string $via2
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setVia2($via2)
-    {
-        $this->via2 = $via2;
-
-        return $this;
-    }
-
-    /**
-     * Get via2
-     *
-     * @return string
-     */
-    public function getVia2()
-    {
-        return $this->via2;
-    }
-
-    /**
-     * Set numero2
-     *
-     * @param integer $numero2
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setNumero2($numero2)
-    {
-        $this->numero2 = $numero2;
-
-        return $this;
-    }
-
-    /**
-     * Get numero2
-     *
-     * @return integer
-     */
-    public function getNumero2()
-    {
-        return $this->numero2;
-    }
-
-    /**
-     * Set via3
-     *
-     * @param string $via3
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setVia3($via3)
-    {
-        $this->via3 = $via3;
-
-        return $this;
-    }
-
-    /**
-     * Get via3
-     *
-     * @return string
-     */
-    public function getVia3()
-    {
-        return $this->via3;
-    }
-
-    /**
-     * Set numero3
-     *
-     * @param integer $numero3
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setNumero3($numero3)
-    {
-        $this->numero3 = $numero3;
-
-        return $this;
-    }
-
-    /**
-     * Get numero3
-     *
-     * @return integer
-     */
-    public function getNumero3()
-    {
-        return $this->numero3;
     }
 
     /**

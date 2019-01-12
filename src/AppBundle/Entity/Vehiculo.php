@@ -321,6 +321,9 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
+        if ($this->fechaManifiesto) {
+            return $this->fechaManifiesto->format('d/m/Y');
+        }
         return $this->fechaManifiesto;
     }
 
