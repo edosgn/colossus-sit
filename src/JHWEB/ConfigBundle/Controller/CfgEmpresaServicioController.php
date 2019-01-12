@@ -196,6 +196,7 @@ class CfgEmpresaServicioController extends Controller
         $cfgEmpresaServicios = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findBy(
             array('activo' => true)
         );
+        $response=[];
         foreach ($cfgEmpresaServicios as $key => $cfgEmpresaServicio) {
             $response[$key] = array( 
                 'value' => $cfgEmpresaServicio->getId(),

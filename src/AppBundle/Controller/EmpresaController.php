@@ -45,6 +45,31 @@ class EmpresaController extends Controller
          
         return $helpers->json($response);
     }
+    /**
+     * Lists all Empresa entities.
+     *
+     * @Route("/index/empresaAlcaldia", name="empresaAlcaldia_index")
+     * @Method("GET")
+     */
+    public function indexEmpresaAlcaldiaAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
+            array('estado' => 1,'tipoEmpresa'=>1)
+        );
+
+        $response['data'] = array();
+
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado empresas", 
+                    'data'=> $empresas,
+            );
+         
+        return $helpers->json($response);
+    }
 
     /**
      * Creates a new Empresa entity.
@@ -101,6 +126,7 @@ class EmpresaController extends Controller
                         $tipoSociedad = $em->getRepository('AppBundle:TipoSociedad')->find($tipoSociedadId);
                         $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($tipoIdentificacionId);
                         $municipio = $em->getRepository('AppBundle:Municipio')->find($municipioId);
+
                         $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($ciudadanoId);
                         
                         $cfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->find($cfgEmpresaServicioId);
@@ -150,13 +176,11 @@ class EmpresaController extends Controller
                             $em->persist($representanteEmpresa);
                             $em->flush();                     
 
-                           
-
                             $response = array(
                                 'status' => 'success',
                                 'code' => 200,
                                 'msj' => "Empresa creado con exito", 
-                            );
+                            ); 
                      
                     // }
         }else{
@@ -485,5 +509,28 @@ class EmpresaController extends Controller
     }
 
 
-       
+     /**
+     * datos para select 2
+     *
+     * @Route("/select/trasporte/publico", name="empresa_transporte_publico_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectTrasportePublicoAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $empresas = $em->getRepository('AppBundle:Empresa')->findBy(
+        array('estado' => 1,'tipoEmpresa'=>2) 
+    );
+    if ($empresas == null) {
+       $response = null;
+    }
+      foreach ($empresas as $key => $empresa) {
+        $response[$key] = array(
+            'value' => $empresa->getId(),
+            'label' => $empresa->getNit()."_".$empresa->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }
