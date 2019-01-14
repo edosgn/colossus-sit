@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlotpconvenios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numeroconvenio</th>
+                <th>Fechaconvenio</th>
+                <th>Fechaactainicio</th>
+                <th>Fechaactafin</th>
+                <th>Observacion</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloTpConvenio in vhloTpConvenios %}
+            <tr>
+                <td><a href="{{ path('vhlotpconvenio_show', { 'id': vhloTpConvenio.id }) }}">{{ vhloTpConvenio.id }}</a></td>
+                <td>{{ vhloTpConvenio.numeroConvenio }}</td>
+                <td>{% if vhloTpConvenio.fechaConvenio %}{{ vhloTpConvenio.fechaConvenio|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if vhloTpConvenio.fechaActaInicio %}{{ vhloTpConvenio.fechaActaInicio|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ vhloTpConvenio.fechaActaFin }}</td>
+                <td>{{ vhloTpConvenio.observacion }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlotpconvenio_show', { 'id': vhloTpConvenio.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlotpconvenio_edit', { 'id': vhloTpConvenio.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlotpconvenio_new') }}">Create a new vhloTpConvenio</a>
+        </li>
+    </ul>
+{% endblock %}
