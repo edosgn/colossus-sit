@@ -958,4 +958,52 @@ class ComparendoController extends Controller
         $pdf->Output("example.pdf", 'I');
         die();
     }
+
+    /**
+     * Busca si existen trazabilidades por id de documento.
+     *
+     * @Route("/record", name="comparendo_record")
+     * @Method({"GET", "POST"})
+     */
+    public function recordAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                array(
+                    'comparendo' => $params->id
+                )
+            );
+            
+            if ($trazabilidades) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($trazabilidades)." Documentos registrados.", 
+                    'data'=> $trazabilidades,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El comparendo no tiene trazabilidades aún.", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
