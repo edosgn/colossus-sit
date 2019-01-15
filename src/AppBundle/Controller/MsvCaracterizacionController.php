@@ -6,6 +6,8 @@ use AppBundle\Entity\MsvCaracterizacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * Msvcaracterizacion controller.
@@ -256,5 +258,47 @@ class MsvCaracterizacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Search empresa entity.
+     *
+     * @Route("/get/datos/empresa", name="datos_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarEmpresaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $empresa = $em->getRepository('AppBundle:Empresa')->findBy(array('nit' => $params->nit));
+            if ($empresa) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "empresa encontrada",
+                    'data' => $empresa,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La empresa no se encuentra en la Base de Datos",
+                );
+                return $helpers->json($response);
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 }
