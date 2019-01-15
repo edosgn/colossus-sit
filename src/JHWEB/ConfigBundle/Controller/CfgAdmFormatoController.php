@@ -70,10 +70,10 @@ class CfgAdmFormatoController extends Controller
             $formato->setActivo(true);
 
             if ($params->idTipo) {
-                $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findOneByTipo(
+                $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->find(
                     $params->idTipo
                 );
-                $formato->setTipo($params->idTipo);
+                $formato->setTipo($tipo);
             }
 
             $em->persist($formato);

@@ -85,6 +85,9 @@ class CvCdoTrazabilidad
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('Y-m-d');
+        }
         return $this->fecha;
     }
 

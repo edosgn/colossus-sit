@@ -493,6 +493,9 @@ class Comparendo
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('h:i:s A');
+        }
         return $this->hora;
     }
 
