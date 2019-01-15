@@ -66,17 +66,26 @@ class Helpers
 	public function comparendoState($params){
 		$em = $this->em;
 
-		//Pendiente
-		$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-            1
-        );
+		//Valida si el comparendo esta en proceso de anulación
+        if ($params->comparendo->anulado) {
+            //En proceso de anulación
+			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+	            13
+	        );
+        }else{
+			//Pendiente
+			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+	            1
+	        );
 
-		if (!$params->infractor->identificacion || !$params->comparendo->idInfraccion) {
-			//Inhibitorio
-            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                6
-            );
+			if (!$params->infractor->identificacion || !$params->comparendo->idInfraccion) {
+				//Inhibitorio
+	            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+	                6
+	            );
+	        }
         }
+
 
         /*$fecha = $params->comparendo->fecha." ".$params->comparendo->horas.':'.$params->comparendo->minutos.':00';
 

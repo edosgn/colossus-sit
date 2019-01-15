@@ -22,6 +22,20 @@ class MparqEntradaSalida
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_comparendo", type="bigint")
+     */
+    private $numero_comparendo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="placa", type="string", length=255)
+     */
+    private $placa;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fechaIngreso", type="datetime")
@@ -94,11 +108,17 @@ class MparqEntradaSalida
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MparqGrua", inversedBy="entradasSalidas") */
     private $grua;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="entradasSalidas") */
-    private $comparendo;
-
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MparqCostoTrayecto", inversedBy="entradasSalidas") */
     private $costoTrayecto;
+
+     /** @ORM\ManyToOne(targetEntity="Linea", inversedBy="vehiculos") */
+    private $linea;
+
+    /** @ORM\ManyToOne(targetEntity="Color", inversedBy="vehiculos") */
+    private $color;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
+    private $clase;
 
 
     /**
@@ -109,6 +129,54 @@ class MparqEntradaSalida
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set numeroComparendo
+     *
+     * @param integer $numeroComparendo
+     *
+     * @return MparqEntradaSalida
+     */
+    public function setNumeroComparendo($numeroComparendo)
+    {
+        $this->numero_comparendo = $numeroComparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroComparendo
+     *
+     * @return integer
+     */
+    public function getNumeroComparendo()
+    {
+        return $this->numero_comparendo;
+    }
+
+    /**
+     * Set placa
+     *
+     * @param string $placa
+     *
+     * @return MparqEntradaSalida
+     */
+    public function setPlaca($placa)
+    {
+        $this->placa = $placa;
+
+        return $this;
+    }
+
+    /**
+     * Get placa
+     *
+     * @return string
+     */
+    public function getPlaca()
+    {
+        return $this->placa;
     }
 
     /**
@@ -132,7 +200,7 @@ class MparqEntradaSalida
      */
     public function getFechaIngreso()
     {
-        return $this->fechaIngreso->format('d/m/Y');
+        return $this->fechaIngreso;
     }
 
     /**
@@ -376,30 +444,6 @@ class MparqEntradaSalida
     }
 
     /**
-     * Set comparendo
-     *
-     * @param \AppBundle\Entity\Comparendo $comparendo
-     *
-     * @return MparqEntradaSalida
-     */
-    public function setComparendo(\AppBundle\Entity\Comparendo $comparendo = null)
-    {
-        $this->comparendo = $comparendo;
-
-        return $this;
-    }
-
-    /**
-     * Get comparendo
-     *
-     * @return \AppBundle\Entity\Comparendo
-     */
-    public function getComparendo()
-    {
-        return $this->comparendo;
-    }
-
-    /**
      * Set costoTrayecto
      *
      * @param \AppBundle\Entity\MparqCostoTrayecto $costoTrayecto
@@ -421,5 +465,77 @@ class MparqEntradaSalida
     public function getCostoTrayecto()
     {
         return $this->costoTrayecto;
+    }
+
+    /**
+     * Set linea
+     *
+     * @param \AppBundle\Entity\Linea $linea
+     *
+     * @return MparqEntradaSalida
+     */
+    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    {
+        $this->linea = $linea;
+
+        return $this;
+    }
+
+    /**
+     * Get linea
+     *
+     * @return \AppBundle\Entity\Linea
+     */
+    public function getLinea()
+    {
+        return $this->linea;
+    }
+
+    /**
+     * Set color
+     *
+     * @param \AppBundle\Entity\Color $color
+     *
+     * @return MparqEntradaSalida
+     */
+    public function setColor(\AppBundle\Entity\Color $color = null)
+    {
+        $this->color = $color;
+
+        return $this;
+    }
+
+    /**
+     * Get color
+     *
+     * @return \AppBundle\Entity\Color
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \AppBundle\Entity\Clase $clase
+     *
+     * @return MparqEntradaSalida
+     */
+    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \AppBundle\Entity\Clase
+     */
+    public function getClase()
+    {
+        return $this->clase;
     }
 }

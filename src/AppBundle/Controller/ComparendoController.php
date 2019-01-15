@@ -137,6 +137,7 @@ class ComparendoController extends Controller
             $comparendo->setRetencionLicencia(
                 $params->comparendo->retencionLicencia
             );
+
             //$comparendo->setFotomulta(false);
             //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
             

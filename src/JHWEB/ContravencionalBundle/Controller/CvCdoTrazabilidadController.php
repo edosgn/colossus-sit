@@ -3,6 +3,7 @@
 namespace JHWEB\ContravencionalBundle\Controller;
 
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
+use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -61,7 +62,7 @@ class CvCdoTrazabilidadController extends Controller
     /**
      * Finds and displays a cvCdoTrazabilidad entity.
      *
-     * @Route("/{id}", name="cvcdotrazabilidad_show")
+     * @Route("/{id}/show", name="cvcdotrazabilidad_show")
      * @Method("GET")
      */
     public function showAction(CvCdoTrazabilidad $cvCdoTrazabilidad)
@@ -102,7 +103,7 @@ class CvCdoTrazabilidadController extends Controller
     /**
      * Deletes a cvCdoTrazabilidad entity.
      *
-     * @Route("/{id}", name="cvcdotrazabilidad_delete")
+     * @Route("/{id}/delete", name="cvcdotrazabilidad_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CvCdoTrazabilidad $cvCdoTrazabilidad)
@@ -133,5 +134,71 @@ class CvCdoTrazabilidadController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Displays a form to update/documento an existing cvCdoTrazabilidad entity.
+     *
+     * @Route("/update/documento", name="cvlccfgmotivo_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function updateDocumentoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $trazabilidad = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->find(
+                $params->id
+            );
+
+            if ($trazabilidad) {
+                $actoAdministrativo = new CfgAdmActoAdministrativo();
+
+                $actoAdministrativo->setNumero($params->numero);
+                $actoAdministrativo->setFecha(new \Datetime(date('Y-m-d')));
+                $actoAdministrativo->setCuerpo($params->cuerpo);
+                $actoAdministrativo->setActivo(true);
+
+                if ($params->idFormato) {
+                    $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                        $params->idFormato
+                    );
+                    $actoAdministrativo->setFormato($formato);
+                }
+                $em->persist($actoAdministrativo);
+                $em->flush();
+
+                $trazabilidad->setActoAdministrativo($actoAdministrativo);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $trazabilidad,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
+        }
+
+        return $helpers->json($response);
     }
 }
