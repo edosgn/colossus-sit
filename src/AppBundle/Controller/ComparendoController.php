@@ -870,6 +870,53 @@ class ComparendoController extends Controller
     }
 
     /**
+     * Busca un unico comparendo por numero.
+     *
+     * @Route("/search/number", name="comparendo_search_number")
+     * @Method({"GET","POST"})
+     */
+    public function searchByNumber(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->getByNumber(
+                $params->numero
+            );
+
+            if ($comparendo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Comparendo encontrado satisfactoriamente.", 
+                    'data' => $comparendo,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existe ningún comparendo con el número que desea buscar.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Exporta un comparendo en un archivo plano.
      *
      * @Route("/export", name="comparendo_export")

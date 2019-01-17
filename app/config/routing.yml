@@ -1,3 +1,7 @@
+jhweb_contravencional_cv_cdo_cfg_interes:
+    resource: "@JHWEBContravencionalBundle/Controller/CvCdoCfgInteresController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
