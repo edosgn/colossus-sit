@@ -2,22 +2,23 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\TecnoMecanica;
+use JHWEB\VehiculoBundle\Entity\VhloSoat;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Tecnomecanica controller.
+ * Vhlosoat controller.
  *
- * @Route("tecnomecanica")
+ * @Route("vhlosoat")
  */
-class TecnoMecanicaController extends Controller
+class VhloSoatController extends Controller
 {
     /**
-     * Lists all tecnoMecanica entities.
+     * Lists all vhloSoat entities.
      *
-     * @Route("/", name="tecnomecanica_index")
+     * @Route("/", name="vhlosoat_index")
      * @Method({"GET", "POST"})
      */
     public function indexAction(Request $request)
@@ -26,51 +27,48 @@ class TecnoMecanicaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
-        
-            $tecnoMecanicas = $em->getRepository('JHWEBVehiculoBundle:TecnoMecanica')->findBy(
+            $soats = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findBy(
                 array(
                     'activo' => true,
-                    'vehiculo' => $params->idVehiculo
+                    'vehiculo' => $params->idVehiculo,
                 )
             );
-
             $response['data'] = array();
 
-            if ($tecnoMecanicas) {
+            if ($soats) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($tecnoMecanicas)." registros encontrados", 
-                    'data'=> $tecnoMecanicas,
+                    'message' => count($soats) . " registros encontrados",
+                    'data' => $soats,
                 );
-            } 
+            }
             else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se ha encontrado ningun registro de revisiones técnico mecánicas para este vehículo",
-                    'data' => $tecnoMecanicas,
+                    'message' => "No se ha encontrado ningun registro de soat para este vehículo",
+                    'data' => $soats,
                 );
             }
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorización no válida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new tecnoMecanica entity.
+     * Creates a new VhloSoat entity.
      *
-     * @Route("/new", name="tecnomecanica_new")
+     * @Route("/new", name="vhlosoat_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -79,134 +77,132 @@ class TecnoMecanicaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-
-            $tecnoMecanica = new TecnoMecanica();
+            
+            $soat = new VhloSoat();
 
             $em = $this->getDoctrine()->getManager();
-
-            if ($params->idCda) {
-                $cfgCda = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->find(
-                    $params->idCda
+            if ($params->idMunicipio) {
+                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                    $params->idMunicipio
                 );
-                $tecnoMecanica->setCda($cfgCda);
+                $soat->setMunicipio($municipio);
             }
 
             if ($params->idVehiculo) {
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
                     $params->idVehiculo
                 );
-                $tecnoMecanica->setVehiculo($vehiculo);
+                $soat->setVehiculo($vehiculo);
             }
 
-
-            $tecnoMecanica->setNumeroControl($params->numeroControl);
-            $tecnoMecanica->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-            $tecnoMecanica->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
-            $tecnoMecanica->setActivo(true);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tecnoMecanica);
+            $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+            $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
+            $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+            $soat->setNumeroPoliza($params->numeroPoliza);
+            $soat->setNombreEmpresa($params->nombreEmpresa);
+            $soat->setActivo(true);
+            $soat->setEstado("Disponible");
+            $em->persist($soat);
             $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con exito",
+                'message' => "Los datos han sido registrados exitosamente.",
             );
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorización no válida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a tecnoMecanica entity.
+     * Finds and displays a vhloSoat entity.
      *
-     * @Route("/{id}", name="tecnomecanica_show")
+     * @Route("/{id}", name="vhlosoat_show")
      * @Method("GET")
      */
-    public function showAction(TecnoMecanica $tecnoMecanica)
+    public function showAction(VhloSoat $vhloSoat)
     {
-        $deleteForm = $this->createDeleteForm($tecnoMecanica);
-
-        return $this->render('tecnomecanica/show.html.twig', array(
-            'tecnoMecanica' => $tecnoMecanica,
+        $deleteForm = $this->createDeleteForm($vhloSoat);
+        return $this->render('vhlosoat/show.html.twig', array(
+            'vhlosoat' => $vhloSoat,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing tecnoMecanica entity.
+     * Displays a form to edit an existing VhloSoat entity.
      *
-     * @Route("/{id}/edit", name="tecnomecanica_edit")
+     * @Route("/{id}/edit", name="vhlosoat_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, TecnoMecanica $tecnoMecanica)
+    public function editAction(Request $request, VhloSoat $vhloSoat)
     {
-        $deleteForm = $this->createDeleteForm($tecnoMecanica);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\TecnoMecanicaType', $tecnoMecanica);
+        $deleteForm = $this->createDeleteForm($vhlosoat);
+        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\vhloSoatType', $vhloSoat);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('tecnomecanica_edit', array('id' => $tecnoMecanica->getId()));
+            return $this->redirectToRoute('vhlosoat_edit', array('id' => $vhloSoat->getId()));
         }
 
-        return $this->render('tecnomecanica/edit.html.twig', array(
-            'tecnoMecanica' => $tecnoMecanica,
+        return $this->render('vhlosoat/edit.html.twig', array(
+            'vhlosoat' => $vhloSoat,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a tecnoMecanica entity.
+     * Deletes a VhloSoat entity.
      *
-     * @Route("/{id}", name="tecnomecanica_delete")
+     * @Route("/{id}", name="vhlosoat_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, TecnoMecanica $tecnoMecanica)
+    public function deleteAction(Request $request, VhloSoat $vhloSoat)
     {
-        $form = $this->createDeleteForm($tecnoMecanica);
+        $form = $this->createDeleteForm($vhloSoat);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($tecnoMecanica);
+            $em->remove($vhloSoat);
             $em->flush();
         }
 
-        return $this->redirectToRoute('tecnomecanica_index');
+        return $this->redirectToRoute('vhlosoat_index');
     }
 
     /**
-     * Creates a form to delete a tecnoMecanica entity.
+     * Creates a form to delete a vhloSoat entity.
      *
-     * @param TecnoMecanica $tecnoMecanica The tecnoMecanica entity
+     * @param VhloSoat $vhloSoat The vhloSoat entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(TecnoMecanica $tecnoMecanica)
+    private function createDeleteForm(VhloSoat $vhloSoat)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('tecnomecanica_delete', array('id' => $tecnoMecanica->getId())))
+            ->setAction($this->generateUrl('vhlosoat_delete', array('id' => $vhloSoat->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new VhloSoat entity.
      *
-     * @Route("/get/fecha/vencimiento", name="tecnomecanica_fecha_vencimiento")
+     * @Route("/get/fecha/vencimiento", name="soat_fecha_vencimiento")
      * @Method({"GET", "POST"})
      */
     public function getFechaVencimientoAction(Request $request)
@@ -220,12 +216,14 @@ class TecnoMecanicaController extends Controller
             $params = json_decode($json);
 
             $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));
+            $fechaVigencia = new \Datetime(date('Y-m-d', strtotime('+1 day', strtotime($params->fechaExpedicion))));
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Fecha de vencimiento calculada con exito",
-                'data' => $fechaVencimiento->format('Y-m-d')
+                'message' => "Fecha de vencimiento del soat calculada con éxito",
+                'fechaVencimiento' => $fechaVencimiento->format('Y-m-d'),
+                'fechaVigencia' => $fechaVigencia->format('Y-m-d')
             );
         }else{
             $response = array(

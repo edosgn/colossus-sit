@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlotecnomecanicas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numerocontrol</th>
+                <th>Fechaexpedicion</th>
+                <th>Fechavencimiento</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloTecnoMecanica in vhloTecnoMecanicas %}
+            <tr>
+                <td><a href="{{ path('vhlotecnomecanica_show', { 'id': vhloTecnoMecanica.id }) }}">{{ vhloTecnoMecanica.id }}</a></td>
+                <td>{{ vhloTecnoMecanica.numeroControl }}</td>
+                <td>{% if vhloTecnoMecanica.fechaExpedicion %}{{ vhloTecnoMecanica.fechaExpedicion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if vhloTecnoMecanica.fechaVencimiento %}{{ vhloTecnoMecanica.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if vhloTecnoMecanica.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlotecnomecanica_show', { 'id': vhloTecnoMecanica.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

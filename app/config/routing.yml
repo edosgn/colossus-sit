@@ -1,3 +1,11 @@
+jhweb_vehiculo_vhlo_soat:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloSoatController.php"
+    type:     annotation
+
+jhweb_vehiculo_vhlo_tecno_mecanica:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloTecnoMecanicaController.php"
+    type:     annotation
+
 jhweb_vehiculo_vhlo_cfg_cda:
     resource: "@JHWEBVehiculoBundle/Controller/VhloCfgCdaController.php"
     type:     annotation
