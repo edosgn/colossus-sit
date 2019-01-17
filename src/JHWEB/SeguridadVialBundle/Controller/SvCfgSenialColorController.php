@@ -63,6 +63,7 @@ class SvCfgSenialColorController extends Controller
             $color = new SvCfgSenialColor();
 
             $color->setNombre(strtoupper($params->nombre));
+            $color->setHexadecimal('#000000');
             $color->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
