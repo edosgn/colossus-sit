@@ -5,12 +5,12 @@ namespace JHWEB\ContravencionalBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CvComparendoNotificacion
+ * CvCdoNotificacion
  *
- * @ORM\Table(name="cv_comparendo_notificacion")
- * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvComparendoNotificacionRepository")
+ * @ORM\Table(name="cv_cdo_notificacion")
+ * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCdoNotificacionRepository")
  */
-class CvComparendoNotificacion
+class CvCdoNotificacion
 {
     /**
      * @var int
@@ -64,7 +64,7 @@ class CvComparendoNotificacion
      *
      * @param integer $dia
      *
-     * @return CvComparendoNotificacion
+     * @return CvCdoNotificacion
      */
     public function setDia($dia)
     {
@@ -88,7 +88,7 @@ class CvComparendoNotificacion
      *
      * @param \DateTime $hora
      *
-     * @return CvComparendoNotificacion
+     * @return CvCdoNotificacion
      */
     public function setHora($hora)
     {
@@ -112,7 +112,7 @@ class CvComparendoNotificacion
      *
      * @param boolean $activo
      *
-     * @return CvComparendoNotificacion
+     * @return CvCdoNotificacion
      */
     public function setActivo($activo)
     {
@@ -136,7 +136,7 @@ class CvComparendoNotificacion
      *
      * @param \AppBundle\Entity\CfgComparendoEstado $estado
      *
-     * @return CvComparendoNotificacion
+     * @return CvCdoNotificacion
      */
     public function setEstado(\AppBundle\Entity\CfgComparendoEstado $estado = null)
     {
@@ -160,7 +160,7 @@ class CvComparendoNotificacion
      *
      * @param \AppBundle\Entity\CfgCargo $cargo
      *
-     * @return CvComparendoNotificacion
+     * @return CvCdoNotificacion
      */
     public function setCargo(\AppBundle\Entity\CfgCargo $cargo = null)
     {

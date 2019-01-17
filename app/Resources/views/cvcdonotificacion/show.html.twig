@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvcdonotificacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cvCdoNotificacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Dia</th>
+                <td>{{ cvCdoNotificacion.dia }}</td>
+            </tr>
+            <tr>
+                <th>Hora</th>
+                <td>{% if cvCdoNotificacion.hora %}{{ cvCdoNotificacion.hora|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if cvCdoNotificacion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvcdonotificacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cvcdonotificacion_edit', { 'id': cvCdoNotificacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

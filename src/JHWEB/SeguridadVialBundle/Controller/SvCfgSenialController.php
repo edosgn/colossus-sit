@@ -132,7 +132,9 @@ class SvCfgSenialController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find($params->id);
+            $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find(
+                $params->id
+            );
 
             if ($senial) {
                 $response = array(
@@ -162,26 +164,79 @@ class SvCfgSenialController extends Controller
     /**
      * Displays a form to edit an existing svCfgSenial entity.
      *
-     * @Route("/{id}/edit", name="svcfgsenial_edit")
+     * @Route("/edit", name="svcfgsenial_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, SvCfgSenial $svCfgSenial)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenial);
-        $editForm = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvCfgSenialType', $svCfgSenial);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('svcfgsenial_edit', array('id' => $svCfgSenial->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $senial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenial')->find(
+                $params->id
+            );
+
+            if ($senial) {
+                $senial->setCodigo($params->codigo);
+                $senial->setNombre(strtoupper($params->nombre));
+                $senial->setCantidad(0);
+
+                $file = $request->files->get('file');
+                       
+                if ($file) {
+                    $extension = $file->guessExtension();
+                    $filename = md5(rand().time()).".".$extension;
+                    $dir=__DIR__.'/../../../../web/uploads/seniales/logos';
+
+                    $file->move($dir,$filename);
+                    $senial->setLogo($filename);
+                }
+
+                if ($params->idSenialTipo) {
+                    $tipo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialTipo')->find(
+                        $params->idSenialTipo
+                    );
+                    $senial->setTipoSenial($tipo);
+                }
+
+                if ($params->idColor) {
+                    $color = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialColor')->find(
+                        $params->idColor
+                    );
+                    $senial->setColor($color);
+                }
+
+                $em->flush();
+                
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $senial,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->render('svcfgsenial/edit.html.twig', array(
-            'svCfgSenial' => $svCfgSenial,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
