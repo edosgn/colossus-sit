@@ -2,22 +2,23 @@
 
 namespace JHWEB\VehiculoBundle\Controller;
 
-use JHWEB\VehiculoBundle\Entity\CfgCda;
+use JHWEB\VehiculoBundle\Entity\VhloCfgCda;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgcda controller.
+ * Vhlocfgcda controller.
  *
- * @Route("cfgcda")
+ * @Route("vhlocfgcda")
  */
-class CfgCdaController extends Controller
+class VhloCfgCdaController extends Controller
 {
     /**
-     * Lists all cfgCda entities.
+     * Lists all vhloCfgCda entities.
      *
-     * @Route("/", name="cfgcda_index")
+     * @Route("/", name="vhlocfgcda_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +27,7 @@ class CfgCdaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $cdas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCda')->findBy(
             array('activo' => true)
         );
 
@@ -45,9 +46,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a new cfgCda entity.
+     * Creates a new vhloCfgCda entity.
      *
-     * @Route("/new", name="cfgcda_new")
+     * @Route("/new", name="vhlocfgcda_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,7 +61,7 @@ class CfgCdaController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
            
-            $cda = new CfgCda();
+            $cda = new VhloCfgCda();
 
             $cda->setNombre($params->nombre);
             $cda->setNit($params->nit);
@@ -87,25 +88,25 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Finds and displays a cfgCda entity.
+     * Finds and displays a vhloCfgCda entity.
      *
-     * @Route("/{id}/show", name="cfgcda_show")
+     * @Route("/{id}/show", name="vhlocfgcda_show")
      * @Method("GET")
      */
-    public function showAction(CfgCda $cfgCda)
+    public function showAction(VhloCfgCda $vhloCfgCda)
     {
-        $deleteForm = $this->createDeleteForm($cfgCda);
+        $deleteForm = $this->createDeleteForm($vhloCfgCda);
 
-        return $this->render('cfgcda/show.html.twig', array(
-            'cfgCda' => $cfgCda,
+        return $this->render('vhlocfgcda/show.html.twig', array(
+            'vhloCfgCda' => $vhloCfgCda,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgCda entity.
+     * Displays a form to edit an existing vhloCfgCda entity.
      *
-     * @Route("/edit", name="cfgcda_edit")
+     * @Route("/edit", name="vhlocfgcda_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -119,7 +120,7 @@ class CfgCdaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $cda = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCda")->find($params->id);
 
             if ($cda) {
                 $cda->setNombre($params->nombre);
@@ -152,9 +153,9 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Deletes a cfgCda entity.
+     * Deletes a vhloCfgCda entity.
      *
-     * @Route("/delete", name="cfgcda_delete")
+     * @Route("/delete", name="vhlocfgcda_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -168,7 +169,7 @@ class CfgCdaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $cda = $em->getRepository("JHWEBVehiculoBundle:CfgCda")->find($params->id);
+            $cda = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCda")->find($params->id);
 
             if ($cda) {
                 $cda->setActivo(false);
@@ -200,16 +201,16 @@ class CfgCdaController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgCda entity.
+     * Creates a form to delete a vhloCfgCda entity.
      *
-     * @param CfgCda $cfgCda The cfgCda entity
+     * @param VhloCfgCda $vhloCfgCda The vhloCfgCda entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgCda $cfgCda)
+    private function createDeleteForm(VhloCfgCda $vhloCfgCda)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgcda_delete', array('id' => $cfgCda->getId())))
+            ->setAction($this->generateUrl('vhlocfgcda_delete', array('id' => $vhloCfgCda->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -218,7 +219,7 @@ class CfgCdaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgcda_select")
+     * @Route("/select", name="vhlocfgcda_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -226,7 +227,7 @@ class CfgCdaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $cdas = $em->getRepository('JHWEBVehiculoBundle:CfgCda')->findBy(
+        $cdas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCda')->findBy(
             array('activo' => true)
         );
 

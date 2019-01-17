@@ -24,7 +24,7 @@ class MsvCaracterizacion
     /**
      * @var bool
      *
-     * @ORM\Column(name="asistencia", type="boolean")
+     * @ORM\Column(name="asistencia", type="boolean", nullable = true)
      */
     private $asistencia;
 
@@ -38,7 +38,7 @@ class MsvCaracterizacion
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudad", type="string", length=150)
+     * @ORM\Column(name="ciudad", type="string", length=150, nullable=true)
      */
     private $ciudad;
 
@@ -66,21 +66,21 @@ class MsvCaracterizacion
     /**
      * @var string
      *
-     * @ORM\Column(name="lugar_expedicion", type="string", length=255)
+     * @ORM\Column(name="lugar_expedicion", type="string", length=255, nullable=true)
      */
     private $lugarExpedicion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="clc", type="string", length=150)
+     * @ORM\Column(name="clc", type="string", length=150, nullable=true)
      */
     private $clc;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vigencia", type="date")
+     * @ORM\Column(name="fecha_vigencia", type="date", nullable=true)
      */
     private $fechaVigencia;
 
@@ -104,6 +104,13 @@ class MsvCaracterizacion
      * @ORM\Column(name="grupo_trabajo", type="string", length=100)
      */
     private $grupoTrabajo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otro_grupo_trabajo", type="string", length=100, nullable=true)
+     */
+    private $otroGrupoTrabajo;
 
     /**
      * @var string
@@ -115,112 +122,133 @@ class MsvCaracterizacion
     /**
      * @var string
      *
-     * @ORM\Column(name="experiencia_conduccion", type="string", length=255)
+     * @ORM\Column(name="otro_tipo_contrato", type="string", length=100, nullable=true)
+     */
+    private $otroTipoContrato;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="experiencia_conduccion", type="string", length=255, nullable=true)
      */
     private $experienciaConduccion;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="accidente_transito", type="boolean")
+     * @ORM\Column(name="accidente_transito", type="boolean", nullable=true)
      */
     private $accidenteTransito;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="circunstancias", type="string", length=500)
+     * @ORM\Column(name="circunstancias", type="string", length=500, nullable=true)
      */
     private $circunstancias;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="incidente", type="boolean")
+     * @ORM\Column(name="incidente", type="boolean", nullable=true)
      */
     private $incidente;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="frecuencia_desplazamiento", type="string", length=100)
+     * @ORM\Column(name="frecuencia_desplazamiento", type="string", length=100, nullable=true)
      */
     private $frecuenciaDesplazamiento;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="vehiculo_propio", type="boolean")
+     * @ORM\Column(name="vehiculo_propio", type="boolean", nullable=true)
      */
     private $vehiculoPropio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="planificacion_desplazamiento", type="string", length=100)
+     * @ORM\Column(name="planificacion_desplazamiento", type="string", length=100, nullable=true)
      */
     private $planificacionDesplazamiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tiempo_antelacion", type="string", length=255)
+     * @ORM\Column(name="tiempo_antelacion", type="string", length=255, nullable=true)
      */
     private $tiempoAntelacion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="medio_desplazamiento", type="string", length=100)
+     * @ORM\Column(name="medio_desplazamiento", type="string", length=100, nullable=true)
      */
     private $medioDesplazamiento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="trayecto", type="string", length=50)
+     * @ORM\Column(name="trayecto", type="string", length=50, nullable=true)
      */
     private $trayecto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tiempo_trayecto", type="string", length=50)
+     * @ORM\Column(name="tiempo_trayecto", type="string", length=50, nullable=true)
      */
     private $tiempoTrayecto;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="km_mensuales_recorridos", type="string", length=50)
+     * @ORM\Column(name="km_mensuales_recorridos", type="string", length=50, nullable=true)
      */
     private $kmMensualesRecorridos;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="factores_riesgo", type="string", length=255)
+     * @ORM\Column(name="factores_riesgo", type="string", length=255, nullable=true)
      */
     private $factoresRiesgo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="causas_riesgo", type="string", length=255)
+     * @ORM\Column(name="otro_factor_riesgo", type="string", length=255, nullable=true)
+     */
+    private $otroFactorRiesgo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="causas_riesgo", type="string", length=255, nullable=true)
      */
     private $causasRiesgo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="riesgo", type="string", length=255)
+     * @ORM\Column(name="otra_causa_riesgo", type="string", length=255, nullable=true)
+     */
+    private $otraCausaRiesgo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="riesgo", type="string", length=255, nullable=true)
      */
     private $riesgo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="propuesta_reduccion_riesgo", type="string", length=500)
+     * @ORM\Column(name="propuesta_reduccion_riesgo", type="string", length=500, nullable=true)
      */
     private $propuestaReduccionRiesgo;
 
@@ -241,6 +269,7 @@ class MsvCaracterizacion
         return $this->id;
     }
 
+
     /**
      * Set asistencia
      *
@@ -258,7 +287,7 @@ class MsvCaracterizacion
     /**
      * Get asistencia
      *
-     * @return bool
+     * @return boolean
      */
     public function getAsistencia()
     {
@@ -474,7 +503,7 @@ class MsvCaracterizacion
     /**
      * Get edad
      *
-     * @return int
+     * @return integer
      */
     public function getEdad()
     {
@@ -530,6 +559,30 @@ class MsvCaracterizacion
     }
 
     /**
+     * Set otroGrupoTrabajo
+     *
+     * @param string $otroGrupoTrabajo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOtroGrupoTrabajo($otroGrupoTrabajo)
+    {
+        $this->otroGrupoTrabajo = $otroGrupoTrabajo;
+
+        return $this;
+    }
+
+    /**
+     * Get otroGrupoTrabajo
+     *
+     * @return string
+     */
+    public function getOtroGrupoTrabajo()
+    {
+        return $this->otroGrupoTrabajo;
+    }
+
+    /**
      * Set tipoContrato
      *
      * @param string $tipoContrato
@@ -551,6 +604,30 @@ class MsvCaracterizacion
     public function getTipoContrato()
     {
         return $this->tipoContrato;
+    }
+
+    /**
+     * Set otroTipoContrato
+     *
+     * @param string $otroTipoContrato
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOtroTipoContrato($otroTipoContrato)
+    {
+        $this->otroTipoContrato = $otroTipoContrato;
+
+        return $this;
+    }
+
+    /**
+     * Get otroTipoContrato
+     *
+     * @return string
+     */
+    public function getOtroTipoContrato()
+    {
+        return $this->otroTipoContrato;
     }
 
     /**
@@ -594,7 +671,7 @@ class MsvCaracterizacion
     /**
      * Get accidenteTransito
      *
-     * @return bool
+     * @return boolean
      */
     public function getAccidenteTransito()
     {
@@ -642,7 +719,7 @@ class MsvCaracterizacion
     /**
      * Get incidente
      *
-     * @return bool
+     * @return boolean
      */
     public function getIncidente()
     {
@@ -690,7 +767,7 @@ class MsvCaracterizacion
     /**
      * Get vehiculoPropio
      *
-     * @return bool
+     * @return boolean
      */
     public function getVehiculoPropio()
     {
@@ -866,6 +943,30 @@ class MsvCaracterizacion
     }
 
     /**
+     * Set otroFactorRiesgo
+     *
+     * @param string $otroFactorRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOtroFactorRiesgo($otroFactorRiesgo)
+    {
+        $this->otroFactorRiesgo = $otroFactorRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get otroFactorRiesgo
+     *
+     * @return string
+     */
+    public function getOtroFactorRiesgo()
+    {
+        return $this->otroFactorRiesgo;
+    }
+
+    /**
      * Set causasRiesgo
      *
      * @param string $causasRiesgo
@@ -887,6 +988,30 @@ class MsvCaracterizacion
     public function getCausasRiesgo()
     {
         return $this->causasRiesgo;
+    }
+
+    /**
+     * Set otraCausaRiesgo
+     *
+     * @param string $otraCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOtraCausaRiesgo($otraCausaRiesgo)
+    {
+        $this->otraCausaRiesgo = $otraCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get otraCausaRiesgo
+     *
+     * @return string
+     */
+    public function getOtraCausaRiesgo()
+    {
+        return $this->otraCausaRiesgo;
     }
 
     /**
@@ -961,4 +1086,3 @@ class MsvCaracterizacion
         return $this->estado;
     }
 }
-
