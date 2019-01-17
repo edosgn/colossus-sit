@@ -55,7 +55,7 @@ class MsvCaracterizacionController extends Controller
             $em = $this->getDoctrine()->getManager();
             
                 $caracterizacion = new MsvCaracterizacion();
-                $caracterizacion->setAsistencia($params->asistencia);
+                //$caracterizacion->setAsistencia($params->asistencia);
                 $caracterizacion->setFecha(new \Datetime($params->fecha));
                 $caracterizacion->setCiudad($params->ciudad);
                 $caracterizacion->setNombres($params->nombres);
@@ -66,24 +66,32 @@ class MsvCaracterizacionController extends Controller
                 $caracterizacion->setFechaVigencia($params->fechaVigencia);
                 $caracterizacion->setEdad($params->edad);
                 $caracterizacion->setGenero($params->ciudad);
+
                 $caracterizacion->setGrupoTrabajo($params->grupoTrabajo);
+                $caracterizacion->setOtroGrupoTrabajo($params->otroGrupoTrabajo);
                 $caracterizacion->setTipoContrato($params->tipoContrato);
+                $caracterizacion->setOtroTipoContrato($params->otroTipoContrato);
                 $caracterizacion->setExperienciaConduccion($params->experienciaConduccion);
-                $caracterizacion->setAccidenteTransito($params->accidenteTransito);
+                $caracterizacion->setAccidenteTransito($params->accidente);
                 $caracterizacion->setCircunstancias($params->circunstancias);
                 $caracterizacion->setIncidente($params->incidente);
                 $caracterizacion->setFrecuenciaDesplazamiento($params->frecuenciaDesplazamiento);
-                $caracterizacion->setVehiculoPropio($params->vehiculoPropio);
-                $caracterizacion->setPlanificacionDesplazamiento($params->planificacionDesplazamiento);
-                $caracterizacion->setTiempoAntelacion($params->tiempoAntelacion);
+                $caracterizacion->setVehiculoPropio($params->propioVehiculo);
+                $caracterizacion->setPlanificacionDesplazamiento($params->desplazamientoPlanificacion);
+                $caracterizacion->setTiempoAntelacion($params->antelacion);
                 $caracterizacion->setMedioDesplazamiento($params->medioDesplazamiento);
                 $caracterizacion->setTrayecto($params->trayecto);
                 $caracterizacion->setTiempoTrayecto($params->tiempoTrayecto);
                 $caracterizacion->setKmMensualesRecorridos($params->kmMensualesRecorridos);
-                $caracterizacion->setFactorRiesgo($params->factorRiesgo);
+                $caracterizacion->setEstadoInfraestructura($params->estadoInfraestructura);
+                //$caracterizacion->setFactorRiesgo($params->factorRiesgo);
+                $caracterizacion->setOrganizacionTrabajo($params->organizacionTrabajo);
+                $caracterizacion->setPropiaConduccion($params->propiaConduccion);
+                $caracterizacion->setOtroFactorRiesgo($params->otroFactorRiesgo);
                 $caracterizacion->setCausaRiesgo($params->causaRiesgo);
-                $caracterizacion->setRiesgo($params->riesgo);
-                $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccionRiesgo);
+                $caracterizacion->setOtraCausaRiesgo($params->otraCausaRiesgo);
+                $caracterizacion->setRiesgo($params->riesgoPercibido);
+                $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccion);
                 $caracterizacion->setEstado(true);
                 $em->persist($caracterizacion);
                 $em->flush();
@@ -268,6 +276,7 @@ class MsvCaracterizacionController extends Controller
      */
     public function buscarEmpresaAction(Request $request)
     {
+        var_dump("assad");
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
