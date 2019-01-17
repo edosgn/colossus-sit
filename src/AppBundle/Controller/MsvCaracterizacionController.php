@@ -26,15 +26,21 @@ class MsvCaracterizacionController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $msvCaracterizaciones = $em->getRepository('AppBundle:MsvCaracterizacion')->findBy(array('estado'=>1));
-
-        $response = array(
-            'status' => 'succes',
-            'code' => 200,
-            'msj' => "listado festivos",
-            //'data' => $cfgFestivos,
+        $caracterizaciones = $em->getRepository('AppBundle:MsvCaracterizacion')->findBy(
+            array('estado' => true)
         );
-        return $helpers -> json($response);
+
+        $response['data'] = array();
+
+        if ($caracterizaciones) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($caracterizaciones) . " registros encontrados",
+                'data' => $caracterizaciones,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -51,21 +57,20 @@ class MsvCaracterizacionController extends Controller
         if($authCheck == true){
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
             
                 $caracterizacion = new MsvCaracterizacion();
                 //$caracterizacion->setAsistencia($params->asistencia);
                 $caracterizacion->setFecha(new \Datetime($params->fecha));
-                $caracterizacion->setCiudad($params->ciudad);
+                $caracterizacion->setCiudad($params->municipio);
                 $caracterizacion->setNombres($params->nombres);
                 $caracterizacion->setApellidos($params->apellidos);
-                $caracterizacion->setCedula($params->cedula);
-                $caracterizacion->setLugarExpedicion($params->lugarExpedicion);
+                $caracterizacion->setCedula($params->identificacion);
+                //$caracterizacion->setLugarExpedicion($params->lugarExpedicion);
                 $caracterizacion->setClc($params->clc);
-                $caracterizacion->setFechaVigencia($params->fechaVigencia);
+                $caracterizacion->setFechaVigencia(new \Datetime($params->fechaVigencia));
                 $caracterizacion->setEdad($params->edad);
-                $caracterizacion->setGenero($params->ciudad);
+                $caracterizacion->setGenero($params->genero);
 
                 $caracterizacion->setGrupoTrabajo($params->grupoTrabajo);
                 $caracterizacion->setOtroGrupoTrabajo($params->otroGrupoTrabajo);
@@ -77,19 +82,19 @@ class MsvCaracterizacionController extends Controller
                 $caracterizacion->setIncidente($params->incidente);
                 $caracterizacion->setFrecuenciaDesplazamiento($params->frecuenciaDesplazamiento);
                 $caracterizacion->setVehiculoPropio($params->propioVehiculo);
-                $caracterizacion->setPlanificacionDesplazamiento($params->desplazamientoPlanificacion);
+                $caracterizacion->setPlanificacionDesplazamiento($params->desplazamientoPlanificado);
                 $caracterizacion->setTiempoAntelacion($params->antelacion);
                 $caracterizacion->setMedioDesplazamiento($params->medioDesplazamiento);
                 $caracterizacion->setTrayecto($params->trayecto);
                 $caracterizacion->setTiempoTrayecto($params->tiempoTrayecto);
-                $caracterizacion->setKmMensualesRecorridos($params->kmMensualesRecorridos);
-                $caracterizacion->setEstadoInfraestructura($params->estadoInfraestructura);
+                $caracterizacion->setKmMensualesRecorridos($params->kmMensualTrayecto);
+                //$caracterizacion->setEstadoInfraestructura($params->estadoInfraestructura);
                 //$caracterizacion->setFactorRiesgo($params->factorRiesgo);
-                $caracterizacion->setOrganizacionTrabajo($params->organizacionTrabajo);
-                $caracterizacion->setPropiaConduccion($params->propiaConduccion);
-                $caracterizacion->setOtroFactorRiesgo($params->otroFactorRiesgo);
-                $caracterizacion->setCausaRiesgo($params->causaRiesgo);
-                $caracterizacion->setOtraCausaRiesgo($params->otraCausaRiesgo);
+                //$caracterizacion->setOrganizacionTrabajo($params->organizacionTrabajo);
+                //$caracterizacion->setPropiaConduccion($params->propiaConduccion);
+                $caracterizacion->setOtroFactorRiesgo($params->otro2);
+                $caracterizacion->setCausasRiesgo($params->causaRiesgo);
+                $caracterizacion->setOtraCausaRiesgo($params->otro3);
                 $caracterizacion->setRiesgo($params->riesgoPercibido);
                 $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccion);
                 $caracterizacion->setEstado(true);
@@ -276,7 +281,6 @@ class MsvCaracterizacionController extends Controller
      */
     public function buscarEmpresaAction(Request $request)
     {
-        var_dump("assad");
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -285,13 +289,17 @@ class MsvCaracterizacionController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $empresa = $em->getRepository('AppBundle:Empresa')->findBy(array('nit' => $params->nit));
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
+            $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento());
             if ($empresa) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "empresa encontrada",
                     'data' => $empresa,
+                    'licenciaConduccion' => $licenciaConduccion,
+                    'edad' => $edad,
                 );
             } else {
                 $response = array(

@@ -1,3 +1,7 @@
+jhweb_vehiculo_vhlo_cfg_cda:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgCdaController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
