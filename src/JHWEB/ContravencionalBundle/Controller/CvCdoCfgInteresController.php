@@ -2,22 +2,22 @@
 
 namespace JHWEB\ContravencionalBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvCdoNotificacion;
+use JHWEB\ContravencionalBundle\Entity\CvCdoCfgInteres;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cvcdonotificacion controller.
+ * Cvcdocfgintere controller.
  *
- * @Route("cvcdonotificacion")
+ * @Route("cvcdocfginteres")
  */
-class CvCdoNotificacionController extends Controller
+class CvCdoCfgInteresController extends Controller
 {
     /**
-     * Lists all cvCdoNotificacion entities.
+     * Lists all cvCdoCfgIntere entities.
      *
-     * @Route("/", name="cvcdonotificacion_index")
+     * @Route("/", name="cvcdocfginteres_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +26,7 @@ class CvCdoNotificacionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $notificaciones = $em->getRepository('JHWEBContravencionalBundle:CvCdoNotificacion')->findBy(
+        $intereses = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->findBy(
             array(
                 'activo' => true
             )
@@ -34,12 +34,12 @@ class CvCdoNotificacionController extends Controller
 
         $response['data'] = array();
 
-        if ($notificaciones) {
+        if ($intereses) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($notificaciones)." registros encontrados", 
-                'data'=> $notificaciones,
+                'message' => count($intereses)." registros encontrados", 
+                'data'=> $intereses,
             );
         }
 
@@ -47,9 +47,9 @@ class CvCdoNotificacionController extends Controller
     }
 
     /**
-     * Creates a new cvCdoNotificacion entity.
+     * Creates a new cvCdoCfgIntere entity.
      *
-     * @Route("/new", name="cvcdonotificacion_new")
+     * @Route("/new", name="cvcdocfginteres_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -64,28 +64,21 @@ class CvCdoNotificacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($params->notificacion->idComparendoEstado) {
+            $interes = new CvCdoCfgInteres();
+
+            $interes->setPorcentaje($params->porcentaje);
+            $interes->setDias($params->dias);
+            $interes->setActivo(true);
+
+            if ($params->idComparendoEstado) {
                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                    $params->notificacion->idComparendoEstado
+                    $params->idComparendoEstado
                 );
+                $interes->setEstado($estado);
             }
-
-            foreach ($params->arrayCargos as $key => $idCargo) {
-                $notificacion = new CvCdoNotificacion();
-
-                $notificacion->setDia($params->notificacion->dia);
-                $notificacion->setHora(new \Datetime($params->notificacion->hora));
-                $notificacion->setActivo(true);
-                $notificacion->setEstado($estado);
-                
-                $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
-                    $idCargo
-                );
-                $notificacion->setCargo($cargo);
-
-                $em->persist($notificacion);
-            }
-
+            
+            $em->persist($interes);
+            
             $em->flush();
 
             $response = array(
@@ -105,25 +98,51 @@ class CvCdoNotificacionController extends Controller
     }
 
     /**
-     * Finds and displays a cvCdoNotificacion entity.
+     * Finds and displays a cvCdoCfgIntere entity.
      *
-     * @Route("/{id}", name="cvcdonotificacion_show")
-     * @Method("GET")
+     * @Route("/show", name="cvcdocfginteres_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(CvCdoNotificacion $cvCdoNotificacion)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cvCdoNotificacion);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cvcdonotificacion/show.html.twig', array(
-            'cvCdoNotificacion' => $cvCdoNotificacion,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->find(
+                $params->id
+            );
+
+            $em->persist($interes);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado con exito",
+                'data' => $interes
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
-     * Displays a form to edit an existing cvCdoNotificacion entity.
+     * Displays a form to edit an existing cvCdoCfgIntere entity.
      *
-     * @Route("/edit", name="cvcdonotificacion_edit")
+     * @Route("/edit", name="cvcdocfginteres_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -137,18 +156,18 @@ class CvCdoNotificacionController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            
-            $notificacion = $em->getRepository("JHWEBContravencionalBundle:CvCdoNotificacion")->find($params->id);
 
-            if ($notificacion) {
-                $notificacion->setDia($params->notificacion->dia);
-                $notificacion->setHora(new \Datetime($params->notificacion->hora));
+            $interes = $em->getRepository("JHWEBContravencionalBundle:CvCdoCfgInteres")->find($params->id);
 
-                if ($params->notificacion->idComparendoEstado) {
+            if ($interes) {
+                $interes->setPorcentaje($params->porcentaje);
+                $interes->setDias($params->dias);
+
+                if ($params->idComparendoEstado) {
                     $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                        $params->notificacion->idComparendoEstado
+                        $params->idComparendoEstado
                     );
-                    $notificacion->setEstado($estado);
+                    $interes->setEstado($estado);
                 }
                 
                 $em->flush();
@@ -157,7 +176,7 @@ class CvCdoNotificacionController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $notificacion,
+                    'data'=> $interes,
                 );
             }else{
                 $response = array(
@@ -178,9 +197,9 @@ class CvCdoNotificacionController extends Controller
     }
 
     /**
-     * Deletes a cvCdoNotificacion entity.
+     * Deletes a cvCdoCfgIntere entity.
      *
-     * @Route("/delete", name="cvcdonotificacion_delete")
+     * @Route("/delete", name="cvcdocfginteres_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
@@ -195,11 +214,11 @@ class CvCdoNotificacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoNotificacion')->find(
+            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->find(
                 $params->id
             );
 
-            $notificacion->setActivo(false);
+            $interes->setActivo(false);
 
             $em->flush();
 
@@ -220,16 +239,16 @@ class CvCdoNotificacionController extends Controller
     }
 
     /**
-     * Creates a form to delete a cvCdoNotificacion entity.
+     * Creates a form to delete a cvCdoCfgIntere entity.
      *
-     * @param CvCdoNotificacion $cvCdoNotificacion The cvCdoNotificacion entity
+     * @param CvCdoCfgInteres $cvCdoCfgIntere The cvCdoCfgIntere entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvCdoNotificacion $cvCdoNotificacion)
+    private function createDeleteForm(CvCdoCfgInteres $cvCdoCfgIntere)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvcdonotificacion_delete', array('id' => $cvCdoNotificacion->getId())))
+            ->setAction($this->generateUrl('cvcdocfginteres_delete', array('id' => $cvCdoCfgIntere->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;

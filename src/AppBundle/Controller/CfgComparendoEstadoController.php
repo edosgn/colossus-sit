@@ -62,6 +62,7 @@ class CfgComparendoEstadoController extends Controller
             $estado = new CfgComparendoEstado();
 
             $estado->setNombre(strtoupper($params->nombre));
+            $estado->setSigla(strtoupper($params->sigla));
             $estado->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
@@ -120,6 +121,7 @@ class CfgComparendoEstadoController extends Controller
 
             if ($estado!=null) {
                 $estado->setNombre(strtoupper($params->nombre));
+                $estado->setSigla(strtoupper($params->sigla));
                 
                 $em->flush();
 

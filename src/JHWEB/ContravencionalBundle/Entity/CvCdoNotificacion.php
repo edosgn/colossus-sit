@@ -104,6 +104,9 @@ class CvCdoNotificacion
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('h:m:s A');
+        }
         return $this->hora;
     }
 
