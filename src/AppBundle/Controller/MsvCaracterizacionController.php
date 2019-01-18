@@ -58,54 +58,64 @@ class MsvCaracterizacionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            
-                $caracterizacion = new MsvCaracterizacion();
-                //$caracterizacion->setAsistencia($params->asistencia);
-                $caracterizacion->setFecha(new \Datetime($params->fecha));
-                $caracterizacion->setCiudad($params->municipio);
-                $caracterizacion->setNombres($params->nombres);
-                $caracterizacion->setApellidos($params->apellidos);
-                $caracterizacion->setCedula($params->identificacion);
-                //$caracterizacion->setLugarExpedicion($params->lugarExpedicion);
-                $caracterizacion->setClc($params->clc);
-                $caracterizacion->setFechaVigencia(new \Datetime($params->fechaVigencia));
-                $caracterizacion->setEdad($params->edad);
-                $caracterizacion->setGenero($params->genero);
 
-                $caracterizacion->setGrupoTrabajo($params->grupoTrabajo);
-                $caracterizacion->setOtroGrupoTrabajo($params->otroGrupoTrabajo);
-                $caracterizacion->setTipoContrato($params->tipoContrato);
-                $caracterizacion->setOtroTipoContrato($params->otroTipoContrato);
-                $caracterizacion->setExperienciaConduccion($params->experienciaConduccion);
-                $caracterizacion->setAccidenteTransito($params->accidente);
-                $caracterizacion->setCircunstancias($params->circunstancias);
-                $caracterizacion->setIncidente($params->incidente);
-                $caracterizacion->setFrecuenciaDesplazamiento($params->frecuenciaDesplazamiento);
-                $caracterizacion->setVehiculoPropio($params->propioVehiculo);
-                $caracterizacion->setPlanificacionDesplazamiento($params->desplazamientoPlanificado);
-                $caracterizacion->setTiempoAntelacion($params->antelacion);
-                $caracterizacion->setMedioDesplazamiento($params->medioDesplazamiento);
-                $caracterizacion->setTrayecto($params->trayecto);
-                $caracterizacion->setTiempoTrayecto($params->tiempoTrayecto);
-                $caracterizacion->setKmMensualesRecorridos($params->kmMensualTrayecto);
-                //$caracterizacion->setEstadoInfraestructura($params->estadoInfraestructura);
-                //$caracterizacion->setFactorRiesgo($params->factorRiesgo);
-                //$caracterizacion->setOrganizacionTrabajo($params->organizacionTrabajo);
-                //$caracterizacion->setPropiaConduccion($params->propiaConduccion);
-                $caracterizacion->setOtroFactorRiesgo($params->otro2);
-                $caracterizacion->setCausasRiesgo($params->causaRiesgo);
-                $caracterizacion->setOtraCausaRiesgo($params->otro3);
-                $caracterizacion->setRiesgo($params->riesgoPercibido);
-                $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccion);
-                $caracterizacion->setEstado(true);
-                $em->persist($caracterizacion);
-                $em->flush();
-                $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Caracterización creada con éxito",
-                );
-            
+            $caracterizacion = new MsvCaracterizacion();
+            //$caracterizacion->setAsistencia($params->asistencia);
+            $caracterizacion->setFecha(new \Datetime($params->fecha));
+
+            if($params->municipio){
+                $ciudad = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
+                $caracterizacion->setCiudad($ciudad->getNombre());
+            }
+
+            $caracterizacion->setNombres($params->nombres);
+            $caracterizacion->setApellidos($params->apellidos);
+            $caracterizacion->setCedula($params->identificacion);
+            //$caracterizacion->setLugarExpedicion($params->lugarExpedicion);
+            if($params->clc){
+                $clc = $em->getRepository('AppBundle:CfgLicenciaConduccionCategoria')->find($params->clc);
+                $caracterizacion->setClc($clc->getNombre());
+            }
+            $caracterizacion->setFechaVigencia(new \Datetime($params->fechaVigencia));
+            $caracterizacion->setEdad($params->edad);
+
+            if($params->genero){
+                $genero = $em->getRepository('AppBundle:Genero')->find($params->genero);
+                $caracterizacion->setGenero($genero->getSigla());
+            }
+            $caracterizacion->setGrupoTrabajo($params->grupoTrabajo);
+            $caracterizacion->setOtroGrupoTrabajo($params->otroGrupoTrabajo);
+            $caracterizacion->setTipoContrato($params->tipoContrato);
+            $caracterizacion->setOtroTipoContrato($params->otroTipoContrato);
+            $caracterizacion->setExperienciaConduccion($params->experienciaConduccion);
+            $caracterizacion->setAccidenteTransito($params->accidente);
+            $caracterizacion->setCircunstancias($params->circunstancias);
+            $caracterizacion->setIncidente($params->incidente);
+            $caracterizacion->setFrecuenciaDesplazamiento($params->frecuenciaDesplazamiento);
+            $caracterizacion->setVehiculoPropio($params->propioVehiculo);
+            $caracterizacion->setPlanificacionDesplazamiento($params->desplazamientoPlanificado);
+            $caracterizacion->setTiempoAntelacion($params->antelacion);
+            $caracterizacion->setMedioDesplazamiento($params->medioDesplazamiento);
+            $caracterizacion->setTrayecto($params->trayecto);
+            $caracterizacion->setTiempoTrayecto($params->tiempoTrayecto);
+            $caracterizacion->setKmMensualesRecorridos($params->kmMensualTrayecto);
+            //$caracterizacion->setEstadoInfraestructura($params->estadoInfraestructura);
+            //$caracterizacion->setFactorRiesgo($params->factorRiesgo);
+            //$caracterizacion->setOrganizacionTrabajo($params->organizacionTrabajo);
+            //$caracterizacion->setPropiaConduccion($params->propiaConduccion);
+            $caracterizacion->setOtroFactorRiesgo($params->otro2);
+            $caracterizacion->setCausasRiesgo($params->causaRiesgo);
+            $caracterizacion->setOtraCausaRiesgo($params->otro3);
+            $caracterizacion->setRiesgo($params->riesgoPercibido);
+            $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccion);
+            $caracterizacion->setEstado(true);
+            $em->persist($caracterizacion);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Caracterización creada con éxito",
+            );
         }else{
             $response = array(
                 'status' => 'error',
