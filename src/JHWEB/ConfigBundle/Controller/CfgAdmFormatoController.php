@@ -169,10 +169,10 @@ class CfgAdmFormatoController extends Controller
                 $formato->setCuerpo($params->cuerpo);
 
                 if ($params->idTipo) {
-                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findOneByTipo(
-                        $params->tipo->id
+                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->find(
+                        $params->idTipo
                     );
-                    $formato->setTipo($params->idTipo);
+                    $formato->setTipo($tipo);
                 }
 
                 $em->flush();
@@ -262,5 +262,6 @@ class CfgAdmFormatoController extends Controller
             );
         }
 
+        return $helpers->json($response);
     }
 }

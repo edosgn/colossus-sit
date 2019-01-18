@@ -41,22 +41,81 @@ class CvCdoTrazabilidadController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cvCdoTrazabilidad = new Cvcdotrazabilidad();
-        $form = $this->createForm('JHWEB\ContravencionalBundle\Form\CvCdoTrazabilidadType', $cvCdoTrazabilidad);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cvCdoTrazabilidad);
-            $em->flush();
 
-            return $this->redirectToRoute('cvcdotrazabilidad_show', array('id' => $cvCdoTrazabilidad->getId()));
+            $trazabilidadNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findByEstado(
+                    $params->idComparendoEstado
+                );
+
+            if (!$trazabilidadNew) {
+                $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                    array(
+                        'comparendo' => $params->idComparendo,
+                        'activo' => true
+                    )
+                );
+
+                if ($trazabilidadesOld) {
+                    foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
+                        $trazabilidadOld->setActivo(false);
+                        $em->flush();
+                    }
+                }
+
+                $trazabilidad = new CvCdoTrazabilidad();
+
+                $trazabilidad->setFecha(new \Datetime($params->fecha));
+                if ($params->observaciones) {
+                    $trazabilidad->setObservaciones($params->observaciones);
+                }
+                $trazabilidad->setActivo(true);
+
+                if ($params->idComparendoEstado) {
+                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                        $params->idComparendoEstado
+                    );
+                }
+                    $trazabilidad->setEstado($estado);
+
+                if ($params->idComparendo) {
+                    $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                        $params->idComparendo
+                    );
+                    $trazabilidad->setComparendo($comparendo);
+                }
+
+                $em->persist($trazabilidad);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se premite registrar mas de una trazabilidad con el mismo estado.",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
 
-        return $this->render('cvcdotrazabilidad/new.html.twig', array(
-            'cvCdoTrazabilidad' => $cvCdoTrazabilidad,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -139,7 +198,7 @@ class CvCdoTrazabilidadController extends Controller
     /**
      * Displays a form to update/documento an existing cvCdoTrazabilidad entity.
      *
-     * @Route("/update/documento", name="cvlccfgmotivo_edit")
+     * @Route("/update/documento", name="cvcdotrazabilidad_update_document")
      * @Method({"GET", "POST"})
      */
     public function updateDocumentoAction(Request $request)

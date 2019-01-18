@@ -1027,6 +1027,9 @@ class ComparendoController extends Controller
             $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                 array(
                     'comparendo' => $params->id
+                ),
+                array(
+                    'fecha' => 'DESC'
                 )
             );
             

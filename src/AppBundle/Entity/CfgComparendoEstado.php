@@ -29,6 +29,13 @@ class CfgComparendoEstado
     private $nombre;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="sigla", type="string", length=3)
+     */
+    private $sigla;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -93,5 +100,28 @@ class CfgComparendoEstado
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set sigla
+     *
+     * @param string $sigla
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setSigla($sigla)
+    {
+        $this->sigla = $sigla;
+
+        return $this;
+    }
+
+    /**
+     * Get sigla
+     *
+     * @return string
+     */
+    public function getSigla()
+    {
+        return $this->sigla;
+    }
+}
