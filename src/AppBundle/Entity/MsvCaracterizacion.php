@@ -22,18 +22,16 @@ class MsvCaracterizacion
     private $id;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="asistencia", type="boolean", nullable = true)
-     */
-    private $asistencia;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="empresas")
+     **/
+    protected $empresa;
 
     /**
      * @var string
@@ -213,23 +211,95 @@ class MsvCaracterizacion
     /**
      * @var string
      *
-     * @ORM\Column(name="factores_riesgo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="estado_infraestructura_factor_riesgo", type="string", length=50, nullable=true)
      */
-    private $factoresRiesgo;
+    private $estadoInfraestructuraFactorRiesgo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="otro_factor_riesgo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="organizacion_trabajo_factor_riesgo", type="string", length=50, nullable=true)
+     */
+    private $organizacionTrabajoFactorRiesgo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="propia_conduccion_factor_riesgo", type="string", length=50, nullable=true)
+     */
+    private $propiaConduccionFactorRiesgo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otro_factor_riesgo", type="string", length=50, nullable=true)
      */
     private $otroFactorRiesgo;
-
+    
+    
     /**
      * @var string
      *
-     * @ORM\Column(name="causas_riesgo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="intensidad_trafico_causa_riesgo", type="string", length=50, nullable=true)
      */
-    private $causasRiesgo;
+    private $intensidadTraficoCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="condicion_climatologica_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $condicionClimatologicaCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_vehiculo_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $tipoVehiculoCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="organizacion_trabajo_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $organizacionTrabajoCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="propia_conduccion_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $propiaConduccionCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $estadoCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otro_conductor_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $otroConductorCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado_infraestructura_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $estadoInfraestructuraCausaRiesgo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="falta_informacion_causa_riesgo", type="string", length=50, nullable=true)
+     */
+    private $faltaInformacionCausaRiesgo;
+
 
     /**
      * @var string
@@ -267,31 +337,6 @@ class MsvCaracterizacion
     public function getId()
     {
         return $this->id;
-    }
-
-
-    /**
-     * Set asistencia
-     *
-     * @param boolean $asistencia
-     *
-     * @return MsvCaracterizacion
-     */
-    public function setAsistencia($asistencia)
-    {
-        $this->asistencia = $asistencia;
-
-        return $this;
-    }
-
-    /**
-     * Get asistencia
-     *
-     * @return boolean
-     */
-    public function getAsistencia()
-    {
-        return $this->asistencia;
     }
 
     /**
@@ -919,27 +964,75 @@ class MsvCaracterizacion
     }
 
     /**
-     * Set factoresRiesgo
+     * Set estadoInfraestructuraFactorRiesgo
      *
-     * @param string $factoresRiesgo
+     * @param string $estadoInfraestructuraFactorRiesgo
      *
      * @return MsvCaracterizacion
      */
-    public function setFactoresRiesgo($factoresRiesgo)
+    public function setEstadoInfraestructuraFactorRiesgo($estadoInfraestructuraFactorRiesgo)
     {
-        $this->factoresRiesgo = $factoresRiesgo;
+        $this->estadoInfraestructuraFactorRiesgo = $estadoInfraestructuraFactorRiesgo;
 
         return $this;
     }
 
     /**
-     * Get factoresRiesgo
+     * Get estadoInfraestructuraFactorRiesgo
      *
      * @return string
      */
-    public function getFactoresRiesgo()
+    public function getEstadoInfraestructuraFactorRiesgo()
     {
-        return $this->factoresRiesgo;
+        return $this->estadoInfraestructuraFactorRiesgo;
+    }
+
+    /**
+     * Set organizacionTrabajoFactorRiesgo
+     *
+     * @param string $organizacionTrabajoFactorRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOrganizacionTrabajoFactorRiesgo($organizacionTrabajoFactorRiesgo)
+    {
+        $this->organizacionTrabajoFactorRiesgo = $organizacionTrabajoFactorRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get organizacionTrabajoFactorRiesgo
+     *
+     * @return string
+     */
+    public function getOrganizacionTrabajoFactorRiesgo()
+    {
+        return $this->organizacionTrabajoFactorRiesgo;
+    }
+
+    /**
+     * Set propiaConduccionFactorRiesgo
+     *
+     * @param string $propiaConduccionFactorRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setPropiaConduccionFactorRiesgo($propiaConduccionFactorRiesgo)
+    {
+        $this->propiaConduccionFactorRiesgo = $propiaConduccionFactorRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get propiaConduccionFactorRiesgo
+     *
+     * @return string
+     */
+    public function getPropiaConduccionFactorRiesgo()
+    {
+        return $this->propiaConduccionFactorRiesgo;
     }
 
     /**
@@ -967,27 +1060,219 @@ class MsvCaracterizacion
     }
 
     /**
-     * Set causasRiesgo
+     * Set intensidadTraficoCausaRiesgo
      *
-     * @param string $causasRiesgo
+     * @param string $intensidadTraficoCausaRiesgo
      *
      * @return MsvCaracterizacion
      */
-    public function setCausasRiesgo($causasRiesgo)
+    public function setIntensidadTraficoCausaRiesgo($intensidadTraficoCausaRiesgo)
     {
-        $this->causasRiesgo = $causasRiesgo;
+        $this->intensidadTraficoCausaRiesgo = $intensidadTraficoCausaRiesgo;
 
         return $this;
     }
 
     /**
-     * Get causasRiesgo
+     * Get intensidadTraficoCausaRiesgo
      *
      * @return string
      */
-    public function getCausasRiesgo()
+    public function getIntensidadTraficoCausaRiesgo()
     {
-        return $this->causasRiesgo;
+        return $this->intensidadTraficoCausaRiesgo;
+    }
+
+    /**
+     * Set condicionClimatologicaCausaRiesgo
+     *
+     * @param string $condicionClimatologicaCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setCondicionClimatologicaCausaRiesgo($condicionClimatologicaCausaRiesgo)
+    {
+        $this->condicionClimatologicaCausaRiesgo = $condicionClimatologicaCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get condicionClimatologicaCausaRiesgo
+     *
+     * @return string
+     */
+    public function getCondicionClimatologicaCausaRiesgo()
+    {
+        return $this->condicionClimatologicaCausaRiesgo;
+    }
+
+    /**
+     * Set tipoVehiculoCausaRiesgo
+     *
+     * @param string $tipoVehiculoCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setTipoVehiculoCausaRiesgo($tipoVehiculoCausaRiesgo)
+    {
+        $this->tipoVehiculoCausaRiesgo = $tipoVehiculoCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVehiculoCausaRiesgo
+     *
+     * @return string
+     */
+    public function getTipoVehiculoCausaRiesgo()
+    {
+        return $this->tipoVehiculoCausaRiesgo;
+    }
+
+    /**
+     * Set organizacionTrabajoCausaRiesgo
+     *
+     * @param string $organizacionTrabajoCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOrganizacionTrabajoCausaRiesgo($organizacionTrabajoCausaRiesgo)
+    {
+        $this->organizacionTrabajoCausaRiesgo = $organizacionTrabajoCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get organizacionTrabajoCausaRiesgo
+     *
+     * @return string
+     */
+    public function getOrganizacionTrabajoCausaRiesgo()
+    {
+        return $this->organizacionTrabajoCausaRiesgo;
+    }
+
+    /**
+     * Set propiaConduccionCausaRiesgo
+     *
+     * @param string $propiaConduccionCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setPropiaConduccionCausaRiesgo($propiaConduccionCausaRiesgo)
+    {
+        $this->propiaConduccionCausaRiesgo = $propiaConduccionCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get propiaConduccionCausaRiesgo
+     *
+     * @return string
+     */
+    public function getPropiaConduccionCausaRiesgo()
+    {
+        return $this->propiaConduccionCausaRiesgo;
+    }
+
+    /**
+     * Set estadoCausaRiesgo
+     *
+     * @param string $estadoCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setEstadoCausaRiesgo($estadoCausaRiesgo)
+    {
+        $this->estadoCausaRiesgo = $estadoCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoCausaRiesgo
+     *
+     * @return string
+     */
+    public function getEstadoCausaRiesgo()
+    {
+        return $this->estadoCausaRiesgo;
+    }
+
+    /**
+     * Set otroConductorCausaRiesgo
+     *
+     * @param string $otroConductorCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setOtroConductorCausaRiesgo($otroConductorCausaRiesgo)
+    {
+        $this->otroConductorCausaRiesgo = $otroConductorCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get otroConductorCausaRiesgo
+     *
+     * @return string
+     */
+    public function getOtroConductorCausaRiesgo()
+    {
+        return $this->otroConductorCausaRiesgo;
+    }
+
+    /**
+     * Set estadoInfraestructuraCausaRiesgo
+     *
+     * @param string $estadoInfraestructuraCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setEstadoInfraestructuraCausaRiesgo($estadoInfraestructuraCausaRiesgo)
+    {
+        $this->estadoInfraestructuraCausaRiesgo = $estadoInfraestructuraCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get estadoInfraestructuraCausaRiesgo
+     *
+     * @return string
+     */
+    public function getEstadoInfraestructuraCausaRiesgo()
+    {
+        return $this->estadoInfraestructuraCausaRiesgo;
+    }
+
+    /**
+     * Set faltaInformacionCausaRiesgo
+     *
+     * @param string $faltaInformacionCausaRiesgo
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setFaltaInformacionCausaRiesgo($faltaInformacionCausaRiesgo)
+    {
+        $this->faltaInformacionCausaRiesgo = $faltaInformacionCausaRiesgo;
+
+        return $this;
+    }
+
+    /**
+     * Get faltaInformacionCausaRiesgo
+     *
+     * @return string
+     */
+    public function getFaltaInformacionCausaRiesgo()
+    {
+        return $this->faltaInformacionCausaRiesgo;
     }
 
     /**
@@ -1084,5 +1369,29 @@ class MsvCaracterizacion
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return MsvCaracterizacion
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }

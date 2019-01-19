@@ -60,7 +60,10 @@ class MsvCaracterizacionController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $caracterizacion = new MsvCaracterizacion();
-            //$caracterizacion->setAsistencia($params->asistencia);
+            
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $caracterizacion->setEmpresa($empresa);
+
             $caracterizacion->setFecha(new \Datetime($params->fecha));
 
             if($params->municipio){
@@ -99,13 +102,23 @@ class MsvCaracterizacionController extends Controller
             $caracterizacion->setTrayecto($params->trayecto);
             $caracterizacion->setTiempoTrayecto($params->tiempoTrayecto);
             $caracterizacion->setKmMensualesRecorridos($params->kmMensualTrayecto);
-            //$caracterizacion->setEstadoInfraestructura($params->estadoInfraestructura);
-            //$caracterizacion->setFactorRiesgo($params->factorRiesgo);
-            //$caracterizacion->setOrganizacionTrabajo($params->organizacionTrabajo);
-            //$caracterizacion->setPropiaConduccion($params->propiaConduccion);
+
+            $caracterizacion->setEstadoInfraestructuraFactorRiesgo($params->estadoInfraestructura);
+            $caracterizacion->setOrganizacionTrabajoFactorRiesgo($params->organizacionTrabajo);
+            $caracterizacion->setPropiaConduccionFactorRiesgo($params->propiaConduccion);
             $caracterizacion->setOtroFactorRiesgo($params->otro2);
-            $caracterizacion->setCausasRiesgo($params->causaRiesgo);
-            $caracterizacion->setOtraCausaRiesgo($params->otro3);
+            
+            $caracterizacion->setIntensidadTraficoCausaRiesgo($params->intensidadTrafico);
+            $caracterizacion->setCondicionClimatologicaCausaRiesgo($params->condicionClimatologica);
+            $caracterizacion->setTipoVehiculoCausaRiesgo($params->tipoVehiculo);
+            $caracterizacion->setOrganizacionTrabajoCausaRiesgo($params->organizacionTrabajo2);
+            $caracterizacion->setPropiaConduccionCausaRiesgo($params->propiaConduccion2);
+            $caracterizacion->setEstadoCausaRiesgo($params->estado);
+            $caracterizacion->setOtroConductorCausaRiesgo($params->otroConductor);
+            $caracterizacion->setEstadoInfraestructuraCausaRiesgo($params->estadoInfraestructura2);
+            $caracterizacion->setFaltaInformacionCausaRiesgo($params->faltaInformacion);
+            $caracterizacion->setOtraCausaRiesgo($params->otraCausa);
+
             $caracterizacion->setRiesgo($params->riesgoPercibido);
             $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccion);
             $caracterizacion->setEstado(true);
@@ -286,6 +299,55 @@ class MsvCaracterizacionController extends Controller
     /**
      * Search empresa entity.
      *
+     * @Route("/get/datos/registros", name="datos_registros")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarRegistrosAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            /* $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
+            $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento()); */
+            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $registros = $em->getRepository('AppBundle:MsvCaracterizacion')->findBy(array('empresa' => $empresa));
+            
+            $response['data'] = array();
+
+            if ($registros) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($registros) . " registros encontrados",
+                    'data' => $registros,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La empresa no se encuentra en la Base de Datos",
+                );
+                return $helpers->json($response);
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Search empresa entity.
+     *
      * @Route("/get/datos/empresa", name="datos_empresa")
      * @Method({"GET", "POST"})
      */
@@ -300,16 +362,15 @@ class MsvCaracterizacionController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
-            $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
-            $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento());
+            /* $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
+            $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento()); */ 
+     
             if ($empresa) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "empresa encontrada",
                     'data' => $empresa,
-                    'licenciaConduccion' => $licenciaConduccion,
-                    'edad' => $edad,
                 );
             } else {
                 $response = array(
