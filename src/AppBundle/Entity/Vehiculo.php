@@ -249,6 +249,9 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
+        if ($this->fechaFactura) {
+            return $this->fechaFactura->format('d/m/Y');
+        }
         return $this->fechaFactura;
     }
 
