@@ -5,12 +5,12 @@ namespace JHWEB\BancoProyectoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BpRecurso
+ * BpInsumo
  *
- * @ORM\Table(name="bp_recurso")
- * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpRecursoRepository")
+ * @ORM\Table(name="bp_insumo")
+ * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpInsumoRepository")
  */
-class BpRecurso
+class BpInsumo
 {
     /**
      * @var int
@@ -31,16 +31,9 @@ class BpRecurso
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=255)
+     * @ORM\Column(name="unidad_medida", type="string", length=255)
      */
-    private $tipo;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="cantidad_medida", type="integer")
-     */
-    private $cantidadMedida;
+    private $unidadMedida;
 
     /**
      * @var int
@@ -57,9 +50,9 @@ class BpRecurso
     private $valorUnitario;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="valor_total", type="string", length=255)
+     * @ORM\Column(name="valor_total", type="integer")
      */
     private $valorTotal;
 
@@ -71,14 +64,20 @@ class BpRecurso
     private $activo;
 
     /**
+     * @ORM\ManyToOne(targetEntity="BpCfgTipoInsumo")
+     **/
+    protected $tipo;
+
+    /**
      * @ORM\ManyToOne(targetEntity="BpActividad")
      **/
     protected $actividad;
 
+
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -90,7 +89,7 @@ class BpRecurso
      *
      * @param string $nombre
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
     public function setNombre($nombre)
     {
@@ -110,51 +109,27 @@ class BpRecurso
     }
 
     /**
-     * Set tipo
+     * Set unidadMedida
      *
-     * @param string $tipo
+     * @param string $unidadMedida
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
-    public function setTipo($tipo)
+    public function setUnidadMedida($unidadMedida)
     {
-        $this->tipo = $tipo;
+        $this->unidadMedida = $unidadMedida;
 
         return $this;
     }
 
     /**
-     * Get tipo
+     * Get unidadMedida
      *
      * @return string
      */
-    public function getTipo()
+    public function getUnidadMedida()
     {
-        return $this->tipo;
-    }
-
-    /**
-     * Set cantidadMedida
-     *
-     * @param integer $cantidadMedida
-     *
-     * @return BpRecurso
-     */
-    public function setCantidadMedida($cantidadMedida)
-    {
-        $this->cantidadMedida = $cantidadMedida;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidadMedida
-     *
-     * @return integer
-     */
-    public function getCantidadMedida()
-    {
-        return $this->cantidadMedida;
+        return $this->unidadMedida;
     }
 
     /**
@@ -162,7 +137,7 @@ class BpRecurso
      *
      * @param integer $cantidad
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
     public function setCantidad($cantidad)
     {
@@ -174,7 +149,7 @@ class BpRecurso
     /**
      * Get cantidad
      *
-     * @return integer
+     * @return int
      */
     public function getCantidad()
     {
@@ -186,7 +161,7 @@ class BpRecurso
      *
      * @param integer $valorUnitario
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
     public function setValorUnitario($valorUnitario)
     {
@@ -198,7 +173,7 @@ class BpRecurso
     /**
      * Get valorUnitario
      *
-     * @return integer
+     * @return int
      */
     public function getValorUnitario()
     {
@@ -208,9 +183,9 @@ class BpRecurso
     /**
      * Set valorTotal
      *
-     * @param string $valorTotal
+     * @param integer $valorTotal
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
     public function setValorTotal($valorTotal)
     {
@@ -222,7 +197,7 @@ class BpRecurso
     /**
      * Get valorTotal
      *
-     * @return string
+     * @return int
      */
     public function getValorTotal()
     {
@@ -234,7 +209,7 @@ class BpRecurso
      *
      * @param boolean $activo
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
     public function setActivo($activo)
     {
@@ -246,7 +221,7 @@ class BpRecurso
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
@@ -254,26 +229,50 @@ class BpRecurso
     }
 
     /**
-     * Set bpActividad
+     * Set tipo
      *
-     * @param \JHWEB\BancoProyectoBundle\Entity\BpActividad $bpActividad
+     * @param \JHWEB\BancoProyectoBundle\Entity\BpCfgTipoInsumo $tipo
      *
-     * @return BpRecurso
+     * @return BpInsumo
      */
-    public function setBpActividad(\JHWEB\BancoProyectoBundle\Entity\BpActividad $bpActividad = null)
+    public function setTipo(\JHWEB\BancoProyectoBundle\Entity\BpCfgTipoInsumo $tipo = null)
     {
-        $this->BpActividad = $bpActividad;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get bpActividad
+     * Get tipo
+     *
+     * @return \JHWEB\BancoProyectoBundle\Entity\BpCfgTipoInsumo
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
+    }
+
+    /**
+     * Set actividad
+     *
+     * @param \JHWEB\BancoProyectoBundle\Entity\BpActividad $actividad
+     *
+     * @return BpInsumo
+     */
+    public function setActividad(\JHWEB\BancoProyectoBundle\Entity\BpActividad $actividad = null)
+    {
+        $this->actividad = $actividad;
+
+        return $this;
+    }
+
+    /**
+     * Get actividad
      *
      * @return \JHWEB\BancoProyectoBundle\Entity\BpActividad
      */
-    public function getBpActividad()
+    public function getActividad()
     {
-        return $this->BpActividad;
+        return $this->actividad;
     }
 }

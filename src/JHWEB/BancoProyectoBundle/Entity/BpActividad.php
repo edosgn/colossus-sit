@@ -246,4 +246,28 @@ class BpActividad
     {
         return $this->BpProyecto;
     }
+
+    /**
+     * Set proyecto
+     *
+     * @param \JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto
+     *
+     * @return BpActividad
+     */
+    public function setProyecto(\JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto = null)
+    {
+        $this->proyecto = $proyecto;
+
+        return $this;
+    }
+
+    /**
+     * Get proyecto
+     *
+     * @return \JHWEB\BancoProyectoBundle\Entity\BpProyecto
+     */
+    public function getProyecto()
+    {
+        return $this->proyecto;
+    }
 }
