@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\ConfigBundle\Controller;
+namespace JHWEB\BancoProyectoBundle\Controller;
 
-use JHWEB\ConfigBundle\Entity\CfgAdmFormatoTipo;
+use JHWEB\BancoProyectoBundle\Entity\BpCfgTipoInsumo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgadmformatotipo controller.
+ * Bpcfgtipoinsumo controller.
  *
- * @Route("cfgadmformatotipo")
+ * @Route("bpcfgtipoinsumo")
  */
-class CfgAdmFormatoTipoController extends Controller
+class BpCfgTipoInsumoController extends Controller
 {
     /**
-     * Lists all cfgAdmFormatoTipo entities.
+     * Lists all bpCfgTipoInsumo entities.
      *
-     * @Route("/", name="cfgadmformatotipo_index")
+     * @Route("/", name="bpcfgtipoinsumo_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +26,7 @@ class CfgAdmFormatoTipoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $tipos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findBy(
+        $tipos = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->findBy(
             array('activo' => true)
         );
 
@@ -45,9 +45,9 @@ class CfgAdmFormatoTipoController extends Controller
     }
 
     /**
-     * Creates a new cfgAdmFormatoTipo entity.
+     * Creates a new bpCfgTipoInsumo entity.
      *
-     * @Route("/new", name="cfgadmformatotipo_new")
+     * @Route("/new", name="bpcfgtipoinsumo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,7 +60,7 @@ class CfgAdmFormatoTipoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $tipo = new CfgAdmFormatoTipo();
+            $tipo = new BpCfgTipoInsumo();
 
             $tipo->setNombre(strtoupper($params->nombre));
             $tipo->setActivo(true);
@@ -86,25 +86,25 @@ class CfgAdmFormatoTipoController extends Controller
     }
 
     /**
-     * Finds and displays a cfgAdmFormatoTipo entity.
+     * Finds and displays a bpCfgTipoInsumo entity.
      *
-     * @Route("/{id}/show", name="cfgadmformatotipo_show")
+     * @Route("/{id}/show", name="bpcfgtipoinsumo_show")
      * @Method("GET")
      */
-    public function showAction(CfgAdmFormatoTipo $cfgAdmFormatoTipo)
+    public function showAction(BpCfgTipoInsumo $bpCfgTipoInsumo)
     {
-        $deleteForm = $this->createDeleteForm($cfgAdmFormatoTipo);
+        $deleteForm = $this->createDeleteForm($bpCfgTipoInsumo);
 
-        return $this->render('cfgadmformatotipo/show.html.twig', array(
-            'cfgAdmFormatoTipo' => $cfgAdmFormatoTipo,
+        return $this->render('bpcfgtipoinsumo/show.html.twig', array(
+            'bpCfgTipoInsumo' => $bpCfgTipoInsumo,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgAdmFormatoTipo entity.
+     * Displays a form to edit an existing bpCfgTipoInsumo entity.
      *
-     * @Route("/edit", name="cfgadmformatotipo_edit")
+     * @Route("/edit", name="bpcfgtipoinsumo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -119,7 +119,7 @@ class CfgAdmFormatoTipoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->find(
+            $tipo = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->find(
                 $params->id
             );
 
@@ -153,36 +153,66 @@ class CfgAdmFormatoTipoController extends Controller
     }
 
     /**
-     * Deletes a cfgAdmFormatoTipo entity.
+     * Deletes a bpCfgTipoInsumo entity.
      *
-     * @Route("/{id}/delete", name="cfgadmformatotipo_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="bpcfgtipoinsumo_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, CfgAdmFormatoTipo $cfgAdmFormatoTipo)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($cfgAdmFormatoTipo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cfgAdmFormatoTipo);
-            $em->flush();
+            
+            $tipo = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->find(
+                $params->id
+            );
+
+            if ($tipo) {
+                $tipo->setActivo(false);
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito"
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
 
-        return $this->redirectToRoute('cfgadmformatotipo_index');
+        return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a cfgAdmFormatoTipo entity.
+     * Creates a form to delete a bpCfgTipoInsumo entity.
      *
-     * @param CfgAdmFormatoTipo $cfgAdmFormatoTipo The cfgAdmFormatoTipo entity
+     * @param BpCfgTipoInsumo $bpCfgTipoInsumo The bpCfgTipoInsumo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgAdmFormatoTipo $cfgAdmFormatoTipo)
+    private function createDeleteForm(BpCfgTipoInsumo $bpCfgTipoInsumo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgadmformatotipo_delete', array('id' => $cfgAdmFormatoTipo->getId())))
+            ->setAction($this->generateUrl('bpcfgtipoinsumo_delete', array('id' => $bpCfgTipoInsumo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -193,7 +223,7 @@ class CfgAdmFormatoTipoController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cfgadminformatotipo_select")
+     * @Route("/select", name="bpcfgtipoinsumo_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -201,7 +231,7 @@ class CfgAdmFormatoTipoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $tipos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findBy(
+        $tipos = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->findBy(
             array('activo' => true)
         );
 

@@ -90,6 +90,7 @@ class CvCdoTrazabilidadController extends Controller
                         $params->idComparendo
                     );
                     $trazabilidad->setComparendo($comparendo);
+                    $comparendo->setEstado($estado);
                 }
 
                 $em->persist($trazabilidad);

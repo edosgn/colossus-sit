@@ -45,23 +45,23 @@ class BpProyecto
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_cuota", type="integer")
+     * @ORM\Column(name="cuenta_numero", type="integer")
      */
-    private $numeroCuota;
+    private $cuentaNumero;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre_cuota", type="string", length=255)
+     * @ORM\Column(name="cuenta_nombre", type="string", length=255)
      */
-    private $nombreCuota;
+    private $cuentaNombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="costo_valor", type="integer")
+     * @ORM\Column(name="costo_total", type="integer")
      */
-    private $costoValor;
+    private $costoTotal;
 
     /**
      * @var bool
@@ -150,79 +150,79 @@ class BpProyecto
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        return $this->fecha;
     }
 
     /**
-     * Set numeroCuota
+     * Set cuentaNumero
      *
-     * @param integer $numeroCuota
+     * @param integer $cuentaNumero
      *
      * @return BpProyecto
      */
-    public function setNumeroCuota($numeroCuota)
+    public function setCuentaNumero($cuentaNumero)
     {
-        $this->numeroCuota = $numeroCuota;
+        $this->cuentaNumero = $cuentaNumero;
 
         return $this;
     }
 
     /**
-     * Get numeroCuota
+     * Get cuentaNumero
      *
      * @return integer
      */
-    public function getNumeroCuota()
+    public function getCuentaNumero()
     {
-        return $this->numeroCuota;
+        return $this->cuentaNumero;
     }
 
     /**
-     * Set nombreCuota
+     * Set cuentaNombre
      *
-     * @param string $nombreCuota
+     * @param string $cuentaNombre
      *
      * @return BpProyecto
      */
-    public function setNombreCuota($nombreCuota)
+    public function setCuentaNombre($cuentaNombre)
     {
-        $this->nombreCuota = $nombreCuota;
+        $this->cuentaNombre = $cuentaNombre;
 
         return $this;
     }
 
     /**
-     * Get nombreCuota
+     * Get cuentaNombre
      *
      * @return string
      */
-    public function getNombreCuota()
+    public function getCuentaNombre()
     {
-        return $this->nombreCuota;
+        return $this->cuentaNombre;
     }
 
     /**
-     * Set costoValor
+     * Set costoTotal
      *
-     * @param integer $costoValor
+     * @param integer $costoTotal
      *
      * @return BpProyecto
      */
-    public function setCostoValor($costoValor)
+    public function setCostoTotal($costoTotal)
     {
-        $this->costoValor = $costoValor;
+        $this->costoTotal = $costoTotal;
 
         return $this;
     }
 
     /**
-     * Get costoValor
+     * Get costoTotal
      *
      * @return integer
      */
-    public function getCostoValor()
+    public function getCostoTotal()
     {
-        return $this->costoValor;
+        return $this->costoTotal;
     }
 
     /**

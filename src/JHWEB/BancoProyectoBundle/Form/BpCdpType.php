@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class BpRecursoType extends AbstractType
+class BpCdpType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nombre')->add('tipo')->add('cantidadMedida')->add('cantidad')->add('valorUnitario')->add('valorTotal')->add('activo')->add('BpActividad');
+        $builder->add('solicitudNumero')->add('solicitudFecha')->add('solicitudConsecutivo')->add('numero')->add('valor')->add('activo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JHWEB\BancoProyectoBundle\Entity\BpRecurso'
+            'data_class' => 'JHWEB\BancoProyectoBundle\Entity\BpCdp'
         ));
     }
 
@@ -29,7 +29,7 @@ class BpRecursoType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jhweb_bancoproyectobundle_bprecurso';
+        return 'jhweb_bancoproyectobundle_bpcdp';
     }
 
 

@@ -48,54 +48,44 @@ class BpActividadController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                if ($tramite==null) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "no existe el tramite", 
-                    );
-                }else{
-                    $bpActividad = new BpActividad();
+            $actividad = new BpCdp();
 
-                    $bpActividad->setNombre($params->nombre);
-                    $bpActividad->setUnidadMedida($params->unidadMedida);
-                    $bpActividad->setCantidad($params->cantidad);
-                    $bpActividad->setCostoUnitario($params->costoUnitario);
-                    $bpActividad->setCostoTotal($params->costoTotal);
 
-                    $em = $this->getDoctrine()->getManager();
-                    $bpProyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($params->bpProyectoId);
-                    $bpActividad->setBpProyecto($bpProyecto);
-                    $bpActividad->setActivo(true);
+            $actividad->setNombre($params->nombre);
+            $actividad->setUnidadMedida($params->unidadMedida);
+            $actividad->setCantidad($params->cantidad);
+            $actividad->setCostoUnitario($params->costoUnitario);
+            $actividad->setCostoTotal($params->costoTotal);
+            $actividad->setActivo(true);
 
-                    $em->persist($bpActividad);
-                    $em->flush();
+            if ($params->idProyecto) {
+                $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($params->idProyecto);
+                $actividad->setProyecto($proyecto);
+            }
 
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "BpActividad creado con exito", 
-                    );
-                }
-            //}
+            $em->persist($actividad);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
-        } 
+        }
+        
         return $helpers->json($response);
     }
 
