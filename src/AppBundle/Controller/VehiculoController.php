@@ -145,6 +145,8 @@ class VehiculoController extends Controller
                 $pignorado = (isset($params->vehiculo->pignorado)) ? $params->vehiculo->pignorado : false;
                 $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
                 $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
+                
+                $idRadioAccion = (isset($params->vehiculo->radioAccionId)) ? $params->vehiculo->radioAccionId : false;
 
 
                 $linea = $em->getRepository('AppBundle:Linea')->find($lineaId);
@@ -153,9 +155,12 @@ class VehiculoController extends Controller
                 $combustible = $em->getRepository('AppBundle:Combustible')->find($combustibleId);
                 $carroceria = $em->getRepository('AppBundle:Carroceria')->find($carroceriaId);
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
-                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
-                    $params->vehiculo->radioAccionId
-                );
+
+                if($params->vehiculo->radioAccionId){
+                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
+                        $idRadioAccion
+                    );
+                }   
                 $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find(
                     $params->vehiculo->modalidadTransporteId
                 );
