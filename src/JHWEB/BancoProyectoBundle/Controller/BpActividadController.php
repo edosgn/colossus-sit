@@ -77,6 +77,7 @@ class BpActividadController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
+                'data' => $actividad
             );
         }else{
             $response = array(

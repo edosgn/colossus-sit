@@ -150,6 +150,9 @@ class BpProyecto
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
     }
 

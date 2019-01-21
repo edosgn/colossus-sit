@@ -52,7 +52,7 @@ class BpProyectoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        
+
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -62,11 +62,11 @@ class BpProyectoController extends Controller
             $proyecto = new BpProyecto();
 
             $proyecto->setNumero($params->numero);
-            $proyecto->setNombre($params->nombre);
+            $proyecto->setNombre(strtoupper($params->nombre));
             $proyecto->setFecha(new \Datetime($params->fecha));
-            $proyecto->setNumeroCuota($params->numeroCuota);
-            $proyecto->setNombreCuota($params->nombreCuota);
-            $proyecto->setCostoValor($params->costoValor);
+            $proyecto->setCuentaNumero($params->cuentaNumero);
+            $proyecto->setCuentaNombre($params->cuentaNombre);
+            $proyecto->setCostoTotal($params->costoTotal);
             $proyecto->setActivo(true);
 
             $em->persist($proyecto);
