@@ -6,7 +6,7 @@ jhweb_banco_proyecto:
 jhweb_usuario:
     resource: "@JHWEBUsuarioBundle/Controller/"
     type:     annotation
-    prefix:   /
+    prefix:   /usuario
 
 jhweb_financiero:
     resource: "@JHWEBFinancieroBundle/Controller/"
