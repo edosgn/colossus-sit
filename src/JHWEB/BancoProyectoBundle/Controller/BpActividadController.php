@@ -55,8 +55,7 @@ class BpActividadController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $actividad = new BpCdp();
-
+            $actividad = new BpActividad();
 
             $actividad->setNombre($params->nombre);
             $actividad->setUnidadMedida($params->unidadMedida);

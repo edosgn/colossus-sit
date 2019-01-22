@@ -224,30 +224,6 @@ class BpActividad
     }
 
     /**
-     * Set bpProyecto
-     *
-     * @param \JHWEB\BancoProyectoBundle\Entity\BpProyecto $bpProyecto
-     *
-     * @return BpActividad
-     */
-    public function setBpProyecto(\JHWEB\BancoProyectoBundle\Entity\BpProyecto $bpProyecto = null)
-    {
-        $this->BpProyecto = $bpProyecto;
-
-        return $this;
-    }
-
-    /**
-     * Get bpProyecto
-     *
-     * @return \JHWEB\BancoProyectoBundle\Entity\BpProyecto
-     */
-    public function getBpProyecto()
-    {
-        return $this->BpProyecto;
-    }
-
-    /**
      * Set proyecto
      *
      * @param \JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto

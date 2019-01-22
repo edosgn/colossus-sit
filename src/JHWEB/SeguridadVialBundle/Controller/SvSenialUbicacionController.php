@@ -103,28 +103,6 @@ class SvSenialUbicacionController extends Controller
             $ubicacion->setHora(new \Datetime(date('h:i:s A')));
             $ubicacion->setLatitud($params->latitud);
             $ubicacion->setLongitud($params->longitud);
-
-            if ($params->via1) {
-                $ubicacion->setVia1($params->via1);
-            }
-            if ($params->no1) {
-                $ubicacion->setNumero1($params->no1);
-            }
-
-            if ($params->via2) {
-                $ubicacion->setVia2($params->via2);
-            }
-            if ($params->no2) {
-                $ubicacion->setNumero2($params->no2);
-            }
-
-            if ($params->via3) {
-                $ubicacion->setVia3($params->via3);
-            }
-            if ($params->no3) {
-                $ubicacion->setNumero3($params->no3);
-            }
-
             $ubicacion->setDireccion($params->direccion);
 
             if ($params->idConector) {
