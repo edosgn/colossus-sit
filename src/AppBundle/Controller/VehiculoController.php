@@ -713,8 +713,7 @@ class VehiculoController extends Controller
                             break;
 
                         case 'motor':
-                            $vehiculo->setMotor($params->idMotor);
-
+                            $vehiculo->setMotor($params->numeroMotor);
                             break;
 
                         case 'placa':
@@ -743,7 +742,7 @@ class VehiculoController extends Controller
                             break;
 
                         case 'conjunto':
-                            $vehiculo->setModelo($params->modelo);
+                            $vehiculo->setModelo($params->nuevoModelo);
                             break;
 
                         case 'repotenciacion':

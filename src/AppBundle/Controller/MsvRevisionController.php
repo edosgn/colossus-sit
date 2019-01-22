@@ -155,8 +155,10 @@ class MsvRevisionController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
             $em = $this->getDoctrine()->getManager();
-            $revision = $em->getRepository('AppBundle:MsvRevision')->findOneBy(array('empresa' =>$id));
-            //var_dump($revision->getEmpresa()->getNombre());
+            $revision = $em->getRepository('AppBundle:MsvRevision')->findBy(array('empresa' =>$id));
+
+            $response['data'] = array();
+
             if($revision){
                 $response = array(
                     'status' => 'success',
