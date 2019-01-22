@@ -147,7 +147,6 @@ class TramiteSolicitudController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            //var_dump($params);
 
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
