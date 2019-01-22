@@ -138,6 +138,9 @@ class LimitacionDatos
      */
     public function getFechaRadicacion()
     {
+        if ($this->fechaRadicacion) {
+            return $this->fechaRadicacion->format('d/m/Y');
+        }
         return $this->fechaRadicacion;
     }
 
@@ -186,6 +189,9 @@ class LimitacionDatos
      */
     public function getFechaExpedicion()
     {
+        if ($this->fechaExpedicion) {
+            return $this->fechaExpedicion->format('d/m/Y');
+        }
         return $this->fechaExpedicion;
     }
 
