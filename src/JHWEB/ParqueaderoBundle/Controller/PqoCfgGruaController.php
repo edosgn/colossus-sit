@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\BancoProyectoBundle\Controller;
+namespace JHWEB\ParqueaderoBundle\Controller;
 
-use JHWEB\BancoProyectoBundle\Entity\BpCfgTipoInsumo;
+use JHWEB\ParqueaderoBundle\Entity\PqoCfgGrua;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Bpcfgtipoinsumo controller.
+ * Pqocfggrua controller.
  *
- * @Route("bpcfgtipoinsumo")
+ * @Route("pqocfggrua")
  */
-class BpCfgTipoInsumoController extends Controller
+class PqoCfgGruaController extends Controller
 {
     /**
-     * Lists all bpCfgTipoInsumo entities.
+     * Lists all pqoCfgGrua entities.
      *
-     * @Route("/", name="bpcfgtipoinsumo_index")
+     * @Route("/", name="pqocfggrua_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,18 +26,18 @@ class BpCfgTipoInsumoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $tipos = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->findBy(
+        $gruas = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgGrua')->findBy(
             array('activo' => true)
         );
 
         $response['data'] = array();
 
-        if ($tipos) {
+        if ($gruas) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($tipos)." registros encontrados", 
-                'data'=> $tipos,
+                'message' => count($gruas)." registros encontrados", 
+                'data'=> $gruas,
             );
         }
 
@@ -45,9 +45,9 @@ class BpCfgTipoInsumoController extends Controller
     }
 
     /**
-     * Creates a new bpCfgTipoInsumo entity.
+     * Creates a new pqoCfgGrua entity.
      *
-     * @Route("/new", name="bpcfgtipoinsumo_new")
+     * @Route("/new", name="pqocfggrua_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,13 +60,14 @@ class BpCfgTipoInsumoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $tipo = new BpCfgTipoInsumo();
+            $grua = new PqoCfgGrua();
 
-            $tipo->setNombre(strtoupper($params->nombre));
-            $tipo->setActivo(true);
+            $grua->setPlaca(strtoupper($params->placa));
+            $grua->setCodigo(strtoupper($params->codigo));
+            $grua->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($tipo);
+            $em->persist($grua);
             $em->flush();
 
             $response = array(
@@ -86,25 +87,25 @@ class BpCfgTipoInsumoController extends Controller
     }
 
     /**
-     * Finds and displays a bpCfgTipoInsumo entity.
+     * Finds and displays a pqoCfgGrua entity.
      *
-     * @Route("/{id}/show", name="bpcfgtipoinsumo_show")
+     * @Route("/{id}/show", name="pqocfggrua_show")
      * @Method("GET")
      */
-    public function showAction(BpCfgTipoInsumo $bpCfgTipoInsumo)
+    public function showAction(PqoCfgGrua $pqoCfgGrua)
     {
-        $deleteForm = $this->createDeleteForm($bpCfgTipoInsumo);
+        $deleteForm = $this->createDeleteForm($pqoCfgGrua);
 
-        return $this->render('bpcfgtipoinsumo/show.html.twig', array(
-            'bpCfgTipoInsumo' => $bpCfgTipoInsumo,
+        return $this->render('pqocfggrua/show.html.twig', array(
+            'pqoCfgGrua' => $pqoCfgGrua,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing bpCfgTipoInsumo entity.
+     * Displays a form to edit an existing pqoCfgGrua entity.
      *
-     * @Route("/edit", name="bpcfgtipoinsumo_edit")
+     * @Route("/edit", name="pqocfggrua_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -119,12 +120,13 @@ class BpCfgTipoInsumoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $tipo = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->find(
+            $grua = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgGrua')->find(
                 $params->id
             );
 
-            if ($tipo) {
-                $tipo->setNombre(strtoupper($params->nombre));
+            if ($grua) {
+                $grua->setPlaca(strtoupper($params->placa));
+                $grua->setCodigo(strtoupper($params->codigo));
 
                 $em->flush();
 
@@ -132,7 +134,7 @@ class BpCfgTipoInsumoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con éxito",
-                    'data' => $tipo,
+                    'data' => $grua,
                 );
             } else {
                 $response = array(
@@ -153,9 +155,9 @@ class BpCfgTipoInsumoController extends Controller
     }
 
     /**
-     * Deletes a bpCfgTipoInsumo entity.
+     * Deletes a pqoCfgGrua entity.
      *
-     * @Route("/delete", name="bpcfgtipoinsumo_delete")
+     * @Route("/delete", name="pqocfggrua_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request)
@@ -170,12 +172,12 @@ class BpCfgTipoInsumoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $tipo = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->find(
+            $grua = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgGrua')->find(
                 $params->id
             );
 
-            if ($tipo) {
-                $tipo->setActivo(false);
+            if ($grua) {
+                $grua->setActivo(false);
 
                 $em->flush();
 
@@ -203,16 +205,16 @@ class BpCfgTipoInsumoController extends Controller
     }
 
     /**
-     * Creates a form to delete a bpCfgTipoInsumo entity.
+     * Creates a form to delete a pqoCfgGrua entity.
      *
-     * @param BpCfgTipoInsumo $bpCfgTipoInsumo The bpCfgTipoInsumo entity
+     * @param PqoCfgGrua $pqoCfgGrua The pqoCfgGrua entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(BpCfgTipoInsumo $bpCfgTipoInsumo)
+    private function createDeleteForm(PqoCfgGrua $pqoCfgGrua)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('bpcfgtipoinsumo_delete', array('id' => $bpCfgTipoInsumo->getId())))
+            ->setAction($this->generateUrl('pqocfggrua_delete', array('id' => $pqoCfgGrua->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -223,7 +225,7 @@ class BpCfgTipoInsumoController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="bpcfgtipoinsumo_select")
+     * @Route("/select", name="pqocfggrua_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -231,16 +233,16 @@ class BpCfgTipoInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $tipos = $em->getRepository('JHWEBBancoProyectoBundle:BpCfgTipoInsumo')->findBy(
+        $gruas = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgGrua')->findBy(
             array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($tipos as $key => $tipo) {
+        foreach ($gruas as $key => $grua) {
             $response[$key] = array(
-                'value' => $tipo->getId(),
-                'label' => $tipo->getNombre(),
+                'value' => $grua->getId(),
+                'label' => $grua->getCodigo().' - '.$grua->getPlaca(),
             );
         }
 

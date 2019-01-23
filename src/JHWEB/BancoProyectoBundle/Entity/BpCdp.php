@@ -45,16 +45,58 @@ class BpCdp
     /**
      * @var int
      *
-     * @ORM\Column(name="numero", type="bigint")
+     * @ORM\Column(name="numero", type="bigint", nullable=true)
      */
     private $numero;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_registro", type="date", nullable=true)
+     */
+    private $fechaRegistro;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_expedicion", type="date", nullable=true)
+     */
+    private $fechaExpedicion;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="valor", type="integer")
+     * @ORM\Column(name="valor", type="integer", nullable=true)
      */
     private $valor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="valor_letras", type="string", length=255, nullable=true)
+     */
+    private $valorLetras;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="tercero_identificacion", type="bigint", nullable=true)
+     */
+    private $terceroIdentificacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tercero_nombre", type="string", length=255, nullable=true)
+     */
+    private $terceroNombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones", type="text", nullable=true)
+     */
+    private $observaciones;
 
     /**
      * @var bool
@@ -68,6 +110,9 @@ class BpCdp
      **/
     protected $actividad;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="cdps") */
+    private $expide;
+
 
     /**
      * Get id
@@ -77,102 +122,6 @@ class BpCdp
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set numero
-     *
-     * @param integer $numero
-     *
-     * @return BpCdp
-     */
-    public function setNumero($numero)
-    {
-        $this->numero = $numero;
-
-        return $this;
-    }
-
-    /**
-     * Get numero
-     *
-     * @return int
-     */
-    public function getNumero()
-    {
-        return $this->numero;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param integer $valor
-     *
-     * @return BpCdp
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return int
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return BpCdp
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return bool
-     */
-    public function getActivo()
-    {
-        return $this->activo;
-    }
-
-    /**
-     * Set actividad
-     *
-     * @param \JHWEB\BancoProyectoBundle\Entity\BpActividad $actividad
-     *
-     * @return BpCdp
-     */
-    public function setActividad(\JHWEB\BancoProyectoBundle\Entity\BpActividad $actividad = null)
-    {
-        $this->actividad = $actividad;
-
-        return $this;
-    }
-
-    /**
-     * Get actividad
-     *
-     * @return \JHWEB\BancoProyectoBundle\Entity\BpActividad
-     */
-    public function getActividad()
-    {
-        return $this->actividad;
     }
 
     /**
@@ -245,5 +194,269 @@ class BpCdp
     public function getSolicitudConsecutivo()
     {
         return $this->solicitudConsecutivo;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param integer $numero
+     *
+     * @return BpCdp
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return integer
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set fechaRegistro
+     *
+     * @param \DateTime $fechaRegistro
+     *
+     * @return BpCdp
+     */
+    public function setFechaRegistro($fechaRegistro)
+    {
+        $this->fechaRegistro = $fechaRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRegistro
+     *
+     * @return \DateTime
+     */
+    public function getFechaRegistro()
+    {
+        return $this->fechaRegistro;
+    }
+
+    /**
+     * Set fechaExpedicion
+     *
+     * @param \DateTime $fechaExpedicion
+     *
+     * @return BpCdp
+     */
+    public function setFechaExpedicion($fechaExpedicion)
+    {
+        $this->fechaExpedicion = $fechaExpedicion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaExpedicion
+     *
+     * @return \DateTime
+     */
+    public function getFechaExpedicion()
+    {
+        return $this->fechaExpedicion;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param integer $valor
+     *
+     * @return BpCdp
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return integer
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
+     * Set valorLetras
+     *
+     * @param string $valorLetras
+     *
+     * @return BpCdp
+     */
+    public function setValorLetras($valorLetras)
+    {
+        $this->valorLetras = $valorLetras;
+
+        return $this;
+    }
+
+    /**
+     * Get valorLetras
+     *
+     * @return string
+     */
+    public function getValorLetras()
+    {
+        return $this->valorLetras;
+    }
+
+    /**
+     * Set terceroIdentificacion
+     *
+     * @param integer $terceroIdentificacion
+     *
+     * @return BpCdp
+     */
+    public function setTerceroIdentificacion($terceroIdentificacion)
+    {
+        $this->terceroIdentificacion = $terceroIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroIdentificacion
+     *
+     * @return integer
+     */
+    public function getTerceroIdentificacion()
+    {
+        return $this->terceroIdentificacion;
+    }
+
+    /**
+     * Set terceroNombre
+     *
+     * @param string $terceroNombre
+     *
+     * @return BpCdp
+     */
+    public function setTerceroNombre($terceroNombre)
+    {
+        $this->terceroNombre = $terceroNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get terceroNombre
+     *
+     * @return string
+     */
+    public function getTerceroNombre()
+    {
+        return $this->terceroNombre;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return BpCdp
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return BpCdp
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set actividad
+     *
+     * @param \JHWEB\BancoProyectoBundle\Entity\BpActividad $actividad
+     *
+     * @return BpCdp
+     */
+    public function setActividad(\JHWEB\BancoProyectoBundle\Entity\BpActividad $actividad = null)
+    {
+        $this->actividad = $actividad;
+
+        return $this;
+    }
+
+    /**
+     * Get actividad
+     *
+     * @return \JHWEB\BancoProyectoBundle\Entity\BpActividad
+     */
+    public function getActividad()
+    {
+        return $this->actividad;
+    }
+
+    /**
+     * Set expide
+     *
+     * @param \AppBundle\Entity\MpersonalFuncionario $expide
+     *
+     * @return BpCdp
+     */
+    public function setExpide(\AppBundle\Entity\MpersonalFuncionario $expide = null)
+    {
+        $this->expide = $expide;
+
+        return $this;
+    }
+
+    /**
+     * Get expide
+     *
+     * @return \AppBundle\Entity\MpersonalFuncionario
+     */
+    public function getExpide()
+    {
+        return $this->expide;
     }
 }

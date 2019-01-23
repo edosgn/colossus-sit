@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pqocfggruas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Placa</th>
+                <th>Codigo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pqoCfgGrua in pqoCfgGruas %}
+            <tr>
+                <td><a href="{{ path('pqocfggrua_show', { 'id': pqoCfgGrua.id }) }}">{{ pqoCfgGrua.id }}</a></td>
+                <td>{{ pqoCfgGrua.placa }}</td>
+                <td>{{ pqoCfgGrua.codigo }}</td>
+                <td>{% if pqoCfgGrua.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pqocfggrua_show', { 'id': pqoCfgGrua.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pqocfggrua_edit', { 'id': pqoCfgGrua.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pqocfggrua_new') }}">Create a new pqoCfgGrua</a>
+        </li>
+    </ul>
+{% endblock %}
