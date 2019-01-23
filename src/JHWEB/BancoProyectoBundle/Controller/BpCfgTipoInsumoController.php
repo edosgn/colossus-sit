@@ -195,7 +195,7 @@ class BpCfgTipoInsumoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no válida para editar",
+                'message' => "Autorización no válida",
             );
         }
 

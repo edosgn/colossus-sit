@@ -104,7 +104,7 @@ class BpCdpController extends Controller
     /**
      * Finds and displays a bpCdp entity.
      *
-     * @Route("/{id}", name="bpcdp_show")
+     * @Route("/{id}/show", name="bpcdp_show")
      * @Method("GET")
      */
     public function showAction(BpCdp $bpCdp)
@@ -145,7 +145,7 @@ class BpCdpController extends Controller
     /**
      * Deletes a bpCdp entity.
      *
-     * @Route("/{id}", name="bpcdp_delete")
+     * @Route("/{id}/delete", name="bpcdp_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, BpCdp $bpCdp)
@@ -176,5 +176,66 @@ class BpCdpController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ========================= */
+    /**
+     * Creates a request bpCdp entity.
+     *
+     * @Route("/request", name="bpcdp_request")
+     * @Method({"GET", "POST"})
+     */
+    public function requestAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
+
+            $cdp = new BpCdp();
+
+            $solicitudFecha = new \Datetime(date('Y-m-d'));
+
+            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->getMaximo(
+                $solicitudFecha->format('Y')
+            );
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+
+            $numero = $solicitudFecha->format('Y').(str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
+
+            $cdp->setSolicitudNumero($numero);
+            $cdp->setSolicitudFecha($solicitudFecha);
+            $cdp->setSolicitudConsecutivo($consecutivo);
+
+            if ($params->idActividad) {
+                $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
+                $cdp->setActividad($actividad);
+                $cdp->setValor($actividad->getCostoTotal());
+            }
+
+            $cdp->setActivo(true);
+
+            $em->persist($cdp);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

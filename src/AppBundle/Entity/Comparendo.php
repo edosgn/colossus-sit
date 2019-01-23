@@ -414,11 +414,6 @@ class Comparendo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
      **/
     protected $sedeOperativa;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Inmovilizacion")
-     */
-    private $inmovilizacion;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalComparendo", inversedBy="comparendos")
@@ -1841,30 +1836,6 @@ class Comparendo
     public function getSedeOperativa()
     {
         return $this->sedeOperativa;
-    }
-
-    /**
-     * Set inmovilizacion
-     *
-     * @param \AppBundle\Entity\Inmovilizacion $inmovilizacion
-     *
-     * @return Comparendo
-     */
-    public function setInmovilizacion(\AppBundle\Entity\Inmovilizacion $inmovilizacion = null)
-    {
-        $this->inmovilizacion = $inmovilizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get inmovilizacion
-     *
-     * @return \AppBundle\Entity\Inmovilizacion
-     */
-    public function getInmovilizacion()
-    {
-        return $this->inmovilizacion;
     }
 
     /**

@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pqogruaciudadanos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fechainicial</th>
+                <th>Fechafinal</th>
+                <th>Observaciones</th>
+                <th>Tipo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pqoGruaCiudadano in pqoGruaCiudadanos %}
+            <tr>
+                <td><a href="{{ path('pqogruaciudadano_show', { 'id': pqoGruaCiudadano.id }) }}">{{ pqoGruaCiudadano.id }}</a></td>
+                <td>{% if pqoGruaCiudadano.fechaInicial %}{{ pqoGruaCiudadano.fechaInicial|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if pqoGruaCiudadano.fechaFinal %}{{ pqoGruaCiudadano.fechaFinal|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ pqoGruaCiudadano.observaciones }}</td>
+                <td>{{ pqoGruaCiudadano.tipo }}</td>
+                <td>{% if pqoGruaCiudadano.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pqogruaciudadano_show', { 'id': pqoGruaCiudadano.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pqogruaciudadano_edit', { 'id': pqoGruaCiudadano.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pqogruaciudadano_new') }}">Create a new pqoGruaCiudadano</a>
+        </li>
+    </ul>
+{% endblock %}

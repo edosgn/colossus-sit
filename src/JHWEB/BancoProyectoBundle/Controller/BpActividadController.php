@@ -23,17 +23,24 @@ class BpActividadController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
-        $bpActividads = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
-            array('estado' => 1)
+        
+        $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
+            array('activo' => true)
         );
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado bpActividads", 
-                    'data'=> $bpActividads,
+
+        $response['data'] = array();
+
+        if ($actividades) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($actividades)." registros encontrados", 
+                'data'=> $actividades,
             );
-         
+        }
+
         return $helpers->json($response);
     }
 
@@ -55,8 +62,7 @@ class BpActividadController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $actividad = new BpCdp();
-
+            $actividad = new BpActividad();
 
             $actividad->setNombre($params->nombre);
             $actividad->setUnidadMedida($params->unidadMedida);
@@ -180,34 +186,50 @@ class BpActividadController extends Controller
     /**
      * Deletes a BpActividad entity.
      *
-     * @Route("/{id}/delete", name="bpActividad_delete")
-     * @Method("POST")
+     * @Route("/delete", name="bpActividad_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();
-            $bpActividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($id);
 
-            $bpActividad->setActivo(false);
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-                $em->persist($bpActividad);
+            
+            $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find(
+                $params->id
+            );
+
+            if ($actividad) {
+                $actividad->setActivo(false);
+
                 $em->flush();
-            $response = array(
+
+                $response = array(
                     'status' => 'success',
-                        'code' => 200,
-                        'msj' => "bpActividad eliminado con exito", 
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito"
                 );
-        }else{
-            $response = array(
+            } else {
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "El registro no se encuentra en la base de datos",
                 );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
+
         return $helpers->json($response);
     }
 
@@ -227,47 +249,89 @@ class BpActividadController extends Controller
         ;
     }
 
+    /* ============================================ */
+
     /**
-     * busca los bpActividads de un tramite.
+     * datos para select 2
      *
-     * @Route("/showBpActividads/{id}", name="bpActividad_tramites_show")
+     * @Route("/select", name="bpActividad_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
+            array(
+                'proyecto' => $params->idProyecto,
+                'activo' => true
+            )
+        );
+
+        $response = null;
+
+        foreach ($actividades as $key => $actividad) {
+            $response[$key] = array(
+                'value' => $actividad->getId(),
+                'label' => $actividad->getNombre(),
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * busca los bpProyectos de un tramite.
+     *
+     * @Route("/search/insumos", name="bpActividad_search_insumos")
      * @Method("POST")
      */
-    public function showBpActividadsAction(Request  $request, $id)
+    public function searchInsumosAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $bpActividads = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
-            array('estado' => 1,'tramite'=> $id)
+
+            $insumos = $em->getRepository('JHWEBBancoProyectoBundle:BpInsumo')->findBy(
+                array(
+                    'actividad' => $params->idActividad,
+                    'activo' => true
+                )
             );
 
-            if ($bpActividads==null) {
+            if ($insumos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($insumos)." registros encontrados.",
+                    'data'=> $insumos,
+                );
+            }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "No hay bpActividads asigandos a este tramite", 
+                    'message' => "Ningún insumo registrado aún.",
                 );
             }
-            else{
-               $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "bpActividads encontrado", 
-                    'data'=> $bpActividads,
-            ); 
-            }
-            
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
+        
         return $helpers->json($response);
     }
 }

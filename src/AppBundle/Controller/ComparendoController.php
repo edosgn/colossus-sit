@@ -362,12 +362,12 @@ class ComparendoController extends Controller
                         new \Datetime($params->comparendo->fecha)
                     );
 
-                    $grua = $em->getRepository('AppBundle:MparqGrua')->find(
+                    $grua = $em->getRepository('JHWEBPaqueaderoBundle:PqoCfgGrua')->find(
                         $params->inmovilizacion->idGrua
                     );
                     $inmovilizacion->setGrua($grua);
 
-                    $patio = $em->getRepository('AppBundle:MparqPatio')->find(
+                    $patio = $em->getRepository('JHWEBPaqueaderoBundle:PqoCfgPatio')->find(
                         $params->inmovilizacion->idPatio
                     );
                     $inmovilizacion->setPatio($patio);
