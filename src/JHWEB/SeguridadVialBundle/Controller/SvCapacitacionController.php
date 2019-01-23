@@ -108,12 +108,17 @@ class SvCapacitacionController extends Controller
                 die();
                 $capacitacion->setCedula($ciudadano);
             }*/
-            $capacitacion->setCedula($params->cedula);
             $capacitacion->setFechaHoraRegistro(new \Datetime(date('Y-m-d h:i:s', strtotime($params->fechaHoraRegistro))));
+            $capacitacion->setEmailFormador($params->emailFormador);
+            $capacitacion->setCedula($params->cedula);
             $capacitacion->setFormador($params->formador);
             $capacitacion->setSemana($params->semana);
             $capacitacion->setFechaActividad(new \Datetime($params->fechaActividad));
-            $capacitacion->setClaseActividad($params->claseActividad);
+
+            if ($params->funcionCriterio) {
+                $funcionCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->find($params->funcionCriterio);
+                $capacitacion->setFuncionCriterio($funcionCriterio);
+            }
             $capacitacion->setDescripcionActividad($params->descripcionActividad);
             $capacitacion->setNombreActorVial($params->nombreActorVial);
             $capacitacion->setApellidoActorVial($params->apellidoActorVial);

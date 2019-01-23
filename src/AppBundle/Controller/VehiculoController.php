@@ -698,6 +698,11 @@ class VehiculoController extends Controller
                             $vehiculo->setCombustible($combustible);
                             break;
 
+                        case 'gas':
+                            $gas = $em->getRepository('AppBundle:Combustible')->find($params->idCombustibleCambio);
+                            $vehiculo->setCombustible($gas);
+                            break;
+
                         case 'sedeOperativa':
                             $sedeOperativa = $em->getRepository("AppBundle:SedeOperativa")->find($params->idSedeOperativa);
                             $vehiculo->setSedeOperativa($sedeOperativa);
@@ -728,7 +733,8 @@ class VehiculoController extends Controller
                             break;
                             
                         case 'servicio':
-                            $vehiculo->setServicio($params->idServicio);
+                            $servicio = $em->getRepository('AppBundle:Servicio')->find($params->idServicio);
+                            $vehiculo->setServicio($servicio);
                             break;
                             
                         case 'cancelacionmatricula':

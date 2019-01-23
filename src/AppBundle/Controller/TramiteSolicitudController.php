@@ -191,6 +191,7 @@ class TramiteSolicitudController extends Controller
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
                     $datos->tramiteFormulario
                 );
+                
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(),$tramite->getId());
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                 $tramiteFactura->setRealizado(true);

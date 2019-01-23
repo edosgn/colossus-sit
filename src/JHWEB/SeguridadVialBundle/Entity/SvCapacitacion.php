@@ -43,6 +43,13 @@ class SvCapacitacion
     private $cedula;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="emailFormador", type="string")
+     */
+    private $emailFormador;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_actividad", type="date")
@@ -67,11 +74,9 @@ class SvCapacitacion
     protected $funcion;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="clase_actividad", type="string")
-     */
-    private $claseActividad;
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncionCriterio", inversedBy="funcionesCriterios")
+     **/
+    protected $funcionCriterio;
 
     /**
      * @var string
@@ -138,11 +143,6 @@ class SvCapacitacion
     {
         return $this->id;
     }
-    /*if ($this->fechaHoraRegistro) {
-        return $this->fechaHoraRegistro->format('d/m/Y HH:mm:ss a');
-        }
-        return $this->fechaHoraRegistro;
-        */
 
     /**
      * Set fechaHoraRegistro
@@ -169,7 +169,6 @@ class SvCapacitacion
             return $this->fechaHoraRegistro->format('d/m/Y h:i:s A');
         }
         return $this->fechaHoraRegistro;
-
     }
 
     /**
@@ -221,6 +220,30 @@ class SvCapacitacion
     }
 
     /**
+     * Set emailFormador
+     *
+     * @param string $emailFormador
+     *
+     * @return SvCapacitacion
+     */
+    public function setEmailFormador($emailFormador)
+    {
+        $this->emailFormador = $emailFormador;
+
+        return $this;
+    }
+
+    /**
+     * Get emailFormador
+     *
+     * @return string
+     */
+    public function getEmailFormador()
+    {
+        return $this->emailFormador;
+    }
+
+    /**
      * Set fechaActividad
      *
      * @param \DateTime $fechaActividad
@@ -245,7 +268,6 @@ class SvCapacitacion
             return $this->fechaActividad->format('d/m/Y');
         }
         return $this->fechaActividad;
-
     }
 
     /**
@@ -270,30 +292,6 @@ class SvCapacitacion
     public function getSemana()
     {
         return $this->semana;
-    }
-
-    /**
-     * Set claseActividad
-     *
-     * @param string $claseActividad
-     *
-     * @return SvCapacitacion
-     */
-    public function setClaseActividad($claseActividad)
-    {
-        $this->claseActividad = $claseActividad;
-
-        return $this;
-    }
-
-    /**
-     * Get claseActividad
-     *
-     * @return string
-     */
-    public function getClaseActividad()
-    {
-        return $this->claseActividad;
     }
 
     /**
@@ -486,6 +484,30 @@ class SvCapacitacion
     public function getFuncion()
     {
         return $this->funcion;
+    }
+
+    /**
+     * Set funcionCriterio
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncionCriterio $funcionCriterio
+     *
+     * @return SvCapacitacion
+     */
+    public function setFuncionCriterio(\JHWEB\SeguridadVialBundle\Entity\SvCfgFuncionCriterio $funcionCriterio = null)
+    {
+        $this->funcionCriterio = $funcionCriterio;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionCriterio
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgFuncionCriterio
+     */
+    public function getFuncionCriterio()
+    {
+        return $this->funcionCriterio;
     }
 
     /**
