@@ -239,7 +239,7 @@ class SvCfgFuncionCriterioController extends Controller
      * Lists all funcionCriterio por funcion entities.
      *
      * @Route("/select/funcion", name="funcionCriterio_por_funcion_select")
-     * @Method({"GET", "POST"})
+     * @Method("POST")
      */
     public function funcionCriterioPorFuncionAction(Request $request)
     {
@@ -250,22 +250,21 @@ class SvCfgFuncionCriterioController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-            
+
             $em = $this->getDoctrine()->getManager();
-            $funcionesCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+            $funcionesCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->findBy(
             array(
                 'activo' => true,
                 'funcion' => $params->idFuncionCriterio
                 )
             );
-            $response['data'] = array();
 
-            if ($funcionesCriterio) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($funcionesCriterio) . " registros encontrados",
-                    'data' => $funcionesCriterio,
+            $response = null;
+            
+            foreach ($funcionesCriterio as $key => $funcionCriterio) {
+                $response[$key] = array(
+                    'value' => $funcionCriterio->getId(),
+                    'label' => $funcionCriterio->getId()."_".$funcionCriterio->getNombre()
                 );
             }
         } else {
