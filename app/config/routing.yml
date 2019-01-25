@@ -1,3 +1,7 @@
+jhweb_financiero_fro_factura:
+    resource: "@JHWEBFinancieroBundle/Controller/FroFacturaController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

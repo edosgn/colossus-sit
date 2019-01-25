@@ -29,6 +29,13 @@ class Factura
     private $numero; 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=100, nullable=true)
+     */
+    private $tipo; 
+
+    /**
      * @var int
      *
      * @ORM\Column(name="consecutivo", type="integer")
@@ -99,6 +106,7 @@ class Factura
     protected $ciudadano;
 
 
+
     /**
      * Get id
      *
@@ -131,6 +139,30 @@ class Factura
     public function getNumero()
     {
         return $this->numero;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return Factura
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 
     /**
@@ -202,9 +234,6 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        if ($this->fechaCreacion) {
-            return $this->fechaCreacion->format('d/m/Y');
-        }
         return $this->fechaCreacion;
     }
 
