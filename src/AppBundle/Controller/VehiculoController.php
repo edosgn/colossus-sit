@@ -264,7 +264,11 @@ class VehiculoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo($params);
+
+            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->getVehiculoCampo(
+                $params
+            );
+            
             if ($vehiculo) {
                 $vehiculoRna = $em->getRepository('AppBundle:Vehiculo')->getOnlyVehiculo($vehiculo->getId());
             }

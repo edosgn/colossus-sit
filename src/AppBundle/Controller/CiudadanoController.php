@@ -69,8 +69,6 @@ class CiudadanoController extends Controller
                 $fechaExpedicionDocumento = (isset($params->ciudadano->fechaExpedicionDocumento)) ? $params->ciudadano->fechaExpedicionDocumento : null;
                 $fechaExpedicionDocumentoDateTime = new \DateTime($fechaExpedicionDocumento);
                 
-
-
                 $ciudadano = new Ciudadano();
                 $ciudadano->setMunicipioNacimiento($municipioNacimiento);
                 $ciudadano->setMunicipioResidencia($municipioResidencia);
@@ -78,7 +76,6 @@ class CiudadanoController extends Controller
                 $ciudadano->setDireccion($params->ciudadano->direccion);
                 $ciudadano->setEstado(true);
                 $ciudadano->setEnrolado(false);
-
 
                 $usuario = new Usuario();
                 $usuario->setPrimerNombre($params->ciudadano->primerNombreUsuario);
@@ -96,8 +93,6 @@ class CiudadanoController extends Controller
                 $pwd = hash('sha256', $password);
                 $usuario->setPassword($pwd);
 
-                
-                
                 $usuario->setCreatedAt();
                 $usuario->setUpdatedAt();     
                 $usuario->setCiudadano($ciudadano);
@@ -459,7 +454,9 @@ class CiudadanoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+            
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
                 array('identificacion' => $params->numeroIdentificacion)
             );

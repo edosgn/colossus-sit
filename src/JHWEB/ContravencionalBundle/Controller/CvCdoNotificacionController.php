@@ -3,9 +3,12 @@
 namespace JHWEB\ContravencionalBundle\Controller;
 
 use JHWEB\ContravencionalBundle\Entity\CvCdoNotificacion;
+use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
+use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cvcdonotificacion controller.
@@ -107,7 +110,7 @@ class CvCdoNotificacionController extends Controller
     /**
      * Finds and displays a cvCdoNotificacion entity.
      *
-     * @Route("/{id}", name="cvcdonotificacion_show")
+     * @Route("/{id}/show", name="cvcdonotificacion_show")
      * @Method("GET")
      */
     public function showAction(CvCdoNotificacion $cvCdoNotificacion)
@@ -233,5 +236,142 @@ class CvCdoNotificacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* =================================== */
+    /**
+     * Lists all cvCdoNotificacion entities.
+     *
+     * @Route("/state", name="cvcdonotificacion_state")
+     * @Method("GET")
+     */
+    public function stateAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $comparendos = $em->getRepository('AppBundle:Comparendo')->getForProcessing();
+
+        if ($comparendos) {
+            foreach ($comparendos as $key => $comparendo) {
+                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+
+                //Valida que el comparendo este Pendiente
+                if ($comparendo->getEstado()->getId() == 1) {
+                    if (!$comparendo->getAudiencia()) {
+                        //Valida si han pasado mas de 30 días
+                        if ($diasHabiles > 30) {
+                            //Cambia a estado sansonatorio
+                            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(2);
+                            $comparendo->setEstado($estado);
+
+                            $em->flush();
+
+                            $this->generateTrazabilidad($comparendo, $estado);
+                        }else{
+                            $caduco = $helpers->checkRangeDates($comparendo->getFecha());
+
+                            if ($caduco) {
+                                //Caducidad
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                                    7
+                                );
+                                $comparendo->setEstado($estado);
+
+                                $em->flush();
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }
+                        }
+                    }
+                }
+                /*var_dump($validacion['estado']->getId());*/
+            }
+
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($comparendos)." registros encontrados",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    public function generateTrazabilidad($comparendo, $estado){
+        $em = $this->getDoctrine()->getManager();
+
+        $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+            array(
+                'comparendo' => $comparendo->getId(),
+                'activo' => true
+            )
+        );
+
+        if ($trazabilidadesOld) {
+            foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
+                $trazabilidadOld->setActivo(false);
+                $em->flush();
+            }
+        }
+
+        $trazabilidad = new CvCdoTrazabilidad();
+
+        $trazabilidad->setFecha(
+            new \Datetime(date('Y-m-d'))
+        );
+        $trazabilidad->setActivo(true);
+        $trazabilidad->setComparendo($comparendo);
+        $trazabilidad->setEstado($estado);
+
+        if ($estado->getFormato()) {
+            $documento = new CfgAdmActoAdministrativo();
+
+            $documento->setNumero(
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+            );
+            $documento->setFecha(new \Datetime(date('Y-m-d')));
+            $documento->setActivo(true);
+
+            $documento->setFormato(
+                $comparendo->getEstado()->getFormato()
+            );
+
+            $template = $this->generateTemplate($comparendo);
+            $documento->setCuerpo($template);
+
+            $em->persist($documento);
+            $em->flush();
+
+            $trazabilidad->setActoAdministrativo($documento);
+        }
+
+        $em->persist($trazabilidad);
+        $em->flush();
+    }
+
+    public function generateTemplate($comparendo){
+        $helpers = $this->get("app.helpers");
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        
+        $replaces[] = (object)array('id' => '{NOM}', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+        $replaces[] = (object)array('id' => '{ID}', 'value' => $comparendo->getInfractorIdentificacion());
+        $replaces[] = (object)array('id' => '{NOC}', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => '{FC1}', 'value' => $fechaActual); 
+
+
+        $template = $helpers->createTemplate(
+          $comparendo->getEstado()->getFormato()->getCuerpo(),
+          $replaces
+        );
+
+        $template = str_replace("<br>", "<br/>", $template);
+
+        return $template;
     }
 }

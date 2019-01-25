@@ -42,6 +42,17 @@ class CfgComparendoEstado
      */
     private $activo;
 
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="actualiza", type="boolean")
+     */
+    private $actualiza;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="estados")
+     **/
+    protected $formato;
 
     /**
      * Get id
@@ -78,30 +89,6 @@ class CfgComparendoEstado
     }
 
     /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return CfgComparendoEstado
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return bool
-     */
-    public function getActivo()
-    {
-        return $this->activo;
-    }
-
-    /**
      * Set sigla
      *
      * @param string $sigla
@@ -123,5 +110,77 @@ class CfgComparendoEstado
     public function getSigla()
     {
         return $this->sigla;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set formato
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setFormato(\JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato = null)
+    {
+        $this->formato = $formato;
+
+        return $this;
+    }
+
+    /**
+     * Get formato
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgAdmFormato
+     */
+    public function getFormato()
+    {
+        return $this->formato;
+    }
+
+    /**
+     * Set actualiza
+     *
+     * @param boolean $actualiza
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setActualiza($actualiza)
+    {
+        $this->actualiza = $actualiza;
+
+        return $this;
+    }
+
+    /**
+     * Get actualiza
+     *
+     * @return boolean
+     */
+    public function getActualiza()
+    {
+        return $this->actualiza;
     }
 }
