@@ -28,21 +28,22 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
+        /*$asignaciones = $em->getRepository('AppBundle:MpersonalAsignacion')->findByFuncionario(
             1
-        ); 
+        ); */
         
         $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
             $placaId 
-        ); 
-             
-        
-
-        $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
-            $vehiculo->getId()
         );
 
-        $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($vehiculo->getId());
+        if ($vehiculo) {
+            $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
+                $vehiculo->getId()
+            );
+
+            $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($vehiculo->getId());
+        }        
+
 
         $tramitesSolicitudArray = false;
         

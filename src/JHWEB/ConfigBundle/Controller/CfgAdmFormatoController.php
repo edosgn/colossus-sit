@@ -98,17 +98,48 @@ class CfgAdmFormatoController extends Controller
     /**
      * Finds and displays a cfgAdmFormato entity.
      *
-     * @Route("/{id}/show", name="cfgadmformato_show")
-     * @Method("GET")
+     * @Route("/show", name="cfgadmformato_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(CfgAdmFormato $cfgAdmFormato)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgAdmFormato);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cfgadmformato/show.html.twig', array(
-            'cfgAdmFormato' => $cfgAdmFormato,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                $params->id)
+            ;
+
+            if ($formato) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data'=> $formato,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -128,6 +159,7 @@ class CfgAdmFormatoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            
             $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
                 $params->id
             );
@@ -138,10 +170,10 @@ class CfgAdmFormatoController extends Controller
                 $formato->setCuerpo($params->cuerpo);
 
                 if ($params->idTipo) {
-                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findOneByTipo(
-                        $params->tipo->id
+                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->find(
+                        $params->idTipo
                     );
-                    $formato->setTipo($params->idTipo);
+                    $formato->setTipo($tipo);
                 }
 
                 $em->flush();
@@ -172,7 +204,7 @@ class CfgAdmFormatoController extends Controller
     /**
      * Deletes a cfgAdmFormato entity.
      *
-     * @Route("/{id}", name="cfgadmformato_delete")
+     * @Route("/{id}/delete", name="cfgadmformato_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgAdmFormato $cfgAdmFormato)
@@ -203,5 +235,34 @@ class CfgAdmFormatoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* =================================================== */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="cfgadminformato_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $formatos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->findBy(
+            array('activo' => 1)
+        );
+
+        $response = null;
+
+        foreach ($formatos as $key => $formato) {
+            $response[$key] = array(
+                'value' => $formato->getId(),
+                'label' => $formato->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

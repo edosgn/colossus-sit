@@ -38,7 +38,7 @@ class CfgAdmFormato
     /**
      * @var string
      *
-     * @ORM\Column(name="codigo", type="string", length=10, nullable=true)
+     * @ORM\Column(name="codigo", type="string", length=50, nullable=true)
      */
     private $codigo;
 

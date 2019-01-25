@@ -538,6 +538,7 @@ class PropietarioVehiculoController extends Controller
 
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
+            
             $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findOneBy(
                 array(
                     'ciudadano' => $params->solicitanteId,

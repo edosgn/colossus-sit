@@ -227,7 +227,7 @@ class SvSenialInventarioController extends Controller
      * @Route("/search/date/tipo/destino", name="svsenialinventario_search_date_tipo_destino")
      * @Method({"GET", "POST"})
      */
-    public function searchByDateAndTipoAndDestinoAction(Request $request)
+    public function searchByDateAndTipoDestinoAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
@@ -238,10 +238,15 @@ class SvSenialInventarioController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $fechaInicial = new \Datetime($params->fechaInicial);
-            $fechaFinal = new \Datetime($params->fechaFinal);
+            if ($params->fechaInicial) {
+                $fechaInicial = new \Datetime($params->fechaInicial);
+            }
 
-            $inventarios = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getByDateAndTipoAndDestino(
+            if ($params->fechaFinal) {
+                $fechaFinal = new \Datetime($params->fechaFinal);
+            }            
+
+            $inventarios = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getByDateAndTipoDestino(
                     $fechaInicial,
                     $fechaFinal,
                     $params->idTipoSenial,
@@ -274,12 +279,59 @@ class SvSenialInventarioController extends Controller
     }
 
     /**
-     * Creates a new svSenialInventario entity.
+     * Lists all mpersonalFuncionario entities.
      *
-     * @Route("/search/destino", name="svsenialinventario_search_destino")
+     * @Route("/search/cantidad/senial/tipo/destino", name="svsenialinventario_search_cantidad_senial_tipo_destino")
      * @Method({"GET", "POST"})
      */
-    public function searchByDestinoAction(Request $request)
+    public function searchCantidadBySenialAndTipoDestinoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);          
+
+            $inventarios = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getCantidadBySenialAndTipoDestino(
+                    $params->idTipoSenial,
+                    $params->tipoDestino,
+                    $params->idMunicipio
+                );
+
+            if ($inventarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($inventarios)." inventario(s) encontrado(s)",
+                    'data'=> $inventarios
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún registro no encontrado"
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new svSenialInventario entity.
+     *
+     * @Route("/search/senial/tipo/destino", name="svsenialinventario_search_senial_tipo_destino")
+     * @Method({"GET", "POST"})
+     */
+    public function searchBySenialAndTipoDestinoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -289,20 +341,15 @@ class SvSenialInventarioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-
             $em = $this->getDoctrine()->getManager();
 
             if ($params->tipoDestino == 'BODEGA') {
-                $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->findBy(
-                    array(
-                        'inventario' => $params->inventario->id
-                    )
+                $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->getBySenial(
+                    $params->idSenial
                 ); 
             }else{
-                $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->findBy(
-                    array(
-                        'inventario' => $params->inventario->id
-                    )
+                $seniales = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->getBySenial(
+                    $params->idSenial
                 ); 
             }
         

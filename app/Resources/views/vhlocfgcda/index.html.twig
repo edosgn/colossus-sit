@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgcdas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Nit</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgCda in vhloCfgCdas %}
+            <tr>
+                <td><a href="{{ path('vhlocfgcda_show', { 'id': vhloCfgCda.id }) }}">{{ vhloCfgCda.id }}</a></td>
+                <td>{{ vhloCfgCda.nombre }}</td>
+                <td>{{ vhloCfgCda.nit }}</td>
+                <td>{% if vhloCfgCda.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgcda_show', { 'id': vhloCfgCda.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

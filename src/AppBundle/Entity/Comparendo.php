@@ -38,6 +38,13 @@ class Comparendo
     /**
      * @var string
      *
+     * @ORM\Column(name="expediente", type="string", length=255, nullable=true)
+     */
+    private $expediente;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="direccion", type="string", length=255, nullable=true)
      */
     private $direccion;
@@ -323,6 +330,27 @@ class Comparendo
     /**
      * @var boolean
      *
+     * @ORM\Column(name="audiencia", type="boolean")
+     */
+    private $audiencia;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="recurso", type="boolean")
+     */
+    private $recurso;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="notificado", type="boolean")
+     */
+    private $notificado;
+
+    /**
+     * @var boolean
+     *
      * @ORM\Column(name="pagado", type="boolean")
      */
     private $pagado;
@@ -414,11 +442,6 @@ class Comparendo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
      **/
     protected $sedeOperativa;
-    
-    /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Inmovilizacion")
-     */
-    private $inmovilizacion;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalComparendo", inversedBy="comparendos")
@@ -497,6 +520,30 @@ class Comparendo
             return $this->hora->format('h:i:s A');
         }
         return $this->hora;
+    }
+
+    /**
+     * Set expediente
+     *
+     * @param string $expediente
+     *
+     * @return Comparendo
+     */
+    public function setExpediente($expediente)
+    {
+        $this->expediente = $expediente;
+
+        return $this;
+    }
+
+    /**
+     * Get expediente
+     *
+     * @return string
+     */
+    public function getExpediente()
+    {
+        return $this->expediente;
     }
 
     /**
@@ -1844,30 +1891,6 @@ class Comparendo
     }
 
     /**
-     * Set inmovilizacion
-     *
-     * @param \AppBundle\Entity\Inmovilizacion $inmovilizacion
-     *
-     * @return Comparendo
-     */
-    public function setInmovilizacion(\AppBundle\Entity\Inmovilizacion $inmovilizacion = null)
-    {
-        $this->inmovilizacion = $inmovilizacion;
-
-        return $this;
-    }
-
-    /**
-     * Get inmovilizacion
-     *
-     * @return \AppBundle\Entity\Inmovilizacion
-     */
-    public function getInmovilizacion()
-    {
-        return $this->inmovilizacion;
-    }
-
-    /**
      * Set consecutivo
      *
      * @param \AppBundle\Entity\MpersonalComparendo $consecutivo
@@ -1937,5 +1960,77 @@ class Comparendo
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set audiencia
+     *
+     * @param boolean $audiencia
+     *
+     * @return Comparendo
+     */
+    public function setAudiencia($audiencia)
+    {
+        $this->audiencia = $audiencia;
+
+        return $this;
+    }
+
+    /**
+     * Get audiencia
+     *
+     * @return boolean
+     */
+    public function getAudiencia()
+    {
+        return $this->audiencia;
+    }
+
+    /**
+     * Set recurso
+     *
+     * @param boolean $recurso
+     *
+     * @return Comparendo
+     */
+    public function setRecurso($recurso)
+    {
+        $this->recurso = $recurso;
+
+        return $this;
+    }
+
+    /**
+     * Get recurso
+     *
+     * @return boolean
+     */
+    public function getRecurso()
+    {
+        return $this->recurso;
+    }
+
+    /**
+     * Set notificado
+     *
+     * @param boolean $notificado
+     *
+     * @return Comparendo
+     */
+    public function setNotificado($notificado)
+    {
+        $this->notificado = $notificado;
+
+        return $this;
+    }
+
+    /**
+     * Get notificado
+     *
+     * @return boolean
+     */
+    public function getNotificado()
+    {
+        return $this->notificado;
     }
 }

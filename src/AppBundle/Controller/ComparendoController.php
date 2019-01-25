@@ -54,6 +54,7 @@ class ComparendoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
@@ -137,6 +138,7 @@ class ComparendoController extends Controller
             $comparendo->setRetencionLicencia(
                 $params->comparendo->retencionLicencia
             );
+
             //$comparendo->setFotomulta(false);
             //$comparendo->setGradoAlcohol($params->comparendo->gradoAlchoholemia); 
             
@@ -332,6 +334,9 @@ class ComparendoController extends Controller
 
                 $comparendo->setPagado(false);
                 $comparendo->setCurso(false);
+                $comparendo->setAudiencia(false);
+                $comparendo->setRecurso(false);
+                $comparendo->setNotificado(false);
                 $comparendo->setPorcentajeDescuento(0);
 
                 $estado = $helpers->comparendoState($params);
@@ -361,12 +366,12 @@ class ComparendoController extends Controller
                         new \Datetime($params->comparendo->fecha)
                     );
 
-                    $grua = $em->getRepository('AppBundle:MparqGrua')->find(
+                    $grua = $em->getRepository('JHWEBPaqueaderoBundle:PqoCfgGrua')->find(
                         $params->inmovilizacion->idGrua
                     );
                     $inmovilizacion->setGrua($grua);
 
-                    $patio = $em->getRepository('AppBundle:MparqPatio')->find(
+                    $patio = $em->getRepository('JHWEBPaqueaderoBundle:PqoCfgPatio')->find(
                         $params->inmovilizacion->idPatio
                     );
                     $inmovilizacion->setPatio($patio);
@@ -869,6 +874,53 @@ class ComparendoController extends Controller
     }
 
     /**
+     * Busca un unico comparendo por numero.
+     *
+     * @Route("/search/number", name="comparendo_search_number")
+     * @Method({"GET","POST"})
+     */
+    public function searchByNumber(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->getByNumber(
+                $params->numero
+            );
+
+            if ($comparendo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Comparendo encontrado satisfactoriamente.", 
+                    'data' => $comparendo,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existe ningún comparendo con el número que desea buscar.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Exporta un comparendo en un archivo plano.
      *
      * @Route("/export", name="comparendo_export")
@@ -979,6 +1031,9 @@ class ComparendoController extends Controller
             $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                 array(
                     'comparendo' => $params->id
+                ),
+                array(
+                    'fecha' => 'DESC'
                 )
             );
             

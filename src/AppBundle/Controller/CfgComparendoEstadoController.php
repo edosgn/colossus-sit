@@ -55,6 +55,7 @@ class CfgComparendoEstadoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -62,7 +63,16 @@ class CfgComparendoEstadoController extends Controller
             $estado = new CfgComparendoEstado();
 
             $estado->setNombre(strtoupper($params->nombre));
+            $estado->setSigla(strtoupper($params->sigla));
+            $estado->setActualiza($params->actualiza);
             $estado->setActivo(true);
+
+            if ($params->idFormato) {
+                $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                    $params->idFormato
+                );
+                $estado->setFormato($formato);
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($estado);
@@ -115,11 +125,26 @@ class CfgComparendoEstadoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $em = $this->getDoctrine()->getManager();
-            $estado = $em->getRepository("AppBundle:CfgComparendoEstado")->find($params->id);
+            var_dump($params);
+            die();
 
-            if ($estado!=null) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $estado = $em->getRepository("AppBundle:CfgComparendoEstado")->find(
+                $params->id
+            );
+
+            if ($estado) {
                 $estado->setNombre(strtoupper($params->nombre));
+                $estado->setSigla(strtoupper($params->sigla));
+                $estado->setActualiza($params->actualiza);
+                
+                if ($params->idFormato) {
+                    $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                        $params->idFormato
+                    );
+                    $estado->setFormato($formato);
+                }
                 
                 $em->flush();
 

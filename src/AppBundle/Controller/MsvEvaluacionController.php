@@ -104,7 +104,7 @@ class MsvEvaluacionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if(authCheck == true ){
+        if($authCheck == true ){
             $em = $this->getDoctrine()->getManager();
             $evaluacion = $em->getRepository('AppBundle:MsvEvaluacion')->find($id);
             if($evaluacion){

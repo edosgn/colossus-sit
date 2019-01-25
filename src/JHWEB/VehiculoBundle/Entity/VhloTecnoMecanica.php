@@ -110,6 +110,9 @@ class VhloTecnoMecanica
      */
     public function getFechaExpedicion()
     {
+        if ($this->fechaExpedicion) {
+            return $this->fechaExpedicion->format('d/m/Y');
+        }
         return $this->fechaExpedicion;
     }
 
@@ -134,6 +137,9 @@ class VhloTecnoMecanica
      */
     public function getFechaVencimiento()
     {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('d/m/Y');
+        }
         return $this->fechaVencimiento;
     }
 

@@ -10,6 +10,21 @@ namespace AppBundle\Repository;
  */
 class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene todos los comparendos por tramitar
+    public function getForProcessing(){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c from AppBundle:Comparendo c
+        WHERE c.estado != 6
+        AND c.estado != 8
+        AND c.estado != 9
+        AND c.estado != 10
+        AND c.estado != 11
+        AND c.estado != 12";
+
+        $consulta = $em->createQuery($dql);
+        return $consulta->getResult();
+    }
 
     public function findByParametros($params){
         
@@ -101,6 +116,22 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
         }
 
         return $consulta->getResult();
+    }
+
+    public function getByNumber($numero){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c
+        FROM AppBundle:Comparendo c, AppBundle:MpersonalComparendo pc
+        WHERE pc.consecutivo = :consecutivo
+        AND c.consecutivo = pc.id";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'consecutivo' => $numero,
+        ));
+
+        return $consulta->getOneOrNullResult();
     }
 
     //Obtiene el comparendo según ciudadano

@@ -7,7 +7,8 @@ use AppBundle\Entity\VehiculoLimitacion;
 use AppBundle\Entity\CfgCausalLimitacion;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Limitaciondato controller.
@@ -51,7 +52,6 @@ class LimitacionDatosController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
 
             $fechaRadicacion = $params[0]->datosLimitacion->fechaRadicacion;
             $municipioId = $params[0]->datosLimitacion->municipioId;
@@ -99,7 +99,6 @@ class LimitacionDatosController extends Controller
             $graba = false;
             $vehiculosGrabar = array();
             foreach ($vehiculosLimitacion->vehiculos as $key => $vehiculoLimitacion) {
-
                 $placaNew = $em->getRepository('AppBundle:CfgPlaca')->findOneByNumero($vehiculoLimitacion->placa);
                 $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca($placaNew);
                 $vehiculoLimitacion = $em->getRepository('AppBundle:VehiculoLimitacion')->getByDatosAndVehiculo(
@@ -112,6 +111,7 @@ class LimitacionDatosController extends Controller
                 );
 
                 if (!$vehiculoLimitacion) {
+
                     $graba = true;
 
                     $em = $this->getDoctrine()->getManager();
@@ -128,11 +128,10 @@ class LimitacionDatosController extends Controller
                 } else {
                     $response = array(
                         'status' => 'error',
-                        'code' => 450,
+                        'code' => 400,
                         'msj' => "Ya existe registro",
                     );
                 }
-
             }
 
             if ($graba) {
@@ -147,15 +146,13 @@ class LimitacionDatosController extends Controller
                     $vehiculoLimitacionNew->setVehiculo($vehiculoN);
                     $vehiculoLimitacionNew->setEstado(true);
 
-                    
                     $em->persist($vehiculoLimitacionNew);
                     $em->flush();
                     $response = array(
-    'status' => 'success',
-    'code' => 200,
-    'msj' => "Registro creado con exito",
-);
-
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "Registro creado con exito",
+                    );
                 }
                 //  die();
 

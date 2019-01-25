@@ -235,5 +235,46 @@ class SvCfgFuncionCriterioController extends Controller
        return $helpers->json($response);
     }
 
+    /**
+     * Lists all funcionCriterio por funcion entities.
+     *
+     * @Route("/select/funcion", name="funcionCriterio_por_funcion_select")
+     * @Method("POST")
+     */
+    public function funcionCriterioPorFuncionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $funcionesCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->findBy(
+            array(
+                'activo' => true,
+                'funcion' => $params->idFuncionCriterio
+                )
+            );
+
+            $response = null;
+            
+            foreach ($funcionesCriterio as $key => $funcionCriterio) {
+                $response[$key] = array(
+                    'value' => $funcionCriterio->getId(),
+                    'label' => $funcionCriterio->getId()."_".$funcionCriterio->getNombre()
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 
 }

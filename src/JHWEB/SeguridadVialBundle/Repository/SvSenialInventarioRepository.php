@@ -23,8 +23,8 @@ class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-	//Obtiene las señales por tipo de señal en inventario de bodega
-    public function getByDateAndTipoAndDestino($fechaInicial, $fechaFinal, $idTipoSenial, $tipoDestino, $idMunicipio)
+	//Obtiene los inventarios por fechas y tipo de destino
+    public function getByDateAndTipoDestino($fechaInicial, $fechaFinal, $idTipoSenial, $tipoDestino, $idMunicipio)
     {
         $em = $this->getEntityManager();
 
@@ -66,6 +66,52 @@ class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
 	            'idTipoSenial' => $idTipoSenial,
 	            'tipoDestino' => $tipoDestino,
 	        ));
+        }
+
+        return $consulta->getResult();
+    }
+
+    //Obtiene las cantidades por senial y tipo de destino
+    public function getCantidadBySenialAndTipoDestino($idTipoSenial, $tipoDestino, $idMunicipio)
+    {
+        $em = $this->getEntityManager();
+
+        if ($idMunicipio) {
+            $dql = "SELECT SUM(su.cantidad) AS cantidad, m.nombre, 
+            s.id, s.nombre, s.codigo, st.id AS tipoSenial
+            FROM JHWEBSeguridadVialBundle:SvSenialUbicacion su,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
+            JHWEBSeguridadVialBundle:SvCfgSenial s,
+            AppBundle:Municipio m
+            WHERE su.municipio = m.id
+            AND su.municipio = :idMunicipio
+            AND s.tipoSenial = st.id
+            AND s.tipoSenial = :idTipoSenial
+            AND su.senial = s.id
+            GROUP BY su.senial";
+
+            $consulta = $em->createQuery($dql);
+
+            $consulta->setParameters(array(
+                'idTipoSenial' => $idTipoSenial,
+                'idMunicipio' => $idMunicipio,
+            ));
+        }else{
+            $dql = "SELECT SUM(sb.cantidad) AS cantidad, 
+            s.id, s.nombre, s.codigo, st.id AS tipoSenial
+            FROM JHWEBSeguridadVialBundle:SvSenialBodega sb,
+            JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
+            JHWEBSeguridadVialBundle:SvCfgSenial s
+            WHERE s.tipoSenial = st.id
+            AND s.tipoSenial = :idTipoSenial
+            AND sb.senial = s.id
+            GROUP BY sb.senial";
+
+            $consulta = $em->createQuery($dql);
+
+            $consulta->setParameters(array(
+                'idTipoSenial' => $idTipoSenial,
+            ));
         }
 
         return $consulta->getResult();

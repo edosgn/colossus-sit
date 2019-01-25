@@ -90,17 +90,43 @@ class SvCfgSenialTipoController extends Controller
     /**
      * Finds and displays a svCfgSenialTipo entity.
      *
-     * @Route("/{id}/show", name="svcfgsenialtipo_show")
-     * @Method("GET")
+     * @Route("/show", name="svcfgsenialtipo_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(SvCfgSenialTipo $svCfgSenialTipo)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($svCfgSenialTipo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('svcfgsenialtipo/show.html.twig', array(
-            'svCfgSenialTipo' => $svCfgSenialTipo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialTipo')->find(
+                $params->id
+            );
+
+            $em->persist($tipo);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado con exito",
+                'data' => $tipo
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**

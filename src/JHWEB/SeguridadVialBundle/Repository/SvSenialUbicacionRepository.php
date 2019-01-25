@@ -10,4 +10,27 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvSenialUbicacionRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene las seniales por senial
+    public function getBySenial($idSenial)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT su
+        FROM JHWEBSeguridadVialBundle:SvSenialUbicacion su,
+        JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
+        JHWEBSeguridadVialBundle:SvCfgSenial s,
+        JHWEBSeguridadVialBundle:SvCfgSenialProveedor sp
+        WHERE su.senial = :idSenial
+        AND su.senial = s.id
+        AND s.tipoSenial = st.id";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+           'idSenial' => $idSenial,
+        ));
+        
+
+        return $consulta->getResult();
+    }
 }

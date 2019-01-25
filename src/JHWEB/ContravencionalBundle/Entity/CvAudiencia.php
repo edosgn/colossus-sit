@@ -38,13 +38,6 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_expediente", type="string", length=10)
-     */
-    private $numeroExpediente;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="objetivo", type="text")
      */
     private $objetivo;
@@ -59,16 +52,12 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="solicitante", type="string", length=255)
-     */
-    private $solicitante;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="apoderado", type="string", length=255)
      */
     private $apoderado;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="audicencias") */
+    private $comparendo;
 
 
     /**
@@ -130,30 +119,6 @@ class CvAudiencia
     }
 
     /**
-     * Set numeroExpediente
-     *
-     * @param string $numeroExpediente
-     *
-     * @return CvAudiencia
-     */
-    public function setNumeroExpediente($numeroExpediente)
-    {
-        $this->numeroExpediente = $numeroExpediente;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroExpediente
-     *
-     * @return string
-     */
-    public function getNumeroExpediente()
-    {
-        return $this->numeroExpediente;
-    }
-
-    /**
      * Set objetivo
      *
      * @param string $objetivo
@@ -194,35 +159,11 @@ class CvAudiencia
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set solicitante
-     *
-     * @param string $solicitante
-     *
-     * @return CvAudiencia
-     */
-    public function setSolicitante($solicitante)
-    {
-        $this->solicitante = $solicitante;
-
-        return $this;
-    }
-
-    /**
-     * Get solicitante
-     *
-     * @return string
-     */
-    public function getSolicitante()
-    {
-        return $this->solicitante;
     }
 
     /**
@@ -248,5 +189,28 @@ class CvAudiencia
     {
         return $this->apoderado;
     }
-}
 
+    /**
+     * Set comparendo
+     *
+     * @param \AppBundle\Entity\Comparendo $comparendo
+     *
+     * @return CvAudiencia
+     */
+    public function setComparendo(\AppBundle\Entity\Comparendo $comparendo = null)
+    {
+        $this->comparendo = $comparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get comparendo
+     *
+     * @return \AppBundle\Entity\Comparendo
+     */
+    public function getComparendo()
+    {
+        return $this->comparendo;
+    }
+}

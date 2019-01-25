@@ -202,7 +202,7 @@ class CfgAdmFormatoTipoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $tipos = $em->getRepository('JHWEBConfigBundle:CfgAdmFormatoTipo')->findBy(
-            array('activo' => 1)
+            array('activo' => true)
         );
 
         $response = null;

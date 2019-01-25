@@ -74,6 +74,7 @@
         <br>      
     </p>
 
+    {% if propietariosVehiculo|length > 0 %}
     <table border="1">
         <tr>
             <td>Identificacion</td>
@@ -82,14 +83,17 @@
             <td>Direccion</td>
         </tr>
         {% for propietarioVehiculo in propietariosVehiculo %}
-            <tr>
-                <td>{{ propietarioVehiculo.ciudadano.usuario.identificacion }}</td>
-                <td>{{ propietarioVehiculo.ciudadano.usuario.PrimerNombre }} {{ propietarioVehiculo.ciudadano.usuario.SegundoNombre }}</td>
-                <td>{{ propietarioVehiculo.ciudadano.usuario.PrimerApellido }} {{ propietarioVehiculo.ciudadano.usuario.SegundoApellido }}</td>
-                <td>{{ propietarioVehiculo.ciudadano.direccion }}</td>
-            </tr>
+            {% if propietarioVehiculo.ciudadano %}
+                <tr>
+                    <td>{{ propietarioVehiculo.ciudadano.usuario.identificacion }}</td>
+                    <td>{{ propietarioVehiculo.ciudadano.usuario.PrimerNombre }} {{ propietarioVehiculo.ciudadano.usuario.SegundoNombre }}</td>
+                    <td>{{ propietarioVehiculo.ciudadano.usuario.PrimerApellido }} {{ propietarioVehiculo.ciudadano.usuario.SegundoApellido }}</td>
+                    <td>{{ propietarioVehiculo.ciudadano.direccion }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
     </table>
+    {% endif %}
 
     <p style="text-align:center;"> 
         <b>tramites</b>

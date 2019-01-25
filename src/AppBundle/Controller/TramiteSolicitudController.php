@@ -96,11 +96,11 @@ class TramiteSolicitudController extends Controller
                 $params->tramiteFormulario
             );
 
-            $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($params->idFactura,$tramite->getId());
+            $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($params->idFactura, $tramite->getId());
 
             $tramiteSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findOneBy(
                 array(
-                    'estado' => 1, 
+                    'estado' => true, 
                     'tramiteFactura'=> $tramiteFactura->getId(),
                 )
             );
@@ -191,7 +191,9 @@ class TramiteSolicitudController extends Controller
                 $tramite = $em->getRepository('AppBundle:Tramite')->findOneByFormulario(
                     $datos->tramiteFormulario
                 );
-                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(),$tramite->getId());
+                
+                $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(), $tramite->getId()
+                );
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                 $tramiteFactura->setRealizado(true);
                 $em->flush();
