@@ -457,7 +457,7 @@ class FacturaController extends Controller
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
                 );
-        }
+        } 
         return $helpers->json($response);
     }
 

@@ -5,7 +5,8 @@ namespace JHWEB\ConfigBundle\Controller;
 use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cfgadmactoadministrativo controller.
@@ -60,7 +61,7 @@ class CfgAdmActoAdministrativoController extends Controller
     /**
      * Finds and displays a cfgAdmActoAdministrativo entity.
      *
-     * @Route("/{id}", name="cfgadmactoadministrativo_show")
+     * @Route("/{id}/show", name="cfgadmactoadministrativo_show")
      * @Method("GET")
      */
     public function showAction(CfgAdmActoAdministrativo $cfgAdmActoAdministrativo)
@@ -101,7 +102,7 @@ class CfgAdmActoAdministrativoController extends Controller
     /**
      * Deletes a cfgAdmActoAdministrativo entity.
      *
-     * @Route("/{id}", name="cfgadmactoadministrativo_delete")
+     * @Route("/{id}/delete", name="cfgadmactoadministrativo_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, CfgAdmActoAdministrativo $cfgAdmActoAdministrativo)
@@ -132,5 +133,63 @@ class CfgAdmActoAdministrativoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ===================================== */
+
+    /**
+     * PDF
+     *
+     * @Route("/{id}/pdf", name="cfgadmactoadministrativo_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(
+            $id
+        );
+
+        $html = $this->renderView('@App/default/pdf.actoAdministrativo.html.twig', array(
+            'trazabilidad' => $trazabilidad
+        ));
+
+        $pdf = $this->container->get("white_october.tcpdf")->create(
+            'PORTRAIT',
+            PDF_UNIT,
+            PDF_PAGE_FORMAT,
+            true,
+            'UTF-8',
+            false
+        );
+        $pdf->SetAuthor('qweqwe');
+        $pdf->SetTitle('Documento');
+        $pdf->SetSubject('SUBDETRA');
+        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+        $pdf->setFontSubsetting(true);
+
+        $pdf->SetFont('helvetica', '', 11, '', true);
+        $pdf->SetMargins('25', '25', '25');
+        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+        $pdf->AddPage();
+
+        $pdf->writeHTMLCell(
+            $w = 0,
+            $h = 0,
+            $x = '',
+            $y = '',
+            $html,
+            $border = 0,
+            $ln = 1,
+            $fill = 0,
+            $reseth = true,
+            $align = '',
+            $autopadding = true
+        );
+
+        $pdf->Output("example.pdf", 'I');
+        die();
     }
 }

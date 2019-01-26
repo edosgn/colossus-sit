@@ -159,6 +159,7 @@ class CfgAdmFormatoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            
             $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
                 $params->id
             );

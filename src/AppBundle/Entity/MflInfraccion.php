@@ -50,6 +50,27 @@ class MflInfraccion
     private $activo = true;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="retiene", type="boolean")
+     */
+    private $retiene;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="inmoviliza", type="boolean")
+     */
+    private $inmoviliza;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dias", type="integer", nullable=true)
+     */
+    private $dias;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MflInfraccionCategoria", inversedBy="infracciones")
      **/
     protected $categoria;
@@ -114,30 +135,6 @@ class MflInfraccion
     }
 
     /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return MflInfraccion
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return bool
-     */
-    public function getActivo()
-    {
-        return $this->activo;
-    }
-
-    /**
      * Set codigo
      *
      * @param string $codigo
@@ -159,6 +156,102 @@ class MflInfraccion
     public function getCodigo()
     {
         return $this->codigo;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return MflInfraccion
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set retiene
+     *
+     * @param boolean $retiene
+     *
+     * @return MflInfraccion
+     */
+    public function setRetiene($retiene)
+    {
+        $this->retiene = $retiene;
+
+        return $this;
+    }
+
+    /**
+     * Get retiene
+     *
+     * @return boolean
+     */
+    public function getRetiene()
+    {
+        return $this->retiene;
+    }
+
+    /**
+     * Set inmoviliza
+     *
+     * @param boolean $inmoviliza
+     *
+     * @return MflInfraccion
+     */
+    public function setInmoviliza($inmoviliza)
+    {
+        $this->inmoviliza = $inmoviliza;
+
+        return $this;
+    }
+
+    /**
+     * Get inmoviliza
+     *
+     * @return boolean
+     */
+    public function getInmoviliza()
+    {
+        return $this->inmoviliza;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return MflInfraccion
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
     }
 
     /**

@@ -10,6 +10,21 @@ namespace AppBundle\Repository;
  */
 class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene todos los comparendos por tramitar
+    public function getForProcessing(){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c from AppBundle:Comparendo c
+        WHERE c.estado != 6
+        AND c.estado != 8
+        AND c.estado != 9
+        AND c.estado != 10
+        AND c.estado != 11
+        AND c.estado != 12";
+
+        $consulta = $em->createQuery($dql);
+        return $consulta->getResult();
+    }
 
     public function findByParametros($params){
         

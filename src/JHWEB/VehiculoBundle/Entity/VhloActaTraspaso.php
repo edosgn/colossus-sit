@@ -45,8 +45,6 @@ class VhloActaTraspaso
      */
     private $entidadJudicial; 
  
-
-
     /**
      * Get id
      *

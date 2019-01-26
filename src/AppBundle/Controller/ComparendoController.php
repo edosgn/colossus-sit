@@ -54,6 +54,7 @@ class ComparendoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
@@ -333,6 +334,9 @@ class ComparendoController extends Controller
 
                 $comparendo->setPagado(false);
                 $comparendo->setCurso(false);
+                $comparendo->setAudiencia(false);
+                $comparendo->setRecurso(false);
+                $comparendo->setNotificado(false);
                 $comparendo->setPorcentajeDescuento(0);
 
                 $estado = $helpers->comparendoState($params);

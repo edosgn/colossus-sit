@@ -57,35 +57,33 @@ class MflInfraccionController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $infraccion = new MflInfraccion();
+            $infraccion = new MflInfraccion();
 
-                $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-                $infraccion->setNombre($params->nombre);
-                $infraccion->setCodigo($params->codigo);
-                $infraccion->setDescripcion($params->descripcion);
+            $infraccion->setNombre($params->nombre);
+            $infraccion->setCodigo($params->codigo);
+            $infraccion->setDescripcion($params->descripcion);
+            $infraccion->setRetiene($params->retiene);
+            $infraccion->setInmoviliza($params->inmoviliza);
 
-                $categoria = $em->getRepository('AppBundle:MflInfraccionCategoria')->find(
-                    $params->infraccionCategoriaId
-                );
-                $infraccion->setCategoria($categoria);
+            if ($params->inmoviliza && $params->dias) {
+                $infraccion->setDias($params->dias);
+            }
 
-                $em->persist($infraccion);
-                $em->flush();
+            $categoria = $em->getRepository('AppBundle:MflInfraccionCategoria')->find(
+                $params->infraccionCategoriaId
+            );
+            $infraccion->setCategoria($categoria);
 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro creado con exito",  
-                );
-            //}
+            $em->persist($infraccion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Registro creado con exito",  
+            );
         }else{
             $response = array(
                 'status' => 'error',

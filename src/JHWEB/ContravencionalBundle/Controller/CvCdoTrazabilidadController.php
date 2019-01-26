@@ -213,6 +213,7 @@ class CvCdoTrazabilidadController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            
             $trazabilidad = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->find(
                 $params->id
             );
