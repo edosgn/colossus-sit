@@ -39,55 +39,54 @@ class MsvCalificacionController extends Controller
      */
     public function newAction(Request $request,$id)
     {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization",null);
-        $authCheck = $helpers->authCheck($hash);
-        if ($authCheck == true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-            $em = $this->getDoctrine()->getManager();
+    $helpers = $this->get("app.helpers");
+    $hash = $request->get("authorization", null);
+    $authCheck = $helpers->authCheck($hash);
+    if ($authCheck == true) {
+        $json = $request->get("json", null);
+        $params = json_decode($json);
+        $em = $this->getDoctrine()->getManager();
 
-                foreach ($params as $key => $parametro) {
-                    foreach ($parametro->variables as $key => $variable) {
-                        foreach ($variable->criterios as $key => $criterio) {                            
-                            $msvCalificacion = new MsvCalificacion();
-                            $criterioA = $em->getRepository('AppBundle:MsvCriterio')->find($criterio->id);
-                            $empresa = $em->getRepository('AppBundle:Empresa')->find($id); 
+        foreach ($params as $key => $parametro) {
+            foreach ($parametro->variables as $key => $variable) {
+                foreach ($variable->criterios as $key => $criterio) {
+                    var_dump($variable->criterios);
+                    $criterioA = $em->getRepository('AppBundle:MsvCriterio')->find($variable->criterios->id);
+                    $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
 
-                            $msvCalificacion->setCriterio($criterioA);
-                            $msvCalificacion->setEmpresa($empresa);
-                            $msvCalificacion->setAplica($criterio->aplica);
-                            $msvCalificacion->setEvidencia($criterio->evidencia);
-                            $msvCalificacion->setResponde($criterio->responde);
-                            $msvCalificacion->setObservacion($criterio->observacion);
-                            if($criterio->responde == true){
-                                $valorParametro = $parametro->valor;
-                                $numeroVariables = $parametro->numeroVariables;
-                                $msvCalificacion->setValorObtenido($valorParametro/$numeroVariables);
-                            }
-                            else{
-                                $msvCalificacion->setValorObtenido(0);
-                            }
-                            $msvCalificacion->setEstado(true);
-                            $em->persist($msvCalificacion);
-                            $em->flush();
-                        }
-                    } 
-                }die();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registros creados con exito",  
-                );
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorización no válida",
-            );
+                    $msvCalificacion = new MsvCalificacion();
+                    $msvCalificacion->setCriterio($criterioA);
+                    $msvCalificacion->setEmpresa($empresa);
+                    $msvCalificacion->setAplica($variable->criterios->aplica);
+                    $msvCalificacion->setEvidencia($variable->criterios->evidencia);
+                    $msvCalificacion->setResponde($variable->criterios->responde);
+                    $msvCalificacion->setObservacion($variable->criterios->observacion);
+                    if ($variable->criterios->responde == true) {
+                        $msvCalificacion->setValorObtenido($parametro->valor / $parametro->numeroVariables);
+                    } else {
+                        $msvCalificacion->setValorObtenido(0);
+                    }
+                    $msvCalificacion->setEstado(true);
+                    $em->persist($msvCalificacion);
+                    $em->flush();
+                }
+            }
         }
-        return $helpers->json($response);
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'msj' => "Registros creados con exito",
+        );
+    } else {
+        $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'msj' => "Autorización no válida",
+        );
     }
+    return $helpers->json($response);
+}
+
 
     /**
      * Finds and displays a msvCalificacion entity.

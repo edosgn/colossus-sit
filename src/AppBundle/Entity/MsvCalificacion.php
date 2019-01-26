@@ -24,21 +24,21 @@ class MsvCalificacion
     /**
      * @var bool
      *
-     * @ORM\Column(name="aplica", type="boolean")
+     * @ORM\Column(name="aplica", type="boolean", nullable=true)
      */
     private $aplica;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="evidencia", type="boolean")
+     * @ORM\Column(name="evidencia", type="boolean", nullable=true)
      */
     private $evidencia;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="responde", type="boolean")
+     * @ORM\Column(name="responde", type="boolean", nullable=true)
      */
     private $responde;
 
@@ -52,7 +52,7 @@ class MsvCalificacion
     /**
      * @var string
      *
-     * @ORM\Column(name="observacion", type="string", length=1000)
+     * @ORM\Column(name="observacion", type="string", length=1000, nullable=true)
      */
     private $observacion;
 
