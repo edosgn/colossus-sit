@@ -1,7 +1,6 @@
-jhweb_parqueadero:
-    resource: "@JHWEBParqueaderoBundle/Controller/"
+jhweb_financiero_fro_factura:
+    resource: "@JHWEBFinancieroBundle/Controller/FroFacturaController.php"
     type:     annotation
-    prefix:   /parqueadero
 
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"

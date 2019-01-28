@@ -272,7 +272,7 @@ class VehiculoController extends Controller
             if ($vehiculo) {
                 $vehiculoRna = $em->getRepository('AppBundle:Vehiculo')->getOnlyVehiculo($vehiculo->getId());
             }
-
+            
             if ($vehiculoRna) {
                 $propietarioVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findBy(
                     array(
@@ -684,7 +684,7 @@ class VehiculoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
-
+            
             $em = $this->getDoctrine()->getManager();
 
             $vehiculo = $em->getRepository("AppBundle:Vehiculo")->find($params->idVehiculo);
