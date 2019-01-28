@@ -67,11 +67,13 @@ class FroRecaudoController extends Controller
 
             $froRecaudo = new FroRecaudo();
 
-            // var_dump($params);
-            // die();
+            $froFactura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find(
+                $params->IdFroFactura
+            );
 
-            $froFactura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($params->IdFroFactura);
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->IdSedeOperativa);
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                $params->IdSedeOperativa
+            );
            
             $froRecaudo->setFecha($fecha);
             $froRecaudo->setValor($params->valor);
@@ -85,6 +87,7 @@ class FroRecaudoController extends Controller
             
             $em->persist($froRecaudo);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -222,6 +225,7 @@ class FroRecaudoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            
             $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
             $tipoCorrespondencia->setActivo(false);
 

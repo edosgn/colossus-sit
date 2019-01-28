@@ -295,9 +295,7 @@ class CvCdoNotificacionController extends Controller
                         }
                     }
                 }
-                /*var_dump($validacion['estado']->getId());*/
             }
-
 
             $response = array(
                 'status' => 'success',
