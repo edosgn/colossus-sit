@@ -13,6 +13,11 @@ jhweb_financiero:
     type:     annotation
     prefix:   /financiero
 
+jhweb_parqueadero:
+    resource: "@JHWEBParqueaderoBundle/Controller/"
+    type:     annotation
+    prefix:   /parqueadero
+
 jhweb_personal:
     resource: "@JHWEBPersonalBundle/Controller/"
     type:     annotation
