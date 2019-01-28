@@ -49,7 +49,8 @@ class MsvRevisionController extends Controller
         if($authCheck == true){
             $json = $request->get("json",null);
             $params = json_decode($json);
-
+            var_dump($params);
+            die();
             $em = $this->getDoctrine()->getManager();
 
             $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
@@ -57,6 +58,7 @@ class MsvRevisionController extends Controller
             
                 $revision = new MsvRevision();
                 $revision->setFechaRecepcion(new \DateTime($params->fechaRecepcion));
+                $revision->setFechaRevision(new \DateTime($params->fechaRevision));
                 $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
                 $revision->setFechaOtorgamiento(new \DateTime($params->fechaOtorgamiento));
                 $revision->setFuncionario($funcionario);
@@ -191,5 +193,39 @@ class MsvRevisionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Creates a new VhloSoat entity.
+     *
+     * @Route("/get/fecha/devolucion", name="revision_fecha_devolucion")
+     * @Method({"GET", "POST"})
+     */
+    public function getFechaDevolucionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $fechaDevolucion = new \Datetime(date('Y-m-d', strtotime('+2 month', strtotime($params->fechaRecepcion))));
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Fecha de devolución de la revisión calculada con éxito",
+                'fechaDevolucion' => $fechaDevolucion->format('Y-m-d'),
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida", 
+            );
+        } 
+        return $helpers->json($response);
     }
 }

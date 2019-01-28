@@ -46,130 +46,6 @@ class SvCfgControlViaController extends Controller
     }
 
     /**
-     * Lists all svCfgControlVia entities.
-     *
-     * @Route("/senialvertical", name="svcfgcontrolvia_senialvertical_index")
-     * @Method("GET")
-     */
-    public function indexSenialVerticalAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
-            array(
-                'activo' => true,
-                'tipoControl' => 3
-                )
-        );
-
-        $response['data'] = array();
-
-        if ($controlesVia) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($controlesVia) . " registros encontrados",
-                'data' => $controlesVia,
-            );
-        }
-        return $helpers->json($response);
-
-    }
-
-    /**
-     * Lists all svCfgControlVia entities.
-     *
-     * @Route("/senialhorizontal", name="svcfgcontrolvia_senialhorizontal_index")
-     * @Method("GET")
-     */
-    public function indexSenialHorizontalAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
-            array(
-                'activo' => true,
-                'tipoControl' => 4
-                )
-        );
-
-        $response['data'] = array();
-
-        if ($controlesVia) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($controlesVia) . " registros encontrados",
-                'data' => $controlesVia,
-            );
-        }
-        return $helpers->json($response);
-
-    }
-
-    /**
-     * Lists all svCfgControlVia entities.
-     *
-     * @Route("/reductorvelocidad", name="svcfgcontrolvia_reductorvelovidad_index")
-     * @Method("GET")
-     */
-    public function indexReductorVelocidadAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
-            array(
-                'activo' => true,
-                'tipoControl' => 5
-                )
-        );
-
-        $response['data'] = array();
-
-        if ($controlesVia) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($controlesVia) . " registros encontrados",
-                'data' => $controlesVia,
-            );
-        }
-        return $helpers->json($response);
-
-    }
-
-    /**
-     * Lists all svCfgControlVia entities.
-     *
-     * @Route("/delineadorpiso", name="svcfgcontrolvia_delineadorpiso_index")
-     * @Method("GET")
-     */
-    public function indexDelineadorPisoAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
-            array(
-                'activo' => true,
-                'tipoControl' => 6
-                )
-        );
-
-        $response['data'] = array();
-
-        if ($controlesVia) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($controlesVia) . " registros encontrados",
-                'data' => $controlesVia,
-            );
-        }
-        return $helpers->json($response);
-
-    }
-
-    /**
      * Creates a new svCfgControlVia entity.
      *
      * @Route("/new", name="svcfgcontrolvia_new")
@@ -416,4 +292,81 @@ class SvCfgControlViaController extends Controller
        return $helpers->json($response);
     }
 
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/senialvertical", name="controlvia_senialvertical_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectSenialVerticalAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
+            array('activo' => 1,
+                'tipoControl' => 3,
+                )
+        );
+        $response = null;
+
+        foreach ($controlesVia as $key => $controlVia) {
+            $response[$key] = array(
+                'value' => $controlVia->getId(),
+                'label' => $controlVia->getNombre(),
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/senialhorizontal", name="controlvia_senialhorizontal_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectSenialHorizontalAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
+            array('activo' => 1,
+                'tipoControl' => 4,
+                )
+        );
+        $response = null;
+
+        foreach ($controlesVia as $key => $controlVia) {
+            $response[$key] = array(
+                'value' => $controlVia->getId(),
+                'label' => $controlVia->getNombre(),
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/reductorvelocidad", name="controlvia_reductorvelocidad_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectReductorVelocidadAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $controlesVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->findBy(
+            array('activo' => 1,
+                'tipoControl' => 5,
+                )
+        );
+        $response = null;
+
+        foreach ($controlesVia as $key => $controlVia) {
+            $response[$key] = array(
+                'value' => $controlVia->getId(),
+                'label' => $controlVia->getNombre(),
+                );
+        }
+        return $helpers->json($response);
+    }
 }
