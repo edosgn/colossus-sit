@@ -93,6 +93,8 @@ class FroFacturaController extends Controller
             $em->persist($factura);
             $em->flush();
 
+            
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,

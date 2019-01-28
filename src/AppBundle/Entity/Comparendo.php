@@ -403,21 +403,21 @@ class Comparendo
     /**
      * @var string
      *
-     * @ORM\Column(name="radio_accion", type="string", length=255)
+     * @ORM\Column(name="radio_accion", type="string", length=255, nullable=true)
      */
     private $radioAccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="modalidadTransporte", type="string", length=255)
+     * @ORM\Column(name="modalidadTransporte", type="string", length=255, nullable=true)
      */   
     private $modalidadTransporte;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="trasnportePasajero", type="string", length=255)
+     * @ORM\Column(name="trasnportePasajero", type="string", length=255, nullable=true )
      */
     private $transportePasajero;
 
