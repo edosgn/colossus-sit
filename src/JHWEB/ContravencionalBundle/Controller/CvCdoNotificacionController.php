@@ -5,6 +5,7 @@ namespace JHWEB\ContravencionalBundle\Controller;
 use JHWEB\ContravencionalBundle\Entity\CvCdoNotificacion;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
+use JHWEB\ContravencionalBundle\Entity\CvAudiencia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -287,6 +288,21 @@ class CvCdoNotificacionController extends Controller
                                     $comparendo->setEstado($estado);
                                     $em->flush();
                                 }
+
+                                $audiencia = new CvAudiencia();
+
+                                $audiencia->setFecha(new \Datetime('Y-m-d'));
+                                $audiencia->setHora(new \Datetime('h:i:s A'));
+                                $audiencia->setObjetivo('Audiencia automatica');
+                                $audiencia->setActivo(true);
+
+                                $audiencia->setComparendo($comparendo);
+
+                                $comparendo->setAudiencia(true);
+        
+                                $em->persist($audiencia);
+                                $em->flush();
+
 
                                 $this->generateTrazabilidad($comparendo, $estado);
                             }                            

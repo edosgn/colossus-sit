@@ -192,7 +192,7 @@ class CvAcuerdoPagoController extends Controller
     }
 
     /**
-     * Busca comparendo por número.
+     * Calcula el valor según los comparendos seleecionados.
      *
      * @Route("/calculate/value", name="cvacuerdopago_calculate_value")
      * @Method("POST")

@@ -65,27 +65,30 @@ class FroRecaudoController extends Controller
 
             $fecha = new \DateTime($params->fecha);
 
-            $froRecaudo = new FroRecaudo();
+            $recaudo = new FroRecaudo();
 
-            $froFactura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find(
-                $params->IdFroFactura
-            );
+            if ($params->IdFroFactura) {
+                $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find(
+                    $params->IdFroFactura
+                );
+                $recaudo->setFroFactura($factura);
+                $factura->setEstado('PAGADA');
+            }
 
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
                 $params->IdSedeOperativa
             );
            
-            $froRecaudo->setFecha($fecha);
-            $froRecaudo->setValor($params->valor);
-            $froRecaudo->setValorMora($params->valorMora);
-            $froRecaudo->setValorFinanciacion($params->valorFinanciacion);
-            $froRecaudo->setValorCapital($params->valorCapital);
-            $froRecaudo->setValorDescuento($params->valorDescuento);
-            $froRecaudo->setFroFactura($froFactura);
-            $froRecaudo->setSedeOperativa($sedeOperativa);
-            $froRecaudo->setActivo(true);
+            $recaudo->setFecha($fecha);
+            $recaudo->setValor($params->valor);
+            $recaudo->setValorMora($params->valorMora);
+            $recaudo->setValorFinanciacion($params->valorFinanciacion);
+            $recaudo->setValorCapital($params->valorCapital);
+            $recaudo->setValorDescuento($params->valorDescuento);
+            $recaudo->setSedeOperativa($sedeOperativa);
+            $recaudo->setActivo(true);
             
-            $em->persist($froRecaudo);
+            $em->persist($recaudo);
             $em->flush();
 
             $response = array(

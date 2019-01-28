@@ -159,4 +159,54 @@ class FroFacturaController extends Controller
         } 
         return $helpers->json($response);
     }
+
+    /**
+     * Calcula el valor según los comparendos seleecionados.
+     *
+     * @Route("/calculate/value", name="froFactura_calculate_value")
+     * @Method("POST")
+     */
+    public function calculateValueByComparendosAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $valorTotal = 0;
+
+            foreach ($params->comparendos as $key => $idComparendo) {
+                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                    $idComparendo
+                );
+
+                if ($comparendo) {
+                    $valorTotal += $comparendo->getValorInfraccion();
+                    if ($comparendo->getValorAdicional()) {
+                        $valorTotal += $comparendo->getValorAdicional();
+                    }
+                }
+            }
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Calculo generado',
+                'data' => $valorTotal
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
