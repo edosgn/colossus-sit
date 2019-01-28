@@ -260,13 +260,20 @@ class CvCdoNotificacionController extends Controller
                 //Valida que el comparendo este Pendiente
                 if ($comparendo->getEstado()->getId() == 1) {
                     if (!$comparendo->getAudiencia()) {
-                        //Valida si han pasado mas de 30 días
-                        if ($diasHabiles > 30) {
+                        //Valida si han pasado mas de 5 días
+                        if ($diasHabiles > 5 && $diasHabiles <= 30) {
+                            //Registra trazabilidad de notificación
+                            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
+
+                            if ($estado->getActualiza()) {
+                                $comparendo->setEstado($estado);
+                                $em->flush();
+                            }
+
+                            $this->generateTrazabilidad($comparendo, $estado);
+                        }elseif ($diasHabiles > 30) {//Valida si han pasado mas de 30 días
                             //Cambia a estado sansonatorio
                             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(2);
-                            $comparendo->setEstado($estado);
-
-                            $em->flush();
 
                             $this->generateTrazabilidad($comparendo, $estado);
                         }else{
@@ -277,9 +284,11 @@ class CvCdoNotificacionController extends Controller
                                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
                                     7
                                 );
-                                $comparendo->setEstado($estado);
-
-                                $em->flush();
+                                
+                                if ($estado->getActualiza()) {
+                                    $comparendo->setEstado($estado);
+                                    $em->flush();
+                                }
 
                                 $this->generateTrazabilidad($comparendo, $estado);
                             }
@@ -293,7 +302,7 @@ class CvCdoNotificacionController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($comparendos)." registros encontrados",
+                'message' => count($comparendos)." registros automatizados",
             );
         }
 
@@ -362,7 +371,16 @@ class CvCdoNotificacionController extends Controller
         $replaces[] = (object)array('id' => '{NOM}', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
         $replaces[] = (object)array('id' => '{ID}', 'value' => $comparendo->getInfractorIdentificacion());
         $replaces[] = (object)array('id' => '{NOC}', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
-        $replaces[] = (object)array('id' => '{FC1}', 'value' => $fechaActual); 
+        $replaces[] = (object)array('id' => '{FC1}', 'value' => $fechaActual);
+
+        if ($comparendo->getInfraccion()) {
+            $replaces[] = (object)array('id' => '{DCI}', 'value' => $comparendo->getInfraccion()->getDescripcion());
+            $replaces[] = (object)array('id' => '{CIC}', 'value' => $comparendo->getInfraccion()->getCodigo());
+        }
+
+        if ($comparendo->getPlaca()) {
+            $replaces[] = (object)array('id' => '{PLACA}', 'value' => $comparendo->getPlaca());
+        }
 
 
         $template = $helpers->createTemplate(
