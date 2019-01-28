@@ -124,10 +124,7 @@ class CfgComparendoEstadoController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
-            var_dump($params);
-            die();
-
+            
             $em = $this->getDoctrine()->getManager();
             
             $estado = $em->getRepository("AppBundle:CfgComparendoEstado")->find(
@@ -138,7 +135,7 @@ class CfgComparendoEstadoController extends Controller
                 $estado->setNombre(strtoupper($params->nombre));
                 $estado->setSigla(strtoupper($params->sigla));
                 $estado->setActualiza($params->actualiza);
-                
+
                 if ($params->idFormato) {
                     $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
                         $params->idFormato

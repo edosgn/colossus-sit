@@ -5,6 +5,7 @@ namespace JHWEB\ContravencionalBundle\Controller;
 use JHWEB\ContravencionalBundle\Entity\CvCdoNotificacion;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
+use JHWEB\ContravencionalBundle\Entity\CvAudiencia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -260,15 +261,61 @@ class CvCdoNotificacionController extends Controller
                 //Valida que el comparendo este Pendiente
                 if ($comparendo->getEstado()->getId() == 1) {
                     if (!$comparendo->getAudiencia()) {
-                        //Valida si han pasado mas de 30 días
-                        if ($diasHabiles > 30) {
-                            //Cambia a estado sansonatorio
-                            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(2);
-                            $comparendo->setEstado($estado);
+                        //Valida si han pasado mas de 5 días
+                        if ($diasHabiles > 5 && $diasHabiles <= 30) {
+                            //Busca si ya se creo un auto de no comparecencia
+                            $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(14);
+                            if ($auto) {
+                                //Busca si ya se creo una notificacion
+                                $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(15);
 
-                            $em->flush();
+                                if (!$notificacion) {
+                                    //Registra trazabilidad de auto de no comparecencia
+                                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(15);
 
-                            $this->generateTrazabilidad($comparendo, $estado);
+                                    if ($estado->getActualiza()) {
+                                        $comparendo->setEstado($estado);
+                                        $em->flush();
+                                    }
+
+                                    $this->generateTrazabilidad($comparendo, $estado);
+                                }
+                            }else{
+                                //Registra trazabilidad de notificación
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
+
+                                if ($estado->getActualiza()) {
+                                    $comparendo->setEstado($estado);
+                                    $em->flush();
+                                }
+
+                                $audiencia = new CvAudiencia();
+
+                                $audiencia->setFecha(new \Datetime('Y-m-d'));
+                                $audiencia->setHora(new \Datetime('h:i:s A'));
+                                $audiencia->setObjetivo('Audiencia automatica');
+                                $audiencia->setActivo(true);
+
+                                $audiencia->setComparendo($comparendo);
+
+                                $comparendo->setAudiencia(true);
+        
+                                $em->persist($audiencia);
+                                $em->flush();
+
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }                            
+                        }elseif ($diasHabiles > 30) {//Valida si han pasado mas de 30 días
+                            //Busca si ya se creo una sancion
+                            $sancion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(2);
+
+                            if (!$sancion) {
+                                //Cambia a estado sansonatorio
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(2);
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }
                         }else{
                             $caduco = $helpers->checkRangeDates($comparendo->getFecha());
 
@@ -277,23 +324,38 @@ class CvCdoNotificacionController extends Controller
                                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
                                     7
                                 );
-                                $comparendo->setEstado($estado);
+                                
+                                if ($estado->getActualiza()) {
+                                    $comparendo->setEstado($estado);
+                                    $em->flush();
+                                }
 
-                                $em->flush();
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }
+                        }
+                    }
+                }elseif($comparendo->getEstado()->getId() == 2){
+                    if (!$comparendo->getAudiencia()) {
+                        //Valida si han pasado mas de 912 días (2 años 6 meses)
+                        if ($diasHabiles > 912) {
+                            //Busca si ya se creo un cobro coactivo
+                            $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(3);
+
+                            if (!$cobroCoactivo) {
+                                //Cambia a estado a cobro coactivo
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(3);
 
                                 $this->generateTrazabilidad($comparendo, $estado);
                             }
                         }
                     }
                 }
-                /*var_dump($validacion['estado']->getId());*/
             }
-
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($comparendos)." registros encontrados",
+                'message' => count($comparendos)." registros automatizados",
             );
         }
 
@@ -362,7 +424,16 @@ class CvCdoNotificacionController extends Controller
         $replaces[] = (object)array('id' => '{NOM}', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
         $replaces[] = (object)array('id' => '{ID}', 'value' => $comparendo->getInfractorIdentificacion());
         $replaces[] = (object)array('id' => '{NOC}', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
-        $replaces[] = (object)array('id' => '{FC1}', 'value' => $fechaActual); 
+        $replaces[] = (object)array('id' => '{FC1}', 'value' => $fechaActual);
+
+        if ($comparendo->getInfraccion()) {
+            $replaces[] = (object)array('id' => '{DCI}', 'value' => $comparendo->getInfraccion()->getDescripcion());
+            $replaces[] = (object)array('id' => '{CIC}', 'value' => $comparendo->getInfraccion()->getCodigo());
+        }
+
+        if ($comparendo->getPlaca()) {
+            $replaces[] = (object)array('id' => '{PLACA}', 'value' => $comparendo->getPlaca());
+        }
 
 
         $template = $helpers->createTemplate(

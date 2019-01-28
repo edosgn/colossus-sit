@@ -24,7 +24,7 @@ class PdfTemplate extends TCPDF{
         $this->Cell(0, 15, '', 0, false, 'J', 0, '', 0, false, 'T', 'M');
         //$this->MultiCell(0, 5, $nota, 0, 'J', 0, 1, '', '', true, 0);
         $image_file = __DIR__.'/../../../web/img/footer.png';
-        $this->Image($image_file, 5, 258, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $this->Image($image_file, 5, 270, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     }
 
     public function templateSummary($html, $solicitud){

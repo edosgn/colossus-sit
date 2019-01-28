@@ -73,7 +73,7 @@ class FroRecaudo
     /**
      * @ORM\ManyToOne(targetEntity="FroFactura")
      */
-    private $froFactura;
+    private $froFactura; 
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sedesOperativas") */
     private $sedeOperativa;

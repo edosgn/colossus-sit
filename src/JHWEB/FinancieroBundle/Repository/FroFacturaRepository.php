@@ -10,4 +10,18 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de facturas por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(f.consecutivo) AS maximo
+            FROM JHWEBFinancieroBundle:FroFactura f
+            WHERE YEAR(f.fechaCreacion) = :ANIO";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+
+        return $consulta->getOneOrNullResult();
+    }
 }

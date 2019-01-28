@@ -132,7 +132,6 @@ class ComparendoController extends Controller
             
             $comparendo->setDireccion($params->comparendo->direccion);
             $comparendo->setLocalidad($params->comparendo->localidad);
-            $comparendo->setInmovilizacion($params->comparendo->inmovilizacion);
             $comparendo->setFuga($params->comparendo->fuga);
             $comparendo->setAccidente($params->comparendo->accidente);
             $comparendo->setRetencionLicencia(

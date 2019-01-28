@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvaudiencias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Objetivo</th>
+                <th>Activo</th>
+                <th>Apoderado</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvAudiencium in cvAudiencias %}
+            <tr>
+                <td><a href="{{ path('cvaudiencia_show', { 'id': cvAudiencium.id }) }}">{{ cvAudiencium.id }}</a></td>
+                <td>{% if cvAudiencium.fecha %}{{ cvAudiencium.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if cvAudiencium.hora %}{{ cvAudiencium.hora|date('H:i:s') }}{% endif %}</td>
+                <td>{{ cvAudiencium.objetivo }}</td>
+                <td>{% if cvAudiencium.activo %}Yes{% else %}No{% endif %}</td>
+                <td>{{ cvAudiencium.apoderado }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvaudiencia_show', { 'id': cvAudiencium.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvaudiencia_edit', { 'id': cvAudiencium.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvaudiencia_new') }}">Create a new cvAudiencium</a>
+        </li>
+    </ul>
+{% endblock %}

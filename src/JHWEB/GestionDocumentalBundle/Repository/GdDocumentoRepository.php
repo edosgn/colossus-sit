@@ -14,6 +14,7 @@ class GdDocumentoRepository extends \Doctrine\ORM\EntityRepository
     public function getMaximo($anio)
     {
         $em = $this->getEntityManager();
+        
         $dql = "SELECT MAX(d.consecutivo) AS maximo
             FROM JHWEBGestionDocumentalBundle:GdDocumento d
             WHERE YEAR(d.fechaRegistro) = :ANIO";
