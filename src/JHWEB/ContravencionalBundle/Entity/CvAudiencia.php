@@ -38,7 +38,7 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="objetivo", type="text")
+     * @ORM\Column(name="objetivo", type="text", nullable=true)
      */
     private $objetivo;
 
@@ -52,7 +52,7 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="apoderado", type="string", length=255)
+     * @ORM\Column(name="apoderado", type="string", length=255, nullable=true)
      */
     private $apoderado;
 

@@ -97,7 +97,13 @@ class SvSenialUbicacionController extends Controller
                     $ubicacion = new SvSenialUbicacion();
 
                     $ubicacion->setInventario($inventario);
-                    $ubicacion->setMunicipio($inventario->getMunicipio());
+
+                     if ($params->idMunicipio) {
+                        $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                            $params->idMunicipio
+                        );
+                        $ubicacion->setMunicipio($municipio);
+                    }
 
                     $ubicacion->setFecha(new \Datetime($params->fecha));
                     $ubicacion->setHora(new \Datetime(date('h:i:s A')));

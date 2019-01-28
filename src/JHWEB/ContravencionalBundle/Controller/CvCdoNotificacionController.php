@@ -262,20 +262,44 @@ class CvCdoNotificacionController extends Controller
                     if (!$comparendo->getAudiencia()) {
                         //Valida si han pasado mas de 5 días
                         if ($diasHabiles > 5 && $diasHabiles <= 30) {
-                            //Registra trazabilidad de notificación
-                            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
+                            //Busca si ya se creo un auto de no comparecencia
+                            $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(14);
+                            if ($auto) {
+                                //Busca si ya se creo una notificacion
+                                $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(15);
 
-                            if ($estado->getActualiza()) {
-                                $comparendo->setEstado($estado);
-                                $em->flush();
-                            }
+                                if (!$notificacion) {
+                                    //Registra trazabilidad de auto de no comparecencia
+                                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(15);
 
-                            $this->generateTrazabilidad($comparendo, $estado);
+                                    if ($estado->getActualiza()) {
+                                        $comparendo->setEstado($estado);
+                                        $em->flush();
+                                    }
+
+                                    $this->generateTrazabilidad($comparendo, $estado);
+                                }
+                            }else{
+                                //Registra trazabilidad de notificación
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
+
+                                if ($estado->getActualiza()) {
+                                    $comparendo->setEstado($estado);
+                                    $em->flush();
+                                }
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }                            
                         }elseif ($diasHabiles > 30) {//Valida si han pasado mas de 30 días
-                            //Cambia a estado sansonatorio
-                            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(2);
+                            //Busca si ya se creo una sancion
+                            $sancion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(2);
 
-                            $this->generateTrazabilidad($comparendo, $estado);
+                            if (!$sancion) {
+                                //Cambia a estado sansonatorio
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(2);
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }
                         }else{
                             $caduco = $helpers->checkRangeDates($comparendo->getFecha());
 
@@ -289,6 +313,21 @@ class CvCdoNotificacionController extends Controller
                                     $comparendo->setEstado($estado);
                                     $em->flush();
                                 }
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }
+                        }
+                    }
+                }elseif($comparendo->getEstado()->getId() == 2){
+                    if (!$comparendo->getAudiencia()) {
+                        //Valida si han pasado mas de 912 días (2 años 6 meses)
+                        if ($diasHabiles > 912) {
+                            //Busca si ya se creo un cobro coactivo
+                            $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(3);
+
+                            if (!$cobroCoactivo) {
+                                //Cambia a estado a cobro coactivo
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(3);
 
                                 $this->generateTrazabilidad($comparendo, $estado);
                             }
