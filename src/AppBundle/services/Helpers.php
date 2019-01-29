@@ -250,6 +250,22 @@ class Helpers
 		return $diasHabiles; 
 	}
 
+	public function getDiasCalendario($fechaComparendo)
+	{
+		$fechaComparendo = $this->convertDateTime($fechaComparendo);
+		$fechaActual = new \Datetime(date('Y-m-d'));
+
+		$diasCalendario = 1;
+
+		$em = $this->em;
+
+		while ($fechaComparendo < $fechaActual) {
+			$fechaComparendo->modify('+1 days');
+		}
+		
+		return $diasCalendario; 
+	}
+
 	public function createTemplate($template, $replaces)
     {
         foreach ($replaces as $key => $comodin) {
