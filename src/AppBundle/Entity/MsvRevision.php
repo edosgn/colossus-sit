@@ -31,6 +31,13 @@ class MsvRevision
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="fecha_revision", type="date")
+     */
+    private $fechaRevision;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="fecha_devolucion", type="date")
      */
     private $fechaDevolucion;
@@ -38,7 +45,7 @@ class MsvRevision
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_otorgamiento", type="date")
+     * @ORM\Column(name="fecha_otorgamiento", type="date", nullable=true)
      */
     private $fechaOtorgamiento;
 
@@ -111,7 +118,37 @@ class MsvRevision
      */
     public function getFechaRecepcion()
     {
-        return $this->fechaRecepcion->format('d/m/Y');
+        if ($this->fechaRecepcion) {
+            return $this->fechaRecepcion->format('d/m/Y');
+        }
+        return $this->fechaRecepcion;
+    }
+
+    /**
+     * Set fechaRevision
+     *
+     * @param \DateTime $fechaRevision
+     *
+     * @return MsvRevision
+     */
+    public function setFechaRevision($fechaRevision)
+    {
+        $this->fechaRevision = $fechaRevision;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRevision
+     *
+     * @return \DateTime
+     */
+    public function getFechaRevision()
+    {
+        if ($this->fechaRevision) {
+            return $this->fechaRevision->format('d/m/Y');
+        }
+        return $this->fechaRevision;
     }
 
     /**
@@ -135,7 +172,10 @@ class MsvRevision
      */
     public function getFechaDevolucion()
     {
-        return $this->fechaDevolucion->format('d/m/Y');
+        if ($this->fechaDevolucion) {
+            return $this->fechaDevolucion->format('d/m/Y');
+        }
+        return $this->fechaDevolucion;
     }
 
     /**
@@ -159,7 +199,10 @@ class MsvRevision
      */
     public function getFechaOtorgamiento()
     {
-        return $this->fechaOtorgamiento->format('d/m/Y');
+        if ($this->fechaOtorgamiento) {
+            return $this->fechaOtorgamiento->format('d/m/Y');
+        }
+        return $this->fechaOtorgamiento;
     }
 
     /**
