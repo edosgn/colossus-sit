@@ -26,7 +26,7 @@ class FroAmortizacion
      *
      * @ORM\Column(name="numCuota", type="integer")
      */
-    private $numCuota;
+    private $numeroCuota;
 
     /**
      * @var \DateTime
@@ -38,15 +38,14 @@ class FroAmortizacion
     /**
      * @var float
      *
-     * @ORM\Column(name="vamor", type="float")
+     * @ORM\Column(name="valor", type="float")
      */
-    private $vamor;
+    private $valor;
 
     /**
      * @ORM\OneToOne(targetEntity="FroFactura")
      */
     private $froFactura;
-
 
 
     /**
@@ -60,27 +59,27 @@ class FroAmortizacion
     }
 
     /**
-     * Set numCuota
+     * Set numeroCuota
      *
-     * @param integer $numCuota
+     * @param integer $numeroCuota
      *
      * @return FroAmortizacion
      */
-    public function setNumCuota($numCuota)
+    public function setNumeroCuota($numeroCuota)
     {
-        $this->numCuota = $numCuota;
+        $this->numeroCuota = $numeroCuota;
 
         return $this;
     }
 
     /**
-     * Get numCuota
+     * Get numeroCuota
      *
      * @return integer
      */
-    public function getNumCuota()
+    public function getNumeroCuota()
     {
-        return $this->numCuota;
+        return $this->numeroCuota;
     }
 
     /**
@@ -108,27 +107,27 @@ class FroAmortizacion
     }
 
     /**
-     * Set vamor
+     * Set valor
      *
-     * @param float $vamor
+     * @param float $valor
      *
      * @return FroAmortizacion
      */
-    public function setVamor($vamor)
+    public function setValor($valor)
     {
-        $this->vamor = $vamor;
+        $this->valor = $valor;
 
         return $this;
     }
 
     /**
-     * Get vamor
+     * Get valor
      *
      * @return float
      */
-    public function getVamor()
+    public function getValor()
     {
-        return $this->vamor;
+        return $this->valor;
     }
 
     /**
