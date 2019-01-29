@@ -1060,4 +1060,55 @@ class ComparendoController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Busca un comparendo por agente y fecha.
+     *
+     * @Route("/search/agente", name="comparendo_search_agente")
+     * @Method({"GET","POST"})
+     */
+    public function searchByAgente(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            if($params->sedeOperativaId) {
+                $nombreSedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+            }
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByAgente($params);
+
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Comparendos encontrados satisfactoriamente.", 
+                    'data' => $comparendos,
+                    'nombreSedeOperativa' => $nombreSedeOperativa->getNombre(),
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existe ningún comparendo asociado al agente de transito.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
 }

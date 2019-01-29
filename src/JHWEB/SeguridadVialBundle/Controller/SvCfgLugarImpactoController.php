@@ -224,8 +224,8 @@ class SvCfgLugarImpactoController extends Controller
             $response[$key] = array(
                 'value' => $lugarImpacto->getId(),
                 'label' => $lugarImpacto->getNombre(),
-            );
+                );
         }
         return $helpers->json($response);
-    }
+        }
 }
