@@ -66,7 +66,9 @@ class FroFacturaController extends Controller
            
             $factura = new FroFactura();
 
-            $factura->setFechaCreacion(new \Datetime(date('Y-m-d')));
+            $fechaCreacion = new \Datetime(date('Y-m-d'));
+
+            $factura->setFechaCreacion($fechaCreacion);
             $factura->setFechaVencimiento(new \Datetime(date('Y-m-d')));
             $factura->setHora(new \Datetime(date('h:i:s A')));
             $factura->setValor($params->valor);
@@ -80,8 +82,7 @@ class FroFacturaController extends Controller
             
             $factura->setNumero(
                 '770'.str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaCreacion->format('Y')
-            ); 
-
+            );
             
             if ($params->idSedeOperativa) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
@@ -180,7 +181,7 @@ class FroFacturaController extends Controller
 
             $valorTotal = 0;
 
-            foreach ($params->comparendos as $key => $idComparendo) {
+            foreach ($params as $key => $idComparendo) {
                 $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                     $idComparendo
                 );
