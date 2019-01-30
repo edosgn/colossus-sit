@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Froacuerdopago</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ froAcuerdoPago.id }}</td>
+            </tr>
+            <tr>
+                <th>Numcuotas</th>
+                <td>{{ froAcuerdoPago.numCuotas }}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ froAcuerdoPago.valor }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('froacuerdopago_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

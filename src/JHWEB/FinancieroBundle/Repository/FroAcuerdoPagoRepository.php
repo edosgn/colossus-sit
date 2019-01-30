@@ -10,4 +10,17 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroAcuerdoPagoRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    //Obtiene el numero maximo de las solicitudes
+    public function findMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(ap.consecutivo) AS maximo
+            FROM JHWEBContravencionalBundle:CvAcuerdoPago ap
+            WHERE YEAR(ap.fecha) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
+    
 }

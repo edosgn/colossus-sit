@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Froacuerdopagos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numcuotas</th>
+                <th>Valor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froAcuerdoPago in froAcuerdoPagos %}
+            <tr>
+                <td><a href="{{ path('froacuerdopago_show', { 'id': froAcuerdoPago.id }) }}">{{ froAcuerdoPago.id }}</a></td>
+                <td>{{ froAcuerdoPago.numCuotas }}</td>
+                <td>{{ froAcuerdoPago.valor }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('froacuerdopago_show', { 'id': froAcuerdoPago.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

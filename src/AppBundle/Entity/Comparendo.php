@@ -449,7 +449,7 @@ class Comparendo
     protected $consecutivo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroAcuerdoPago", inversedBy="comparendos")
      **/
     protected $acuerdoPago;
 
@@ -1889,30 +1889,7 @@ class Comparendo
     {
         return $this->consecutivo;
     }
-
-    /**
-     * Set acuerdoPago
-     *
-     * @param \JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago $acuerdoPago
-     *
-     * @return Comparendo
-     */
-    public function setAcuerdoPago(\JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago $acuerdoPago = null)
-    {
-        $this->acuerdoPago = $acuerdoPago;
-
-        return $this;
-    }
-
-    /**
-     * Get acuerdoPago
-     *
-     * @return \JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago
-     */
-    public function getAcuerdoPago()
-    {
-        return $this->acuerdoPago;
-    }
+    
 
     /**
      * Set estado
@@ -2011,26 +1988,26 @@ class Comparendo
     }
 
     /**
-     * Set valorPagar
+     * Set acuerdoPago
      *
-     * @param integer $valorPagar
+     * @param \JHWEB\FinancieroBundle\Entity\FroAcuerdoPago $acuerdoPago
      *
      * @return Comparendo
      */
-    public function setValorPagar($valorPagar)
+    public function setAcuerdoPago(\JHWEB\FinancieroBundle\Entity\FroAcuerdoPago $acuerdoPago = null)
     {
-        $this->valorPagar = $valorPagar;
+        $this->acuerdoPago = $acuerdoPago;
 
         return $this;
     }
 
     /**
-     * Get valorPagar
+     * Get acuerdoPago
      *
-     * @return integer
+     * @return \JHWEB\FinancieroBundle\Entity\FroAcuerdoPago
      */
-    public function getValorPagar()
+    public function getAcuerdoPago()
     {
-        return $this->valorPagar;
+        return $this->acuerdoPago;
     }
 }

@@ -1,41 +1,26 @@
 <?php
 
-namespace JHWEB\ContravencionalBundle\Controller;
+namespace JHWEB\FinancieroBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvAcuerdoPago;
+use JHWEB\FinancieroBundle\Entity\FroAcuerdoPago;
+use JHWEB\FinancieroBundle\Entity\FroAmortizacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cvacuerdopago controller.
+ * Froacuerdopago controller.
  *
- * @Route("cvacuerdopago")
+ * @Route("froacuerdopago")
  */
-class CvAcuerdoPagoController extends Controller
+class FroAcuerdoPagoController extends Controller
 {
-    /**
-     * Lists all cvAcuerdoPago entities.
-     *
-     * @Route("/", name="cvacuerdopago_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $cvAcuerdoPagos = $em->getRepository('JHWEBContravencionalBundle:CvAcuerdoPago')->findAll();
-
-        return $this->render('cvacuerdopago/index.html.twig', array(
-            'cvAcuerdoPagos' => $cvAcuerdoPagos,
-        ));
-    }
 
     /**
-     * Creates a new cvAcuerdoPago entity.
+     * Creates a new froAcuerdoPago entity.
      *
-     * @Route("/new", name="cvacuerdopago_new")
+     * @Route("/new", name="frocuerdopago_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -50,51 +35,67 @@ class CvAcuerdoPagoController extends Controller
            
             $em = $this->getDoctrine()->getManager();
             
-            $acuerdoPago = new CvAcuerdoPago();
+            $acuerdoPago = new FroAcuerdoPago();
 
-            $fecha = new \Datetime($params->fecha);
-            $consecutivo = $em->getRepository('JHWEBContravencionalBundle:CvAcuerdoPago')->findMaximo(
+            // var_dump($params->acuerdoPago->fecha);
+            // die();
+
+
+            $fecha = new \Datetime($params->acuerdoPago->fecha);
+            $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->findMaximo(
                 $fecha->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
             $acuerdoPago->setConsecutivo($consecutivo);
             $acuerdoPago->setNumero($fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
-
             $acuerdoPago->setFecha($fecha);
-            $acuerdoPago->setNumeroCuotas($params->numeroCuotas);
-            $acuerdoPago->setValor($params->valorCapital);
-            $acuerdoPago->setCuotasPagadas(0);
+            $acuerdoPago->setNumeroCuotas($params->acuerdoPago->numeroCuotas);
+            $acuerdoPago->setValor($params->acuerdoPago->valorCapital);
             
-            if ($params->idPorcentajeInicial) {
+            if ($params->acuerdoPago->idPorcentajeInicial) {
                 $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->find(
-                    $params->idPorcentajeInicial
+                    $params->acuerdoPago->idPorcentajeInicial
                 );
                 $acuerdoPago->setPorcentajeInicial($porcentajeInicial);
             }
 
-            if ($params->idInteres) {
+            if ($params->acuerdoPago->idInteres) {
                 $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
-                    $params->idInteres
+                    $params->acuerdoPago->idInteres
                 );
                 $acuerdoPago->setInteres($interes);
             }
             
             $acuerdoPago->setActivo(true);
+            $acuerdoPago->setValorCuotaInicial($params->acuerdoPago->valorCuotaInicial);
 
             $em->persist($acuerdoPago);
             $em->flush();
 
-            if ($params->comparendos) {
-                foreach ($params->comparendos as $key => $idComparendo) {
-                    $comparendo = $em->getRepository('AppBundleBundle:Comparendo')->find(
+            if ($params->acuerdoPago->comparendos) {
+                foreach ($params->acuerdoPago->comparendos as $key => $idComparendo) {
+                    $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                         $idComparendo
                     );
                     $comparendo->setAcuerdoPago($acuerdoPago);
 
-                    $estado = $em->getRepository('AppBundleBundle:CfgComparendoEstado')->find(
+                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
                         4
                     );
                     $comparendo->setEstado($estado);
+                    $em->flush();
+                }
+            }
+
+            if ($params->cuotas) {
+                foreach ($params->cuotas as $key => $cuota) {
+                    $amortizacion = new FroAmortizacion();
+                    
+                    $fecha = new \Datetime($cuota->fechaMensual);
+                    $amortizacion->setValor($cuota->valorCapital);
+                    $amortizacion->setFechaLimite($fecha);
+                    $amortizacion->setNumeroCuota($key++);
+                    $em->persist($amortizacion);
                     $em->flush();
                 }
             }
@@ -115,77 +116,77 @@ class CvAcuerdoPagoController extends Controller
     }
 
     /**
-     * Finds and displays a cvAcuerdoPago entity.
+     * Finds and displays a froAcuerdoPago entity.
      *
-     * @Route("/{id}/show", name="cvacuerdopago_show")
+     * @Route("/{id}/show", name="frocuerdopago_show")
      * @Method("GET")
      */
-    public function showAction(CvAcuerdoPago $cvAcuerdoPago)
+    public function showAction(FroAcuerdoPago $froAcuerdoPago)
     {
-        $deleteForm = $this->createDeleteForm($cvAcuerdoPago);
+        $deleteForm = $this->createDeleteForm($froAcuerdoPago);
 
-        return $this->render('cvacuerdopago/show.html.twig', array(
-            'cvAcuerdoPago' => $cvAcuerdoPago,
+        return $this->render('frocuerdopago/show.html.twig', array(
+            'froAcuerdoPago' => $froAcuerdoPago,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cvAcuerdoPago entity.
+     * Displays a form to edit an existing froAcuerdoPago entity.
      *
-     * @Route("/{id}/edit", name="cvacuerdopago_edit")
+     * @Route("/{id}/edit", name="frocuerdopago_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CvAcuerdoPago $cvAcuerdoPago)
+    public function editAction(Request $request, FroAcuerdoPago $froAcuerdoPago)
     {
-        $deleteForm = $this->createDeleteForm($cvAcuerdoPago);
-        $editForm = $this->createForm('JHWEB\ContravencionalBundle\Form\CvAcuerdoPagoType', $cvAcuerdoPago);
+        $deleteForm = $this->createDeleteForm($froAcuerdoPago);
+        $editForm = $this->createForm('JHWEB\ContravencionalBundle\Form\FroAcuerdoPagoType', $froAcuerdoPago);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('cvacuerdopago_edit', array('id' => $cvAcuerdoPago->getId()));
+            return $this->redirectToRoute('frocuerdopago_edit', array('id' => $froAcuerdoPago->getId()));
         }
 
-        return $this->render('cvacuerdopago/edit.html.twig', array(
-            'cvAcuerdoPago' => $cvAcuerdoPago,
+        return $this->render('frocuerdopago/edit.html.twig', array(
+            'froAcuerdoPago' => $froAcuerdoPago,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a cvAcuerdoPago entity.
+     * Deletes a froAcuerdoPago entity.
      *
-     * @Route("/{id}/delete", name="cvacuerdopago_delete")
+     * @Route("/{id}/delete", name="frocuerdopago_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, CvAcuerdoPago $cvAcuerdoPago)
+    public function deleteAction(Request $request, FroAcuerdoPago $froAcuerdoPago)
     {
-        $form = $this->createDeleteForm($cvAcuerdoPago);
+        $form = $this->createDeleteForm($froAcuerdoPago);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cvAcuerdoPago);
+            $em->remove($froAcuerdoPago);
             $em->flush();
         }
 
-        return $this->redirectToRoute('cvacuerdopago_index');
+        return $this->redirectToRoute('frocuerdopago_index');
     }
 
     /**
-     * Creates a form to delete a cvAcuerdoPago entity.
+     * Creates a form to delete a froAcuerdoPago entity.
      *
-     * @param CvAcuerdoPago $cvAcuerdoPago The cvAcuerdoPago entity
+     * @param FroAcuerdoPago $froAcuerdoPago The froAcuerdoPago entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvAcuerdoPago $cvAcuerdoPago)
+    private function createDeleteForm(FroAcuerdoPago $froAcuerdoPago)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvacuerdopago_delete', array('id' => $cvAcuerdoPago->getId())))
+            ->setAction($this->generateUrl('frocuerdopago_delete', array('id' => $froAcuerdoPago->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -194,7 +195,7 @@ class CvAcuerdoPagoController extends Controller
     /**
      * Calcula el valor según los comparendos seleecionados.
      *
-     * @Route("/calculate/value", name="cvacuerdopago_calculate_value")
+     * @Route("/calculate/value", name="frocuerdopago_calculate_value")
      * @Method("POST")
      */
     public function calculateValueByComparendosAction(Request $request)
@@ -244,7 +245,7 @@ class CvAcuerdoPagoController extends Controller
     /**
      * Busca comparendo por número.
      *
-     * @Route("/calculate/date/end", name="cvacuerdopago_calculate_date_end")
+     * @Route("/calculate/date/end", name="frocuerdopago_calculate_date_end")
      * @Method("POST")
      */
     public function calculateDateEndAction(Request $request)
@@ -282,7 +283,7 @@ class CvAcuerdoPagoController extends Controller
     /**
      * Busca comparendo por número.
      *
-     * @Route("/calculate/dues", name="cvacuerdopago_calculate_dues")
+     * @Route("/calculate/dues", name="frocuerdopago_calculate_dues")
      * @Method("POST")
      */
     public function calculateDuesAction(Request $request)
@@ -311,7 +312,7 @@ class CvAcuerdoPagoController extends Controller
             $totalPagar = 0;
 
             for ($i=0; $i < $params->numeroCuotas ; $i++) { 
-                $fechaMensual = date("d/m/Y", strtotime("+".$i." month", $fecha));
+                $fechaMensual = date("Y-m-d", strtotime("+".$i." month", $fecha));
                 $totalPagar += $cuotaMensual;
                 $cuotas[] = array(
                     'valorCapital' => $cuotaMensual,

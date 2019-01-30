@@ -1111,59 +1111,53 @@ class ComparendoController extends Controller
     }
 
     /**
-     * Valida si puede marcar la opción curso según la fecha de liquidación.
+     * Busca un comparendo por agente y fecha.
      *
-     * @Route("/validate/curso", name="comparendo_validate_curso")
-     * @Method({"GET", "POST"})
+     * @Route("/search/agente", name="comparendo_search_agente")
+     * @Method({"GET","POST"})
      */
-    public function validateCursoAction(Request $request)
+    public function searchByAgente(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
+
         if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-
-            $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
-                $params->id
-            );
             
-            if ($comparendo) {
-                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+            $em = $this->getDoctrine()->getManager();
 
-                if ($diasHabiles < 21) {
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => 'Selección de curso permitida.', 
-                        'data'=> 21 - $diasHabiles,
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => 'Selección de curso no permitida.', 
-                        'data'=> 21 - $diasHabiles,
-                    );
-                }
-            }else{
+            if($params->sedeOperativaId) {
+                $nombreSedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+            }
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByAgente($params);
+
+            if ($comparendos) {
                 $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Comparendos encontrados satisfactoriamente.", 
+                    'data' => $comparendos,
+                    'nombreSedeOperativa' => $nombreSedeOperativa->getNombre(),
+            );
+            }else{
+                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El comparendo no existe.", 
+                    'message' => "No existe ningún comparendo asociado al agente de transito.", 
                 );
             }
         }else{
             $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida", 
-            );
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
-
         return $helpers->json($response);
     }
+
 }

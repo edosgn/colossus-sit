@@ -226,4 +226,35 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    public function getByAgente($params){
+        $em = $this->getEntityManager();
+
+        $fechaDesdeDatetime = new \Datetime($params->fechaDesde);
+        $fechaHastaDatetime = new \Datetime($params->fechaHasta);
+
+        if($params->agenteId){
+            $idAgente = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->agenteId);
+        }
+
+        if($params->sedeOperativaId){
+            $idSedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+        }
+
+        $dql = "SELECT co
+        FROM AppBundle:Comparendo co
+        WHERE co.fecha BETWEEN :fechaDesdeDatetime AND :fechaHastaDatetime
+        AND co.agenteTransito = :idAgente
+        AND co.sedeOperativa = :idSedeOperativa";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaDesdeDatetime' => $fechaDesdeDatetime,
+            'fechaHastaDatetime' => $fechaHastaDatetime,
+            'idAgente' => $idAgente,
+            'idSedeOperativa' => $idSedeOperativa,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }
