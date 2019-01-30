@@ -2010,4 +2010,28 @@ class Comparendo
     {
         return $this->acuerdoPago;
     }
+
+    /**
+     * Set valorPagar
+     *
+     * @param integer $valorPagar
+     *
+     * @return Comparendo
+     */
+    public function setValorPagar($valorPagar)
+    {
+        $this->valorPagar = $valorPagar;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPagar
+     *
+     * @return integer
+     */
+    public function getValorPagar()
+    {
+        return $this->valorPagar;
+    }
 }
