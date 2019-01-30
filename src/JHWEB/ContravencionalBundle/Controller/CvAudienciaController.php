@@ -74,9 +74,9 @@ class CvAudienciaController extends Controller
             $audiencia->setTipo('MANUAL');
             $audiencia->setActivo(true);
 
-            if ($params->objetivo) {
+            /*if ($params->objetivo) {
                 $audiencia->setObjetivo($params->objetivo);
-            }
+            }*/
 
             if ($params->idComparendo) {
                 $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
