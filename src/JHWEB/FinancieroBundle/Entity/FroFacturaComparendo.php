@@ -22,13 +22,12 @@ class FroFacturaComparendo
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="FroFactura")
+     * @ORM\ManyToOne(targetEntity="FroFactura", inversedBy="comparendos")
      */
-    private $froFactura;
+    private $factura;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="sedesOperativas") */
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="facturas") */
     private $comparendo;
-
 
     /**
      * Get id
@@ -41,27 +40,27 @@ class FroFacturaComparendo
     }
 
     /**
-     * Set froFactura
+     * Set factura
      *
-     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $froFactura
+     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $factura
      *
      * @return FroFacturaComparendo
      */
-    public function setFroFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $froFactura = null)
+    public function setFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $factura = null)
     {
-        $this->froFactura = $froFactura;
+        $this->factura = $factura;
 
         return $this;
     }
 
     /**
-     * Get froFactura
+     * Get factura
      *
      * @return \JHWEB\FinancieroBundle\Entity\FroFactura
      */
-    public function getFroFactura()
+    public function getFactura()
     {
-        return $this->froFactura;
+        return $this->factura;
     }
 
     /**

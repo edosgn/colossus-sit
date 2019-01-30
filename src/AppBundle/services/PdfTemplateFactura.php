@@ -106,7 +106,6 @@ class PdfTemplateFactura extends TCPDF{
         $pdf->Output(__DIR__."../../../../web/uploads/".date('d-M-Y').".pdf", 'F');
 
         return (date('d-M-Y').".pdf");
-
     }
 
     public function templatePreview($html, $estado){

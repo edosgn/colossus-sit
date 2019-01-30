@@ -873,6 +873,55 @@ class ComparendoController extends Controller
     }
 
     /**
+     * Busca comparendos por parametros (nombres, identificacion, placa o numero).
+     *
+     * @Route("/search/filtros/factura", name="comparendo_search_filtros_factura")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltrosFactura(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByFilterForFactura(
+                $params
+            );
+
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($comparendos)." Comparendos encontrados", 
+                    'data' => $comparendos,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen comparendos para esos filtros de búsqueda", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca un unico comparendo por numero.
      *
      * @Route("/search/number", name="comparendo_search_number")
@@ -1048,6 +1097,63 @@ class ComparendoController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El comparendo no tiene trazabilidades aún.", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Valida si puede marcar la opción curso según la fecha de liquidación.
+     *
+     * @Route("/validate/curso", name="comparendo_validate_curso")
+     * @Method({"GET", "POST"})
+     */
+    public function validateCursoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $params->id
+            );
+            
+            if ($comparendo) {
+                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+
+                if ($diasHabiles < 21) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Selección de curso permitida.', 
+                        'data'=> 21 - $diasHabiles,
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'Selección de curso no permitida.', 
+                        'data'=> 21 - $diasHabiles,
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El comparendo no existe.", 
                 );
             }
         }else{
