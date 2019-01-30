@@ -105,12 +105,12 @@ class FroFacturaController extends Controller
             $em->persist($factura);
             $em->flush();
 
-            $this->calculateValueUpdate($params->comparendos);
+            $this->calculateValueUpdate($params->comparendos, $factura);
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con exito",
+                'message' => "Factura No.".$factura->getNumero()." creada con exito",
                 'data' => $factura
             );
         }else{
@@ -200,57 +200,42 @@ class FroFacturaController extends Controller
                 );
 
                 $interes = 0;
+                $valorPagar = 0;
 
-                if ($comparendo) {
-                    //Actualiza el estado del curso
-                    if ($comparendoSelect->curso) {
-                        $comparendo->setCurso(true);
-                    }else{
-                        $comparendo->setCurso(false);
-                    }
-                    
+                if ($comparendo) {                   
                     $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
 
-                    if ($diasHabiles < 6) {
-                        $comparendo->setValorPagar($comparendo->getValorInfraccion() / 2);
-                        $comparendo->setPorcentajeDescuento(50);
-                    }elseif($diasHabiles > 5 && $diasHabiles < 21){
-                        $comparendo->setValorPagar(
-                            $comparendo->getValorInfraccion() - ($comparendo->getValorInfraccion() * 0.25)
-                        );
-                        $comparendo->setPorcentajeDescuento(25);
+                    if ($diasHabiles < 6 && $comparendoSelect->curso) {
+                        $valorPagar = $comparendo->getValorInfraccion() / 2;
+                    }elseif($diasHabiles > 5 && $diasHabiles < 21 && $comparendoSelect->curso){
+                        $valorPagar = $comparendo->getValorInfraccion() - ($comparendo->getValorInfraccion() * 0.25);
                     }else{
-                        $comparendo->setPorcentajeDescuento(0);
+                        if ($comparendo->getEstado()->getId() == 1 || $comparendo->getEstado()->getId() == 2 || $comparendo->getEstado()->getId() == 3) {
 
-                        if ($comparendo->getEstado()->getId() == 2 || $comparendo->getEstado()->getId() == 3) {
-                            //Busca la sanción en la trazabilidad del comparendo
-                            $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
-                                array(
-                                    'comparendo' => $comparendo->getId(),
-                                    'estado' => 2
-                                )
-                            );
+                            if ($comparendo->getEstado()->getId() == 2 || $comparendo->getEstado()->getId() == 3) {
+                                //Busca la sanción en la trazabilidad del comparendo
+                                $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
+                                    array(
+                                        'comparendo' => $comparendo->getId(),
+                                        'estado' => 2
+                                    )
+                                );
 
-                            $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha());
+                                $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha());
 
-                            $porcentajeInteres = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
-                               true
-                            );
+                                $porcentajeInteres = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
+                                   true
+                                );
 
-                            $interes = $comparendo->getValorInfraccion() * ($porcentajeInteres->getValor() / 100);
-                            $interes = $interes * $diasCalendario;
+                                $interes = $comparendo->getValorInfraccion() * ($porcentajeInteres->getValor() / 100);
+                                $interes = $interes * $diasCalendario;
+                            }
                             $totalInteres = $totalInteres + $interes;
-
-                            $comparendo->setInteresMora($interes);
-                            $comparendo->setValorPagar(
-                                $comparendo->getValorInfraccion() + $interes
-                            );
+                            $valorPagar = $comparendo->getValorInfraccion() + $interes;
                         }
                     }
 
-                    $em->flush();
-
-                    $totalPagar += $comparendo->getValorPagar();
+                    $totalPagar += $valorPagar;
                 }
             }
             
@@ -277,8 +262,10 @@ class FroFacturaController extends Controller
     /**
      * Calcula el valor según los comparendos seleccionados y actualiza los valores.
      */
-    public function calculateValueUpdate($params)
+    public function calculateValueUpdate($params, $factura)
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
 
         $totalPagar = 0;
@@ -310,10 +297,10 @@ class FroFacturaController extends Controller
                 
                 $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
 
-                if ($diasHabiles < 6) {
+                if ($diasHabiles < 6 && $comparendoSelect->curso) {
                     $comparendo->setValorPagar($comparendo->getValorInfraccion() / 2);
                     $comparendo->setPorcentajeDescuento(50);
-                }elseif($diasHabiles > 5 && $diasHabiles < 21){
+                }elseif($diasHabiles > 5 && $diasHabiles < 21 && $comparendoSelect->curso){
                     $comparendo->setValorPagar(
                         $comparendo->getValorInfraccion() - ($comparendo->getValorInfraccion() * 0.25)
                     );
@@ -321,23 +308,25 @@ class FroFacturaController extends Controller
                 }else{
                     $comparendo->setPorcentajeDescuento(0);
 
-                    if ($comparendo->getEstado()->getId() == 2 || $comparendo->getEstado()->getId() == 3) {
-                        //Busca la sanción en la trazabilidad del comparendo
-                        $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
-                            array(
-                                'comparendo' => $comparendo->getId(),
-                                'estado' => 2
-                            )
-                        );
+                    if ($comparendo->getEstado()->getId() == 1 || $comparendo->getEstado()->getId() == 2 || $comparendo->getEstado()->getId() == 3) {
+                        if ($comparendo->getEstado()->getId() == 2 || $comparendo->getEstado()->getId() == 3) {
+                            //Busca la sanción en la trazabilidad del comparendo
+                            $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
+                                array(
+                                    'comparendo' => $comparendo->getId(),
+                                    'estado' => 2
+                                )
+                            );
 
-                        $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha());
+                            $diasCalendario = $helpers->getDiasCalendario($trazabilidad->getFecha());
 
-                        $porcentajeInteres = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
-                           true
-                        );
+                            $porcentajeInteres = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
+                               true
+                            );
 
-                        $interes = $comparendo->getValorInfraccion() * ($porcentajeInteres->getValor() / 100);
-                        $interes = $interes * $diasCalendario;
+                            $interes = $comparendo->getValorInfraccion() * ($porcentajeInteres->getValor() / 100);
+                            $interes = $interes * $diasCalendario;
+                        }
                         $totalInteres = $totalInteres + $interes;
 
                         $comparendo->setInteresMora($interes);

@@ -4,6 +4,11 @@
         .separator{
             border-top: 1px dashed #cccccc;
         }
+
+        .table-comparendos td{
+            max-height: 15px;
+            padding: 2px;
+        }
     </style>
   </header>
   <body style="font-size:8px">
@@ -21,7 +26,7 @@
         {% if comparendos %}
             <table style="background-color:#e7e7e7;width:100%">
                 <tr>
-                    <td colspan="5" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
+                    <td colspan="7" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #cccccc"><b>Número</b></td>
@@ -29,7 +34,7 @@
                     <td style="border:1px solid #cccccc"><b>Cod. Infracción</b></td>
                     <td style="border:1px solid #cccccc"><b>Valor</b></td>
                     <td style="border:1px solid #cccccc"><b>Interes</b></td>
-                    <td style="border:1px solid #cccccc"><b>% Descto.</b></td>
+                    <td style="border:1px solid #cccccc"><b>Descto.</b></td>
                     <td style="border:1px solid #cccccc"><b>Placa</b></td>
                 </tr>
                 {% set total = 0 %}
@@ -41,12 +46,12 @@
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infraccion.codigo }}</td>
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.valorInfraccion|number_format(0, ',', '.') }}</td>
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.interesMora|number_format(0, ',', '.') }}</td>
-                    <td style="border:1px solid #cccccc">% {{ facturaComparendo.comparendo.porcentajeDescuento }}</td>
+                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.porcentajeDescuento }} %</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.placa }}</td>
                 </tr>
                 {% endfor %}
                 <tr style="background-color:#ffffff">
-                    <td colspan="4" style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR</b></td>
+                    <td colspan="6" style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR</b></td>
                     <td style="border:1px solid #cccccc">$ {{ total|number_format(0, ',', '.') }}</td>
                 </tr>
             </table>

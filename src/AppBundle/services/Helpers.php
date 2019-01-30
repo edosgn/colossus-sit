@@ -254,13 +254,14 @@ class Helpers
 	{
 		$fechaComparendo = $this->convertDateTime($fechaComparendo);
 		$fechaActual = new \Datetime(date('Y-m-d'));
-
-		$diasCalendario = 1;
+		
+		$diasCalendario = 0;
 
 		$em = $this->em;
 
 		while ($fechaComparendo < $fechaActual) {
 			$fechaComparendo->modify('+1 days');
+			$diasCalendario ++;
 		}
 		
 		return $diasCalendario; 

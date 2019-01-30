@@ -43,6 +43,13 @@ class CvAudiencia
     private $objetivo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo", type="string", length=50, nullable=true)
+     */
+    private $tipo;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -91,6 +98,9 @@ class CvAudiencia
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
     }
 
@@ -115,6 +125,9 @@ class CvAudiencia
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('h:i:s A');
+        }
         return $this->hora;
     }
 
@@ -212,5 +225,29 @@ class CvAudiencia
     public function getComparendo()
     {
         return $this->comparendo;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return CvAudiencia
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 }
