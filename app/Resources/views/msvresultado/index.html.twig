@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Msvresultados list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for msvResultado in msvResultados %}
+            <tr>
+                <td><a href="{{ path('msvresultado_show', { 'id': msvResultado.id }) }}">{{ msvResultado.id }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('msvresultado_show', { 'id': msvResultado.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
