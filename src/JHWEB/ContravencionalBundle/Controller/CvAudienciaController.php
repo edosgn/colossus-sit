@@ -79,11 +79,11 @@ class CvAudienciaController extends Controller
             }*/
 
             if ($params->idComparendo) {
-                $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                     $params->idComparendo
                 );
-                $audiencia->setComparendo($comprendo);
-                $comprendo->setAudiencia(true);
+                $audiencia->setComparendo($comparendo);
+                $comparendo->setAudiencia(true);
             }
 
             //Registra trazabilidad de notificación
@@ -234,10 +234,10 @@ class CvAudienciaController extends Controller
                     $audiencia->setActivo(true);
 
                     if ($params->idComparendo) {
-                        $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
+                        $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                             $params->idComparendo
                         );
-                        $audiencia->setComparendo($comprendo);
+                        $audiencia->setComparendo($comparendo);
                     }
                     
                     $em->persist($audiencia);
@@ -256,10 +256,10 @@ class CvAudienciaController extends Controller
             $audiencia->setActivo(true);
 
             if ($params->idComparendo) {
-                $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                     $params->idComparendo
                 );
-                $audiencia->setComparendo($comprendo);
+                $audiencia->setComparendo($comparendo);
             }
             
             $em->persist($audiencia);

@@ -349,8 +349,12 @@ class ComparendoController extends Controller
                 $trazabilidad->setFecha(
                     new \Datetime($params->comparendo->fecha)
                 );
-                $trazabilidad->setActivo(true);
+                $trazabilidad->setHora(
+                    new \DateTime($hora.':'.$minutos.':00')
+                );
+                $trazabilidad->setActivo(true); 
                 $trazabilidad->setComparendo($comparendo);
+                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(1);
                 $trazabilidad->setEstado($estado);
 
                 $em->persist($trazabilidad);

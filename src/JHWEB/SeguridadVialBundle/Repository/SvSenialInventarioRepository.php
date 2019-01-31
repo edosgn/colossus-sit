@@ -77,7 +77,7 @@ class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
 
         if ($idMunicipio) {
-            $dql = "SELECT SUM(s.cantidad) AS cantidad, m.nombre, 
+            $dql = "SELECT s.cantidad, m.nombre, 
             s.id, s.nombre, s.codigo, st.id AS tipoSenial
             FROM JHWEBSeguridadVialBundle:SvSenialUbicacion su,
             JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
@@ -97,7 +97,7 @@ class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
                 'idMunicipio' => $idMunicipio,
             ));
         }else{
-            $dql = "SELECT SUM(sb.cantidad) AS cantidad, 
+            $dql = "SELECT s.cantidad, 
             s.id, s.nombre, s.codigo, st.id AS tipoSenial
             FROM JHWEBSeguridadVialBundle:SvSenialBodega sb,
             JHWEBSeguridadVialBundle:SvCfgSenialTipo st,

@@ -73,7 +73,7 @@ class FroFacturaController extends Controller
             $fechaCreacion = new \Datetime(date('Y-m-d'));
 
             $factura->setFechaCreacion($fechaCreacion);
-            $factura->setFechaVencimiento(new \Datetime(date('Y-m-d')));
+            $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
             $factura->setHora(new \Datetime(date('h:i:s A')));
             $factura->setValor($params->valor);
             $factura->setEstado('EMITIDA');
@@ -85,7 +85,7 @@ class FroFacturaController extends Controller
             $factura->setConsecutivo($consecutivo);
             
             $factura->setNumero(
-                '770'.str_pad($consecutivo, 3, '0', STR_PAD_LEFT).$fechaCreacion->format('Y')
+                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
             );
             
             if ($params->idSedeOperativa) {
@@ -367,7 +367,9 @@ class FroFacturaController extends Controller
         );
 
         $barcode = new BarcodeGenerator();
-        $barcode->setText($factura->getNumero());
+        $barcode->setText(
+            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValor().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
+        );
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
