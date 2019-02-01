@@ -295,11 +295,10 @@ class CvCdoNotificacionController extends Controller
                                 $audiencia->setFecha(new \Datetime(date('Y-m-d')));
                                 $audiencia->setHora(new \Datetime(date('h:i:s A')));
                                 $audiencia->setObjetivo('Audiencia automatica');
+                                $audiencia->setTipo('AUTOMATICA');
                                 $audiencia->setActivo(true);
 
                                 $audiencia->setComparendo($comparendo);
-
-                                $comparendo->setAudiencia(true);
         
                                 $em->persist($audiencia);
                                 $em->flush();
@@ -387,6 +386,7 @@ class CvCdoNotificacionController extends Controller
         return $helpers->json($response);
     }
 
+    //Migrar a servicio
     public function generateTrazabilidad($comparendo, $estado){
         $em = $this->getDoctrine()->getManager();
 
@@ -408,6 +408,9 @@ class CvCdoNotificacionController extends Controller
 
         $trazabilidad->setFecha(
             new \Datetime(date('Y-m-d'))
+        );
+        $trazabilidad->setHora(
+            new \Datetime(date('h:i:s A'))
         );
         $trazabilidad->setActivo(true);
         $trazabilidad->setComparendo($comparendo);
@@ -438,7 +441,8 @@ class CvCdoNotificacionController extends Controller
         $em->persist($trazabilidad);
         $em->flush();
     }
-
+    
+    //Migrar a servicio
     public function generateTemplate($comparendo){
         $helpers = $this->get("app.helpers");
 
@@ -446,18 +450,18 @@ class CvCdoNotificacionController extends Controller
         $fechaActual = strftime("%d de %B del %Y");
 
         
-        $replaces[] = (object)array('id' => '{NOM}', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
-        $replaces[] = (object)array('id' => '{ID}', 'value' => $comparendo->getInfractorIdentificacion());
-        $replaces[] = (object)array('id' => '{NOC}', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
-        $replaces[] = (object)array('id' => '{FC1}', 'value' => $fechaActual);
+        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+        $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
 
         if ($comparendo->getInfraccion()) {
-            $replaces[] = (object)array('id' => '{DCI}', 'value' => $comparendo->getInfraccion()->getDescripcion());
-            $replaces[] = (object)array('id' => '{CIC}', 'value' => $comparendo->getInfraccion()->getCodigo());
+            $replaces[] = (object)array('id' => 'DCI', 'value' => $comparendo->getInfraccion()->getDescripcion());
+            $replaces[] = (object)array('id' => 'CIC', 'value' => $comparendo->getInfraccion()->getCodigo());
         }
 
         if ($comparendo->getPlaca()) {
-            $replaces[] = (object)array('id' => '{PLACA}', 'value' => $comparendo->getPlaca());
+            $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
         }
 
 

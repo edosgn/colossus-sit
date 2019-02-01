@@ -349,8 +349,12 @@ class ComparendoController extends Controller
                 $trazabilidad->setFecha(
                     new \Datetime($params->comparendo->fecha)
                 );
-                $trazabilidad->setActivo(true);
+                $trazabilidad->setHora(
+                    new \DateTime($hora.':'.$minutos.':00')
+                );
+                $trazabilidad->setActivo(true); 
                 $trazabilidad->setComparendo($comparendo);
+                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(1);
                 $trazabilidad->setEstado($estado);
 
                 $em->persist($trazabilidad);
@@ -873,6 +877,112 @@ class ComparendoController extends Controller
     }
 
     /**
+     * Busca comparendos por parametros (nombres, identificacion, placa o numero).
+     *
+     * @Route("/search/filtros/factura", name="comparendo_search_filtros_factura")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltrosFactura(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->getByFilterForFactura(
+                $params
+            );
+
+            if ($comparendos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($comparendos)." Comparendos encontrados", 
+                    'data' => $comparendos,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen comparendos para esos filtros de búsqueda", 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Valida si puede marcar la opción curso según la fecha de liquidación.
+     *
+     * @Route("/validate/curso", name="comparendo_validate_curso")
+     * @Method({"GET", "POST"})
+     */
+    public function validateCursoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $params->id
+            );
+            
+            if ($comparendo) {
+                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+
+                if ($diasHabiles < 21) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Selección de curso permitida.', 
+                        'data'=> 21 - $diasHabiles,
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'Selección de curso no permitida.', 
+                        'data'=> 21 - $diasHabiles,
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El comparendo no existe.", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca un unico comparendo por numero.
      *
      * @Route("/search/number", name="comparendo_search_number")
@@ -955,7 +1065,7 @@ class ComparendoController extends Controller
     /**
      * Busca peticionario por cedula o por nombre entidad y numero de oficio.
      *
-     * @Route("/pazysalvo/{idUsuario}/pdf", name="mpersonalasignacion_pdf")
+     * @Route("/{idUsuario}/pazysalvo/pdf", name="comparendo_pdf")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request, $idUsuario)

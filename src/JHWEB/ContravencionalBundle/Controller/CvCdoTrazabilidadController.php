@@ -73,6 +73,7 @@ class CvCdoTrazabilidadController extends Controller
                 $trazabilidad = new CvCdoTrazabilidad();
 
                 $trazabilidad->setFecha(new \Datetime($params->fecha));
+                $trazabilidad->setHora(new \Datetime($params->hora));
                 if ($params->observaciones) {
                     $trazabilidad->setObservaciones($params->observaciones);
                 }

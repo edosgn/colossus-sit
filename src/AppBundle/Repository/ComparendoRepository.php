@@ -118,6 +118,65 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    public function getByFilterForFactura($params){
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c
+                WHERE (c.infractorNombres LIKE :nombres
+                OR c.infractorApellidos LIKE :apellidos)
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'nombres' => '%'.$params->filtro.'%',
+                    'apellidos' => '%'.$params->filtro.'%',
+                ));
+                break;
+
+            case 2:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c
+                WHERE c.infractorIdentificacion = :identificacion
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'identificacion' => $params->filtro,
+                ));
+                break;
+
+            case 3:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c
+                WHERE c.placa LIKE :placa
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'placa' => '%'.$params->filtro.'%',
+                ));
+                break;
+
+            case 4:
+                $dql = "SELECT c
+                FROM AppBundle:Comparendo c, AppBundle:MpersonalComparendo pc
+                WHERE pc.consecutivo = :consecutivo
+                AND c.consecutivo = pc.id
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'consecutivo' => $params->filtro,
+                ));
+                break;
+        }
+
+        return $consulta->getResult();
+    }
+
     public function getByNumber($numero){
         $em = $this->getEntityManager();
 

@@ -3,6 +3,8 @@
 namespace JHWEB\ContravencionalBundle\Controller;
 
 use JHWEB\ContravencionalBundle\Entity\CvAudiencia;
+use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
+use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -69,18 +71,30 @@ class CvAudienciaController extends Controller
 
             $audiencia->setFecha(new \Datetime($params->fecha));
             $audiencia->setHora(new \Datetime($params->hora));
+            $audiencia->setTipo('MANUAL');
             $audiencia->setActivo(true);
 
-            if ($params->objetivo) {
+            /*if ($params->objetivo) {
                 $audiencia->setObjetivo($params->objetivo);
-            }
+            }*/
 
             if ($params->idComparendo) {
-                $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                     $params->idComparendo
                 );
-                $audiencia->setComparendo($comprendo);
+                $audiencia->setComparendo($comparendo);
+                $comparendo->setAudiencia(true);
             }
+
+            //Registra trazabilidad de notificación
+            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(19);
+
+            if ($estado->getActualiza()) {
+                $comparendo->setEstado($estado);
+                $em->flush();
+            }
+
+            $this->generateTrazabilidad($comparendo, $estado);
             
             $em->persist($audiencia);
             $em->flush();
@@ -220,10 +234,10 @@ class CvAudienciaController extends Controller
                     $audiencia->setActivo(true);
 
                     if ($params->idComparendo) {
-                        $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
+                        $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                             $params->idComparendo
                         );
-                        $audiencia->setComparendo($comprendo);
+                        $audiencia->setComparendo($comparendo);
                     }
                     
                     $em->persist($audiencia);
@@ -242,10 +256,10 @@ class CvAudienciaController extends Controller
             $audiencia->setActivo(true);
 
             if ($params->idComparendo) {
-                $comprendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
                     $params->idComparendo
                 );
-                $audiencia->setComparendo($comprendo);
+                $audiencia->setComparendo($comparendo);
             }
             
             $em->persist($audiencia);
@@ -281,4 +295,93 @@ class CvAudienciaController extends Controller
 
        return false;
     }*/
+
+    //Migrar a servicio
+    public function generateTrazabilidad($comparendo, $estado){
+        $em = $this->getDoctrine()->getManager();
+
+        $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+            array(
+                'comparendo' => $comparendo->getId(),
+                'activo' => true
+            )
+        );
+
+        if ($trazabilidadesOld) {
+            foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
+                $trazabilidadOld->setActivo(false);
+                $em->flush();
+            }
+        }
+
+        $trazabilidad = new CvCdoTrazabilidad();
+
+        $trazabilidad->setFecha(
+            new \Datetime(date('Y-m-d'))
+        );
+        $trazabilidad->setHora(
+            new \Datetime(date('h:i:s A'))
+        );
+        $trazabilidad->setActivo(true);
+        $trazabilidad->setComparendo($comparendo);
+        $trazabilidad->setEstado($estado);
+
+        if ($estado->getFormato()) {
+            $documento = new CfgAdmActoAdministrativo();
+
+            $documento->setNumero(
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+            );
+            $documento->setFecha(new \Datetime(date('Y-m-d')));
+            $documento->setActivo(true);
+
+            $documento->setFormato(
+                $comparendo->getEstado()->getFormato()
+            );
+
+            $template = $this->generateTemplate($comparendo);
+            $documento->setCuerpo($template);
+
+            $em->persist($documento);
+            $em->flush();
+
+            $trazabilidad->setActoAdministrativo($documento);
+        }
+
+        $em->persist($trazabilidad);
+        $em->flush();
+    }
+
+    //Migrar a servicio
+    public function generateTemplate($comparendo){
+        $helpers = $this->get("app.helpers");
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        
+        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+        $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
+
+        if ($comparendo->getInfraccion()) {
+            $replaces[] = (object)array('id' => 'DCI', 'value' => $comparendo->getInfraccion()->getDescripcion());
+            $replaces[] = (object)array('id' => 'CIC', 'value' => $comparendo->getInfraccion()->getCodigo());
+        }
+
+        if ($comparendo->getPlaca()) {
+            $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
+        }
+
+
+        $template = $helpers->createTemplate(
+          $comparendo->getEstado()->getFormato()->getCuerpo(),
+          $replaces
+        );
+
+        $template = str_replace("<br>", "<br/>", $template);
+
+        return $template;
+    }
 }

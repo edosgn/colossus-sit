@@ -302,9 +302,9 @@ class Comparendo
     /**
      * @var int
      *
-     * @ORM\Column(name="valor_adicional", type="integer", nullable=true)
+     * @ORM\Column(name="valor_pagar", type="integer", nullable=true)
      */
-    private $valorAdicional;
+    private $valorPagar;
 
     /**
      * @var string
@@ -410,21 +410,21 @@ class Comparendo
     /**
      * @var string
      *
-     * @ORM\Column(name="modalidadTransporte", type="string", length=255, nullable=true)
+     * @ORM\Column(name="modalidad_transporte", type="string", length=255, nullable=true)
      */   
     private $modalidadTransporte;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="trasnportePasajero", type="string", length=255, nullable=true )
+     * @ORM\Column(name="transporte_pasajero", type="string", length=255, nullable=true )
      */
     private $transportePasajero;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="transporteEspecial", type="string", length=255, nullable=true)
+     * @ORM\Column(name="transporte_especial", type="string", length=255, nullable=true)
      */
     private $transporteEspecial;
 
@@ -1363,30 +1363,6 @@ class Comparendo
     }
 
     /**
-     * Set valorAdicional
-     *
-     * @param integer $valorAdicional
-     *
-     * @return Comparendo
-     */
-    public function setValorAdicional($valorAdicional)
-    {
-        $this->valorAdicional = $valorAdicional;
-
-        return $this;
-    }
-
-    /**
-     * Get valorAdicional
-     *
-     * @return integer
-     */
-    public function getValorAdicional()
-    {
-        return $this->valorAdicional;
-    }
-
-    /**
      * Set urlDocumento
      *
      * @param string $urlDocumento
@@ -2033,5 +2009,29 @@ class Comparendo
     public function getAcuerdoPago()
     {
         return $this->acuerdoPago;
+    }
+
+    /**
+     * Set valorPagar
+     *
+     * @param integer $valorPagar
+     *
+     * @return Comparendo
+     */
+    public function setValorPagar($valorPagar)
+    {
+        $this->valorPagar = $valorPagar;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPagar
+     *
+     * @return integer
+     */
+    public function getValorPagar()
+    {
+        return $this->valorPagar;
     }
 }

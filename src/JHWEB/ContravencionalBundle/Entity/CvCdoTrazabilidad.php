@@ -29,6 +29,13 @@ class CvCdoTrazabilidad
     private $fecha;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora", type="time")
+     */
+    private $hora;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="observaciones", type="text", nullable=true)
@@ -86,7 +93,7 @@ class CvCdoTrazabilidad
     public function getFecha()
     {
         if ($this->fecha) {
-            return $this->fecha->format('Y-m-d');
+            return $this->fecha->format('d/m/Y');
         }
         return $this->fecha;
     }
@@ -209,5 +216,29 @@ class CvCdoTrazabilidad
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set hora
+     *
+     * @param \DateTime $hora
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setHora($hora)
+    {
+        $this->hora = $hora;
+
+        return $this;
+    }
+
+    /**
+     * Get hora
+     *
+     * @return \DateTime
+     */
+    public function getHora()
+    {
+        return $this->hora;
     }
 }

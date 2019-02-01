@@ -219,9 +219,9 @@ class FroAcuerdoPagoController extends Controller
 
                 if ($comparendo) {
                     $valorTotal += $comparendo->getValorInfraccion();
-                    if ($comparendo->getValorAdicional()) {
+                    /*if ($comparendo->getValorAdicional()) {
                         $valorTotal += $comparendo->getValorAdicional();
-                    }
+                    }*/
                 }
             }
             
