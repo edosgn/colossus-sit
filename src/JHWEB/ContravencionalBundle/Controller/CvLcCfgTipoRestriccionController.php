@@ -2,22 +2,22 @@
 
 namespace JHWEB\ContravencionalBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvLcCfgRestriccion;
+use JHWEB\ContravencionalBundle\Entity\CvLcCfgTipoRestriccion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cvlccfgrestriccion controller.
+ * Cvcfgtiporestriccion controller.
  *
- * @Route("cvlccfgrestriccion")
+ * @Route("cvlccfgtiporestriccion")
  */
-class CvLcCfgRestriccionController extends Controller
+class CvLcCfgTipoRestriccionController extends Controller
 {
     /**
-     * Lists all cvLcCfgRestriccion entities.
+     * Lists all cvCfgTipoRestriccion entities.
      *
-     * @Route("/", name="cvlccfgrestriccion_index")
+     * @Route("/", name="cvlccfgtiporestriccion_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -25,63 +25,62 @@ class CvLcCfgRestriccionController extends Controller
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
-        
-        $restricciones = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->findBy(
-            array(
-                'activo' => true
-            )
+
+        $cvLcCfgTipoLcensias = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgTipoRestriccion')->findBy(
+            array('activo'=>true)
         );
 
         $response['data'] = array();
 
-        if ($restricciones) {
+        if ($cvLcCfgTipoLcensias) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($restricciones)." registros encontrados", 
-                'data'=> $restricciones,
+                'message' => count($cvLcCfgTipoLcensias)." Registros encontrados", 
+                'data'=> $cvLcCfgTipoLcensias,
             );
-        } 
+        }
 
         return $helpers->json($response);
     }
 
     /**
-     * Creates a new cvLcCfgRestriccion entity.
+     * Creates a new cvlccfgtiporestriccion_index entity.
      *
-     * @Route("/new", name="cvlccfgrestriccion_new")
+     * @Route("/new", name="cvlccfgtiporestriccion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
+        $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
+        if($authCheck == true){
             $json = $request->get("data",null);
             $params = json_decode($json);
-           
-            $restriccion = new CvLcCfgRestriccion();
-
-            $restriccion->setDescripcion($params->descripcion);
-            $restriccion->setActivo(true);
 
             $em = $this->getDoctrine()->getManager();
-            
-            $em->persist($restriccion);
-            $em->flush();
 
+            $tipoRestriccion = new CvLcCfgTipoRestriccion();
+           
+            $tipoRestriccion->setNombre($params->nombre);
+            $tipoRestriccion->setCodigo($params->codigo);
+            $tipoRestriccion->setActivo(true);
+            
+            $em->persist($tipoRestriccion);
+            $em->flush();
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con exito",
+                'message' => "Registro creado con éxito",
             );
+        
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorización no valida",
             );
         }
         
@@ -89,9 +88,9 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Finds and displays a cvLcCfgRestriccion entity.
+     * Finds and displays a cvlccfgtiporestriccion_index entity.
      *
-     * @Route("/show", name="cvlccfgrestriccion_show")
+     * @Route("/show", name="cvlccfgtiporestriccion_show")
      * @Method("GET")
      */
     public function showAction(Request $request)
@@ -106,16 +105,14 @@ class CvLcCfgRestriccionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $restriccion = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->find(
-                $params->id
-            );
+            $tipoRestriccion = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgTipoRestriccion')->find($params->idMedioCorrespondencia);
 
-            if ($restriccion) {
+            if ($tipoRestriccion) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'data'=> $restriccion,
+                    'data'=> $tipoRestriccion,
                 );
             }else{
                 $response = array(
@@ -123,7 +120,7 @@ class CvLcCfgRestriccionController extends Controller
                     'code' => 400,
                     'message' => "El registro no se encuentra en la base de datos",
                 );
-            }
+            } 
         }else{
             $response = array(
                 'status' => 'error',
@@ -131,18 +128,17 @@ class CvLcCfgRestriccionController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         }
-        
+
         return $helpers->json($response);
     }
 
     /**
-     * Displays a form to edit an existing cvLcCfgRestriccion entity.
+     * Displays a form to edit an existing cvlccfgtiporestriccion_index entity.
      *
-     * @Route("/edit", name="cvlccfgrestriccion_edit")
+     * @Route("/edit", name="cvlccfgtiporestriccion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request)
-    {
+    public function editAction(Request $request){
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -152,21 +148,17 @@ class CvLcCfgRestriccionController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            $tipoRestriccion = $em->getRepository("JHWEBContravencionalBundle:CvLcCfgTipoRestriccion")->find($params->id);
 
-            $restriccion = $em->getRepository("JHWEBContravencionalBundle:CvLcCfgRestriccion")->find(
-                $params->id
-            );
-
-            if ($restriccion) {
-                $restriccion->setDescripcion($params->descripcion);
-                
+            if ($tipoRestriccion) {
+                $tipoRestriccion->setNombre($params->nombre);
+                $tipoRestriccion->setCodigo($params->codigo);
                 $em->flush();
-
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $restriccion,
+                    'data'=> $tipoRestriccion,
                 );
             }else{
                 $response = array(
@@ -187,9 +179,9 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Deletes a cvLcCfgRestriccion entity.
+     * Deletes a cvlccfgtiporestriccion_index entity.
      *
-     * @Route("/delete", name="cvlccfgrestriccion_delete")
+     * @Route("/delete", name="cvlccfgtiporestriccion_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -197,17 +189,13 @@ class CvLcCfgRestriccionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
         if($authCheck == true){
             $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-
-            $restriccion = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->find(
-                $params->id
-            );
-            $restriccion->setActivo(false);
+            $tipoCorrespondencia = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgTipoCorrespondencia')->find($params->id);
+            $tipoCorrespondencia->setActivo(false);
 
             $em->flush();
 
@@ -223,54 +211,46 @@ class CvLcCfgRestriccionController extends Controller
                 'message' => "Autorización no valida", 
             );
         }
-        
         return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a cvLcCfgRestriccion entity.
+     * Creates a form to delete a cvlccfgtiporestriccion_index entity.
      *
-     * @param CvLcCfgRestriccion $cvLcCfgRestriccion The cvLcCfgRestriccion entity
+     * @param CvLcCfgTipoRestriccion $cvlccfgtiporestriccion_index The cvlccfgtiporestriccion_index entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvLcCfgRestriccion $cvLcCfgRestriccion)
+    private function createDeleteForm(CvLcCfgTipoRestriccion $cvlccfgtiporestriccion_index)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvlccfgrestriccion_delete', array('id' => $cvLcCfgRestriccion->getId())))
+            ->setAction($this->generateUrl('cvlccfgtiporestriccion_delete', array('id' => $cvlccfgtiporestriccion_index->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
     }
 
-    /* ============================================== */
-
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cvlccfgrestriccion_select")
+     * @Route("/select", name="cvlccfgtiporestriccion_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-
-        $json = $request->get("data",null);
-        $params = json_decode($json);
         
-        $restricciones = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->findBy(
-            array(
-                'activo' => true
-            )
+        $cvLcCfgTipoLcensias = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgTipoRestriccion')->findBy(
+            array('activo' => true)
         );
 
         $response = null;
 
-        foreach ($restricciones as $key => $restriccion) {
+        foreach ($cvLcCfgTipoLcensias as $key => $tipoRestriccion) {
             $response[$key] = array(
-                'value' => $restriccion->getId(),
-                'label' => $restriccion->getDescripcion()
+                'value' => $tipoRestriccion->getId(),
+                'label' => $tipoRestriccion->getNombre()
             );
         }
         

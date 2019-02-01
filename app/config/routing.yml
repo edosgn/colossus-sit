@@ -1,7 +1,3 @@
-jhweb_financiero_fro_acuerdo_pago:
-    resource: "@JHWEBFinancieroBundle/Controller/FroAcuerdoPagoController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

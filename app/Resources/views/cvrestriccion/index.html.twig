@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvrestriccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Idforanea</th>
+                <th>Observaciones</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvRestriccion in cvRestriccions %}
+            <tr>
+                <td><a href="{{ path('cvrestriccion_show', { 'id': cvRestriccion.id }) }}">{{ cvRestriccion.id }}</a></td>
+                <td>{{ cvRestriccion.idForanea }}</td>
+                <td>{{ cvRestriccion.observaciones }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvrestriccion_show', { 'id': cvRestriccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvrestriccion_edit', { 'id': cvRestriccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvrestriccion_new') }}">Create a new cvRestriccion</a>
+        </li>
+    </ul>
+{% endblock %}
