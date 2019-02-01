@@ -1065,7 +1065,7 @@ class ComparendoController extends Controller
     /**
      * Busca peticionario por cedula o por nombre entidad y numero de oficio.
      *
-     * @Route("/pazysalvo/{idUsuario}/pdf", name="mpersonalasignacion_pdf")
+     * @Route("/{idUsuario}/pazysalvo/pdf", name="comparendo_pdf")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request, $idUsuario)
