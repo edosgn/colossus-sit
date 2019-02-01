@@ -49,21 +49,35 @@ class MsvRevision
      */
     private $fechaOtorgamiento;
 
-     /**
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_visita_control_1", type="date", nullable=true)
+     */
+    private $fechaVisitaControl1;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_visita_control_2", type="date", nullable=true)
+     */
+    private $fechaVisitaControl2;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="persona_contacto", type="string", length=255)
      */
     private $personaContacto;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="cargo", type="string", length=255)
      */
     private $cargo;
 
-     /**
+    /**
      * @var string
      *
      * @ORM\Column(name="correo", type="string", length=255)
@@ -87,7 +101,7 @@ class MsvRevision
      **/
     protected $funcionario;
 
-        /**
+    /**
      * Get id
      *
      * @return integer
@@ -348,4 +362,59 @@ class MsvRevision
     {
         return $this->funcionario;
     }
+
+    /**
+     * Set fechaVisitaControl1
+     *
+     * @param \DateTime $fechaVisitaControl1
+     *
+     * @return MsvRevision
+     */
+    public function setFechaVisitaControl1($fechaVisitaControl1)
+    {
+        $this->fechaVisitaControl1 = $fechaVisitaControl1;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVisitaControl1
+     *
+     * @return \DateTime
+     */
+    public function getFechaVisitaControl1()
+    {
+        if ($this->fechaVisitaControl1) {
+            return $this->fechaVisitaControl1->format('d/m/Y');
+        }
+        return $this->fechaVisitaControl1;
+    }
+
+    /**
+     * Set fechaVisitaControl2
+     *
+     * @param \DateTime $fechaVisitaControl2
+     *
+     * @return MsvRevision
+     */
+    public function setFechaVisitaControl2($fechaVisitaControl2)
+    {
+        $this->fechaVisitaControl2 = $fechaVisitaControl2;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVisitaControl2
+     *
+     * @return \DateTime
+     */
+    public function getFechaVisitaControl2()
+    {
+        if ($this->fechaVisitaControl2) {
+            return $this->fechaVisitaControl2->format('d/m/Y');
+        }
+        return $this->fechaVisitaControl2;
+    }
 }
+

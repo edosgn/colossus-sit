@@ -1,3 +1,7 @@
+app_msv_resultado:
+    resource: "@AppBundle/Controller/MsvResultadoController.php"
+    type:     annotation
+
 jhweb_financiero_fro_acuerdo_pago:
     resource: "@JHWEBFinancieroBundle/Controller/FroAcuerdoPagoController.php"
     type:     annotation

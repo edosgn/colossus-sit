@@ -49,18 +49,49 @@ class MsvRevisionController extends Controller
         if($authCheck == true){
             $json = $request->get("json",null);
             $params = json_decode($json);
-            var_dump($params);
-            die();
+            
             $em = $this->getDoctrine()->getManager();
 
             $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
             $empresa = $em->getRepository('AppBundle:Empresa')->find($params->empresaId);
             
                 $revision = new MsvRevision();
-                $revision->setFechaRecepcion(new \DateTime($params->fechaRecepcion));
-                $revision->setFechaRevision(new \DateTime($params->fechaRevision));
                 $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
-                $revision->setFechaOtorgamiento(new \DateTime($params->fechaOtorgamiento));
+                
+                $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
+                $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime);
+                
+                $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
+                $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
+                if($fechaRecepcionDatetime < $fechaRevisionDatetime){
+                    $revision->setFechaRecepcion($fechaRecepcionDatetime);
+                    $revision->setFechaRevision($fechaRevisionDatetime);
+                } else {
+                    $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La fecha de recepción debe ser menor a la fecha de revisión.",
+                        );
+                        return $helpers->json($response);
+                }
+                
+
+                if($params->fechaOtorgamiento) {
+                    $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
+                    $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
+                    if ($fechaOtorgamientoDatetime < $fechaVisitaControlDatetime1 && $fechaOtorgamientoDatetime < $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2 ){
+                        $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
+                        $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
+                    } else {
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "Las fechas de visita para control deben ser menores a la fecha de otorgamiento del aval.",
+                        );
+                        return $helpers->json($response);
+                    }
+                }
+
                 $revision->setFuncionario($funcionario);
                 $revision->setPersonaContacto($params->personaContacto);
                 $revision->setCargo($params->cargo);
