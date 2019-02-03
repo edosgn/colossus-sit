@@ -323,8 +323,8 @@ class MunicipioController extends Controller
       foreach ($municipios as $key => $municipio) {
         $response[$key] = array(
             'value' => $municipio->getId(),
-            'label' => $municipio->getCodigoDane()."_".$municipio->getNombre(),
-            );
+            'label' => $municipio->getCodigoDane()."_".$municipio->getNombre()."-".$municipio->getDepartamento()->getNombre(),
+        );
       }
        return $helpers->json($response);
     }

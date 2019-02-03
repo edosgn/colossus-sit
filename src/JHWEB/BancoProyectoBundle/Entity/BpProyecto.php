@@ -22,9 +22,9 @@ class BpProyecto
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="numero", type="integer")
+     * @ORM\Column(name="numero", type="string", length=255)
      */
     private $numero;
 
@@ -84,7 +84,7 @@ class BpProyecto
     /**
      * Set numero
      *
-     * @param integer $numero
+     * @param string $numero
      *
      * @return BpProyecto
      */
@@ -98,7 +98,7 @@ class BpProyecto
     /**
      * Get numero
      *
-     * @return integer
+     * @return string
      */
     public function getNumero()
     {

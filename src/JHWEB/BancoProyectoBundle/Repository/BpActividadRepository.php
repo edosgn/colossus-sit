@@ -10,4 +10,17 @@ namespace JHWEB\BancoProyectoBundle\Repository;
  */
 class BpActividadRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene la suma de los costos de actividades por proyecto
+    public function getCostoTotalByProyecto($idProyecto)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(a.costoTotal) AS total
+            FROM JHWEBBancoProyectoBundle:BpActividad a
+            WHERE a.proyecto = :idProyecto";
+            
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('idProyecto', $idProyecto);
+        return $consulta->getOneOrNullResult();
+    }
 }

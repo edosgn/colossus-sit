@@ -3,7 +3,7 @@
 namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroFactura;
-use JHWEB\FinancieroBundle\Entity\FroFacturaComparendo;
+use JHWEB\FinancieroBundle\Entity\FroFacComparendo;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -277,7 +277,7 @@ class FroFacturaController extends Controller
             );
 
             //Inserta la relación de factura con comparendos seleccionados
-            $facturaComparendo = new FroFacturaComparendo();
+            $facturaComparendo = new FroFacComparendo();
 
             $facturaComparendo->setFactura($factura);
             $facturaComparendo->setComparendo($comparendo);
@@ -360,7 +360,7 @@ class FroFacturaController extends Controller
 
         $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
 
-        $comparendos = $em->getRepository('JHWEBFinancieroBundle:FroFacturaComparendo')->findBy(
+        $comparendos = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findBy(
             array(
                 'factura' => $factura->getId()
             )

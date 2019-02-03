@@ -24,14 +24,14 @@ class FroAmortizacion
     /**
      * @var int
      *
-     * @ORM\Column(name="numCuota", type="integer")
+     * @ORM\Column(name="numero_cuota", type="integer")
      */
     private $numeroCuota;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaLimite", type="datetime")
+     * @ORM\Column(name="fecha_limite", type="datetime")
      */
     private $fechaLimite;
 

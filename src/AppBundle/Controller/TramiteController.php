@@ -70,6 +70,7 @@ class TramiteController extends Controller
                 $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
                 $tramite->setModulo($modulo);
                 
+                $tramite->setCodigo($params->codigo);
                 $tramite->setNombre(strtoupper($params->nombre));
 
                 $sustrato = ($params->sustrato == 'true') ? true : false;
@@ -158,6 +159,7 @@ class TramiteController extends Controller
                 $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
                 $tramite->setModulo($modulo);
 
+                $tramite->setCodigo($params->codigo);
                 $tramite->setNombre(strtoupper($params->nombre));
 
                 $sustrato = ($params->sustrato == 'true') ? true : false;

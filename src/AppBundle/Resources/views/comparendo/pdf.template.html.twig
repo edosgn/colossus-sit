@@ -1,7 +1,7 @@
 <html>
   <header>
   </header>
-  <body>
+  <body style="font-size:12px">
     <p style="text-align:center">
         <b>
             LA SUBSECRETARÍA DE TRÁNSITO DEPARTAMENTAL DE NARIÑO
@@ -11,11 +11,41 @@
         <br>      
     </p>
 
-    <p style="text-align:justify">
-        Que el (la) sr(a) {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }} {{ usuario.segundoApellido }} con documento de identificación No. {{ usuario.identificacion }} a la fecha, se encuentra a Paz y Salvo con Subsecretaría de Tránsito y Transporte del Departamento de Nariño por concepto de multas por infracciones a las normas de tránsito reguladas por la Ley 769 de 2002 y demás normas concordantes.
+    {% if comparendos %}
+        <p style="text-align:justify">Que el (la) sr(a) {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }} {{ usuario.segundoApellido }} con documento de identificación No. {{ usuario.identificacion }} a la fecha, no se encuentra a Paz y Salvo con Subsecretaría de Tránsito y Transporte del Departamento de Nariño por concepto de multas por infracciones a las normas de tránsito reguladas por la Ley 769 de 2002 y demás normas concordantes.
+            <br>
+            <br>Dada en San Juan de Pasto, {{ fechaActual }}.
+        </p>
         <br>
-        Dada en San Juan de Pasto, {{ fechaActual }}.
-    </p>
+        <br>
+        <br>
+        <table style="background-color:#e7e7e7;width:100%;font-size:8px">
+            <tr>
+                <td colspan="5" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;"><b>COMPARENDOS</b></td>
+            </tr>
+            <tr>
+                <td style="border:1px solid #cccccc"><b>Número</b></td>
+                <td style="border:1px solid #cccccc"><b>Fecha</b></td>
+                <td style="border:1px solid #cccccc"><b>Cod. Infracción</b></td>
+                <td style="border:1px solid #cccccc"><b>Placa</b></td>
+                <td style="border:1px solid #cccccc"><b>Estado</b></td>
+            </tr>
+            {% for key, comparendo in comparendos %}
+            <tr>
+                <td style="border:1px solid #cccccc">{{ comparendo.consecutivo.consecutivo }}</td>
+                <td style="border:1px solid #cccccc">{{ comparendo.fecha }}</td>
+                <td style="border:1px solid #cccccc">{{ comparendo.infraccion.codigo }}</td>
+                <td style="border:1px solid #cccccc">{{ comparendo.placa }}</td>
+                <td style="border:1px solid #cccccc">{{ comparendo.estado.nombre }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p style="text-align:justify">Que el (la) sr(a) {{ usuario.primerNombre }} {{ usuario.segundoNombre }} {{ usuario.primerApellido }} {{ usuario.segundoApellido }} con documento de identificación No. {{ usuario.identificacion }} a la fecha, se encuentra a Paz y Salvo con Subsecretaría de Tránsito y Transporte del Departamento de Nariño por concepto de multas por infracciones a las normas de tránsito reguladas por la Ley 769 de 2002 y demás normas concordantes.
+            <br>
+            <br>Dada en San Juan de Pasto, {{ fechaActual }}.
+        </p>
+    {% endif %}
 
     <br>
     <br>

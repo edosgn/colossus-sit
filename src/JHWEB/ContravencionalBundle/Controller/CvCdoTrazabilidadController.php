@@ -4,6 +4,7 @@ namespace JHWEB\ContravencionalBundle\Controller;
 
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
+use JHWEB\ContravencionalBundle\Entity\CvAudiencia;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -63,11 +64,140 @@ class CvCdoTrazabilidadController extends Controller
                     )
                 );
 
+                //Inactiva trazabilidades anteriores
                 if ($trazabilidadesOld) {
                     foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
                         $trazabilidadOld->setActivo(false);
                         $em->flush();
                     }
+                }
+
+                if ($params->idComparendo) {
+                    $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                        $params->idComparendo
+                    );
+                }
+
+                //Busca el estado que se solicita insertar
+                if ($params->idComparendoEstado) {
+                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                        $params->idComparendoEstado
+                    );
+                }
+
+                //Valida si el estado a registrar es SANCIONADO
+                if ($estado->getId() == 2) {
+                    //Valida que tenga auto de no comparecencia
+                    $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(
+                        array(
+                            'comparendo' => $params->idComparendo,
+                            'estado' => 14
+                        )
+                    );
+
+                    //Si no lo tiene lo genera automaticamente
+                    if (!$trazabilidadOld) {
+                        $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
+
+                        $audiencia = new CvAudiencia();
+
+                        $audiencia->setFecha(new \Datetime(date('Y-m-d')));
+                        $audiencia->setHora(new \Datetime(date('h:i:s A')));
+                        $audiencia->setObjetivo('Audiencia automatica');
+                        $audiencia->setTipo('AUTOMATICA');
+                        $audiencia->setActivo(true);
+                        $audiencia->setComparendo($comparendo);
+
+                        $em->persist($audiencia);
+                        $em->flush();
+
+                        $this->generateTrazabilidad($comparendo, $estadoNew);
+                    }
+
+                    //Valida que tenga notificacion
+                    $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        array(
+                            'comparendo' => $params->idComparendo,
+                            'estado' => 15
+                        )
+                    );
+
+                    //Si no lo tiene lo genera automaticamente
+                    if (!$trazabilidadOld) {
+                        $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                            15
+                        );
+                        $this->generateTrazabilidad($comparendo, $estadoNew);
+                    }
+                }elseif($estado->getId() == 3){
+                    //Valida que tenga el estado de SANCIONADO
+                    $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        array(
+                            'comparendo' => $params->idComparendo,
+                            'estado' => 2
+                        )
+                    );
+
+                    if ($trazabilidadOld) {
+                        //Valida que tenga auto de avoco
+                        $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                            array(
+                                'comparendo' => $params->idComparendo,
+                                'estado' => 16
+                            )
+                        );
+
+                        //Si no lo tiene lo genera automaticamente
+                        if (!$trazabilidadOld) {
+                            $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                                16
+                            );
+
+                            $this->generateTrazabilidad($comparendo, $estadoNew);
+                        }
+
+                        //Valida que tenga mandamiento de pago
+                        $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                            array(
+                                'comparendo' => $params->idComparendo,
+                                'estado' => 18
+                            )
+                        );
+
+                        //Si no lo tiene lo genera automaticamente
+                        if (!$trazabilidadOld) {
+                            $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                                18
+                            );
+                            $this->generateTrazabilidad($comparendo, $estadoNew);
+                        }
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "No puede registrar un cobro coactivo sin estar sancionado el comparendo.",
+                        );
+
+                        return $helpers->json($response);
+                    }
+                }elseif($estado->getId() == 4){
+                    //Valida que tenga minimo el estado de SANCIONADO
+                    $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        array(
+                            'comparendo' => $params->idComparendo,
+                            'estado' => 2
+                        )
+                    );
+
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No puede registrar un acuerdo de pago sin estar sancionado el comparendo.",
+                    );
+
+                    return $helpers->json($response);
+                }elseif($estado->getId() == 15){
+                    //No genera documento solo un pdf general de todas las notificaciones para el día siguiente al auto de no comparecencia
                 }
 
                 $trazabilidad = new CvCdoTrazabilidad();
@@ -78,21 +208,9 @@ class CvCdoTrazabilidadController extends Controller
                     $trazabilidad->setObservaciones($params->observaciones);
                 }
                 $trazabilidad->setActivo(true);
-
-                if ($params->idComparendoEstado) {
-                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                        $params->idComparendoEstado
-                    );
-                }
-                    $trazabilidad->setEstado($estado);
-
-                if ($params->idComparendo) {
-                    $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
-                        $params->idComparendo
-                    );
-                    $trazabilidad->setComparendo($comparendo);
-                    $comparendo->setEstado($estado);
-                }
+                $trazabilidad->setComparendo($comparendo);
+                $comparendo->setEstado($estado);
+                $trazabilidad->setEstado($estado);
 
                 $em->persist($trazabilidad);
                 $em->flush();
@@ -262,5 +380,99 @@ class CvCdoTrazabilidadController extends Controller
         }
 
         return $helpers->json($response);
+    }
+
+    //Migrar a servicio
+    public function generateTrazabilidad($comparendo, $estado){
+        $em = $this->getDoctrine()->getManager();
+
+        if ($estado->getActualiza()) {
+            $comparendo->setEstado($estado);
+            $em->flush();
+        }
+
+        $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+            array(
+                'comparendo' => $comparendo->getId(),
+                'activo' => true
+            )
+        );
+
+        if ($trazabilidadesOld) {
+            foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
+                $trazabilidadOld->setActivo(false);
+                $em->flush();
+            }
+        }
+
+        $trazabilidad = new CvCdoTrazabilidad();
+
+        $trazabilidad->setFecha(
+            new \Datetime(date('Y-m-d'))
+        );
+        $trazabilidad->setHora(
+            new \Datetime(date('h:i:s A'))
+        );
+        $trazabilidad->setActivo(true);
+        $trazabilidad->setComparendo($comparendo);
+        $trazabilidad->setEstado($estado);
+
+        if ($estado->getFormato()) {
+            $documento = new CfgAdmActoAdministrativo();
+
+            $documento->setNumero(
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+            );
+            $documento->setFecha(new \Datetime(date('Y-m-d')));
+            $documento->setActivo(true);
+
+            $documento->setFormato(
+                $comparendo->getEstado()->getFormato()
+            );
+
+            $template = $this->generateTemplate($comparendo);
+            $documento->setCuerpo($template);
+
+            $em->persist($documento);
+            $em->flush();
+
+            $trazabilidad->setActoAdministrativo($documento);
+        }
+
+        $em->persist($trazabilidad);
+        $em->flush();
+    }
+    
+    //Migrar a servicio
+    public function generateTemplate($comparendo){
+        $helpers = $this->get("app.helpers");
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        
+        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+        $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
+
+        if ($comparendo->getInfraccion()) {
+            $replaces[] = (object)array('id' => 'DCI', 'value' => $comparendo->getInfraccion()->getDescripcion());
+            $replaces[] = (object)array('id' => 'CIC', 'value' => $comparendo->getInfraccion()->getCodigo());
+        }
+
+        if ($comparendo->getPlaca()) {
+            $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
+        }
+
+
+        $template = $helpers->createTemplate(
+          $comparendo->getEstado()->getFormato()->getCuerpo(),
+          $replaces
+        );
+
+        $template = str_replace("<br>", "<br/>", $template);
+
+        return $template;
     }
 }

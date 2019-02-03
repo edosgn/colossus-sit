@@ -36,34 +36,6 @@ class FroRecaudo
     private $valor;
 
     /**
-     * @var float
-     *
-     * @ORM\Column(name="valorMora", type="float")
-     */
-    private $valorMora;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="valorFinanciacion", type="float")
-     */
-    private $valorFinanciacion;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="valorCapital", type="float")
-     */
-    private $valorCapital;
-
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="valorDescuento", type="float")
-     */
-    private $valorDescuento;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -75,12 +47,9 @@ class FroRecaudo
      */
     private $froFactura; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sedesOperativas") */
-    private $sedeOperativa;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="recaudos") */
+    private $organismoTransito;
     
-
-   
-
     /**
      * Get id
      *
@@ -288,26 +257,26 @@ class FroRecaudo
     }
 
     /**
-     * Set sedeOperativa
+     * Set organismoTransito
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return FroRecaudo
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get organismoTransito
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getSedeOperativa()
+    public function getOrganismoTransito()
     {
-        return $this->sedeOperativa;
+        return $this->organismoTransito;
     }
 }

@@ -70,7 +70,7 @@ class BpProyectoController extends Controller
             $proyecto->setFecha(new \Datetime(date('Y-m-d')));
             $proyecto->setCuentaNumero($params->cuentaNumero);
             $proyecto->setCuentaNombre($params->cuentaNombre);
-            $proyecto->setCostoTotal($params->costoTotal);
+            $proyecto->setCostoTotal(0);
             $proyecto->setActivo(true);
 
             $em->persist($proyecto);

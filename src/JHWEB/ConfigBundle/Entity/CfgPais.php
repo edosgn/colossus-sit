@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\FinancieroBundle\Entity;
+namespace JHWEB\ConfigBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FroFacturaTramite
+ * CfgPais
  *
- * @ORM\Table(name="fro_factura_tramite")
- * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroFacturaTramiteRepository")
+ * @ORM\Table(name="cfg_pais")
+ * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgPaisRepository")
  */
-class FroFacturaTramite
+class CfgPais
 {
     /**
      * @var int
@@ -22,18 +22,18 @@ class FroFacturaTramite
     private $id;
 
     /**
-     * @var bool
+     * @var string
      *
-     * @ORM\Column(name="realizado", type="boolean")
+     * @ORM\Column(name="nombre", type="string", length=255)
      */
-    private $realizado;
+    private $nombre;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="codigo", type="integer")
      */
-    private $cantidad;
+    private $codigo;
 
     /**
      * @var bool
@@ -54,51 +54,51 @@ class FroFacturaTramite
     }
 
     /**
-     * Set realizado
+     * Set nombre
      *
-     * @param boolean $realizado
+     * @param string $nombre
      *
-     * @return FroFacturaTramite
+     * @return CfgPais
      */
-    public function setRealizado($realizado)
+    public function setNombre($nombre)
     {
-        $this->realizado = $realizado;
+        $this->nombre = $nombre;
 
         return $this;
     }
 
     /**
-     * Get realizado
+     * Get nombre
      *
-     * @return bool
+     * @return string
      */
-    public function getRealizado()
+    public function getNombre()
     {
-        return $this->realizado;
+        return $this->nombre;
     }
 
     /**
-     * Set cantidad
+     * Set codigo
      *
-     * @param integer $cantidad
+     * @param integer $codigo
      *
-     * @return FroFacturaTramite
+     * @return CfgPais
      */
-    public function setCantidad($cantidad)
+    public function setCodigo($codigo)
     {
-        $this->cantidad = $cantidad;
+        $this->codigo = $codigo;
 
         return $this;
     }
 
     /**
-     * Get cantidad
+     * Get codigo
      *
      * @return int
      */
-    public function getCantidad()
+    public function getCodigo()
     {
-        return $this->cantidad;
+        return $this->codigo;
     }
 
     /**
@@ -106,7 +106,7 @@ class FroFacturaTramite
      *
      * @param boolean $activo
      *
-     * @return FroFacturaTramite
+     * @return CfgPais
      */
     public function setActivo($activo)
     {

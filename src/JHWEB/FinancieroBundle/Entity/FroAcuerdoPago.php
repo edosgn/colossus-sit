@@ -60,7 +60,7 @@ class FroAcuerdoPago
     /**
      * @var float
      *
-     * @ORM\Column(name="valorCuotaInicial", type="float")
+     * @ORM\Column(name="valor_cuota_inicial", type="float")
      */
     private $valorCuotaInicial;
 

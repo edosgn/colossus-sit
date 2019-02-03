@@ -111,30 +111,6 @@ class MflInfraccion
     }
 
     /**
-     * Set descripcion
-     *
-     * @param string $descripcion
-     *
-     * @return MflInfraccion
-     */
-    public function setDescripcion($descripcion)
-    {
-        $this->descripcion = $descripcion;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcion
-     *
-     * @return string
-     */
-    public function getDescripcion()
-    {
-        return $this->descripcion;
-    }
-
-    /**
      * Set codigo
      *
      * @param string $codigo
@@ -156,6 +132,30 @@ class MflInfraccion
     public function getCodigo()
     {
         return $this->codigo;
+    }
+
+    /**
+     * Set descripcion
+     *
+     * @param string $descripcion
+     *
+     * @return MflInfraccion
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return string
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**

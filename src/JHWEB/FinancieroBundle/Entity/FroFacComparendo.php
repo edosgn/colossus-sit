@@ -5,12 +5,12 @@ namespace JHWEB\FinancieroBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FroFacturaComparendo
+ * FroFacComparendo
  *
- * @ORM\Table(name="fro_factura_comparendo")
- * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroFacturaComparendoRepository")
+ * @ORM\Table(name="fro_fac_comparendo")
+ * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroFacComparendoRepository")
  */
-class FroFacturaComparendo
+class FroFacComparendo
 {
     /**
      * @var int
@@ -29,6 +29,7 @@ class FroFacturaComparendo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="facturas") */
     private $comparendo;
 
+
     /**
      * Get id
      *
@@ -44,7 +45,7 @@ class FroFacturaComparendo
      *
      * @param \JHWEB\FinancieroBundle\Entity\FroFactura $factura
      *
-     * @return FroFacturaComparendo
+     * @return FroFacComparendo
      */
     public function setFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $factura = null)
     {
@@ -68,7 +69,7 @@ class FroFacturaComparendo
      *
      * @param \AppBundle\Entity\Comparendo $comparendo
      *
-     * @return FroFacturaComparendo
+     * @return FroFacComparendo
      */
     public function setComparendo(\AppBundle\Entity\Comparendo $comparendo = null)
     {

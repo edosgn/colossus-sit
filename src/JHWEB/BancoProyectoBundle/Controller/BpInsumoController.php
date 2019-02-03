@@ -82,6 +82,30 @@ class BpInsumoController extends Controller
             }
 
             $em->persist($insumo);
+
+
+            //Actualiza costo total de actividad
+            $insumos = $em->getRepository('JHWEBBancoProyectoBundle:BpInsumo')->getCostoTotalByActividad(
+                $actividad->getId()
+            );
+
+            if ($insumos) {
+                $actividad->setCostoTotal($insumos['total']);
+            }else{
+                $actividad->setCostoTotal(0);
+            }
+
+            //Actualiza costo total de proyecto
+            $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->getCostoTotalByProyecto(
+                $actividad->getProyecto()->getId()
+            );
+
+            if ($actividades) {
+                $actividad->getProyecto()->setCostoTotal($actividades['total']);
+            }else{
+                $actividad->getProyecto()->setCostoTotal(0);
+            }
+
             $em->flush();
 
             $response = array(

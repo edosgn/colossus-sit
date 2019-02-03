@@ -89,11 +89,6 @@ class CvAudienciaController extends Controller
             //Registra trazabilidad de notificación
             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(19);
 
-            if ($estado->getActualiza()) {
-                $comparendo->setEstado($estado);
-                $em->flush();
-            }
-
             $this->generateTrazabilidad($comparendo, $estado);
             
             $em->persist($audiencia);
@@ -299,6 +294,11 @@ class CvAudienciaController extends Controller
     //Migrar a servicio
     public function generateTrazabilidad($comparendo, $estado){
         $em = $this->getDoctrine()->getManager();
+
+        if ($estado->getActualiza()) {
+            $comparendo->setEstado($estado);
+            $em->flush();
+        }
 
         $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
             array(

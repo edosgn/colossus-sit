@@ -63,6 +63,7 @@ class VehiculoController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $campo = (isset($params->campo)) ? $params->campo : false;
+
             if($campo){
                 $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
                 $linea = $em->getRepository('AppBundle:Linea')->find($params->vehiculo->lineaId);
@@ -135,6 +136,7 @@ class VehiculoController extends Controller
 
                 $vin = $params->vehiculo->vin;
                 $numeroPasajeros = $params->vehiculo->numeroPasajeros;
+                $capacidadCarga = $params->vehiculo->capacidadCarga;
 
                 $lineaId = $params->vehiculo->lineaId;
                 $servicioId = $params->vehiculo->servicioId;
@@ -208,6 +210,7 @@ class VehiculoController extends Controller
                 $vehiculo->setSerie($serie);
                 $vehiculo->setVin($vin);
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
+                $vehiculo->setCapacidadCarga($capacidadCarga);
 
                 if (isset($params->vehiculo->municipioId)) {
                     $municipio = $em->getRepository('AppBundle:Municipio')->find(

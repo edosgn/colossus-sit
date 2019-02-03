@@ -29,6 +29,13 @@ class Tramite
     private $nombre;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer")
+     */
+    private $codigo;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="redondeo", type="boolean", nullable=true)
@@ -101,6 +108,30 @@ class Tramite
     public function getNombre()
     {
         return $this->nombre;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return Tramite
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**

@@ -110,9 +110,17 @@ class TramitePrecioController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-                $fechaInicio = $params->fechaInicio;
-                
+            $fechaInicio = $params->fechaInicio;
+
+            if (new \DateTime($fechaInicio) < new \DateTime('Y-m-d')) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "La fecha de inicio no puede ser inferior a la fecha actual.", 
+                );
+            }else{
                 $em = $this->getDoctrine()->getManager();
+
                 $tramitePrecio = new TramitePrecio();
                 $tramite = $em->getRepository('AppBundle:Tramite')->find($params->tramiteId);
                 $modulo = $em->getRepository('AppBundle:Modulo')->find($params->moduloId);
@@ -151,13 +159,15 @@ class TramitePrecioController extends Controller
                     'code' => 200,
                     'msj' => "precio creada con exito", 
                 );
+            }  
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
             );
-            } 
+        }
+
         return $helpers->json($response);
     }
 

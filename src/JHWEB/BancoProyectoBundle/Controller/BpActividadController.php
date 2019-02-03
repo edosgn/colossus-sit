@@ -65,10 +65,7 @@ class BpActividadController extends Controller
             $actividad = new BpActividad();
 
             $actividad->setNombre($params->nombre);
-            $actividad->setUnidadMedida($params->unidadMedida);
-            $actividad->setCantidad($params->cantidad);
-            $actividad->setCostoUnitario($params->costoUnitario);
-            $actividad->setCostoTotal($params->costoTotal);
+            $actividad->setCostoTotal(0);
             $actividad->setActivo(true);
 
             if ($params->idProyecto) {

@@ -10,4 +10,17 @@ namespace JHWEB\BancoProyectoBundle\Repository;
  */
 class BpInsumoRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene la suma de los costos de isumos por actividad
+    public function getCostoTotalByActividad($idActividad)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(i.valorTotal) AS total
+            FROM JHWEBBancoProyectoBundle:BpInsumo i
+            WHERE i.actividad = :idActividad";
+            
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('idActividad', $idActividad);
+        return $consulta->getOneOrNullResult();
+    }
 }

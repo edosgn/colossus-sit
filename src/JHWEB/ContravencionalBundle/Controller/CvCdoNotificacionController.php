@@ -265,30 +265,31 @@ class CvCdoNotificacionController extends Controller
                         //Valida si han pasado mas de 5 días
                         if ($diasHabiles > 5 && $diasHabiles <= 30) {
                             //Busca si ya se creo un auto de no comparecencia
-                            $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(14);
+                            $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                array(
+                                    'comparendo' => $comparendo->getId(),
+                                    'estado' => 14
+                                )
+                            );
+
                             if ($auto) {
-                                //Busca si ya se creo una notificacion
-                                $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(15);
+                                //Busca si ya se creo un auto de comparecencia
+                                $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                    array(
+                                        'comparendo' => $comparendo->getId(),
+                                        'estado' => 15
+                                    )
+                                );
 
                                 if (!$notificacion) {
-                                    //Registra trazabilidad de auto de no comparecencia
+                                    //Registra trazabilidad de notificacion por estado
                                     $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(15);
-
-                                    if ($estado->getActualiza()) {
-                                        $comparendo->setEstado($estado);
-                                        $em->flush();
-                                    }
 
                                     $this->generateTrazabilidad($comparendo, $estado);
                                 }
                             }else{
                                 //Registra trazabilidad de notificación
                                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
-
-                                if ($estado->getActualiza()) {
-                                    $comparendo->setEstado($estado);
-                                    $em->flush();
-                                }
 
                                 $audiencia = new CvAudiencia();
 
@@ -303,12 +304,16 @@ class CvCdoNotificacionController extends Controller
                                 $em->persist($audiencia);
                                 $em->flush();
 
-
                                 $this->generateTrazabilidad($comparendo, $estado);
                             }                            
                         }elseif ($diasCalendario > 30 && $diasCalendario <= 912) {//Valida si han pasado mas de 30 días
                             //Busca si ya se creo una sancion
-                            $sancion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(2);
+                            $sancion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                array(
+                                    'comparendo' => $comparendo->getId(),
+                                    'estado' => 2
+                                )
+                            );
 
                             if (!$sancion) {
                                 //Cambia a estado sansonatorio
@@ -324,11 +329,6 @@ class CvCdoNotificacionController extends Controller
                                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
                                     7
                                 );
-                                
-                                if ($estado->getActualiza()) {
-                                    $comparendo->setEstado($estado);
-                                    $em->flush();
-                                }
 
                                 $this->generateTrazabilidad($comparendo, $estado);
                             }
@@ -342,11 +342,6 @@ class CvCdoNotificacionController extends Controller
                             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
                                 16
                             );
-                            
-                            if ($estado->getActualiza()) {
-                                $comparendo->setEstado($estado);
-                                $em->flush();
-                            }
 
                             $this->generateTrazabilidad($comparendo, $estado);
 
@@ -354,16 +349,16 @@ class CvCdoNotificacionController extends Controller
                             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
                                 18
                             );
-                            
-                            if ($estado->getActualiza()) {
-                                $comparendo->setEstado($estado);
-                                $em->flush();
-                            }
 
                             $this->generateTrazabilidad($comparendo, $estado);
 
                             //Busca si ya se creo un cobro coactivo
-                            $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->find(3);
+                            $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                array(
+                                    'comparendo' => $comparendo->getId(),
+                                    'estado' => 3
+                                )
+                            );
 
                             if (!$cobroCoactivo) {
                                 //Cambia a estado a cobro coactivo
@@ -389,6 +384,11 @@ class CvCdoNotificacionController extends Controller
     //Migrar a servicio
     public function generateTrazabilidad($comparendo, $estado){
         $em = $this->getDoctrine()->getManager();
+
+        if ($estado->getActualiza()) {
+            $comparendo->setEstado($estado);
+            $em->flush();
+        }
 
         $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
             array(

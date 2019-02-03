@@ -1,16 +1,16 @@
 <?php
 
-namespace JHWEB\BancoProyectoBundle\Entity;
+namespace JHWEB\ConfigBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BpActividad
+ * CfgDepartamento
  *
- * @ORM\Table(name="bp_actividad")
- * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpActividadRepository")
+ * @ORM\Table(name="cfg_departamento")
+ * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgDepartamentoRepository")
  */
-class BpActividad
+class CfgDepartamento
 {
     /**
      * @var int
@@ -31,9 +31,9 @@ class BpActividad
     /**
      * @var int
      *
-     * @ORM\Column(name="costo_total", type="integer")
+     * @ORM\Column(name="codigo_dane", type="integer")
      */
-    private $costoTotal;
+    private $codigoDane;
 
     /**
      * @var bool
@@ -43,15 +43,15 @@ class BpActividad
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="BpProyecto")
-     **/
-    protected $proyecto;
+     * @ORM\ManyToOne(targetEntity="CfgPais", inversedBy="departamentos")
+     */
+    private $pais;
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -63,7 +63,7 @@ class BpActividad
      *
      * @param string $nombre
      *
-     * @return BpActividad
+     * @return CfgDepartamento
      */
     public function setNombre($nombre)
     {
@@ -83,27 +83,27 @@ class BpActividad
     }
 
     /**
-     * Set costoTotal
+     * Set codigoDane
      *
-     * @param integer $costoTotal
+     * @param integer $codigoDane
      *
-     * @return BpActividad
+     * @return CfgDepartamento
      */
-    public function setCostoTotal($costoTotal)
+    public function setCodigoDane($codigoDane)
     {
-        $this->costoTotal = $costoTotal;
+        $this->codigoDane = $codigoDane;
 
         return $this;
     }
 
     /**
-     * Get costoTotal
+     * Get codigoDane
      *
-     * @return integer
+     * @return int
      */
-    public function getCostoTotal()
+    public function getCodigoDane()
     {
-        return $this->costoTotal;
+        return $this->codigoDane;
     }
 
     /**
@@ -111,7 +111,7 @@ class BpActividad
      *
      * @param boolean $activo
      *
-     * @return BpActividad
+     * @return CfgDepartamento
      */
     public function setActivo($activo)
     {
@@ -123,7 +123,7 @@ class BpActividad
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
@@ -131,26 +131,26 @@ class BpActividad
     }
 
     /**
-     * Set proyecto
+     * Set pais
      *
-     * @param \JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto
+     * @param \JHWEB\ConfigBundle\Entity\CfgPais $pais
      *
-     * @return BpActividad
+     * @return CfgDepartamento
      */
-    public function setProyecto(\JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto = null)
+    public function setPais(\JHWEB\ConfigBundle\Entity\CfgPais $pais = null)
     {
-        $this->proyecto = $proyecto;
+        $this->pais = $pais;
 
         return $this;
     }
 
     /**
-     * Get proyecto
+     * Get pais
      *
-     * @return \JHWEB\BancoProyectoBundle\Entity\BpProyecto
+     * @return \JHWEB\ConfigBundle\Entity\CfgPais
      */
-    public function getProyecto()
+    public function getPais()
     {
-        return $this->proyecto;
+        return $this->pais;
     }
 }

@@ -45,9 +45,23 @@ class FroFactura
     /**
      * @var float
      *
-     * @ORM\Column(name="valor", type="float")
+     * @ORM\Column(name="valor_bruto", type="float")
      */
-    private $valor;
+    private $valorBruto;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_mora", type="float")
+     */
+    private $valorMora;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_neto", type="float")
+     */
+    private $valorNeto;
 
     /**
      * @var string
@@ -171,27 +185,75 @@ class FroFactura
     }
 
     /**
-     * Set valor
+     * Set valorBruto
      *
-     * @param float $valor
+     * @param float $valorBruto
      *
      * @return FroFactura
      */
-    public function setValor($valor)
+    public function setValorBruto($valorBruto)
     {
-        $this->valor = $valor;
+        $this->valorBruto = $valorBruto;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get valorBruto
      *
      * @return float
      */
-    public function getValor()
+    public function getValorBruto()
     {
-        return $this->valor;
+        return $this->valorBruto;
+    }
+
+    /**
+     * Set valorMora
+     *
+     * @param float $valorMora
+     *
+     * @return FroFactura
+     */
+    public function setValorMora($valorMora)
+    {
+        $this->valorMora = $valorMora;
+
+        return $this;
+    }
+
+    /**
+     * Get valorMora
+     *
+     * @return float
+     */
+    public function getValorMora()
+    {
+        return $this->valorMora;
+    }
+
+    /**
+     * Set valorNeto
+     *
+     * @param float $valorNeto
+     *
+     * @return FroFactura
+     */
+    public function setValorNeto($valorNeto)
+    {
+        $this->valorNeto = $valorNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get valorNeto
+     *
+     * @return float
+     */
+    public function getValorNeto()
+    {
+        return $this->valorNeto;
     }
 
     /**

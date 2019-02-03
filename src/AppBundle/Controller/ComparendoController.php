@@ -702,7 +702,8 @@ class ComparendoController extends Controller
 
             $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
                 array(
-                    'infractorIdentificacion' => $params->infractorIdentificacion
+                    'infractorIdentificacion' => $params->infractorIdentificacion,
+                    'estado' => array(1,2,3,4,5)
                 )
             );
 
@@ -1077,8 +1078,16 @@ class ComparendoController extends Controller
 
         $usuario = $em->getRepository('UsuarioBundle:Usuario')->find($idUsuario);
 
+        $comparendos = $em->getRepository('AppBundle:Comparendo')->findBy(
+            array(
+                'infractorIdentificacion' => $usuario->getIdentificacion(),
+                'estado' => array(1,2,3,4,5)
+            )
+        );
+
         $html = $this->renderView('@App/comparendo/pdf.template.html.twig', array(
             'usuario'=>$usuario,
+            'comparendos'=>$comparendos,
             'fechaActual' => $fechaActual
         ));
 

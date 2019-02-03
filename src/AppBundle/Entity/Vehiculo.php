@@ -106,6 +106,13 @@ class Vehiculo
     private $numeroPasajeros;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="capacidad_carga", type="integer", nullable= true)
+     */
+    private $capacidadCarga;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="estado", type="boolean")
@@ -976,5 +983,29 @@ class Vehiculo
     public function getPaisRegistro()
     {
         return $this->paisRegistro;
+    }
+
+    /**
+     * Set capacidadCarga
+     *
+     * @param integer $capacidadCarga
+     *
+     * @return Vehiculo
+     */
+    public function setCapacidadCarga($capacidadCarga)
+    {
+        $this->capacidadCarga = $capacidadCarga;
+
+        return $this;
+    }
+
+    /**
+     * Get capacidadCarga
+     *
+     * @return integer
+     */
+    public function getCapacidadCarga()
+    {
+        return $this->capacidadCarga;
     }
 }
