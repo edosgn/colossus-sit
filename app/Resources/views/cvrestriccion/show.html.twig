@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvrestriccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cvRestriccion.id }}</td>
+            </tr>
+            <tr>
+                <th>Idforanea</th>
+                <td>{{ cvRestriccion.idForanea }}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{ cvRestriccion.observaciones }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvrestriccion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cvrestriccion_edit', { 'id': cvRestriccion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

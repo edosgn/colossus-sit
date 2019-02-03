@@ -35,18 +35,34 @@ class CvRestriccion
      */
     private $observaciones;
 
-
+ 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="notificaciones") */
     private $vehiculo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="notificaciones") */
-    private $ciudadano;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombres", type="string", length=255)
+     */
+    private $nombres;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="apellidos", type="string", length=255)
+     */
+    private $apellidos;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identificacion", type="string", length=255)
+     */
+    private $identificacion;
+
+    
     /** @ORM\ManyToOne(targetEntity="CvCfgTipoRestriccion", inversedBy="notificaciones") */
     private $tipoRestriccion;
-
-
-
 
 
     /**
@@ -108,6 +124,78 @@ class CvRestriccion
     }
 
     /**
+     * Set nombres
+     *
+     * @param string $nombres
+     *
+     * @return CvRestriccion
+     */
+    public function setNombres($nombres)
+    {
+        $this->nombres = $nombres;
+
+        return $this;
+    }
+
+    /**
+     * Get nombres
+     *
+     * @return string
+     */
+    public function getNombres()
+    {
+        return $this->nombres;
+    }
+
+    /**
+     * Set apellidos
+     *
+     * @param string $apellidos
+     *
+     * @return CvRestriccion
+     */
+    public function setApellidos($apellidos)
+    {
+        $this->apellidos = $apellidos;
+
+        return $this;
+    }
+
+    /**
+     * Get apellidos
+     *
+     * @return string
+     */
+    public function getApellidos()
+    {
+        return $this->apellidos;
+    }
+
+    /**
+     * Set identificacion
+     *
+     * @param string $identificacion
+     *
+     * @return CvRestriccion
+     */
+    public function setIdentificacion($identificacion)
+    {
+        $this->identificacion = $identificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacion
+     *
+     * @return string
+     */
+    public function getIdentificacion()
+    {
+        return $this->identificacion;
+    }
+
+    /**
      * Set vehiculo
      *
      * @param \AppBundle\Entity\Vehiculo $vehiculo
@@ -129,30 +217,6 @@ class CvRestriccion
     public function getVehiculo()
     {
         return $this->vehiculo;
-    }
-
-    /**
-     * Set ciudadano
-     *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
-     *
-     * @return CvRestriccion
-     */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
-    {
-        $this->ciudadano = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadano
-     *
-     * @return \AppBundle\Entity\Ciudadano
-     */
-    public function getCiudadano()
-    {
-        return $this->ciudadano;
     }
 
     /**

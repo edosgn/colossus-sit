@@ -2,7 +2,7 @@
 
 namespace JHWEB\ContravencionalBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvLcCfgRestriccion;
+use JHWEB\ContravencionalBundle\Entity\CvRestriccion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -10,14 +10,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 /**
  * Cvlccfgrestriccion controller.
  *
- * @Route("cvlccfgrestriccion")
+ * @Route("cvrestriccion")
  */
-class CvLcCfgRestriccionController extends Controller
+class CvRestriccionController extends Controller
 {
     /**
-     * Lists all cvLcCfgRestriccion entities.
+     * Lists all cvRestriccion entities.
      *
-     * @Route("/", name="cvlccfgrestriccion_index")
+     * @Route("/", name="cvrestriccion_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,11 +26,7 @@ class CvLcCfgRestriccionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $restricciones = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->findBy(
-            array(
-                'activo' => true
-            )
-        );
+        $restricciones = $em->getRepository('JHWEBContravencionalBundle:CvRestriccion')->findAll();
 
         $response['data'] = array();
 
@@ -47,9 +43,9 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Creates a new cvLcCfgRestriccion entity.
+     * Creates a new cvRestriccion entity.
      *
-     * @Route("/new", name="cvlccfgrestriccion_new")
+     * @Route("/new", name="cvrestriccion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -62,7 +58,7 @@ class CvLcCfgRestriccionController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
            
-            $restriccion = new CvLcCfgRestriccion();
+            $restriccion = new CvRestriccion();
 
             $restriccion->setDescripcion($params->descripcion);
             $restriccion->setActivo(true);
@@ -89,9 +85,9 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Finds and displays a cvLcCfgRestriccion entity.
+     * Finds and displays a cvRestriccion entity.
      *
-     * @Route("/show", name="cvlccfgrestriccion_show")
+     * @Route("/show", name="cvrestriccion_show")
      * @Method("GET")
      */
     public function showAction(Request $request)
@@ -99,14 +95,14 @@ class CvLcCfgRestriccionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+    
         if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
-            $restriccion = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->find(
+            $restriccion = $em->getRepository('JHWEBContravencionalBundle:CvRestriccion')->find(
                 $params->id
             );
 
@@ -136,9 +132,9 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing cvLcCfgRestriccion entity.
+     * Displays a form to edit an existing cvRestriccion entity.
      *
-     * @Route("/edit", name="cvlccfgrestriccion_edit")
+     * @Route("/edit", name="cvrestriccion_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -153,7 +149,7 @@ class CvLcCfgRestriccionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $restriccion = $em->getRepository("JHWEBContravencionalBundle:CvLcCfgRestriccion")->find(
+            $restriccion = $em->getRepository("JHWEBContravencionalBundle:CvRestriccion")->find(
                 $params->id
             );
 
@@ -187,9 +183,9 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Deletes a cvLcCfgRestriccion entity.
+     * Deletes a cvRestriccion entity.
      *
-     * @Route("/delete", name="cvlccfgrestriccion_delete")
+     * @Route("/delete", name="cvrestriccion_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -204,7 +200,7 @@ class CvLcCfgRestriccionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $restriccion = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->find(
+            $restriccion = $em->getRepository('JHWEBContravencionalBundle:CvRestriccion')->find(
                 $params->id
             );
             $restriccion->setActivo(false);
@@ -228,16 +224,16 @@ class CvLcCfgRestriccionController extends Controller
     }
 
     /**
-     * Creates a form to delete a cvLcCfgRestriccion entity.
+     * Creates a form to delete a cvRestriccion entity.
      *
-     * @param CvLcCfgRestriccion $cvLcCfgRestriccion The cvLcCfgRestriccion entity
+     * @param CvRestriccion $cvRestriccion The cvRestriccion entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvLcCfgRestriccion $cvLcCfgRestriccion)
+    private function createDeleteForm(CvRestriccion $cvRestriccion)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvlccfgrestriccion_delete', array('id' => $cvLcCfgRestriccion->getId())))
+            ->setAction($this->generateUrl('cvrestriccion_delete', array('id' => $cvRestriccion->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -248,7 +244,7 @@ class CvLcCfgRestriccionController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="cvlccfgrestriccion_select")
+     * @Route("/select", name="cvrestriccion_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -259,7 +255,7 @@ class CvLcCfgRestriccionController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
         
-        $restricciones = $em->getRepository('JHWEBContravencionalBundle:CvLcCfgRestriccion')->findBy(
+        $restricciones = $em->getRepository('JHWEBContravencionalBundle:CvRestriccion')->findBy(
             array(
                 'activo' => true
             )

@@ -112,7 +112,7 @@ class FroAcuerdoPagoController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         } 
-        return $helpers->json($response);
+        return $helpers->json($response); 
     }
 
     /**
