@@ -73,7 +73,7 @@ class BpCdp
     /**
      * @var string
      *
-     * @ORM\Column(name="valor_letras", type="string", length=255, nullable=true)
+     * @ORM\Column(name="valor_letras", type="text", nullable=true)
      */
     private $valorLetras;
 
@@ -169,6 +169,9 @@ class BpCdp
      */
     public function getSolicitudFecha()
     {
+        if ($this->solicitudFecha) {
+            return $this->solicitudFecha->format('d/m/Y');
+        }
         return $this->solicitudFecha;
     }
 

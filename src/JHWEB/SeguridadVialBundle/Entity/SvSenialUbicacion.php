@@ -64,6 +64,13 @@ class SvSenialUbicacion
     private $cantidad;
 
     /**
+     * @var array
+     *
+     * @ORM\Column(name="geolocalizacion", type="array", nullable=true)
+     */
+    private $geolocalizacion;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="adjunto", type="string", length=255, nullable=true)
@@ -87,6 +94,9 @@ class SvSenialUbicacion
 
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialLinea", inversedBy="ubicaciones") */
     private $linea;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialProveedor", inversedBy="bodegas") */
+    private $proveedor;
 
     /**
      * Get id
@@ -246,6 +256,30 @@ class SvSenialUbicacion
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set geolocalizacion
+     *
+     * @param array $geolocalizacion
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setGeolocalizacion($geolocalizacion)
+    {
+        $this->geolocalizacion = $geolocalizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get geolocalizacion
+     *
+     * @return array
+     */
+    public function getGeolocalizacion()
+    {
+        return $this->geolocalizacion;
     }
 
     /**
@@ -414,5 +448,29 @@ class SvSenialUbicacion
     public function getLinea()
     {
         return $this->linea;
+    }
+
+    /**
+     * Set proveedor
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setProveedor(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor = null)
+    {
+        $this->proveedor = $proveedor;
+
+        return $this;
+    }
+
+    /**
+     * Get proveedor
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor
+     */
+    public function getProveedor()
+    {
+        return $this->proveedor;
     }
 }

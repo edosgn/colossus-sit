@@ -5,7 +5,9 @@ namespace JHWEB\BancoProyectoBundle\Controller;
 use JHWEB\BancoProyectoBundle\Entity\BpCdp;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Numbers_Words;
 
 /**
  * Bpcdp controller.
@@ -216,7 +218,13 @@ class BpCdpController extends Controller
                 $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
                 $cdp->setActividad($actividad);
                 $cdp->setValor($actividad->getCostoTotal());
+
+                $valorEnLetras = Numbers_Words::toWords(
+                    $actividad->getCostoTotal(), 'es'
+                );
+                $cdp->setValorLetras($valorEnLetras);
             }
+
 
             $cdp->setActivo(true);
 
