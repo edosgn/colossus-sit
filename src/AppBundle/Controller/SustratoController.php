@@ -154,8 +154,6 @@ class SustratoController extends Controller
                 array('consecutivo' => $consecutivo,'estado'=>'Disponible')
             );
 
-           
-
             if ($sustrato) {
                 $response = array(
                         'status' => 'success',

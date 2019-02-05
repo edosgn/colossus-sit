@@ -111,12 +111,13 @@ class InsumoController extends Controller
                 
                 while ($desde <= $hasta) {
                     
-
+                    
                     $insumo = new Insumo();
                     $em = $this->getDoctrine()->getManager();
                     $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
                     
                     $insumo->setNumero($casoInsumo->getModulo()->getSiglaSustrato().$desde);
+                    $insumo->setSedeOperativa($sedeOperativa);
                     $insumo->setCasoInsumo($casoInsumo);
                     $insumo->setLoteInsumo($loteInsumo); 
                     $insumo->setFecha($fecha);
@@ -383,7 +384,7 @@ class InsumoController extends Controller
         $params = json_decode($json);
 
         $sustratos = $em->getRepository('AppBundle:Insumo')->findBy(
-            array('tipo'=>'Sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen), 
+            array('tipo'=>'sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen), 
             array('id' => 'DESC'),$params->cantidad
         );
 
@@ -424,6 +425,38 @@ class InsumoController extends Controller
             'code' => 400,
             'msj' => 'Sustratos reasignados:'.count($sustratos),
         );
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all insumo entities.
+     *
+     * @Route("/show/ultimo/sustrato/disponible", name="insumo_sustrato_ultimo_disponible")
+     * @Method({"GET", "POST"})
+     */
+    public function showUltimoSustratoDisponibleAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager(); 
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+
+        
+        $numeroSustrato = $em->getRepository('AppBundle:Insumo')->getLastByFuncionario($params->sedeOperativa);
+        if ($numeroSustrato['numero']) {
+            $response = array(
+                'status' => 'success',
+                'code' => 400,
+                'numero' => $numeroSustrato['numero'],
+            );
+        }else {
+            $response = array(
+                'status' => 'error',
+                'code' => 200,
+                'msj' => 'sin sustratos',
+            );
+        }
         
         return $helpers->json($response);
     }
