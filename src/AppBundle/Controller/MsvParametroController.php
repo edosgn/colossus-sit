@@ -45,8 +45,8 @@ class MsvParametroController extends Controller
         $categoriaId = $request->get("json", null);
 
         $authCheck = $helpers->authCheck($hash);
-        // var_dump($categoriaId);
-        // die();
+        /* var_dump($categoriaId);
+        die(); */
         $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
         $msvParametrosArray = null;
         foreach ($msvParametros as $keyParametro => $msvParametro) {
@@ -89,7 +89,8 @@ class MsvParametroController extends Controller
             'status' => 'succes',
             'code' => 200,
             'msj' => "Parametros no encontrados",
-            'data' => $msvParametrosArray,);
+            'data' => $msvParametrosArray
+            );
         return $helpers ->json($response);
     }
 
