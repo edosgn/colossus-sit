@@ -73,7 +73,9 @@ class FacturaInsumoController extends Controller
 
             $facturaInsumo->setDescripcion($descripcion);
             $facturaInsumo->setEntregado($entregado);
-            $facturaInsumo->setCiudadano($usuario->getCiudadano());
+            if ($usuario) {
+                $facturaInsumo->setCiudadano($usuario->getCiudadano());
+            }
             $facturaInsumo->setInsumo($insumo);
             $facturaInsumo->setFactura($factura);
             $fecha = new \DateTime();

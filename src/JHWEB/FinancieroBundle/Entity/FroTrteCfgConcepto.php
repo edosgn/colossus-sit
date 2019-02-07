@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\FinancieroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * ConceptoParametro
+ * FroTrteCfgConcepto
  *
- * @ORM\Table(name="concepto_parametro")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ConceptoParametroRepository")
+ * @ORM\Table(name="fro_trte_cfg_concepto")
+ * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroTrteCfgConceptoRepository")
  */
-class ConceptoParametro
+class FroTrteCfgConcepto
 {
     /**
      * @var int
@@ -43,16 +43,17 @@ class ConceptoParametro
     private $cuenta;
 
     /**
-     * @var boolean
+     * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado;
+    private $activo;
+
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -64,7 +65,7 @@ class ConceptoParametro
      *
      * @param string $nombre
      *
-     * @return ConceptoParametro
+     * @return FroTrteCfgConcepto
      */
     public function setNombre($nombre)
     {
@@ -88,7 +89,7 @@ class ConceptoParametro
      *
      * @param integer $valor
      *
-     * @return ConceptoParametro
+     * @return FroTrteCfgConcepto
      */
     public function setValor($valor)
     {
@@ -100,7 +101,7 @@ class ConceptoParametro
     /**
      * Get valor
      *
-     * @return integer
+     * @return int
      */
     public function getValor()
     {
@@ -108,35 +109,11 @@ class ConceptoParametro
     }
 
     /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return ConceptoParametro
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
-
-    /**
      * Set cuenta
      *
      * @param string $cuenta
      *
-     * @return ConceptoParametro
+     * @return FroTrteCfgConcepto
      */
     public function setCuenta($cuenta)
     {
@@ -154,4 +131,29 @@ class ConceptoParametro
     {
         return $this->cuenta;
     }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return FroTrteCfgConcepto
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return bool
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
 }
+

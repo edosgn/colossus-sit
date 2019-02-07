@@ -241,7 +241,7 @@ class MpersonalComparendoController extends Controller
             $params = json_decode($json);
 
             $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->getLastByFuncionario($params->funcionario->id);
-                
+                 
             if ($comparendo) {
                 $comparendo = $em->getRepository('AppBundle:MpersonalComparendo')->find(
                     $comparendo['id']

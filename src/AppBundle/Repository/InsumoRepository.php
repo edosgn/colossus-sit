@@ -10,4 +10,24 @@ namespace AppBundle\Repository;
  */
 class InsumoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el minimo insumo sustrato disponible
+    public function getLastByFuncionario($idSedeOperativa)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(i.id) AS id, i.numero
+            FROM AppBundle:Insumo i
+            WHERE i.sedeOperativa = :idSedeOperativa
+            AND i.estado = :estado
+            AND i.tipo = :tipo";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idSedeOperativa' => $idSedeOperativa,
+            'estado' => 'disponible',
+            'tipo' => 'sustrato',
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

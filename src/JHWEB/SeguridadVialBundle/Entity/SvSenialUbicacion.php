@@ -36,27 +36,6 @@ class SvSenialUbicacion
     private $hora;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="latitud", type="string", length=100, nullable=true)
-     */
-    private $latitud;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="longitud", type="string", length=100, nullable=true)
-     */
-    private $longitud;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="direccion", type="string", length=255)
-     */
-    private $direccion;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="cantidad", type="integer", nullable=true)
@@ -77,9 +56,6 @@ class SvSenialUbicacion
      */
     private $adjunto;
 
-    /** @ORM\ManyToOne(targetEntity="SvCfgSenialConector", inversedBy="ubicaciones") */
-    private $conector;
-
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
 
@@ -95,8 +71,11 @@ class SvSenialUbicacion
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialLinea", inversedBy="ubicaciones") */
     private $linea;
 
-    /** @ORM\ManyToOne(targetEntity="SvCfgSenialProveedor", inversedBy="bodegas") */
-    private $proveedor;
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialUnidadMedida", inversedBy="ubicaciones") */
+    private $unidadMedida;
+
+    /** @ORM\ManyToOne(targetEntity="SvSenialBodega", inversedBy="ubicaciones") */
+    private $bodega;
 
     /**
      * Get id
@@ -160,78 +139,6 @@ class SvSenialUbicacion
             return $this->hora->format('h:m:s A');
         }
         return $this->hora;
-    }
-
-    /**
-     * Set latitud
-     *
-     * @param string $latitud
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setLatitud($latitud)
-    {
-        $this->latitud = $latitud;
-
-        return $this;
-    }
-
-    /**
-     * Get latitud
-     *
-     * @return string
-     */
-    public function getLatitud()
-    {
-        return $this->latitud;
-    }
-
-    /**
-     * Set longitud
-     *
-     * @param string $longitud
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setLongitud($longitud)
-    {
-        $this->longitud = $longitud;
-
-        return $this;
-    }
-
-    /**
-     * Get longitud
-     *
-     * @return string
-     */
-    public function getLongitud()
-    {
-        return $this->longitud;
-    }
-
-    /**
-     * Set direccion
-     *
-     * @param string $direccion
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setDireccion($direccion)
-    {
-        $this->direccion = $direccion;
-
-        return $this;
-    }
-
-    /**
-     * Get direccion
-     *
-     * @return string
-     */
-    public function getDireccion()
-    {
-        return $this->direccion;
     }
 
     /**
@@ -304,30 +211,6 @@ class SvSenialUbicacion
     public function getAdjunto()
     {
         return $this->adjunto;
-    }
-
-    /**
-     * Set conector
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector $conector
-     *
-     * @return SvSenialUbicacion
-     */
-    public function setConector(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector $conector = null)
-    {
-        $this->conector = $conector;
-
-        return $this;
-    }
-
-    /**
-     * Get conector
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector
-     */
-    public function getConector()
-    {
-        return $this->conector;
     }
 
     /**
@@ -451,26 +334,50 @@ class SvSenialUbicacion
     }
 
     /**
-     * Set proveedor
+     * Set unidadMedida
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialUnidadMedida $unidadMedida
      *
      * @return SvSenialUbicacion
      */
-    public function setProveedor(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor = null)
+    public function setUnidadMedida(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialUnidadMedida $unidadMedida = null)
     {
-        $this->proveedor = $proveedor;
+        $this->unidadMedida = $unidadMedida;
 
         return $this;
     }
 
     /**
-     * Get proveedor
+     * Get unidadMedida
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialUnidadMedida
      */
-    public function getProveedor()
+    public function getUnidadMedida()
     {
-        return $this->proveedor;
+        return $this->unidadMedida;
+    }
+
+    /**
+     * Set bodega
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvSenialBodega $bodega
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setBodega(\JHWEB\SeguridadVialBundle\Entity\SvSenialBodega $bodega = null)
+    {
+        $this->bodega = $bodega;
+
+        return $this;
+    }
+
+    /**
+     * Get bodega
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvSenialBodega
+     */
+    public function getBodega()
+    {
+        return $this->bodega;
     }
 }
