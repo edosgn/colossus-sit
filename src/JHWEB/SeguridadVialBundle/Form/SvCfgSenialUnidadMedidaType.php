@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SvCfgSenialConectorType extends AbstractType
+class SvCfgSenialUnidadMedidaType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -20,7 +20,7 @@ class SvCfgSenialConectorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'JHWEB\SeguridadVialBundle\Entity\SvCfgSenialConector'
+            'data_class' => 'JHWEB\SeguridadVialBundle\Entity\SvCfgSenialUnidadMedida'
         ));
     }
 
@@ -29,7 +29,7 @@ class SvCfgSenialConectorType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'jhweb_seguridadvialbundle_svcfgsenialconector';
+        return 'jhweb_seguridadvialbundle_svcfgsenialunidadmedida';
     }
 
 

@@ -70,6 +70,11 @@ class FroTrtePrecio
     private $clase;
 
     /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="precios")
+     **/
+    protected $modulo;
+
+    /**
      * Get id
      *
      * @return int
@@ -269,5 +274,29 @@ class FroTrtePrecio
     public function getClase()
     {
         return $this->clase;
+    }
+
+    /**
+     * Set modulo
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgModulo $modulo
+     *
+     * @return FroTrtePrecio
+     */
+    public function setModulo(\JHWEB\ConfigBundle\Entity\CfgModulo $modulo = null)
+    {
+        $this->modulo = $modulo;
+
+        return $this;
+    }
+
+    /**
+     * Get modulo
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgModulo
+     */
+    public function getModulo()
+    {
+        return $this->modulo;
     }
 }

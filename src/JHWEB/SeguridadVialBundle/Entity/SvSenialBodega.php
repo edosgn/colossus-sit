@@ -38,9 +38,16 @@ class SvSenialBodega
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="cantidad_entregada", type="integer")
      */
-    private $cantidad;
+    private $cantidadEntregada;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad_disponible", type="integer")
+     */
+    private $cantidadDisponible;
 
     /**
      * @var float
@@ -134,27 +141,51 @@ class SvSenialBodega
     }
 
     /**
-     * Set cantidad
+     * Set cantidadEntregada
      *
-     * @param integer $cantidad
+     * @param integer $cantidadEntregada
      *
      * @return SvSenialBodega
      */
-    public function setCantidad($cantidad)
+    public function setCantidadEntregada($cantidadEntregada)
     {
-        $this->cantidad = $cantidad;
+        $this->cantidadEntregada = $cantidadEntregada;
 
         return $this;
     }
 
     /**
-     * Get cantidad
+     * Get cantidadEntregada
      *
      * @return integer
      */
-    public function getCantidad()
+    public function getCantidadEntregada()
     {
-        return $this->cantidad;
+        return $this->cantidadEntregada;
+    }
+
+    /**
+     * Set cantidadDisponible
+     *
+     * @param integer $cantidadDisponible
+     *
+     * @return SvSenialBodega
+     */
+    public function setCantidadDisponible($cantidadDisponible)
+    {
+        $this->cantidadDisponible = $cantidadDisponible;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadDisponible
+     *
+     * @return integer
+     */
+    public function getCantidadDisponible()
+    {
+        return $this->cantidadDisponible;
     }
 
     /**

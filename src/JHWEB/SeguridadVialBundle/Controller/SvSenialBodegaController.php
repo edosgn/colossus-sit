@@ -94,7 +94,8 @@ class SvSenialBodegaController extends Controller
 
             $bodega->setFecha(new \Datetime($params->fecha));
             $bodega->setHora(new \Datetime($params->hora));
-            $bodega->setCantidad($params->cantidad);
+            $bodega->setCantidadEntregada($params->cantidad);
+            $bodega->setCantidadDisponible($params->cantidad);
             $bodega->setValor($params->valor);
 
             if ($request->files->get('file')) {
@@ -220,5 +221,35 @@ class SvSenialBodegaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ========================================================= */
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/proveedor/senial", name="svcfgsenialproveedor_select_proveedor_senial")
+     * @Method({"GET", "POST"})
+     */
+    public function selectProveedorBySenialAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $json = $request->get("data", null);
+        $params = json_decode($json);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $bodegas = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->getProveedorBySenial($params->idSenial);
+
+        $response = null;
+
+        foreach ($bodegas as $key => $bodega) {
+            $response[$key] = array(
+                'value' => $bodega->getId(),
+                'label' => $bodega->getProveedor()->getNombre().' ('.$bodega->getCantidadDisponible().')',
+            );
+        }
+
+        return $helpers->json($response);
     }
 }
