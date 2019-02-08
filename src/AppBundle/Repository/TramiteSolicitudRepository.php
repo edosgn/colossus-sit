@@ -73,8 +73,7 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT ts, count(ts.tramiteFactura) as conteo
                 FROM AppBundle:tramiteSolicitud ts
                 GROUP BY ts.tramiteFactura
-                ORDER BY ts.id ASC
-            ";
+                ORDER BY ts.id ASC";
         $consulta = $em->createQuery($dql);
         
         return $consulta->getResult();
@@ -125,6 +124,19 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    public function findMatriculaCancelada($params)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT ts
+            FROM AppBundle:TramiteFactura tf, AppBundle:Tramite t
+            WHERE tf.factura.vehiculo.id = :idVehiculo
+            AND tf.tramite.cancelado = true
+            AND tf.realizado = 1";
+        $consulta = $em->creatyQuery($dql);
 
-    
+        $consulta->setParameters(array(
+            'idVehiculo' => $params->datos->idVehiculo,
+        ));
+        return $consulta->getResultOrNull();
+    }    
 }

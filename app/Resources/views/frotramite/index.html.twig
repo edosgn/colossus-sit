@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frotramites list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Codigo</th>
+                <th>Nombre</th>
+                <th>Sustrato</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froTramite in froTramites %}
+            <tr>
+                <td><a href="{{ path('frotramite_show', { 'id': froTramite.id }) }}">{{ froTramite.id }}</a></td>
+                <td>{{ froTramite.codigo }}</td>
+                <td>{{ froTramite.nombre }}</td>
+                <td>{% if froTramite.sustrato %}Yes{% else %}No{% endif %}</td>
+                <td>{% if froTramite.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('frotramite_show', { 'id': froTramite.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

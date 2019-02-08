@@ -183,6 +183,8 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setVehiculo($vehiculo);
             }
 
+            VAR_DUMP($params);
+
             if ($datos->idFactura && $datos->tramiteFormulario) {
                 $factura = $em->getRepository('AppBundle:Factura')->find(
                     $datos->idFactura
@@ -435,6 +437,41 @@ class TramiteSolicitudController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "No hay tramites entre esas fechas",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all tramiteSolicitud entities.
+     *
+     * @Route("/buscar/matricula/cancelada", name="tramitesolicitud_matriculada_cancelada")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarMatriculadaActionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $datos = $request->get("json", null);
+        $params = json_decode($datos);
+        var_dump($params);
+        die();
+        $authCheck = $helpers->authCheck($hash);
+        $matriculaCancelada = $em->getRepository('AppBundle:TramiteSolicitud')->findMatriculaCancelada($params);
+
+        if ($matriculaCancelada) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "La matricula se encuentra cancelada",
+                'data' => $matriculaCancelada,
+            );} else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "La matricula no se encuentra cancelada",
             );
         }
         return $helpers->json($response);

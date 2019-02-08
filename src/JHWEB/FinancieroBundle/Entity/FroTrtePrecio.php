@@ -153,7 +153,9 @@ class FroTrtePrecio
      */
     public function getFechaInicio()
     {
-        return $this->fechaInicio;
+        if ($this->fechaInicio) {
+            return $this->fechaInicio->format('d/m/Y');
+        }
     }
 
     /**
