@@ -56,6 +56,13 @@ class SvSenialUbicacion
      */
     private $adjunto;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="proveedor", type="string", length=255, nullable=true)
+     */
+    private $proveedor;
+
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
 
@@ -379,5 +386,29 @@ class SvSenialUbicacion
     public function getBodega()
     {
         return $this->bodega;
+    }
+
+    /**
+     * Set proveedor
+     *
+     * @param string $proveedor
+     *
+     * @return SvSenialUbicacion
+     */
+    public function setProveedor($proveedor)
+    {
+        $this->proveedor = $proveedor;
+
+        return $this;
+    }
+
+    /**
+     * Get proveedor
+     *
+     * @return string
+     */
+    public function getProveedor()
+    {
+        return $this->proveedor;
     }
 }
