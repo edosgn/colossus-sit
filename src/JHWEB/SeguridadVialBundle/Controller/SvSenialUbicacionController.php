@@ -114,10 +114,16 @@ class SvSenialUbicacionController extends Controller
                             $params->idBodega);
                         $ubicacion->setBodega($bodega);
                         
-                        if (!$params->idUnidadMedida) {
+                        if (!$params->idUnidadMedida && !$params->idProveedor) {
                             $bodega->setCantidadDisponible($bodega->getCantidadDisponible() - $params->cantidad);
                             $em->flush();
                         }
+                    }
+
+                    if ($params->idProveedor) {
+                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
+                            $params->idProveedor);
+                        $ubicacion->setProveedor($proveedor->getNombre());
                     }
 
                     if ($params->idLinea) {
