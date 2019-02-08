@@ -111,8 +111,8 @@ class TramitePrecioController extends Controller
             $params = json_decode($json);
 
             $fechaInicio = $params->fechaInicio;
-
-            if (new \DateTime($fechaInicio) < new \DateTime('Y-m-d')) {
+            
+            if (new \DateTime($fechaInicio) < new \DateTime(date('Y-m-d'))) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,

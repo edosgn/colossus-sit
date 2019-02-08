@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfgsenialunidadmedidas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgSenialUnidadMedida in svCfgSenialUnidadMedidas %}
+            <tr>
+                <td><a href="{{ path('svcfgsenialunidadmedida_show', { 'id': svCfgSenialUnidadMedida.id }) }}">{{ svCfgSenialUnidadMedida.id }}</a></td>
+                <td>{{ svCfgSenialUnidadMedida.nombre }}</td>
+                <td>{% if svCfgSenialUnidadMedida.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfgsenialunidadmedida_show', { 'id': svCfgSenialUnidadMedida.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svcfgsenialunidadmedida_edit', { 'id': svCfgSenialUnidadMedida.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svcfgsenialunidadmedida_new') }}">Create a new svCfgSenialUnidadMedida</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -34,4 +34,28 @@ class SvSenialBodegaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    //Obtiene los proveedores por senial y cantidad mayor a 0
+    public function getProveedorBySenial($idSenial)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT sb
+        FROM JHWEBSeguridadVialBundle:SvSenialBodega sb,
+        JHWEBSeguridadVialBundle:SvCfgSenial s,
+        JHWEBSeguridadVialBundle:SvCfgSenialProveedor sp
+        WHERE sb.senial = :idSenial
+        AND sb.proveedor = sp.id
+        AND sb.senial = s.id
+        AND sb.cantidadDisponible > 0";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+           'idSenial' => $idSenial,
+        ));
+        
+
+        return $consulta->getResult();
+    }
 }

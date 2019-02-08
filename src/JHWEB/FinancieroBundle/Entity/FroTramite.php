@@ -49,11 +49,6 @@ class FroTramite
      */
     private $activo;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="tramites")
-     **/
-    protected $modulo;
-
 
     /**
      * Get id
@@ -159,29 +154,5 @@ class FroTramite
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set modulo
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgModulo $modulo
-     *
-     * @return FroTramite
-     */
-    public function setModulo(\JHWEB\ConfigBundle\Entity\CfgModulo $modulo = null)
-    {
-        $this->modulo = $modulo;
-
-        return $this;
-    }
-
-    /**
-     * Get modulo
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgModulo
-     */
-    public function getModulo()
-    {
-        return $this->modulo;
     }
 }

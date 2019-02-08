@@ -6,6 +6,8 @@ use AppBundle\Entity\MsvResultado;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * Msvresultado controller.
@@ -56,48 +58,53 @@ class MsvResultadoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
-
+            
             $msvResultado = new MsvResultado();
             $em = $this->getDoctrine()->getManager();
 
-            $msvResultado->setPilarFortalecimiento($params->nombreFortalecimiento);
+            $msvResultado->setFecha(new \Datetime(date('Y-m-d h:i:s')));
+
+            $idEmpresa = $em->getRepository('AppBundle:Empresa')->find($params->idEmpresa);
+            $msvResultado->setEmpresa($idEmpresa);
+
+            $msvResultado->setPilarFortalecimiento("FORTALECIMIENTO EN LA GESTIÓN INSTITUCIONAL");
             $msvResultado->setValorObtenidoFortalecimiento($params->valorObtenidoFortalecimiento);
             $msvResultado->setValorPonderadoFortalecimiento(0.3);
-            $valorResultadoFortalecimiento = $params->valorObtenidoFotalecimiento * 0.3;
-            $msvResultado->setValorResultadoFortalecimiento($valorResultadoFortalecimiento);
+            $valorResultadoFortalecimiento = $params->valorObtenidoFortalecimiento * 0.3;
+            $msvResultado->setResultadoFortalecimiento($valorResultadoFortalecimiento);
 
-            $msvResultado->setPilarComportamiento($params->nombreComportamiento);
+            $msvResultado->setPilarComportamiento("COMPORTAMIENTO HUMANO");
             $msvResultado->setValorObtenidoComportamiento($params->valorObtenidoComportamiento);
             $msvResultado->setValorPonderadoComportamiento(0.2);
             $valorResultadoComportamiento = $params->valorObtenidoComportamiento * 0.3;
-            $msvResultado->setValorResultadoComportamiento($valorResultadoComportamiento);
+            $msvResultado->setResultadoComportamiento($valorResultadoComportamiento);
 
-            $msvResultado->setPilarVehiculoSeguro($params->nombreVehiculoSeguro);
+            $msvResultado->setPilarVehiculoSeguro("VEHÍCULOS SEGUROS");
             $msvResultado->setValorObtenidoVehiculoSeguro($params->valorObtenidoVehiculoSeguro);
             $msvResultado->setValorPonderadoVehiculoSeguro(0.2);
             $valorResultadoVehiculoSeguro = $params->valorObtenidoVehiculoSeguro * 0.2;
-            $msvResultado->setValorResultadoVehiculoSeguro($valorResultadoVehiculoSeguro);
+            $msvResultado->setResultadoVehiculoSeguro($valorResultadoVehiculoSeguro);
 
-            $msvResultado->setPilarInfraestructuraSegura($params->nombreInfraestructuraSegura);
+            $msvResultado->setPilarInfraestructuraSegura("INFRAESTRUCTURA SEGURA ");
             $msvResultado->setValorObtenidoInfraestructuraSegura($params->valorObtenidoInfraestructuraSegura);
             $msvResultado->setValorPonderadoInfraestructuraSegura(0.1);
             $valorResultadoInfraestructuraSegura = $params->valorObtenidoInfraestructuraSegura * 0.1;
-            $msvResultado->setValorResultadoInfraestructuraSegura($valorResultadoInfraestructuraSegura);
+            $msvResultado->setResultadoInfraestructuraSegura($valorResultadoInfraestructuraSegura);
 
-            $msvResultado->setPilarAtencionVictima($params->nombreAtencionVictima);
+            $msvResultado->setPilarAtencionVictima("ATENCIÓN A VÍCTIMAS");
             $msvResultado->setValorObtenidoAtencionVictima($params->valorObtenidoAtencionVictima);
-            $msvResultado->setValorPonderadoAtencionVictima($params->valorPonderadoAtencionVictima);
+            $msvResultado->setValorPonderadoAtencionVictima(0.1);
             $valorResultadoAtencionVictima = $params->valorObtenidoAtencionVictima * 0.1;
-            $msvResultado->setValorResultadoAtencionVictima($valorResultadoAtencionVictima);
+            $msvResultado->setResultadoAtencionVictima($valorResultadoAtencionVictima);
 
-            $msvResultado->setPilarValorAgregado($params->nombreValorAgregado);
+            $msvResultado->setPilarValorAgregado("VALORES AGREGADOS O INNOVACIONES");
             $msvResultado->setValorObtenidoValorAgregado($params->valorObtenidoValorAgregado);
             $msvResultado->setValorPonderadoValorAgregado(0.05);
             $valorResultadoValorAgregado = $params->valorObtenidoValorAgregado * 0.05;
-            $msvResultado->setValorResultadoValorAgregado($valorResultadoValorAgregado);
+            $msvResultado->setResultadoValorAgregado($valorResultadoValorAgregado);
 
             $msvResultado->setResultadoFinal($valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado);
-
+            
             $msvResultado->setActivo(true);
             $em->persist($msvResultado);
             $em->flush();

@@ -107,18 +107,38 @@ class SvSenialUbicacionController extends Controller
 
                     $ubicacion->setFecha(new \Datetime($params->fecha));
                     $ubicacion->setHora(new \Datetime(date('h:i:s A')));
-                    $ubicacion->setLatitud($params->latitud);
-                    $ubicacion->setLongitud($params->longitud);
-                    $ubicacion->setDireccion($params->direccion);
                     $ubicacion->setCantidad($params->cantidad);
 
-                    if ($params->idConector) {
-                        $conector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialConector')->find(
-                            $params->idConector
-                        );
-                        $ubicacion->setConector($conector);
+                    if ($params->idBodega) {
+                        $bodega = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->find(
+                            $params->idBodega);
+                        $ubicacion->setBodega($bodega);
+                        
+                        if (!$params->idUnidadMedida && !$params->idProveedor) {
+                            $bodega->setCantidadDisponible($bodega->getCantidadDisponible() - $params->cantidad);
+                            $em->flush();
+                        }
                     }
 
+                    if ($params->idProveedor) {
+                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
+                            $params->idProveedor);
+                        $ubicacion->setProveedor($proveedor->getNombre());
+                    }
+
+                    if ($params->idLinea) {
+                        $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                            $params->idLinea
+                        );
+                        $ubicacion->setLinea($linea);
+                    }
+
+                    if ($params->idUnidadMedida) {
+                        $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                            $params->idUnidadMedida
+                        );
+                        $ubicacion->setUnidadMedida($unidadMedida);
+                    }
 
                     if ($senial) {
                         $ubicacion->setSenial($senial);

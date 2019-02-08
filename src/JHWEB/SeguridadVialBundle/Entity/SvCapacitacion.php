@@ -22,6 +22,11 @@ class SvCapacitacion
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="ciudadanos")
+     **/
+    protected $ciudadano;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_hora_registro", type="datetime")
@@ -556,5 +561,29 @@ class SvCapacitacion
     public function getClaseActorVial()
     {
         return $this->claseActorVial;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     *
+     * @return SvCapacitacion
+     */
+    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
     }
 }
