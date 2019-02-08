@@ -21,31 +21,41 @@ class MsvResultado
      */
     private $id;
 
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="empresas") */
+    private $empresa;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="date", nullable = true)
+     */
+    private $fecha;
+
     /**
      * @var string
      *
-     * @ORM\Column(name="pilar_fortalecimiento", type="string", length=255)
+     * @ORM\Column(name="pilar_fortalecimiento", type="string", length=255, nullable = true)
      */
     private $pilarFortalecimiento;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido_fortalecimiento", type="integer", length=255)
+     * @ORM\Column(name="valor_obtenido_fortalecimiento", type="float", length=255, nullable = true)
      */
     private $valorObtenidoFortalecimiento;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_ponderado_fortalecimiento", type="integer", length=255)
+     * @ORM\Column(name="valor_ponderado_fortalecimiento", type="float", length=255, nullable = true)
      */
     private $valorPonderadoFortalecimiento;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_fortalecimiento", type="integer", length=255)
+     * @ORM\Column(name="resultado_fortalecimiento", type="float", length=255, nullable = true)
      */
     private $resultadoFortalecimiento;
 
@@ -53,28 +63,28 @@ class MsvResultado
     /**
      * @var string
      *
-     * @ORM\Column(name="pilar_comportamiento", type="string", length=255)
+     * @ORM\Column(name="pilar_comportamiento", type="string", length=255, nullable = true)
      */
     private $pilarComportamiento;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido_comportamiento", type="integer", length=255)
+     * @ORM\Column(name="valor_obtenido_comportamiento", type="float", length=255, nullable = true)
      */
     private $valorObtenidoComportamiento;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_ponderado_comportamiento", type="integer", length=255)
+     * @ORM\Column(name="valor_ponderado_comportamiento", type="float", length=255, nullable = true)
      */
     private $valorPonderadoComportamiento;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_comportamiento", type="integer", length=255)
+     * @ORM\Column(name="resultado_comportamiento", type="float", length=255, nullable = true)
      */
     private $resultadoComportamiento;
 
@@ -82,28 +92,28 @@ class MsvResultado
     /**
      * @var string
      *
-     * @ORM\Column(name="pilar_vehiculo_seguro", type="string", length=255)
+     * @ORM\Column(name="pilar_vehiculo_seguro", type="string", length=255, nullable = true)
      */
     private $pilarVehiculoSeguro;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido_vehiculo_seguro", type="integer", length=255)
+     * @ORM\Column(name="valor_obtenido_vehiculo_seguro", type="float", length=255, nullable = true)
      */
     private $valorObtenidoVehiculoSeguro;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_ponderado_vehiculo_seguro", type="integer", length=255)
+     * @ORM\Column(name="valor_ponderado_vehiculo_seguro", type="float", length=255, nullable = true)
      */
     private $valorPonderadoVehiculoSeguro;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_vehiculo_seguro", type="integer", length=255)
+     * @ORM\Column(name="resultado_vehiculo_seguro", type="float", length=255, nullable = true)
      */
     private $resultadoVehiculoSeguro;
 
@@ -111,28 +121,28 @@ class MsvResultado
     /**
      * @var string
      *
-     * @ORM\Column(name="pilar_infraestructura_segura", type="string", length=255)
+     * @ORM\Column(name="pilar_infraestructura_segura", type="string", length=255, nullable = true)
      */
     private $pilarInfraestructuraSegura;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido_infraestructura_segura", type="integer", length=255)
+     * @ORM\Column(name="valor_obtenido_infraestructura_segura", type="float", length=255, nullable = true)
      */
     private $valorObtenidoInfraestructuraSegura;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_ponderado_infraestructura_segura", type="integer", length=255)
+     * @ORM\Column(name="valor_ponderado_infraestructura_segura", type="float", length=255, nullable = true)
      */
     private $valorPonderadoInfraestructuraSegura;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_infraestructura_segura", type="integer", length=255)
+     * @ORM\Column(name="resultado_infraestructura_segura", type="float", length=255, nullable = true)
      */
     private $resultadoInfraestructuraSegura;
 
@@ -140,28 +150,28 @@ class MsvResultado
     /**
      * @var string
      *
-     * @ORM\Column(name="pilar_atencion_victima", type="string", length=255)
+     * @ORM\Column(name="pilar_atencion_victima", type="string", length=255, nullable = true)
      */
     private $pilarAtencionVictima;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido_atencion_victima", type="integer", length=255)
+     * @ORM\Column(name="valor_obtenido_atencion_victima", type="float", length=255, nullable = true)
      */
     private $valorObtenidoAtencionVictima;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_ponderado_atencion_victima", type="integer", length=255)
+     * @ORM\Column(name="valor_ponderado_atencion_victima", type="float", length=255, nullable = true)
      */
     private $valorPonderadoAtencionVictima;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_atencion_victima", type="integer", length=255)
+     * @ORM\Column(name="resultado_atencion_victima", type="float", length=255, nullable = true)
      */
     private $resultadoAtencionVictima;
 
@@ -169,37 +179,44 @@ class MsvResultado
     /**
      * @var string
      *
-     * @ORM\Column(name="pilar_valor_agregado", type="string", length=255)
+     * @ORM\Column(name="pilar_valor_agregado", type="string", length=255, nullable = true)
      */
     private $pilarValorAgregado;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido_valor_agregado", type="integer", length=255)
+     * @ORM\Column(name="valor_obtenido_valor_agregado", type="float", length=255, nullable = true)
      */
     private $valorObtenidoValorAgregado;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_ponderado_valor_agregado", type="integer", length=255)
+     * @ORM\Column(name="valor_ponderado_valor_agregado", type="float", length=255, nullable = true)
      */
     private $valorPonderadoValorAgregado;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_valor_agregado", type="integer", length=255)
+     * @ORM\Column(name="resultado_valor_agregado", type="float", length=255, nullable = true)
      */
     private $resultadoValorAgregado;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="resultado_final", type="integer", length=255)
+     * @ORM\Column(name="resultado_final", type="float", length=255, nullable = true)
      */
     private $resultadofinal;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo = true;
 
 
     /**
@@ -210,6 +227,30 @@ class MsvResultado
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return MsvResultado
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
     }
 
     /**
@@ -239,7 +280,7 @@ class MsvResultado
     /**
      * Set valorObtenidoFortalecimiento
      *
-     * @param integer $valorObtenidoFortalecimiento
+     * @param float $valorObtenidoFortalecimiento
      *
      * @return MsvResultado
      */
@@ -253,7 +294,7 @@ class MsvResultado
     /**
      * Get valorObtenidoFortalecimiento
      *
-     * @return integer
+     * @return float
      */
     public function getValorObtenidoFortalecimiento()
     {
@@ -263,7 +304,7 @@ class MsvResultado
     /**
      * Set valorPonderadoFortalecimiento
      *
-     * @param integer $valorPonderadoFortalecimiento
+     * @param float $valorPonderadoFortalecimiento
      *
      * @return MsvResultado
      */
@@ -277,7 +318,7 @@ class MsvResultado
     /**
      * Get valorPonderadoFortalecimiento
      *
-     * @return integer
+     * @return float
      */
     public function getValorPonderadoFortalecimiento()
     {
@@ -287,7 +328,7 @@ class MsvResultado
     /**
      * Set resultadoFortalecimiento
      *
-     * @param integer $resultadoFortalecimiento
+     * @param float $resultadoFortalecimiento
      *
      * @return MsvResultado
      */
@@ -301,7 +342,7 @@ class MsvResultado
     /**
      * Get resultadoFortalecimiento
      *
-     * @return integer
+     * @return float
      */
     public function getResultadoFortalecimiento()
     {
@@ -335,7 +376,7 @@ class MsvResultado
     /**
      * Set valorObtenidoComportamiento
      *
-     * @param integer $valorObtenidoComportamiento
+     * @param float $valorObtenidoComportamiento
      *
      * @return MsvResultado
      */
@@ -349,7 +390,7 @@ class MsvResultado
     /**
      * Get valorObtenidoComportamiento
      *
-     * @return integer
+     * @return float
      */
     public function getValorObtenidoComportamiento()
     {
@@ -359,7 +400,7 @@ class MsvResultado
     /**
      * Set valorPonderadoComportamiento
      *
-     * @param integer $valorPonderadoComportamiento
+     * @param float $valorPonderadoComportamiento
      *
      * @return MsvResultado
      */
@@ -373,7 +414,7 @@ class MsvResultado
     /**
      * Get valorPonderadoComportamiento
      *
-     * @return integer
+     * @return float
      */
     public function getValorPonderadoComportamiento()
     {
@@ -383,7 +424,7 @@ class MsvResultado
     /**
      * Set resultadoComportamiento
      *
-     * @param integer $resultadoComportamiento
+     * @param float $resultadoComportamiento
      *
      * @return MsvResultado
      */
@@ -397,7 +438,7 @@ class MsvResultado
     /**
      * Get resultadoComportamiento
      *
-     * @return integer
+     * @return float
      */
     public function getResultadoComportamiento()
     {
@@ -431,7 +472,7 @@ class MsvResultado
     /**
      * Set valorObtenidoVehiculoSeguro
      *
-     * @param integer $valorObtenidoVehiculoSeguro
+     * @param float $valorObtenidoVehiculoSeguro
      *
      * @return MsvResultado
      */
@@ -445,7 +486,7 @@ class MsvResultado
     /**
      * Get valorObtenidoVehiculoSeguro
      *
-     * @return integer
+     * @return float
      */
     public function getValorObtenidoVehiculoSeguro()
     {
@@ -455,7 +496,7 @@ class MsvResultado
     /**
      * Set valorPonderadoVehiculoSeguro
      *
-     * @param integer $valorPonderadoVehiculoSeguro
+     * @param float $valorPonderadoVehiculoSeguro
      *
      * @return MsvResultado
      */
@@ -469,7 +510,7 @@ class MsvResultado
     /**
      * Get valorPonderadoVehiculoSeguro
      *
-     * @return integer
+     * @return float
      */
     public function getValorPonderadoVehiculoSeguro()
     {
@@ -479,7 +520,7 @@ class MsvResultado
     /**
      * Set resultadoVehiculoSeguro
      *
-     * @param integer $resultadoVehiculoSeguro
+     * @param float $resultadoVehiculoSeguro
      *
      * @return MsvResultado
      */
@@ -493,7 +534,7 @@ class MsvResultado
     /**
      * Get resultadoVehiculoSeguro
      *
-     * @return integer
+     * @return float
      */
     public function getResultadoVehiculoSeguro()
     {
@@ -527,7 +568,7 @@ class MsvResultado
     /**
      * Set valorObtenidoInfraestructuraSegura
      *
-     * @param integer $valorObtenidoInfraestructuraSegura
+     * @param float $valorObtenidoInfraestructuraSegura
      *
      * @return MsvResultado
      */
@@ -541,7 +582,7 @@ class MsvResultado
     /**
      * Get valorObtenidoInfraestructuraSegura
      *
-     * @return integer
+     * @return float
      */
     public function getValorObtenidoInfraestructuraSegura()
     {
@@ -551,7 +592,7 @@ class MsvResultado
     /**
      * Set valorPonderadoInfraestructuraSegura
      *
-     * @param integer $valorPonderadoInfraestructuraSegura
+     * @param float $valorPonderadoInfraestructuraSegura
      *
      * @return MsvResultado
      */
@@ -565,7 +606,7 @@ class MsvResultado
     /**
      * Get valorPonderadoInfraestructuraSegura
      *
-     * @return integer
+     * @return float
      */
     public function getValorPonderadoInfraestructuraSegura()
     {
@@ -575,7 +616,7 @@ class MsvResultado
     /**
      * Set resultadoInfraestructuraSegura
      *
-     * @param integer $resultadoInfraestructuraSegura
+     * @param float $resultadoInfraestructuraSegura
      *
      * @return MsvResultado
      */
@@ -589,7 +630,7 @@ class MsvResultado
     /**
      * Get resultadoInfraestructuraSegura
      *
-     * @return integer
+     * @return float
      */
     public function getResultadoInfraestructuraSegura()
     {
@@ -623,7 +664,7 @@ class MsvResultado
     /**
      * Set valorObtenidoAtencionVictima
      *
-     * @param integer $valorObtenidoAtencionVictima
+     * @param float $valorObtenidoAtencionVictima
      *
      * @return MsvResultado
      */
@@ -637,7 +678,7 @@ class MsvResultado
     /**
      * Get valorObtenidoAtencionVictima
      *
-     * @return integer
+     * @return float
      */
     public function getValorObtenidoAtencionVictima()
     {
@@ -647,7 +688,7 @@ class MsvResultado
     /**
      * Set valorPonderadoAtencionVictima
      *
-     * @param integer $valorPonderadoAtencionVictima
+     * @param float $valorPonderadoAtencionVictima
      *
      * @return MsvResultado
      */
@@ -661,7 +702,7 @@ class MsvResultado
     /**
      * Get valorPonderadoAtencionVictima
      *
-     * @return integer
+     * @return float
      */
     public function getValorPonderadoAtencionVictima()
     {
@@ -671,7 +712,7 @@ class MsvResultado
     /**
      * Set resultadoAtencionVictima
      *
-     * @param integer $resultadoAtencionVictima
+     * @param float $resultadoAtencionVictima
      *
      * @return MsvResultado
      */
@@ -685,7 +726,7 @@ class MsvResultado
     /**
      * Get resultadoAtencionVictima
      *
-     * @return integer
+     * @return float
      */
     public function getResultadoAtencionVictima()
     {
@@ -719,7 +760,7 @@ class MsvResultado
     /**
      * Set valorObtenidoValorAgregado
      *
-     * @param integer $valorObtenidoValorAgregado
+     * @param float $valorObtenidoValorAgregado
      *
      * @return MsvResultado
      */
@@ -733,7 +774,7 @@ class MsvResultado
     /**
      * Get valorObtenidoValorAgregado
      *
-     * @return integer
+     * @return float
      */
     public function getValorObtenidoValorAgregado()
     {
@@ -743,7 +784,7 @@ class MsvResultado
     /**
      * Set valorPonderadoValorAgregado
      *
-     * @param integer $valorPonderadoValorAgregado
+     * @param float $valorPonderadoValorAgregado
      *
      * @return MsvResultado
      */
@@ -757,7 +798,7 @@ class MsvResultado
     /**
      * Get valorPonderadoValorAgregado
      *
-     * @return integer
+     * @return float
      */
     public function getValorPonderadoValorAgregado()
     {
@@ -767,7 +808,7 @@ class MsvResultado
     /**
      * Set resultadoValorAgregado
      *
-     * @param integer $resultadoValorAgregado
+     * @param float $resultadoValorAgregado
      *
      * @return MsvResultado
      */
@@ -781,7 +822,7 @@ class MsvResultado
     /**
      * Get resultadoValorAgregado
      *
-     * @return integer
+     * @return float
      */
     public function getResultadoValorAgregado()
     {
@@ -791,7 +832,7 @@ class MsvResultado
     /**
      * Set resultadofinal
      *
-     * @param integer $resultadofinal
+     * @param float $resultadofinal
      *
      * @return MsvResultado
      */
@@ -805,10 +846,58 @@ class MsvResultado
     /**
      * Get resultadofinal
      *
-     * @return integer
+     * @return float
      */
     public function getResultadofinal()
     {
         return $this->resultadofinal;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return MsvResultado
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \AppBundle\Entity\Empresa $empresa
+     *
+     * @return MsvResultado
+     */
+    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \AppBundle\Entity\Empresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }

@@ -35,7 +35,6 @@ class SvCapacitacionController extends Controller
             $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
             array(
                 'activo' => true,
-                'cedula' => $params->identificacion
                 )
             );
             $response['data'] = array();
@@ -45,14 +44,6 @@ class SvCapacitacionController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($capacitaciones) . " registros encontrados",
-                    'data' => $capacitaciones,
-                );
-            }
-            else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No se ha encontrado ningun registro de capacitación para este ciudadano",
                     'data' => $capacitaciones,
                 );
             }
@@ -102,13 +93,13 @@ class SvCapacitacionController extends Controller
                 $capacitacion->setClaseActorVial($claseActorVial);
             }
 
-            /*if ($params->cedula) {
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($params->cedula);
-                var_dump($ciudadano);
-                die();
-                $capacitacion->setCedula($ciudadano);
-            }*/
-            $capacitacion->setFechaHoraRegistro(new \Datetime(date('Y-m-d h:i:s', strtotime($params->fechaHoraRegistro))));
+            if ($params->identificacion) {
+                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion'=> $params->identificacion));
+                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($usuario->getId());
+                $capacitacion->setCiudadano($ciudadano);
+            }
+            
+            $capacitacion->setFechaHoraRegistro(new \Datetime($params->fechaHoraRegistro));
             $capacitacion->setEmailFormador($params->emailFormador);
             $capacitacion->setCedula($params->cedula);
             $capacitacion->setFormador($params->formador);
@@ -230,5 +221,58 @@ class SvCapacitacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * Lists all svCapacitacion by ciudadano entities.
+     *
+     * @Route("/buscar/capacitacionbyciudadano", name="svCapacitacion_ciudadano")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarCapacitacionByCiudadano(Request $request) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params->identificacion));
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($usuario->getId());
+
+            $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+            array(
+                'activo' => true,
+                'ciudadano' => $ciudadano
+                )
+            );
+            $response['data'] = array();
+
+            if ($capacitaciones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($capacitaciones) . " registros encontrados",
+                    'data' => $capacitaciones,
+                );
+            }
+            else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se ha encontrado ningun registro de capacitación para este ciudadano",
+                    'data' => $capacitaciones,
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 }

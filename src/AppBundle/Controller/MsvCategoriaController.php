@@ -8,14 +8,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Msvcategorium controller.
+ * Msvcategoria controller.
  *
  * @Route("msvcategoria")
  */
 class MsvCategoriaController extends Controller
 {
     /**
-     * Lists all msvCategorium entities.
+     * Lists all msvCategoria entities.
      *
      * @Route("/", name="msvcategoria_index")
      * @Method("GET")
@@ -29,7 +29,7 @@ class MsvCategoriaController extends Controller
         $response = array(
                     'status' => 'succes',
                     'code' => 200,
-                    'msj' => "listado festivos",
+                    'msj' => "listado categorias",
                     'data' => $msvCategoria,
         );
 
@@ -62,86 +62,86 @@ class MsvCategoriaController extends Controller
     }
 
     /**
-     * Creates a new msvCategorium entity.
+     * Creates a new msvCategoria entity.
      *
      * @Route("/new", name="msvcategoria_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $msvCategorium = new Msvcategorium();
-        $form = $this->createForm('AppBundle\Form\MsvCategoriaType', $msvCategorium);
+        $msvCategoria = new Msvcategoria();
+        $form = $this->createForm('AppBundle\Form\MsvCategoriaType', $msvCategoria);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($msvCategorium);
+            $em->persist($msvCategoria);
             $em->flush();
 
-            return $this->redirectToRoute('msvcategoria_show', array('id' => $msvCategorium->getId()));
+            return $this->redirectToRoute('msvcategoria_show', array('id' => $msvCategoria->getId()));
         }
 
         return $this->render('msvcategoria/new.html.twig', array(
-            'msvCategorium' => $msvCategorium,
+            'msvCategoria' => $msvCategoria,
             'form' => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a msvCategorium entity.
+     * Finds and displays a msvCategoria entity.
      *
      * @Route("/{id}", name="msvcategoria_show")
      * @Method("GET")
      */
-    public function showAction(MsvCategoria $msvCategorium)
+    public function showAction(MsvCategoria $msvCategoria)
     {
-        $deleteForm = $this->createDeleteForm($msvCategorium);
+        $deleteForm = $this->createDeleteForm($msvCategoria);
 
         return $this->render('msvcategoria/show.html.twig', array(
-            'msvCategorium' => $msvCategorium,
+            'msvCategoria' => $msvCategoria,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing msvCategorium entity.
+     * Displays a form to edit an existing msvCategoria entity.
      *
      * @Route("/{id}/edit", name="msvcategoria_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvCategoria $msvCategorium)
+    public function editAction(Request $request, MsvCategoria $msvCategoria)
     {
-        $deleteForm = $this->createDeleteForm($msvCategorium);
-        $editForm = $this->createForm('AppBundle\Form\MsvCategoriaType', $msvCategorium);
+        $deleteForm = $this->createDeleteForm($msvCategoria);
+        $editForm = $this->createForm('AppBundle\Form\MsvCategoriaType', $msvCategoria);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('msvcategoria_edit', array('id' => $msvCategorium->getId()));
+            return $this->redirectToRoute('msvcategoria_edit', array('id' => $msvCategoria->getId()));
         }
 
         return $this->render('msvcategoria/edit.html.twig', array(
-            'msvCategorium' => $msvCategorium,
+            'msvCategoria' => $msvCategoria,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a msvCategorium entity.
+     * Deletes a msvCategoria entity.
      *
      * @Route("/{id}", name="msvcategoria_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, MsvCategoria $msvCategorium)
+    public function deleteAction(Request $request, MsvCategoria $msvCategoria)
     {
-        $form = $this->createDeleteForm($msvCategorium);
+        $form = $this->createDeleteForm($msvCategoria);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($msvCategorium);
+            $em->remove($msvCategoria);
             $em->flush();
         }
 
@@ -149,18 +149,43 @@ class MsvCategoriaController extends Controller
     }
 
     /**
-     * Creates a form to delete a msvCategorium entity.
+     * Creates a form to delete a msvCategoria entity.
      *
-     * @param MsvCategoria $msvCategorium The msvCategorium entity
+     * @param MsvCategoria $msvCategoria The msvCategoria entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(MsvCategoria $msvCategorium)
+    private function createDeleteForm(MsvCategoria $msvCategoria)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('msvcategoria_delete', array('id' => $msvCategorium->getId())))
+            ->setAction($this->generateUrl('msvcategoria_delete', array('id' => $msvCategoria->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/categoria", name="msvCategoria_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $categorias = $em->getRepository('AppBundle:MsvCategoria')->findBy(
+            array('estado' => 1)
+        );
+        $response = null;
+
+        foreach ($categorias as $key => $categoria) {
+            $response[$key] = array(
+                'value' => $categoria->getId(),
+                'label' => $categoria->getNombre(),
+            );
+        }
+        return $helpers->json($response);
     }
 }
