@@ -449,6 +449,7 @@ class InsumoController extends Controller
                 'status' => 'success',
                 'code' => 400,
                 'numero' => $numeroSustrato['numero'],
+                'idInsumo' => $numeroSustrato['id'],
             );
         }else {
             $response = array(
