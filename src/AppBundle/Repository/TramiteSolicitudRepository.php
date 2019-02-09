@@ -130,13 +130,15 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT ts
             FROM AppBundle:TramiteFactura tf, AppBundle:Tramite t
             WHERE tf.factura.vehiculo.id = :idVehiculo
-            AND tf.tramite.cancelado = true
+            AND tf.factura = :idFactura
+            AND tf.factura.vehiculo.cancelado = 1
             AND tf.realizado = 1";
-        $consulta = $em->creatyQuery($dql);
+        $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'idVehiculo' => $params->datos->idVehiculo,
+            'idVehiculo' => $params->idVehiculo,
+            'idFactura' => $params->idFactura,
         ));
-        return $consulta->getResultOrNull();
+        return $consulta->getResult();
     }    
 }

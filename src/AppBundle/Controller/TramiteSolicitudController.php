@@ -456,18 +456,18 @@ class TramiteSolicitudController extends Controller
         $hash = $request->get("authorization", null);
         $datos = $request->get("json", null);
         $params = json_decode($datos);
-        var_dump($params);
-        die();
         $authCheck = $helpers->authCheck($hash);
         $matriculaCancelada = $em->getRepository('AppBundle:TramiteSolicitud')->findMatriculaCancelada($params);
-
+        var_dump($matriculaCancelada);
+        die();
         if ($matriculaCancelada) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "La matricula se encuentra cancelada",
                 'data' => $matriculaCancelada,
-            );} else {
+            );
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
