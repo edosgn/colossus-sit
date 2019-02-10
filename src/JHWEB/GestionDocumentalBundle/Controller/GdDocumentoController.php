@@ -102,6 +102,10 @@ class GdDocumentoController extends Controller
                 $documento->setIdentificacion($params->identificacion);
             }
 
+            if ($params->entidadCargo) {
+                $documento->setEntidadCargo(strtoupper($params->entidadCargo));
+            }
+
             if ($params->entidadNombre) {
                 $documento->setEntidadNombre(strtoupper($params->entidadNombre));
             }

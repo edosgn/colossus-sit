@@ -68,9 +68,9 @@ class BpActividadController extends Controller
             $actividad->setCostoTotal(0);
             $actividad->setActivo(true);
 
-            if ($params->idProyecto) {
-                $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($params->idProyecto);
-                $actividad->setProyecto($proyecto);
+            if ($params->idCuenta) {
+                $cuenta = $em->getRepository('JHWEBBancoProyectoBundle:BpCuenta')->find($params->idCuenta);
+                $actividad->setCuenta($cuenta);
             }
 
             $em->persist($actividad);

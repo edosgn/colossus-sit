@@ -5,12 +5,12 @@ namespace JHWEB\BancoProyectoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BpActividad
+ * BpCuenta
  *
- * @ORM\Table(name="bp_actividad")
- * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpActividadRepository")
+ * @ORM\Table(name="bp_cuenta")
+ * @ORM\Entity(repositoryClass="JHWEB\BancoProyectoBundle\Repository\BpCuentaRepository")
  */
-class BpActividad
+class BpCuenta
 {
     /**
      * @var int
@@ -20,6 +20,13 @@ class BpActividad
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero", type="string", length=255)
+     */
+    private $numero;
 
     /**
      * @var string
@@ -43,15 +50,15 @@ class BpActividad
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="BpCuenta")
+     * @ORM\ManyToOne(targetEntity="BpProyecto")
      **/
-    protected $cuenta;
+    protected $proyecto;
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -59,11 +66,35 @@ class BpActividad
     }
 
     /**
+     * Set numero
+     *
+     * @param string $numero
+     *
+     * @return BpCuenta
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return string
+     */
+    public function getNumero()
+    {
+        return $this->numero;
+    }
+
+    /**
      * Set nombre
      *
      * @param string $nombre
      *
-     * @return BpActividad
+     * @return BpCuenta
      */
     public function setNombre($nombre)
     {
@@ -87,7 +118,7 @@ class BpActividad
      *
      * @param integer $costoTotal
      *
-     * @return BpActividad
+     * @return BpCuenta
      */
     public function setCostoTotal($costoTotal)
     {
@@ -111,7 +142,7 @@ class BpActividad
      *
      * @param boolean $activo
      *
-     * @return BpActividad
+     * @return BpCuenta
      */
     public function setActivo($activo)
     {
@@ -131,26 +162,26 @@ class BpActividad
     }
 
     /**
-     * Set cuenta
+     * Set proyecto
      *
-     * @param \JHWEB\BancoProyectoBundle\Entity\BpCuenta $cuenta
+     * @param \JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto
      *
-     * @return BpActividad
+     * @return BpCuenta
      */
-    public function setCuenta(\JHWEB\BancoProyectoBundle\Entity\BpCuenta $cuenta = null)
+    public function setProyecto(\JHWEB\BancoProyectoBundle\Entity\BpProyecto $proyecto = null)
     {
-        $this->cuenta = $cuenta;
+        $this->proyecto = $proyecto;
 
         return $this;
     }
 
     /**
-     * Get cuenta
+     * Get proyecto
      *
-     * @return \JHWEB\BancoProyectoBundle\Entity\BpCuenta
+     * @return \JHWEB\BancoProyectoBundle\Entity\BpProyecto
      */
-    public function getCuenta()
+    public function getProyecto()
     {
-        return $this->cuenta;
+        return $this->proyecto;
     }
 }
