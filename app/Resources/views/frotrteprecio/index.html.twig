@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frotrteprecios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Valor</th>
+                <th>Fechainicio</th>
+                <th>Valorconcepto</th>
+                <th>Valortotal</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froTrtePrecio in froTrtePrecios %}
+            <tr>
+                <td><a href="{{ path('frotrteprecio_show', { 'id': froTrtePrecio.id }) }}">{{ froTrtePrecio.id }}</a></td>
+                <td>{{ froTrtePrecio.nombre }}</td>
+                <td>{{ froTrtePrecio.valor }}</td>
+                <td>{% if froTrtePrecio.fechaInicio %}{{ froTrtePrecio.fechaInicio|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ froTrtePrecio.valorConcepto }}</td>
+                <td>{{ froTrtePrecio.valorTotal }}</td>
+                <td>{% if froTrtePrecio.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('frotrteprecio_show', { 'id': froTrtePrecio.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

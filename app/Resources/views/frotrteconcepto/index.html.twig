@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frotrteconceptos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froTrteConcepto in froTrteConceptos %}
+            <tr>
+                <td><a href="{{ path('frotrteconcepto_show', { 'id': froTrteConcepto.id }) }}">{{ froTrteConcepto.id }}</a></td>
+                <td>{% if froTrteConcepto.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('frotrteconcepto_show', { 'id': froTrteConcepto.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

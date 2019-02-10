@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use AppBundle\Entity\PropietarioVehiculo;
 use AppBundle\Entity\TramiteGeneral;
 use AppBundle\Entity\Caso;
+use JHWEB\UsuarioBundle\Entity\UserLicenciaTrancito;
 use AppBundle\Entity\Variante;
 use AppBundle\Entity\TramiteEspecifico;
 use AppBundle\Form\CiudadanoVehiculoType;
@@ -507,6 +508,16 @@ class PropietarioVehiculoController extends Controller
                 'vehiculo' => $vehiculoId,
             )
         );
+
+        $licenciaTrancitoBd = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTrancito')->findOneByPropietarioVehiculo($propietarioVehiculo->getId());
+        $licenciaTrancito = new UserLicenciaTrancito();
+ 
+        $licenciaTrancito->setPropietarioVehiculo($licenciaTrancitoBd->getPropietarioVehiculo());
+        $licenciaTrancito->setNumero($licenciaTransito);
+        $licenciaTrancito->setFecha(new \DateTime('now'));
+        $em->persist($licenciaTrancito);
+        $em->flush();
+
         $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
         $em = $this->getDoctrine()->getManager();
         $em->persist($propietarioVehiculo);
