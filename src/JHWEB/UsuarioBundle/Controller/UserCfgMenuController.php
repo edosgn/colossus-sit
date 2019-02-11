@@ -439,7 +439,7 @@ class UserCfgMenuController extends Controller
 
             $response = null;
 
-            if ($menus) > 0) {
+            if (($menus) > 0) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

@@ -130,8 +130,7 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 
         $dql = "SELECT ts
             FROM AppBundle:TramiteFactura tf, AppBundle:Tramite t,
-            AppBundle:TramitePrecio tp, AppBundle:TramiteSolicitud ts,
-            AppBundle:Vehiculo v
+            AppBundle:TramitePrecio tp, AppBundle:TramiteSolicitud ts
             WHERE tf.tramitePrecio = tp.id
             AND tp.tramite = t.id
             AND t.codigo = 84
