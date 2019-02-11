@@ -350,12 +350,7 @@ class UserCfgMenuController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->findBy(
-                array(
-                    'parent' => $params->idParent,
-                    'activo' => true
-                )
-            );
+            $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->getAvailablesByUsuario($params->idParent, $params->idUsuario);
 
             $response = null;
 
@@ -444,7 +439,7 @@ class UserCfgMenuController extends Controller
 
             $response = null;
 
-            if (count($menus) > 0) {
+            if ($menus) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
