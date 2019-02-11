@@ -228,13 +228,9 @@ class FacturaController extends Controller
             $sedeOperativaId = $params->sedeOperativaId;
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
-            // var_dump($params->idSolicitante);
-            // var_dump();
-            // die();
-
             if ($idApoderado) {
-                $apoderado = $em->getRepository('AppBundle:Ciudadano')->find($params->idApoderado);
-                $factura->setApoderado($apoderado);
+                $apoderado = $em->getRepository('UsuarioBundle:Usuario')->find($params->idApoderado);
+                $factura->setApoderado($apoderado->getCiudadano());
             }
 
             $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($params->idSolicitante);

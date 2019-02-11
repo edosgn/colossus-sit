@@ -205,7 +205,7 @@ class TramiteSolicitudController extends Controller
             $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
             $tramiteSolicitud->setEstado(true);
             $tramiteSolicitud->setDatos((array)$datos);
-            $tramiteSolicitud->setResumen((array)$params->datos->resumen);
+            // $tramiteSolicitud->setResumen((array)$params->datos->resumen);
 
             $em->persist($tramiteSolicitud);
             $em->flush();
