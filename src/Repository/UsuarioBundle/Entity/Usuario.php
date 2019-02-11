@@ -115,9 +115,6 @@ class Usuario
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="usuarios") */
     private $tipoIdentificacion;
 
-    /** @ORM\ManyToOne(targetEntity="UserCfgRole", inversedBy="usuarios") */
-    private $cfgRole;
-
     /**
      * @var \DateTime
      *
@@ -529,29 +526,5 @@ class Usuario
     public function getTipoIdentificacion()
     {
         return $this->tipoIdentificacion;
-    }
-
-    /**
-     * Set cfgRole
-     *
-     * @param \Repository\UsuarioBundle\Entity\UserCfgRole $cfgRole
-     *
-     * @return Usuario
-     */
-    public function setCfgRole(\Repository\UsuarioBundle\Entity\UserCfgRole $cfgRole = null)
-    {
-        $this->cfgRole = $cfgRole;
-
-        return $this;
-    }
-
-    /**
-     * Get cfgRole
-     *
-     * @return \Repository\UsuarioBundle\Entity\UserCfgRole
-     */
-    public function getCfgRole()
-    {
-        return $this->cfgRole;
     }
 }

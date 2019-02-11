@@ -1,26 +1,26 @@
 <?php
 
-namespace Repository\UsuarioBundle\Form;
+namespace JHWEB\UsuarioBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserCfgRoleMenuType extends AbstractType
+class UserCfgRoleType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('activo')->add('menu')->add('role');
+        $builder->add('nombre')->add('activo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Repository\UsuarioBundle\Entity\UserCfgRoleMenu'
+            'data_class' => 'JHWEB\UsuarioBundle\Entity\UserCfgRole'
         ));
     }
 
@@ -29,7 +29,7 @@ class UserCfgRoleMenuType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'repository_usuariobundle_usercfgrolemenu';
+        return 'jhweb_usuariobundle_usercfgrole';
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Repository\UsuarioBundle\Entity;
+namespace JHWEB\UsuarioBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * UserCfgRole
  *
  * @ORM\Table(name="user_cfg_role")
- * @ORM\Entity(repositoryClass="Repository\UsuarioBundle\Repository\UserCfgRoleRepository")
+ * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserCfgRoleRepository")
  */
 class UserCfgRole
 {
@@ -87,11 +87,10 @@ class UserCfgRole
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-

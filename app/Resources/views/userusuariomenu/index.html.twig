@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userusuariomenus list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userUsuarioMenu in userUsuarioMenus %}
+            <tr>
+                <td><a href="{{ path('userusuariomenu_show', { 'id': userUsuarioMenu.id }) }}">{{ userUsuarioMenu.id }}</a></td>
+                <td>{% if userUsuarioMenu.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('userusuariomenu_show', { 'id': userUsuarioMenu.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('userusuariomenu_edit', { 'id': userUsuarioMenu.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userusuariomenu_new') }}">Create a new userUsuarioMenu</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,8 +1,8 @@
 <?php
 
-namespace Repository\UsuarioBundle\Controller;
+namespace JHWEB\UsuarioBundle\Controller;
 
-use Repository\UsuarioBundle\Entity\UserCfgMenu;
+use JHWEB\UsuarioBundle\Entity\UserCfgMenu;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -24,11 +24,9 @@ class UserCfgMenuController extends Controller
     {
         $helpers = $this->get("app.helpers");
 
-        //$menus = $this->multilevelMenuAction();
-
         $em = $this->getDoctrine()->getManager();
 
-        $menus = $em->getRepository('UsuarioBundle:UserCfgMenu')->findBy(
+        $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->findBy(
             array(
                 'activo'=>true
             )
@@ -76,8 +74,15 @@ class UserCfgMenuController extends Controller
                 $menu->setPath($params->path);
             }
 
+            if ($params->idRole) {
+                $role = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->find(
+                    $params->idRole
+                );
+                $menu->setRole($role);
+            }
+
             if (isset($params->idParent) && $params->idParent) {
-                $parentMenu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                $parentMenu = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->find(
                     $params->idParent
                 );
                 $menu->setParent($parentMenu);
@@ -93,20 +98,10 @@ class UserCfgMenuController extends Controller
                     $em->persist($menu);
                     $em->flush();
                 }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
-                    $menu->setTipo('TERCER_NIVEL');
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Registro creado con éxito",
-                    );
-
-                    $em->persist($menu);
-                    $em->flush();
-                }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "Debe seleccionar maximo un padre de segundo nivel",
+                        'message' => "Debe seleccionar maximo un padre de primer nivel",
                     );
                 }
             }else{
@@ -135,7 +130,7 @@ class UserCfgMenuController extends Controller
      * Finds and displays a userCfgMenu entity.
      *
      * @Route("/show", name="usercfgmenu_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request)
     {
@@ -149,7 +144,9 @@ class UserCfgMenuController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find($params->id);
+            $menu = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->find(
+                $params->id
+            );
 
             if ($menu) {
                 $response = array(
@@ -193,7 +190,7 @@ class UserCfgMenuController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $menu = $em->getRepository("UsuarioBundle:UserCfgMenu")->find($params->id);
+            $menu = $em->getRepository("JHWEBUsuarioBundle:UserCfgMenu")->find($params->id);
 
             if ($menu) {
                 $menu->setTitulo($params->titulo);
@@ -202,10 +199,17 @@ class UserCfgMenuController extends Controller
                 $menu->setPath($params->path);
 
                 if (isset($params->idParent) && $params->idParent) {
-                $parentMenu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
+                $parentMenu = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->find(
                     $params->idParent
                 );
                 $menu->setParent($parentMenu);
+
+                if ($params->idRole) {
+                    $role = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->find(
+                        $params->idRole
+                    );
+                    $menu->setRole($role);
+                }
 
                 if ($parentMenu->getTipo() == 'PRIMER_NIVEL') {
                     $menu->setTipo('SEGUNDO_NIVEL');
@@ -218,20 +222,10 @@ class UserCfgMenuController extends Controller
                     $em->persist($menu);
                     $em->flush();
                 }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
-                    $menu->setTipo('TERCER_NIVEL');
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Registro creado con éxito",
-                    );
-
-                    $em->persist($menu);
-                    $em->flush();
-                }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "Debe seleccionar maximo un padre de segundo nivel",
+                        'message' => "Debe seleccionar maximo un padre de primer nivel",
                     );
                 }
             }else{
@@ -300,6 +294,7 @@ class UserCfgMenuController extends Controller
     }
 
     /* ================================================= */
+
     /**
      * datos para select 2
      *
@@ -309,9 +304,10 @@ class UserCfgMenuController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
         
-        $menus = $em->getRepository('UsuarioBundle:UserCfgMenu')->findBy(
+        $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->findBy(
             array('activo' => true)
         );
 
@@ -324,7 +320,7 @@ class UserCfgMenuController extends Controller
                 $titulo = $menu->getTitulo();
             }
 
-            if ($menu->getTipo() != 'TERCER_NIVEL') {
+            if (!$menu->getParent()) {
                 $response[] = array(
                     'value' => $menu->getId(),
                     'label' => $titulo
@@ -336,15 +332,13 @@ class UserCfgMenuController extends Controller
         return $helpers->json($response);
     }
 
-    /* ============================================================ */
-
     /**
      * Lists all userCfgMenu entities.
      *
-     * @Route("/list", name="usercfgmenu_list")
+     * @Route("/select/parent", name="usercfgmenu_select_parent")
      * @Method({"GET", "POST"})
      */
-    public function listAction(Request $request)
+    public function selectByParentAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -354,22 +348,21 @@ class UserCfgMenuController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $menus = $this->multilevelMenuAction($params->idRole);
+            $em = $this->getDoctrine()->getManager();
+
+            $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->findBy(
+                array(
+                    'parent' => $params->idParent,
+                    'activo' => true
+                )
+            );
 
             $response = null;
 
-            if (count($menus) > 0) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($menus)." Registros encontrados", 
-                    'data'=> $menus,
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No existen registros para mostrar", 
+            foreach ($menus as $key => $menu) {
+                $response[] = array(
+                    'value' => $menu->getId(),
+                    'label' => $menu->getTitulo()
                 );
             }
         }else{
@@ -384,67 +377,51 @@ class UserCfgMenuController extends Controller
         return $helpers->json($response);
     }
 
-    public function multilevelMenuAction($idRole, $idParent = NULL){
-        $em = $this->getDoctrine()->getManager();
+    /**
+     * Lists all userCfgMenu entities.
+     *
+     * @Route("/select/role", name="usercfgmenu_select_role")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByRoleAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        $menus = $em->getRepository('UsuarioBundle:UserCfgMenu')->findBy(
-            array(
-                'parent' => $idParent,
-                'activo' => true
-            )
-        );
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-        $tree = null;
+            $em = $this->getDoctrine()->getManager();
 
-        if ($idRole) {
-            $menusByRole = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
+            $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->findBy(
                 array(
-                    'role' => $idRole,
+                    'role' => $params->idRole,
                     'activo' => true
                 )
             );
 
-            foreach ($menus as $key => $menu) {
-                $checked = false;
+            $response = null;
 
-                foreach ($menusByRole as $key => $menuByRole) {
-                    if ($menuByRole->getMenu()->getId() == $menu->getId()) {
-                        $checked = true;
-                    }
+            foreach ($menus as $key => $menu){
+                if (!$menu->getParent()) {
+                    $response[] = array(
+                        'value' => $menu->getId(),
+                        'label' => $menu->getTitulo()
+                    );
                 }
-
-                $tree[] = array(
-                    'id' => $menu->getId(),
-                    'title' => $menu->getTitulo(),
-                    'tipo' => $menu->getTipo(),
-                    'path' => $menu->getPath(),
-                    'abbreviation' => $menu->getAbreviatura(),
-                    'checked' => $checked,
-                    'childrens' => $this->multilevelMenuAction(
-                        $idRole, $menu->getId()
-                    )
-                );            
             }
         }else{
-            foreach ($menus as $key => $menu) {
-                $tree[] = array(
-                    'id' => $menu->getId(),
-                    'title' => $menu->getTitulo(),
-                    'tipo' => $menu->getTipo(),
-                    'path' => $menu->getPath(),
-                    'abbreviation' => $menu->getAbreviatura(),
-                    'childrens' => $this->multilevelMenuAction(
-                        $idRole, $menu->getId()
-                    )
-                );            
-            }
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
 
-        
-
-
-        return $tree;
+        return $helpers->json($response);
     }
 
     /**
@@ -496,7 +473,7 @@ class UserCfgMenuController extends Controller
     public function multilevelMenuByUsuarioAction($idUsuario, $idParent = NULL){
         $em = $this->getDoctrine()->getManager();
 
-        $menus = $em->getRepository('UsuarioBundle:UserCfgMenu')->findBy(
+        $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->findBy(
             array(
                 'parent' => $idParent,
                 'activo' => true
@@ -510,10 +487,10 @@ class UserCfgMenuController extends Controller
         $tree = null;
 
         foreach ($menus as $key => $menu) {
-            $roleMenu = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
+            $roleMenu = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findBy(
                 array(
                     'menu' => $menu->getId(),
-                    'role' => $usuario->getCfgRole()->getId()
+                    'usuario' => $usuario->getId()
                 )
             );
 

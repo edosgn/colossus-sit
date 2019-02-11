@@ -1,9 +1,8 @@
 <?php
 
-namespace Repository\UsuarioBundle\Controller;
+namespace JHWEB\UsuarioBundle\Controller;
 
-use Repository\UsuarioBundle\Entity\UserCfgRole;
-use Repository\UsuarioBundle\Entity\UserCfgRoleMenu;
+use JHWEB\UsuarioBundle\Entity\UserCfgRole;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,7 @@ class UserCfgRoleController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $roles = $em->getRepository('UsuarioBundle:UserCfgRole')->findBy(
+        $roles = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->findBy(
             array(
                 'activo'=>true
             )
@@ -35,7 +34,7 @@ class UserCfgRoleController extends Controller
 
         $response['data'] = null;
 
-        if (count($roles) > 0) {
+        if ($roles) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -67,20 +66,10 @@ class UserCfgRoleController extends Controller
             
             $role = new UserCfgRole();
 
-            $role->setNombre(strtoupper($params->nombre));
+            $role->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $role->setActivo(true);
             
             $em->persist($role);
-            $em->flush();
-
-            foreach ($params->menus as $key => $idMenu) {
-                $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
-                    $idMenu
-                );
-                
-                $this->createMenuAction($role, $menu);
-            }
-            
             $em->flush();
 
             $response = array(
@@ -104,7 +93,7 @@ class UserCfgRoleController extends Controller
      * Finds and displays a userCfgRole entity.
      *
      * @Route("/show", name="usercfgrole_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request)
     {
@@ -118,7 +107,9 @@ class UserCfgRoleController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $role = $em->getRepository('UsuarioBundle:UserCfgRole')->find($params->id);
+            $role = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->find(
+                $params->id
+            );
 
             if ($role) {
                 $response = array(
@@ -163,18 +154,12 @@ class UserCfgRoleController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $role = $em->getRepository("UsuarioBundle:UserCfgRole")->find($params->id);
+            $role = $em->getRepository("JHWEBUsuarioBundle:UserCfgRole")->find(
+                $params->id
+            );
 
             if ($role) {
-                $role->setNombre(strtoupper($params->nombre));
-
-                foreach ($params->menus as $key => $idMenu) {
-                    $menu = $em->getRepository('UsuarioBundle:UserCfgMenu')->find(
-                        $idMenu
-                    );
-                    
-                    $this->createMenuAction($role, $menu);
-                }
+                $role->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 
                 $em->flush();
 
@@ -219,7 +204,10 @@ class UserCfgRoleController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $role = $em->getRepository('UsuarioBundle:UserCfgRole')->find($params->id);
+
+            $role = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->find(
+                $params->id
+            );
             $role->setActivo(false);
 
             $em->flush();
@@ -256,6 +244,8 @@ class UserCfgRoleController extends Controller
         ;
     }
 
+    /* ======================================================== */
+
     /**
      * datos para select 2
      *
@@ -267,7 +257,7 @@ class UserCfgRoleController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-        $roles = $em->getRepository('UsuarioBundle:UserCfgRole')->findBy(
+        $roles = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->findBy(
             array('activo' => true)
         );
 
@@ -281,40 +271,5 @@ class UserCfgRoleController extends Controller
         }
         
         return $helpers->json($response);
-    }
-
-    /* ======================================================== */
-
-    /**
-     * datos para select 2
-     *
-     * @Route("/create/menu", name="usercfgrole_create_menu")
-     * @Method({"GET", "POST"})
-     */
-    public function createMenuAction($role, $menu)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $roleMenu = $em->getRepository('UsuarioBundle:UserCfgRoleMenu')->findBy(
-            array(
-                'menu' => $menu->getId(),
-                'role' => $role->getId()
-            )
-        );
-
-        if (!$roleMenu) {
-            $roleMenu = new UserCfgRoleMenu();
-
-            $roleMenu->setMenu($menu);
-            $roleMenu->setRole($role);
-            $roleMenu->setActivo(true);
-
-            $em->persist($roleMenu);
-            $em->flush();
-        }
-
-        if ($menu->getParent()) {
-            $this->createMenuAction($role, $menu->getParent());
-        }
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Repository\UsuarioBundle\Entity;
+namespace JHWEB\UsuarioBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * UserCfgMenu
  *
  * @ORM\Table(name="user_cfg_menu")
- * @ORM\Entity(repositoryClass="Repository\UsuarioBundle\Repository\UserCfgMenuRepository")
+ * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserCfgMenuRepository")
  */
 class UserCfgMenu
 {
@@ -58,6 +58,9 @@ class UserCfgMenu
 
     /** @ORM\ManyToOne(targetEntity="UserCfgMenu", inversedBy="childrens") */
     private $parent;
+
+    /** @ORM\ManyToOne(targetEntity="UserCfgRole", inversedBy="menus") */
+    private $role;
 
 
     /**
@@ -193,11 +196,11 @@ class UserCfgMenu
     /**
      * Set parent
      *
-     * @param \Repository\UsuarioBundle\Entity\UserCfgMenu $parent
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgMenu $parent
      *
      * @return UserCfgMenu
      */
-    public function setParent(\Repository\UsuarioBundle\Entity\UserCfgMenu $parent = null)
+    public function setParent(\JHWEB\UsuarioBundle\Entity\UserCfgMenu $parent = null)
     {
         $this->parent = $parent;
 
@@ -207,10 +210,34 @@ class UserCfgMenu
     /**
      * Get parent
      *
-     * @return \Repository\UsuarioBundle\Entity\UserCfgMenu
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgMenu
      */
     public function getParent()
     {
         return $this->parent;
+    }
+
+    /**
+     * Set role
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgRole $role
+     *
+     * @return UserCfgMenu
+     */
+    public function setRole(\JHWEB\UsuarioBundle\Entity\UserCfgRole $role = null)
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * Get role
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgRole
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 }

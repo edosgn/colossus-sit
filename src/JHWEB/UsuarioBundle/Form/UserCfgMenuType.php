@@ -1,6 +1,6 @@
 <?php
 
-namespace Repository\UsuarioBundle\Form;
+namespace JHWEB\UsuarioBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -13,14 +13,14 @@ class UserCfgMenuType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('titulo')->add('url')->add('activo')->add('parent');
+        $builder->add('titulo')->add('tipo')->add('path')->add('abreviatura')->add('activo')->add('parent')->add('role');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Repository\UsuarioBundle\Entity\UserCfgMenu'
+            'data_class' => 'JHWEB\UsuarioBundle\Entity\UserCfgMenu'
         ));
     }
 
@@ -29,7 +29,7 @@ class UserCfgMenuType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'repository_usuariobundle_usercfgmenu';
+        return 'jhweb_usuariobundle_usercfgmenu';
     }
 
 

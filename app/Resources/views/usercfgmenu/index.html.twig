@@ -8,7 +8,9 @@
             <tr>
                 <th>Id</th>
                 <th>Titulo</th>
-                <th>Url</th>
+                <th>Tipo</th>
+                <th>Path</th>
+                <th>Abreviatura</th>
                 <th>Activo</th>
                 <th>Actions</th>
             </tr>
@@ -18,7 +20,9 @@
             <tr>
                 <td><a href="{{ path('usercfgmenu_show', { 'id': userCfgMenu.id }) }}">{{ userCfgMenu.id }}</a></td>
                 <td>{{ userCfgMenu.titulo }}</td>
-                <td>{{ userCfgMenu.url }}</td>
+                <td>{{ userCfgMenu.tipo }}</td>
+                <td>{{ userCfgMenu.path }}</td>
+                <td>{{ userCfgMenu.abreviatura }}</td>
                 <td>{% if userCfgMenu.activo %}Yes{% else %}No{% endif %}</td>
                 <td>
                     <ul>

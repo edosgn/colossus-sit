@@ -1,6 +1,6 @@
 <?php
 
-namespace Repository\UsuarioBundle\Repository;
+namespace JHWEB\UsuarioBundle\Repository;
 
 /**
  * UserCfgMenuRepository
