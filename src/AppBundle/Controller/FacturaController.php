@@ -223,19 +223,26 @@ class FacturaController extends Controller
             $numero = $params->numero;
             $estado = $params->estado;
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
+            $idApoderado = (isset($params->idApoderado)) ? $params->idApoderado : null;
             $fechaCreacionDateTime = new \DateTime(date('Y-m-d'));
             $sedeOperativaId = $params->sedeOperativaId;
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
 
+            if ($idApoderado) {
+                $apoderado = $em->getRepository('UsuarioBundle:Usuario')->find($params->idApoderado);
+                $factura->setApoderado($apoderado->getCiudadano());
+            }
+
+            $solicitante = $em->getRepository('AppBundle:Ciudadano')->find($params->idSolicitante);
+            $factura->setSolicitante($solicitante);
+
             $em = $this->getDoctrine()->getManager();
-        
 
             if ($factura!=null) {
                 $factura->setNumero($numero);
                 $factura->setFechaCreacion($fechaCreacionDateTime);
                 $factura->setEstado($estado);
                 $factura->setSedeOperativa($sedeOperativa);
-                
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($factura);

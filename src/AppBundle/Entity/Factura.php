@@ -105,7 +105,18 @@ class Factura
      **/
     protected $ciudadano;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
+     **/
+    protected $solicitante;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
+     **/
+    protected $apoderado;
+
+
+    
 
     /**
      * Get id
@@ -234,9 +245,6 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        if ($this->fechaCreacion) {
-            return $this->fechaCreacion->format('d/m/Y');
-        }
         return $this->fechaCreacion;
     }
 
@@ -430,5 +438,53 @@ class Factura
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set solicitante
+     *
+     * @param \AppBundle\Entity\Ciudadano $solicitante
+     *
+     * @return Factura
+     */
+    public function setSolicitante(\AppBundle\Entity\Ciudadano $solicitante = null)
+    {
+        $this->solicitante = $solicitante;
+
+        return $this;
+    }
+
+    /**
+     * Get solicitante
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getSolicitante()
+    {
+        return $this->solicitante;
+    }
+
+    /**
+     * Set apoderado
+     *
+     * @param \AppBundle\Entity\Ciudadano $apoderado
+     *
+     * @return Factura
+     */
+    public function setApoderado(\AppBundle\Entity\Ciudadano $apoderado = null)
+    {
+        $this->apoderado = $apoderado;
+
+        return $this;
+    }
+
+    /**
+     * Get apoderado
+     *
+     * @return \AppBundle\Entity\Ciudadano
+     */
+    public function getApoderado()
+    {
+        return $this->apoderado;
     }
 }
