@@ -741,7 +741,7 @@ class VehiculoController extends Controller
                             break;
                             
                         case 'cancelacionmatricula':
-                            $vehiculo->setEstado(false);
+                            $vehiculo->setCancelado(true);
                             break;
 
                         case 'regrabarchasis':
