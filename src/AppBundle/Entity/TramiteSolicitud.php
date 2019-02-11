@@ -57,9 +57,9 @@ class TramiteSolicitud
     private $datos;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="resumen", type="array", nullable=true)
+     * @ORM\Column(name="resumen", type="text", nullable=true)
      */
     private $resumen;
 
@@ -221,7 +221,7 @@ class TramiteSolicitud
     /**
      * Set resumen
      *
-     * @param array $resumen
+     * @param string $resumen
      *
      * @return TramiteSolicitud
      */
@@ -235,7 +235,7 @@ class TramiteSolicitud
     /**
      * Get resumen
      *
-     * @return array
+     * @return string
      */
     public function getResumen()
     {

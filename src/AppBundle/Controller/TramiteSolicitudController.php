@@ -183,8 +183,6 @@ class TramiteSolicitudController extends Controller
                 $tramiteSolicitud->setVehiculo($vehiculo);
             }
 
-            VAR_DUMP($params);
-
             if ($datos->idFactura && $datos->tramiteFormulario) {
                 $factura = $em->getRepository('AppBundle:Factura')->find(
                     $datos->idFactura
@@ -196,8 +194,10 @@ class TramiteSolicitudController extends Controller
                 
                 $tramiteFactura = $em->getRepository('AppBundle:TramiteFactura')->getByFacturaAndTramite($factura->getId(), $tramite->getId()
                 );
+
                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
                 $tramiteFactura->setRealizado(true);
+
                 $em->flush();
             }
             $tramiteSolicitud->setObservacion($observacion);
@@ -421,9 +421,10 @@ class TramiteSolicitudController extends Controller
 
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
+
         $datos = $request->get("json", null);
         $params = json_decode($datos);
-        $authCheck = $helpers->authCheck($hash);
+        
         $reporteFecha = $em->getRepository('AppBundle:TramiteSolicitud')->getReporteFecha($params);
 
         if ($reporteFecha) {
@@ -445,21 +446,21 @@ class TramiteSolicitudController extends Controller
     /**
      * Lists all tramiteSolicitud entities.
      *
-     * @Route("/buscar/matricula/cancelada", name="tramitesolicitud_matriculada_cancelada")
+     * @Route("/search/matricula/cancelada", name="tramitesolicitud_matricula_cancelada")
      * @Method({"GET", "POST"})
      */
-    public function buscarMatriculadaActionAction(Request $request)
+    public function searchMatriculaCanceladaAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
-        $datos = $request->get("json", null);
-        $params = json_decode($datos);
-        $authCheck = $helpers->authCheck($hash);
-        $matriculaCancelada = $em->getRepository('AppBundle:TramiteSolicitud')->findMatriculaCancelada($params);
-        var_dump($matriculaCancelada);
-        die();
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $matriculaCancelada = $em->getRepository('AppBundle:TramiteSolicitud')->getMatriculaCancelada($params->idVehiculo);
+
         if ($matriculaCancelada) {
             $response = array(
                 'status' => 'success',
@@ -471,7 +472,7 @@ class TramiteSolicitudController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "La matricula no se encuentra cancelada",
+                'message' => "El vehiculo no presenta un tramite de cancelación previo, no es posible continuar con el trámite de Rematricula.",
             );
         }
         return $helpers->json($response);

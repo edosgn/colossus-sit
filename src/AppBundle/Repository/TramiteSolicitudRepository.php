@@ -124,21 +124,26 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
-    public function findMatriculaCancelada($params)
+    public function getMatriculaCancelada($idVehiculo)
     {
         $em = $this->getEntityManager();
+
         $dql = "SELECT ts
-            FROM AppBundle:TramiteFactura tf, AppBundle:Tramite t
-            WHERE tf.factura.vehiculo.id = :idVehiculo
-            AND tf.factura = :idFactura
-            AND tf.factura.vehiculo.cancelado = 1
-            AND tf.realizado = 1";
+            FROM AppBundle:TramiteFactura tf, AppBundle:Tramite t,
+            AppBundle:TramitePrecio tp, AppBundle:TramiteSolicitud ts,
+            AppBundle:Vehiculo v
+            WHERE tf.tramitePrecio = tp.id
+            AND tp.tramite = t.id
+            AND t.codigo = 84
+            AND ts.tramiteFactura = tf.id
+            AND ts.vehiculo = :idVehiculo
+            AND tf.realizado = true";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'idVehiculo' => $params->idVehiculo,
-            'idFactura' => $params->idFactura,
+            'idVehiculo' => $idVehiculo,
         ));
-        return $consulta->getResult();
+
+        return $consulta->getOneOrNullResult();
     }    
 }
