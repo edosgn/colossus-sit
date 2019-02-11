@@ -60,8 +60,9 @@ class FroTramiteController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $tramite = new FroTramite();
+
             $tramite->setCodigo($params->codigo);
-            $tramite->setNombre(strtoupper($params->nombre));
+            $tramite->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
 
             $sustrato = ($params->sustrato == 'true') ? true : false;
             $tramite->setSustrato($sustrato);
@@ -118,23 +119,25 @@ class FroTramiteController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $froTramite = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->find($params->id);
 
-            if ($froTramite != null) {
+            $tramite = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->find(
+                $params->id
+            );
 
-                $froTramite->setCodigo($params->codigo);
-                $froTramite->setNombre(strtoupper($params->nombre));
+            if ($tramite) {
+                $tramite->setCodigo($params->codigo);
+                $tramite->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
 
                 $sustrato = ($params->sustrato == 'true') ? true : false;
-                $froTramite->setSustrato($sustrato);
+                $tramite->setSustrato($sustrato);
 
-                $em->persist($froTramite);
+                $em->persist($tramite);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con éxito",
-                    'data' => $froTramite,
+                    'data' => $tramite,
                 );
             } else {
                 $response = array(
@@ -170,11 +173,13 @@ class FroTramiteController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $frotramite = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->find($params->id);
+            $tramite = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->find(
+                $params->id
+            );
 
-            $frotramite->setActivo(false);
+            $tramite->setActivo(false);
 
-            $em->persist($frotramite);
+            $em->persist($tramite);
             $em->flush();
 
             $response = array(
@@ -219,10 +224,13 @@ class FroTramiteController extends Controller
     {
         $response = null;
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
+
         $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->findBy(
             array('activo' => true)
         );
+
         foreach ($tramites as $key => $tramite) {
             $response[$key] = array(
                 'value' => $tramite->getId(),

@@ -231,7 +231,7 @@ class UserUsuarioMenuController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $usuarioMenu = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findBy(
+        $usuarioMenu = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findOneBy(
             array(
                 'menu' => $menu->getId(),
                 'usuario' => $usuario->getId()
@@ -246,6 +246,10 @@ class UserUsuarioMenuController extends Controller
             $usuarioMenu->setActivo(true);
 
             $em->persist($usuarioMenu);
+            $em->flush();
+        }else{
+            $usuarioMenu->setActivo(true);
+
             $em->flush();
         }
 
