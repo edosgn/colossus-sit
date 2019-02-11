@@ -181,11 +181,7 @@ class UserUsuarioMenuController extends Controller
             );
 
             if ($usuario) {
-                $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findByUsuario(
-                    array(
-                        'usuario' => $usuario->getId()
-                    )
-                );
+                $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
 
                 if ($menus) {
                     $response = array(
