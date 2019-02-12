@@ -109,6 +109,10 @@ class SvSenialUbicacionController extends Controller
                     $ubicacion->setHora(new \Datetime(date('h:i:s A')));
                     $ubicacion->setCantidad($params->cantidad);
 
+                    if ($params->markers) {
+                        $ubicacion->setGeolocalizacion($params->markers);
+                    }
+
                     if ($params->idBodega) {
                         $bodega = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->find(
                             $params->idBodega);

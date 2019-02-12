@@ -29,18 +29,18 @@ class FroTrtePrecio
     private $nombre;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="valor", type="integer")
-     */
-    private $valor;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_inicio", type="date")
      */
     private $fechaInicio;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor", type="integer")
+     */
+    private $valor;
 
     /**
      * @var int
