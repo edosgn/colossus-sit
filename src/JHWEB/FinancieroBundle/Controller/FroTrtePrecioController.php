@@ -62,20 +62,33 @@ class FroTrtePrecioController extends Controller
             
             $tramitePrecio = new FroTrtePrecio();
 
-            $tramitePrecio->setNombre(strtoupper($params->nombre));
             $tramitePrecio->setValor($params->valor);
             $tramitePrecio->setFechaInicio(new \Datetime($params->fechaInicio));
-            $tramitePrecio->setValorConcepto($params->valorConcepto);
-            $tramitePrecio->setValorTotal($params->valorTotal);
+            $tramitePrecio->setValorConcepto(0);
+            $tramitePrecio->setValorTotal(0);
 
-            $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find($params->idTramite);
-            $tramitePrecio->setTramite($tramite);
+            if ($params->idTramite) {
+                $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find(
+                    $params->idTramite
+                );
+                $tramitePrecio->setTramite($tramite);
+            }
 
-            $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find($params->idClase);
-            $tramitePrecio->setClase($clase);
+            if ($params->idClase) {
+                $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find(
+                    $params->idClase
+                );
+                $tramitePrecio->setClase($clase);
+            }
 
-            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
-            $tramitePrecio->setModulo($modulo);
+            if ($params->idModulo) {
+                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
+                    $params->idModulo
+                );
+                $tramitePrecio->setModulo($modulo);
+            }
+
+            $tramitePrecio->setNombre(mb_strtoupper($tramite->getNombre().' '.$modulo->getAbreviatura()), 'utf-8');
 
             $tramitePrecio->setActivo(true);
 
@@ -87,9 +100,6 @@ class FroTrtePrecioController extends Controller
                 'code' => 200,
                 'message' => "tramite precio creado con éxito",
             );
-
-            //}
-
         }else{
             $response = array(
                 'status' => 'error',
