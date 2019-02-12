@@ -37,10 +37,6 @@ class FroAcuerdoPagoController extends Controller
             
             $acuerdoPago = new FroAcuerdoPago();
 
-            // var_dump($params->acuerdoPago->fecha);
-            // die();
-
-
             $fecha = new \Datetime($params->acuerdoPago->fecha);
             $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->findMaximo(
                 $fecha->format('Y')
@@ -95,6 +91,7 @@ class FroAcuerdoPagoController extends Controller
                     $amortizacion->setValor($cuota->valorCapital);
                     $amortizacion->setFechaLimite($fecha);
                     $amortizacion->setNumeroCuota($key++);
+
                     $em->persist($amortizacion);
                     $em->flush();
                 }

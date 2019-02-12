@@ -275,4 +275,80 @@ class Helpers
 
         return $template; 
     }
+
+    public function getDateAudiencia($fecha, $hora){
+		$em = $this->em;
+
+		$horario = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgHorario')->findOneByActivo(true);
+
+		$atenciones = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgAtencion')->findByActivo(true);
+
+		if ($horario) {
+			$audienciaLast = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->findOneByActivo(
+				array(
+					'activo' => true,
+				),
+				array(
+					'fecha' => desc,
+				)
+			);
+
+			return = $this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+		}else{
+			console.log('No se ha asignado el hoario de atención en el sistema.');
+		}
+	}
+
+	public function validateAudiencia($fecha, $hora, $audienciaLast, $horario){
+		if ($fecha->format('w') != 0 and $fecha->format('w') != 6) {
+			if ($audienciaLast) {
+				if ($fecha >= $audienciaLast->getFecha() and $hora > $audienciaLast->getHora()){
+					$horaTardeFinal = new \Datetime($horario->getHoraTardeFinal);
+
+					if ($hora > $horaTardeFinal) {
+						$fecha->modify('+1 days');
+						$hora = $horaManianaInicial;
+						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+					}else{
+						$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial);
+						$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal);
+						$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial);
+
+						if(($hora > $horaManianaInicial && $hora < $horaManianaFinal) || ($hora > $horaTardeInicial && $hora < $horaTardeFinal)){
+							return array('fecha' => $fecha, 'hora' => $hora);
+						}else{
+							$hora->modify('+2 hour');
+							$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+						}
+					}
+				}else{
+					$fecha->modify('+1 days');
+					$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+				}
+			}else{
+				$horaTardeFinal = new \Datetime($horario->getHoraTardeFinal);
+
+				if ($hora > $horaTardeFinal) {
+					$fecha->modify('+1 days');
+					$hora = $horaManianaInicial;
+					$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+				}else{
+					$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial);
+					$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal);
+					$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial);
+
+					if(($hora > $horaManianaInicial && $hora < $horaManianaFinal) || ($hora > $horaTardeInicial && $hora < $horaTardeFinal)){
+						return array('fecha' => $fecha, 'hora' => $hora);
+					}else{
+						$hora->modify('+2 hour');
+						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+					}
+				}
+			}
+		}else{
+			$fecha->modify('+1 days');
+			$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+		}
+
+	}
 }

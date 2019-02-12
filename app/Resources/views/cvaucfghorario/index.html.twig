@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvaucfghorarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Horamanianainicial</th>
+                <th>Horamanianafinal</th>
+                <th>Horatardeinicial</th>
+                <th>Horatardefinal</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvAuCfgHorario in cvAuCfgHorarios %}
+            <tr>
+                <td><a href="{{ path('cvaucfghorario_show', { 'id': cvAuCfgHorario.id }) }}">{{ cvAuCfgHorario.id }}</a></td>
+                <td>{% if cvAuCfgHorario.horaManianaInicial %}{{ cvAuCfgHorario.horaManianaInicial|date('H:i:s') }}{% endif %}</td>
+                <td>{% if cvAuCfgHorario.horaManianaFinal %}{{ cvAuCfgHorario.horaManianaFinal|date('H:i:s') }}{% endif %}</td>
+                <td>{% if cvAuCfgHorario.horaTardeInicial %}{{ cvAuCfgHorario.horaTardeInicial|date('H:i:s') }}{% endif %}</td>
+                <td>{% if cvAuCfgHorario.horaTardeFinal %}{{ cvAuCfgHorario.horaTardeFinal|date('H:i:s') }}{% endif %}</td>
+                <td>{% if cvAuCfgHorario.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvaucfghorario_show', { 'id': cvAuCfgHorario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvaucfghorario_edit', { 'id': cvAuCfgHorario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvaucfghorario_new') }}">Create a new cvAuCfgHorario</a>
+        </li>
+    </ul>
+{% endblock %}

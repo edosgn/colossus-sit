@@ -1154,13 +1154,21 @@ class ComparendoController extends Controller
                     'fecha' => 'DESC'
                 )
             );
+
+
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->find($params->id);
+            $acuerdoPago = $comparendo->getAcuerdoPago();
+
             
             if ($trazabilidades) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($trazabilidades)." Documentos registrados.", 
-                    'data'=> $trazabilidades,
+                    'data'=> array(
+                        'trazabilidades' => $trazabilidades,
+                        'acuerdoPago' => $acuerdoPago,
+                    )
                 );
             }else{
                 $response = array(
