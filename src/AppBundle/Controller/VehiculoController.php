@@ -765,7 +765,7 @@ class VehiculoController extends Controller
                 $em->flush();
                 $response = array(
                     'status' => 'success',
-                    'code' => 400,
+                    'code' => 200,
                     'message' => "El vehiculo se actualizó con éxito",
                 );
             } else {
