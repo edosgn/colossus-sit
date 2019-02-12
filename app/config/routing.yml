@@ -1,11 +1,3 @@
-jhweb_financiero_fro_cfg_tipo_recaudo:
-    resource: "@JHWEBFinancieroBundle/Controller/FroCfgTipoRecaudoController.php"
-    type:     annotation
-
-jhweb_usuario_user_usuario_menu:
-    resource: "@JHWEBUsuarioBundle/Controller/UserUsuarioMenuController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
