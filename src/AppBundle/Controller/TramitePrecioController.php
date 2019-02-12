@@ -194,10 +194,6 @@ class TramitePrecioController extends Controller
                 $em->persist($tramitePrecioBD);
                 $em->flush();
 
-                
-
-
-
                 $tramitePrecioNew = new TramitePrecio();
                 $fechaInicio = new \DateTime($tramitePrecio->fechaInicio);
 

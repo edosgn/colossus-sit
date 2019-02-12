@@ -143,6 +143,14 @@ class PropietarioVehiculoController extends Controller
                 $em->persist($propietarioVehiculo);
                 $em->flush();
             }
+
+            $licenciaTrancito = new UserLicenciaTrancito();
+ 
+            $licenciaTrancito->setPropietarioVehiculo($propietarioVehiculo);
+            $licenciaTrancito->setNumero($licenciaTransito);
+            $licenciaTrancito->setFecha(new \DateTime('now'));
+            $em->persist($licenciaTrancito);
+            $em->flush();
            
 
             $response = array(
@@ -517,6 +525,7 @@ class PropietarioVehiculoController extends Controller
         $licenciaTrancito->setFecha(new \DateTime('now'));
         $em->persist($licenciaTrancito);
         $em->flush();
+        
 
         $propietarioVehiculo->setLicenciaTransito($licenciaTransito);
         $em = $this->getDoctrine()->getManager();
@@ -573,6 +582,8 @@ class PropietarioVehiculoController extends Controller
             $propietarioVehiculoNew->setPermisoTramite(false); 
 
             $propietarioVehiculoNew->setEstado(true);
+
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($propietarioVehiculoNew);
             $em->flush();
