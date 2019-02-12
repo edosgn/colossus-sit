@@ -116,7 +116,7 @@ class TramitePrecioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La fecha de inicio no puede ser inferior a la fecha actual.", 
+                    'message' => "La fecha de inicio no puede ser inferior a la fecha actual.", 
                 );
             }else{
                 $em = $this->getDoctrine()->getManager();

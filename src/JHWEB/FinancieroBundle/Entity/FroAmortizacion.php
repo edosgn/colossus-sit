@@ -47,6 +47,11 @@ class FroAmortizacion
      */
     private $froFactura;
 
+    /**
+     * @ORM\OneToOne(targetEntity="FroAcuerdoPago")
+     */
+    private $froAcuerdoPago;
+
 
     /**
      * Get id

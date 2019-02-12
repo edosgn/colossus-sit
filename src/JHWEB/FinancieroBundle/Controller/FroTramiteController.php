@@ -61,27 +61,41 @@ class FroTramiteController extends Controller
             
             $tramite = new FroTramite();
 
-            $tramite->setCodigo($params->codigo);
-            $tramite->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
-
-            $sustrato = ($params->sustrato == 'true') ? true : false;
-            $tramite->setSustrato($sustrato);
-            $tramite->setActivo(true);
-
-            $em->persist($tramite);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "tramite creado con exito",
+            $tramiteOld = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->findOneBy(
+                array(
+                    'codigo' => $params->codigo,
+                    'activo' => true,
+                )
             );
 
+            if (!$tramiteOld) {
+                $tramite->setCodigo($params->codigo);
+                $tramite->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+
+                $sustrato = ($params->sustrato == 'true') ? true : false;
+                $tramite->setSustrato($sustrato);
+                $tramite->setActivo(true);
+
+                $em->persist($tramite);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "tramite creado con exito",
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El trámite ya existe.",
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);

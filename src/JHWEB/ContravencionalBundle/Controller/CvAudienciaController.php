@@ -69,8 +69,15 @@ class CvAudienciaController extends Controller
 
             $audiencia = new CvAudiencia();
 
-            $audiencia->setFecha(new \Datetime($params->fecha));
-            $audiencia->setHora(new \Datetime($params->hora));
+            $helpers = $this->get("app.helpers");
+
+            $fecha = new \Datetime($params->fecha);
+            $hora = new \Datetime($params->hora)
+
+            $validarAudiencia = $helpers->getDateAudiencia($fecha, $hora);
+
+            $audiencia->setFecha($validarAudiencia['fecha']);
+            $audiencia->setHora($validarAudiencia['hora']);
             $audiencia->setTipo('MANUAL');
             $audiencia->setActivo(true);
 
