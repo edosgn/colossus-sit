@@ -133,7 +133,7 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             AppBundle:TramitePrecio tp, AppBundle:TramiteSolicitud ts
             WHERE tf.tramitePrecio = tp.id
             AND tp.tramite = t.id
-            AND t.codigo = 84
+            AND t.codigo = 15
             AND ts.tramiteFactura = tf.id
             AND ts.vehiculo = :idVehiculo
             AND tf.realizado = true";
