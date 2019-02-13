@@ -147,6 +147,7 @@ class VehiculoController extends Controller
                 $clase = $em->getRepository('AppBundle:Clase')->find($params->vehiculo->clase);
                 $pignorado = (isset($params->vehiculo->pignorado)) ? $params->vehiculo->pignorado : false;
                 $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
+                $tipoMatricula = (isset($params->vehiculo->tipoMatricula)) ? $params->vehiculo->tipoMatricula : false;
                 $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
                 
                 $idRadioAccion = (isset($params->vehiculo->radioAccionId)) ? $params->vehiculo->radioAccionId : false;
@@ -210,6 +211,7 @@ class VehiculoController extends Controller
                 $vehiculo->setSerie($serie);
                 $vehiculo->setVin($vin);
                 $vehiculo->setNumeroPasajeros($numeroPasajeros);
+                $vehiculo->setTipoMatricula($tipoMatricula);
                 $vehiculo->setCapacidadCarga($capacidadCarga);
 
                 if (isset($params->vehiculo->municipioId)) {

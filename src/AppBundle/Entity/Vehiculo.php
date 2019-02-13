@@ -139,6 +139,13 @@ class Vehiculo
      * @ORM\Column(name="cancelado", type="boolean", nullable= true)
      */
     private $cancelado;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="tipoMatricula", type="boolean", nullable= true)
+     */
+    private $tipoMatricula;
     
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
@@ -201,7 +208,9 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pais", inversedBy="paises") */
     private $paisRegistro;   
 
-    /** 
+    
+
+    /**
      * Get id
      *
      * @return integer
@@ -256,9 +265,6 @@ class Vehiculo
      */
     public function getFechaFactura()
     {
-        if ($this->fechaFactura) {
-            return $this->fechaFactura->format('d/m/Y');
-        }
         return $this->fechaFactura;
     }
 
@@ -331,9 +337,6 @@ class Vehiculo
      */
     public function getFechaManifiesto()
     {
-        if ($this->fechaManifiesto) {
-            return $this->fechaManifiesto->format('d/m/Y');
-        }
         return $this->fechaManifiesto;
     }
 
@@ -506,6 +509,30 @@ class Vehiculo
     }
 
     /**
+     * Set capacidadCarga
+     *
+     * @param integer $capacidadCarga
+     *
+     * @return Vehiculo
+     */
+    public function setCapacidadCarga($capacidadCarga)
+    {
+        $this->capacidadCarga = $capacidadCarga;
+
+        return $this;
+    }
+
+    /**
+     * Get capacidadCarga
+     *
+     * @return integer
+     */
+    public function getCapacidadCarga()
+    {
+        return $this->capacidadCarga;
+    }
+
+    /**
      * Set estado
      *
      * @param boolean $estado
@@ -599,6 +626,30 @@ class Vehiculo
     public function getCancelado()
     {
         return $this->cancelado;
+    }
+
+    /**
+     * Set tipoMatricula
+     *
+     * @param boolean $tipoMatricula
+     *
+     * @return Vehiculo
+     */
+    public function setTipoMatricula($tipoMatricula)
+    {
+        $this->tipoMatricula = $tipoMatricula;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoMatricula
+     *
+     * @return boolean
+     */
+    public function getTipoMatricula()
+    {
+        return $this->tipoMatricula;
     }
 
     /**
@@ -983,29 +1034,5 @@ class Vehiculo
     public function getPaisRegistro()
     {
         return $this->paisRegistro;
-    }
-
-    /**
-     * Set capacidadCarga
-     *
-     * @param integer $capacidadCarga
-     *
-     * @return Vehiculo
-     */
-    public function setCapacidadCarga($capacidadCarga)
-    {
-        $this->capacidadCarga = $capacidadCarga;
-
-        return $this;
-    }
-
-    /**
-     * Get capacidadCarga
-     *
-     * @return integer
-     */
-    public function getCapacidadCarga()
-    {
-        return $this->capacidadCarga;
     }
 }
