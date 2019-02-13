@@ -72,9 +72,10 @@ class CvAudienciaController extends Controller
             $helpers = $this->get("app.helpers");
 
             $fecha = new \Datetime($params->fecha);
-            $hora = new \Datetime($params->hora)
+            $hora = new \Datetime($params->hora);
 
             $validarAudiencia = $helpers->getDateAudiencia($fecha, $hora);
+            die($validarAudiencia);
 
             $audiencia->setFecha($validarAudiencia['fecha']);
             $audiencia->setHora($validarAudiencia['hora']);
