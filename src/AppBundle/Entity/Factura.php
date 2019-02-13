@@ -245,7 +245,9 @@ class Factura
      */
     public function getFechaCreacion()
     {
-        return $this->fechaCreacion;
+        if ($this->fechaCreacion) {
+            return $this->fechaCreacion->format('d/m/Y');
+        }
     }
 
     /**
@@ -269,7 +271,9 @@ class Factura
      */
     public function getFechaVencimiento()
     {
-        return $this->fechaVencimiento;
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('d/m/Y');
+        }
     }
 
     /**

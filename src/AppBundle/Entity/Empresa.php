@@ -59,7 +59,7 @@ class Empresa
     /**
      * @var int
      *
-     * @ORM\Column(name="fax", type="bigint", length=20)
+     * @ORM\Column(name="fax", type="bigint", length=20, nullable = true)
      */
     private $fax;
 
@@ -80,42 +80,42 @@ class Empresa
     /**
      * @var string
      *
-     * @ORM\Column(name="sigla", type="string", length=255)
+     * @ORM\Column(name="sigla", type="string", length=255, nullable=true)
      */
     private $sigla;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="capital_pagado", type="string", length=255)
+     * @ORM\Column(name="capital_pagado", type="string", length=255, nullable=true)
      */
     private $capitalPagado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="capital_liquido", type="string", length=255)
+     * @ORM\Column(name="capital_liquido", type="string", length=255, nullable=true)
      */
     private $capitalLiquido;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo_entidad", type="string", length=255)
+     * @ORM\Column(name="tipo_entidad", type="string", length=255, nullable=true)
      */
     private $tipoEntidad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="certificado_existencial", type="string", length=255)
+     * @ORM\Column(name="certificado_existencial", type="string", length=255, nullable=true)
      */
     private $certificadoExistencial;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255)
+     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255, nullable=true)
      */
     private $nroRegistroMercantil;
 
