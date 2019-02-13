@@ -341,7 +341,7 @@ class CvCdoNotificacionController extends Controller
                             }
                         }
                     }
-                }elseif($comparendo->getEstado()->getId() == 2){
+                }elseif($comparendo->getEstado()->getId() == 2){ //Sancionado
                     if (!$comparendo->getAudiencia()) {
                         //Valida si han pasado mas de 912 días (2 años 6 meses)
                         if ($diasCalendario > 912) {
@@ -459,6 +459,31 @@ class CvCdoNotificacionController extends Controller
 
                             }
                         }
+                    }
+                }elseif($comparendo->getEstado()->getId() == 4){//Acuerdo de pago
+                    $acuerdoPago = $comparendo->getAcuerdoPago();
+
+                    $amortizaciones = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->findBy(
+                        array(
+                            'acuerdoPago' => $acuerdoPago->getId()
+                        )
+                    );
+
+
+                    $fechaActual = new \Datetime(date('Y-m-d'));
+                    $noPagadas = 0;
+                    foreach ($amortizaciones as $key => $amortizacion) {
+                        $fechaLimite = $helpers->convertDateTime($amortizacion->getFechaLimite());
+                        if (!$amortizacion->getPagada() &&  $fechaLimite < $fechaActual) {
+                            $noPagadas += 1;
+                        }
+                    }
+
+                    if ($noPagadas >= 2) {
+                        //Cambia a estado acuerdo de pago incumplido
+                        $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(5);
+
+                        $this->generateTrazabilidad($comparendo, $estado);
                     }
                 }else{
                     //Busca si existe la trazabilidad de pendiente

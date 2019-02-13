@@ -35,7 +35,6 @@ class FroAcuerdoPagoController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-
             $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->findOneByActivo(
                 true
             );
@@ -43,7 +42,7 @@ class FroAcuerdoPagoController extends Controller
             if ($params->acuerdoPago->porcentajeInicial >= $porcentajeInicial->getValor()) {
                 $acuerdoPago = new FroAcuerdoPago();
 
-                $fecha = new \Datetime($params->acuerdoPago->fecha);
+                $fecha = new \Datetime(date('Y-m-d'));
                 $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->findMaximo(
                     $fecha->format('Y')
                 );
@@ -105,10 +104,12 @@ class FroAcuerdoPagoController extends Controller
 
                     $em->persist($amortizacion);
                     $em->flush();
+                    
                     foreach ($params->cuotas as $key => $cuota) {
                         $amortizacion = new FroAmortizacion();
                         
-                        $fecha = new \Datetime($cuota->fechaMensual);
+                        $fecha = $helpers->convertDateTime($cuota->fechaMensual);
+
                         $amortizacion->setValorBruto($cuota->valorCapital);
                         $amortizacion->setValorMora(0);
                         $amortizacion->setValorNeto($cuota->valorCapital);
@@ -127,10 +128,19 @@ class FroAcuerdoPagoController extends Controller
                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(4);
                 $helpers->generateTrazabilidad($comparendo, $estado);
 
+                $amortizaciones = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->findByAcuerdoPago($acuerdoPago->getId());
+
+                $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneByEstado(4);
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro creado con exito",
+                    'message' => 'Registro creado con exito.',
+                    'data' => array(
+                        'acuerdoPago' => $acuerdoPago,
+                        'amortizaciones' => $amortizaciones,
+                        'trazabilidad' => $trazabilidad,
+                    )
                 );
             }else{
                 $response = array(
@@ -294,15 +304,33 @@ class FroAcuerdoPagoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $fecha = strtotime($params->fecha);
-            $fechaFinal = date("d/m/Y", strtotime("+".$params->numeroCuotas." month", $fecha));
-            
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Calculo generado',
-                'data' => $fechaFinal
+            $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->findOneByActivo(
+                true
             );
+
+            if ($params->porcentajeInicial >= $porcentajeInicial->getValor()) {
+                $fecha = strtotime(date('Y-m-d'));
+
+                $fechaFinal = date('Y-m-d', strtotime("+".$params->numeroCuotas." month", $fecha));
+
+                $fechaFinal = $this->get('app.gestion.documental')->getFechaVencimiento(
+                    new \Datetime($fechaFinal),
+                    5
+                );
+                
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Calculo generado',
+                    'data' => $fechaFinal->format('Y-m-d')
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El porcentaje inicial no puede ser inferior al '.$porcentajeInicial->getValor().'%',
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',
@@ -332,25 +360,31 @@ class FroAcuerdoPagoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $fecha = strtotime($params->fecha);
+            $fecha = strtotime(date('Y-m-d'));
 
-            // var_dump($params->valorCapital);
-            // die();
-
-            $subtotal = $params->valorCapital - $params->valorCuotaInicial;
-            $cuotaMensual = $subtotal / $params->numeroCuotas;
             $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
                 $params->idInteres
             );
+            $valorInteres = ($interes->getValor() / 100) * $params->valorCapital;
+
+            $subtotal = $params->valorCapital - $params->valorCuotaInicial + $valorInteres;
+            $cuotaMensual = $subtotal / $params->numeroCuotas;
 
             $totalPagar = 0;
 
             for ($i=0; $i < $params->numeroCuotas ; $i++) { 
-                $fechaMensual = date("Y-m-d", strtotime("+".$i." month", $fecha));
+                $mes = $i + 1;
+                $fechaMensual = date("Y-m-d", strtotime("+".$mes." month", $fecha));
+
+                $fechaMensual = $this->get('app.gestion.documental')->getFechaVencimiento(
+                    new \Datetime($fechaMensual),
+                    5
+                );
+
                 $totalPagar += $cuotaMensual;
                 $cuotas[] = array(
                     'valorCapital' => $cuotaMensual,
-                    'fechaMensual' => $fechaMensual
+                    'fechaMensual' => $fechaMensual->format('d/m/Y')
                 );
             }
             
@@ -360,7 +394,7 @@ class FroAcuerdoPagoController extends Controller
                 'message' => 'Calculo generado',
                 'data' => array (
                     'cuotas'=> $cuotas,
-                    'totalPagar'=> $totalPagar,
+                    'totalPagar'=> number_format(round($totalPagar), 0, ',', '.')
                 ),
             );
         } else {

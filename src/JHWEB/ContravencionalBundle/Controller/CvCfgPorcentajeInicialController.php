@@ -165,7 +165,7 @@ class CvCfgPorcentajeInicialController extends Controller
     }
 
     /**
-     * datos para select 2
+     * Selecciona el porcentaje inicial activo a la fecha
      *
      * @Route("/search/active", name="cvcfgporcentajeinicial_search_active")
      * @Method({"GET", "POST"})
@@ -183,7 +183,7 @@ class CvCfgPorcentajeInicialController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Interes parametrizado '.$porcentaje->getValor().'%',
+                'message' => 'Porcentaje inicial parametrizado '.$porcentaje->getValor().'%',
                 'data' => $porcentaje
             );
         }else{

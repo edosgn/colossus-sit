@@ -297,11 +297,6 @@ class CvAcuerdoPagoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $fecha = strtotime($params->fecha);
-
-            // var_dump($params->valorCapital);
-            // die();
-
             $subtotal = $params->valorCapital - $params->valorCuotaInicial;
             $cuotaMensual = $subtotal / $params->numeroCuotas;
             $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
@@ -311,7 +306,9 @@ class CvAcuerdoPagoController extends Controller
             $totalPagar = 0;
 
             for ($i=0; $i < $params->numeroCuotas ; $i++) { 
-                $fechaMensual = date("d/m/Y", strtotime("+".$i." month", $fecha));
+                $mes = $i + 1;
+                $fechaMensual = date("d/m/Y", strtotime("+".$mes." month", date('Y-m-d')));
+                $fechaMensual = date("d/m/Y", strtotime("+5 days", $fechaMensual));
                 $totalPagar += $cuotaMensual;
                 $cuotas[] = array(
                     'valorCapital' => $cuotaMensual,
