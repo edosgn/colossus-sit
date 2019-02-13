@@ -217,4 +217,38 @@ class CvCfgInteresController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Selecciona el interes activo a la fecha
+     *
+     * @Route("/search/active", name="cvcfginteres_search_active")
+     * @Method({"GET", "POST"})
+     */
+    public function searchActiveAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneBy(
+            array('activo' => true)
+        );
+
+        if ($interes) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Interes parametrizado '.$interes->getValor().'%',
+                'data' => $interes
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Interes no parametrizado", 
+            );
+        } 
+
+        
+        return $helpers->json($response);
+    }
 }

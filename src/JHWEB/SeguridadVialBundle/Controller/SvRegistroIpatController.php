@@ -1104,6 +1104,123 @@ class SvRegistroIpatController extends Controller
         }
         return $helpers->json($response);
     }
+    /**
+     * Exporta ipats total.
+     *
+     * @Route("/buscaripatexport", name="buscar_ipat_export")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarIpatExportAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $em = $this->getDoctrine()->getManager();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findAll();
+            
+            if($params->file == null) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Por favor seleccione un archivo para subir",
+                );
+            } else {
+                foreach($params->file as $key => $dato) {
+                    
+                    $ipat = new SvRegistroIpat();
+                    if($ipat -> getNombresConductor() != $dato[7] && $ipat -> getApellidosConductor() != $dato[8] && $ipat -> getFechaAccidente() != $dato[2] && $ipat -> getHoraAccidente() != $dato[3]) {
+
+                        $ipat -> setFechaAccidente(new \Datetime($dato[2]));
+                        $ipat -> setHoraAccidente(new \Datetime($dato[3]));
+                        $ipat -> setDiaAccidente($dato[4]);
+                        $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
+                        $ipat -> setGravedad($gravedadFile);
+                        $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
+                        $ipat -> setTipoVictima($tipoVictimaFile);
+                        $ipat -> setCiudadResidenciaConductor($dato[0]);
+                        $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
+                        $ipat -> setSexoConductor($sexoConductorFile->getSigla());
+                        $ipat -> setEdadConductor($dato[10]);
+                        $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
+                        $ipat -> setClaseAccidente($claseAccidenteFile);
+                        $ipat->setActivo(true);
+
+                        $dataConductores = array(
+                            'nombres' => $dato[7],
+                            'apellidos' => $dato[8],
+                            'sexo' => $sexoConductorFile->getSigla(),
+                            'ciudad residencia' => $dato[0],
+                        );
+                        $ipat->setConductores($dataConductores);
+                        $em->persist($ipat);
+                        $em->flush();
+                    }
+                }
+            }
+
+            $conductoresArray = false;
+            $victimassArray = false;
+            $dataNombresConductores = null;
+            $dataApellidosConductores = null;
+            $dataNombresVictimas = null;
+            $dataApellidosVictimas = null;
+
+            /* $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
+                array('activo' => true)
+            ); */
+
+            foreach ($ipats as $ipatExport) {
+                foreach ((array)$ipatExport->getConductores() as $key => $value) {
+                    var_dump($value->nombres);
+
+                    $dataNombresConductores[] = $value->nombres;
+                    $dataApellidosConductores[] = $value->apellidos;
+                }
+                $conductoresArray = array(
+                    'nombres' => $dataNombresConductores,
+                    'apellidos' => $dataApellidosConductores,
+                );
+                foreach ((array)$ipatExport->getVictimas() as $key => $value) {
+                    $dataNombresVictimas[] = $value->nombres;
+                    $dataApellidosVictimas[] = $value->apellidos;
+                }
+                $victimasArray = array(
+                    'nombres' => $dataNombresVictimas,
+                    'apellidos' => $dataApellidosVictimas,
+                );
+            }
+            if ($ipats) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($ipats) . " ipats encontrado(s)",
+                    'data' => $ipats,
+                    'conductores' => $conductoresArray,
+                    'victimas' => $victimasArray,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron coincidencias en la Base de Datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 
     /**
      * Obtener Correspondio.

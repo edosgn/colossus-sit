@@ -38,9 +38,9 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="objetivo", type="text", nullable=true)
+     * @ORM\Column(name="borrador", type="text", nullable=true)
      */
-    private $objetivo;
+    private $borrador;
 
     /**
      * @var string
@@ -132,27 +132,51 @@ class CvAudiencia
     }
 
     /**
-     * Set objetivo
+     * Set borrador
      *
-     * @param string $objetivo
+     * @param string $borrador
      *
      * @return CvAudiencia
      */
-    public function setObjetivo($objetivo)
+    public function setBorrador($borrador)
     {
-        $this->objetivo = $objetivo;
+        $this->borrador = $borrador;
 
         return $this;
     }
 
     /**
-     * Get objetivo
+     * Get borrador
      *
      * @return string
      */
-    public function getObjetivo()
+    public function getBorrador()
     {
-        return $this->objetivo;
+        return $this->borrador;
+    }
+
+    /**
+     * Set tipo
+     *
+     * @param string $tipo
+     *
+     * @return CvAudiencia
+     */
+    public function setTipo($tipo)
+    {
+        $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    /**
+     * Get tipo
+     *
+     * @return string
+     */
+    public function getTipo()
+    {
+        return $this->tipo;
     }
 
     /**
@@ -225,29 +249,5 @@ class CvAudiencia
     public function getComparendo()
     {
         return $this->comparendo;
-    }
-
-    /**
-     * Set tipo
-     *
-     * @param string $tipo
-     *
-     * @return CvAudiencia
-     */
-    public function setTipo($tipo)
-    {
-        $this->tipo = $tipo;
-
-        return $this;
-    }
-
-    /**
-     * Get tipo
-     *
-     * @return string
-     */
-    public function getTipo()
-    {
-        return $this->tipo;
     }
 }
