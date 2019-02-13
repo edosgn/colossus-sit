@@ -75,16 +75,8 @@ class CvAudienciaController extends Controller
             $hora = new \Datetime($params->hora);
 
             $validarAudiencia = $helpers->getDateAudiencia($fecha, $hora);
-            die($validarAudiencia);
-
             $audiencia->setFecha($validarAudiencia['fecha']);
             $audiencia->setHora($validarAudiencia['hora']);
-            $audiencia->setTipo('MANUAL');
-            $audiencia->setActivo(true);
-
-            /*if ($params->objetivo) {
-                $audiencia->setObjetivo($params->objetivo);
-            }*/
 
             if ($params->idComparendo) {
                 $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
@@ -93,6 +85,31 @@ class CvAudienciaController extends Controller
                 $audiencia->setComparendo($comparendo);
                 $comparendo->setAudiencia(true);
             }
+
+            if ($comparendo) {
+                //Busca si existe una audiencia previa programada para este comprendo
+                $audienciaOld = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->findOneBy(
+                    array(
+                        'comparendo' => $comparendo->getId(),
+                        'activo' => true,
+                    )
+                );
+
+                if ($audienciaOld) {
+                    $audienciaOld->setActivo(false);
+                    $em->flush();
+
+                    $audiencia->setTipo('REPROGRAMADA');
+                }else{
+                    $audiencia->setTipo('MANUAL');
+                }
+            }
+
+            $audiencia->setActivo(true);
+
+            /*if ($params->objetivo) {
+                $audiencia->setObjetivo($params->objetivo);
+            }*/
 
             //Registra trazabilidad de notificación
             $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(19);

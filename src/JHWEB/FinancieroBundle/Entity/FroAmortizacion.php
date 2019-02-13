@@ -38,19 +38,38 @@ class FroAmortizacion
     /**
      * @var float
      *
-     * @ORM\Column(name="valor", type="float")
+     * @ORM\Column(name="valor_bruto", type="float")
      */
-    private $valor;
+    private $valorBruto;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_mora", type="float")
+     */
+    private $valorMora;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_neto", type="float")
+     */
+    private $valorNeto;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="pagada", type="boolean")
+     */
+    private $pagada;
 
     /**
      * @ORM\OneToOne(targetEntity="FroFactura")
      */
-    private $froFactura;
+    private $factura;
 
-    /**
-     * @ORM\OneToOne(targetEntity="FroAcuerdoPago")
-     */
-    private $froAcuerdoPago;
+    /** @ORM\ManyToOne(targetEntity="FroAcuerdoPago", inversedBy="acuerdosPago") */
+    private $acuerdoPago;
 
 
     /**
@@ -112,50 +131,146 @@ class FroAmortizacion
     }
 
     /**
-     * Set valor
+     * Set valorBruto
      *
-     * @param float $valor
+     * @param float $valorBruto
      *
      * @return FroAmortizacion
      */
-    public function setValor($valor)
+    public function setValorBruto($valorBruto)
     {
-        $this->valor = $valor;
+        $this->valorBruto = $valorBruto;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get valorBruto
      *
      * @return float
      */
-    public function getValor()
+    public function getValorBruto()
     {
-        return $this->valor;
+        return $this->valorBruto;
     }
 
     /**
-     * Set froFactura
+     * Set valorMora
      *
-     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $froFactura
+     * @param float $valorMora
      *
      * @return FroAmortizacion
      */
-    public function setFroFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $froFactura = null)
+    public function setValorMora($valorMora)
     {
-        $this->froFactura = $froFactura;
+        $this->valorMora = $valorMora;
 
         return $this;
     }
 
     /**
-     * Get froFactura
+     * Get valorMora
+     *
+     * @return float
+     */
+    public function getValorMora()
+    {
+        return $this->valorMora;
+    }
+
+    /**
+     * Set valorNeto
+     *
+     * @param float $valorNeto
+     *
+     * @return FroAmortizacion
+     */
+    public function setValorNeto($valorNeto)
+    {
+        $this->valorNeto = $valorNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get valorNeto
+     *
+     * @return float
+     */
+    public function getValorNeto()
+    {
+        return $this->valorNeto;
+    }
+
+    /**
+     * Set pagada
+     *
+     * @param boolean $pagada
+     *
+     * @return FroAmortizacion
+     */
+    public function setPagada($pagada)
+    {
+        $this->pagada = $pagada;
+
+        return $this;
+    }
+
+    /**
+     * Get pagada
+     *
+     * @return boolean
+     */
+    public function getPagada()
+    {
+        return $this->pagada;
+    }
+
+    /**
+     * Set factura
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $factura
+     *
+     * @return FroAmortizacion
+     */
+    public function setFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $factura = null)
+    {
+        $this->factura = $factura;
+
+        return $this;
+    }
+
+    /**
+     * Get factura
      *
      * @return \JHWEB\FinancieroBundle\Entity\FroFactura
      */
-    public function getFroFactura()
+    public function getFactura()
     {
-        return $this->froFactura;
+        return $this->factura;
+    }
+
+    /**
+     * Set acuerdoPago
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroAcuerdoPago $acuerdoPago
+     *
+     * @return FroAmortizacion
+     */
+    public function setAcuerdoPago(\JHWEB\FinancieroBundle\Entity\FroAcuerdoPago $acuerdoPago = null)
+    {
+        $this->acuerdoPago = $acuerdoPago;
+
+        return $this;
+    }
+
+    /**
+     * Get acuerdoPago
+     *
+     * @return \JHWEB\FinancieroBundle\Entity\FroAcuerdoPago
+     */
+    public function getAcuerdoPago()
+    {
+        return $this->acuerdoPago;
     }
 }

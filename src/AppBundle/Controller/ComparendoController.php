@@ -1155,11 +1155,14 @@ class ComparendoController extends Controller
                 )
             );
 
-
             $comparendo = $em->getRepository('AppBundle:Comparendo')->find($params->id);
             $acuerdoPago = $comparendo->getAcuerdoPago();
 
-            
+            $amortizaciones = null;
+            if ($acuerdoPago) {
+                $amortizaciones = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->findByAcuerdoPago($acuerdoPago->getId());
+            }
+
             if ($trazabilidades) {
                 $response = array(
                     'status' => 'success',
@@ -1168,6 +1171,7 @@ class ComparendoController extends Controller
                     'data'=> array(
                         'trazabilidades' => $trazabilidades,
                         'acuerdoPago' => $acuerdoPago,
+                        'amortizaciones' => $amortizaciones,
                     )
                 );
             }else{

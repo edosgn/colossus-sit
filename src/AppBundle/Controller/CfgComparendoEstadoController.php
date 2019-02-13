@@ -62,8 +62,11 @@ class CfgComparendoEstadoController extends Controller
 
             $estado = new CfgComparendoEstado();
 
-            $estado->setNombre(strtoupper($params->nombre));
-            $estado->setSigla(strtoupper($params->sigla));
+            $estado->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $estado->setSigla(mb_strtoupper($params->sigla, 'utf-8'));
+            $estado->setDias($params->dias);
+            $estado->setHabiles($params->habiles);
+            $estado->setSimit($params->simit);
             $estado->setActualiza($params->actualiza);
             $estado->setActivo(true);
 
@@ -96,7 +99,7 @@ class CfgComparendoEstadoController extends Controller
     /**
      * Finds and displays a cfgComparendoEstado entity.
      *
-     * @Route("/{id}/show", name="cfgcomparendoestado_show")
+     * @Route("/show", name="cfgcomparendoestado_show")
      * @Method("GET")
      */
     public function showAction(CfgComparendoEstado $cfgComparendoEstado)
@@ -132,8 +135,8 @@ class CfgComparendoEstadoController extends Controller
             );
 
             if ($estado) {
-                $estado->setNombre(strtoupper($params->nombre));
-                $estado->setSigla(strtoupper($params->sigla));
+                $estado->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                $estado->setSigla(mb_strtoupper($params->sigla, 'utf-8'));
                 $estado->setActualiza($params->actualiza);
 
                 if ($params->idFormato) {

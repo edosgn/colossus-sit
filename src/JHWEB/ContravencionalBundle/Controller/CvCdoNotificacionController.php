@@ -293,8 +293,15 @@ class CvCdoNotificacionController extends Controller
 
                                 $audiencia = new CvAudiencia();
 
-                                $audiencia->setFecha(new \Datetime(date('Y-m-d')));
-                                $audiencia->setHora(new \Datetime(date('h:i:s A')));
+                                $fecha = new \Datetime(date('Y-m-d'));
+                                $hora = new \Datetime(date('h:i:s'));
+
+                                $validarAudiencia = $helpers->getDateAudiencia(
+                                    $fecha, 
+                                    $hora
+                                );
+                                $audiencia->setFecha($validarAudiencia['fecha']);
+                                $audiencia->setHora($validarAudiencia['hora']);
                                 $audiencia->setObjetivo('Audiencia automatica');
                                 $audiencia->setTipo('AUTOMATICA');
                                 $audiencia->setActivo(true);
@@ -368,6 +375,106 @@ class CvCdoNotificacionController extends Controller
                             }
                         }
                     }
+                }elseif($comparendo->getEstado()->getId() == 3){//Cobro coactivo
+                    //Busca la trazabilidad de cobro coactivo
+                    $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        array(
+                            'comparendo' => $comparendo->getId(),
+                            'estado' => 20
+                        )
+                    );
+
+                    $diasHabiles = $helpers->getDiasHabiles(
+                        $cobroCoactivo->getFecha()
+                    );
+
+                    //Busca si ya se creo una notificacion personal
+                    $notificacionPersonal = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        array(
+                            'comparendo' => $comparendo->getId(),
+                            'estado' => 20
+                        )
+                    );
+
+                    if (!$notificacionPersonal && $diasHabiles > 20) {
+                        //Cambia a estado a cobro coactivo
+                        $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(20);
+
+                        $this->generateTrazabilidad($comparendo, $estado);
+                    }else{
+                        $diasCalendario = $helpers->getDiasCalendario(
+                            $notificacionPersonal->getFecha()
+                        );
+
+                        //Busca si ya se creo una notificacion por aviso
+                        $notificacionAviso = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                            array(
+                                'comparendo' => $comparendo->getId(),
+                                'estado' => 21
+                            )
+                        );
+
+                        if (!$notificacionAviso && $diasCalendario > 40) {
+                            //Cambia a estado a cobro coactivo
+                            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(21);
+
+                            $this->generateTrazabilidad($comparendo, $estado);
+                        }else{
+                            $diasCalendario = $helpers->getDiasCalendario(
+                                $notificacionAviso->getFecha()
+                            );
+
+                            //Busca si ya se creo una notificacion por pagina web
+                            $notificacionWeb = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                array(
+                                    'comparendo' => $comparendo->getId(),
+                                    'estado' => 22
+                                )
+                            );
+
+                            if (!$notificacionWeb && $diasCalendario > 20) {
+                                //Cambia a estado a cobro coactivo
+                                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(22);
+
+                                $this->generateTrazabilidad($comparendo, $estado);
+                            }else{
+                                $diasHabiles = $helpers->getDiasHabiles(
+                                    $notificacionWeb->getFecha()
+                                );
+
+                                //Busca si ya se creo una notificacion por pagina web
+                                $autoSeguirAdelante = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                    array(
+                                        'comparendo' => $comparendo->getId(),
+                                        'estado' => 23
+                                    )
+                                );
+
+                                if (!$autoSeguirAdelante && $diasHabiles > 1) {
+                                    //Cambia a estado a cobro coactivo
+                                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(23);
+
+                                    $this->generateTrazabilidad($comparendo, $estado);
+                                }
+
+                            }
+                        }
+                    }
+                }else{
+                    //Busca si existe la trazabilidad de pendiente
+                    $pendiente = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        array(
+                            'comparendo' => $comparendo->getId(),
+                            'estado' => 1
+                        )
+                    );
+
+                    if (!$pendiente) {
+                        //Cambia a estado pendiente
+                        $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(1);
+
+                        $this->generateTrazabilidad($comparendo, $estado);
+                    }
                 }
             }
 
@@ -405,13 +512,14 @@ class CvCdoNotificacionController extends Controller
         }
 
         $trazabilidad = new CvCdoTrazabilidad();
-
+        
         $trazabilidad->setFecha(
             new \Datetime(date('Y-m-d'))
         );
         $trazabilidad->setHora(
             new \Datetime(date('h:i:s A'))
         );
+
         $trazabilidad->setActivo(true);
         $trazabilidad->setComparendo($comparendo);
         $trazabilidad->setEstado($estado);
@@ -422,7 +530,13 @@ class CvCdoNotificacionController extends Controller
             $documento->setNumero(
                 $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
             );
-            $documento->setFecha(new \Datetime(date('Y-m-d')));
+
+            if ($estado->getId() == 15) {
+                $fecha = new \Datetime(date('Y-m-d'));
+                $documento->setFecha($fecha->modify('+1 days'));
+            }else{
+                $documento->setFecha(new \Datetime(date('Y-m-d')));
+            }
             $documento->setActivo(true);
 
             $documento->setFormato(

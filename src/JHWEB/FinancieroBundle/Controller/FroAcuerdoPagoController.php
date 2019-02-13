@@ -34,74 +34,111 @@ class FroAcuerdoPagoController extends Controller
             $params = json_decode($json);
            
             $em = $this->getDoctrine()->getManager();
-            
-            $acuerdoPago = new FroAcuerdoPago();
 
-            $fecha = new \Datetime($params->acuerdoPago->fecha);
-            $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->findMaximo(
-                $fecha->format('Y')
+
+            $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->findOneByActivo(
+                true
             );
-            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-            $acuerdoPago->setConsecutivo($consecutivo);
-            $acuerdoPago->setNumero($fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
-            $acuerdoPago->setFecha($fecha);
-            $acuerdoPago->setNumeroCuotas($params->acuerdoPago->numeroCuotas);
-            $acuerdoPago->setValor($params->acuerdoPago->valorCapital);
-            
-            if ($params->acuerdoPago->idPorcentajeInicial) {
-                $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->find(
-                    $params->acuerdoPago->idPorcentajeInicial
+
+            if ($params->acuerdoPago->porcentajeInicial >= $porcentajeInicial->getValor()) {
+                $acuerdoPago = new FroAcuerdoPago();
+
+                $fecha = new \Datetime($params->acuerdoPago->fecha);
+                $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->findMaximo(
+                    $fecha->format('Y')
                 );
-                $acuerdoPago->setPorcentajeInicial($porcentajeInicial);
-            }
-
-            if ($params->acuerdoPago->idInteres) {
-                $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
-                    $params->acuerdoPago->idInteres
-                );
-                $acuerdoPago->setInteres($interes);
-            }
-            
-            $acuerdoPago->setActivo(true);
-            $acuerdoPago->setValorCuotaInicial($params->acuerdoPago->valorCuotaInicial);
-
-            $em->persist($acuerdoPago);
-            $em->flush();
-
-            if ($params->acuerdoPago->comparendos) {
-                foreach ($params->acuerdoPago->comparendos as $key => $idComparendo) {
-                    $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
-                        $idComparendo
+                $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+                $acuerdoPago->setConsecutivo($consecutivo);
+                $acuerdoPago->setNumero($fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
+                $acuerdoPago->setFecha($fecha);
+                $acuerdoPago->setNumeroCuotas($params->acuerdoPago->numeroCuotas);
+                $acuerdoPago->setValorBruto($params->acuerdoPago->valorCapital);
+                $acuerdoPago->setValorMora(0);
+                $acuerdoPago->setValorNeto($params->acuerdoPago->valorCapital);
+                
+                if ($params->acuerdoPago->porcentajeInicial) {
+                    $acuerdoPago->setPorcentajeInicial(
+                        $params->acuerdoPago->porcentajeInicial
                     );
-                    $comparendo->setAcuerdoPago($acuerdoPago);
-
-                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                        4
-                    );
-                    $comparendo->setEstado($estado);
-                    $em->flush();
                 }
-            }
 
-            if ($params->cuotas) {
-                foreach ($params->cuotas as $key => $cuota) {
+                if ($params->acuerdoPago->idInteres) {
+                    $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
+                        $params->acuerdoPago->idInteres
+                    );
+                    $acuerdoPago->setInteres($interes);
+                }
+                
+                $acuerdoPago->setActivo(true);
+                $acuerdoPago->setValorCuotaInicial($params->acuerdoPago->valorCuotaInicial);
+
+                $em->persist($acuerdoPago);
+                $em->flush();
+
+                if ($params->acuerdoPago->comparendos) {
+                    foreach ($params->acuerdoPago->comparendos as $key => $idComparendo) {
+                        $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                            $idComparendo
+                        );
+                        $comparendo->setAcuerdoPago($acuerdoPago);
+
+                        $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                            4
+                        );
+                        $comparendo->setEstado($estado);
+                        $em->flush();
+                    }
+                }
+
+                if ($params->cuotas) {
                     $amortizacion = new FroAmortizacion();
-                    
-                    $fecha = new \Datetime($cuota->fechaMensual);
-                    $amortizacion->setValor($cuota->valorCapital);
+                        
+                    $fecha = new \Datetime(date('Y-m-d'));
+                    $amortizacion->setValorBruto($acuerdoPago->getValorCuotaInicial());
+                    $amortizacion->setValorMora(0);
+                    $amortizacion->setValorNeto($acuerdoPago->getValorCuotaInicial());
                     $amortizacion->setFechaLimite($fecha);
-                    $amortizacion->setNumeroCuota($key++);
+                    $amortizacion->setNumeroCuota(0);
+                    $amortizacion->setPagada(false);
+
+                    $amortizacion->setAcuerdoPago($acuerdoPago);
 
                     $em->persist($amortizacion);
                     $em->flush();
-                }
-            }
+                    foreach ($params->cuotas as $key => $cuota) {
+                        $amortizacion = new FroAmortizacion();
+                        
+                        $fecha = new \Datetime($cuota->fechaMensual);
+                        $amortizacion->setValorBruto($cuota->valorCapital);
+                        $amortizacion->setValorMora(0);
+                        $amortizacion->setValorNeto($cuota->valorCapital);
+                        $amortizacion->setFechaLimite($fecha);
+                        $amortizacion->setNumeroCuota($key + 1);
+                        $amortizacion->setPagada(false);
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-            );
+                        $amortizacion->setAcuerdoPago($acuerdoPago);
+
+                        $em->persist($amortizacion);
+                        $em->flush();
+                    }
+                }
+
+                //Registra trazabilidad de acuerdo de pago
+                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(4);
+                $helpers->generateTrazabilidad($comparendo, $estado);
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El porcentaje inicial no puede ser inferior al ".$porcentajeInicial->getValor()."%", 
+                );
+            }  
         }else{
             $response = array(
                 'status' => 'error',

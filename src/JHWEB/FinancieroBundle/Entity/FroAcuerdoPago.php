@@ -53,9 +53,23 @@ class FroAcuerdoPago
     /**
      * @var float
      *
-     * @ORM\Column(name="valor", type="float")
+     * @ORM\Column(name="valor_bruto", type="float")
      */
-    private $valor;
+    private $valorBruto;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_mora", type="float")
+     */
+    private $valorMora;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_neto", type="float")
+     */
+    private $valorNeto;
 
     /**
      * @var float
@@ -63,6 +77,13 @@ class FroAcuerdoPago
      * @ORM\Column(name="valor_cuota_inicial", type="float")
      */
     private $valorCuotaInicial;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="porcentaje_inicial", type="float")
+     */
+    private $porcentajeInicial;
 
     /**
      * @var bool
@@ -75,14 +96,10 @@ class FroAcuerdoPago
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sedesOperativas") */
     private $ciudadano;
 
-     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCfgPorcentajeInicial", inversedBy="acuerdosPago") */
-     private $porcentajeInicial;
-
-     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCfgInteres", inversedBy="acuerdosPago") */
-     private $interes;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCfgInteres", inversedBy="acuerdosPago") */
+    private $interes;
 
  
-
     /**
      * Get id
      *
@@ -193,27 +210,75 @@ class FroAcuerdoPago
     }
 
     /**
-     * Set valor
+     * Set valorBruto
      *
-     * @param float $valor
+     * @param float $valorBruto
      *
      * @return FroAcuerdoPago
      */
-    public function setValor($valor)
+    public function setValorBruto($valorBruto)
     {
-        $this->valor = $valor;
+        $this->valorBruto = $valorBruto;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get valorBruto
      *
      * @return float
      */
-    public function getValor()
+    public function getValorBruto()
     {
-        return $this->valor;
+        return $this->valorBruto;
+    }
+
+    /**
+     * Set valorMora
+     *
+     * @param float $valorMora
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setValorMora($valorMora)
+    {
+        $this->valorMora = $valorMora;
+
+        return $this;
+    }
+
+    /**
+     * Get valorMora
+     *
+     * @return float
+     */
+    public function getValorMora()
+    {
+        return $this->valorMora;
+    }
+
+    /**
+     * Set valorNeto
+     *
+     * @param float $valorNeto
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setValorNeto($valorNeto)
+    {
+        $this->valorNeto = $valorNeto;
+
+        return $this;
+    }
+
+    /**
+     * Get valorNeto
+     *
+     * @return float
+     */
+    public function getValorNeto()
+    {
+        return $this->valorNeto;
     }
 
     /**
@@ -238,6 +303,30 @@ class FroAcuerdoPago
     public function getValorCuotaInicial()
     {
         return $this->valorCuotaInicial;
+    }
+
+    /**
+     * Set porcentajeInicial
+     *
+     * @param float $porcentajeInicial
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setPorcentajeInicial($porcentajeInicial)
+    {
+        $this->porcentajeInicial = $porcentajeInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeInicial
+     *
+     * @return float
+     */
+    public function getPorcentajeInicial()
+    {
+        return $this->porcentajeInicial;
     }
 
     /**
@@ -286,30 +375,6 @@ class FroAcuerdoPago
     public function getCiudadano()
     {
         return $this->ciudadano;
-    }
-
-    /**
-     * Set porcentajeInicial
-     *
-     * @param \JHWEB\ContravencionalBundle\Entity\CvCfgPorcentajeInicial $porcentajeInicial
-     *
-     * @return FroAcuerdoPago
-     */
-    public function setPorcentajeInicial(\JHWEB\ContravencionalBundle\Entity\CvCfgPorcentajeInicial $porcentajeInicial = null)
-    {
-        $this->porcentajeInicial = $porcentajeInicial;
-
-        return $this;
-    }
-
-    /**
-     * Get porcentajeInicial
-     *
-     * @return \JHWEB\ContravencionalBundle\Entity\CvCfgPorcentajeInicial
-     */
-    public function getPorcentajeInicial()
-    {
-        return $this->porcentajeInicial;
     }
 
     /**

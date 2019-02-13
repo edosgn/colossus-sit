@@ -38,6 +38,27 @@ class CfgComparendoEstado
     /**
      * @var bool
      *
+     * @ORM\Column(name="simit", type="boolean")
+     */
+    private $simit;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dias", type="integer", nullable=true)
+     */
+    private $dias;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="habiles", type="boolean", nullable=true)
+     */
+    private $habiles;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -113,6 +134,78 @@ class CfgComparendoEstado
     }
 
     /**
+     * Set simit
+     *
+     * @param boolean $simit
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setSimit($simit)
+    {
+        $this->simit = $simit;
+
+        return $this;
+    }
+
+    /**
+     * Get simit
+     *
+     * @return boolean
+     */
+    public function getSimit()
+    {
+        return $this->simit;
+    }
+
+    /**
+     * Set dias
+     *
+     * @param integer $dias
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setDias($dias)
+    {
+        $this->dias = $dias;
+
+        return $this;
+    }
+
+    /**
+     * Get dias
+     *
+     * @return integer
+     */
+    public function getDias()
+    {
+        return $this->dias;
+    }
+
+    /**
+     * Set habiles
+     *
+     * @param boolean $habiles
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setHabiles($habiles)
+    {
+        $this->habiles = $habiles;
+
+        return $this;
+    }
+
+    /**
+     * Get habiles
+     *
+     * @return boolean
+     */
+    public function getHabiles()
+    {
+        return $this->habiles;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -137,30 +230,6 @@ class CfgComparendoEstado
     }
 
     /**
-     * Set formato
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato
-     *
-     * @return CfgComparendoEstado
-     */
-    public function setFormato(\JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato = null)
-    {
-        $this->formato = $formato;
-
-        return $this;
-    }
-
-    /**
-     * Get formato
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgAdmFormato
-     */
-    public function getFormato()
-    {
-        return $this->formato;
-    }
-
-    /**
      * Set actualiza
      *
      * @param boolean $actualiza
@@ -182,5 +251,29 @@ class CfgComparendoEstado
     public function getActualiza()
     {
         return $this->actualiza;
+    }
+
+    /**
+     * Set formato
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato
+     *
+     * @return CfgComparendoEstado
+     */
+    public function setFormato(\JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato = null)
+    {
+        $this->formato = $formato;
+
+        return $this;
+    }
+
+    /**
+     * Get formato
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgAdmFormato
+     */
+    public function getFormato()
+    {
+        return $this->formato;
     }
 }

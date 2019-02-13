@@ -3,6 +3,8 @@
 namespace AppBundle\services;
 
 use Doctrine\ORM\EntityManager;
+use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
+use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 
 /**
 * 
@@ -11,6 +13,7 @@ class Helpers
 {
 	public $jwt_auth;
 	protected $em;
+	protected $newDate = array('fecha' => null, 'hora' => null);
 	
 	public function __construct($jwt_auth, EntityManager $em) {
 		$this->jwt_auth = $jwt_auth;
@@ -283,6 +286,13 @@ class Helpers
 
 		$atenciones = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgAtencion')->findByActivo(true);
 
+		$diasAtencion = array();
+		if ($atenciones) {
+			foreach ($atenciones as $key => $atencion) {
+				$diasAtencion[] = $atencion->getDia();
+			}
+		}
+		
 		$result = null;
 
 		if ($horario) {
@@ -295,17 +305,20 @@ class Helpers
 				)
 			);
 
-			$result = $this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+			$result = $this->validateAudiencia(
+				$fecha, 
+				$hora, 
+				$audienciaLast, 
+				$horario,
+				$diasAtencion
+			);
 		}
-
-		var_dump($result);
-		die();
 
 		return $result;
 	}
 
-	public function validateAudiencia($fecha, $hora, $audienciaLast, $horario){
-		if ($fecha->format('w') != 0 and $fecha->format('w') != 6) {
+	public function validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion = null){
+		if ($fecha->format('w') != 0 and $fecha->format('w') != 6 and (in_array($fecha->format('w'), $diasAtencion)) == FALSE) {
 			if ($audienciaLast) {
 				$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial());
 				if ($fecha >= $audienciaLast->getFecha() and $hora >= $horaManianaInicial){
@@ -314,57 +327,144 @@ class Helpers
 					if ($hora > $horaTardeFinal) {
 						$fecha->modify('+1 days');
 						$hora = $horaManianaInicial;
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}else{
 						$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal());
 						$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial());
 
-						
 						if(($hora >= $horaManianaInicial and $hora < $horaManianaFinal) or ($hora >= $horaTardeInicial and $hora < $horaTardeFinal)){
-							$newDate = array(
-								'fecha' => $fecha, 
-								'hora' => $hora
-							);
-
-							return $newDate;
+							$this->newDate['fecha'] = $fecha;
+							$this->newDate['hora'] = $hora;
 						}else{
 							$hora->modify('+2 hour');
-							$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+							$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 						}
 					}
 				}else{
 					if ($fecha >= $audienciaLast->getFecha()){
 						$hora->modify('+2 hour');
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}else{
 						$fecha->modify('+1 days');
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}
 				}
 			}else{
-				$horaTardeFinal = new \Datetime($horario->getHoraTardeFinal);
-				$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial);
+				$horaTardeFinal = new \Datetime($horario->getHoraTardeFinal());
+				$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial());
 
 				if ($hora > $horaTardeFinal) {
 					$fecha->modify('+1 days');
 					$hora = $horaManianaInicial;
-					$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+					$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 				}else{
-					$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal);
-					$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial);
+					$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal());
+					$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial());
 
-					if(($hora > $horaManianaInicial && $hora < $horaManianaFinal) || ($hora > $horaTardeInicial && $hora < $horaTardeFinal)){
-						return array('fecha' => $fecha, 'hora' => $hora);
+					if(($hora >= $horaManianaInicial && $hora < $horaManianaFinal) || ($hora >= $horaTardeInicial && $hora < $horaTardeFinal)){
+						$this->newDate['fecha'] = $fecha;
+						$this->newDate['hora'] = $hora;
 					}else{
 						$hora->modify('+2 hour');
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}
 				}
 			}
 		}else{
 			$fecha->modify('+1 days');
-			$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario);
+			$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 		}
-
+		
+		return $this->newDate;
 	}
+
+	public function generateTrazabilidad($comparendo, $estado){
+        $em = $this->em;
+
+        if ($estado->getActualiza()) {
+            $comparendo->setEstado($estado);
+            $em->flush();
+        }
+
+        $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+            array(
+                'comparendo' => $comparendo->getId(),
+                'activo' => true
+            )
+        );
+
+        if ($trazabilidadesOld) {
+            foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
+                $trazabilidadOld->setActivo(false);
+                $em->flush();
+            }
+        }
+
+        $trazabilidad = new CvCdoTrazabilidad();
+
+        $trazabilidad->setFecha(
+            new \Datetime(date('Y-m-d'))
+        );
+        $trazabilidad->setHora(
+            new \Datetime(date('h:i:s A'))
+        );
+        $trazabilidad->setActivo(true);
+        $trazabilidad->setComparendo($comparendo);
+        $trazabilidad->setEstado($estado);
+
+        if ($estado->getFormato()) {
+            $documento = new CfgAdmActoAdministrativo();
+
+            $documento->setNumero(
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+            );
+            $documento->setFecha(new \Datetime(date('Y-m-d')));
+            $documento->setActivo(true);
+
+            $documento->setFormato(
+                $comparendo->getEstado()->getFormato()
+            );
+
+            $template = $this->generateTemplate($comparendo);
+            $documento->setCuerpo($template);
+
+            $em->persist($documento);
+            $em->flush();
+
+            $trazabilidad->setActoAdministrativo($documento);
+        }
+
+        $em->persist($trazabilidad);
+        $em->flush();
+    }
+
+    public function generateTemplate($comparendo){
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        
+        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
+        $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
+
+        if ($comparendo->getInfraccion()) {
+            $replaces[] = (object)array('id' => 'DCI', 'value' => $comparendo->getInfraccion()->getDescripcion());
+            $replaces[] = (object)array('id' => 'CIC', 'value' => $comparendo->getInfraccion()->getCodigo());
+        }
+
+        if ($comparendo->getPlaca()) {
+            $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
+        }
+
+
+        $template = $this->createTemplate(
+          $comparendo->getEstado()->getFormato()->getCuerpo(),
+          $replaces
+        );
+
+        $template = str_replace("<br>", "<br/>", $template);
+
+        return $template;
+    }
 }

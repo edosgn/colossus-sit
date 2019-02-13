@@ -127,7 +127,7 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
                 FROM AppBundle:Comparendo c
                 WHERE (c.infractorNombres LIKE :nombres
                 OR c.infractorApellidos LIKE :apellidos)
-                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -140,7 +140,7 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
                 $dql = "SELECT c
                 FROM AppBundle:Comparendo c
                 WHERE c.infractorIdentificacion = :identificacion
-                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -152,7 +152,7 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
                 $dql = "SELECT c
                 FROM AppBundle:Comparendo c
                 WHERE c.placa LIKE :placa
-                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -165,7 +165,7 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
                 FROM AppBundle:Comparendo c, AppBundle:MpersonalComparendo pc
                 WHERE pc.consecutivo = :consecutivo
                 AND c.consecutivo = pc.id
-                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
