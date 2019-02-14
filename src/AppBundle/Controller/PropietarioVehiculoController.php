@@ -70,11 +70,20 @@ class PropietarioVehiculoController extends Controller
             $params = json_decode($json);
             $params = (object)$params;
             
-            $cfgplaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(
-                array('numero' => $params->vehiculo->numero)
-            );
 
-            $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($cfgplaca->getId());
+            $numero = (isset($params->vehiculo->numero)) ? $params->vehiculo->numero : null;
+            $cfgplaca = null;
+            if ($numero) {
+                $cfgplaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(
+                    array('numero' => $params->vehiculo->numero)
+                );
+            }
+
+            if ($cfgplaca) {
+                $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByPlaca($cfgplaca->getId());
+            }else {
+                $vehiculo = $em->getRepository("AppBundle:Vehiculo")->findOneByMotor($params->vehiculo->motor);
+            }
 
             if ($tipoTraspaso == 1) {
                 $vehiculo->setLeasing(true);
@@ -88,7 +97,8 @@ class PropietarioVehiculoController extends Controller
                         'estadoPropiedad' => '1'
                     )
                 );
-
+                // var_dump($params);
+                // die();
             $fechaActual = new \DateTime(date('Y-m-d'));
             foreach ($propietariosVehiculo as $key => $propietarioActual) {
 
@@ -99,6 +109,8 @@ class PropietarioVehiculoController extends Controller
                 $em->flush();
 
             }
+
+            
 
             $licenciaTransito = (isset($params->licenciaTransito)) ? $params->licenciaTransito : null;
             
