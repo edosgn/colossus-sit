@@ -61,20 +61,25 @@ class CvAuCfgAtencionController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
+            if ($params->dias) {
+                foreach ($params->dias as $key => $dia) {
+                    $atencion = new CvAuCfgAtencion();
+
+                    $atencion->setDia($dia);
+                    $atencion->setHoraManianaInicial(new \Datetime($params->horaManianaInicial));
+                    $atencion->setHoraManianaFinal(new \Datetime($params->horaManianaFinal));
+                    $atencion->setHoraTardeInicial(new \Datetime($params->horaTardeInicial));
+                    $atencion->setHoraTardeFinal(new \Datetime($params->horaTardeFinal));
+                    $atencion->setActivo(true);
+
+                    $em = $this->getDoctrine()->getManager();
+                    
+                    $em->persist($atencion);
+                    $em->flush();
+                }
+            }
            
-            $atencion = new CvAuCfgAtencion();
-
-            $atencion->setDia($params->dia);
-            $atencion->setHoraManianaInicial(new \Datetime($params->horaManianaInicial));
-            $atencion->setHoraManianaFinal(new \Datetime($params->horaManianaFinal));
-            $atencion->setHoraTardeInicial(new \Datetime($params->horaTardeInicial));
-            $atencion->setHoraTardeFinal(new \Datetime($params->horaTardeFinal));
-            $atencion->setActivo(true);
-
-            $em = $this->getDoctrine()->getManager();
-            
-            $em->persist($atencion);
-            $em->flush();
 
             $response = array(
                 'status' => 'success',

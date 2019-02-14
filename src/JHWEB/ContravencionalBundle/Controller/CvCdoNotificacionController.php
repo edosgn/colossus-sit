@@ -302,7 +302,6 @@ class CvCdoNotificacionController extends Controller
                                 );
                                 $audiencia->setFecha($validarAudiencia['fecha']);
                                 $audiencia->setHora($validarAudiencia['hora']);
-                                $audiencia->setObjetivo('Audiencia automatica');
                                 $audiencia->setTipo('AUTOMATICA');
                                 $audiencia->setActivo(true);
 

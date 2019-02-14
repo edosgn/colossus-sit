@@ -51,6 +51,20 @@ class FroAcuerdoPago
     private $consecutivo;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_final", type="date")
+     */
+    private $fechaFinal;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="dias_mora_total", type="integer")
+     */
+    private $diasMoraTotal;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="valor_bruto", type="float")
@@ -207,6 +221,54 @@ class FroAcuerdoPago
     public function getConsecutivo()
     {
         return $this->consecutivo;
+    }
+
+    /**
+     * Set fechaFinal
+     *
+     * @param \DateTime $fechaFinal
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setFechaFinal($fechaFinal)
+    {
+        $this->fechaFinal = $fechaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaFinal()
+    {
+        return $this->fechaFinal;
+    }
+
+    /**
+     * Set diasMoraTotal
+     *
+     * @param integer $diasMoraTotal
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setDiasMoraTotal($diasMoraTotal)
+    {
+        $this->diasMoraTotal = $diasMoraTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get diasMoraTotal
+     *
+     * @return integer
+     */
+    public function getDiasMoraTotal()
+    {
+        return $this->diasMoraTotal;
     }
 
     /**

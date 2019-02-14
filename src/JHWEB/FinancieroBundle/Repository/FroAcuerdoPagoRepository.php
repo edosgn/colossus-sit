@@ -35,4 +35,46 @@ class FroAcuerdoPagoRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameter('ANIO', $anio);
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene los acuerdo de pago según el filtro de búsqueda
+    public function getByFilter($params)
+    {
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT ap
+                    FROM JHWEBFinancieroBundle:FroAcuerdoPago ap,
+                    AppBundle:Comparendo c
+                    WHERE c.acuerdoPago = ap.id
+                    AND ap.numero = :numero";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('numero', $params->filtro);
+                break;
+
+            case 2:
+                $dql = "SELECT ap
+                    FROM JHWEBFinancieroBundle:FroAcuerdoPago ap,
+                    AppBundle:Comparendo c
+                    WHERE c.acuerdoPago = ap.id
+                    AND c.infractorIdentificacion = :identificacion";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('identificacion', $params->filtro);
+                break;
+
+            case 3:
+                $dql = "SELECT ap
+                    FROM JHWEBFinancieroBundle:FroAcuerdoPago ap,
+                    AppBundle:Comparendo c,
+                    AppBundle:MpersonalComparendo pc,
+                    WHERE c.acuerdoPago = ap.id
+                    AND c.consecutivo = pc.id
+                    AND pc.consecutivo = :numero";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('numero', $params->filtro);
+                break;
+        }
+        
+        return $consulta->getResult();
+    }
 }

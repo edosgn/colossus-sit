@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FroAcuerdoPagoController extends Controller
 {
-
     /**
      * Creates a new froAcuerdoPago entity.
      *
@@ -51,9 +50,13 @@ class FroAcuerdoPagoController extends Controller
                 $acuerdoPago->setNumero($fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
                 $acuerdoPago->setFecha($fecha);
                 $acuerdoPago->setNumeroCuotas($params->acuerdoPago->numeroCuotas);
-                $acuerdoPago->setValorBruto($params->acuerdoPago->valorCapital);
-                $acuerdoPago->setValorMora(0);
-                $acuerdoPago->setValorNeto($params->acuerdoPago->valorCapital);
+                $acuerdoPago->setValorBruto($params->acuerdoPago->valorBruto);
+                $acuerdoPago->setValorMora($params->acuerdoPago->valorMora);
+                $acuerdoPago->setValorNeto($params->acuerdoPago->valorNeto);
+                $acuerdoPago->setDiasMoraTotal($params->acuerdoPago->diasMoraTotal);
+                $acuerdoPago->setFechaFinal(
+                    new \Datetime($params->acuerdoPago->fechaFinal)
+                );
                 
                 if ($params->acuerdoPago->porcentajeInicial) {
                     $acuerdoPago->setPorcentajeInicial(
@@ -69,7 +72,9 @@ class FroAcuerdoPagoController extends Controller
                 }
                 
                 $acuerdoPago->setActivo(true);
-                $acuerdoPago->setValorCuotaInicial($params->acuerdoPago->valorCuotaInicial);
+                $acuerdoPago->setValorCuotaInicial(
+                    $params->acuerdoPago->valorCuotaInicial
+                );
 
                 $em->persist($acuerdoPago);
                 $em->flush();
@@ -110,9 +115,9 @@ class FroAcuerdoPagoController extends Controller
                         
                         $fecha = $helpers->convertDateTime($cuota->fechaMensual);
 
-                        $amortizacion->setValorBruto($cuota->valorCapital);
-                        $amortizacion->setValorMora(0);
-                        $amortizacion->setValorNeto($cuota->valorCapital);
+                        $amortizacion->setValorBruto($cuota->valorBruto);
+                        $amortizacion->setValorMora($cuota->valorMora);
+                        $amortizacion->setValorNeto($cuota->valorNeto);
                         $amortizacion->setFechaLimite($fecha);
                         $amortizacion->setNumeroCuota($key + 1);
                         $amortizacion->setPagada(false);
@@ -162,17 +167,55 @@ class FroAcuerdoPagoController extends Controller
     /**
      * Finds and displays a froAcuerdoPago entity.
      *
-     * @Route("/{id}/show", name="frocuerdopago_show")
-     * @Method("GET")
+     * @Route("/show", name="frocuerdopago_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(FroAcuerdoPago $froAcuerdoPago)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($froAcuerdoPago);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('frocuerdopago/show.html.twig', array(
-            'froAcuerdoPago' => $froAcuerdoPago,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $acuerdoPago = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->find(
+                $params->id
+            );
+
+            if ($acuerdoPago) {
+
+                $amortizaciones = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->findByAcuerdoPago(
+                    $acuerdoPago->getId()
+                );
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Acuerdo de pago encontrado", 
+                    'data' => array(
+                        'acuerdoPago' => $acuerdoPago,
+                        'amortizaciones' => $amortizaciones,
+                    )
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen acuerdos de pago para esos filtros de búsqueda", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -313,16 +356,23 @@ class FroAcuerdoPagoController extends Controller
 
                 $fechaFinal = date('Y-m-d', strtotime("+".$params->numeroCuotas." month", $fecha));
 
-                $fechaFinal = $this->get('app.gestion.documental')->getFechaVencimiento(
+                $fechaFinal = $helpers->getFechaVencimiento(
                     new \Datetime($fechaFinal),
                     5
+                );
+
+                $diasMoraTotal = $helpers->getDiasCalendarioInverse(
+                    $fechaFinal->format('d/m/Y')
                 );
                 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Calculo generado',
-                    'data' => $fechaFinal->format('Y-m-d')
+                    'data' => array(
+                        'fechaFinal' => $fechaFinal->format('d/m/Y'),
+                        'diasMoraTotal' => $diasMoraTotal
+                    )
                 );
             }else{
                 $response = array(
@@ -362,13 +412,12 @@ class FroAcuerdoPagoController extends Controller
 
             $fecha = strtotime(date('Y-m-d'));
 
-            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->find(
-                $params->idInteres
-            );
-            $valorInteres = ($interes->getValor() / 100) * $params->valorCapital;
 
-            $subtotal = $params->valorCapital - $params->valorCuotaInicial + $valorInteres;
-            $cuotaMensual = $subtotal / $params->numeroCuotas;
+            $subtotal = $params->valorNeto - $params->valorCuotaInicial;
+            $subtotalMora = $subtotal * (25 / 100);
+            $subtotalBruto = $subtotal * (75 / 100);
+            $cuotaMora = $subtotalMora / $params->numeroCuotas;
+            $cuotaBruto = $subtotalBruto / $params->numeroCuotas;
 
             $totalPagar = 0;
 
@@ -376,14 +425,16 @@ class FroAcuerdoPagoController extends Controller
                 $mes = $i + 1;
                 $fechaMensual = date("Y-m-d", strtotime("+".$mes." month", $fecha));
 
-                $fechaMensual = $this->get('app.gestion.documental')->getFechaVencimiento(
+                $fechaMensual = $helpers->getFechaVencimiento(
                     new \Datetime($fechaMensual),
                     5
                 );
 
-                $totalPagar += $cuotaMensual;
+                $totalPagar += $cuotaMora + $cuotaBruto;
                 $cuotas[] = array(
-                    'valorCapital' => $cuotaMensual,
+                    'valorMora' => number_format(round($cuotaMora), 0, ',', '.'),
+                    'valorBruto' => number_format(round($cuotaBruto), 0, ',', '.'),
+                    'valorNeto' => number_format(round($cuotaMora + $cuotaBruto), 0, ',', '.'),
                     'fechaMensual' => $fechaMensual->format('d/m/Y')
                 );
             }
@@ -391,7 +442,7 @@ class FroAcuerdoPagoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Calculo generado',
+                'message' => 'Preliquidación generada.',
                 'data' => array (
                     'cuotas'=> $cuotas,
                     'totalPagar'=> number_format(round($totalPagar), 0, ',', '.')
@@ -403,6 +454,53 @@ class FroAcuerdoPagoController extends Controller
                 'code' => 400,
                 'message' => "Autorizacion no valida",
             );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca acuerdos de pago por parametros (identificacion, No. acuerdo pago o No. comparendo).
+     *
+     * @Route("/search/filtros", name="froacuerdopago_search_filtros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $acuerdosPago = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->getByFilter(
+                $params
+            );
+
+            if ($acuerdosPago) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($acuerdosPago)." acuerdosPago encontrados", 
+                    'data' => $acuerdosPago,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen acuerdos de pago para esos filtros de búsqueda", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
         }
 
         return $helpers->json($response);
