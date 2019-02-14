@@ -253,17 +253,34 @@ class Helpers
 		return $diasHabiles; 
 	}
 
-	public function getDiasCalendario($fechaComparendo)
+	public function getDiasCalendario($fecha)
 	{
-		$fechaComparendo = $this->convertDateTime($fechaComparendo);
+		$fecha = $this->convertDateTime($fecha);
 		$fechaActual = new \Datetime(date('Y-m-d'));
 		
 		$diasCalendario = 0;
 
 		$em = $this->em;
 
-		while ($fechaComparendo < $fechaActual) {
-			$fechaComparendo->modify('+1 days');
+		while ($fecha < $fechaActual) {
+			$fecha->modify('+1 days');
+			$diasCalendario ++;
+		}
+		
+		return $diasCalendario; 
+	}
+
+	public function getDiasCalendarioInverse($fecha)
+	{
+		$fecha = $this->convertDateTime($fecha);
+		$fechaActual = new \Datetime(date('Y-m-d'));
+		
+		$diasCalendario = 0;
+
+		$em = $this->em;
+
+		while ($fechaActual < $fecha) {
+			$fechaActual->modify('+1 days');
 			$diasCalendario ++;
 		}
 		
@@ -467,4 +484,41 @@ class Helpers
 
         return $template;
     }
+
+    public function getFechaVencimiento($fechaInicial, $diasSolicitados){
+		$em = $this->em;
+
+		$festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
+		$diasHabiles = 0;
+
+		if ($festivos) {
+		  foreach ($festivos as $key => $value) {
+		    $diasNoLaborales[] = $value->getFecha()->format('j-n');
+		  }
+
+		  while ($diasHabiles < $diasSolicitados) {
+		    if ($fechaInicial->format('w') != 0 and $fechaInicial->format('w') != 6 and (in_array($fechaInicial->format('j-n'),$diasNoLaborales)) == false) {
+		      $diasHabiles ++;
+		    }
+
+		    if ($diasHabiles < $diasSolicitados) {
+		      $fechaInicial->modify('+1 days');
+		    }
+		  }
+		}else{
+		  while ($diasHabiles < $diasSolicitados) {
+		    if ($fechaInicial->format('w') != 0 and $fechaInicial->format('w') != 6) {
+		      $diasHabiles ++;
+		    }
+
+		    if ($diasHabiles < $diasSolicitados) {
+		      $fechaInicial->modify('+1 days');
+		    }
+		  }
+		}
+
+		$fechaVencimiento = $fechaInicial;
+
+		return $fechaVencimiento; 
+	}
 }

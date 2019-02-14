@@ -25,5 +25,5 @@ services:
         arguments: ["null"]
 
     app.pdf.factura:
-        class: AppBundle\services\PdfTemplateFactura
+        class: JHWEB\FinancieroBundle\Service\PdfTemplate
         arguments: ["null"]

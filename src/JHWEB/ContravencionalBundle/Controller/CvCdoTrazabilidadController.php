@@ -103,7 +103,6 @@ class CvCdoTrazabilidadController extends Controller
 
                         $audiencia->setFecha(new \Datetime(date('Y-m-d')));
                         $audiencia->setHora(new \Datetime(date('h:i:s A')));
-                        $audiencia->setObjetivo('Audiencia automatica');
                         $audiencia->setTipo('AUTOMATICA');
                         $audiencia->setActivo(true);
                         $audiencia->setComparendo($comparendo);
