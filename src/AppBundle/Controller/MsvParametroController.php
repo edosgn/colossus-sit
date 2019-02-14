@@ -22,13 +22,23 @@ class MsvParametroController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $parametros = $em->getRepository('AppBundle:MsvParametro')->findBy(
+            array('estado' => true)
+        );
 
-        $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findAll();
+        $response['data'] = array();
 
-        return $this->render('msvparametro/index.html.twig', array(
-            'msvParametros' => $msvParametros,
-        ));
+        if ($parametros) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($parametros) . " registros encontrados",
+                'data' => $parametros,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -102,28 +112,44 @@ class MsvParametroController extends Controller
      */
     public function newAction(Request $request)
     {
-        $msvParametro = new Msvparametro();
-        $form = $this->createForm('AppBundle\Form\MsvParametroType', $msvParametro);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($msvParametro);
+            
+            $parametro = new MsvParametro();
+            $parametro->setNombre(strtoupper($params->nombre));
+
+            $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params->idCategoria);
+            $parametro->setCategoria($categoria);
+            $parametro->setValor($params->valor);
+            $parametro->setEstado(true);
+            $em->persist($parametro);
             $em->flush();
 
-            return $this->redirectToRoute('msvparametro_show', array('id' => $msvParametro->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('msvparametro/new.html.twig', array(
-            'msvParametro' => $msvParametro,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a msvParametro entity.
      *
-     * @Route("/{id}", name="msvparametro_show")
+     * @Route("/{id}/show", name="msvparametro_show")
      * @Method("GET")
      */
     public function showAction(MsvParametro $msvParametro)
@@ -139,46 +165,91 @@ class MsvParametroController extends Controller
     /**
      * Displays a form to edit an existing msvParametro entity.
      *
-     * @Route("/{id}/edit", name="msvparametro_edit")
+     * @Route("/edit", name="msvparametro_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvParametro $msvParametro)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($msvParametro);
-        $editForm = $this->createForm('AppBundle\Form\MsvParametroType', $msvParametro);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            $parametro = $em->getRepository('AppBundle:MsvParametro')->find($params->id);
 
-            return $this->redirectToRoute('msvparametro_edit', array('id' => $msvParametro->getId()));
+            $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params->idCategoria);
+            if ($parametro != null) {
+
+                $parametro->setNombre(strtoupper($params->nombre));
+                $parametro->setCategoria($categoria);
+
+                $em->persist($parametro);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $parametro,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
+        return $helpers->json($response);
 
-        return $this->render('msvparametro/edit.html.twig', array(
-            'msvParametro' => $msvParametro,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
     }
 
     /**
      * Deletes a msvParametro entity.
      *
-     * @Route("/{id}", name="msvparametro_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="msvparametro_delete")
+     * @Method({"GET","POST"})
      */
-    public function deleteAction(Request $request, MsvParametro $msvParametro)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($msvParametro);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($msvParametro);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('msvparametro_index');
+            $parametro = $em->getRepository('AppBundle:MsvParametro')->find($params->id);
+
+            $parametro->setEstado(false);
+
+            $em->persist($parametro);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -195,5 +266,29 @@ class MsvParametroController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/", name="msvParametro_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $parametros = $em->getRepository('AppBundle:MsvParametro')->findBy(
+            array('estado' => true)
+        );
+        $response = null;
+
+        foreach ($parametros as $key => $parametro) {
+            $response[$key] = array(
+                'value' => $parametro->getId(),
+                'label' => $parametro->getNombre(),
+            );
+        }
+        return $helpers->json($response);
     }
 }
