@@ -44,28 +44,47 @@ class MsvVariableController extends Controller
      */
     public function newAction(Request $request)
     {
-        $msvVariable = new Msvvariable();
-        $form = $this->createForm('AppBundle\Form\MsvVariableType', $msvVariable);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $variable = new MsvVariable();
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($msvVariable);
+
+            $nombre = strtoupper($params->nombre);
+
+            $variable->setNombre($nombre);
+
+            $parametro = $em->getRepository('AppBundle:MsvParametro')->find($params->idParametro);
+            $variable->setParametro($parametro);
+            $variable->setEstado(true);
+            $em->persist($variable);
             $em->flush();
 
-            return $this->redirectToRoute('msvvariable_show', array('id' => $msvVariable->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('msvvariable/new.html.twig', array(
-            'msvVariable' => $msvVariable,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a msvVariable entity.
      *
-     * @Route("/{id}", name="msvvariable_show")
+     * @Route("/{id}/show", name="msvvariable_show")
      * @Method("GET")
      */
     public function showAction(MsvVariable $msvVariable)
@@ -81,46 +100,90 @@ class MsvVariableController extends Controller
     /**
      * Displays a form to edit an existing msvVariable entity.
      *
-     * @Route("/{id}/edit", name="msvvariable_edit")
+     * @Route("/edit", name="msvvariable_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvVariable $msvVariable)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($msvVariable);
-        $editForm = $this->createForm('AppBundle\Form\MsvVariableType', $msvVariable);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            $variable = $em->getRepository('AppBundle:MsvVariable')->find($params->id);
 
-            return $this->redirectToRoute('msvvariable_edit', array('id' => $msvVariable->getId()));
+            if ($variable != null) {
+                $nombre = strtoupper($params->nombre);
+
+                $variable->setNombre($nombre);
+                $parametro = $em->getRepository('AppBundle:MsvParametro')->find($params->idParametro);
+                $variable->setParametro($parametro);
+                $em->persist($variable);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $variable,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
-
-        return $this->render('msvvariable/edit.html.twig', array(
-            'msvVariable' => $msvVariable,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a msvVariable entity.
      *
-     * @Route("/{id}", name="msvvariable_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="msvvariable_delete")
+     * @Method({"GET","POST"})
      */
-    public function deleteAction(Request $request, MsvVariable $msvVariable)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($msvVariable);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($msvVariable);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('msvvariable_index');
+            $variable = $em->getRepository('AppBundle:MsvVariable')->find($params->id);
+
+            $variable->setEstado(false);
+
+            $em->persist($variable);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -137,5 +200,29 @@ class MsvVariableController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="variable_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $variables = $em->getRepository('AppBundle:MsvVariable')->findBy(
+        array('estado' => 1)
+    );
+    $response = null;
+
+      foreach ($variables as $key => $variable) {
+        $response[$key] = array(
+            'value' => $variable->getId(),
+            'label' => $variable->getNombre(),
+            );
+      }
+       return $helpers->json($response);
     }
 }

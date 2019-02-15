@@ -1023,7 +1023,8 @@ class SvRegistroIpatController extends Controller
                     
                     $ipat = new SvRegistroIpat();
                     if($ipat -> getNombresConductor() != $dato[7] && $ipat -> getApellidosConductor() != $dato[8] && $ipat -> getFechaAccidente() != $dato[2] && $ipat -> getHoraAccidente() != $dato[3]) {
-
+                        $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $dato[35]));
+                        $ipat -> setConsecutivo($consecutivo);
                         $ipat -> setFechaAccidente(new \Datetime($dato[2]));
                         $ipat -> setHoraAccidente(new \Datetime($dato[3]));
                         $ipat -> setDiaAccidente($dato[4]);
@@ -1124,6 +1125,8 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
+            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findAll();    
+
             if($params->file == null) {
                 $response = array(
                     'status' => 'error',
@@ -1132,9 +1135,6 @@ class SvRegistroIpatController extends Controller
                 );
             } else {
                 foreach($params->file as $key => $dato) {
-                    $ipatConsecutivo = $em->getRepository("JHWEBSeguridadVialBundle:SvRegistroIpat")->findOneBy(array('consecutivo'=>$dato[35]));
-        
-                        $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
 
                         $response = array(
                             'status' => 'success',
@@ -1186,7 +1186,6 @@ class SvRegistroIpatController extends Controller
                         }
                     }
             }
-            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findAll();
             if ($ipats) {
                 $response = array(
                     'status' => 'success',
