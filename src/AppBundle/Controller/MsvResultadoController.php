@@ -67,6 +67,8 @@ class MsvResultadoController extends Controller
             $idEmpresa = $em->getRepository('AppBundle:Empresa')->find($params->idEmpresa);
             $msvResultado->setEmpresa($idEmpresa);
 
+            var_dump($params->valorObtenidoFortalecimiento);
+
             $msvResultado->setPilarFortalecimiento("FORTALECIMIENTO EN LA GESTIÓN INSTITUCIONAL");
             $msvResultado->setValorObtenidoFortalecimiento($params->valorObtenidoFortalecimiento);
             $msvResultado->setValorPonderadoFortalecimiento(0.3);
@@ -103,7 +105,12 @@ class MsvResultadoController extends Controller
             $valorResultadoValorAgregado = $params->valorObtenidoValorAgregado * 0.05;
             $msvResultado->setResultadoValorAgregado($valorResultadoValorAgregado);
 
-            $msvResultado->setResultadoFinal($valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado);
+            $resultadoFinal = $valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado;
+            var_dump($valorResultadoFortalecimiento);
+            var_dump($valorResultadoComportamiento);
+            var_dump($resultadoFinal);
+            die();
+            $msvResultado->setResultadoFinal($resultadoFinal);
             
             $msvResultado->setActivo(true);
             $em->persist($msvResultado);
@@ -112,7 +119,8 @@ class MsvResultadoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Los datos han sido registrados exitosamente.",
+                'message' => "Los datos han sido registrados exitosamente.", 
+                'message2' => "El resultado final es: " . $resultadoFinal,
             );
         } else {
             $response = array(

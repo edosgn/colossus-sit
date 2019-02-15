@@ -41,21 +41,21 @@ class MsvResultado
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_obtenido_fortalecimiento", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_obtenido_fortalecimiento", type="float", nullable = true)
      */
     private $valorObtenidoFortalecimiento;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_ponderado_fortalecimiento", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_ponderado_fortalecimiento", type="float", nullable = true)
      */
     private $valorPonderadoFortalecimiento;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_fortalecimiento", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_fortalecimiento", type="float", nullable = true)
      */
     private $resultadoFortalecimiento;
 
@@ -70,21 +70,21 @@ class MsvResultado
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_obtenido_comportamiento", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_obtenido_comportamiento", type="float", nullable = true)
      */
     private $valorObtenidoComportamiento;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_ponderado_comportamiento", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_ponderado_comportamiento", type="float", nullable = true)
      */
     private $valorPonderadoComportamiento;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_comportamiento", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_comportamiento", type="float", nullable = true)
      */
     private $resultadoComportamiento;
 
@@ -99,21 +99,21 @@ class MsvResultado
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_obtenido_vehiculo_seguro", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_obtenido_vehiculo_seguro", type="float", nullable = true)
      */
     private $valorObtenidoVehiculoSeguro;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_ponderado_vehiculo_seguro", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_ponderado_vehiculo_seguro", type="float", nullable = true)
      */
     private $valorPonderadoVehiculoSeguro;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_vehiculo_seguro", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_vehiculo_seguro", type="float", nullable = true)
      */
     private $resultadoVehiculoSeguro;
 
@@ -128,21 +128,21 @@ class MsvResultado
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_obtenido_infraestructura_segura", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_obtenido_infraestructura_segura", type="float", nullable = true)
      */
     private $valorObtenidoInfraestructuraSegura;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_ponderado_infraestructura_segura", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_ponderado_infraestructura_segura", type="float", nullable = true)
      */
     private $valorPonderadoInfraestructuraSegura;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_infraestructura_segura", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_infraestructura_segura", type="float", nullable = true)
      */
     private $resultadoInfraestructuraSegura;
 
@@ -157,21 +157,21 @@ class MsvResultado
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_obtenido_atencion_victima", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_obtenido_atencion_victima", type="float", nullable = true)
      */
     private $valorObtenidoAtencionVictima;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_ponderado_atencion_victima", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_ponderado_atencion_victima", type="float", nullable = true)
      */
     private $valorPonderadoAtencionVictima;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_atencion_victima", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_atencion_victima", type="float", nullable = true)
      */
     private $resultadoAtencionVictima;
 
@@ -186,28 +186,28 @@ class MsvResultado
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_obtenido_valor_agregado", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_obtenido_valor_agregado", type="float", nullable = true)
      */
     private $valorObtenidoValorAgregado;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="valor_ponderado_valor_agregado", type="float", length=255, nullable = true)
+     * @ORM\Column(name="valor_ponderado_valor_agregado", type="float", nullable = true)
      */
     private $valorPonderadoValorAgregado;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_valor_agregado", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_valor_agregado", type="float", nullable = true)
      */
     private $resultadoValorAgregado;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="resultado_final", type="float", length=255, nullable = true)
+     * @ORM\Column(name="resultado_final", type="float", nullable = true)
      */
     private $resultadofinal;
 

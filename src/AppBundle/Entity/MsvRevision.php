@@ -57,11 +57,25 @@ class MsvRevision
     private $fechaVisitaControl1;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion_visita_1", type="string", length=255)
+     */
+    private $observacionVisita1;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_visita_control_2", type="date", nullable=true)
      */
     private $fechaVisitaControl2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion_visita_2", type="string", length=255)
+     */
+    private $observacionVisita2;
 
     /**
      * @var string
@@ -416,5 +430,52 @@ class MsvRevision
         }
         return $this->fechaVisitaControl2;
     }
-}
 
+    /**
+     * Set observacionVisita1
+     *
+     * @param string $observacionVisita1
+     *
+     * @return MsvRevision
+     */
+    public function setObservacionVisita1($observacionVisita1)
+    {
+        $this->observacionVisita1 = $observacionVisita1;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionVisita1
+     *
+     * @return string
+     */
+    public function getObservacionVisita1()
+    {
+        return $this->observacionVisita1;
+    }
+
+    /**
+     * Set observacionVisita2
+     *
+     * @param string $observacionVisita2
+     *
+     * @return MsvRevision
+     */
+    public function setObservacionVisita2($observacionVisita2)
+    {
+        $this->observacionVisita2 = $observacionVisita2;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionVisita2
+     *
+     * @return string
+     */
+    public function getObservacionVisita2()
+    {
+        return $this->observacionVisita2;
+    }
+}

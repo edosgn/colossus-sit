@@ -81,7 +81,9 @@ class MsvRevisionController extends Controller
                     $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
                     if ($fechaOtorgamientoDatetime < $fechaVisitaControlDatetime1 && $fechaOtorgamientoDatetime < $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2 ){
                         $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
+                        $revision->setObservacionVisita1($params->observacionVisita1);
                         $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
+                        $revision->setObservacionVisita2($params->observacionVisita2);
                     } else {
                         $response = array(
                             'status' => 'error',
@@ -103,13 +105,13 @@ class MsvRevisionController extends Controller
                 $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'msj' => "Revisión creada con éxito",
+                            'message' => "Revisión creada con éxito",
                 );    
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorización no valida",
+                'message' => "Autorización no válida",
             );
         }
         return $helpers->json($response);
