@@ -299,19 +299,24 @@ class InsumoController extends Controller
     /**
      * Finds and displays a sustrato entity.
      *
-     * @Route("/showInsumo/numero/{numero}", name="insumo_show_numero")
+     * @Route("/showInsumo/numero/modulo", name="insumo_show_numero")
      * @Method({"GET", "POST"})
      */
-    public function showNumeroAction(Request $request,$numero)
+    public function showNumeroAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            // var_dump($params);
+            // die();
             $em = $this->getDoctrine()->getManager();
-            $sustrato = $em->getRepository('AppBundle:Insumo')->findOneBy(
-                array('numero' => $numero,'estado'=>'Disponible','tipo'=>'sustrato')
+ 
+            $sustrato = $em->getRepository('AppBundle:Insumo')->getNumeroModulo(
+                $params->numero,$params->idModulo,$params->idSedeOperativa
             );
 
             if ($sustrato) {

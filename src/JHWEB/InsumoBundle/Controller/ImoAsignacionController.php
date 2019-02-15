@@ -50,7 +50,7 @@ class ImoAsignacionController extends Controller
     
             $response['data'] = array();
     
-            if ($imoAsignacion) {
+            if ($imoAsignacion) { 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

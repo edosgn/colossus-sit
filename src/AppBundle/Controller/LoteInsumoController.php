@@ -93,6 +93,7 @@ class LoteInsumoController extends Controller
             $sedeOperativaId = (isset($params->sedeOperativaId)) ? $params->sedeOperativaId : null;
 
             $loteInsumo = new LoteInsumo();
+
             if ($sedeOperativaId) {
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
                 $loteInsumo->setSedeOperativa($sedeOperativa);
@@ -100,7 +101,23 @@ class LoteInsumoController extends Controller
             }else {
                 $loteInsumo->setTipo('insumo');
             }
+
+            $ultimoRango = $em->getRepository('AppBundle:LoteInsumo')->getMax(); 
+
+            if ($params->rangoInicio < $ultimoRango['maximo']+1) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 200,
+                    'msj' => "El rango ya se encuentra registrado", 
+                );
+                return $helpers->json($response);
+            }
+
+            // var_dump();
+            // die();
+
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
+
             $loteInsumo->setNumeroActa($params->numeroActa);
             $loteInsumo->setEmpresa($empresa);
             $loteInsumo->setCasoInsumo($casoInsumo); 
@@ -112,6 +129,7 @@ class LoteInsumoController extends Controller
             $loteInsumo->setFecha($fecha);
             $em->persist($loteInsumo);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,

@@ -76,7 +76,7 @@ class ImoTrazabilidad
     public function setFecha($fecha)
     {
         $this->fecha = $fecha;
-
+ 
         return $this;
     }
 
@@ -87,7 +87,7 @@ class ImoTrazabilidad
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->fecha->format('Y-m-d');
     }
 
     /**
