@@ -10,4 +10,45 @@ namespace JHWEB\ContravencionalBundle\Repository;
  */
 class CvAudienciaRepository extends \Doctrine\ORM\EntityRepository
 {
+	//Obtiene las audiencias según el filtro de búsqueda
+    public function getByFilter($params)
+    {
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT a
+                    FROM JHWEBContravencionalBundle:CvAudiencia a,
+                    AppBundle:Comparendo c
+                    WHERE a.comparendo = c.id
+                    AND c.infractorIdentificacion = :identificacion";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('identificacion', $params->filtro);
+                break;
+
+            case 2:
+                $dql = "SELECT a
+                    FROM JHWEBContravencionalBundle:CvAudiencia a,
+                    AppBundle:Comparendo c,
+                    AppBundle:MpersonalComparendo pc,
+                    WHERE a.comparendo = c.id
+                    AND c.consecutivo = pc.id
+                    AND pc.consecutivo = :numero";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('numero', $params->filtro);
+                break;
+
+            case 3:
+                $dql = "SELECT a
+                    FROM JHWEBContravencionalBundle:CvAudiencia a,
+                    AppBundle:Comparendo c
+                    WHERE a.comparendo = c.id
+                    AND a.fecha = :fecha";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('fecha', $params->filtro);
+                break;
+        }
+        
+        return $consulta->getResult();
+    }
 }
