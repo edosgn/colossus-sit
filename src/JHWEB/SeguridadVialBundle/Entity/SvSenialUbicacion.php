@@ -56,13 +56,6 @@ class SvSenialUbicacion
      */
     private $adjunto;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="proveedor", type="string", length=255, nullable=true)
-     */
-    private $proveedor;
-
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialEstado", inversedBy="ubicaciones") */
     private $estado;
 
@@ -83,6 +76,9 @@ class SvSenialUbicacion
 
     /** @ORM\ManyToOne(targetEntity="SvSenialBodega", inversedBy="ubicaciones") */
     private $bodega;
+
+    /** @ORM\ManyToOne(targetEntity="SvCfgSenialProveedor", inversedBy="ubicaciones") */
+    private $proveedor;
 
     /**
      * Get id
@@ -391,11 +387,11 @@ class SvSenialUbicacion
     /**
      * Set proveedor
      *
-     * @param string $proveedor
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor
      *
      * @return SvSenialUbicacion
      */
-    public function setProveedor($proveedor)
+    public function setProveedor(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor $proveedor = null)
     {
         $this->proveedor = $proveedor;
 
@@ -405,7 +401,7 @@ class SvSenialUbicacion
     /**
      * Get proveedor
      *
-     * @return string
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialProveedor
      */
     public function getProveedor()
     {
