@@ -98,20 +98,20 @@ class LoteInsumoController extends Controller
                 $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($sedeOperativaId);
                 $loteInsumo->setSedeOperativa($sedeOperativa);
                 $loteInsumo->setTipo('sustrato');
+                $ultimoRango = $em->getRepository('AppBundle:LoteInsumo')->getMax(); 
+                if ($params->rangoInicio < $ultimoRango['maximo']+1) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 200,
+                        'msj' => "El rango ya se encuentra registrado", 
+                    );
+                    return $helpers->json($response);
+                }
             }else {
                 $loteInsumo->setTipo('insumo');
             }
 
-            $ultimoRango = $em->getRepository('AppBundle:LoteInsumo')->getMax(); 
-
-            if ($params->rangoInicio < $ultimoRango['maximo']+1) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 200,
-                    'msj' => "El rango ya se encuentra registrado", 
-                );
-                return $helpers->json($response);
-            }
+            
 
             // var_dump();
             // die();
