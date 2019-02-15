@@ -290,19 +290,18 @@ class CvCdoNotificacionController extends Controller
                             }else{
                                 //Registra trazabilidad de notificación
                                 $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
-
+                                //Crea una audiencia automatica
                                 $audiencia = new CvAudiencia();
 
                                 $fecha = new \Datetime(date('Y-m-d'));
                                 $hora = new \Datetime(date('h:i:s'));
 
-                                $validarAudiencia = $helpers->getDateAudiencia(
+                                $validarAudiencia = $helpers->getDateAudienciaAutomatica(
                                     $fecha, 
                                     $hora
                                 );
                                 $audiencia->setFecha($validarAudiencia['fecha']);
                                 $audiencia->setHora($validarAudiencia['hora']);
-                                $audiencia->setObjetivo('Audiencia automatica');
                                 $audiencia->setTipo('AUTOMATICA');
                                 $audiencia->setActivo(true);
 
@@ -568,7 +567,10 @@ class CvCdoNotificacionController extends Controller
                 $comparendo->getEstado()->getFormato()
             );
 
-            $template = $this->generateTemplate($comparendo);
+            $template = $this->generateTemplate(
+                $comparendo,
+                $comparendo->getEstado()->getFormato()->getCuerpo()
+            );
             $documento->setCuerpo($template);
 
             $em->persist($documento);
@@ -582,7 +584,7 @@ class CvCdoNotificacionController extends Controller
     }
     
     //Migrar a servicio
-    public function generateTemplate($comparendo){
+    public function generateTemplate($comparendo, $cuerpo){
         $helpers = $this->get("app.helpers");
 
         setlocale(LC_ALL,"es_ES");
@@ -603,9 +605,8 @@ class CvCdoNotificacionController extends Controller
             $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
         }
 
-
         $template = $helpers->createTemplate(
-          $comparendo->getEstado()->getFormato()->getCuerpo(),
+          $cuerpo,
           $replaces
         );
 

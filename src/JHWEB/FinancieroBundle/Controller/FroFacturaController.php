@@ -75,7 +75,9 @@ class FroFacturaController extends Controller
             $factura->setFechaCreacion($fechaCreacion);
             $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
             $factura->setHora(new \Datetime(date('h:i:s A')));
-            $factura->setValor($params->valor);
+            $factura->setValorBruto($params->valor);
+            $factura->setValorMora($params->interes);
+            $factura->setValorNeto($params->valor + $params->interes);
             $factura->setEstado('EMITIDA');
             $factura->setActivo(true);
 
@@ -106,6 +108,91 @@ class FroFacturaController extends Controller
             $em->flush();
 
             $this->calculateValueUpdate($params->comparendos, $factura);
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Factura No.".$factura->getNumero()." creada con exito",
+                'data' => $factura
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /* =================================== */
+
+    /**
+     * Creates a new cvCfgIntere entity.
+     *
+     * @Route("/new/amortizacion", name="froFactura_new_amortizacion")
+     * @Method({"GET", "POST"})
+     */
+    public function newAmortizacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+           
+            $factura = new FroFactura();
+
+            $fechaCreacion = new \Datetime(date('Y-m-d'));
+
+            if ($params->idAmortizacion) {
+                $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->find(
+                    $params->idAmortizacion
+                );
+            }
+
+            $factura->setFechaCreacion($fechaCreacion);
+            $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
+            $factura->setHora(new \Datetime(date('h:i:s A')));
+            $factura->setValorBruto($amortizacion->getValorBruto());
+            $factura->setValorMora($amortizacion->getValorMora());
+            $factura->setValorNeto($amortizacion->getValorNeto());
+            $factura->setEstado('EMITIDA');
+            $factura->setActivo(true);
+
+            $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getMaximo(date('Y'));
+           
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            $factura->setConsecutivo($consecutivo);
+            
+            $factura->setNumero(
+                $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
+            );
+            
+            if ($params->idSedeOperativa) {
+                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                    $params->idSedeOperativa
+                );
+                $factura->setSedeOperativa($sedeOperativa);
+            }
+
+            if ($params->idTipoRecaudo) {
+                $tipoRecaudo = $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->find(
+                    $params->idTipoRecaudo
+                );
+                $factura->setTipoRecaudo($tipoRecaudo);
+            }
+
+            $em->persist($factura);
+            $em->flush();
+
+            $amortizacion->setFactura($factura);
+            $em->flush();
 
             $response = array(
                 'status' => 'success',
@@ -244,8 +331,8 @@ class FroFacturaController extends Controller
                 'code' => 200,
                 'message' => 'Calculo generado',
                 'data' => array(
-                    'totalPagar' => $totalPagar,
-                    'totalInteres'=> $totalInteres
+                    'totalPagar' => round($totalPagar),
+                    'totalInteres'=> round($totalInteres)
                 )
             );
         } else {
@@ -348,15 +435,33 @@ class FroFacturaController extends Controller
     /**
      * Genera pdf de factura seleccionada.
      *
-     * @Route("/{id}/pdf", name="froFactura_pdf")
-     * @Method({"GET", "POST"})
+     * @Route("/{tipoRecaudo}/{id}/pdf", name="froFactura_pdf")
+     * @Method("GET")
      */
-    public function pdfAction(Request $request, $id)
+    public function pdfAction(Request $request, $tipoRecaudo, $id)
     {
+        switch ($tipoRecaudo) {
+            case 1:
+                $this->generatePdfInfracciones($id);
+                break;
+            
+            case 2:
+                $this->generatePdfInfracciones($id);
+                break;
+
+            case 3:
+                $this->generatePdfAmortizacion($id);
+                break;
+        }
+
+
+    }
+
+    protected function generatePdfInfracciones($id){
+        $em = $this->getDoctrine()->getManager();
+
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
-
-        $em = $this->getDoctrine()->getManager();
 
         $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
 
@@ -381,52 +486,58 @@ class FroFacturaController extends Controller
         //$imgBarcode = \base64_decode($code);
         $imgBarcode = $code;
 
-        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.html.twig', array(
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
             'comparendos'=>$comparendos,
             'imgBarcode' => $imgBarcode
         ));
 
-        $pdf = $this->container->get("white_october.tcpdf")->create(
-            'PORTRAIT',
-            PDF_UNIT,
-            PDF_PAGE_FORMAT,
-            true,
-            'UTF-8',
-            false
+        $this->get('app.pdf.factura')->templateInfracciones($html, $factura);
+    }
+
+    protected function generatePdfAmortizacion($idFactura){
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
+
+        if ($factura) {
+            $fechaCreacion = new \Datetime(date('Y-m-d'));
+
+            $factura->setFechaCreacion($fechaCreacion);
+            $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
+            $factura->setHora(new \Datetime(date('h:i:s A')));
+
+            $em->flush();
+        }
+
+        $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneByFactura($factura->getId());
+
+        $barcode = new BarcodeGenerator();
+        $barcode->setText(
+            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
         );
-        $pdf->SetAuthor('qweqwe');
-        $pdf->SetTitle('Factura No.'.$factura->getNumero());
-        $pdf->SetSubject('SUBDETRA');
-        $pdf->SetKeywords('Factura, Infracciones');
-        $pdf->setFontSubsetting(true);
+        $barcode->setNoLengthLimit(true);
+        $barcode->setAllowsUnknownIdentifier(true);
+        $barcode->setType(BarcodeGenerator::Gs1128);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(7);
+        $code = $barcode->generate();
 
-        $pdf->SetFont('helvetica', '', 11, '', true);
-        $pdf->SetMargins('2', '25', '2');
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->AddPage();
+        //$imgBarcode = \base64_decode($code);
+        $imgBarcode = $code;
 
-        $mi = $ms = $md = 10;
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'factura'=>$factura,
+            'comparendos'=>$comparendos,
+            'imgBarcode' => $imgBarcode
+        ));
 
-        $pdf->writeHTMLCell(
-            $w = 0,
-            $h = 0,
-            $x = '',
-            $y = '',
-            $html,
-            $border = 0,
-            $ln = 1,
-            $fill = 0,
-            $reseth = true,
-            $align = '',
-            $autopadding = true
-        );
-
-        //$pdf->Image('@'.$imgBarcode, $mi + 4, $ms + 242, 90, 18, 'png');
-
-        $pdf->Output("example.pdf", 'I');
-        die();
+        $this->get('app.pdf.factura')->templateInfracciones($html, $factura);
     }
 }

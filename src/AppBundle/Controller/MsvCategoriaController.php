@@ -24,13 +24,13 @@ class MsvCategoriaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $msvCategoria = $em->getRepository('AppBundle:MsvCategoria')->findBy( array('estado' => 1));
+        $categorias = $em->getRepository('AppBundle:MsvCategoria')->findBy( array('estado' => true));
 
         $response = array(
                     'status' => 'succes',
                     'code' => 200,
-                    'msj' => "listado categorias",
-                    'data' => $msvCategoria,
+                    'message' => count($categorias) . " registros encontrados",
+                    'data' => $categorias,
         );
 
         return $helpers ->json($response);
@@ -69,22 +69,36 @@ class MsvCategoriaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $msvCategoria = new Msvcategoria();
-        $form = $this->createForm('AppBundle\Form\MsvCategoriaType', $msvCategoria);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $categoria = new MsvCategoria();
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($msvCategoria);
+
+            $categoria->setNombre(strtoupper($params->nombre));
+            $categoria->setEstado(true);
+            $em->persist($categoria);
             $em->flush();
 
-            return $this->redirectToRoute('msvcategoria_show', array('id' => $msvCategoria->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('msvcategoria/new.html.twig', array(
-            'msvCategoria' => $msvCategoria,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -106,46 +120,86 @@ class MsvCategoriaController extends Controller
     /**
      * Displays a form to edit an existing msvCategoria entity.
      *
-     * @Route("/{id}/edit", name="msvcategoria_edit")
+     * @Route("/edit", name="msvcategoria_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvCategoria $msvCategoria)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($msvCategoria);
-        $editForm = $this->createForm('AppBundle\Form\MsvCategoriaType', $msvCategoria);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('msvcategoria_edit', array('id' => $msvCategoria->getId()));
+            $em = $this->getDoctrine()->getManager();
+            $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params->id);
+
+            if ($categoria != null) {
+                $categoria->setNombre(strtoupper($params->nombre));
+
+                $em->persist($categoria);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $categoria,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
-
-        return $this->render('msvcategoria/edit.html.twig', array(
-            'msvCategoria' => $msvCategoria,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a msvCategoria entity.
      *
-     * @Route("/{id}", name="msvcategoria_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="msvcategoria_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, MsvCategoria $msvCategoria)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($msvCategoria);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($msvCategoria);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params);
 
-        return $this->redirectToRoute('msvcategoria_index');
+            $categoria->setEstado(false);
+
+            $em->persist($categoria);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**

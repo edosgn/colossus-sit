@@ -13,21 +13,33 @@
   </header>
   <body style="font-size:8px">
     {% for key, i in 0..2 %}
+        <table style="border:none;">
+            <tr>
+                <td>
+                    <img src="{{ asset('img/logo-entidad.png') }}" height="40px" />
+                </td>
+                <td>
+                    <img src="{{ asset('img/logo-banco.png') }}" height="40px" />
+                </td>
+                <td style="text-align:right;">
+                    <span style="border:1px solid #000;text-align:center;background-color: #ccc;padding:5px;font-size:20px">
+                        <b>{{ factura.numero }}</b>
+                    </span>
+                </td>
+            </tr>
+        </table>
         <p style="text-align:right"><b>{{ fechaActual }}</b></p>
         <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:50%">
             <tr>
-                <td><b>Ciudad:</b><br>  {{ factura.sedeOperativa.municipio.nombre }}</td> 
-                <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
+                <td><b>Ciudad:</b><br>  {{ factura.sedeOperativa?.municipio.nombre }}</td> 
+                <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
             </tr>
         </table>
         <br>
         <br>
-        {% if comparendos %}
+        {% if amortizacion %}
             <table style="background-color:#e7e7e7;width:100%">
-                <tr>
-                    <td colspan="7" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
-                </tr>
                 <tr>
                     <td style="border:1px solid #cccccc"><b>Número</b></td>
                     <td style="border:1px solid #cccccc"><b>Fecha</b></td>
@@ -48,6 +60,11 @@
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.interesMora|number_format(0, ',', '.') }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.porcentajeDescuento }} %</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.placa }}</td>
+
+                    <td>{{ amortizacion.numeroCuota }}</td>
+                    <td>{{ amortizacion.valorBruto | currency: 'COP' }}</td>
+                    <td>{{ amortizacion.valorMora | currency: 'COP' }}</td>
+                    <td>{{ amortizacion.valorNeto | currency: 'COP' }}</td>
                 </tr>
                 {% endfor %}
                 <tr style="background-color:#ffffff">
@@ -57,10 +74,9 @@
             </table>
         {% endif %}
         <br>
-        <p style="text-align:right">
-            <img src="data:image/png;base64,{{ imgBarcode }}" height="30px">
-        </p>
+            <img src="data:image/png;base64,{{ imgBarcode }}" height="40px" />
         {% if key < 2 %}
+        <br>
         <div class="separator"></div>
         {% endif %}
     {% endfor %}

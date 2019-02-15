@@ -253,17 +253,34 @@ class Helpers
 		return $diasHabiles; 
 	}
 
-	public function getDiasCalendario($fechaComparendo)
+	public function getDiasCalendario($fecha)
 	{
-		$fechaComparendo = $this->convertDateTime($fechaComparendo);
+		$fecha = $this->convertDateTime($fecha);
 		$fechaActual = new \Datetime(date('Y-m-d'));
 		
 		$diasCalendario = 0;
 
 		$em = $this->em;
 
-		while ($fechaComparendo < $fechaActual) {
-			$fechaComparendo->modify('+1 days');
+		while ($fecha < $fechaActual) {
+			$fecha->modify('+1 days');
+			$diasCalendario ++;
+		}
+		
+		return $diasCalendario; 
+	}
+
+	public function getDiasCalendarioInverse($fecha)
+	{
+		$fecha = $this->convertDateTime($fecha);
+		$fechaActual = new \Datetime(date('Y-m-d'));
+		
+		$diasCalendario = 0;
+
+		$em = $this->em;
+
+		while ($fechaActual < $fecha) {
+			$fechaActual->modify('+1 days');
 			$diasCalendario ++;
 		}
 		
@@ -279,8 +296,10 @@ class Helpers
         return $template; 
     }
 
-    public function getDateAudiencia($fecha, $hora){
+    public function getDateAudienciaAutomatica($fecha, $hora){
 		$em = $this->em;
+
+		$this->getFechaVencimiento($fecha, 31);
 
 		$horario = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgHorario')->findOneByActivo(true);
 
@@ -305,9 +324,11 @@ class Helpers
 				)
 			);
 
-			$result = $this->validateAudiencia(
+			$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial());
+
+			$result = $this->validateAudienciaAutomatica(
 				$fecha, 
-				$hora, 
+				$horaManianaInicial, 
 				$audienciaLast, 
 				$horario,
 				$diasAtencion
@@ -317,7 +338,7 @@ class Helpers
 		return $result;
 	}
 
-	public function validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion = null){
+	public function validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion = null){
 		if ($fecha->format('w') != 0 and $fecha->format('w') != 6 and (in_array($fecha->format('w'), $diasAtencion)) == FALSE) {
 			if ($audienciaLast) {
 				$horaManianaInicial = new \Datetime($horario->getHoraManianaInicial());
@@ -327,7 +348,7 @@ class Helpers
 					if ($hora > $horaTardeFinal) {
 						$fecha->modify('+1 days');
 						$hora = $horaManianaInicial;
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+						$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}else{
 						$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal());
 						$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial());
@@ -336,17 +357,17 @@ class Helpers
 							$this->newDate['fecha'] = $fecha;
 							$this->newDate['hora'] = $hora;
 						}else{
-							$hora->modify('+2 hour');
-							$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+							$hora->modify('+5 minutes');
+							$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 						}
 					}
 				}else{
 					if ($fecha >= $audienciaLast->getFecha()){
-						$hora->modify('+2 hour');
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+						$hora->modify('+5 minutes');
+						$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}else{
 						$fecha->modify('+1 days');
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+						$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}
 				}
 			}else{
@@ -356,7 +377,7 @@ class Helpers
 				if ($hora > $horaTardeFinal) {
 					$fecha->modify('+1 days');
 					$hora = $horaManianaInicial;
-					$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+					$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 				}else{
 					$horaManianaFinal = new \Datetime($horario->getHoraManianaFinal());
 					$horaTardeInicial = new \Datetime($horario->getHoraTardeInicial());
@@ -365,14 +386,14 @@ class Helpers
 						$this->newDate['fecha'] = $fecha;
 						$this->newDate['hora'] = $hora;
 					}else{
-						$hora->modify('+2 hour');
-						$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+						$hora->modify('+5 minutes');
+						$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 					}
 				}
 			}
 		}else{
 			$fecha->modify('+1 days');
-			$this->validateAudiencia($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
+			$this->validateAudienciaAutomatica($fecha, $hora, $audienciaLast, $horario, $diasAtencion);
 		}
 		
 		return $this->newDate;
@@ -438,7 +459,7 @@ class Helpers
         $em->flush();
     }
 
-    public function generateTemplate($comparendo){
+    public function generateTemplate($comparendo, $cuerpo){
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
 
@@ -459,7 +480,7 @@ class Helpers
 
 
         $template = $this->createTemplate(
-          $comparendo->getEstado()->getFormato()->getCuerpo(),
+          $cuerpo,
           $replaces
         );
 
@@ -467,4 +488,41 @@ class Helpers
 
         return $template;
     }
+
+    public function getFechaVencimiento($fechaInicial, $diasSolicitados){
+		$em = $this->em;
+
+		$festivos = $em->getRepository('AppBundle:CfgFestivo')->findByActivo(true);
+		$diasHabiles = 0;
+
+		if ($festivos) {
+		  foreach ($festivos as $key => $value) {
+		    $diasNoLaborales[] = $value->getFecha()->format('j-n');
+		  }
+
+		  while ($diasHabiles < $diasSolicitados) {
+		    if ($fechaInicial->format('w') != 0 and $fechaInicial->format('w') != 6 and (in_array($fechaInicial->format('j-n'),$diasNoLaborales)) == false) {
+		      $diasHabiles ++;
+		    }
+
+		    if ($diasHabiles < $diasSolicitados) {
+		      $fechaInicial->modify('+1 days');
+		    }
+		  }
+		}else{
+		  while ($diasHabiles < $diasSolicitados) {
+		    if ($fechaInicial->format('w') != 0 and $fechaInicial->format('w') != 6) {
+		      $diasHabiles ++;
+		    }
+
+		    if ($diasHabiles < $diasSolicitados) {
+		      $fechaInicial->modify('+1 days');
+		    }
+		  }
+		}
+
+		$fechaVencimiento = $fechaInicial;
+
+		return $fechaVencimiento; 
+	}
 }

@@ -22,13 +22,21 @@ class MsvCriterioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $criterios = $em->getRepository('AppBundle:MsvCriterio')->findBy(array('estado' => true));
 
-        $msvCriterios = $em->getRepository('AppBundle:MsvCriterio')->findAll();
+        $response['data'] = array();
 
-        return $this->render('msvcriterio/index.html.twig', array(
-            'msvCriterios' => $msvCriterios,
-        ));
+        if ($criterios) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($criterios) . " registros encontrados",
+                'data' => $criterios,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -39,28 +47,48 @@ class MsvCriterioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $msvCriterio = new Msvcriterio();
-        $form = $this->createForm('AppBundle\Form\MsvCriterioType', $msvCriterio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $criterio = new MsvCriterio();
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($msvCriterio);
+            if ($params->idVariable) {
+                $idVariable = $em->getRepository('AppBundle:MsvVariable')->find(
+                    $params->idVariable
+                );
+                $criterio->setVariable($idVariable);
+            }
+
+            $criterio->setNombre(strtoupper($params->nombre));
+            $criterio->setEstado(true);
+            $em->persist($criterio);
             $em->flush();
 
-            return $this->redirectToRoute('msvcriterio_show', array('id' => $msvCriterio->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('msvcriterio/new.html.twig', array(
-            'msvCriterio' => $msvCriterio,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a msvCriterio entity.
      *
-     * @Route("/{id}", name="msvcriterio_show")
+     * @Route("/{id}/show", name="msvcriterio_show")
      * @Method("GET")
      */
     public function showAction(MsvCriterio $msvCriterio)
@@ -76,46 +104,90 @@ class MsvCriterioController extends Controller
     /**
      * Displays a form to edit an existing msvCriterio entity.
      *
-     * @Route("/{id}/edit", name="msvcriterio_edit")
+     * @Route("/edit", name="msvcriterio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvCriterio $msvCriterio)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($msvCriterio);
-        $editForm = $this->createForm('AppBundle\Form\MsvCriterioType', $msvCriterio);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            $criterio = $em->getRepository('AppBundle:MsvCriterio')->find($params->id);
 
-            return $this->redirectToRoute('msvcriterio_edit', array('id' => $msvCriterio->getId()));
+            $variable = $em->getRepository('AppBundle:MsvVariable')->find($params->idVariable);
+            if ($criterio != null) {
+
+                $criterio->setNombre(strtoupper($params->nombre));
+                $criterio->setVariable($variable);
+
+                $em->persist($criterio);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $criterio,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
-
-        return $this->render('msvcriterio/edit.html.twig', array(
-            'msvCriterio' => $msvCriterio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a msvCriterio entity.
      *
-     * @Route("/{id}", name="msvcriterio_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="msvcriterio_delete")
+     * @Method({"GET","POST"})
      */
-    public function deleteAction(Request $request, MsvCriterio $msvCriterio)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($msvCriterio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($msvCriterio);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('msvcriterio_index');
+            $criterio = $em->getRepository('AppBundle:MsvCriterio')->find($params->id);
+
+            $criterio->setEstado(false);
+
+            $em->persist($criterio);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**

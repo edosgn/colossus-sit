@@ -74,9 +74,12 @@ class CvAudienciaController extends Controller
             $fecha = new \Datetime($params->fecha);
             $hora = new \Datetime($params->hora);
 
-            $validarAudiencia = $helpers->getDateAudiencia($fecha, $hora);
+            /*$validarAudiencia = $helpers->getDateAudienciaManual($fecha, $hora);
             $audiencia->setFecha($validarAudiencia['fecha']);
-            $audiencia->setHora($validarAudiencia['hora']);
+            $audiencia->setHora($validarAudiencia['hora']);*/
+
+            $audiencia->setFecha($fecha);
+            $audiencia->setHora($hora);
 
             if ($params->idComparendo) {
                 $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
@@ -408,5 +411,52 @@ class CvAudienciaController extends Controller
         $template = str_replace("<br>", "<br/>", $template);
 
         return $template;
+    }
+
+    /**
+     * Busca audiencias por parametros (identificacion, No. comparendo o fecha).
+     *
+     * @Route("/search/filtros", name="cvaudiencia_search_filtros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $audiencias = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->getByFilter(
+                $params
+            );
+
+            if ($audiencias) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($audiencias)." audiencias encontrados", 
+                    'data' => $audiencias,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen audiencias para esos filtros de búsqueda", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
     }
 }
