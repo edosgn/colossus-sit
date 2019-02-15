@@ -97,6 +97,13 @@ class Vehiculo
      * @ORM\Column(name="vin", type="string", length=255, nullable= true)
      */
     private $vin;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_matricula", type="string", length=255, nullable= true)
+     */
+    private $tipoMatricula;
   
     /**
      * @var int
@@ -140,13 +147,7 @@ class Vehiculo
      */
     private $cancelado;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="tipoMatricula", type="boolean", nullable= true)
-     */
-    private $tipoMatricula;
-    
+      
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
     private $municipio; 
@@ -208,7 +209,6 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pais", inversedBy="paises") */
     private $paisRegistro;   
 
-    
 
     /**
      * Get id
@@ -485,6 +485,30 @@ class Vehiculo
     }
 
     /**
+     * Set tipoMatricula
+     *
+     * @param string $tipoMatricula
+     *
+     * @return Vehiculo
+     */
+    public function setTipoMatricula($tipoMatricula)
+    {
+        $this->tipoMatricula = $tipoMatricula;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoMatricula
+     *
+     * @return string
+     */
+    public function getTipoMatricula()
+    {
+        return $this->tipoMatricula;
+    }
+
+    /**
      * Set numeroPasajeros
      *
      * @param integer $numeroPasajeros
@@ -626,30 +650,6 @@ class Vehiculo
     public function getCancelado()
     {
         return $this->cancelado;
-    }
-
-    /**
-     * Set tipoMatricula
-     *
-     * @param boolean $tipoMatricula
-     *
-     * @return Vehiculo
-     */
-    public function setTipoMatricula($tipoMatricula)
-    {
-        $this->tipoMatricula = $tipoMatricula;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoMatricula
-     *
-     * @return boolean
-     */
-    public function getTipoMatricula()
-    {
-        return $this->tipoMatricula;
     }
 
     /**

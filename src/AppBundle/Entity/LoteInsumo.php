@@ -174,7 +174,7 @@ class LoteInsumo
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->fecha->format('Y-m-d');
     }
 
     /**

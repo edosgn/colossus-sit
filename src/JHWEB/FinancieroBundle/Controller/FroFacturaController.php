@@ -141,7 +141,7 @@ class FroFacturaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -150,10 +150,18 @@ class FroFacturaController extends Controller
 
             $fechaCreacion = new \Datetime(date('Y-m-d'));
 
+            if ($params->idAmortizacion) {
+                $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->find(
+                    $params->idAmortizacion
+                );
+            }
+
             $factura->setFechaCreacion($fechaCreacion);
             $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
             $factura->setHora(new \Datetime(date('h:i:s A')));
-            $factura->setValor($params->valor);
+            $factura->setValorBruto($amortizacion->getValorBruto());
+            $factura->setValorMora($amortizacion->getValorMora());
+            $factura->setValorNeto($amortizacion->getValorNeto());
             $factura->setEstado('EMITIDA');
             $factura->setActivo(true);
 
@@ -183,7 +191,8 @@ class FroFacturaController extends Controller
             $em->persist($factura);
             $em->flush();
 
-            $this->calculateValueUpdate($params->comparendos, $factura);
+            $amortizacion->setFactura($factura);
+            $em->flush();
 
             $response = array(
                 'status' => 'success',
@@ -441,7 +450,7 @@ class FroFacturaController extends Controller
                 break;
 
             case 3:
-                $this->generatePdfInfracciones($id);
+                $this->generatePdfAmortizacion($id);
                 break;
         }
 
@@ -477,7 +486,7 @@ class FroFacturaController extends Controller
         //$imgBarcode = \base64_decode($code);
         $imgBarcode = $code;
 
-        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.html.twig', array(
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
             'comparendos'=>$comparendos,
@@ -494,6 +503,16 @@ class FroFacturaController extends Controller
         $fechaActual = strftime("%d de %B del %Y");
 
         $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
+
+        if ($factura) {
+            $fechaCreacion = new \Datetime(date('Y-m-d'));
+
+            $factura->setFechaCreacion($fechaCreacion);
+            $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
+            $factura->setHora(new \Datetime(date('h:i:s A')));
+
+            $em->flush();
+        }
 
         $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneByFactura($factura->getId());
 
@@ -512,7 +531,7 @@ class FroFacturaController extends Controller
         //$imgBarcode = \base64_decode($code);
         $imgBarcode = $code;
 
-        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.html.twig', array(
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
             'comparendos'=>$comparendos,

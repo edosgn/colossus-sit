@@ -114,15 +114,27 @@ class CfgAdmFormatoController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
-                $params->id)
-            ;
+                $params->id
+            );
 
-            if ($formato) {
+            $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $params->idComparendo
+            );
+
+            $template = $helpers->generateTemplate(
+                $comparendo,
+                $formato->getCuerpo()
+            );
+
+            if ($template) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado", 
-                    'data'=> $formato,
+                    'message' => "Plantilla encontrada.", 
+                    'data'=> array(
+                        'formato' => $formato,
+                        'template' => $template,
+                    )
                 );
             }else{
                 $response = array(

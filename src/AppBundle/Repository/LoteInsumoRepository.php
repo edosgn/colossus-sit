@@ -10,4 +10,15 @@ namespace AppBundle\Repository;
  */
 class LoteInsumoRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getMax()
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(l.rangoFin) AS maximo
+            FROM AppBundle:LoteInsumo l";
+        $consulta = $em->createQuery($dql);
+        return $consulta->getOneOrNullResult();
+    }
+
 }

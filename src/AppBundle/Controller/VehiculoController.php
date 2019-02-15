@@ -149,6 +149,9 @@ class VehiculoController extends Controller
                 $cancelado = (isset($params->vehiculo->cancelado)) ? $params->vehiculo->cancelado : false;
                 $tipoMatricula = (isset($params->vehiculo->tipoMatricula)) ? $params->vehiculo->tipoMatricula : false;
                 $placa = (isset($params->vehiculo->placa)) ? $params->vehiculo->placa : false;
+
+                // var_dump($tipoMatricula);
+                // die();
                 
                 $idRadioAccion = (isset($params->vehiculo->radioAccionId)) ? $params->vehiculo->radioAccionId : false;
 

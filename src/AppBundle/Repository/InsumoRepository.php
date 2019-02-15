@@ -30,4 +30,35 @@ class InsumoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    public function getNumeroModulo($numero,$idModulo,$idSedeOperativa)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT i.numero,ci.nombre
+            FROM AppBundle:Insumo i
+            JOIN i.casoInsumo ci
+            WHERE i.casoInsumo = ci.id
+            AND i.sedeOperativa = :idSedeOperativa
+            AND ci.modulo = :idModulo
+            AND i.estado = :estado
+            AND i.tipo = :tipo
+            AND i.numero = :numero
+            GROUP BY i.numero";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idSedeOperativa' => $idSedeOperativa,
+            'estado' => 'disponible',
+            'tipo' => 'sustrato',
+            'numero' => $numero,
+            'idModulo' => $idModulo,
+        ));
+
+        // var_dump($consulta->getResult());
+        // die();
+        // return $consulta->getResult();
+        return $consulta->getOneOrNullResult();
+    }
 }
