@@ -59,7 +59,7 @@ class MsvRevision
     /**
      * @var string
      *
-     * @ORM\Column(name="observacion_visita_1", type="string", length=255)
+     * @ORM\Column(name="observacion_visita_1", type="string", length=255, nullable=true)
      */
     private $observacionVisita1;
 
@@ -73,7 +73,7 @@ class MsvRevision
     /**
      * @var string
      *
-     * @ORM\Column(name="observacion_visita_2", type="string", length=255)
+     * @ORM\Column(name="observacion_visita_2", type="string", length=255, nullable=true)
      */
     private $observacionVisita2;
 

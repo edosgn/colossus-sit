@@ -74,26 +74,34 @@ class MsvRevisionController extends Controller
                         );
                         return $helpers->json($response);
                 }
-                
 
                 if($params->fechaOtorgamiento) {
                     $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
                     $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
-                    if ($fechaOtorgamientoDatetime < $fechaVisitaControlDatetime1 && $fechaOtorgamientoDatetime < $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2 ){
-                        $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
-                        $revision->setObservacionVisita1($params->observacionVisita1);
-                        $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
-                        $revision->setObservacionVisita2($params->observacionVisita2);
-                    } else {
+                    if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime1 ){
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => "Las fechas de visita para control deben ser menores a la fecha de otorgamiento del aval.",
+                            'message' => "La fecha de la primera visita de control debe ser mayor a un año de la fecha de otorgamiento del aval",
                         );
                         return $helpers->json($response);
+                    } else {
+                        $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
+                        $revision->setObservacionVisita1($params->observacionVisita1);
+                        
+                    } if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2) {
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La fecha de la segunda visita de control debe ser mayor a dos años de la fecha de otorgamiento del aval",
+                        );
+                        return $helpers->json($response);
+                    } else {
+                        $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
+                        $revision->setObservacionVisita2($params->observacionVisita2);
                     }
                 }
-
+                            
                 $revision->setFuncionario($funcionario);
                 $revision->setPersonaContacto($params->personaContacto);
                 $revision->setCargo($params->cargo);
@@ -120,7 +128,7 @@ class MsvRevisionController extends Controller
     /**
      * Finds and displays a msvRevision entity.
      *
-     * @Route("/{id}", name="msvrevision_show")
+     * @Route("/{id}/show", name="msvrevision_show")
      * @Method("GET")
      */
     public function showAction(MsvRevision $msvRevision)

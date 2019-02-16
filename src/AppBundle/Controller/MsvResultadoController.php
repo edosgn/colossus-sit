@@ -67,8 +67,6 @@ class MsvResultadoController extends Controller
             $idEmpresa = $em->getRepository('AppBundle:Empresa')->find($params->idEmpresa);
             $msvResultado->setEmpresa($idEmpresa);
 
-            var_dump($params->valorObtenidoFortalecimiento);
-
             $msvResultado->setPilarFortalecimiento("FORTALECIMIENTO EN LA GESTIÓN INSTITUCIONAL");
             $msvResultado->setValorObtenidoFortalecimiento($params->valorObtenidoFortalecimiento);
             $msvResultado->setValorPonderadoFortalecimiento(0.3);
@@ -77,7 +75,7 @@ class MsvResultadoController extends Controller
 
             $msvResultado->setPilarComportamiento("COMPORTAMIENTO HUMANO");
             $msvResultado->setValorObtenidoComportamiento($params->valorObtenidoComportamiento);
-            $msvResultado->setValorPonderadoComportamiento(0.2);
+            $msvResultado->setValorPonderadoComportamiento(0.3);
             $valorResultadoComportamiento = $params->valorObtenidoComportamiento * 0.3;
             $msvResultado->setResultadoComportamiento($valorResultadoComportamiento);
 
@@ -106,10 +104,7 @@ class MsvResultadoController extends Controller
             $msvResultado->setResultadoValorAgregado($valorResultadoValorAgregado);
 
             $resultadoFinal = $valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado;
-            var_dump($valorResultadoFortalecimiento);
-            var_dump($valorResultadoComportamiento);
-            var_dump($resultadoFinal);
-            die();
+            
             $msvResultado->setResultadoFinal($resultadoFinal);
             
             $msvResultado->setActivo(true);
