@@ -75,7 +75,7 @@ class MsvResultadoController extends Controller
 
             $msvResultado->setPilarComportamiento("COMPORTAMIENTO HUMANO");
             $msvResultado->setValorObtenidoComportamiento($params->valorObtenidoComportamiento);
-            $msvResultado->setValorPonderadoComportamiento(0.2);
+            $msvResultado->setValorPonderadoComportamiento(0.3);
             $valorResultadoComportamiento = $params->valorObtenidoComportamiento * 0.3;
             $msvResultado->setResultadoComportamiento($valorResultadoComportamiento);
 
@@ -103,7 +103,9 @@ class MsvResultadoController extends Controller
             $valorResultadoValorAgregado = $params->valorObtenidoValorAgregado * 0.05;
             $msvResultado->setResultadoValorAgregado($valorResultadoValorAgregado);
 
-            $msvResultado->setResultadoFinal($valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado);
+            $resultadoFinal = $valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado;
+            
+            $msvResultado->setResultadoFinal($resultadoFinal);
             
             $msvResultado->setActivo(true);
             $em->persist($msvResultado);
@@ -112,7 +114,8 @@ class MsvResultadoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Los datos han sido registrados exitosamente.",
+                'message' => "Los datos han sido registrados exitosamente.", 
+                'message2' => "El resultado final es: " . $resultadoFinal,
             );
         } else {
             $response = array(

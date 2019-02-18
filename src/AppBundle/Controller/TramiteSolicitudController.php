@@ -150,7 +150,7 @@ class TramiteSolicitudController extends Controller
 
             $observacion = (isset($params->observacion)) ? $params->observacion : null;
             $documentacionCompleta = (isset($params->documentacionCompleta)) ? $params->documentacionCompleta : false;
-            $fechaSolicitudDateTime = new \DateTime(date('Y-m-d h:i:s'));
+            $fechaSolicitudDateTime = new \DateTime(date('Y-m-d'));
             $datos = $params->datos->foraneas; 
             
             $em = $this->getDoctrine()->getManager();
@@ -203,6 +203,7 @@ class TramiteSolicitudController extends Controller
             $tramiteSolicitud->setObservacion($observacion);
             $tramiteSolicitud->setDocumentacion($documentacionCompleta);
             $tramiteSolicitud->setFecha($fechaSolicitudDateTime);
+            $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
             $tramiteSolicitud->setEstado(true);
             $tramiteSolicitud->setDatos((array)$datos);
             // $tramiteSolicitud->setResumen((array)$params->datos->resumen);
@@ -478,4 +479,49 @@ class TramiteSolicitudController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Busca trámites por módulo y parametros (No. placa, No. factura y fecha).
+     *
+     * @Route("/search/modulo/filter", name="tramitesolicitud_search_modulo_filter")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByModuloAndFilterAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramites = $em->getRepository('AppBundle:TramiteSolicitud')->getByModuloAndFilter(
+                $params
+            );
+
+            if ($tramites) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($tramites)." trámites encontrados", 
+                    'data' => $tramites,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existen trámites para esos filtros de búsqueda, si desea registralo por favor presione el botón "NUEVO"', 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }

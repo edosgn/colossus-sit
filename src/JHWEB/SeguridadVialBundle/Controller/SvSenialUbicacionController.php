@@ -122,27 +122,50 @@ class SvSenialUbicacionController extends Controller
                             $bodega->setCantidadDisponible($bodega->getCantidadDisponible() - $params->cantidad);
                             $em->flush();
                         }
+
+                        if ($params->idLinea) {
+                            $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                                $params->idLinea
+                            );
+                            $ubicacion->setLinea($linea);
+                        }
+
+                        if ($params->idUnidadMedida) {
+                            $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                                $params->idUnidadMedida
+                            );
+                            $ubicacion->setUnidadMedida($unidadMedida);
+                        }
                     }
 
                     if ($params->idProveedor) {
                         $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
                             $params->idProveedor);
-                        $ubicacion->setProveedor($proveedor->getNombre());
+                        $ubicacion->setProveedor($proveedor);
+
+                        if ($params->demarcaciones) {
+                            foreach ($paramas->demarcaciones as $key => $demarcacion) {
+                                
+                                    # code...
+                                    if ($params->idLinea) {
+                                        $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                                            $params->idLinea
+                                        );
+                                        $ubicacion->setLinea($linea);
+                                    }
+
+                                    if ($params->idUnidadMedida) {
+                                        $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                                            $params->idUnidadMedida
+                                        );
+                                        $ubicacion->setUnidadMedida($unidadMedida);
+                                    }
+                            }
+                        }
+
                     }
 
-                    if ($params->idLinea) {
-                        $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
-                            $params->idLinea
-                        );
-                        $ubicacion->setLinea($linea);
-                    }
-
-                    if ($params->idUnidadMedida) {
-                        $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
-                            $params->idUnidadMedida
-                        );
-                        $ubicacion->setUnidadMedida($unidadMedida);
-                    }
+                    
 
                     if ($senial) {
                         $ubicacion->setSenial($senial);

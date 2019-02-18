@@ -24,9 +24,17 @@ class TramiteSolicitud
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora", type="time")
+     */
+    private $hora;
+
 
     /**
      * @var string
@@ -120,6 +128,33 @@ class TramiteSolicitud
             return $this->fecha->format('d/m/Y');
         }
         return $this->fecha;
+    }
+
+    /**
+     * Set hora
+     *
+     * @param \DateTime $hora
+     *
+     * @return TramiteSolicitud
+     */
+    public function setHora($hora)
+    {
+        $this->hora = $hora;
+
+        return $this;
+    }
+
+    /**
+     * Get hora
+     *
+     * @return \DateTime
+     */
+    public function getHora()
+    {
+        if ($this->hora) {
+            return $this->hora->format('h:i A');
+        }
+        return $this->hora;
     }
 
     /**

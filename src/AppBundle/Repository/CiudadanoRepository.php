@@ -10,4 +10,41 @@ namespace AppBundle\Repository;
  */
 class CiudadanoRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getByFilter($params){
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT c
+                FROM AppBundle:Ciudadano c,
+                UsuarioBundle:Usuario u
+                WHERE u.identificacion = :identificacion
+                AND c.usuario = u.id
+                ORDER BY u.primerNombre, u.primerApellido ASC";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'identificacion' => $params->filtro,
+                ));
+                break;
+
+            case 2:
+                $dql = "SELECT c
+                FROM AppBundle:Ciudadano c,
+                UsuarioBundle:Usuario u
+                WHERE c.usuario = u.id
+                AND (u.primerNombre LIKE :nombres OR u.segundoNombre LIKE :nombres
+                OR u.primerApellido LIKE :apellidos OR u.segundoApellido LIKE :apellidos)
+                ORDER BY u.primerNombre, u.primerApellido ASC";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'nombres' => '%'.$params->filtro.'%',
+                    'apellidos' => '%'.$params->filtro.'%',
+                ));
+                break;
+        }
+
+        return $consulta->getResult();
+    }
 }

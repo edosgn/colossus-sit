@@ -621,4 +621,52 @@ class CiudadanoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca ciudadanos por parametros (identificacion, nombres y/o apellidos).
+     *
+     * @Route("/search/filtros", name="ciudadano_search_filtros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $ciudadanos = $em->getRepository('AppBundle:Ciudadano')->getByFilter(
+                $params
+            );
+
+            if ($ciudadanos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($ciudadanos)." ciudadanos encontrados", 
+                    'data' => $ciudadanos,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existen ciudadanos para esos filtros de búsqueda, si desea registralo por favor presione el botón "NUEVO"', 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
