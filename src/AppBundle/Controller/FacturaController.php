@@ -157,13 +157,13 @@ class FacturaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro creado con exito", 
+                'message' => "Factura No. ".$factura->getNumero()." creada con exito", 
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);
