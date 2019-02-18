@@ -23,8 +23,6 @@ class CfgPlacaController extends Controller
      */
     public function indexAction()
     {
-
-        
         $helpers = $this->get("app.helpers");
         
         $em = $this->getDoctrine()->getManager();

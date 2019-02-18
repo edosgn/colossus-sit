@@ -108,20 +108,79 @@ class TramiteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getTramitesModulo($moduloId)
+    public function getByModuloAndFilter($params)
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT ts
-            FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf, AppBundle:Factura f, AppBundle:Modulo m, AppBundle:TramitePrecio tp
-            WHERE tf.factura = f.id AND tf.tramitePrecio = tp.id
-            AND tp.modulo = :moduloId";
-        $consulta = $em->createQuery($dql);
 
-        $consulta->setParameters(array(
-            'moduloId' => $moduloId,
-        ));
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT ts
+                FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf,
+                AppBundle:Factura f, AppBundle:Modulo m, 
+                AppBundle:TramitePrecio tp, AppBundle:Vehiculo v,
+                AppBundle:CfgPlaca p
+                WHERE ts.vehiculo = v.id
+                AND v.placa = p.id
+                AND p.numero = :placa
+                AND tf.factura = f.id 
+                AND tf.tramitePrecio = tp.id
+                AND tp.modulo = :idModulo
+                ORDER BY ts.fecha DESC";
+
+                $consulta = $em->createQuery($dql);
+
+                $consulta->setParameters(array(
+                    'idModulo' => $params->idModulo,
+                    'placa' => $params->filtro,
+                ));
+                break;
+
+            case 2:
+                $dql = "SELECT ts
+                FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf,
+                AppBundle:Factura f, AppBundle:Modulo m, 
+                AppBundle:TramitePrecio tp, AppBundle:Vehiculo v,
+                AppBundle:CfgPlaca p
+                WHERE ts.vehiculo = v.id
+                AND v.placa = p.id
+                AND tf.factura = f.id 
+                AND tf.tramitePrecio = tp.id
+                AND tp.modulo = :idModulo
+                AND f.numero = :numero
+                ORDER BY ts.fecha DESC";
+
+                $consulta = $em->createQuery($dql);
+
+                $consulta->setParameters(array(
+                    'idModulo' => $params->idModulo,
+                    'numero' => $params->filtro,
+                ));
+                break;
+
+            case 3:
+                $dql = "SELECT ts
+                FROM AppBundle:TramiteSolicitud ts, AppBundle:TramiteFactura tf,
+                AppBundle:Factura f, AppBundle:Modulo m, 
+                AppBundle:TramitePrecio tp, AppBundle:Vehiculo v,
+                AppBundle:CfgPlaca p
+                WHERE ts.vehiculo = v.id
+                AND v.placa = p.id
+                AND tf.factura = f.id 
+                AND tf.tramitePrecio = tp.id
+                AND tp.modulo = :idModulo
+                AND ts.fecha = :fecha
+                ORDER BY ts.fecha DESC";
+
+                $consulta = $em->createQuery($dql);
+
+                $consulta->setParameters(array(
+                    'idModulo' => $params->idModulo,
+                    'fecha' => $params->filtro,
+                ));
+                break;
+        }
+
         return $consulta->getResult();
-
     }
 
     public function getMatriculaCancelada($idVehiculo)

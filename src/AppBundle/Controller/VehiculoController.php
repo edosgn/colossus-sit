@@ -732,12 +732,24 @@ class VehiculoController extends Controller
                             break;
 
                         case 'placa':
-                            $placa = $em->getRepository("AppBundle:CfgPlaca")->find($params->idPlaca);
-                            $vehiculo->setPlaca($placa);
-                            break;
+                            $placa = $em->getRepository("AppBundle:CfgPlaca")->findOneByNumero(
+                                $params->nuevaPlaca
+                            );
 
-                        case 'regrabarvin':
-                            $vehiculo->setVin($params->vin);
+                            if (!$placa) {
+                                $placa = new CfgPlaca();
+                                $placa->setNumero(
+                                    strtoupper($params->nuevaPlaca)
+                                );
+                                $placa->setEstado('FABRICADA');
+                                //Revisar$placa->setClase($clase);
+                                //Revisar$placa->setSedeOperativa($sedeOperativa);
+
+                                $em->persist($placa);
+                                $em->flush();
+                            }
+
+                            $vehiculo->setPlaca($placa);
                             break;
                             
                         case 'servicio':
@@ -750,11 +762,19 @@ class VehiculoController extends Controller
                             break;
 
                         case 'regrabarchasis':
-                            $vehiculo->setChasis($params->idChasis);
+                            $vehiculo->setChasis($params->nuevoNumero);
+                            break;
+
+                        case 'regrabarmotor':
+                            $vehiculo->setMotor($params->nuevoNumero);
                             break;
 
                         case 'regrabarserie':
                             $vehiculo->setSerie($params->nuevoNumero);
+                            break;
+
+                        case 'regrabarvin':
+                            $vehiculo->setVin($params->nuevoNumero);
                             break;
 
                         case 'conjunto':

@@ -147,8 +147,6 @@ class Vehiculo
      */
     private $cancelado;
 
-      
-
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
     private $municipio; 
 
