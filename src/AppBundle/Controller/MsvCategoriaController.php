@@ -104,17 +104,32 @@ class MsvCategoriaController extends Controller
     /**
      * Finds and displays a msvCategoria entity.
      *
-     * @Route("/{id}", name="msvcategoria_show")
-     * @Method("GET")
+     * @Route("/{id}/show", name="msvcategoria_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(MsvCategoria $msvCategoria)
+    public function showAction(Request $request, $id)
     {
-        $deleteForm = $this->createDeleteForm($msvCategoria);
+       $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('msvcategoria/show.html.twig', array(
-            'msvCategoria' => $msvCategoria,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "categoria con nombre"." ".$categoria->getNombre(), 
+                    'data'=> $categoria,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**

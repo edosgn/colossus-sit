@@ -53,54 +53,69 @@ class MsvParametroController extends Controller
         $em = $this->getDoctrine()->getManager();
         $hash = $request->get("authorization", null);
         $categoriaId = $request->get("json", null);
-
         $authCheck = $helpers->authCheck($hash);
-        /* var_dump($categoriaId);
-        die(); */
-        $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
-        $msvParametrosArray = null;
-        foreach ($msvParametros as $keyParametro => $msvParametro) {
-            $msvParametrosArray[$keyParametro] = array(
-                'id'=>$msvParametro->getId(),
-                'name'=>$msvParametro->getNombre(),
-                'valor'=>$msvParametro->getValor(),
-                'variables' => null,
-                'numeroVariables'=> null
-             );
-            $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
-            $numeroVariables = count($variables);
-            $msvParametrosArray[$keyParametro]['numeroVariables']= $numeroVariables;
-            if($variables){
-                foreach ($variables as $keyVariable => $variable) {
-                    $msvParametrosArray[$keyParametro]['variables'][$keyVariable] = array(
-                        'id'=> $variable->getId(),
-                        'name' => $variable->getNombre(),
-                        'criterios' => null,
-                    );
-                    $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable(
-                        $variable->getId()
-                    );
-                    if($criterios){
-                        foreach ($criterios as $keyCriterio => $criterio) {
-                            $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'] = array(
-                                'id'=> $criterio->getId(),
-                                'name' => $criterio->getNombre(),
-                                'evidencia'=> false,
-                                'responde'=>false,
-                                'aplica'=>false,
-                                'observacion'=>null,
-                            );
+
+        if ($authCheck == true) {
+    
+            $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
+            $msvParametrosArray = null;
+            foreach ($msvParametros as $keyParametro => $msvParametro) {
+                $msvParametrosArray[$keyParametro] = array(
+                    'id'=>$msvParametro->getId(),
+                    'name'=>$msvParametro->getNombre(),
+                    'valor'=>$msvParametro->getValor(),
+                    'variables' => null,
+                    'numeroVariables'=> null
+                );
+                $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
+                $numeroVariables = count($variables);
+                $msvParametrosArray[$keyParametro]['numeroVariables']= $numeroVariables;
+                if($variables){
+                    foreach ($variables as $keyVariable => $variable) {
+                        $msvParametrosArray[$keyParametro]['variables'][$keyVariable] = array(
+                            'id'=> $variable->getId(),
+                            'name' => $variable->getNombre(),
+                            'criterios' => null,
+                        );
+                        $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable(
+                            $variable->getId()
+                        );
+                        if($criterios){
+                            foreach ($criterios as $keyCriterio => $criterio) {
+                                $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'] = array(
+                                    'id'=> $criterio->getId(),
+                                    'name' => $criterio->getNombre(),
+                                    'evidencia'=> false,
+                                    'responde'=>false,
+                                    'aplica'=>false,
+                                    'observacion'=>null,
+                                );
+                            }
                         }
-                    }
-                }                
-            }           
+                    }                
+                }           
+            }
+            if($msvParametrosArray) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Parámetros encontrados",
+                    'data' => $msvParametrosArray,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron parámetros para la categoria ". $categoriaId,
+                );
+            }
+        } else {
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no válida", 
+                );
         }
-        $response = array(
-            'status' => 'succes',
-            'code' => 200,
-            'msj' => "Parametros no encontrados",
-            'data' => $msvParametrosArray
-            );
         return $helpers ->json($response);
     }
 
