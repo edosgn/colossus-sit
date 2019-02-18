@@ -4,9 +4,11 @@ namespace JHWEB\SeguridadVialBundle\Controller;
 
 use JHWEB\SeguridadVialBundle\Entity\SvSenialInventario;
 use JHWEB\SeguridadVialBundle\Entity\SvSenialUbicacion;
+use JHWEB\SeguridadVialBundle\Entity\SvSenialDemarcacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Svsenialubicacion controller.
@@ -138,35 +140,6 @@ class SvSenialUbicacionController extends Controller
                         }
                     }
 
-                    if ($params->idProveedor) {
-                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
-                            $params->idProveedor);
-                        $ubicacion->setProveedor($proveedor);
-
-                        if ($params->demarcaciones) {
-                            foreach ($paramas->demarcaciones as $key => $demarcacion) {
-                                
-                                    # code...
-                                    if ($params->idLinea) {
-                                        $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
-                                            $params->idLinea
-                                        );
-                                        $ubicacion->setLinea($linea);
-                                    }
-
-                                    if ($params->idUnidadMedida) {
-                                        $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
-                                            $params->idUnidadMedida
-                                        );
-                                        $ubicacion->setUnidadMedida($unidadMedida);
-                                    }
-                            }
-                        }
-
-                    }
-
-                    
-
                     if ($senial) {
                         $ubicacion->setSenial($senial);
 
@@ -193,6 +166,48 @@ class SvSenialUbicacionController extends Controller
 
                     $em->persist($ubicacion);
                     $em->flush();
+
+                    if ($params->idProveedor) {
+                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
+                            $params->idProveedor);
+                        $ubicacion->setProveedor($proveedor);
+
+                        if ($params->demarcaciones) {
+                            foreach ($paramas->demarcaciones as $demarcacion) {
+
+                                $demarcacion = new Svsenialdemarcacion();
+
+                                if ($params->idLinea) {
+                                    $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                                        $params->idLinea
+                                    );
+                                    $demarcacion->setLinea($linea);
+                                }
+
+                                if ($params->idUnidadMedida) {
+                                    $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                                        $params->idUnidadMedida
+                                    );
+                                    $demarcacion->setUnidadMedida($unidadMedida);
+                                }
+
+                                $demarcacion->setCantidad($demarcacion->cantidad);
+                                $demarcacion->setMetraje($demarcacion->metraje);
+                                $demarcacion->setAnchoLinea(
+                                    $demarcacion->anchoLinea
+                                );
+                                $demarcacion->setTotal($demarcacion->total);
+                                $demarcacion->setTramoVial($demarcacion->tramoVial);
+                                $demarcacion->setActivo(true);
+
+                                $demarcacion->setUbicacion($ubicacion);
+
+                                $em->persist($demarcacion);
+                                $em->flush();
+                            }
+                        }
+
+                    }
 
                     $response = array(
                         'status' => 'success',
