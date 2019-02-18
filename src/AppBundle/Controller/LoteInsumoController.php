@@ -278,7 +278,7 @@ class LoteInsumoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->findOneBy(
+            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->findBy(
                 array('estado' => 'registrado','sedeOperativa'=> $params->sedeOperativa,'casoInsumo'=>$params->casoInsumo)
             );
             if ($loteInsumo!=null) {
