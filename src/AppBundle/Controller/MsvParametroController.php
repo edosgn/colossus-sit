@@ -85,9 +85,9 @@ class MsvParametroController extends Controller
                                 $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'] = array(
                                     'id'=> $criterio->getId(),
                                     'name' => $criterio->getNombre(),
+                                    'aplica'=>false,
                                     'evidencia'=> false,
                                     'responde'=>false,
-                                    'aplica'=>false,
                                     'observacion'=>null,
                                 );
                             }
