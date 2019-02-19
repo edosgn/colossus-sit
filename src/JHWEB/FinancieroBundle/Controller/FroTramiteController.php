@@ -253,4 +253,48 @@ class FroTramiteController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * datos para obtener tramites por rango de fechas
+     *
+     * @Route("/tramite/fecha", name="frotramite_rango_fechas")
+     * @Method({"GET", "POST"})
+     */
+    public function TramiteByFechaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->findTramiteByFecha($params);
+
+            if($tramites){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Trámites encontrados.",
+                    'data' => $tramites,
+                    'cant' => count($tramites),
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron tramites para la sede operativa con los rangos de fecha establecidos para la búsqueda.",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

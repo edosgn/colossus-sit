@@ -1242,4 +1242,45 @@ class ComparendoController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Finds and displays a comparendo entity by date.
+     *
+     * @Route("/comparendo/fecha", name="comparendo_date")
+     * @Method("GET")
+     */
+    public function getComparendoByFechaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+
+            $comparendos = $em->getRepository('AppBundle:Comparendo')->findByFecha($params);
+
+            if($comparendos){
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado",
+                    'data' => $comparendo,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron comparendos diligenciados para el rango de fechas establecido.",
+                );    
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

@@ -43,9 +43,9 @@ class MsvCalificacion
     private $responde;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="valor_obtenido", type="integer")
+     * @ORM\Column(name="valor_obtenido", type="float")
      */
     private $valorObtenido;
 
@@ -101,7 +101,7 @@ class MsvCalificacion
     /**
      * Get aplica
      *
-     * @return bool
+     * @return boolean
      */
     public function getAplica()
     {
@@ -125,7 +125,7 @@ class MsvCalificacion
     /**
      * Get evidencia
      *
-     * @return bool
+     * @return boolean
      */
     public function getEvidencia()
     {
@@ -149,7 +149,7 @@ class MsvCalificacion
     /**
      * Get responde
      *
-     * @return bool
+     * @return boolean
      */
     public function getResponde()
     {
@@ -159,7 +159,7 @@ class MsvCalificacion
     /**
      * Set valorObtenido
      *
-     * @param integer $valorObtenido
+     * @param float $valorObtenido
      *
      * @return MsvCalificacion
      */
@@ -173,7 +173,7 @@ class MsvCalificacion
     /**
      * Get valorObtenido
      *
-     * @return int
+     * @return float
      */
     public function getValorObtenido()
     {
@@ -221,7 +221,7 @@ class MsvCalificacion
     /**
      * Get estado
      *
-     * @return bool
+     * @return boolean
      */
     public function getEstado()
     {
@@ -233,7 +233,7 @@ class MsvCalificacion
      *
      * @param \AppBundle\Entity\MsvCriterio $criterio
      *
-     * @return MsvCriterio
+     * @return MsvCalificacion
      */
     public function setCriterio(\AppBundle\Entity\MsvCriterio $criterio = null)
     {
@@ -257,7 +257,7 @@ class MsvCalificacion
      *
      * @param \AppBundle\Entity\Empresa $empresa
      *
-     * @return Empresa
+     * @return MsvCalificacion
      */
     public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
     {
@@ -276,4 +276,3 @@ class MsvCalificacion
         return $this->empresa;
     }
 }
-
