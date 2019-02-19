@@ -139,7 +139,7 @@ class SvSenialUbicacionController extends Controller
                     }
 
                     if ($params->idProveedor) {
-                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
+                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
                             $params->idProveedor);
                         $ubicacion->setProveedor($proveedor);
 
