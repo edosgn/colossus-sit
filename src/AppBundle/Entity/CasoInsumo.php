@@ -31,23 +31,9 @@ class CasoInsumo
     /**
      * @var string
      *
-     * @ORM\Column(name="referencia", type="string", length=255)
+     * @ORM\Column(name="referencia", type="string", length=255, nullable = true)
      */
     private $referencia;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="estado", type="boolean")
-     */
-    private $estado;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="valor", type="string", length=255)
-     */
-    private $valor;
 
     /**
      * @var string
@@ -60,6 +46,15 @@ class CasoInsumo
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo")
      **/
     protected $modulo;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="estado", type="boolean")
+     */
+    private $estado;
+
+
 
 
     /**
@@ -121,54 +116,6 @@ class CasoInsumo
     }
 
     /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return CasoInsumo
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param string $valor
-     *
-     * @return CasoInsumo
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return string
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
      * Set tipo
      *
      * @param string $tipo
@@ -190,6 +137,30 @@ class CasoInsumo
     public function getTipo()
     {
         return $this->tipo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return CasoInsumo
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

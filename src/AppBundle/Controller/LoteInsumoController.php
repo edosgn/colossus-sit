@@ -27,7 +27,7 @@ class LoteInsumoController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
-            array('estado' => 'REGISTRADO','tipo'=>'sustrato')
+            array('tipo'=>'sustrato')
         );
 
         $response['data'] = array();
@@ -53,7 +53,7 @@ class LoteInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $loteInsumos = $em->getRepository('AppBundle:LoteInsumo')->findBy(
-            array('estado' => 'registrado','tipo'=>'insumo')
+            array('tipo'=>'insumo')
         );
 
         $response = array(

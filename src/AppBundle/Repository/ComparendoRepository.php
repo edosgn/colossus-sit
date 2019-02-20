@@ -257,4 +257,21 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    public function findByFecha($params){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c
+        FROM AppBundle:Comparendo c, AppBundle:MpersonalComparendo pc
+        WHERE c.fecha = :fechaDesde BETWEEN :fechaHasta
+        AND c.consecutivo = pc.id";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

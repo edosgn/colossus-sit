@@ -147,6 +147,35 @@ class SvSenialUbicacionController extends Controller
                         }
                     }
 
+                    if ($params->idProveedor) {
+                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
+                            $params->idProveedor);
+                        $ubicacion->setProveedor($proveedor);
+
+                        if ($params->demarcaciones) {
+                            foreach ($paramas->demarcaciones as $key => $demarcacion) {
+                                
+                                    # code...
+                                    if ($params->idLinea) {
+                                        $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                                            $params->idLinea
+                                        );
+                                        $ubicacion->setLinea($linea);
+                                    }
+
+                                    if ($params->idUnidadMedida) {
+                                        $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                                            $params->idUnidadMedida
+                                        );
+                                        $ubicacion->setUnidadMedida($unidadMedida);
+                                    }
+                            }
+                        }
+
+                    }
+
+                    
+
                     if ($senial) {
                         $ubicacion->setSenial($senial);
 

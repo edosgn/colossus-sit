@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Imocfgvalors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Valor</th>
+                <th>Fecha</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imoCfgValor in imoCfgValors %}
+            <tr>
+                <td><a href="{{ path('imocfgvalor_show', { 'id': imoCfgValor.id }) }}">{{ imoCfgValor.id }}</a></td>
+                <td>{{ imoCfgValor.valor }}</td>
+                <td>{% if imoCfgValor.fecha %}{{ imoCfgValor.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('imocfgvalor_show', { 'id': imoCfgValor.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('imocfgvalor_edit', { 'id': imoCfgValor.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('imocfgvalor_new') }}">Create a new imoCfgValor</a>
+        </li>
+    </ul>
+{% endblock %}
