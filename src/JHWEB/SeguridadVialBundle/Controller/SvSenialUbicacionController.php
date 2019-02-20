@@ -111,8 +111,15 @@ class SvSenialUbicacionController extends Controller
                     $ubicacion->setHora(new \Datetime(date('h:i:s A')));
                     $ubicacion->setCantidad($params->cantidad);
 
+                    $markers = null;
                     if ($params->markers) {
-                        $ubicacion->setGeolocalizacion($params->markers);
+                        foreach ($params->markers as $key => $marker) {
+                            $markers[] = (array)$marker;
+                        }
+
+                        $ubicacion->setGeolocalizacion(
+                            $markers
+                        );
                     }
 
                     if ($params->idBodega) {
