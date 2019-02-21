@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgorganismotransitos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Divipo</th>
+                <th>Asignacionrango</th>
+                <th>Narinio</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgOrganismoTransito in cfgOrganismoTransitos %}
+            <tr>
+                <td><a href="{{ path('cfgorganismotransito_show', { 'id': cfgOrganismoTransito.id }) }}">{{ cfgOrganismoTransito.id }}</a></td>
+                <td>{{ cfgOrganismoTransito.nombre }}</td>
+                <td>{{ cfgOrganismoTransito.divipo }}</td>
+                <td>{% if cfgOrganismoTransito.asignacionRango %}Yes{% else %}No{% endif %}</td>
+                <td>{% if cfgOrganismoTransito.narinio %}Yes{% else %}No{% endif %}</td>
+                <td>{% if cfgOrganismoTransito.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgorganismotransito_show', { 'id': cfgOrganismoTransito.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgorganismotransito_edit', { 'id': cfgOrganismoTransito.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgorganismotransito_new') }}">Create a new cfgOrganismoTransito</a>
+        </li>
+    </ul>
+{% endblock %}

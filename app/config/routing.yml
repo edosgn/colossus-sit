@@ -1,7 +1,3 @@
-jhweb_insumo_imo_cfg_valor:
-    resource: "@JHWEBInsumoBundle/Controller/ImoCfgValorController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

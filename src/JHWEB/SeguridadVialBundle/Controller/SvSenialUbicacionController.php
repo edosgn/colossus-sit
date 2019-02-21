@@ -59,7 +59,7 @@ class SvSenialUbicacionController extends Controller
                     $params->idSenial
                 );
 
-                if ($senial->getCantidad() >= $params->cantidad)  {
+                if ($params->idProveedor) {
                     $inventario = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->findOneBy(
                         array(
                             'fecha' => $fecha,
@@ -111,63 +111,16 @@ class SvSenialUbicacionController extends Controller
                     $ubicacion->setHora(new \Datetime(date('h:i:s A')));
                     $ubicacion->setCantidad($params->cantidad);
 
+                    $markers = null;
                     if ($params->markers) {
-                        $ubicacion->setGeolocalizacion($params->markers);
-                    }
-
-                    if ($params->idBodega) {
-                        $bodega = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->find(
-                            $params->idBodega);
-                        $ubicacion->setBodega($bodega);
-                        
-                        if (!$params->idUnidadMedida && !$params->idProveedor) {
-                            $bodega->setCantidadDisponible($bodega->getCantidadDisponible() - $params->cantidad);
-                            $em->flush();
+                        foreach ($params->markers as $key => $marker) {
+                            $markers[] = (array)$marker;
                         }
 
-                        if ($params->idLinea) {
-                            $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
-                                $params->idLinea
-                            );
-                            $ubicacion->setLinea($linea);
-                        }
-
-                        if ($params->idUnidadMedida) {
-                            $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
-                                $params->idUnidadMedida
-                            );
-                            $ubicacion->setUnidadMedida($unidadMedida);
-                        }
-                    }
-
-                    if ($params->idProveedor) {
-                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
-                            $params->idProveedor);
-                        $ubicacion->setProveedor($proveedor);
-
-                        if ($params->demarcaciones) {
-                            foreach ($paramas->demarcaciones as $key => $demarcacion) {
-                                
-                                    # code...
-                                    if ($params->idLinea) {
-                                        $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
-                                            $params->idLinea
-                                        );
-                                        $ubicacion->setLinea($linea);
-                                    }
-
-                                    if ($params->idUnidadMedida) {
-                                        $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
-                                            $params->idUnidadMedida
-                                        );
-                                        $ubicacion->setUnidadMedida($unidadMedida);
-                                    }
-                            }
-                        }
-
-                    }
-
-                    
+                        $ubicacion->setGeolocalizacion(
+                            $markers
+                        );
+                    }                    
 
                     if ($senial) {
                         $ubicacion->setSenial($senial);
@@ -196,47 +149,44 @@ class SvSenialUbicacionController extends Controller
                     $em->persist($ubicacion);
                     $em->flush();
 
-                    if ($params->idProveedor) {
-                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
-                            $params->idProveedor);
-                        $ubicacion->setProveedor($proveedor);
+                    
+                    $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
+                        $params->idProveedor);
+                    $ubicacion->setProveedor($proveedor);
 
-                        if ($params->demarcaciones) {
-                            foreach ($paramas->demarcaciones as $demarcacion) {
+                    if ($params->demarcaciones) {
+                        foreach ($params->demarcaciones as $demarcacion) {
+                            $demarcacionNew = new SvSenialDemarcacion();
 
-                                $demarcacion = new Svsenialdemarcacion();
-
-                                if ($params->idLinea) {
-                                    $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
-                                        $params->idLinea
-                                    );
-                                    $demarcacion->setLinea($linea);
-                                }
-
-                                if ($params->idUnidadMedida) {
-                                    $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
-                                        $params->idUnidadMedida
-                                    );
-                                    $demarcacion->setUnidadMedida($unidadMedida);
-                                }
-
-                                $demarcacion->setCantidad($demarcacion->cantidad);
-                                $demarcacion->setMetraje($demarcacion->metraje);
-                                $demarcacion->setAnchoLinea(
-                                    $demarcacion->anchoLinea
+                            if ($params->idLinea) {
+                                $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                                    $params->idLinea
                                 );
-                                $demarcacion->setTotal($demarcacion->total);
-                                $demarcacion->setTramoVial($demarcacion->tramoVial);
-                                $demarcacion->setActivo(true);
-
-                                $demarcacion->setUbicacion($ubicacion);
-
-                                $em->persist($demarcacion);
-                                $em->flush();
+                                $demarcacionNew->setLinea($linea);
                             }
-                        }
 
-                    }
+                            if ($params->idUnidadMedida) {
+                                $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                                    $params->idUnidadMedida
+                                );
+                                $demarcacionNew->setUnidadMedida($unidadMedida);
+                            }
+
+                            $demarcacionNew->setCantidad($demarcacion->cantidad);
+                            $demarcacionNew->setMetraje($demarcacion->metraje);
+                            $demarcacionNew->setAnchoLinea(
+                                $demarcacion->anchoLinea
+                            );
+                            $demarcacionNew->setTotal($demarcacion->total);
+                            $demarcacionNew->setTramoVial($demarcacion->tramoVial);
+                            $demarcacionNew->setActivo(true);
+
+                            $demarcacionNew->setUbicacion($ubicacion);
+
+                            $em->persist($demarcacionNew);
+                            $em->flush();
+                        }
+                    }                    
 
                     $response = array(
                         'status' => 'success',
@@ -244,11 +194,133 @@ class SvSenialUbicacionController extends Controller
                         'message' => "Registro creado con exito",
                     );
                 }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "La cantidad solicitada supera los ".$senial->getCantidad()." disponibles.", 
-                    );
+                    if ($senial->getCantidad() >= $params->cantidad)  {
+                        $inventario = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->findOneBy(
+                            array(
+                                'fecha' => $fecha,
+                                'tipoDestino' => 'MUNICIPIO',
+                                'tipoSenial' => $senial->getTipoSenial()->getId()
+                            )
+                        );
+
+                        if (!$inventario) {
+                            $inventario = new SvSenialInventario();
+
+                            $inventario->setFecha($fecha);
+
+                            $inventario->setTipoDestino('MUNICIPIO');
+
+                            if ($senial) {
+                                $inventario->setTipoSenial($senial->getTipoSenial());
+                            }
+
+                            if ($params->idMunicipio) {
+                                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                                    $params->idMunicipio
+                                );
+                                $inventario->setMunicipio($municipio);
+                            }
+
+                            $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getMaximo(
+                                $fecha->format('Y')
+                            );
+                            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+                            $inventario->setConsecutivo($consecutivo);
+
+                            $em->persist($inventario);
+                            $em->flush();
+                        }
+
+                        $ubicacion = new SvSenialUbicacion();
+
+                        $ubicacion->setInventario($inventario);
+
+                         if ($params->idMunicipio) {
+                            $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                                $params->idMunicipio
+                            );
+                            $ubicacion->setMunicipio($municipio);
+                        }
+
+                        $ubicacion->setFecha(new \Datetime($params->fecha));
+                        $ubicacion->setHora(new \Datetime(date('h:i:s A')));
+                        $ubicacion->setCantidad($params->cantidad);
+
+                        $markers = null;
+                        if ($params->markers) {
+                            foreach ($params->markers as $key => $marker) {
+                                $markers[] = (array)$marker;
+                            }
+
+                            $ubicacion->setGeolocalizacion(
+                                $markers
+                            );
+                        }
+
+                        if ($params->idBodega) {
+                            $bodega = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialBodega')->find(
+                                $params->idBodega);
+                            $ubicacion->setBodega($bodega);
+                            
+                            if (!$params->idUnidadMedida && !$params->idProveedor) {
+                                $bodega->setCantidadDisponible($bodega->getCantidadDisponible() - $params->cantidad);
+                                $em->flush();
+                            }
+
+                            if ($params->idLinea) {
+                                $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
+                                    $params->idLinea
+                                );
+                                $ubicacion->setLinea($linea);
+                            }
+
+                            if ($params->idUnidadMedida) {
+                                $unidadMedida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialUnidadMedida')->find(
+                                    $params->idUnidadMedida
+                                );
+                                $ubicacion->setUnidadMedida($unidadMedida);
+                            }
+                        }                    
+
+                        if ($senial) {
+                            $ubicacion->setSenial($senial);
+
+                            $senial->setCantidad($senial->getCantidad() - $params->cantidad);
+                            $em->flush();
+                        }
+
+                        if ($params->idEstado) {
+                            $estado = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialEstado')->find(
+                                $params->idEstado
+                            );
+                            $ubicacion->setEstado($estado);
+                        }
+
+                        if ($request->files->get('file')) {
+                            $file = $request->files->get('file');
+                            $extension = $file->guessExtension();
+                            $fileName = md5(rand().time()).".".$extension;
+                            $dir=__DIR__.'/../../../../web/uploads/seniales/files';
+
+                            $file->move($dir,$fileName);
+                            $ubicacion->setAdjunto($fileName);
+                        }
+
+                        $em->persist($ubicacion);
+                        $em->flush();
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro creado con exito",
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La cantidad solicitada supera los ".$senial->getCantidad()." disponibles.", 
+                        );
+                    }
                 }
             }else{
                 $response = array(

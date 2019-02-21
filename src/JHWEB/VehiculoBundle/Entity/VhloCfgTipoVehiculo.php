@@ -35,6 +35,11 @@ class VhloCfgTipoVehiculo
      */
     private $activo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="modulos")
+     **/
+    private $modulo;
+
 
     /**
      * Get id
@@ -93,5 +98,28 @@ class VhloCfgTipoVehiculo
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set modulo
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgModulo $modulo
+     *
+     * @return VhloCfgTipoVehiculo
+     */
+    public function setModulo(\JHWEB\ConfigBundle\Entity\CfgModulo $modulo = null)
+    {
+        $this->modulo = $modulo;
+
+        return $this;
+    }
+
+    /**
+     * Get modulo
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgModulo
+     */
+    public function getModulo()
+    {
+        return $this->modulo;
+    }
+}

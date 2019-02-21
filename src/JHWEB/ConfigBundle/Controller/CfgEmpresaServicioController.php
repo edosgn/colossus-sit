@@ -193,10 +193,13 @@ class CfgEmpresaServicioController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        
         $cfgEmpresaServicios = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->findBy(
             array('activo' => true)
         );
-        $response=[];
+
+        $response = null;
+
         foreach ($cfgEmpresaServicios as $key => $cfgEmpresaServicio) {
             $response[$key] = array( 
                 'value' => $cfgEmpresaServicio->getId(),

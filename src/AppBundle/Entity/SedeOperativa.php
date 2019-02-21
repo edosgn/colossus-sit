@@ -53,8 +53,6 @@ class SedeOperativa
      * @ORM\Column(name="asignacion_rango", type="boolean")
      */
     private $asignacionRango;
-
-
     
 
     /**

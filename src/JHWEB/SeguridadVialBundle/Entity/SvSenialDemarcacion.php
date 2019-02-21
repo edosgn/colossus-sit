@@ -24,16 +24,23 @@ class SvSenialDemarcacion
     /**
      * @var float
      *
-     * @ORM\Column(name="cantidad", type="float")
+     * @ORM\Column(name="cantidad", type="float", nullable=true)
      */
     private $cantidad;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="metraje", type="float")
+     * @ORM\Column(name="area", type="float", nullable=true)
      */
-    private $metraje;
+    private $area;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="largo", type="float", nullable=true)
+     */
+    private $largo;
 
     /**
      * @var float
@@ -82,6 +89,7 @@ class SvSenialDemarcacion
         return $this->id;
     }
 
+
     /**
      * Set cantidad
      *
@@ -107,27 +115,51 @@ class SvSenialDemarcacion
     }
 
     /**
-     * Set metraje
+     * Set area
      *
-     * @param float $metraje
+     * @param float $area
      *
      * @return SvSenialDemarcacion
      */
-    public function setMetraje($metraje)
+    public function setArea($area)
     {
-        $this->metraje = $metraje;
+        $this->area = $area;
 
         return $this;
     }
 
     /**
-     * Get metraje
+     * Get area
      *
      * @return float
      */
-    public function getMetraje()
+    public function getArea()
     {
-        return $this->metraje;
+        return $this->area;
+    }
+
+    /**
+     * Set largo
+     *
+     * @param float $largo
+     *
+     * @return SvSenialDemarcacion
+     */
+    public function setLargo($largo)
+    {
+        $this->largo = $largo;
+
+        return $this;
+    }
+
+    /**
+     * Get largo
+     *
+     * @return float
+     */
+    public function getLargo()
+    {
+        return $this->largo;
     }
 
     /**
@@ -219,7 +251,7 @@ class SvSenialDemarcacion
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {

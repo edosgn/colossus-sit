@@ -36,11 +36,39 @@ class CfgOrganismoTransito
     private $divipo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="departamento", type="string", length=255)
+     */
+    private $departamento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="municipio", type="string", length=255)
+     */
+    private $municipio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="jurisdiccion", type="string", length=10)
+     */
+    private $jurisdiccion;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="asignacion_rango", type="boolean")
      */
     private $asignacionRango;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="sede", type="boolean")
+     */
+    private $sede;
 
     /**
      * @var bool
@@ -109,6 +137,78 @@ class CfgOrganismoTransito
     }
 
     /**
+     * Set departamento
+     *
+     * @param string $departamento
+     *
+     * @return CfgOrganismoTransito
+     */
+    public function setDepartamento($departamento)
+    {
+        $this->departamento = $departamento;
+
+        return $this;
+    }
+
+    /**
+     * Get departamento
+     *
+     * @return string
+     */
+    public function getDepartamento()
+    {
+        return $this->departamento;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param string $municipio
+     *
+     * @return CfgOrganismoTransito
+     */
+    public function setMunicipio($municipio)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return string
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
+    }
+
+    /**
+     * Set jurisdiccion
+     *
+     * @param string $jurisdiccion
+     *
+     * @return CfgOrganismoTransito
+     */
+    public function setJurisdiccion($jurisdiccion)
+    {
+        $this->jurisdiccion = $jurisdiccion;
+
+        return $this;
+    }
+
+    /**
+     * Get jurisdiccion
+     *
+     * @return string
+     */
+    public function getJurisdiccion()
+    {
+        return $this->jurisdiccion;
+    }
+
+    /**
      * Set asignacionRango
      *
      * @param boolean $asignacionRango
@@ -125,11 +225,35 @@ class CfgOrganismoTransito
     /**
      * Get asignacionRango
      *
-     * @return bool
+     * @return boolean
      */
     public function getAsignacionRango()
     {
         return $this->asignacionRango;
+    }
+
+    /**
+     * Set sede
+     *
+     * @param boolean $sede
+     *
+     * @return CfgOrganismoTransito
+     */
+    public function setSede($sede)
+    {
+        $this->sede = $sede;
+
+        return $this;
+    }
+
+    /**
+     * Get sede
+     *
+     * @return boolean
+     */
+    public function getSede()
+    {
+        return $this->sede;
     }
 
     /**
@@ -149,11 +273,10 @@ class CfgOrganismoTransito
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-
