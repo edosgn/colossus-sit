@@ -61,7 +61,6 @@ class VhloCfgPlacaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-
             $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneByNumero(
                 $params->numero
             );
@@ -301,11 +300,11 @@ class VhloCfgPlacaController extends Controller
     /**
      * Datos para select 2 por organismo de transito
      *
-     * @Route("/select/organismotransito/", name="vhlocfgplaca_select_organismotransito")
+     * @Route("/select/organismotransito", name="vhlocfgplaca_select_organismotransito")
      * @Method({"GET", "POST"})
      */
 
-    public function selectPlacaBySedeOperativa(Request $request)
+    public function selectPlacaByOrganismoTransito(Request $request)
     {
         $helpers = $this->get("app.helpers");
 
