@@ -146,7 +146,7 @@ class SvSenialUbicacionController extends Controller
                         $ubicacion->setProveedor($proveedor);
 
                         if ($params->demarcaciones) {
-                            foreach ($paramas->demarcaciones as $key => $demarcacion) {
+                            foreach ($params->demarcaciones as $key => $demarcacion) {
                                 
                                     # code...
                                     if ($params->idLinea) {
@@ -197,14 +197,14 @@ class SvSenialUbicacionController extends Controller
                     $em->flush();
 
                     if ($params->idProveedor) {
-                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialProveedor')->find(
+                        $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
                             $params->idProveedor);
                         $ubicacion->setProveedor($proveedor);
 
                         if ($params->demarcaciones) {
-                            foreach ($paramas->demarcaciones as $demarcacion) {
+                            foreach ($params->demarcaciones as $key => $demarcacion) {
 
-                                $demarcacion = new Svsenialdemarcacion();
+                                $demarcacion = new SvSenialDemarcacion();
 
                                 if ($params->idLinea) {
                                     $linea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialLinea')->find(
@@ -219,14 +219,12 @@ class SvSenialUbicacionController extends Controller
                                     );
                                     $demarcacion->setUnidadMedida($unidadMedida);
                                 }
-
-                                $demarcacion->setCantidad($demarcacion->cantidad);
-                                $demarcacion->setMetraje($demarcacion->metraje);
-                                $demarcacion->setAnchoLinea(
-                                    $demarcacion->anchoLinea
-                                );
-                                $demarcacion->setTotal($demarcacion->total);
-                                $demarcacion->setTramoVial($demarcacion->tramoVial);
+                                
+                                $demarcacion->setCantidad($key->getCantidad());
+                                $demarcacion->setMetraje($key->getMetraje());
+                                $demarcacion->setAnchoLinea($key->getAnchoLinea());
+                                $demarcacion->setTotal($key->getTotal());
+                                $demarcacion->setTramoVial($key->getTramoVial());
                                 $demarcacion->setActivo(true);
 
                                 $demarcacion->setUbicacion($ubicacion);
