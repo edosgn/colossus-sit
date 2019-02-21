@@ -261,13 +261,10 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
     public function findByFecha($params){
         $em = $this->getEntityManager();
 
-        $fechaDesde = new \Datetime($params->fechaDesde);
-        $fechaHasta = new \Datetime($params->fechaHasta);
-
         $dql = "SELECT c
         FROM AppBundle:Comparendo c, AppBundle:MpersonalComparendo pc
-        WHERE c.fecha BETWEEN :fechaDesde AND :fechaHasta
-        AND c.activo = 1";
+        WHERE c.fecha = :fechaDesde BETWEEN :fechaHasta
+        AND c.consecutivo = pc.id";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
@@ -275,6 +272,6 @@ class ComparendoRepository extends \Doctrine\ORM\EntityRepository
             'fechaHasta' => $fechaHasta,
         ));
 
-        return $consulta->getResult();
+        return $consulta->getOneOrNullResult();
     }
 }

@@ -505,49 +505,4 @@ class FroAcuerdoPagoController extends Controller
 
         return $helpers->json($response);
     }
-
-    /**
-     * Busca acuerdos de pago por fecha.
-     *
-     * @Route("/acuerdoPago/fecha", name="froacuerdopago_fecha")
-     * @Method({"GET","POST"})
-     */
-    public function getAcuerdoPagoByFechaAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck == true) {
-            $json = $request->get("json",null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-
-            $acuerdosPago = $em->getRepository('JHWEBFinancieroBundle:FroAcuerdoPago')->findByFecha($params);
-
-            if ($acuerdosPago) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($acuerdosPago)." acuerdos de pago encontrados.", 
-                    'data' => $acuerdosPago,
-            );
-            }else{
-                 $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No existen acuerdos de pago para los filtros de búsqueda establecidos.", 
-                );
-            }
-        }else{
-            $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorización no válida", 
-                );
-        }
-
-        return $helpers->json($response);
-    }
 }

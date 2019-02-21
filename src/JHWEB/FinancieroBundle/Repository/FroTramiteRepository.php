@@ -18,12 +18,10 @@ class FroTramiteRepository extends \Doctrine\ORM\EntityRepository
         $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->idSedeOperativa);
 
         $dql = "SELECT fr
-            FROM JHWEBFinancieroBundle:FroRecaudo fr, JHWEBFinancieroBundle:FroTramite ft, AppBundle:SedeOperativa s, JHWEBFinancieroBundle:FroFactura ff, JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBFinancieroBundle:FroTrteConcepto ftc, JHWEBFinancieroBundle:FroCfgTrteConcepto fctc
+            FROM JHWEBFinancieroBundle:FroRecaudo fr, JHWEBFinancieroBundle:FroTramite ft, AppBundle:SedeOperativa s, JHWEBFinancieroBundle:FroFactura ff, JHWEBFinancieroBundle:FroTrtePrecio ftp
             WHERE fr.fecha BETWEEN :fechaInicio AND :fechaFin
             AND ff.sedeOperativa = :sedeOperativa
             AND ff.estado = 'PAGADO'
-            AND ftp.id = fctc.precio
-            AND ftc.concepto = fctc.id
             AND fr.froFactura = ff.id";
         
         $consulta = $em->createQuery($dql);
