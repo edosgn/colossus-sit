@@ -77,4 +77,24 @@ class FroAcuerdoPagoRepository extends \Doctrine\ORM\EntityRepository
         
         return $consulta->getResult();
     }
+
+    public function findByFecha($params){
+        $em = $this->getEntityManager();
+
+        $fechaDesde = new \Datetime($params->fechaDesde);
+        $fechaHasta = new \Datetime($params->fechaHasta);
+
+        $dql = "SELECT ap
+        FROM JHWEBFinancieroBundle:FroAcuerdoPago ap 
+        WHERE ap.fecha BETWEEN :fechaDesde AND :fechaHasta
+        AND ap.activo = 1";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta,
+        ));
+
+        return $consulta->getResult();
+    }
 }

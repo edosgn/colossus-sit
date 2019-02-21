@@ -57,7 +57,11 @@ class MsvParametroController extends Controller
 
         if ($authCheck == true) {
     
-            $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
+            $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria(
+                array(
+                    'categoria' =>$categoriaId,
+                    'estado' => true,
+                 ));
             $msvParametrosArray = null;
             foreach ($msvParametros as $keyParametro => $msvParametro) {
                 $msvParametrosArray[$keyParametro] = array(
