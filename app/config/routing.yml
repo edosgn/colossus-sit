@@ -1,3 +1,7 @@
+jhweb_vehiculo_vhlo_cfg_tipo_vehiculo:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgTipoVehiculoController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

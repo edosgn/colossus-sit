@@ -191,7 +191,7 @@ class CfgAdmFormatoTipoController extends Controller
     /* =================================================== */
 
     /**
-     * datos para select 2
+     * Listado de tipos de formato para seleccion con busqueda
      *
      * @Route("/select", name="cfgadminformatotipo_select")
      * @Method({"GET", "POST"})

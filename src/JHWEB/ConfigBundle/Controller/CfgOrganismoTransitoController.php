@@ -198,9 +198,11 @@ class CfgOrganismoTransitoController extends Controller
         $response = null;
 
         foreach ($organismos as $key => $organismo) {
+            $consecutive = substr($organismo->getCodigoDivipo(), 0, 12);
             $response[$key] = array(
                 'value' => $organismo->getId(),
                 'label' => $organismo->getNombre().' ('.$organismo->getDepartamento().')',
+                'consecutive' => $consecutive
             );
         }
 
