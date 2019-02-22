@@ -46,19 +46,24 @@ class ImoCfgValorController extends Controller
             $em = $this->getDoctrine()->getManager();
             $json = $request->get("data",null);
             $params = json_decode($json);
+            // var_dump($params);
+            // die();
 
+            
+            // $imoCfgValorActivo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneByActivo(true);
+            // if ($imoCfgValorActivo) {
+            //     $imoCfgValorActivo->setActivo(false);
+            // }
+
+            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->idCasoInsumo); 
+            
             $imoCfgValor = new ImoCfgValor();
-
-            $imoCfgValorActivo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findActivo(true);
-            if ($imoCfgValorActivo) {
-                $imoCfgValorActivo->setActivo(false);
-            }
-
             $fecha = new \DateTime($params->fecha);
 
+            $imoCfgValor->setCasoInsumo($casoInsumo);
             $imoCfgValor->setValor($params->valor);
-            $imoCfgFecha->setFecha($fecha);
-            $imoCfgActivo->setActivo(true);
+            $imoCfgValor->setFecha($fecha);
+            $imoCfgValor->setActivo(false);
 
             $em->persist($imoCfgValor);
             $em->flush();
