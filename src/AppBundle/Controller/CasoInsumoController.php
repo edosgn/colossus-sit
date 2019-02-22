@@ -154,7 +154,6 @@ class CasoInsumoController extends Controller
             $moduloId = $params->moduloId;
             $referencia = $params->referencia;
             $tipo = $params->tipo;
-            $valor = $params->valor;
             $em = $this->getDoctrine()->getManager();
             $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->id);
             $modulo = $em->getRepository('AppBundle:Modulo')->find($moduloId);
@@ -164,7 +163,6 @@ class CasoInsumoController extends Controller
                 $casoInsumo->setNombre(strtoupper($nombre));
                 $casoInsumo->setModulo($modulo);
                 $casoInsumo->setReferencia($referencia);
-                $casoInsumo->setValor($valor);
                 $casoInsumo->setTipo($tipo);
                 $casoInsumo->setEstado(true);
 

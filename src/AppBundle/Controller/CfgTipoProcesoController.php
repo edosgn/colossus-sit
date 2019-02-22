@@ -24,6 +24,7 @@ class CfgTipoProcesoController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
 
         $tipoProceso = $em->getRepository('AppBundle:CfgTipoProceso')->findBy(

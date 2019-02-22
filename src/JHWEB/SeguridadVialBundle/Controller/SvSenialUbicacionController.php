@@ -172,11 +172,24 @@ class SvSenialUbicacionController extends Controller
                                 $demarcacionNew->setUnidadMedida($unidadMedida);
                             }
 
-                            $demarcacionNew->setCantidad($demarcacion->cantidad);
-                            $demarcacionNew->setMetraje($demarcacion->metraje);
-                            $demarcacionNew->setAnchoLinea(
-                                $demarcacion->anchoLinea
-                            );
+                            if ($demarcacion->cantidad) {
+                                $demarcacionNew->setCantidad($demarcacion->cantidad);
+                            }
+
+                            if ($demarcacion->area) {
+                                $demarcacionNew->setArea($demarcacion->area);
+                            }
+
+                            if ($demarcacion->largo) {
+                                $demarcacionNew->setLargo($demarcacion->largo);
+                            }
+
+                            if ($demarcacion->ancho) {
+                                $demarcacionNew->setAncho(
+                                    $demarcacion->ancho
+                                );
+                            }
+
                             $demarcacionNew->setTotal($demarcacion->total);
                             $demarcacionNew->setTramoVial($demarcacion->tramoVial);
                             $demarcacionNew->setActivo(true);

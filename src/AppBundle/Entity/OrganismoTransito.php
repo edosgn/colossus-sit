@@ -36,7 +36,7 @@ class OrganismoTransito
      */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="vehiculos") */
     private $sedeOperativa;
 
     

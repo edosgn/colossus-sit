@@ -86,7 +86,7 @@ class Factura
     private $valorNeto = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="facturas")
      **/
     protected $sedeOperativa;
 

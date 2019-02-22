@@ -56,7 +56,7 @@ class LicenciaConduccion
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="licenciasConduccion") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="licenciasConduccion") */
     private $sedeOperativa;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgLicenciaConduccionCategoria", inversedBy="licenciasConduccion") */

@@ -106,7 +106,7 @@ class MpersonalFuncionario
     private $modificatorio;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="funcionarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="funcionarios")
      **/
     protected $sedeOperativa;
 

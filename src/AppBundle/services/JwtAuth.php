@@ -20,15 +20,14 @@ class JwtAuth
 		$key = $this->key;
 
 		$user = $this->manager->getRepository('UsuarioBundle:Usuario')->findOneBy(
-
 			array(
-					"correo" => $email,
-					"password" => $password
+				'correo' => $email,
+				'password' => $password
+			)
+		);
 
-				)
-
-			);
 		$singup = false;
+
 		if (is_object($user)) {
 			$singup = true;
 		}
@@ -37,40 +36,35 @@ class JwtAuth
 
 			$token = array(
 				"sub" => $user->getId(),
-				"correo" => $user->getCorreo(),
-				"primerNombre" => $user->getPrimerNombre(),
-				"segundoNombre" => $user->getSegundoNombre(),
-				"primerApellido" => $user->getPrimerApellido(),
-				"segundoApellido" => $user->getSegundoApellido(),
-				"identificacion" => $user->getIdentificacion(),
+				"primerNombre" => $user->getCiudadano()->getPrimerNombre(),
+				"segundoNombre" => $user->getCiudadano()->getSegundoNombre(),
+				"primerApellido" => $user->getCiudadano()->getPrimerApellido(),
+				"segundoApellido" => $user->getCiudadano()->getSegundoApellido(),
+				"identificacion" => $user->getCiudadano()->getIdentificacion(),
+				"fechaNacimiento" => $user->getCiudadano()->getFechaNacimiento(),
+				"telefono" => $user->getCiudadano()->getTelefono(),
 				"ciudadano" => $user->getCiudadano(),
+				"correo" => $user->getCorreo(),
 				"foto" => $user->getFoto(),
-				"telefono" => $user->getTelefono(),
-				"fechanacimiento" => $user->getFechaNacimiento(),
-				"estado" => $user->getEstado(),
-				"fechanacimiento" => $user->getFechaNacimiento(),
+				"activo" => $user->getActivo(),
 				"role" => $user->getRole(),
 				"created" => $user->getCreatedAt(),
 				"updated" => $user->getUpdatedAt(),
 				"iat" => time(),
 				"exp" => time() + (7*24*60*60)
 			);
-		$jwt=JWT::encode($token , $key , 'HS256');
-		$decoded = JWT::decode($jwt, $key, array('HS256'));
 
-		if ($getHash!=null ) {
-			return $jwt;
-		}else{
-			return $decoded;
-		}
+			$jwt=JWT::encode($token , $key , 'HS256');
+			$decoded = JWT::decode($jwt, $key, array('HS256'));
 
-			
+			if ($getHash!=null ) {
+				return $jwt;
+			}else{
+				return $decoded;
+			}
 		}else{
 			return array("status" => "error" , "data" =>"Login incorrecto");
 		}
-
-
-
 	}
 
 	public function checkToken($jwt, $getIdentity = false){

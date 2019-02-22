@@ -1,7 +1,3 @@
-jhweb_vehiculo_vhlo_cfg_combustible:
-    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgCombustibleController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

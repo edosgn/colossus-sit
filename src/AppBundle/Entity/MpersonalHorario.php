@@ -21,7 +21,7 @@ class MpersonalHorario
      */
     private $id;
 
-     /**
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date", nullable=true)

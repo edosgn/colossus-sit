@@ -24,26 +24,26 @@ class PnalProroga
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaInicio", type="date")
+     * @ORM\Column(name="fecha_inicial", type="date")
      */
-    private $fechaInicio;
+    private $fechaInicial;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaFin", type="date")
+     * @ORM\Column(name="fecha_final", type="date")
      */
-    private $fechaFin;
+    private $fechaFinal;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroModificatorio", type="string", length=255)
+     * @ORM\Column(name="numero_modificatorio", type="string", length=255)
      */
     private $numeroModificatorio;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="soats") */
-    private $mPersonalFuncionario;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="prorogas") */
+    private $funcionario;
 
 
     /**
@@ -57,51 +57,51 @@ class PnalProroga
     }
 
     /**
-     * Set fechaInicio
+     * Set fechaInicial
      *
-     * @param \DateTime $fechaInicio
+     * @param \DateTime $fechaInicial
      *
      * @return PnalProroga
      */
-    public function setFechaInicio($fechaInicio)
+    public function setFechaInicial($fechaInicial)
     {
-        $this->fechaInicio = $fechaInicio;
+        $this->fechaInicial = $fechaInicial;
 
         return $this;
     }
 
     /**
-     * Get fechaInicio
+     * Get fechaInicial
      *
      * @return \DateTime
      */
-    public function getFechaInicio()
+    public function getFechaInicial()
     {
-        return $this->fechaInicio->format('Y-m-d');
+        return $this->fechaInicial;
     }
 
     /**
-     * Set fechaFin
+     * Set fechaFinal
      *
-     * @param \DateTime $fechaFin
+     * @param \DateTime $fechaFinal
      *
      * @return PnalProroga
      */
-    public function setFechaFin($fechaFin)
+    public function setFechaFinal($fechaFinal)
     {
-        $this->fechaFin = $fechaFin;
+        $this->fechaFinal = $fechaFinal;
 
         return $this;
     }
 
     /**
-     * Get fechaFin
+     * Get fechaFinal
      *
      * @return \DateTime
      */
-    public function getFechaFin()
+    public function getFechaFinal()
     {
-        return $this->fechaFin->format('Y-m-d');
+        return $this->fechaFinal;
     }
 
     /**
@@ -129,26 +129,26 @@ class PnalProroga
     }
 
     /**
-     * Set mPersonalFuncionario
+     * Set funcionario
      *
-     * @param \AppBundle\Entity\MpersonalFuncionario $mPersonalFuncionario
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
      *
      * @return PnalProroga
      */
-    public function setMPersonalFuncionario(\AppBundle\Entity\MpersonalFuncionario $mPersonalFuncionario = null)
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
     {
-        $this->mPersonalFuncionario = $mPersonalFuncionario;
+        $this->funcionario = $funcionario;
 
         return $this;
     }
 
     /**
-     * Get mPersonalFuncionario
+     * Get funcionario
      *
-     * @return \AppBundle\Entity\MpersonalFuncionario
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
-    public function getMPersonalFuncionario()
+    public function getFuncionario()
     {
-        return $this->mPersonalFuncionario;
+        return $this->funcionario;
     }
 }

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfgtipoidentificacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Sigla</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userCfgTipoIdentificacion in userCfgTipoIdentificacions %}
+            <tr>
+                <td><a href="{{ path('usercfgtipoidentificacion_show', { 'id': userCfgTipoIdentificacion.id }) }}">{{ userCfgTipoIdentificacion.id }}</a></td>
+                <td>{{ userCfgTipoIdentificacion.nombre }}</td>
+                <td>{{ userCfgTipoIdentificacion.sigla }}</td>
+                <td>{% if userCfgTipoIdentificacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('usercfgtipoidentificacion_show', { 'id': userCfgTipoIdentificacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('usercfgtipoidentificacion_edit', { 'id': userCfgTipoIdentificacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfgtipoidentificacion_new') }}">Create a new userCfgTipoIdentificacion</a>
+        </li>
+    </ul>
+{% endblock %}

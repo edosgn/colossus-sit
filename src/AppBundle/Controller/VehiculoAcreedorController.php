@@ -214,7 +214,7 @@ class VehiculoAcreedorController extends Controller
                     $acreedorVehiculo = $em->getRepository('AppBundle:VehiculoAcreedor')->findOneBy(
                         array(
                             'estado' => 1,
-                            'empresa' => $empresa->empresaId
+                            'empresa' => $empresa->idEmpresa
                             )
                         );
                         
@@ -229,6 +229,8 @@ class VehiculoAcreedorController extends Controller
                     }
                 }
                 $ciudadanoNewId = (isset($params->ciudadanoNewId)) ? $params->ciudadanoNewId : null;
+                $idEmpresaNew = (isset($params->idEmpresaNew)) ? $params->idEmpresaNew : null;
+
                 if($ciudadanoNewId){
                     $acreedorVehiculoNew = new VehiculoAcreedor();
                     $usuario = $em->getRepository('UsuarioBundle:Usuario')->find($params->ciudadanoNewId);
@@ -239,6 +241,21 @@ class VehiculoAcreedorController extends Controller
                     $acreedorVehiculoNew->setEstado(1);
                     $em->persist($acreedorVehiculoNew);
                     $em->flush(); 
+                }
+
+                
+                if ($idEmpresaNew) {
+                    $acreedorVehiculoNew = new VehiculoAcreedor();
+                    $empresa = $em->getRepository('AppBundle:Empresa')->find($idEmpresaNew);
+                    $acreedorVehiculoNew->setEmpresa($empresa);
+                    $acreedorVehiculoNew->setVehiculo($acreedorVehiculo->getVehiculo());
+                    $acreedorVehiculoNew->setCfgTipoAlerta($acreedorVehiculo->getCfgTipoAlerta());
+                    $acreedorVehiculoNew->setGradoAlerta($acreedorVehiculo->getGradoAlerta());
+                    $acreedorVehiculoNew->setEstado(1);
+                    $em->persist($acreedorVehiculoNew);
+                    $em->flush(); 
+                    // var_dump($idEmpresaNew);
+                    // die();
                 }
 
         }else{
