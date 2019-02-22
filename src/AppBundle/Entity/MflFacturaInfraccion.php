@@ -56,7 +56,7 @@ class MflFacturaInfraccion
      */
     private $fechaVencimiento;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="lineas") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="lineas") */
     private $sedeOperativa;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="lineas") */

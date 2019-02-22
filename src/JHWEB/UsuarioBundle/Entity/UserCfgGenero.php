@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\UsuarioBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Genero
+ * UserCfgGenero
  *
- * @ORM\Table(name="genero")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\GeneroRepository")
+ * @ORM\Table(name="user_cfg_genero")
+ * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserCfgGeneroRepository")
  */
-class Genero
+class UserCfgGenero
 {
     /**
      * @var int
@@ -38,9 +38,9 @@ class Genero
     /**
      * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado;
+    private $activo;
 
 
     /**
@@ -58,7 +58,7 @@ class Genero
      *
      * @param string $nombre
      *
-     * @return Genero
+     * @return UserCfgGenero
      */
     public function setNombre($nombre)
     {
@@ -82,7 +82,7 @@ class Genero
      *
      * @param string $sigla
      *
-     * @return Genero
+     * @return UserCfgGenero
      */
     public function setSigla($sigla)
     {
@@ -102,27 +102,26 @@ class Genero
     }
 
     /**
-     * Set estado
+     * Set activo
      *
-     * @param boolean $estado
+     * @param boolean $activo
      *
-     * @return Genero
+     * @return UserCfgGenero
      */
-    public function setEstado($estado)
+    public function setActivo($activo)
     {
-        $this->estado = $estado;
+        $this->activo = $activo;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get activo
      *
-     * @return bool
+     * @return boolean
      */
-    public function getEstado()
+    public function getActivo()
     {
-        return $this->estado;
+        return $this->activo;
     }
 }
-

@@ -1,3 +1,31 @@
+jhweb_usuario_user_empresa:
+    resource: "@JHWEBUsuarioBundle/Controller/UserEmpresaController.php"
+    type:     annotation
+
+jhweb_usuario_user_ciudadano:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCiudadanoController.php"
+    type:     annotation
+
+jhweb_usuario_user_cfg_grupo_sanguineo:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCfgGrupoSanguineoController.php"
+    type:     annotation
+
+jhweb_usuario_user_cfg_genero:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCfgGeneroController.php"
+    type:     annotation
+
+jhweb_usuario_user_cfg_tipo_identificacion:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCfgTipoIdentificacionController.php"
+    type:     annotation
+
+jhweb_contravencional_cv_cdo_cfg_tipo_infractor:
+    resource: "@JHWEBContravencionalBundle/Controller/CvCdoCfgTipoInfractorController.php"
+    type:     annotation
+
+jhweb_contravencional_cv_cdo_comparendo:
+    resource: "@JHWEBContravencionalBundle/Controller/CvCdoComparendoController.php"
+    type:     annotation
+
 jhweb_vehiculo_vhlo_cfg_tipo_vehiculo:
     resource: "@JHWEBVehiculoBundle/Controller/VhloCfgTipoVehiculoController.php"
     type:     annotation

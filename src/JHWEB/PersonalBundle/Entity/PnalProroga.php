@@ -55,4 +55,100 @@ class PnalProroga
     {
         return $this->id;
     }
+
+    /**
+     * Set fechaInicial
+     *
+     * @param \DateTime $fechaInicial
+     *
+     * @return PnalProroga
+     */
+    public function setFechaInicial($fechaInicial)
+    {
+        $this->fechaInicial = $fechaInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicial
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicial()
+    {
+        return $this->fechaInicial;
+    }
+
+    /**
+     * Set fechaFinal
+     *
+     * @param \DateTime $fechaFinal
+     *
+     * @return PnalProroga
+     */
+    public function setFechaFinal($fechaFinal)
+    {
+        $this->fechaFinal = $fechaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaFinal()
+    {
+        return $this->fechaFinal;
+    }
+
+    /**
+     * Set numeroModificatorio
+     *
+     * @param string $numeroModificatorio
+     *
+     * @return PnalProroga
+     */
+    public function setNumeroModificatorio($numeroModificatorio)
+    {
+        $this->numeroModificatorio = $numeroModificatorio;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroModificatorio
+     *
+     * @return string
+     */
+    public function getNumeroModificatorio()
+    {
+        return $this->numeroModificatorio;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return PnalProroga
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
+    }
 }

@@ -64,7 +64,7 @@ class MpersonalTalonario
     private $activo = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="talonarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="talonarios")
      **/
     protected $sedeOperativa;
 

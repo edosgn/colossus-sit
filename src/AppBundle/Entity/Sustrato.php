@@ -57,7 +57,7 @@ class Sustrato
     private $entregado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sustratos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="sustratos")
      **/
     protected $sedeOperativa;
 

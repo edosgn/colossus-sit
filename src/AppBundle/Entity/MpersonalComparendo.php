@@ -50,7 +50,7 @@ class MpersonalComparendo
     private $activo = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="comparendos")
      **/
     protected $sedeOperativa;
 

@@ -55,10 +55,10 @@ class Ciudadano
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="ciudadanos") */
     private $municipioResidencia;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Genero", inversedBy="ciudadanos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGenero", inversedBy="ciudadanos") */
     private $genero;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\GrupoSanguineo", inversedBy="ciudadanos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGrupoSanguineo", inversedBy="ciudadanos") */
     private $grupoSanguineo;
 
     /**

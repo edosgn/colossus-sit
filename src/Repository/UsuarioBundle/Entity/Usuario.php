@@ -22,41 +22,6 @@ class Usuario
      */
     private $id;
 
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="primer_nombre", type="string", length=255)
-     */
-    private $primerNombre;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="segundo_nombre", type="string", length=255, nullable=true)
-     */
-    private $segundoNombre;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="primer_apellido", type="string", length=255)
-     */
-    private $primerApellido;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="segundo_apellido", type="string", length=255, nullable=true)
-     */
-    private $segundoApellido;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="identificacion", type="integer", nullable=false)
-     */
-    private $identificacion;
-
     /**
      * @var string
      *
@@ -72,25 +37,11 @@ class Usuario
     private $foto;
 
     /**
-     * @var string
+     * @var boolean
      *
-     * @ORM\Column(name="telefono", type="string", length=50, nullable=false)
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $telefono;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
-     */
-    private $fechaNacimiento;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="estado", type="string", length=20, nullable=false)
-     */
-    private $estado;
+    private $activo;
 
     /**
      * @var string
@@ -107,15 +58,6 @@ class Usuario
     private $password;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Ciudadano")
-     * @ORM\JoinColumn(name="ciudadano_id", referencedColumnName="id")
-     */
-    private $ciudadano;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="usuarios") */
-    private $tipoIdentificacion;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
@@ -130,6 +72,12 @@ class Usuario
     private $updatedAt;
 
     /**
+     * @ORM\OneToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano")
+     * @ORM\JoinColumn(name="ciudadano_id", referencedColumnName="id")
+     */
+    private $ciudadano;
+
+    /**
      * Get id
      *
      * @return integer
@@ -137,128 +85,6 @@ class Usuario
     public function getId()
     {
         return $this->id;
-    }
-
-  
-
-    /**
-     * Set primerNombre
-     *
-     * @param string $primerNombre
-     *
-     * @return Usuario
-     */
-    public function setPrimerNombre($primerNombre)
-    {
-        $this->primerNombre = $primerNombre;
-
-        return $this;
-    }
-
-    /**
-     * Get primerNombre
-     *
-     * @return string
-     */
-    public function getPrimerNombre()
-    {
-        return $this->primerNombre;
-    }
-
-    /**
-     * Set segundoNombre
-     *
-     * @param string $segundoNombre
-     *
-     * @return Usuario
-     */
-    public function setSegundoNombre($segundoNombre)
-    {
-        $this->segundoNombre = $segundoNombre;
-
-        return $this;
-    }
-
-    /**
-     * Get segundoNombre
-     *
-     * @return string
-     */
-    public function getSegundoNombre()
-    {
-        return $this->segundoNombre;
-    }
-
-    /**
-     * Set primerApellido
-     *
-     * @param string $primerApellido
-     *
-     * @return Usuario
-     */
-    public function setPrimerApellido($primerApellido)
-    {
-        $this->primerApellido = $primerApellido;
-
-        return $this;
-    }
-
-    /**
-     * Get primerApellido
-     *
-     * @return string
-     */
-    public function getPrimerApellido()
-    {
-        return $this->primerApellido;
-    }
-
-    /**
-     * Set segundoApellido
-     *
-     * @param string $segundoApellido
-     *
-     * @return Usuario
-     */
-    public function setSegundoApellido($segundoApellido)
-    {
-        $this->segundoApellido = $segundoApellido;
-
-        return $this;
-    }
-
-    /**
-     * Get segundoApellido
-     *
-     * @return string
-     */
-    public function getSegundoApellido()
-    {
-        return $this->segundoApellido;
-    }
-
-    /**
-     * Set identificacion
-     *
-     * @param integer $identificacion
-     *
-     * @return Usuario
-     */
-    public function setIdentificacion($identificacion)
-    {
-        $this->identificacion = $identificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get identificacion
-     *
-     * @return integer
-     */
-    public function getIdentificacion()
-    {
-        return $this->identificacion;
     }
 
     /**
@@ -307,81 +133,6 @@ class Usuario
     public function getFoto()
     {
         return $this->foto;
-    }
-
-    /**
-     * Set telefono
-     *
-     * @param string $telefono
-     *
-     * @return Usuario
-     */
-    public function setTelefono($telefono)
-    {
-        $this->telefono = $telefono;
-
-        return $this;
-    }
-
-    /**
-     * Get telefono
-     *
-     * @return string
-     */
-    public function getTelefono()
-    {
-        return $this->telefono;
-    }
-
-    /**
-     * Set fechaNacimiento
-     *
-     * @param \DateTime $fechaNacimiento
-     *
-     * @return Usuario
-     */
-    public function setFechaNacimiento($fechaNacimiento)
-    {
-        $this->fechaNacimiento = $fechaNacimiento;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaNacimiento
-     *
-     * @return \DateTime
-     */
-    public function getFechaNacimiento()
-    {
-        if ($this->fechaNacimiento) {
-            return $this->fechaNacimiento->format('Y-m-d');
-        }
-        return $this->fechaNacimiento;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param string $estado
-     *
-     * @return Usuario
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return string
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 
     /**
@@ -481,13 +232,37 @@ class Usuario
     }
 
     /**
-     * Set ciudadano
+     * Set activo
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param boolean $activo
      *
      * @return Usuario
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set ciudadano
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
+     *
+     * @return Usuario
+     */
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -497,34 +272,10 @@ class Usuario
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {
         return $this->ciudadano;
-    }
-
-    /**
-     * Set tipoIdentificacion
-     *
-     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
-     *
-     * @return Usuario
-     */
-    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
-    {
-        $this->tipoIdentificacion = $tipoIdentificacion;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoIdentificacion
-     *
-     * @return \AppBundle\Entity\TipoIdentificacion
-     */
-    public function getTipoIdentificacion()
-    {
-        return $this->tipoIdentificacion;
     }
 }

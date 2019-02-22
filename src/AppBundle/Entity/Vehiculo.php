@@ -21,7 +21,7 @@ class Vehiculo
      */
     private $id;
 
-        /**
+    /**
      * @var int
      *
      * @ORM\Column(name="numero_factura", type="integer", nullable= true)
@@ -171,7 +171,7 @@ class Vehiculo
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgPlaca", inversedBy="vehiculos") */
     private $placa;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="vehiculos") */
     private $sedeOperativa;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion", inversedBy="vehiculos") */

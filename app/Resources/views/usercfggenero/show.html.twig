@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfggenero</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userCfgGenero.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ userCfgGenero.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Sigla</th>
+                <td>{{ userCfgGenero.sigla }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userCfgGenero.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfggenero_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('usercfggenero_edit', { 'id': userCfgGenero.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

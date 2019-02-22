@@ -52,7 +52,7 @@ class Insumo
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito")
      **/
     protected $sedeOperativa;
 

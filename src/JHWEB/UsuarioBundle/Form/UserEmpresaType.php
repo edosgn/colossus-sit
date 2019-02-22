@@ -1,26 +1,20 @@
 <?php
 
-namespace AppBundle\Form;
+namespace JHWEB\UsuarioBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GeneroType extends AbstractType
+class UserEmpresaType extends AbstractType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add('nombre')->add('sigla')->add('estado');
-    }/**
+/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Genero'
+            'data_class' => 'JHWEB\UsuarioBundle\Entity\UserEmpresa'
         ));
     }
 
@@ -29,7 +23,7 @@ class GeneroType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_genero';
+        return 'jhweb_usuariobundle_userempresa';
     }
 
 

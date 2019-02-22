@@ -22,7 +22,7 @@ class MsvTalonario
     private $id;
 
      /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="msvTalonarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="msvTalonarios")
      **/
     protected $sedeOperativa;
 

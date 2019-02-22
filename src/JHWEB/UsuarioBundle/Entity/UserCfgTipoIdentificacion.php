@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\UsuarioBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * GrupoSanguineo
+ * UserCfgTipoIdentificacion
  *
- * @ORM\Table(name="grupo_sanguineo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\GrupoSanguineoRepository")
+ * @ORM\Table(name="user_cfg_tipo_identificacion")
+ * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserCfgTipoIdentificacionRepository")
  */
-class GrupoSanguineo
+class UserCfgTipoIdentificacion
 {
     /**
      * @var int
@@ -36,11 +36,11 @@ class GrupoSanguineo
     private $sigla;
 
     /**
-     * @var bool
+     * @var boolean
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado;
+    private $activo;
 
 
     /**
@@ -58,7 +58,7 @@ class GrupoSanguineo
      *
      * @param string $nombre
      *
-     * @return GrupoSanguineo
+     * @return UserCfgTipoIdentificacion
      */
     public function setNombre($nombre)
     {
@@ -82,7 +82,7 @@ class GrupoSanguineo
      *
      * @param string $sigla
      *
-     * @return GrupoSanguineo
+     * @return UserCfgTipoIdentificacion
      */
     public function setSigla($sigla)
     {
@@ -102,27 +102,26 @@ class GrupoSanguineo
     }
 
     /**
-     * Set estado
+     * Set activo
      *
-     * @param boolean $estado
+     * @param boolean $activo
      *
-     * @return GrupoSanguineo
+     * @return UserCfgTipoIdentificacion
      */
-    public function setEstado($estado)
+    public function setActivo($activo)
     {
-        $this->estado = $estado;
+        $this->activo = $activo;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get activo
      *
-     * @return bool
+     * @return boolean
      */
-    public function getEstado()
+    public function getActivo()
     {
-        return $this->estado;
+        return $this->activo;
     }
 }
-

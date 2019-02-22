@@ -439,7 +439,7 @@ class Comparendo
     protected $agenteTransito;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="comparendos")
      **/
     protected $sedeOperativa;
 
