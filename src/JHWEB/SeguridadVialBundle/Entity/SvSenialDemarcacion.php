@@ -45,9 +45,9 @@ class SvSenialDemarcacion
     /**
      * @var float
      *
-     * @ORM\Column(name="ancho_linea", type="float", nullable=true)
+     * @ORM\Column(name="ancho", type="float", nullable=true)
      */
-    private $anchoLinea;
+    private $ancho;
 
     /**
      * @var float
@@ -88,7 +88,6 @@ class SvSenialDemarcacion
     {
         return $this->id;
     }
-
 
     /**
      * Set cantidad
@@ -163,27 +162,27 @@ class SvSenialDemarcacion
     }
 
     /**
-     * Set anchoLinea
+     * Set ancho
      *
-     * @param float $anchoLinea
+     * @param float $ancho
      *
      * @return SvSenialDemarcacion
      */
-    public function setAnchoLinea($anchoLinea)
+    public function setAncho($ancho)
     {
-        $this->anchoLinea = $anchoLinea;
+        $this->ancho = $ancho;
 
         return $this;
     }
 
     /**
-     * Get anchoLinea
+     * Get ancho
      *
      * @return float
      */
-    public function getAnchoLinea()
+    public function getAncho()
     {
-        return $this->anchoLinea;
+        return $this->ancho;
     }
 
     /**

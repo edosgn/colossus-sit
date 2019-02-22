@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\PersonalBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * MpersonalHorario
+ * PnalHorario
  *
- * @ORM\Table(name="mpersonal_horario")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\MpersonalHorarioRepository")
+ * @ORM\Table(name="pnal_horario")
+ * @ORM\Entity(repositoryClass="JHWEB\PersonalBundle\Repository\PnalHorarioRepository")
  */
-class MpersonalHorario
+class PnalHorario
 {
     /**
      * @var int
@@ -31,16 +31,16 @@ class MpersonalHorario
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="horaInicio", type="time")
+     * @ORM\Column(name="hora_inicial", type="time")
      */
-    private $horaInicio;
+    private $horaInicial;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="horaFin", type="time")
+     * @ORM\Column(name="hora_final", type="time")
      */
-    private $horaFin;
+    private $horaFinal;
 
     /**
      * @var string
@@ -61,21 +61,19 @@ class MpersonalHorario
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo = true;
+    private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="horarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="horarios")
      **/
 
     protected $funcionario;
-   
-
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -87,7 +85,7 @@ class MpersonalHorario
      *
      * @param \DateTime $fecha
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
     public function setFecha($fecha)
     {
@@ -103,58 +101,55 @@ class MpersonalHorario
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('Y-m-d');
-        }
         return $this->fecha;
     }
 
     /**
-     * Set horaInicio
+     * Set horaInicial
      *
-     * @param \DateTime $horaInicio
+     * @param \DateTime $horaInicial
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
-    public function setHoraInicio($horaInicio)
+    public function setHoraInicial($horaInicial)
     {
-        $this->horaInicio = $horaInicio;
+        $this->horaInicial = $horaInicial;
 
         return $this;
     }
 
     /**
-     * Get horaInicio
+     * Get horaInicial
      *
      * @return \DateTime
      */
-    public function getHoraInicio()
+    public function getHoraInicial()
     {
-        return $this->horaInicio->format('H:m:s');
+        return $this->horaInicial;
     }
 
     /**
-     * Set horaFin
+     * Set horaFinal
      *
-     * @param \DateTime $horaFin
+     * @param \DateTime $horaFinal
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
-    public function setHoraFin($horaFin)
+    public function setHoraFinal($horaFinal)
     {
-        $this->horaFin = $horaFin;
+        $this->horaFinal = $horaFinal;
 
         return $this;
     }
 
     /**
-     * Get horaFin
+     * Get horaFinal
      *
      * @return \DateTime
      */
-    public function getHoraFin()
+    public function getHoraFinal()
     {
-        return $this->horaFin->format('H:m:s');
+        return $this->horaFinal;
     }
 
     /**
@@ -162,7 +157,7 @@ class MpersonalHorario
      *
      * @param string $jornada
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
     public function setJornada($jornada)
     {
@@ -186,7 +181,7 @@ class MpersonalHorario
      *
      * @param string $lugar
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
     public function setLugar($lugar)
     {
@@ -210,7 +205,7 @@ class MpersonalHorario
      *
      * @param boolean $activo
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
     public function setActivo($activo)
     {
@@ -232,11 +227,11 @@ class MpersonalHorario
     /**
      * Set funcionario
      *
-     * @param \AppBundle\Entity\MpersonalFuncionario $funcionario
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
      *
-     * @return MpersonalHorario
+     * @return PnalHorario
      */
-    public function setFuncionario(\AppBundle\Entity\MpersonalFuncionario $funcionario = null)
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
     {
         $this->funcionario = $funcionario;
 
@@ -246,7 +241,7 @@ class MpersonalHorario
     /**
      * Get funcionario
      *
-     * @return \AppBundle\Entity\MpersonalFuncionario
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
     public function getFuncionario()
     {

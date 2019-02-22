@@ -1,26 +1,26 @@
 <?php
 
-namespace AppBundle\Form;
+namespace JHWEB\VehiculoBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CfgPlacaType extends AbstractType
+class VhloCfgTipoVehiculoType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('numero')->add('estado')->add('clase')->add('sedeOperativa');
+        $builder->add('nombre')->add('activo')->add('modulo');
     }/**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\CfgPlaca'
+            'data_class' => 'JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo'
         ));
     }
 
@@ -29,7 +29,7 @@ class CfgPlacaType extends AbstractType
      */
     public function getBlockPrefix()
     {
-        return 'appbundle_cfgplaca';
+        return 'jhweb_vehiculobundle_vhlocfgtipovehiculo';
     }
 
 
