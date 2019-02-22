@@ -35,7 +35,7 @@ class VhloCfgPlacaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($lineas)." registros encontrados.",
+                'message' => count($placas)." registros encontrados.",
                 'data' => $placas,
             );
         }
@@ -110,7 +110,7 @@ class VhloCfgPlacaController extends Controller
     /**
      * Finds and displays a vhloCfgPlaca entity.
      *
-     * @Route("/{id}/show", name="vhlocfgplaca_show")
+     * @Route("/show/{id}", name="vhlocfgplaca_show")
      * @Method("GET")
      */
     public function showAction(VhloCfgPlaca $vhloCfgPlaca)
@@ -188,21 +188,40 @@ class VhloCfgPlacaController extends Controller
     /**
      * Deletes a vhloCfgPlaca entity.
      *
-     * @Route("/{id}/delete", name="vhlocfgplaca_delete")
+     * @Route("/delete", name="vhlocfgplaca_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, VhloCfgPlaca $vhloCfgPlaca)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloCfgPlaca);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloCfgPlaca);
-            $em->flush();
-        }
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('vhlocfgplaca_index');
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->find($params);
+
+            $placa->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($placa);
+            $em->flush();
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Placa eliminada con éxto",
+            );
+
+        }else{
+            $reponse = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**

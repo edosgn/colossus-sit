@@ -82,6 +82,7 @@ class MsvParametroController extends Controller
                         );
                         if($criterios){
                             foreach ($criterios as $keyCriterio => $criterio) {
+                                //var_dump($criterio->getId());
                                 $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'] = array(
                                     'id'=> $criterio->getId(),
                                     'name' => $criterio->getNombre(),
@@ -95,6 +96,7 @@ class MsvParametroController extends Controller
                     }                
                 }           
             }
+            //die();
             if($msvParametrosArray) {
                 $response = array(
                     'status' => 'success',
