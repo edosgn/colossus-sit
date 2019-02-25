@@ -159,10 +159,10 @@ class UserUsuarioMenuController extends Controller
     /**
      * Lists all menus by usuarios.
      *
-     * @Route("/search/menus/usuario", name="userusuariomenu_search_menus_usuario")
+     * @Route("/search/menus", name="userusuariomenu_search_menus")
      * @Method({"GET", "POST"})
      */
-    public function searchMenusByUsuarioAction(Request $request)
+    public function searchMenusAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization",null);
@@ -174,40 +174,50 @@ class UserUsuarioMenuController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(
+            $ciudadano = $em->getRepository('UsuarioBundle:UserCiudadano')->findOneBy(
                 array(
                     'identificacion' => $params->numeroIdentificacion
                 )
             );
 
-            if ($usuario) {
-                $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
+            if ($ciudadano) {
+                $usuario = $ciudadano->getusuario();
 
-                if ($menus) {
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => count($menus)." Registros encontrados", 
-                        'data'=> array(
-                            'usuarioMenus' => $menus,
-                            'usuario' => $usuario,
-                        )
-                    );
+                if ($usuario) {
+                    $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
+
+                    if ($menus) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => count($menus)." Registros encontrados", 
+                            'data'=> array(
+                                'usuarioMenus' => $menus,
+                                'usuario' => $usuario,
+                            )
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "No existen menus registrados para este usuario.",
+                            'data'=> array(
+                                'usuario' => $usuario,
+                            )
+                        );
+                    }
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "No existen menus registrados para este usuario.",
-                        'data'=> array(
-                            'usuario' => $usuario,
-                        )
+                        'message' => "El usuario vinculado a un ciudadano no existe.",
                     );
                 }
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El usuario con el número de indentificación digitada no existe.",
+                    'message' => "Los datos de ciudadano no existen con el número de indentificación digitada.",
                 );
             }
         }else{
