@@ -63,8 +63,9 @@ class UserLicenciaConduccion
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="licenciasConduccion") */
-    private $sedeOperativa;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="licenciasConduccion")
+     **/
+    protected $organismoTransito;
 
     /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgLicenciaConduccionCategoria", inversedBy="licenciasConduccion") */
     private $categoria;
