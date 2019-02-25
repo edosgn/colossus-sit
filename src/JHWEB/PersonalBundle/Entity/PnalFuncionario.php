@@ -114,7 +114,7 @@ class PnalFuncionario
     protected $cargo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="funcionarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="funcionarios")
      **/
     protected $ciudadano;
 
@@ -468,11 +468,11 @@ class PnalFuncionario
     /**
      * Set ciudadano
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return PnalFuncionario
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -482,7 +482,7 @@ class PnalFuncionario
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {
