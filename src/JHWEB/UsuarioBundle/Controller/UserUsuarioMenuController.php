@@ -174,14 +174,14 @@ class UserUsuarioMenuController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $ciudadano = $em->getRepository('UsuarioBundle:UserCiudadano')->findOneBy(
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                 array(
-                    'identificacion' => $params->numeroIdentificacion
+                    'identificacion' => $params->identificacion
                 )
             );
 
             if ($ciudadano) {
-                $usuario = $ciudadano->getusuario();
+                $usuario = $ciudadano->getUsuario();
 
                 if ($usuario) {
                     $menus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->getAssignedByUsuario($usuario->getId());
