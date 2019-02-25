@@ -27,20 +27,6 @@ class SvRegistroIpat
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MsvTConsecutivo", inversedBy="consecutivos")
      */
     private $consecutivo;
-    
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sedes")
-     */
-    private $sedeOperativa;
-
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgGravedad", inversedBy="gravedades")
-     */
-    private $gravedad;
 
     /**
      * @var string
@@ -85,6 +71,13 @@ class SvRegistroIpat
      */
     private $horaLevantamiento;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="ipats")
+     */
+    private $sedeOperativa;
+
+    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgGravedad", inversedBy="gravedades")
+     */
+    private $gravedad;
 
     /**
      * @var string
@@ -4097,30 +4090,6 @@ class SvRegistroIpat
     }
 
     /**
-     * Set sedeOperativa
-     *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
-     *
-     * @return SvRegistroIpat
-     */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
-    {
-        $this->sedeOperativa = $sedeOperativa;
-
-        return $this;
-    }
-
-    /**
-     * Get sedeOperativa
-     *
-     * @return \AppBundle\Entity\SedeOperativa
-     */
-    public function getSedeOperativa()
-    {
-        return $this->sedeOperativa;
-    }
-
-    /**
      * Set gravedad
      *
      * @param \AppBundle\Entity\CfgGravedad $gravedad
@@ -5294,5 +5263,29 @@ class SvRegistroIpat
     public function getVictimas()
     {
         return $this->victimas;
+    }
+
+    /**
+     * Set sedeOperativa
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa
+     *
+     * @return SvRegistroIpat
+     */
+    public function setSedeOperativa(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
     }
 }

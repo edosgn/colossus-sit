@@ -29,25 +29,19 @@ class SvCfgHospital
     private $nombre;
 
     /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="sedes")
-     */
-    private $sedeOperativa;
-
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
-     */
-    private $municipio;
-
-    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean", nullable=true)
      */
     private $activo;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="hospitales")
+     */
+    private $organismoTransito;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="hosiptales")
+     */
+    private $municipio;
 
     /**
      * Get id
@@ -58,7 +52,6 @@ class SvCfgHospital
     {
         return $this->id;
     }
-    
 
     /**
      * Set nombre
@@ -109,37 +102,37 @@ class SvCfgHospital
     }
 
     /**
-     * Set sedeOperativa
+     * Set organismoTransito
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return SvCfgHospital
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get organismoTransito
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getSedeOperativa()
+    public function getOrganismoTransito()
     {
-        return $this->sedeOperativa;
+        return $this->organismoTransito;
     }
 
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return SvCfgHospital
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -149,7 +142,7 @@ class SvCfgHospital
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {

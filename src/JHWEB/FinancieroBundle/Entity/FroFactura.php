@@ -92,9 +92,9 @@ class FroFactura
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="facturas")
      **/
-    protected $sedeOperativa;
+    protected $organismoTransito;
 
     /**
      * @ORM\ManyToOne(targetEntity="FroCfgTipoRecaudo", inversedBy="facturas")
@@ -356,27 +356,27 @@ class FroFactura
     }
 
     /**
-     * Set sedeOperativa
+     * Set organismoTransito
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return FroFactura
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get organismoTransito
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getSedeOperativa()
+    public function getOrganismoTransito()
     {
-        return $this->sedeOperativa;
+        return $this->organismoTransito;
     }
 
     /**

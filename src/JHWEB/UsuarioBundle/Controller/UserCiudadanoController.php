@@ -73,24 +73,24 @@ class UserCiudadanoController extends Controller
                 $ciudadano = new UserCiudadano();
 
                 $primerNombre = mb_strtoupper(
-                    $params->ciudadano->primerNombreUsuario, 'utf-8'
+                    $params->ciudadano->primerNombre, 'utf-8'
                 );
                 $ciudadano->setPrimerNombre($primerNombre);
 
                 $ciudadano->setSegundoNombre(
                     mb_strtoupper(
-                        $params->ciudadano->segundoNombreUsuario, 'utf-8'
+                        $params->ciudadano->segundoNombre, 'utf-8'
                     )
                 );
 
                 $primerApellido = mb_strtoupper(
-                    $params->ciudadano->primerApellidoUsuario, 'utf-8'
+                    $params->ciudadano->primerApellido, 'utf-8'
                 );
                 $ciudadano->setPrimerApellido($primerApellido);
 
                 $ciudadano->setSegundoApellido(
                     mb_strtoupper(
-                        $params->ciudadano->segundoApellidoUsuario, 'utf-8'
+                        $params->ciudadano->segundoApellido, 'utf-8'
                     )
                 );
 

@@ -50,10 +50,10 @@ class ImoTrazabilidad
      */
     private $descripcion;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\SedeOperativa", inversedBy="soats") */
-    private $sedeOperativa;
-
-
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="trazabilidades")
+     **/
+    protected $organismoTransito;
     
 
     /**
@@ -163,26 +163,26 @@ class ImoTrazabilidad
     }
 
     /**
-     * Set sedeOperativa
+     * Set organismoTransito
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return ImoTrazabilidad
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get organismoTransito
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getSedeOperativa()
+    public function getOrganismoTransito()
     {
-        return $this->sedeOperativa;
+        return $this->organismoTransito;
     }
 }
