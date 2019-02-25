@@ -33,7 +33,6 @@ class JwtAuth
 		}
 
 		if ($singup==true) {
-
 			$token = array(
 				"sub" => $user->getId(),
 				"primerNombre" => $user->getCiudadano()->getPrimerNombre(),

@@ -28,7 +28,7 @@ class UserUsuarioMenu
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="Repository\UsuarioBundle\Entity\Usuario", inversedBy="menus") */
+    /** @ORM\ManyToOne(targetEntity="UsuarioBundle\Entity\Usuario", inversedBy="menus") */
     private $usuario;
 
     /** @ORM\ManyToOne(targetEntity="UserCfgMenu", inversedBy="usuarios") */
