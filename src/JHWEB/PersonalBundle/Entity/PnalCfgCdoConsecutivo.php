@@ -31,7 +31,7 @@ class PnalCfgCdoConsecutivo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha]_asignacion", type="date", nullable=true)
+     * @ORM\Column(name="fecha_asignacion", type="date", nullable=true)
      */
     private $fechaAsignacion;
 

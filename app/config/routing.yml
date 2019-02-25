@@ -1,3 +1,19 @@
+jhweb_vehiculo_vhlo_cfg_carroceria:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgCarroceriaController.php"
+    type:     annotation
+
+jhweb_vehiculo_vhlo_cfg_clase:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgClaseController.php"
+    type:     annotation
+
+jhweb_vehiculo_vhlo_cfg_color:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgColorController.php"
+    type:     annotation
+
+jhweb_vehiculo_vhlo_cfg_servicio:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgServicioController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

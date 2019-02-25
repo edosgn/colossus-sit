@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgcolors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Hexadecimal</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgColor in vhloCfgColors %}
+            <tr>
+                <td><a href="{{ path('vhlocfgcolor_show', { 'id': vhloCfgColor.id }) }}">{{ vhloCfgColor.id }}</a></td>
+                <td>{{ vhloCfgColor.nombre }}</td>
+                <td>{{ vhloCfgColor.hexadecimal }}</td>
+                <td>{% if vhloCfgColor.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgcolor_show', { 'id': vhloCfgColor.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgclases list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgClase in vhloCfgClases %}
+            <tr>
+                <td><a href="{{ path('vhlocfgclase_show', { 'id': vhloCfgClase.id }) }}">{{ vhloCfgClase.id }}</a></td>
+                <td>{{ vhloCfgClase.nombre }}</td>
+                <td>{{ vhloCfgClase.codigo }}</td>
+                <td>{% if vhloCfgClase.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgclase_show', { 'id': vhloCfgClase.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

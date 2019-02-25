@@ -182,8 +182,8 @@ class VhloCfgRadioAccionController extends Controller
     /**
      * Deletes a vhloCfgRadioAccion entity.
      *
-     * @Route("/{id}", name="vhlocfgradioaccion_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlocfgradioaccion_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request, VhloCfgRadioAccion $vhloCfgRadioAccion)
     {

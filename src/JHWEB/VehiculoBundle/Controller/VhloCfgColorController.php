@@ -1,48 +1,47 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\VehiculoBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JHWEB\VehiculoBundle\Entity\VhloCfgColor;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use AppBundle\Entity\Color;
-use AppBundle\Form\ColorType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Color controller.
+ * Vhlocfgcolor controller.
  *
- * @Route("/color")
+ * @Route("vhlocfgcolor")
  */
-class ColorController extends Controller
+class VhloCfgColorController extends Controller
 {
     /**
-     * Lists all Color entities.
+     * Lists all vhloCfgColor entities.
      *
-     * @Route("/", name="color_index")
+     * @Route("/", name="vhlocfgcolor_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $colores = $em->getRepository('AppBundle:Color')->findBy(
-            array('estado' => 1)
+        $colores = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findBy(
+            array('activo' => 1)
         );
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado colores", 
-                    'data'=> $colores,
-            );
-         
+            'status' => 'success',
+            'code' => 200,
+            'message' => "listado colores",
+            'data' => $colores,
+        );
+
         return $helpers->json($response);
     }
 
     /**
      * Creates a new Color entity.
      *
-     * @Route("/new", name="color_new")
+     * @Route("/new", name="vhlocfgcolor_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -50,61 +49,52 @@ class ColorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
+            $nombre = $params->nombre;
+
+            $em = $this->getDoctrine()->getManager();
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findOneByNombre($params->nombre);
+
+            if ($color == null) {
+                $color = new VhloCfgColor();
+
+                $color->setNombre(strtoupper($nombre));
+                $color->setActivo(true);
+
+                $em->persist($color);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito",
+                );
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "los campos no pueden estar vacios", 
+                    'message' => "El nombre del color ya se encuentra registrado",
                 );
-            }else{*/
-                $nombre = $params->nombre;
-
-                $em = $this->getDoctrine()->getManager();
-                $color = $em->getRepository('AppBundle:Color')->findOneByNombre($params->nombre);
-
-                if ($color==null) {
-                    $color = new Color();
-    
-                    $color->setNombre(strtoupper($nombre));
-                    $color->setEstado(true);
-    
-                    $em->persist($color);
-                    $em->flush();
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => "Color creado con exito", 
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'msj' => "El nombre del color ya se encuentra registrado", 
-                    );
-                }
-
-            //}
-        }else{
+            }
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorización no válida.",
             );
-            } 
+        }
         return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a Color entity.
+     * Finds and displays a vhloCfgColor entity.
      *
-     * @Route("/show/{id}", name="color_show")
-     * @Method("POST")
+     * @Route("/show/{id}", name="vhlocfgcolor_show")
+     * @Method("GET")
      */
-    public function showAction(Request $request,$id)
+    public function showAction(VhloCfgColor $vhloCfgColor)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -112,18 +102,18 @@ class ColorController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('AppBundle:Color')->find($id);
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "color encontrado", 
+                    'message' => "Color encontrado", 
                     'data'=> $color,
             );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorización no válida.", 
                 );
         }
         return $helpers->json($response);
@@ -132,7 +122,7 @@ class ColorController extends Controller
     /**
      * Displays a form to edit an existing Color entity.
      *
-     * @Route("/edit", name="color_edit")
+     * @Route("/edit", name="vhlocfgcolor_edit")
      * @Method({"GET", "POST"})
      */ 
     public function editAction(Request $request)
@@ -147,11 +137,11 @@ class ColorController extends Controller
 
             $nombre = $params->nombre;
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('AppBundle:Color')->find($params->id);
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($params->id);
             if ($color!=null) {
 
                 $color->setNombre($nombre);
-                $color->setEstado(true);
+                $color->setActivo(true);
                
 
                 $em = $this->getDoctrine()->getManager();
@@ -161,20 +151,20 @@ class ColorController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "color editada con exito", 
+                    'message' => "Registro editado con éxito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La color no se encuentra en la base de datos", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'message' => "Autorización no válida.", 
                 );
         }
 
@@ -184,8 +174,8 @@ class ColorController extends Controller
     /**
      * Deletes a Color entity.
      *
-     * @Route("/{id}/delete", name="color_delete")
-     * @Method("POST")
+     * @Route("/{id}/delete", name="vhlocfgcolor_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request,$id)
     {
@@ -194,38 +184,38 @@ class ColorController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();            
-            $color = $em->getRepository('AppBundle:Color')->find($id);
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($id);
 
-            $color->setEstado(0);
+            $color->setActivo(false);
             $em = $this->getDoctrine()->getManager();
                 $em->persist($color);
                 $em->flush();
             $response = array(
                     'status' => 'success',
-                        'code' => 200,
-                        'msj' => "color eliminado con exito", 
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito", 
                 );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorización no válida", 
                 );
         }
         return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a Color entity.
+     * Creates a form to delete a VhloCfgColor entity.
      *
-     * @param Color $color The Color entity
+     * @param VhloCfgColor $vhloCfgColor The VhloCfgColor entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Color $color)
+    private function createDeleteForm(VhloCfgColor $vhloCfgColor)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('color_delete', array('id' => $color->getId())))
+            ->setAction($this->generateUrl('vhlocfgcolor_delete', array('id' => $vhloCfgColor->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -234,15 +224,15 @@ class ColorController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="color_select")
+     * @Route("/select", name="vhlocfgcolor_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
-    $colors = $em->getRepository('AppBundle:Color')->findBy(
-        array('estado' => 1)
+    $colors = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findBy(
+        array('activo' => 1)
     );
     
     foreach ($colors as $key => $color) {
