@@ -56,6 +56,7 @@ class VhloCfgCarroceria
         return $this->id;
     }
 
+
     /**
      * Set nombre
      *
@@ -97,11 +98,58 @@ class VhloCfgCarroceria
     /**
      * Get codigo
      *
-     * @return int
+     * @return integer
      */
     public function getCodigo()
     {
         return $this->codigo;
     }
-}
 
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return VhloCfgCarroceria
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase
+     *
+     * @return VhloCfgCarroceria
+     */
+    public function setClase(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+}

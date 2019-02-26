@@ -58,7 +58,6 @@ class VhloCfgPlacaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
             
             $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneByNumero(
@@ -68,7 +67,7 @@ class VhloCfgPlacaController extends Controller
             if (!$placa) {
                 $placa = new VhloCfgPlaca();
 
-                $placa->setNumero(mb_strtoupper($numero, 'utf-8'));
+                $placa->setNumero(mb_strtoupper($params->numero, 'utf-8'));
                 $placa->setEstado('FABRICADA');
 
                 $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
@@ -76,7 +75,7 @@ class VhloCfgPlacaController extends Controller
                 );
                 $placa->setTipoVehiculo($tipoVehiculo);
 
-                $organismoTransito = $em->getRepository('JHWEBConfigBundle:OrganismoTransito')->find(
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                     $params->idOrganismoTransito
                 );
                 $placa->setOrganismoTransito($organismoTransito);
@@ -87,7 +86,7 @@ class VhloCfgPlacaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro creado con exito",
+                    'message' => "Registro creado con éxito",
                 );
             }else{
                 $response = array(

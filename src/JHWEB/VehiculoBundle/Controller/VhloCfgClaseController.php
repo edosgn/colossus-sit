@@ -54,30 +54,22 @@ class VhloCfgClaseController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $clase = new VhloCfgClase();
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
+            
+            $clase = new VhloCfgClase();
+            $clase->setNombre($params->nombre);
+            $clase->setCodigo($params->codigo);
+            $clase->setTipoVehiculo($tipoVehiculo);
+            $clase->setActivo(true);
 
-            if ($clase == null) {
-                $clase->setNombre($params->nombre);
-                $clase->setCodigoMt($params->codigoMt);
-                $clase->setTipoVehiculo($tipoVehiculo);
-                $clase->setActivo(true);
+            $em->persist($clase);
+            $em->flush();
 
-                $em->persist($clase);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con éxito",
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "La clase ya se encuentra registrada.",
-                );
-            }
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
 
         } else {
             $response = array(
@@ -136,16 +128,14 @@ class VhloCfgClaseController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigoMt = $params->codigoMt;
-            $moduloId = $params->moduloId;
             $em = $this->getDoctrine()->getManager();
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->id);
             
             $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($params->idTipoVehiculo);
 
             if ($clase!=null) {
                 $clase->setNombre($params->nombre);
-                $clase->setCodigoMt($params->codigoMt);
+                $clase->setCodigo($params->codigo);
                 $clase->setTipoVehiculo($tipoVehiculo);
                 $clase->setActivo(true);
 
@@ -189,12 +179,12 @@ class VhloCfgClaseController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find($id);
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($id);
 
             $clase->setActivo(false);
             $em = $this->getDoctrine()->getManager();
-                $em->persist($clase);
-                $em->flush();
+            $em->persist($clase);
+            $em->flush();
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -242,7 +232,7 @@ class VhloCfgClaseController extends Controller
       foreach ($clases as $key => $clase) {
         $response[$key] = array(
             'value' => $clase->getId(),
-            'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
+            'label' => $clase->getCodigo()."_".$clase->getNombre(),
             );
       }
        return $helpers->json($response);

@@ -89,7 +89,7 @@ class VhloCfgMarcaController extends Controller
     /**
      * Finds and displays a vhloCfgMarca entity.
      *
-     * @Route("/show", name="vhlocfgmarca_show")
+     * @Route("/show/", name="vhlocfgmarca_show")
      * @Method({"GET", "POST"})
      */
     public function showAction(Request $request)
@@ -143,7 +143,7 @@ class VhloCfgMarcaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("data",null);
+            $json = $request->get("json",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -182,10 +182,10 @@ class VhloCfgMarcaController extends Controller
     /**
      * Deletes a vhloCfgMarca entity.
      *
-     * @Route("/delete", name="vhlocfgmarca_delete")
+     * @Route("/{id}/delete", name="vhlocfgmarca_delete")
      * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request)
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -196,7 +196,7 @@ class VhloCfgMarcaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $marca = $em->getRepository("JHWEBVehiculoBundle:VhloCfgMarca")->find($params->id);
+            $marca = $em->getRepository("JHWEBVehiculoBundle:VhloCfgMarca")->find($id);
 
             if ($marca) {
                 $marca->setActivo(false);

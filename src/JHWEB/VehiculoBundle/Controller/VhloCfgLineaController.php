@@ -157,9 +157,11 @@ class VhloCfgLineaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $linea = $em->getRepository("JHWEBVehiculoBundle:VhloCfgLinea")->find($params->id);
 
+            $marca = $em->getRepository("JHWEBVehiculoBundle:VhloCfgMarca")->find($params->idMarca);
             if ($linea) {
                 $linea->setNombre($params->nombre);
                 $linea->setCodigo($params->codigo);
+                $linea->setMarca($marca);
                 
                 $em->flush();
 
@@ -190,10 +192,10 @@ class VhloCfgLineaController extends Controller
     /**
      * Deletes a vhloCfgLinea entity.
      *
-     * @Route("/delete", name="vhlocfglinea_delete")
+     * @Route("/{id}/delete", name="vhlocfglinea_delete")
      * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request)
+    public function deleteAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -201,10 +203,9 @@ class VhloCfgLineaController extends Controller
 
         if ($authCheck==true) {
             $json = $request->get("data",null);
-            $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $linea = $em->getRepository("JHWEBVehiculoBundle:VhloCfgLinea")->find($params->id);
+            $linea = $em->getRepository("JHWEBVehiculoBundle:VhloCfgLinea")->find($id);
 
             if ($linea) {
                 $linea->setActivo(false);

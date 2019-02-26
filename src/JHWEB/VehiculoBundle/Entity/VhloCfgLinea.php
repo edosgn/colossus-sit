@@ -96,7 +96,7 @@ class VhloCfgLinea
     /**
      * Get codigo
      *
-     * @return int
+     * @return integer
      */
     public function getCodigo()
     {
@@ -120,11 +120,34 @@ class VhloCfgLinea
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set marca
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgMarca $marca
+     *
+     * @return VhloCfgLinea
+     */
+    public function setMarca(\JHWEB\VehiculoBundle\Entity\VhloCfgMarca $marca = null)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgMarca
+     */
+    public function getMarca()
+    {
+        return $this->marca;
+    }
+}

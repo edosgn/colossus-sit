@@ -28,15 +28,15 @@ class VhloCfgCombustibleController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $vhloCfgCombustibles = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->findBy(
-            array('estado' => 1)
+            array('activo' => 1)
         );   
 
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "listado combustibles", 
-                    'data'=> $vhloCfgCombustibles,
-            );
+            'status' => 'success',
+            'code' => 200,
+            'message' => "listado combustibles", 
+            'data'=> $vhloCfgCombustibles,
+        );
          
         return $helpers->json($response);
     }
@@ -56,20 +56,16 @@ class VhloCfgCombustibleController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigoMt = $params->codigoMt;
-
             $em = $this->getDoctrine()->getManager();
-            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgConbustible')->findBy(
-                array('codigoMt' => $codigoMt)
+            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->findBy(
+                array('codigo' => $params->codigo)
             );
 
             if ($combustible == null) {
-                $combustible = new Combustible();
-                $combustible->setNombre($nombre);
-                $combustible->setEstado(true);
-                $combustible->setCodigoMt($codigoMt);
-                $em = $this->getDoctrine()->getManager();
+                $combustible = new VhloCfgCombustible();
+                $combustible->setNombre($params->nombre);
+                $combustible->setCodigo($params->codigo);
+                $combustible->setActivo(true);
                 $em->persist($combustible);
                 $em->flush();
                 $response = array(
@@ -141,17 +137,14 @@ class VhloCfgCombustibleController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigoMt = $params->codigoMt;
             $em = $this->getDoctrine()->getManager();
             $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->id);
             if ($combustible!=null) {
 
-                $combustible->setNombre($nombre);
-                $combustible->setEstado(true);
-                $combustible->setCodigoMt($codigoMt);
+                $combustible->setNombre($params->nombre);
+                $combustible->setCodigo($params->codigo);
+                $combustible->setActivo(true);
 
-                
                 $em->persist($combustible);
                 $em->flush();
 
@@ -193,7 +186,7 @@ class VhloCfgCombustibleController extends Controller
             $em = $this->getDoctrine()->getManager();
             $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($id);
 
-            $combustible->setEstado(0);
+            $combustible->setActivo(0);
 
             $em->persist($combustible);
             $em->flush();
@@ -239,7 +232,7 @@ class VhloCfgCombustibleController extends Controller
     $helpers = $this->get("app.helpers");
     $em = $this->getDoctrine()->getManager();
     $combustibles = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->findBy(
-        array('estado' => 1)
+        array('activo' => 1)
     );
       foreach ($combustibles as $key => $combustible) {
         $response[$key] = array(

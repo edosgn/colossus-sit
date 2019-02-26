@@ -6,6 +6,7 @@ use JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlocfgcarrocerium controller.
@@ -53,37 +54,24 @@ class VhloCfgCarroceriaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $carrocerias = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findBy(
-                array('codigoMt' => $params->codigoMt)
+
+            $em = $this->getDoctrine()->getManager();
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+           
+            $carroceria = new VhloCfgCarroceria();
+            $carroceria->setNombre(strtoupper($params->nombre));
+            $carroceria->setCodigo($params->codigo);
+            $carroceria->setClase($clase);
+            $carroceria->setActivo(true);
+
+            $em->persist($carroceria);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
             );
-            if ($carrocerias == null) {
-                $em = $this->getDoctrine()->getManager();
-                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->claseId);
-
-                if ($clase != null) {
-                    $carroceria = new Carroceria();
-                    $carroceria->setNombre(strtoupper($params->nombre));
-                    $carroceria->setCodigoMt($params->codigoMt);
-                    $carroceria->setClase($params->claseId);
-                    $carroceria->setActivo(true);
-
-                    $em->persist($carroceria);
-                    $em->flush();
-
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Registro creado con éxito",
-                    );
-                } else {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "La carroceria no se encuentra en la base de datos",
-                    );
-                }
-
-            } 
         } else {
             $response = array(
                 'status' => 'error',
@@ -100,7 +88,7 @@ class VhloCfgCarroceriaController extends Controller
      * @Route("/show/{id}", name="vhlocfgcarroceria_show")
      * @Method("GET")
      */
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request, $id)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -110,17 +98,17 @@ class VhloCfgCarroceriaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Carroceria con nombre"." ".$carroceria->getNombre(), 
-                    'data'=> $carroceria,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Carroceria con nombre" . " " . $carroceria->getNombre(),
+                'data' => $carroceria,
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -141,18 +129,14 @@ class VhloCfgCarroceriaController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-            $codigoMt = $params->codigoMt;
-
-            $claseId = $params->claseId;
             $em = $this->getDoctrine()->getManager();
             $carroceria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCarroceria")->find($params->id);
-            $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find($claseId);
+            $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find($params->idClase);
 
             if ($carroceria != null) {
 
-                $carroceria->setNombre($nombre);
-                $carroceria->setCodigoMt($codigoMt);
+                $carroceria->setNombre($params->nombre);
+                $carroceria->setCodigo($params->codigo);
                 $carroceria->setClase($clase);
                 $carroceria->setActivo(true);
                 $em->persist($carroceria);

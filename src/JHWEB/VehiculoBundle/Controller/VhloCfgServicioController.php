@@ -63,7 +63,7 @@ class VhloCfgServicioController extends Controller
             );
 
             if ($servicio==null) {
-                $servicio = new Servicio();
+                $servicio = new VhloCfgServicio();
 
                 $servicio->setNombre(strtoupper($nombre));
                 $servicio->setCodigo($codigo);

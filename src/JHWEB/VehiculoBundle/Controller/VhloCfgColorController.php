@@ -53,15 +53,14 @@ class VhloCfgColorController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-
             $em = $this->getDoctrine()->getManager();
             $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findOneByNombre($params->nombre);
 
             if ($color == null) {
                 $color = new VhloCfgColor();
 
-                $color->setNombre(strtoupper($nombre));
+                $color->setNombre(strtoupper($params->nombre));
+                //$color->setHexadecimal('#FFFFFF');
                 $color->setActivo(true);
 
                 $em->persist($color);
