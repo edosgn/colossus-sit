@@ -133,4 +133,47 @@ class UserEmpresaController extends Controller
             ->getForm()
         ;
     }
+
+    /* ============================================================*/
+    /**
+     * Busca empresas por NIT o Nombre.
+     *
+     * @Route("/show/nit/nombre", name="userempresa_show_nit_nombre")
+     * @Method({"GET", "POST"})
+     */
+    public function showNitOrNombreAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $json = $request->get("json",null);
+        $params = json_decode($json);
+        $em = $this->getDoctrine()->getManager();
+        if ($authCheck == true) {
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->getByNitOrNombre($params); 
+              
+            if ($empresa) { 
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Empresa encontrada",
+                    'data' => $empresa,
+                );
+            }          
+            else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Empresa no Encontrada", 
+                );
+            }
+        } else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorización no válida",
+            );
+        } 
+        return $helpers->json($response);
+    }
 }
