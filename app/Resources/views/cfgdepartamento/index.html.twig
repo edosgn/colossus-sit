@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgdepartamentos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigodane</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgDepartamento in cfgDepartamentos %}
+            <tr>
+                <td><a href="{{ path('cfgdepartamento_show', { 'id': cfgDepartamento.id }) }}">{{ cfgDepartamento.id }}</a></td>
+                <td>{{ cfgDepartamento.nombre }}</td>
+                <td>{{ cfgDepartamento.codigoDane }}</td>
+                <td>{% if cfgDepartamento.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgdepartamento_show', { 'id': cfgDepartamento.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgdepartamento_edit', { 'id': cfgDepartamento.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgdepartamento_new') }}">Create a new cfgDepartamento</a>
+        </li>
+    </ul>
+{% endblock %}

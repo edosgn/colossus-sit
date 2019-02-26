@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgpais list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgPai in cfgPais %}
+            <tr>
+                <td><a href="{{ path('cfgpais_show', { 'id': cfgPai.id }) }}">{{ cfgPai.id }}</a></td>
+                <td>{{ cfgPai.nombre }}</td>
+                <td>{{ cfgPai.codigo }}</td>
+                <td>{% if cfgPai.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgpais_show', { 'id': cfgPai.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgpais_edit', { 'id': cfgPai.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgpais_new') }}">Create a new cfgPai</a>
+        </li>
+    </ul>
+{% endblock %}
