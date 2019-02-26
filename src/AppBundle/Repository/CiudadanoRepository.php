@@ -16,11 +16,11 @@ class CiudadanoRepository extends \Doctrine\ORM\EntityRepository
         switch ($params->tipoFiltro) {
             case 1:
                 $dql = "SELECT c
-                FROM AppBundle:Ciudadano c,
+                FROM JHWEBUsuarioBundle:UserCiudadano c,
                 UsuarioBundle:Usuario u
-                WHERE u.identificacion = :identificacion
+                WHERE c.identificacion = :identificacion
                 AND c.usuario = u.id
-                ORDER BY u.primerNombre, u.primerApellido ASC";
+                ORDER BY c.primerNombre, c.primerApellido ASC";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -30,12 +30,12 @@ class CiudadanoRepository extends \Doctrine\ORM\EntityRepository
 
             case 2:
                 $dql = "SELECT c
-                FROM AppBundle:Ciudadano c,
+                FROM JHWEBUsuarioBundle:UserCiudadano c,
                 UsuarioBundle:Usuario u
                 WHERE c.usuario = u.id
-                AND (u.primerNombre LIKE :nombres OR u.segundoNombre LIKE :nombres
-                OR u.primerApellido LIKE :apellidos OR u.segundoApellido LIKE :apellidos)
-                ORDER BY u.primerNombre, u.primerApellido ASC";
+                AND (c.primerNombre LIKE :nombres OR c.segundoNombre LIKE :nombres
+                OR c.primerApellido LIKE :apellidos OR c.segundoApellido LIKE :apellidos)
+                ORDER BY c.primerNombre, c.primerApellido ASC";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
