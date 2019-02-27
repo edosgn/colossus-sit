@@ -170,7 +170,7 @@ class CfgMunicipioController extends Controller
      * @Route("/select/departamento", name="cfgmunicipio_select_departamento")
      * @Method({"GET", "POST"})
      */
-    public function selectByDepartamentoAction($id)
+    public function selectByDepartamentoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
