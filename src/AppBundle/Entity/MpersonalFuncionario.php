@@ -111,17 +111,17 @@ class MpersonalFuncionario
     protected $sedeOperativa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalTipoContrato", inversedBy="funcionarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato", inversedBy="funcionarios")
      **/
     protected $tipoContrato;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgCargo", inversedBy="funcionarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalCfgCargo", inversedBy="funcionarios")
      **/
     protected $cargo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="funcionarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="funcionarios")
      **/
     protected $ciudadano;
 
@@ -253,9 +253,6 @@ class MpersonalFuncionario
      */
     public function getFechaInicio()
     {
-        if ($this->fechaInicio) {
-            return $this->fechaInicio->format('Y-m-d');
-        }
         return $this->fechaInicio;
     }
 
@@ -280,9 +277,6 @@ class MpersonalFuncionario
      */
     public function getFechaFin()
     {
-        if ($this->fechaFin) {
-            return $this->fechaFin->format('Y-m-d');
-        }
         return $this->fechaFin;
     }
 
@@ -433,11 +427,11 @@ class MpersonalFuncionario
     /**
      * Set sedeOperativa
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa
      *
      * @return MpersonalFuncionario
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setSedeOperativa(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa = null)
     {
         $this->sedeOperativa = $sedeOperativa;
 
@@ -447,7 +441,7 @@ class MpersonalFuncionario
     /**
      * Get sedeOperativa
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
     public function getSedeOperativa()
     {
@@ -457,11 +451,11 @@ class MpersonalFuncionario
     /**
      * Set tipoContrato
      *
-     * @param \AppBundle\Entity\MpersonalTipoContrato $tipoContrato
+     * @param \JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato $tipoContrato
      *
      * @return MpersonalFuncionario
      */
-    public function setTipoContrato(\AppBundle\Entity\MpersonalTipoContrato $tipoContrato = null)
+    public function setTipoContrato(\JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato $tipoContrato = null)
     {
         $this->tipoContrato = $tipoContrato;
 
@@ -471,7 +465,7 @@ class MpersonalFuncionario
     /**
      * Get tipoContrato
      *
-     * @return \AppBundle\Entity\MpersonalTipoContrato
+     * @return \JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato
      */
     public function getTipoContrato()
     {
@@ -481,11 +475,11 @@ class MpersonalFuncionario
     /**
      * Set cargo
      *
-     * @param \AppBundle\Entity\CfgCargo $cargo
+     * @param \JHWEB\PersonalBundle\Entity\PnalCfgCargo $cargo
      *
      * @return MpersonalFuncionario
      */
-    public function setCargo(\AppBundle\Entity\CfgCargo $cargo = null)
+    public function setCargo(\JHWEB\PersonalBundle\Entity\PnalCfgCargo $cargo = null)
     {
         $this->cargo = $cargo;
 
@@ -495,7 +489,7 @@ class MpersonalFuncionario
     /**
      * Get cargo
      *
-     * @return \AppBundle\Entity\CfgCargo
+     * @return \JHWEB\PersonalBundle\Entity\PnalCfgCargo
      */
     public function getCargo()
     {
@@ -505,11 +499,11 @@ class MpersonalFuncionario
     /**
      * Set ciudadano
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return MpersonalFuncionario
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -519,7 +513,7 @@ class MpersonalFuncionario
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {
