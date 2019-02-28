@@ -106,7 +106,7 @@ class MsvRevision
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      **/
     protected $empresa;
 
