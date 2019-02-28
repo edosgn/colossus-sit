@@ -1,11 +1,3 @@
-jhweb_financiero_fro_trte_solicitud:
-    resource: "@JHWEBFinancieroBundle/Controller/FroTrteSolicitudController.php"
-    type:     annotation
-
-jhweb_insumo_imo_cfg_tipo:
-    resource: "@JHWEBInsumoBundle/Controller/ImoCfgTipoController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

@@ -25,20 +25,16 @@ class FroTrteCfgConceptoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $tramitesConceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->findBy(
-            array('activo' => true)
+        $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->findBy(
+            array('activo' => 1)
         );
-
-        $response['data'] = array();
-
-        if ($tramitesConceptos) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($tramitesConceptos) . " registros encontrados",
-                'data' => $tramitesConceptos,
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "listado conceptos",  
+                    'data'=> $conceptos,
             );
-        }
+         
         return $helpers->json($response);
     }
 
@@ -53,51 +49,170 @@ class FroTrteCfgConceptoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("data",null);
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
             $params = json_decode($json);
-                
+
             $em = $this->getDoctrine()->getManager();
-            
-            $tramiteConcepto = new FroTrteCfgConcepto();
 
-            $tramiteConcepto->setNombre(strtoupper($params->nombre));
-            $tramiteConcepto->setValor($params->valor);
-            $tramiteConcepto->setCuenta($params->cuenta);
-            $tramiteConcepto->setActivo(true);
+            $cuenta = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgCuenta')->find($params->idCuenta);
 
-            $em->persist($tramiteConcepto);
+            $concepto = new FroTrteCfgConcepto();
+            $concepto->setNombre($params->nombre);
+            $concepto->setValor($params->valor);
+            $concepto->setCuenta($cuenta);
+            $concepto->setActivo(true);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($concepto);
             $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "tramite creado con exito",
+                'message' => "Concepto creado con exito",
             );
-
-            //}
-
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida",
             );
-            } 
+        }
         return $helpers->json($response);
+
     }
 
     /**
      * Finds and displays a froTrteCfgConcepto entity.
      *
-     * @Route("/{id}", name="frotrtecfgconcepto_show")
-     * @Method("GET")
+     * @Route("/{id}/show", name="frotrtecfgconcepto_show")
+     * @Method("POST")
      */
-    public function showAction(FroTrteCfgConcepto $froTrteCfgConcepto)
+    public function showAction(Request $request,$id)
     {
 
-        return $this->render('frotrtecfgconcepto/show.html.twig', array(
-            'froTrteCfgConcepto' => $froTrteCfgConcepto,
-        ));
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Concepto encontrado", 
+                    'data'=> $concepto,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing Concepto entity.
+     *
+     * @Route("/edit", name="frotrtecfgconcepto_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $concepto = $em->getRepository("JHWEBFinancieroBundle:FroTrteCfgConcepto")->find($params->id);
+
+            if ($concepto!=null) {
+                $concepto->setNombre($params->nombre);
+                $concepto->setValor($params->valor);
+                $concepto->setCuenta($params->cuenta);
+                $concepto->setActivo(true);
+
+                $em->persist($concepto);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Concepto editado con éxito", 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El concepto no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no válida", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Deletes a Concepto entity.
+     *
+     * @Route("/{id}/delete", name="frotrtecfgconcepto_delete")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request,$id)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck==true) {
+            $em = $this->getDoctrine()->getManager();
+            $concepto = $em->getRepository('AppBundle:Concepto')->find($id);
+
+            $concepto->setEstado(0);
+            $em = $this->getDoctrine()->getManager();
+                $em->persist($concepto);
+                $em->flush();
+            $response = array(
+                    'status' => 'success',
+                        'code' => 200,
+                        'message' => "concepto eliminado con exito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a form to delete a Concepto entity.
+     *
+     * @param Concepto $concepto The Concepto entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(Concepto $concepto)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('concepto_delete', array('id' => $concepto->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
     }
 }

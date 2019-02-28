@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frotrtecfgcuentum</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ froTrteCfgCuentum.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ froTrteCfgCuentum.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ froTrteCfgCuentum.numero }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('frotrtecfgcuenta_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
