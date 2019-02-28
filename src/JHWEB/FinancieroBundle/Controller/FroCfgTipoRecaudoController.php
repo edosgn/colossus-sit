@@ -139,8 +139,8 @@ class FroCfgTipoRecaudoController extends Controller
                 'message' => "Autorizacion no válida",
             );
         }
-        return $helpers->json($response);
 
+        return $helpers->json($response);
     }
 
     /**

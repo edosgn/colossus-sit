@@ -34,7 +34,7 @@ class FroTrteConcepto
     protected $precio;
 
     /**
-     * @ORM\ManyToOne(targetEntity="FroTrteConcepto", inversedBy="precios")
+     * @ORM\ManyToOne(targetEntity="FroTrteCfgConcepto", inversedBy="precios")
      **/
     protected $concepto;
 
@@ -66,7 +66,7 @@ class FroTrteConcepto
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -100,11 +100,11 @@ class FroTrteConcepto
     /**
      * Set concepto
      *
-     * @param \JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto
+     * @param \JHWEB\FinancieroBundle\Entity\FroTrteCfgConcepto $concepto
      *
      * @return FroTrteConcepto
      */
-    public function setConcepto(\JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto = null)
+    public function setConcepto(\JHWEB\FinancieroBundle\Entity\FroTrteCfgConcepto $concepto = null)
     {
         $this->concepto = $concepto;
 
@@ -114,7 +114,7 @@ class FroTrteConcepto
     /**
      * Get concepto
      *
-     * @return \JHWEB\FinancieroBundle\Entity\FroTrteConcepto
+     * @return \JHWEB\FinancieroBundle\Entity\FroTrteCfgConcepto
      */
     public function getConcepto()
     {
