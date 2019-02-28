@@ -22,7 +22,7 @@ class SvCapacitacion
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="ciudadanos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="capacitaciones")
      **/
     protected $ciudadano;
 
@@ -69,17 +69,17 @@ class SvCapacitacion
     private $semana;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="capacitaciones")
      **/
     protected $municipio;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion", inversedBy="funciones")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncion", inversedBy="capacitaciones")
      **/
     protected $funcion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncionCriterio", inversedBy="funcionesCriterios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgFuncionCriterio", inversedBy="capacitaciones")
      **/
     protected $funcionCriterio;
 
@@ -446,11 +446,11 @@ class SvCapacitacion
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return SvCapacitacion
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -460,7 +460,7 @@ class SvCapacitacion
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {
@@ -566,11 +566,11 @@ class SvCapacitacion
     /**
      * Set ciudadano
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return SvCapacitacion
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setCiudadano(UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -580,7 +580,7 @@ class SvCapacitacion
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {

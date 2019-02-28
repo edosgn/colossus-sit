@@ -5,12 +5,12 @@ namespace JHWEB\FinancieroBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FroTrteCfgConcepto
+ * FroTrteCfgCuenta
  *
- * @ORM\Table(name="fro_trte_cfg_concepto")
- * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroTrteCfgConceptoRepository")
+ * @ORM\Table(name="fro_trte_cfg_cuenta")
+ * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroTrteCfgCuentaRepository")
  */
-class FroTrteCfgConcepto
+class FroTrteCfgCuenta
 {
     /**
      * @var int
@@ -31,14 +31,9 @@ class FroTrteCfgConcepto
     /**
      * @var int
      *
-     * @ORM\Column(name="valor", type="integer")
+     * @ORM\Column(name="numero", type="integer")
      */
-    private $valor;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="FroTrteCfgCuenta", inversedBy="conceptos")
-     **/
-    protected $cuenta;
+    private $numero;
 
     /**
      * @var bool
@@ -46,7 +41,6 @@ class FroTrteCfgConcepto
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
-
 
     /**
      * Get id
@@ -63,7 +57,7 @@ class FroTrteCfgConcepto
      *
      * @param string $nombre
      *
-     * @return FroTrteCfgConcepto
+     * @return FroTrteCfgCuenta
      */
     public function setNombre($nombre)
     {
@@ -83,27 +77,27 @@ class FroTrteCfgConcepto
     }
 
     /**
-     * Set valor
+     * Set numero
      *
-     * @param integer $valor
+     * @param integer $numero
      *
-     * @return FroTrteCfgConcepto
+     * @return FroTrteCfgCuenta
      */
-    public function setValor($valor)
+    public function setNumero($numero)
     {
-        $this->valor = $valor;
+        $this->numero = $numero;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get numero
      *
      * @return integer
      */
-    public function getValor()
+    public function getNumero()
     {
-        return $this->valor;
+        return $this->numero;
     }
 
     /**
@@ -111,7 +105,7 @@ class FroTrteCfgConcepto
      *
      * @param boolean $activo
      *
-     * @return FroTrteCfgConcepto
+     * @return FroTrteCfgCuenta
      */
     public function setActivo($activo)
     {
@@ -128,29 +122,5 @@ class FroTrteCfgConcepto
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set cuenta
-     *
-     * @param \JHWEB\FinancieroBundle\Entity\FroTrteCfgCuenta $cuenta
-     *
-     * @return FroTrteCfgConcepto
-     */
-    public function setCuenta(\JHWEB\FinancieroBundle\Entity\FroTrteCfgCuenta $cuenta = null)
-    {
-        $this->cuenta = $cuenta;
-
-        return $this;
-    }
-
-    /**
-     * Get cuenta
-     *
-     * @return \JHWEB\FinancieroBundle\Entity\FroTrteCfgCuenta
-     */
-    public function getCuenta()
-    {
-        return $this->cuenta;
     }
 }

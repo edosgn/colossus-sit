@@ -49,6 +49,7 @@ class MsvCalificacionController extends Controller
 
         foreach ($params as $key => $parametro) {
             foreach ($parametro->variables as $key => $variable) {
+                var_dump($variable->criterios->id);
                 $criterioA = $em->getRepository('AppBundle:MsvCriterio')->find($variable->criterios->id);
                 $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
 

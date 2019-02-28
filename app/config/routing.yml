@@ -1,3 +1,7 @@
+jhweb_financiero_fro_trte_cfg_cuenta:
+    resource: "@JHWEBFinancieroBundle/Controller/FroTrteCfgCuentaController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
