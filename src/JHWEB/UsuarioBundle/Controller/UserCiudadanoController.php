@@ -3,9 +3,11 @@
 namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
+use Repository\UsuarioBundle\Entity\Usuario;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Userciudadano controller.
@@ -59,17 +61,19 @@ class UserCiudadanoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("data",null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
 
             $ciudadanoOld = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(
                 array(
-                    'identificacion' => $numeroIdentificacion,
-                    'tipoIdentificacion'=>$idTipoIdentificacionUsuario
+                    'identificacion' => $params->ciudadano->identificacion,
+                    'tipoIdentificacion'=> $params->ciudadano->idTipoIdentificacion
                 )
             );
 
-            if (!$ciudadano) {
+            if (!$ciudadanoOld) {
                 $ciudadano = new UserCiudadano();
 
                 $primerNombre = mb_strtoupper(
@@ -138,12 +142,16 @@ class UserCiudadanoController extends Controller
                 $ciudadano->setTipoIdentificacion($tipoIdentificacion);
 
                 if ($params->ciudadano->idMunicipioNacimiento) {
-                    $municipioNacimiento = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipioNacimiento);
+                    $municipioNacimiento = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                        $params->ciudadano->idMunicipioNacimiento
+                    );
                     $ciudadano->setMunicipioNacimiento($municipioNacimiento);
                 }
 
                 if ($params->ciudadano->idMunicipioResidencia) {
-                    $municipioResidencia = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipioResidencia);
+                    $municipioResidencia = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                        $params->ciudadano->idMunicipioResidencia
+                    );
                     $ciudadano->setMunicipioResidencia($municipioResidencia);
                 }
 
@@ -159,7 +167,7 @@ class UserCiudadanoController extends Controller
 
                 $usuario = new Usuario();
 
-                $usuario->setCorreo($params->usuario->correo);
+                $usuario->setCorreo($params->ciudadano->correo);
                 $usuario->setActivo(true);
                 $usuario->setRole("ROLE_USER");
 
@@ -177,6 +185,12 @@ class UserCiudadanoController extends Controller
                 $usuario->setCiudadano($ciudadano);
 
                 $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito.", 
+                );
             }else{
                 $response = array(
                     'status' => 'error',
@@ -219,41 +233,172 @@ class UserCiudadanoController extends Controller
      */
     public function editAction(Request $request, UserCiudadano $userCiudadano)
     {
-        $deleteForm = $this->createDeleteForm($userCiudadano);
-        $editForm = $this->createForm('JHWEB\UsuarioBundle\Form\UserCiudadanoType', $userCiudadano);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('userciudadano_edit', array('id' => $userCiudadano->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
+
+            if ($ciudadano) {
+                $primerNombre = mb_strtoupper(
+                    $params->ciudadano->primerNombre, 'utf-8'
+                );
+                $ciudadano->setPrimerNombre($primerNombre);
+
+                $ciudadano->setSegundoNombre(
+                    mb_strtoupper(
+                        $params->ciudadano->segundoNombre, 'utf-8'
+                    )
+                );
+
+                $primerApellido = mb_strtoupper(
+                    $params->ciudadano->primerApellido, 'utf-8'
+                );
+                $ciudadano->setPrimerApellido($primerApellido);
+
+                $ciudadano->setSegundoApellido(
+                    mb_strtoupper(
+                        $params->ciudadano->segundoApellido, 'utf-8'
+                    )
+                );
+
+                $ciudadano->setIdentificacion(
+                    $params->ciudadano->identificacion
+                );
+
+                $ciudadano->setTelefono($params->ciudadano->telefono);
+
+                if ($params->ciudadano->fechaNacimiento) {
+                    $ciudadano->setFechaNacimiento(
+                        new \DateTime($params->ciudadano->fechaNacimiento)
+                    );
+                }
+
+                if ($params->ciudadano->fechaExpedicionDocumento) {
+                    $ciudadano->setFechaExpedicionDocumento(
+                        new \DateTime(
+                            $params->ciudadano->fechaExpedicionDocumento
+                        )
+                    );
+                }
+
+                $ciudadano->setDireccionPersonal(
+                    $params->ciudadano->direccionPersonal
+                );
+
+                if ($params->ciudadano->direccionTrabajo) {
+                    $ciudadano->setDireccionTrabajo(
+                        $params->ciudadano->direccionTrabajo
+                    );
+                }
+
+                if($params->campo && $params->campo == 'importacion-temporal'){
+                    $ciudadano->setEnrolado(false);
+                }else {                       
+                    $ciudadano->setEnrolado(true);
+                }
+
+                $ciudadano->setActivo(true);
+
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
+                    $params->ciudadano->idTipoIdentificacion
+                );
+                $ciudadano->setTipoIdentificacion($tipoIdentificacion);
+
+                if ($params->ciudadano->idMunicipioNacimiento) {
+                    $municipioNacimiento = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                        $params->ciudadano->idMunicipioNacimiento
+                    );
+                    $ciudadano->setMunicipioNacimiento($municipioNacimiento);
+                }
+
+                if ($params->ciudadano->idMunicipioResidencia) {
+                    $municipioResidencia = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                        $params->ciudadano->idMunicipioResidencia
+                    );
+                    $ciudadano->setMunicipioResidencia($municipioResidencia);
+                }
+
+                if ($params->ciudadano->idGenero) {
+                    $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->ciudadano->idGenero);
+                    $ciudadano->setGenero($genero);
+                }
+
+                if ($params->ciudadano->idGrupoSanguineo) {
+                    $grupoSanguineo = $em->getRepository('JHWEBUsuarioBundle:UserCfgGrupoSanguineo')->find($params->ciudadano->idGrupoSanguineo);
+                    $ciudadano->setGrupoSanguineo($grupoSanguineo);
+                }
+
+                $em->persist($ciudadano);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $ciudadano,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
         }
-
-        return $this->render('userciudadano/edit.html.twig', array(
-            'userCiudadano' => $userCiudadano,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a userCiudadano entity.
      *
-     * @Route("/{id}", name="userciudadano_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="userciudadano_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, UserCiudadano $userCiudadano)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($userCiudadano);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($userCiudadano);
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
+
+            $ciudadano->setActivo(false);
+
+            $em->persist($ciudadano);
             $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
         }
 
-        return $this->redirectToRoute('userciudadano_index');
+        return $helpers->json($response);
     }
 
     /**

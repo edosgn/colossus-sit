@@ -170,7 +170,7 @@ class CfgDepartamentoController extends Controller
      * @Route("/select/pais", name="cfgdepartamento_select_pais")
      * @Method({"GET", "POST"})
      */
-    public function selectByPaisAction($id)
+    public function selectByPaisAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);

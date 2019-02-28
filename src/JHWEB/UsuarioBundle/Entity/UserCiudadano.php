@@ -66,7 +66,7 @@ class UserCiudadano
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_expedicion_documento", type="datetime", nullable=true)
+     * @ORM\Column(name="fecha_expedicion_documento", type="date", nullable=true)
      */
     private $fechaExpedicionDocumento;
 
