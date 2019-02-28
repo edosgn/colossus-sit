@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
 class CfgPaisController extends Controller
 {
     /**
-     * Lists all cfgPai entities.
+     * Lists all cfgPais entities.
      *
      * @Route("/", name="cfgpais_index")
      * @Method("GET")
@@ -32,81 +32,81 @@ class CfgPaisController extends Controller
     }
 
     /**
-     * Creates a new cfgPai entity.
+     * Creates a new cfgPais entity.
      *
      * @Route("/new", name="cfgpais_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $cfgPai = new Cfgpai();
-        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgPaisType', $cfgPai);
+        $cfgPais = new Cfgpai();
+        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgPaisType', $cfgPais);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgPai);
+            $em->persist($cfgPais);
             $em->flush();
 
-            return $this->redirectToRoute('cfgpais_show', array('id' => $cfgPai->getId()));
+            return $this->redirectToRoute('cfgpais_show', array('id' => $cfgPais->getId()));
         }
 
         return $this->render('cfgpais/new.html.twig', array(
-            'cfgPai' => $cfgPai,
+            'cfgPais' => $cfgPais,
             'form' => $form->createView(),
         ));
     }
 
     /**
-     * Finds and displays a cfgPai entity.
+     * Finds and displays a cfgPais entity.
      *
      * @Route("/{id}/show", name="cfgpais_show")
      * @Method("GET")
      */
-    public function showAction(CfgPais $cfgPai)
+    public function showAction(CfgPais $cfgPais)
     {
-        $deleteForm = $this->createDeleteForm($cfgPai);
+        $deleteForm = $this->createDeleteForm($cfgPais);
 
         return $this->render('cfgpais/show.html.twig', array(
-            'cfgPai' => $cfgPai,
+            'cfgPais' => $cfgPais,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing cfgPai entity.
+     * Displays a form to edit an existing cfgPais entity.
      *
      * @Route("/{id}/edit", name="cfgpais_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CfgPais $cfgPai)
+    public function editAction(Request $request, CfgPais $cfgPais)
     {
-        $deleteForm = $this->createDeleteForm($cfgPai);
-        $editForm = $this->createForm('JHWEB\ConfigBundle\Form\CfgPaisType', $cfgPai);
+        $deleteForm = $this->createDeleteForm($cfgPais);
+        $editForm = $this->createForm('JHWEB\ConfigBundle\Form\CfgPaisType', $cfgPais);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('cfgpais_edit', array('id' => $cfgPai->getId()));
+            return $this->redirectToRoute('cfgpais_edit', array('id' => $cfgPais->getId()));
         }
 
         return $this->render('cfgpais/edit.html.twig', array(
-            'cfgPai' => $cfgPai,
+            'cfgPais' => $cfgPais,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a cfgPai entity.
+     * Deletes a cfgPais entity.
      *
      * @Route("/{id}/delete", name="cfgpais_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, CfgPais $cfgPai)
+    public function deleteAction(Request $request, CfgPais $cfgPais)
     {
-        $form = $this->createDeleteForm($cfgPai);
+        $form = $this->createDeleteForm($cfgPais);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

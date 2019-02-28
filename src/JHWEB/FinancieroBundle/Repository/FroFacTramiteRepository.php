@@ -10,4 +10,24 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroFacTramiteRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function getByFacturaAndTramite($idFactura, $idTramite)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT ft
+            FROM JHWEBFinancieroBundle:FroFacTramite ft, JHWEBFinancieroBundle:FroFactura f, JHWEBFinancieroBundle:FroTramite t, JHWEBFinancieroBundle:FroTrtePrecio tp
+            WHERE ft.factura = f.id
+            AND ft.tramitePrecio = tp.id
+            AND tp.tramite = t.id
+            AND t.id = :idTramite
+            AND f.id = :idFactura"; 
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idFactura' => $idFactura,
+            'idTramite' => $idTramite,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

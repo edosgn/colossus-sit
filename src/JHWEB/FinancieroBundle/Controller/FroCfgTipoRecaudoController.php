@@ -24,6 +24,7 @@ class FroCfgTipoRecaudoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        
         $tiposRecaudo = $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->findBy(
             array('activo' => true)
         );
@@ -38,6 +39,7 @@ class FroCfgTipoRecaudoController extends Controller
                 'data' => $tiposRecaudo,
             );
         }
+
         return $helpers->json($response);
     }
 

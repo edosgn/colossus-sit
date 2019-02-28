@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frotrtesolicituds list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Observacion</th>
+                <th>Documentacion</th>
+                <th>Datos</th>
+                <th>Resumen</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froTrteSolicitud in froTrteSolicituds %}
+            <tr>
+                <td><a href="{{ path('frotrtesolicitud_show', { 'id': froTrteSolicitud.id }) }}">{{ froTrteSolicitud.id }}</a></td>
+                <td>{% if froTrteSolicitud.fecha %}{{ froTrteSolicitud.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if froTrteSolicitud.hora %}{{ froTrteSolicitud.hora|date('H:i:s') }}{% endif %}</td>
+                <td>{{ froTrteSolicitud.observacion }}</td>
+                <td>{% if froTrteSolicitud.documentacion %}Yes{% else %}No{% endif %}</td>
+                <td>{% if froTrteSolicitud.datos %}{{ froTrteSolicitud.datos|join(', ') }}{% endif %}</td>
+                <td>{{ froTrteSolicitud.resumen }}</td>
+                <td>{% if froTrteSolicitud.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('frotrtesolicitud_show', { 'id': froTrteSolicitud.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('frotrtesolicitud_edit', { 'id': froTrteSolicitud.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('frotrtesolicitud_new') }}">Create a new froTrteSolicitud</a>
+        </li>
+    </ul>
+{% endblock %}
