@@ -93,7 +93,7 @@ class FroTrteSolicitudController extends Controller
                 $ciudadano = $em->getRepository('JHWEBUserBundle:UserCiudadano')->find(
                     $params->idCiudadano
                 );
-                $tramiteSolicitud->setCiudadano($ciudadano);
+                $tramiteSolicitud->setApoderado($ciudadano);
             }
 
             if ($datos->idFactura && $datos->idTramite) {
