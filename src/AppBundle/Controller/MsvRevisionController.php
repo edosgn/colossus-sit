@@ -131,14 +131,29 @@ class MsvRevisionController extends Controller
      * @Route("/{id}/show", name="msvrevision_show")
      * @Method("GET")
      */
-    public function showAction(MsvRevision $msvRevision)
+    public function showAction(MsvRevision $msvRevision, $id)
     {
-        $deleteForm = $this->createDeleteForm($msvRevision);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('msvrevision/show.html.twig', array(
-            'msvRevision' => $msvRevision,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $revision = $em->getRepository('AppBundle:MsvRevision')->find($id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "revision con nombre"." ".$revision->getNombre(), 
+                    'data'=> $revision,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**

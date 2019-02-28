@@ -229,6 +229,7 @@ class VhloCfgClaseController extends Controller
     $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findBy(
         array('activo' => 1)
     );
+    $response= null;
       foreach ($clases as $key => $clase) {
         $response[$key] = array(
             'value' => $clase->getId(),

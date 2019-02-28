@@ -57,7 +57,13 @@ class MsvParametroController extends Controller
 
         if ($authCheck == true) {
     
-            $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findByCategoria($categoriaId);
+            $msvParametros = $em->getRepository('AppBundle:MsvParametro')->findBy(
+                array(
+                    'categoria' => $categoriaId,
+                    'estado' => 1,
+                )
+            );
+
             $msvParametrosArray = null;
             foreach ($msvParametros as $keyParametro => $msvParametro) {
                 $msvParametrosArray[$keyParametro] = array(
@@ -67,9 +73,17 @@ class MsvParametroController extends Controller
                     'variables' => null,
                     'numeroVariables'=> null
                 );
-                $variables = $em->getRepository('AppBundle:MsvVariable')->findByParametro($msvParametro->getId());
+
+                $variables = $em->getRepository('AppBundle:MsvVariable')->findBy(
+                    array(
+                        'parametro' => $msvParametro->getId(),
+                        'estado' => 1,
+                    )
+                );
+
                 $numeroVariables = count($variables);
-                $msvParametrosArray[$keyParametro]['numeroVariables']= $numeroVariables;
+                $msvParametrosArray[$keyParametro]['numeroVariables'] = $numeroVariables;
+
                 if($variables){
                     foreach ($variables as $keyVariable => $variable) {
                         $msvParametrosArray[$keyParametro]['variables'][$keyVariable] = array(
@@ -77,13 +91,17 @@ class MsvParametroController extends Controller
                             'name' => $variable->getNombre(),
                             'criterios' => null,
                         );
-                        $criterios = $em->getRepository('AppBundle:MsvCriterio')->findByVariable(
-                            $variable->getId()
+
+                        $criterios = $em->getRepository('AppBundle:MsvCriterio')->findBy(
+                            array(
+                            'variable' => $variable->getId(),
+                            'estado' => 1,
+                            )
                         );
+
                         if($criterios){
                             foreach ($criterios as $keyCriterio => $criterio) {
-                                //var_dump($criterio->getId());
-                                $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'] = array(
+                                $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['criterios'][] = array(
                                     'id'=> $criterio->getId(),
                                     'name' => $criterio->getNombre(),
                                     'aplica'=>false,
@@ -91,12 +109,12 @@ class MsvParametroController extends Controller
                                     'responde'=>false,
                                     'observacion'=>null,
                                 );
-                            }
+                            }  
                         }
                     }                
                 }           
             }
-            //die();
+            
             if($msvParametrosArray) {
                 $response = array(
                     'status' => 'success',
