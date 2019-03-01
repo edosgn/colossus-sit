@@ -27,6 +27,11 @@ class SvCapacitacion
     protected $ciudadano;
 
     /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="capacitaciones")
+     **/
+    protected $empresa;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_hora_registro", type="datetime")
@@ -273,6 +278,7 @@ class SvCapacitacion
             return $this->fechaActividad->format('d/m/Y');
         }
         return $this->fechaActividad;
+
     }
 
     /**
@@ -444,13 +450,61 @@ class SvCapacitacion
     }
 
     /**
-     * Set municipio
+     * Set ciudadano
      *
-     * @param ConfigBundle\Entity\CfgMunicipio $municipio
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return SvCapacitacion
      */
-    public function setMunicipio(ConfigBundle\Entity\CfgMunicipio $municipio = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
+    {
+        $this->ciudadano = $ciudadano;
+
+        return $this;
+    }
+
+    /**
+     * Get ciudadano
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
+     */
+    public function getCiudadano()
+    {
+        return $this->ciudadano;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     *
+     * @return SvCapacitacion
+     */
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
+     *
+     * @return SvCapacitacion
+     */
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -460,7 +514,7 @@ class SvCapacitacion
     /**
      * Get municipio
      *
-     * @return ConfigBundle\Entity\CfgMunicipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {
@@ -561,29 +615,5 @@ class SvCapacitacion
     public function getClaseActorVial()
     {
         return $this->claseActorVial;
-    }
-
-    /**
-     * Set ciudadano
-     *
-     * @param UsuarioBundle\Entity\UserCiudadano $ciudadano
-     *
-     * @return SvCapacitacion
-     */
-    public function setCiudadano(UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
-    {
-        $this->ciudadano = $ciudadano;
-
-        return $this;
-    }
-
-    /**
-     * Get ciudadano
-     *
-     * @return UsuarioBundle\Entity\UserCiudadano
-     */
-    public function getCiudadano()
-    {
-        return $this->ciudadano;
     }
 }

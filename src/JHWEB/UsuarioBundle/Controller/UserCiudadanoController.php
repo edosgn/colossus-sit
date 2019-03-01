@@ -461,25 +461,45 @@ class UserCiudadanoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
-                array(
-                    'identificacion' => $params->identificacion,
-                    'tipoIdentificacion' => $params->idTipoIdentificacion,
-                )
-            );
-
-            if ($ciudadano) {
+            $ciudadano = null;
+            $empresa = null;
+            
+            if($params->idTipoIdentificacion == 1) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                    array(
+                        'identificacion' => $params->identificacion,
+                        'tipoIdentificacion' => $params->idTipoIdentificacion,
+                        'activo' => 1,
+                    )
+                );
+            } elseif ($params->idTipoIdentificacion == 4) {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                    array(
+                        'nit' => $params->nit,
+                        'activo' => 1,
+                    )
+                );
+            }
+            if ($ciudadano != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'data'=> $ciudadano,
+                    'ciudadano'=> $ciudadano,
+                );
+            }
+            else if ($empresa != null) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'empresa'=> $empresa,
                 );
             }else{
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Identificacion no encontrada en la base de datos", 
+                    'message' => "No se encontró ningun registro en la base de datos", 
                 );
             }
         }else{

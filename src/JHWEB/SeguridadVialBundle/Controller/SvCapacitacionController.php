@@ -93,10 +93,15 @@ class SvCapacitacionController extends Controller
                 $capacitacion->setClaseActorVial($claseActorVial);
             }
 
+            $identificacion = (isset($params->identificacion)) ? $params->identificacion : null;
+            $nit = (isset($params->nit)) ? $params->nit : null;
             if ($params->identificacion) {
-                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion'=> $params->identificacion));
-                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($usuario->getId());
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion'=> $params->identificacion));
                 $capacitacion->setCiudadano($ciudadano);
+            }
+            if ($params->nit) {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit'=> $params->nit));
+                $capacitacion->setEmpresa($empresa);
             }
             
             $capacitacion->setFechaHoraRegistro(new \Datetime($params->fechaHoraRegistro));
@@ -115,14 +120,13 @@ class SvCapacitacionController extends Controller
             $capacitacion->setApellidoActorVial($params->apellidoActorVial);
             $capacitacion->setNumeroCedulaActorVial($params->numeroCedulaActorVial);
             $capacitacion->setActivo(true);
-            //$capacitacion->setDocumento($params->documento);
 
             $file = $request->files->get('file');
 
             if ($file) {
                 $extension = $file->guessExtension();
                 $filename = md5(rand() . time()) . "." . $extension;
-                $dir = __DIR__ . '/../../../../web/docs';
+                $dir = __DIR__ . '/../../../../web/docs/sv_capacitaciones';
 
                 $file->move($dir, $filename);
                 $capacitacion->setDocumento($filename);
@@ -238,16 +242,27 @@ class SvCapacitacionController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
+            
+            if($params->idTipoIdentificacion == 1) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacion));
+                $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+                array(
+                    'activo' => true,
+                    'ciudadano' => $ciudadano
+                    )
+                );
+            }
+            
+            if($params->idTipoIdentificacion == 4) {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(array('nit' => $params->nit));
+                $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+                array(
+                    'activo' => true,
+                    'empresa' => $empresa
+                    )
+                );
+            }
 
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params->identificacion));
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($usuario->getId());
-
-            $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
-            array(
-                'activo' => true,
-                'ciudadano' => $ciudadano
-                )
-            );
             $response['data'] = array();
 
             if ($capacitaciones) {
@@ -262,7 +277,7 @@ class SvCapacitacionController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se ha encontrado ningun registro de capacitación para este ciudadano",
+                    'message' => "No se ha encontrado ningun registro de capacitación.",
                     'data' => $capacitaciones,
                 );
             }
