@@ -341,12 +341,18 @@ class FroTrtePrecioController extends Controller
                     'message' => count($tramitesPrecio) . ' registros encontrados.',
                     'data' => $tramitesPrecio,
                 );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Ningún registro encontrado.', 
+                );
             }
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => 'Autorizacion no valida', 
             );
         }
         
