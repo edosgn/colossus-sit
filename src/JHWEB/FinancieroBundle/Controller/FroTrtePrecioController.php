@@ -3,6 +3,7 @@
 namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroTrtePrecio;
+use JHWEB\FinancieroBundle\Entity\FroTrteConcepto;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -25,7 +26,9 @@ class FroTrtePrecioController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $tramitesPrecios = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
             array('activo' => true)
         );
@@ -40,6 +43,7 @@ class FroTrtePrecioController extends Controller
                 'data' => $tramitesPrecios,
             );
         }
+
         return $helpers->json($response);
     }
 
@@ -54,18 +58,19 @@ class FroTrtePrecioController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
-            
+
             $tramitePrecio = new FroTrtePrecio();
 
-            $tramitePrecio->setValor($params->valor);
             $tramitePrecio->setFechaInicio(new \Datetime($params->fechaInicio));
-            $tramitePrecio->setValorConcepto(0);
+            $tramitePrecio->setValor($params->valor);
             $tramitePrecio->setValorTotal(0);
+            $tramitePrecio->setActivo(true);
 
             if ($params->idTramite) {
                 $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find(
@@ -74,11 +79,13 @@ class FroTrtePrecioController extends Controller
                 $tramitePrecio->setTramite($tramite);
             }
 
-            if ($params->idClase) {
-                $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find(
-                    $params->idClase
+            $tramitePrecio->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+
+            if ($params->idTipoVehiculo) {
+                $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
+                    $params->idTipoVehiculo
                 );
-                $tramitePrecio->setClase($clase);
+                $tramitePrecio->setTipoVehiculo($tipoVehiculo);
             }
 
             if ($params->idModulo) {
@@ -88,23 +95,49 @@ class FroTrtePrecioController extends Controller
                 $tramitePrecio->setModulo($modulo);
             }
 
-            $tramitePrecio->setNombre(mb_strtoupper($tramite->getNombre().' '.$modulo->getAbreviatura()), 'utf-8');
-
             $tramitePrecio->setActivo(true);
 
             $em->persist($tramitePrecio);
             $em->flush();
 
+            if ($params->conceptos) {
+                $totalConceptos = 0;
+                foreach ($params->conceptos as $key => $idConcepto) {
+                    $tramiteConcepto = new FroTrteConcepto();
+
+                    $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find(
+                        $idConcepto
+                    );
+                    $tramiteConcepto->setConcepto($concepto);
+
+                    $tramiteConcepto->setPrecio($tramitePrecio);
+
+                    $tramiteConcepto->setActivo(true);
+
+                    $em->persist($tramiteConcepto);
+                    $em->flush();
+
+                    $totalConceptos += $concepto->getValor();
+                }
+            }
+
+            $tramitePrecio->setValorConcepto($totalConceptos);
+            $tramitePrecio->setValorTotal(
+                $totalConceptos + $tramitePrecio->getValor()
+            );
+
+            $em->flush();
+            
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "tramite precio creado con éxito",
+                'message' => 'Registro creado con éxito',
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no válida", 
+                'message' => 'Autorización no válida', 
             );
         } 
         return $helpers->json($response);
@@ -244,26 +277,85 @@ class FroTrtePrecioController extends Controller
         ;
     }
 
+    /* ======================================================= */
+
     /**
-     * datos para select 2
+     * Listado de tramites y valores para selección con búsqueda
      *
      * @Route("/select", name="frotrteprecio_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
-        $response = null;
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
         $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->findBy(
-            array('estado' => true)
+            array('activo' => true)
         );
+
+        $response = null;
+
         foreach ($tramitesPrecios as $key => $tramitePrecio) {
             $response[$key] = array(
                 'value' => $tramitePrecio->getId(),
                 'label' => $tramitePrecio->getNombre(),
             );
         }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca todos los tramites y valores por modulo
+     *
+     * @Route("/search/modulo", name="frotrteprecio_seacrh_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
+                array(
+                    'modulo' => $params->idModulo,
+                    'activo' => true
+                )
+            );
+
+            $response['data'] = array();
+
+            if ($tramitesPrecio) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($tramitesPrecio) . ' registros encontrados.',
+                    'data' => $tramitesPrecio,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Ningún registro encontrado.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida', 
+            );
+        }
+        
         return $helpers->json($response);
     }
 }

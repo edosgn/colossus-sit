@@ -49,7 +49,8 @@ class TramiteSolicitudController extends Controller
      * @Method({"GET", "POST"})
      */ 
     public function showAction(Request $request, $tramiteSolicitudId)
-    {$em = $this->getDoctrine()->getManager();
+    {   
+        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);

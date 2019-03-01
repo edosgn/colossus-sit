@@ -24,14 +24,17 @@ class FroTrteCfgCuentaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $cuentas = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgCuenta')->findBy(
-            array('activo' => 1)
+            array('activo' => true)
         );
+
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'message' => "listado cuentas",
+            'message' => count($cuentas) . " registros encontrados",
             'data' => $cuentas,
         );
 
@@ -49,18 +52,22 @@ class FroTrteCfgCuentaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
 
             $cuenta = new FroTrteCfgCuenta();
-            $cuenta->setNombre($params->nombre);
+
+            $cuenta->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $cuenta->setNumero($params->numero);
             $cuenta->setActivo(true);
+
             $em->persist($cuenta);
             $em->flush();
+            
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -189,8 +196,10 @@ class FroTrteCfgCuentaController extends Controller
         return $helpers->json($response);
     }
 
+    /* =============================================== */
+
     /**
-     * datos para select 2
+     * Listado de cuentas para selección con búsqueda
      *
      * @Route("/select", name="frotrtecfgcuenta_select")
      * @Method({"GET", "POST"})
@@ -198,10 +207,13 @@ class FroTrteCfgCuentaController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $cuentas = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgCuenta')->findBy(
-            array('activo' => 1)
+            array('activo' => true)
         );
+
         $response = null;
 
         foreach ($cuentas as $key => $cuenta) {

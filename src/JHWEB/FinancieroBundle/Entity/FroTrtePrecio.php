@@ -45,7 +45,7 @@ class FroTrtePrecio
     /**
      * @var int
      *
-     * @ORM\Column(name="valor_concepto", type="integer")
+     * @ORM\Column(name="valor_concepto", type="integer", nullable=true)
      */
     private $valorConcepto;
 
@@ -66,13 +66,22 @@ class FroTrtePrecio
     /** @ORM\ManyToOne(targetEntity="FroTramite", inversedBy="precios") */
     private $tramite;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="precios") */
-    private $clase;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo", inversedBy="precios") */
+    private $tipoVehiculo;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="precios")
      **/
     protected $modulo;
+
+    /**
+    * @ORM\OneToMany(targetEntity="FroTrteConcepto", mappedBy="precio", cascade={"remove"})
+    */
+    private $conceptos;
+
+    public function __construct() {
+        $this->conceptos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -109,30 +118,6 @@ class FroTrtePrecio
     }
 
     /**
-     * Set valor
-     *
-     * @param integer $valor
-     *
-     * @return FroTrtePrecio
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return int
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
      * Set fechaInicio
      *
      * @param \DateTime $fechaInicio
@@ -156,6 +141,30 @@ class FroTrtePrecio
         if ($this->fechaInicio) {
             return $this->fechaInicio->format('d/m/Y');
         }
+    }
+
+    /**
+     * Set valor
+     *
+     * @param integer $valor
+     *
+     * @return FroTrtePrecio
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return int
+     */
+    public function getValor()
+    {
+        return $this->valor;
     }
 
     /**
@@ -255,27 +264,27 @@ class FroTrtePrecio
     }
 
     /**
-     * Set clase
+     * Set tipoVehiculo
      *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo $tipoVehiculo
      *
      * @return FroTrtePrecio
      */
-    public function setClase(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase = null)
+    public function setTipoVehiculo(\JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo $tipoVehiculo = null)
     {
-        $this->clase = $clase;
+        $this->tipoVehiculo = $tipoVehiculo;
 
         return $this;
     }
 
     /**
-     * Get clase
+     * Get tipoVehiculo
      *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo
      */
-    public function getClase()
+    public function getTipoVehiculo()
     {
-        return $this->clase;
+        return $this->tipoVehiculo;
     }
 
     /**
@@ -300,5 +309,39 @@ class FroTrtePrecio
     public function getModulo()
     {
         return $this->modulo;
+    }
+
+    /**
+     * Add concepto
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto
+     *
+     * @return FroTrtePrecio
+     */
+    public function addConcepto(\JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto)
+    {
+        $this->conceptos[] = $concepto;
+
+        return $this;
+    }
+
+    /**
+     * Remove concepto
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto
+     */
+    public function removeConcepto(\JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto)
+    {
+        $this->conceptos->removeElement($concepto);
+    }
+
+    /**
+     * Get conceptos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConceptos()
+    {
+        return $this->conceptos;
     }
 }
