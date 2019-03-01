@@ -45,7 +45,7 @@ class FroTrtePrecio
     /**
      * @var int
      *
-     * @ORM\Column(name="valor_concepto", type="integer")
+     * @ORM\Column(name="valor_concepto", type="integer", nullable=true)
      */
     private $valorConcepto;
 
@@ -73,6 +73,15 @@ class FroTrtePrecio
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="precios")
      **/
     protected $modulo;
+
+    /**
+    * @ORM\OneToMany(targetEntity="FroTrteConcepto", mappedBy="precio", cascade={"remove"})
+    */
+    private $conceptos;
+
+    public function __construct() {
+        $this->conceptos = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
@@ -129,6 +138,9 @@ class FroTrtePrecio
      */
     public function getValor()
     {
+        if ($this->valor) {
+            return number_format($this->valor, 0, ',', '.');
+        }
         return $this->valor;
     }
 
@@ -179,6 +191,9 @@ class FroTrtePrecio
      */
     public function getValorConcepto()
     {
+        if ($this->valorConcepto) {
+            return number_format($this->valorConcepto, 0, ',', '.');
+        }
         return $this->valorConcepto;
     }
 
@@ -203,6 +218,9 @@ class FroTrtePrecio
      */
     public function getValorTotal()
     {
+        if ($this->valorTotal) {
+            return number_format($this->valorTotal, 0, ',', '.');
+        }
         return $this->valorTotal;
     }
 
@@ -300,5 +318,39 @@ class FroTrtePrecio
     public function getModulo()
     {
         return $this->modulo;
+    }
+
+    /**
+     * Add concepto
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto
+     *
+     * @return FroTrtePrecio
+     */
+    public function addConcepto(\JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto)
+    {
+        $this->conceptos[] = $concepto;
+
+        return $this;
+    }
+
+    /**
+     * Remove concepto
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto
+     */
+    public function removeConcepto(\JHWEB\FinancieroBundle\Entity\FroTrteConcepto $concepto)
+    {
+        $this->conceptos->removeElement($concepto);
+    }
+
+    /**
+     * Get conceptos
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getConceptos()
+    {
+        return $this->conceptos;
     }
 }

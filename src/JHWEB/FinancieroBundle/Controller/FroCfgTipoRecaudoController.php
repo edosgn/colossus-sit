@@ -161,8 +161,10 @@ class FroCfgTipoRecaudoController extends Controller
         ;
     }
 
+    /* ============================================== */
+
     /**
-     * datos para select 2
+     * Listado de tipos de recaudo para select con búsqueda
      *
      * @Route("/select", name="frocfgtiporecaudo_select")
      * @Method({"GET", "POST"})
@@ -170,9 +172,11 @@ class FroCfgTipoRecaudoController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $tiposRecaudo = $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->findBy(
-            array('activo' => 1)
+            array('activo' => true)
         );
         
         $response = null;
@@ -183,6 +187,7 @@ class FroCfgTipoRecaudoController extends Controller
                 'label' => $tipoRecaudo->getNombre(),
             );
         }
+        
         return $helpers->json($response);
     }
 }

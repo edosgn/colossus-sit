@@ -17,7 +17,7 @@ class FroTrteConceptoController extends Controller
     /**
      * Lists all froTrteConcepto entities.
      *
-     * @Route("/", name="frotrteconcepto_index")
+     * @Route("/index", name="frotrteconcepto_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -28,20 +28,6 @@ class FroTrteConceptoController extends Controller
 
         return $this->render('frotrteconcepto/index.html.twig', array(
             'froTrteConceptos' => $froTrteConceptos,
-        ));
-    }
-
-    /**
-     * Finds and displays a froTrteConcepto entity.
-     *
-     * @Route("/{id}", name="frotrteconcepto_show")
-     * @Method("GET")
-     */
-    public function showAction(FroTrteConcepto $froTrteConcepto)
-    {
-
-        return $this->render('frotrteconcepto/show.html.twig', array(
-            'froTrteConcepto' => $froTrteConcepto,
         ));
     }
 }

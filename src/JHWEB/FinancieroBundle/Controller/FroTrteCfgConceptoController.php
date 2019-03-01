@@ -24,16 +24,19 @@ class FroTrteCfgConceptoController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->findBy(
-            array('activo' => 1)
+            array('activo' => true)
         );
+
         $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "listado conceptos",  
-                    'data'=> $conceptos,
-            );
+            'status' => 'success',
+            'code' => 200,
+            'message' => count($conceptos) . " registros encontrados",
+            'data'=> $conceptos,
+        );
          
         return $helpers->json($response);
     }
@@ -49,38 +52,45 @@ class FroTrteCfgConceptoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
-            $cuenta = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgCuenta')->find($params->idCuenta);
-
             $concepto = new FroTrteCfgConcepto();
-            $concepto->setNombre($params->nombre);
+
+            $concepto->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $concepto->setValor($params->valor);
-            $concepto->setCuenta($cuenta);
             $concepto->setActivo(true);
 
+            if ($params->idCuenta) {
+                $cuenta = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgCuenta')->find(
+                    $params->idCuenta
+                );
+                $concepto->setCuenta($cuenta);
+            }
+
             $em = $this->getDoctrine()->getManager();
+
             $em->persist($concepto);
             $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Concepto creado con exito",
+                'message' => 'Concepto creado con exito',
             );
-        } else {
+        }else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida",
+                'message' => 'Autorizacion no valida',
             );
         }
-        return $helpers->json($response);
 
+        return $helpers->json($response);
     }
 
     /**
@@ -214,5 +224,35 @@ class FroTrteCfgConceptoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ============================================== */
+
+    /**
+     * Listado de tipos de recaudo para select con búsqueda
+     *
+     * @Route("/select", name="frotrteconcepto_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->findBy(
+            array('activo' => true)
+        );
+        
+        $response = null;
+
+        foreach ($conceptos as $key => $concepto) {
+            $response[$key] = array(
+                'value' => $concepto->getId(),
+                'label' => $concepto->getNombre(),
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }
