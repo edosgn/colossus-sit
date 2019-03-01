@@ -81,11 +81,11 @@ class FroTrtePrecioController extends Controller
 
             $tramitePrecio->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
 
-            if ($params->idClase) {
-                $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find(
-                    $params->idClase
+            if ($params->idTipoVehiculo) {
+                $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
+                    $params->idTipoVehiculo
                 );
-                $tramitePrecio->setClase($clase);
+                $tramitePrecio->setTipoVehiculo($tipoVehiculo);
             }
 
             if ($params->idModulo) {
@@ -304,6 +304,52 @@ class FroTrtePrecioController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca todos los tramites y valores por modulo
+     *
+     * @Route("/search/modulo", name="frotrteprecio_seacrh_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
+                array(
+                    'modulo' => $params->idModulo,
+                    'activo' => true
+                )
+            );
+
+            $response['data'] = array();
+
+            if ($tramitesPrecio) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($tramitesPrecio) . ' registros encontrados.',
+                    'data' => $tramitesPrecio,
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
         return $helpers->json($response);
     }
 }

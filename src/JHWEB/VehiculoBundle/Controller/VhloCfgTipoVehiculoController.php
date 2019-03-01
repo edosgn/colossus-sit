@@ -170,7 +170,7 @@ class VhloCfgTipoVehiculoController extends Controller
     /**
      * Listado de tipos de formato para seleccion con busqueda
      *
-     * @Route("/select", name="cfgadminformatotipo_select")
+     * @Route("/select", name="vhlocfgtipovehiculo_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -191,6 +191,42 @@ class VhloCfgTipoVehiculoController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Listado de tipos de formato para seleccion con busqueda
+     *
+     * @Route("/select/modulo", name="vhlocfgtipovehiculo_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tipos = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findBy(
+            array(
+                'modulo' => $params->idModulo,
+                'activo' => true
+            )
+        );
+
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
+            $response[$key] = array(
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre(),
+            );
+        }
+        
         return $helpers->json($response);
     }
 }

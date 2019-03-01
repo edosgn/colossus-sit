@@ -66,8 +66,8 @@ class FroTrtePrecio
     /** @ORM\ManyToOne(targetEntity="FroTramite", inversedBy="precios") */
     private $tramite;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="precios") */
-    private $clase;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo", inversedBy="precios") */
+    private $tipoVehiculo;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="precios")
@@ -118,33 +118,6 @@ class FroTrtePrecio
     }
 
     /**
-     * Set valor
-     *
-     * @param integer $valor
-     *
-     * @return FroTrtePrecio
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return int
-     */
-    public function getValor()
-    {
-        if ($this->valor) {
-            return number_format($this->valor, 0, ',', '.');
-        }
-        return $this->valor;
-    }
-
-    /**
      * Set fechaInicio
      *
      * @param \DateTime $fechaInicio
@@ -171,6 +144,30 @@ class FroTrtePrecio
     }
 
     /**
+     * Set valor
+     *
+     * @param integer $valor
+     *
+     * @return FroTrtePrecio
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return int
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
      * Set valorConcepto
      *
      * @param integer $valorConcepto
@@ -191,9 +188,6 @@ class FroTrtePrecio
      */
     public function getValorConcepto()
     {
-        if ($this->valorConcepto) {
-            return number_format($this->valorConcepto, 0, ',', '.');
-        }
         return $this->valorConcepto;
     }
 
@@ -218,9 +212,6 @@ class FroTrtePrecio
      */
     public function getValorTotal()
     {
-        if ($this->valorTotal) {
-            return number_format($this->valorTotal, 0, ',', '.');
-        }
         return $this->valorTotal;
     }
 
@@ -273,27 +264,27 @@ class FroTrtePrecio
     }
 
     /**
-     * Set clase
+     * Set tipoVehiculo
      *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo $tipoVehiculo
      *
      * @return FroTrtePrecio
      */
-    public function setClase(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase = null)
+    public function setTipoVehiculo(\JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo $tipoVehiculo = null)
     {
-        $this->clase = $clase;
+        $this->tipoVehiculo = $tipoVehiculo;
 
         return $this;
     }
 
     /**
-     * Get clase
+     * Get tipoVehiculo
      *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo
      */
-    public function getClase()
+    public function getTipoVehiculo()
     {
-        return $this->clase;
+        return $this->tipoVehiculo;
     }
 
     /**
