@@ -77,7 +77,7 @@ class SvCapacitacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             if ($params->municipio) {
-                $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->municipio);
                 $capacitacion->setMunicipio($municipio);
             }
             if ($params->funcion) {
@@ -95,7 +95,7 @@ class SvCapacitacionController extends Controller
 
             if ($params->identificacion) {
                 $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion'=> $params->identificacion));
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($usuario->getId());
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($usuario->getId());
                 $capacitacion->setCiudadano($ciudadano);
             }
             
@@ -240,7 +240,7 @@ class SvCapacitacionController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params->identificacion));
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find($usuario->getId());
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($usuario->getId());
 
             $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
             array(
