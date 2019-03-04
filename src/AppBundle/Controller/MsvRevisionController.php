@@ -53,7 +53,7 @@ class MsvRevisionController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
-            $empresa = $em->getRepository('AppBundle:Empresa')->find($params->empresaId);
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresaId);
             
                 $revision = new MsvRevision();
                 $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));

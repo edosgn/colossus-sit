@@ -92,7 +92,7 @@ class MsvEvaluacion
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="evaluaciones")
      **/
     protected $empresa;
 

@@ -47,27 +47,29 @@ class MsvCalificacionController extends Controller
         $params = json_decode($json);
         $em = $this->getDoctrine()->getManager();
 
-        foreach ($params as $key => $parametro) {
-            foreach ($parametro->variables as $key => $variable) {
-                var_dump($variable->criterios->id);
-                $criterioA = $em->getRepository('AppBundle:MsvCriterio')->find($variable->criterios->id);
-                $empresa = $em->getRepository('AppBundle:Empresa')->find($id);
-
-                $msvCalificacion = new MsvCalificacion();
-                $msvCalificacion->setCriterio($criterioA);
-                $msvCalificacion->setEmpresa($empresa);
-                $msvCalificacion->setAplica($variable->criterios->aplica);
-                $msvCalificacion->setEvidencia($variable->criterios->evidencia);
-                $msvCalificacion->setResponde($variable->criterios->responde);
-                $msvCalificacion->setObservacion($variable->criterios->observacion);
-                if ($variable->criterios->responde == true) {
-                    $msvCalificacion->setValorObtenido($parametro->valor / $parametro->numeroVariables);
-                } else {
-                    $msvCalificacion->setValorObtenido(0);
+        foreach ($params as $keyParametro => $parametro) {
+            
+            foreach ($parametro->variables as $keyVariable => $variable) {
+                foreach ($variable->criterios as $keyCriterio => $criterio) {
+                    $criterioA = $em->getRepository('AppBundle:MsvCriterio')->find($criterio->id);
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($id);
+    
+                    $msvCalificacion = new MsvCalificacion();
+                    $msvCalificacion->setCriterio($criterioA);
+                    $msvCalificacion->setEmpresa($empresa);
+                    $msvCalificacion->setAplica($criterio->aplica);
+                    $msvCalificacion->setEvidencia($criterio->evidencia);
+                    $msvCalificacion->setResponde($criterio->responde);
+                    $msvCalificacion->setObservacion($criterio->observacion);
+                    if ($criterio->responde == true) {
+                        $msvCalificacion->setValorObtenido($parametro->valor / $parametro->numeroVariables);
+                    } else {
+                        $msvCalificacion->setValorObtenido(0);
+                    }
+                    $msvCalificacion->setEstado(true);
+                    $em->persist($msvCalificacion);
+                    $em->flush();
                 }
-                $msvCalificacion->setEstado(true);
-                $em->persist($msvCalificacion);
-                $em->flush();
             }
         }
         $response = array(
