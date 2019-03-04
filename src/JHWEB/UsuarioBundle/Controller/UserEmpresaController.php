@@ -60,17 +60,42 @@ class UserEmpresaController extends Controller
     /**
      * Finds and displays a userEmpresa entity.
      *
-     * @Route("/{id}", name="userempresa_show")
-     * @Method("GET")
+     * @Route("/show", name="userempresa_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(UserEmpresa $userEmpresa)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($userEmpresa);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('userempresa/show.html.twig', array(
-            'userEmpresa' => $userEmpresa,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                $params->id
+            );
+
+            $em->persist($empresa);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado con exito",
+                'data' => $empresa
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }    
+        return $helpers->json($response);
     }
 
     /**
@@ -101,8 +126,8 @@ class UserEmpresaController extends Controller
     /**
      * Deletes a userEmpresa entity.
      *
-     * @Route("/{id}", name="userempresa_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="userempresa_delete")
+     * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request, UserEmpresa $userEmpresa)
     {
@@ -175,6 +200,33 @@ class UserEmpresaController extends Controller
                 'message' => "Autorización no válida",
             );
         } 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Listado de grupos sanguineos para seleccion con busqueda
+     *
+     * @Route("/select", name="userempresa_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($empresas as $key => $empresa) {
+            $response[$key] = array(
+                'value' => $empresa->getId(),
+                'label' => $empresa->getNombre(),
+            );
+        }
+
         return $helpers->json($response);
     }
 }

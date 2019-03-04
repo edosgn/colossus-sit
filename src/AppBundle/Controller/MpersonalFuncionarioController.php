@@ -50,15 +50,11 @@ class MpersonalFuncionarioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                $params->identificacion
-            );
-            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
-                $usuario->getId()
-            );
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
+
             $funcionario->setCiudadano($ciudadano);
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+            $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                 $params->sedeOperativaId
             );
             $funcionario->setSedeOperativa($sedeOperativa);
@@ -73,15 +69,6 @@ class MpersonalFuncionarioController extends Controller
             );
             $funcionario->setCargo($cargo);
 
-            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                $params->identificacion
-            );
-
-            if ($usuario) {
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
-                    $usuario->getId()
-                );
-            }
             $funcionario->setCiudadano($ciudadano);
 
             if ($params->inhabilidad == 'true') {
@@ -325,7 +312,7 @@ class MpersonalFuncionarioController extends Controller
         foreach ($funcionarios as $key => $funcionario) {
             $response[$key] = array(
                 'value' => $funcionario->getId(),
-                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getUsuario()->getSegundoNombre(),
+                'label' => $funcionario->getCiudadano()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getPrimerApellido(),
             );
         }
         return $helpers->json($response);

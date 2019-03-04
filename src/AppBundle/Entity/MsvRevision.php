@@ -106,7 +106,7 @@ class MsvRevision
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="revisiones")
      **/
     protected $empresa;
 
@@ -149,7 +149,6 @@ class MsvRevision
         if ($this->fechaRecepcion) {
             return $this->fechaRecepcion->format('d/m/Y');
         }
-        return $this->fechaRecepcion;
     }
 
     /**
@@ -176,7 +175,6 @@ class MsvRevision
         if ($this->fechaRevision) {
             return $this->fechaRevision->format('d/m/Y');
         }
-        return $this->fechaRevision;
     }
 
     /**
@@ -203,7 +201,6 @@ class MsvRevision
         if ($this->fechaDevolucion) {
             return $this->fechaDevolucion->format('d/m/Y');
         }
-        return $this->fechaDevolucion;
     }
 
     /**
@@ -230,7 +227,106 @@ class MsvRevision
         if ($this->fechaOtorgamiento) {
             return $this->fechaOtorgamiento->format('d/m/Y');
         }
-        return $this->fechaOtorgamiento;
+    }
+
+    /**
+     * Set fechaVisitaControl1
+     *
+     * @param \DateTime $fechaVisitaControl1
+     *
+     * @return MsvRevision
+     */
+    public function setFechaVisitaControl1($fechaVisitaControl1)
+    {
+        $this->fechaVisitaControl1 = $fechaVisitaControl1;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVisitaControl1
+     *
+     * @return \DateTime
+     */
+    public function getFechaVisitaControl1()
+    {
+        if ($this->fechaVisitaControl1) {
+            return $this->fechaVisitaControl1->format('d/m/Y');
+        }
+    }
+
+    /**
+     * Set observacionVisita1
+     *
+     * @param string $observacionVisita1
+     *
+     * @return MsvRevision
+     */
+    public function setObservacionVisita1($observacionVisita1)
+    {
+        $this->observacionVisita1 = $observacionVisita1;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionVisita1
+     *
+     * @return string
+     */
+    public function getObservacionVisita1()
+    {
+        return $this->observacionVisita1;
+    }
+
+    /**
+     * Set fechaVisitaControl2
+     *
+     * @param \DateTime $fechaVisitaControl2
+     *
+     * @return MsvRevision
+     */
+    public function setFechaVisitaControl2($fechaVisitaControl2)
+    {
+        $this->fechaVisitaControl2 = $fechaVisitaControl2;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVisitaControl2
+     *
+     * @return \DateTime
+     */
+    public function getFechaVisitaControl2()
+    {
+        if ($this->fechaVisitaControl2) {
+            return $this->fechaVisitaControl2->format('d/m/Y');
+        }
+    }
+
+    /**
+     * Set observacionVisita2
+     *
+     * @param string $observacionVisita2
+     *
+     * @return MsvRevision
+     */
+    public function setObservacionVisita2($observacionVisita2)
+    {
+        $this->observacionVisita2 = $observacionVisita2;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionVisita2
+     *
+     * @return string
+     */
+    public function getObservacionVisita2()
+    {
+        return $this->observacionVisita2;
     }
 
     /**
@@ -332,11 +428,11 @@ class MsvRevision
     /**
      * Set empresa
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
      *
      * @return MsvRevision
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
     {
         $this->empresa = $empresa;
 
@@ -346,7 +442,7 @@ class MsvRevision
     /**
      * Get empresa
      *
-     * @return \AppBundle\Entity\Empresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
     public function getEmpresa()
     {
@@ -375,107 +471,5 @@ class MsvRevision
     public function getFuncionario()
     {
         return $this->funcionario;
-    }
-
-    /**
-     * Set fechaVisitaControl1
-     *
-     * @param \DateTime $fechaVisitaControl1
-     *
-     * @return MsvRevision
-     */
-    public function setFechaVisitaControl1($fechaVisitaControl1)
-    {
-        $this->fechaVisitaControl1 = $fechaVisitaControl1;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaVisitaControl1
-     *
-     * @return \DateTime
-     */
-    public function getFechaVisitaControl1()
-    {
-        if ($this->fechaVisitaControl1) {
-            return $this->fechaVisitaControl1->format('d/m/Y');
-        }
-        return $this->fechaVisitaControl1;
-    }
-
-    /**
-     * Set fechaVisitaControl2
-     *
-     * @param \DateTime $fechaVisitaControl2
-     *
-     * @return MsvRevision
-     */
-    public function setFechaVisitaControl2($fechaVisitaControl2)
-    {
-        $this->fechaVisitaControl2 = $fechaVisitaControl2;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaVisitaControl2
-     *
-     * @return \DateTime
-     */
-    public function getFechaVisitaControl2()
-    {
-        if ($this->fechaVisitaControl2) {
-            return $this->fechaVisitaControl2->format('d/m/Y');
-        }
-        return $this->fechaVisitaControl2;
-    }
-
-    /**
-     * Set observacionVisita1
-     *
-     * @param string $observacionVisita1
-     *
-     * @return MsvRevision
-     */
-    public function setObservacionVisita1($observacionVisita1)
-    {
-        $this->observacionVisita1 = $observacionVisita1;
-
-        return $this;
-    }
-
-    /**
-     * Get observacionVisita1
-     *
-     * @return string
-     */
-    public function getObservacionVisita1()
-    {
-        return $this->observacionVisita1;
-    }
-
-    /**
-     * Set observacionVisita2
-     *
-     * @param string $observacionVisita2
-     *
-     * @return MsvRevision
-     */
-    public function setObservacionVisita2($observacionVisita2)
-    {
-        $this->observacionVisita2 = $observacionVisita2;
-
-        return $this;
-    }
-
-    /**
-     * Get observacionVisita2
-     *
-     * @return string
-     */
-    public function getObservacionVisita2()
-    {
-        return $this->observacionVisita2;
     }
 }
