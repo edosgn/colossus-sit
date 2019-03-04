@@ -79,14 +79,16 @@ class FroTrtePrecioController extends Controller
                 $tramitePrecio->setTramite($tramite);
             }
 
-            $tramitePrecio->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
-
             if ($params->idTipoVehiculo) {
                 $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
                     $params->idTipoVehiculo
                 );
                 $tramitePrecio->setTipoVehiculo($tipoVehiculo);
             }
+
+            $tramitePrecio->setNombre(
+                mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
+            );
 
             if ($params->idModulo) {
                 $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
@@ -325,9 +327,13 @@ class FroTrtePrecioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
+                $params->idModulo
+            );
+
             $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
                 array(
-                    'modulo' => $params->idModulo,
+                    'modulo' => $modulo->getId(),
                     'activo' => true
                 )
             );
@@ -339,7 +345,10 @@ class FroTrtePrecioController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($tramitesPrecio) . ' registros encontrados.',
-                    'data' => $tramitesPrecio,
+                    'data' => array(
+                        'modulo' => $modulo,
+                        'tramitesPrecio' => $tramitesPrecio,
+                    )
                 );
             }else{
                 $response = array(
@@ -356,6 +365,202 @@ class FroTrtePrecioController extends Controller
             );
         }
         
+        return $helpers->json($response);
+    }
+
+    /**
+     * Valida que la fecha modificada sea mayor a la fecha actual
+     *
+     * @Route("/validate/date", name="frotrteprecio_validate_date")
+     * @Method({"GET", "POST"})
+     */
+    public function validateDate(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+                $params->id
+            );
+
+            $fechaAnterior = $helpers->convertDateTime(
+                $tramitePrecio->getFechaInicio()
+            );
+            $fechaNueva = $helpers->convertDateTime($params->date);
+            $fechaActual = new \Datetime(date('Y-m-d'));
+
+            if ($fechaAnterior != $fechaNueva) {
+                if ($fechaAnterior < $fechaNueva && $fechaActual < $fechaNueva) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Fecha nueva es superior a la fecha fecha anterior.',
+                        'data' => $fechaNueva->format('d/m/Y'),
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'Fecha nueva no puede ser inferior a la fecha fecha anterior y/o la fecha actual.',
+                        'data' => $fechaAnterior->format('d/m/Y'),
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Fecha no fue modificada.',
+                    'data' => $fechaNueva->format('d/m/Y'),
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Actualiza los tramites y valores según el arreglo recibido.
+     *
+     * @Route("/update", name="frotrteprecio_update")
+     * @Method({"GET", "POST"})
+     */
+    public function updateAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->tramitesPrecios) {
+                $actualizados = 0;
+
+                foreach ($params->tramitesPrecios as $tramitePrecioNew) {
+                    $tramitePrecioOld = $em->getRepository("JHWEBFinancieroBundle:FroTrtePrecio")->find(
+                        $tramitePrecioNew->id
+                    );
+
+                    if ($tramitePrecioOld->getFechaInicio() != $tramitePrecioNew->fechaInicio || $tramitePrecioOld->getValor() != $tramitePrecioNew->valor) {
+
+                        $tramitePrecioOld->setActivo(false);
+
+                        $tramitePrecio = new FroTrtePrecio();
+
+                        $tramitePrecio->setFechaInicio(
+                            $helpers->convertDateTime($tramitePrecioNew->fechaInicio)
+                        );
+                        $tramitePrecio->setValor($tramitePrecioNew->valor);
+                        $tramitePrecio->setValorTotal(0);
+                        $tramitePrecio->setActivo(true);
+
+                        if ($tramitePrecioNew->tramite) {
+                            $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find(
+                                $tramitePrecioNew->tramite->id
+                            );
+                            $tramitePrecio->setTramite($tramite);
+                        }
+
+
+                        if ($tramitePrecioNew->tipoVehiculo) {
+                            $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
+                                $tramitePrecioNew->tipoVehiculo->id
+                            );
+                            $tramitePrecio->setTipoVehiculo($tipoVehiculo);
+                        }
+
+                        $tramitePrecio->setNombre(
+                            mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
+                        );
+
+                        if ($tramitePrecioNew->modulo) {
+                            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
+                                $tramitePrecioNew->modulo->id
+                            );
+                            $tramitePrecio->setModulo($modulo);
+                        }
+
+                        $tramitePrecio->setActivo(true);
+
+                        $em->persist($tramitePrecio);
+                        $em->flush();
+
+                        if ($tramitePrecioNew->conceptos) {
+                            $totalConceptos = 0;
+                            foreach ($tramitePrecioNew->conceptos as $key => $conceptos) {
+                                $tramiteConcepto = new FroTrteConcepto();
+
+                                $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find(
+                                    $conceptos->concepto->id
+                                );
+                                $tramiteConcepto->setConcepto($concepto);
+
+                                $tramiteConcepto->setPrecio($tramitePrecio);
+
+                                $tramiteConcepto->setActivo(true);
+
+                                $em->persist($tramiteConcepto);
+                                $em->flush();
+
+                                $totalConceptos += $concepto->getValor();
+                            }
+                        }
+
+                        $tramitePrecio->setValorConcepto($totalConceptos);
+                        $tramitePrecio->setValorTotal(
+                            $totalConceptos + $tramitePrecio->getValor()
+                        );
+
+                        $em->flush();
+
+                        $actualizados += 1;
+                    }
+                }
+
+                if ($actualizados > 0) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => $actualizados.' Registros actualizados con éxito.',
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'warning',
+                        'code' => 401,
+                        'message' => 'Ningún registro actualizado.',
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Ningún valor de trámite disponible para actualizar.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida', 
+            );
+        }
+
         return $helpers->json($response);
     }
 }
