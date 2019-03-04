@@ -148,7 +148,7 @@ class CfgMunicipioController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $municipios = $em->getRepository('JHWEBConfigBundle:CfgPais')->findBy(
+        $municipios = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->findBy(
             array('activo' => true)
         );
 

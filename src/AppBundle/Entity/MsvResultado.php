@@ -21,8 +21,10 @@ class MsvResultado
      */
     private $id;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="empresas") */
-    private $empresa;
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="resultados")
+     **/
+    protected $empresa;
 
     /**
      * @var \DateTime
@@ -210,6 +212,13 @@ class MsvResultado
      * @ORM\Column(name="resultado_final", type="float", nullable = true)
      */
     private $resultadofinal;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="aval", type="boolean")
+     */
+    private $aval;
 
     /**
      * @var boolean
@@ -854,6 +863,30 @@ class MsvResultado
     }
 
     /**
+     * Set aval
+     *
+     * @param boolean $aval
+     *
+     * @return MsvResultado
+     */
+    public function setAval($aval)
+    {
+        $this->aval = $aval;
+
+        return $this;
+    }
+
+    /**
+     * Get aval
+     *
+     * @return boolean
+     */
+    public function getAval()
+    {
+        return $this->aval;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -880,11 +913,11 @@ class MsvResultado
     /**
      * Set empresa
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
      *
      * @return MsvResultado
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
     {
         $this->empresa = $empresa;
 
@@ -894,7 +927,7 @@ class MsvResultado
     /**
      * Get empresa
      *
-     * @return \AppBundle\Entity\Empresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
     public function getEmpresa()
     {

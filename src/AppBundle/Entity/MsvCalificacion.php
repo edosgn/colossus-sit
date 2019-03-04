@@ -69,7 +69,7 @@ class MsvCalificacion
     protected $criterio;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="capacitaciones")
      **/
     protected $empresa;
 
@@ -255,11 +255,11 @@ class MsvCalificacion
     /**
      * Set empresa
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
      *
      * @return MsvCalificacion
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
     {
         $this->empresa = $empresa;
 
@@ -269,7 +269,7 @@ class MsvCalificacion
     /**
      * Get empresa
      *
-     * @return \AppBundle\Entity\Empresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
     public function getEmpresa()
     {

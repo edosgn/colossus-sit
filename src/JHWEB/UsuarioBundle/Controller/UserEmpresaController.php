@@ -148,6 +148,7 @@ class UserEmpresaController extends Controller
         $authCheck = $helpers->authCheck($hash);
         $json = $request->get("json",null);
         $params = json_decode($json);
+        
         $em = $this->getDoctrine()->getManager();
         if ($authCheck == true) {
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->getByNitOrNombre($params); 
@@ -156,7 +157,7 @@ class UserEmpresaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Empresa encontrada",
+                    'message' => "Empresa encontrada",
                     'data' => $empresa,
                 );
             }          
@@ -164,14 +165,14 @@ class UserEmpresaController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Empresa no Encontrada", 
+                    'message' => "Empresa no Encontrada", 
                 );
             }
         } else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorización no válida",
+                'message' => "Autorización no válida",
             );
         } 
         return $helpers->json($response);

@@ -64,7 +64,7 @@ class MsvResultadoController extends Controller
 
             $msvResultado->setFecha(new \Datetime(date('Y-m-d h:i:s')));
 
-            $idEmpresa = $em->getRepository('AppBundle:Empresa')->find($params->idEmpresa);
+            $idEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
             $msvResultado->setEmpresa($idEmpresa);
 
             $msvResultado->setPilarFortalecimiento("FORTALECIMIENTO EN LA GESTIÓN INSTITUCIONAL");
@@ -107,16 +107,32 @@ class MsvResultadoController extends Controller
             
             $msvResultado->setResultadoFinal($resultadoFinal);
             
+            $minimoAval = 95*0.75;
+            if($resultadoFinal >= $minimoAval){
+                $msvResultado->setAval(true);
+            }else{
+                $msvResultado->setAval(false);
+            }
             $msvResultado->setActivo(true);
             $em->persist($msvResultado);
             $em->flush();
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Los datos han sido registrados exitosamente.", 
-                'message2' => "El resultado final es: " . $resultadoFinal,
-            );
+            if($resultadoFinal >= $minimoAval){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Los datos han sido registrados exitosamente.", 
+                    'message2' => "El resultado final es: " . $resultadoFinal . ", cumple con el aval.",
+                );
+            } else {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Los datos han sido registrados exitosamente.", 
+                        'message2' => "El resultado final es: " . $resultadoFinal . ", no cumple con el aval.",
+                    );
+
+            }
         } else {
             $response = array(
                 'status' => 'error',

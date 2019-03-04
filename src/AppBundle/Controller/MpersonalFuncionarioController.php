@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\MpersonalFuncionario;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Mpersonalfuncionario controller.
@@ -42,117 +42,110 @@ class MpersonalFuncionarioController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
-            /*if (count($params)==0) {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "los campos no pueden estar vacios", 
-                );
-            }else{*/
-                $funcionario = new MpersonalFuncionario();
+            $funcionario = new MpersonalFuncionario();
 
-                $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();
 
-                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                    $params->identificacion
-                );
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                $params->identificacion
+            );
+            $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
+                $usuario->getId()
+            );
+            $funcionario->setCiudadano($ciudadano);
+
+            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
+                $params->sedeOperativaId
+            );
+            $funcionario->setSedeOperativa($sedeOperativa);
+
+            $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
+                $params->tipoContratoId
+            );
+            $funcionario->setTipoContrato($tipoContrato);
+
+            $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
+                $params->cargoId
+            );
+            $funcionario->setCargo($cargo);
+
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
+                $params->identificacion
+            );
+
+            if ($usuario) {
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
                     $usuario->getId()
                 );
-                $funcionario->setCiudadano($ciudadano);
+            }
+            $funcionario->setCiudadano($ciudadano);
 
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->sedeOperativaId
-                );
-                $funcionario->setSedeOperativa($sedeOperativa);
+            if ($params->inhabilidad == 'true') {
+                $funcionario->setActivo(false);
+                $funcionario->setInhabilidad(true);
+            } else {
+                $funcionario->setActivo(true);
+                $funcionario->setInhabilidad(false);
+            }
 
-                $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
-                    $params->tipoContratoId
-                );
-                $funcionario->setTipoContrato($tipoContrato);
+            if ($params->actaPosesion) {
+                $funcionario->setActaPosesion($params->actaPosesion);
+            }
 
-                $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
-                    $params->cargoId
-                );
-                $funcionario->setCargo($cargo);
+            if ($params->resolucion) {
+                $funcionario->setResolucion($params->resolucion);
+            }
 
-                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
-                    $params->identificacion
-                );
+            if ($params->tipoNombramiento) {
+                $funcionario->setTipoNombramiento($params->tipoNombramiento);
+            }
 
-                if ($usuario) {
-                    $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
-                        $usuario->getId()
-                    );
-                }
-                $funcionario->setCiudadano($ciudadano); 
+            if ($params->fechaInicio) {
+                $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
+            }
 
-                if ($params->inhabilidad == 'true') {
-                    $funcionario->setActivo(false);
-                    $funcionario->setInhabilidad(true);
-                }else{
-                    $funcionario->setActivo(true);
-                    $funcionario->setInhabilidad(false);
-                }
+            if ($params->fechaFin) {
+                $funcionario->setFechaFin(new \Datetime($params->fechaFin));
+            }
 
-                if ($params->actaPosesion) {
-                    $funcionario->setActaPosesion($params->actaPosesion);
-                }
+            if ($params->numeroContrato) {
+                $funcionario->setNumeroContrato($params->numeroContrato);
+            }
+            if ($params->objetoContrato) {
+                $funcionario->setObjetoContrato($params->objetoContrato);
+            }
 
-                if ($params->resolucion) {
-                    $funcionario->setResolucion($params->resolucion);
-                }
+            if ($params->numeroPlaca) {
+                $funcionario->setNumeroPlaca($params->numeroPlaca);
+            }
 
-                if ($params->tipoNombramiento) {
-                    $funcionario->setTipoNombramiento($params->tipoNombramiento);
-                }
+            if ($params->novedad) {
+                $funcionario->setNovedad($params->novedad);
+            }
 
-                if ($params->fechaInicio) {
-                    $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
-                }
+            $funcionario->setModificatorio(false);
 
-                if ($params->fechaFin) {
-                    $funcionario->setFechaFin(new \Datetime($params->fechaFin));
-                }
+            $em->persist($funcionario);
+            $em->flush();
 
-                if ($params->numeroContrato) {
-                    $funcionario->setNumeroContrato($params->numeroContrato);
-                }
-                if ($params->objetoContrato) {
-                    $funcionario->setObjetoContrato($params->objetoContrato);
-                }
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+                'data' => $funcionario,
+            );
 
-                if ($params->numeroPlaca) {
-                    $funcionario->setNumeroPlaca($params->numeroPlaca);
-                }
-
-                if ($params->novedad) {
-                    $funcionario->setNovedad($params->novedad);
-                }
-
-                $funcionario->setModificatorio(false);
-
-                $em->persist($funcionario);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con exito", 
-                    'data' => $funcionario
-                );
-            //}
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
 
@@ -165,26 +158,26 @@ class MpersonalFuncionarioController extends Controller
     public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        
+
         $em = $this->getDoctrine()->getManager();
 
-        $json = $request->get("data",null);
+        $json = $request->get("data", null);
         $params = json_decode($json);
-        
+
         $mpersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->id);
 
         if ($mpersonalFuncionario) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro encontrado", 
-                'data' => $mpersonalFuncionario
+                'message' => "Registro encontrado",
+                'data' => $mpersonalFuncionario,
             );
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Registro no encontrado", 
+                'message' => "Registro no encontrado",
             );
         }
 
@@ -263,7 +256,7 @@ class MpersonalFuncionarioController extends Controller
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
-        
+
         $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
             array('activo' => true)
         );
@@ -273,10 +266,10 @@ class MpersonalFuncionarioController extends Controller
         foreach ($funcionarios as $key => $funcionario) {
             $response[$key] = array(
                 'value' => $funcionario->getId(),
-                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getUsuario()->getSegundoNombre(),
             );
         }
-        
+
         return $helpers->json($response);
     }
 
@@ -292,7 +285,7 @@ class MpersonalFuncionarioController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $response = null;
-        
+
         $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
             array(
                 'activo' => true,
@@ -303,7 +296,7 @@ class MpersonalFuncionarioController extends Controller
         foreach ($funcionarios as $key => $funcionario) {
             $response[$key] = array(
                 'value' => $funcionario->getId(),
-                'label' => $funcionario->getNumeroPlaca()."_".$funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+                'label' => $funcionario->getNumeroPlaca() . "_" . $funcionario->getCiudadano()->getUsuario()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getUsuario()->getSegundoNombre(),
             );
         }
         return $helpers->json($response);
@@ -321,7 +314,7 @@ class MpersonalFuncionarioController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $response = null;
-        
+
         $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->findBy(
             array(
                 'activo' => true,
@@ -332,7 +325,7 @@ class MpersonalFuncionarioController extends Controller
         foreach ($funcionarios as $key => $funcionario) {
             $response[$key] = array(
                 'value' => $funcionario->getId(),
-                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre()." ".$funcionario->getCiudadano()->getUsuario()->getSegundoNombre()
+                'label' => $funcionario->getCiudadano()->getUsuario()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getUsuario()->getSegundoNombre(),
             );
         }
         return $helpers->json($response);
@@ -353,31 +346,31 @@ class MpersonalFuncionarioController extends Controller
         $funcionarios['data'] = array();
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            
+
             $funcionarios = $em->getRepository('AppBundle:MpersonalFuncionario')->getSearch($params);
-                
+
             if ($funcionarios) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($funcionarios)." ¡Registros encontrados!", 
-                    'data'=> $funcionarios,
+                    'message' => count($funcionarios) . " ¡Registros encontrados!",
+                    'data' => $funcionarios,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "¡No existen funcionarios, por favor registrelo!",  
+                    'message' => "¡No existen funcionarios, por favor registrelo!",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -396,7 +389,7 @@ class MpersonalFuncionarioController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
@@ -407,36 +400,35 @@ class MpersonalFuncionarioController extends Controller
                 $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneByUsuario(
                     $usuario->getId()
                 );
-                    
+
                 if ($ciudadano) {
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Registro encontrado", 
-                        'data'=> $ciudadano,
+                        'message' => "Registro encontrado",
+                        'data' => $ciudadano,
                     );
-                }else{
+                } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!", 
+                        'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!",
                     );
                 }
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!", 
+                    'message' => "¡No existe el ciudadano registrado con ese número de identificación, por favor registrelo!",
                 );
             }
 
-            
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -456,19 +448,19 @@ class MpersonalFuncionarioController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
             );
-            
+
             if ($usuario) {
                 if ($usuario->getCiudadano()) {
                     $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(
                         array(
                             'ciudadano' => $usuario->getCiudadano()->getId(),
-                            'activo' => true
+                            'activo' => true,
                         )
                     );
 
@@ -476,35 +468,35 @@ class MpersonalFuncionarioController extends Controller
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'message' => "Registro encontrado", 
-                            'data'=> $funcionario,
+                            'message' => "Registro encontrado",
+                            'data' => $funcionario,
                         );
-                    }else{
+                    } else {
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => "El ciudadano no tiene registros de nombramientos vigentes", 
+                            'message' => "El ciudadano no tiene registros de nombramientos vigentes",
                         );
                     }
-                }else{
+                } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
+                        'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano",
                     );
                 }
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
+                    'message' => "No se encuentra ningún usuario registrado con la identificación: " . $params->identificación,
                 );
-            } 
-        }else{
+            }
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida",
             );
         }
 
@@ -519,64 +511,64 @@ class MpersonalFuncionarioController extends Controller
      */
     public function searchEmpresaAction(Request $request)
     {
-        
+
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-       if ($authCheck == true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneByIdentificacion(
                 $params->identificacion
             );
-            
+
             if ($usuario) {
                 if ($usuario->getCiudadano()) {
                     $representante = $em->getRepository('AppBundle:Empresa')->findOneBy(
                         array(
                             'ciudadano' => $usuario->getCiudadano()->getId(),
                             'estado' => true,
-                            'cfgEmpresaServicio' => 1
+                            'cfgEmpresaServicio' => 1,
                         )
                     );
                     if ($representante) {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'message' => "Registro encontrado", 
-                            'data'=> $representante,
+                            'message' => "Registro encontrado",
+                            'data' => $representante,
                         );
-                    }else{
+                    } else {
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => "El ciudadano no tiene concesionarios", 
+                            'message' => "El ciudadano no tiene concesionarios",
                         );
                     }
-                }else{
+                } else {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano", 
+                        'message' => "EL usuario fue encontrado pero no tiene datos asociados como ciudadano",
                     );
                 }
 
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se encuentra ningún usuario registrado con la identificación: ".$params->identificación, 
+                    'message' => "No se encuentra ningún usuario registrado con la identificación: " . $params->identificación,
                 );
-            }            
-        }else{
+            }
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
 
         return $helpers->json($response);
@@ -597,35 +589,35 @@ class MpersonalFuncionarioController extends Controller
         $horarios['data'] = array();
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
-           
+
             $horarios = $em->getRepository('AppBundle:MpersonalHorario')->findBy(
                 array(
-                    'funcionario' => $params->id
+                    'funcionario' => $params->id,
                 )
             );
-                
+
             if ($horarios) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registros encontrados", 
-                    'data'=> $horarios,
+                    'message' => "Registros encontrados",
+                    'data' => $horarios,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado",  
+                    'message' => "Registro no encontrado",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -645,36 +637,35 @@ class MpersonalFuncionarioController extends Controller
         $horarios['data'] = array();
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
-           
-           
+
             $pnalProrogas = $em->getRepository('JHWEBPersonalBundle:PnalProroga')->findBy(
                 array(
-                    'mPersonalFuncionario' => $params->id
+                    'mPersonalFuncionario' => $params->id,
                 )
-            ); 
-                
+            );
+
             if ($pnalProrogas) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registros encontrados", 
-                    'data'=> $pnalProrogas,
+                    'message' => "Registros encontrados",
+                    'data' => $pnalProrogas,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado",  
+                    'message' => "Registro no encontrado",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -694,36 +685,35 @@ class MpersonalFuncionarioController extends Controller
         $horarios['data'] = array();
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("json", null);
             $params = json_decode($json);
-           
-           
+
             $pnalSuspensions = $em->getRepository('JHWEBPersonalBundle:PnalSuspension')->findBy(
                 array(
-                    'mPersonalFuncionario' => $params->id
+                    'mPersonalFuncionario' => $params->id,
                 )
-            ); 
-                
+            );
+
             if ($pnalSuspensions) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registros encontrados", 
-                    'data'=> $pnalSuspensions,
+                    'message' => "Registros encontrados",
+                    'data' => $pnalSuspensions,
                 );
-            }else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Registro no encontrado",  
+                    'message' => "Registro no encontrado",
                 );
             }
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
