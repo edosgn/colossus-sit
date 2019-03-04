@@ -141,6 +141,7 @@ class FroTrtePrecio
         if ($this->fechaInicio) {
             return $this->fechaInicio->format('d/m/Y');
         }
+        return $this->fechaInicio;
     }
 
     /**
