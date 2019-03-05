@@ -228,22 +228,22 @@ class UserCiudadanoController extends Controller
     /**
      * Displays a form to edit an existing userCiudadano entity.
      *
-     * @Route("/{id}/edit", name="userciudadano_edit")
+     * @Route("/edit", name="userciudadano_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, UserCiudadano $userCiudadano)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->ciudadano->id);
 
             if ($ciudadano) {
                 $primerNombre = mb_strtoupper(
@@ -297,14 +297,6 @@ class UserCiudadanoController extends Controller
                         $params->ciudadano->direccionTrabajo
                     );
                 }
-
-                if($params->campo && $params->campo == 'importacion-temporal'){
-                    $ciudadano->setEnrolado(false);
-                }else {                       
-                    $ciudadano->setEnrolado(true);
-                }
-
-                $ciudadano->setActivo(true);
 
                 $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
                     $params->ciudadano->idTipoIdentificacion
@@ -375,7 +367,7 @@ class UserCiudadanoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
