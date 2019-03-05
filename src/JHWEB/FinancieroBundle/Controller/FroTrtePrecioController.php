@@ -84,11 +84,16 @@ class FroTrtePrecioController extends Controller
                     $params->idTipoVehiculo
                 );
                 $tramitePrecio->setTipoVehiculo($tipoVehiculo);
+
+                $tramitePrecio->setNombre(
+                    mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
+                );
+            }else{
+                $tramitePrecio->setNombre(
+                    mb_strtoupper($tramite->getNombre(), 'utf-8')
+                );
             }
 
-            $tramitePrecio->setNombre(
-                mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
-            );
 
             if ($params->idModulo) {
                 $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
@@ -483,11 +488,15 @@ class FroTrtePrecioController extends Controller
                                 $tramitePrecioNew->tipoVehiculo->id
                             );
                             $tramitePrecio->setTipoVehiculo($tipoVehiculo);
-                        }
 
-                        $tramitePrecio->setNombre(
-                            mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
-                        );
+                            $tramitePrecio->setNombre(
+                                mb_strtoupper($tramite->getNombre().' '.$tipoVehiculo->getNombre(), 'utf-8')
+                            );
+                        }else{
+                            $tramitePrecio->setNombre(
+                                mb_strtoupper($tramite->getNombre(), 'utf-8')
+                            );
+                        }                        
 
                         if ($tramitePrecioNew->modulo) {
                             $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
