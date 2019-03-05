@@ -24,74 +24,123 @@ class MsvEvaluacionController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $msvEvaluaciones = $em->getRepository('AppBundle:MsvEvaluacion')->findBy(array('estado' => 1));
-
-        $response = array(
-            'status' => 'succes',
-            'code' => 200,
-            'msj' => "listado evaluaciones",
-            'data' => $msvEvaluaciones,
+        $evaluaciones = $em->getRepository('AppBundle:MsvEvaluacion')->findBy(
+            array('activo' => true)
         );
-        return $helpers -> json($response);
+
+        $response['data'] = array();
+
+        if ($evaluaciones) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($evaluaciones) . " registros encontrados",
+                'data' => $evaluaciones,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
      * Creates a new msvEvaluacion entity.
      *
-     * @Route("/new", name="msvevaluacion")
+     * @Route("/new", name="msvevaluacion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
     {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization",null);
-        $authCheck = $helpers->authCheck($hash);
-        if($authCheck == true){
-            $json = $request->get("json",null);
-            $params = json_decode($json);
+    $helpers = $this->get("app.helpers");
+    $hash = $request->get("authorization", null);
+    $authCheck = $helpers->authCheck($hash);
 
-            $em = $this->getDoctrine()->getManager();
-            
-                $evaluacion = new MsvEvaluacion();
-                $evaluacion->setNumero($params->numero);
-                $evaluacion->setParametro($params->parametro);
-                $evaluacion->setItem($params->item);
-                $evaluacion->setVariable($params->variable);
-                $evaluacion->setCriterio($params->criterio);
-                if($params->aplica == 'true'){
-                    $evaluacion->setAplica(true);
-                }else{
-                    $evaluacion->setAplica(false);
-                }
-                if($params->evidencia == 'true'){
-                    $evaluacion->setEvidencia(true);
-                }else{
-                    $evaluacion->setEvidencia(true);
-                }
-                if($params->responde == 'true'){
-                    $evaluacion->setResponde(true);
-                }else{
-                    $evaluacion->setResponde(true);
-                }
-                $evaluacion->setObservacion($params->observacion);
-                $evaluacion->setEstado(true);
-                $em->persist($evaluacion);
-                $em->flush();
-                $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'msj' => "Evaluación creada con éxito",
-                );
-            
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorización no valida",
-            );
+    if ($authCheck == true) {
+        $json = $request->get("json", null);
+        $params = json_decode($json);
+
+        $msvEvaluacion = new MsvEvaluacion();
+        $em = $this->getDoctrine()->getManager();
+
+        $msvEvaluacion->setFecha(new \Datetime(date('Y-m-d h:i:s')));
+
+        $idEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
+        $msvEvaluacion->setEmpresa($idEmpresa);
+
+        $msvEvaluacion->setPilarFortalecimiento("FORTALECIMIENTO EN LA GESTIÓN INSTITUCIONAL");
+        $msvEvaluacion->setValorObtenidoFortalecimiento($params->valorObtenidoFortalecimiento);
+        $msvEvaluacion->setValorPonderadoFortalecimiento(0.3);
+        $valorResultadoFortalecimiento = $params->valorObtenidoFortalecimiento * 0.3;
+        $msvEvaluacion->setResultadoFortalecimiento($valorResultadoFortalecimiento);
+
+        $msvEvaluacion->setPilarComportamiento("COMPORTAMIENTO HUMANO");
+        $msvEvaluacion->setValorObtenidoComportamiento($params->valorObtenidoComportamiento);
+        $msvEvaluacion->setValorPonderadoComportamiento(0.3);
+        $valorResultadoComportamiento = $params->valorObtenidoComportamiento * 0.3;
+        $msvEvaluacion->setResultadoComportamiento($valorResultadoComportamiento);
+
+        $msvEvaluacion->setPilarVehiculoSeguro("VEHÍCULOS SEGUROS");
+        $msvEvaluacion->setValorObtenidoVehiculoSeguro($params->valorObtenidoVehiculoSeguro);
+        $msvEvaluacion->setValorPonderadoVehiculoSeguro(0.2);
+        $valorResultadoVehiculoSeguro = $params->valorObtenidoVehiculoSeguro * 0.2;
+        $msvEvaluacion->setResultadoVehiculoSeguro($valorResultadoVehiculoSeguro);
+
+        $msvEvaluacion->setPilarInfraestructuraSegura("INFRAESTRUCTURA SEGURA ");
+        $msvEvaluacion->setValorObtenidoInfraestructuraSegura($params->valorObtenidoInfraestructuraSegura);
+        $msvEvaluacion->setValorPonderadoInfraestructuraSegura(0.1);
+        $valorResultadoInfraestructuraSegura = $params->valorObtenidoInfraestructuraSegura * 0.1;
+        $msvEvaluacion->setResultadoInfraestructuraSegura($valorResultadoInfraestructuraSegura);
+
+        $msvEvaluacion->setPilarAtencionVictima("ATENCIÓN A VÍCTIMAS");
+        $msvEvaluacion->setValorObtenidoAtencionVictima($params->valorObtenidoAtencionVictima);
+        $msvEvaluacion->setValorPonderadoAtencionVictima(0.1);
+        $valorResultadoAtencionVictima = $params->valorObtenidoAtencionVictima * 0.1;
+        $msvEvaluacion->setResultadoAtencionVictima($valorResultadoAtencionVictima);
+
+        $msvEvaluacion->setPilarValorAgregado("VALORES AGREGADOS O INNOVACIONES");
+        $msvEvaluacion->setValorObtenidoValorAgregado($params->valorObtenidoValorAgregado);
+        $msvEvaluacion->setValorPonderadoValorAgregado(0.05);
+        $valorResultadoValorAgregado = $params->valorObtenidoValorAgregado * 0.05;
+        $msvEvaluacion->setResultadoValorAgregado($valorResultadoValorAgregado);
+
+        $resultadoFinal = $valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado;
+
+        $msvEvaluacion->setResultadoFinal($resultadoFinal);
+
+        $minimoAval = 95 * 0.75;
+        if ($resultadoFinal >= $minimoAval) {
+            $msvEvaluacion->setAval(true);
+        } else {
+            $msvEvaluacion->setAval(false);
         }
-        return $helpers->json($response);
+        $msvEvaluacion->setActivo(true);
+        $em->persist($msvEvaluacion);
+        $em->flush();
+
+        if ($resultadoFinal >= $minimoAval) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+                'message2' => "El resultado final es: " . $resultadoFinal . ", cumple con el aval.",
+            );
+        } else {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+                'message2' => "El resultado final es: " . $resultadoFinal . ", no cumple con el aval.",
+            );
+
+        }
+    } else {
+        $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'message' => "Autorización no válida",
+        );
     }
+    return $helpers->json($response);
+}
+
 
     /**
      * Finds and displays a msvEvaluacion entity.
@@ -246,5 +295,43 @@ class MsvEvaluacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /**
+     * @Route("/find/aval/evaluacion", name="msvresultado_aval_evaluacion")
+     * @Method({"GET","POST"})
+     */
+    public function findAvalByEvaluacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            
+            $resultadoAval = $em->getRepository('AppBundle:MsvResultado')->findByEvaluacion($params);
+
+            $response['data'] = array();
+
+            if ($resultados) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' =>"Registro encontrado",
+                    'data' => $resultadoAval,
+                );
+            }
+            return $helpers->json($response);
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 }

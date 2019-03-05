@@ -116,6 +116,11 @@ class MsvRevision
     protected $funcionario;
 
     /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\MsvEvaluacion")
+     */
+    private $evaluacion;
+
+    /**
      * Get id
      *
      * @return integer
@@ -147,8 +152,9 @@ class MsvRevision
     public function getFechaRecepcion()
     {
         if ($this->fechaRecepcion) {
-            return $this->fechaRecepcion->format('d/m/Y');
+            return $this->fechaRecepcion->format('Y-m-d');
         }
+        return $this->fechaRecepcion;
     }
 
     /**
@@ -173,7 +179,7 @@ class MsvRevision
     public function getFechaRevision()
     {
         if ($this->fechaRevision) {
-            return $this->fechaRevision->format('d/m/Y');
+            return $this->fechaRevision->format('Y-m-d');
         }
     }
 
@@ -199,7 +205,7 @@ class MsvRevision
     public function getFechaDevolucion()
     {
         if ($this->fechaDevolucion) {
-            return $this->fechaDevolucion->format('d/m/Y');
+            return $this->fechaDevolucion->format('Y-m-d');
         }
     }
 
@@ -225,7 +231,7 @@ class MsvRevision
     public function getFechaOtorgamiento()
     {
         if ($this->fechaOtorgamiento) {
-            return $this->fechaOtorgamiento->format('d/m/Y');
+            return $this->fechaOtorgamiento->format('Y-m-d');
         }
     }
 
@@ -251,7 +257,7 @@ class MsvRevision
     public function getFechaVisitaControl1()
     {
         if ($this->fechaVisitaControl1) {
-            return $this->fechaVisitaControl1->format('d/m/Y');
+            return $this->fechaVisitaControl1->format('Y-m-d');
         }
     }
 
@@ -301,7 +307,7 @@ class MsvRevision
     public function getFechaVisitaControl2()
     {
         if ($this->fechaVisitaControl2) {
-            return $this->fechaVisitaControl2->format('d/m/Y');
+            return $this->fechaVisitaControl2->format('Y-m-d');
         }
     }
 
@@ -471,5 +477,29 @@ class MsvRevision
     public function getFuncionario()
     {
         return $this->funcionario;
+    }
+
+    /**
+     * Set evaluacion
+     *
+     * @param \AppBundle\Entity\MsvEvaluacion $evaluacion
+     *
+     * @return MsvRevision
+     */
+    public function setEvaluacion(\AppBundle\Entity\MsvEvaluacion $evaluacion = null)
+    {
+        $this->evaluacion = $evaluacion;
+
+        return $this;
+    }
+
+    /**
+     * Get evaluacion
+     *
+     * @return \AppBundle\Entity\MsvEvaluacion
+     */
+    public function getEvaluacion()
+    {
+        return $this->evaluacion;
     }
 }

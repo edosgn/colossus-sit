@@ -156,4 +156,42 @@ class MsvResultadoController extends Controller
             'msvResultado' => $msvResultado,
         ));
     }
+
+    /**
+     * @Route("/find/aval/evaluacion", name="msvresultado_aval_evaluacion")
+     * @Method({"GET","POST"})
+     */
+    public function findAvalByEvaluacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            
+            $resultadoAval = $em->getRepository('AppBundle:MsvResultado')->findByEvaluacion($params);
+
+            $response['data'] = array();
+
+            if ($resultados) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' =>"Registro encontrado",
+                    'data' => $resultadoAval,
+                );
+            }
+            return $helpers->json($response);
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }

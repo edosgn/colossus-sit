@@ -147,25 +147,25 @@ class Vehiculo
      */
     private $cancelado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="vehiculos") */
     private $municipio; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgLinea", inversedBy="vehiculos") */
     private $linea;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Servicio", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgServicio", inversedBy="vehiculos") */
     private $servicio; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Color", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgColor", inversedBy="vehiculos") */
     private $color;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Combustible", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgCombustible", inversedBy="vehiculos") */
     private $combustible; 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria", inversedBy="vehiculos") */
     private $carroceria;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="vehiculos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="vehiculos") */
     private $clase;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgPlaca", inversedBy="vehiculos") */
@@ -201,10 +201,10 @@ class Vehiculo
      */
     private $empresaBlindadora;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad", inversedBy="nacionalidades") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad", inversedBy="vehiculos") */
     private $nacionalidad;   
     
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Pais", inversedBy="paises") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgPais", inversedBy="vehiculos") */
     private $paisRegistro;   
 
 
@@ -728,11 +728,11 @@ class Vehiculo
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return Vehiculo
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -742,7 +742,7 @@ class Vehiculo
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {
@@ -752,11 +752,11 @@ class Vehiculo
     /**
      * Set linea
      *
-     * @param \AppBundle\Entity\Linea $linea
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgLinea $linea
      *
      * @return Vehiculo
      */
-    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    public function setLinea(\JHWEB\VehiculoBundle\Entity\VhloCfgLinea $linea = null)
     {
         $this->linea = $linea;
 
@@ -766,7 +766,7 @@ class Vehiculo
     /**
      * Get linea
      *
-     * @return \AppBundle\Entity\Linea
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgLinea
      */
     public function getLinea()
     {
@@ -776,11 +776,11 @@ class Vehiculo
     /**
      * Set servicio
      *
-     * @param \AppBundle\Entity\Servicio $servicio
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio
      *
      * @return Vehiculo
      */
-    public function setServicio(\AppBundle\Entity\Servicio $servicio = null)
+    public function setServicio(\JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio = null)
     {
         $this->servicio = $servicio;
 
@@ -790,7 +790,7 @@ class Vehiculo
     /**
      * Get servicio
      *
-     * @return \AppBundle\Entity\Servicio
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgServicio
      */
     public function getServicio()
     {
@@ -800,11 +800,11 @@ class Vehiculo
     /**
      * Set color
      *
-     * @param \AppBundle\Entity\Color $color
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgColor $color
      *
      * @return Vehiculo
      */
-    public function setColor(\AppBundle\Entity\Color $color = null)
+    public function setColor(\JHWEB\VehiculoBundle\Entity\VhloCfgColor $color = null)
     {
         $this->color = $color;
 
@@ -814,7 +814,7 @@ class Vehiculo
     /**
      * Get color
      *
-     * @return \AppBundle\Entity\Color
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgColor
      */
     public function getColor()
     {
@@ -824,11 +824,11 @@ class Vehiculo
     /**
      * Set combustible
      *
-     * @param \AppBundle\Entity\Combustible $combustible
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgCombustible $combustible
      *
      * @return Vehiculo
      */
-    public function setCombustible(\AppBundle\Entity\Combustible $combustible = null)
+    public function setCombustible(\JHWEB\VehiculoBundle\Entity\VhloCfgCombustible $combustible = null)
     {
         $this->combustible = $combustible;
 
@@ -838,7 +838,7 @@ class Vehiculo
     /**
      * Get combustible
      *
-     * @return \AppBundle\Entity\Combustible
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgCombustible
      */
     public function getCombustible()
     {
@@ -848,11 +848,11 @@ class Vehiculo
     /**
      * Set carroceria
      *
-     * @param \AppBundle\Entity\Carroceria $carroceria
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria $carroceria
      *
      * @return Vehiculo
      */
-    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
+    public function setCarroceria(\JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria $carroceria = null)
     {
         $this->carroceria = $carroceria;
 
@@ -862,7 +862,7 @@ class Vehiculo
     /**
      * Get carroceria
      *
-     * @return \AppBundle\Entity\Carroceria
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria
      */
     public function getCarroceria()
     {
@@ -872,11 +872,11 @@ class Vehiculo
     /**
      * Set clase
      *
-     * @param \AppBundle\Entity\Clase $clase
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase
      *
      * @return Vehiculo
      */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    public function setClase(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase = null)
     {
         $this->clase = $clase;
 
@@ -886,7 +886,7 @@ class Vehiculo
     /**
      * Get clase
      *
-     * @return \AppBundle\Entity\Clase
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
      */
     public function getClase()
     {
@@ -896,11 +896,11 @@ class Vehiculo
     /**
      * Set placa
      *
-     * @param \AppBundle\Entity\CfgPlaca $placa
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgPlaca $placa
      *
      * @return Vehiculo
      */
-    public function setPlaca(\AppBundle\Entity\CfgPlaca $placa = null)
+    public function setPlaca(\JHWEB\VehiculoBundle\Entity\VhloCfgPlaca $placa = null)
     {
         $this->placa = $placa;
 
@@ -910,7 +910,7 @@ class Vehiculo
     /**
      * Get placa
      *
-     * @return \AppBundle\Entity\CfgPlaca
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgPlaca
      */
     public function getPlaca()
     {
@@ -920,11 +920,11 @@ class Vehiculo
     /**
      * Set sedeOperativa
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa
      *
      * @return Vehiculo
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setSedeOperativa(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa = null)
     {
         $this->sedeOperativa = $sedeOperativa;
 
@@ -934,7 +934,7 @@ class Vehiculo
     /**
      * Get sedeOperativa
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
     public function getSedeOperativa()
     {
@@ -1016,11 +1016,11 @@ class Vehiculo
     /**
      * Set paisRegistro
      *
-     * @param \AppBundle\Entity\Pais $paisRegistro
+     * @param \JHWEB\ConfigBundle\Entity\CfgPais $paisRegistro
      *
      * @return Vehiculo
      */
-    public function setPaisRegistro(\AppBundle\Entity\Pais $paisRegistro = null)
+    public function setPaisRegistro(\JHWEB\ConfigBundle\Entity\CfgPais $paisRegistro = null)
     {
         $this->paisRegistro = $paisRegistro;
 
@@ -1030,7 +1030,7 @@ class Vehiculo
     /**
      * Get paisRegistro
      *
-     * @return \AppBundle\Entity\Pais
+     * @return \JHWEB\ConfigBundle\Entity\CfgPais
      */
     public function getPaisRegistro()
     {

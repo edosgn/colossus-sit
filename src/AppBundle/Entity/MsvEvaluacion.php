@@ -22,79 +22,216 @@ class MsvEvaluacion
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="numero", type="string", length=100)
-     */
-    private $numero;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="parametro", type="string", length=255)
-     */
-    private $parametro;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="item", type="string", length=255)
-     */
-    private $item;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="variable", type="string", length=255)
-     */
-    private $variable;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="criterio", type="string", length=255)
-     */
-    private $criterio;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="aplica", type="boolean")
-     */
-    private $aplica;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="evidencia", type="boolean")
-     */
-    private $evidencia;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="responde", type="boolean")
-     */
-    private $responde;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="observacion", type="string", length=255)
-     */
-    private $observacion;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="estado", type="boolean")
-     */
-    private $estado;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="evaluaciones")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="resultados")
      **/
     protected $empresa;
+   
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\MsvRevision")
+     */
+    private $revision;
+
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha", type="date", nullable = true)
+     */
+    private $fecha;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pilar_fortalecimiento", type="string", length=255, nullable = true)
+     */
+    private $pilarFortalecimiento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_obtenido_fortalecimiento", type="float", nullable = true)
+     */
+    private $valorObtenidoFortalecimiento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_ponderado_fortalecimiento", type="float", nullable = true)
+     */
+    private $valorPonderadoFortalecimiento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_fortalecimiento", type="float", nullable = true)
+     */
+    private $resultadoFortalecimiento;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pilar_comportamiento", type="string", length=255, nullable = true)
+     */
+    private $pilarComportamiento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_obtenido_comportamiento", type="float", nullable = true)
+     */
+    private $valorObtenidoComportamiento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_ponderado_comportamiento", type="float", nullable = true)
+     */
+    private $valorPonderadoComportamiento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_comportamiento", type="float", nullable = true)
+     */
+    private $resultadoComportamiento;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pilar_vehiculo_seguro", type="string", length=255, nullable = true)
+     */
+    private $pilarVehiculoSeguro;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_obtenido_vehiculo_seguro", type="float", nullable = true)
+     */
+    private $valorObtenidoVehiculoSeguro;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_ponderado_vehiculo_seguro", type="float", nullable = true)
+     */
+    private $valorPonderadoVehiculoSeguro;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_vehiculo_seguro", type="float", nullable = true)
+     */
+    private $resultadoVehiculoSeguro;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pilar_infraestructura_segura", type="string", length=255, nullable = true)
+     */
+    private $pilarInfraestructuraSegura;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_obtenido_infraestructura_segura", type="float", nullable = true)
+     */
+    private $valorObtenidoInfraestructuraSegura;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_ponderado_infraestructura_segura", type="float", nullable = true)
+     */
+    private $valorPonderadoInfraestructuraSegura;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_infraestructura_segura", type="float", nullable = true)
+     */
+    private $resultadoInfraestructuraSegura;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pilar_atencion_victima", type="string", length=255, nullable = true)
+     */
+    private $pilarAtencionVictima;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_obtenido_atencion_victima", type="float", nullable = true)
+     */
+    private $valorObtenidoAtencionVictima;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_ponderado_atencion_victima", type="float", nullable = true)
+     */
+    private $valorPonderadoAtencionVictima;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_atencion_victima", type="float", nullable = true)
+     */
+    private $resultadoAtencionVictima;
+
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pilar_valor_agregado", type="string", length=255, nullable = true)
+     */
+    private $pilarValorAgregado;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_obtenido_valor_agregado", type="float", nullable = true)
+     */
+    private $valorObtenidoValorAgregado;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_ponderado_valor_agregado", type="float", nullable = true)
+     */
+    private $valorPonderadoValorAgregado;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_valor_agregado", type="float", nullable = true)
+     */
+    private $resultadoValorAgregado;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="resultado_final", type="float", nullable = true)
+     */
+    private $resultadofinal;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="aval", type="boolean")
+     */
+    private $aval;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo = true;
 
 
     /**
@@ -108,253 +245,685 @@ class MsvEvaluacion
     }
 
     /**
-     * Set numero
+     * Set fecha
      *
-     * @param string $numero
+     * @param \DateTime $fecha
      *
      * @return MsvEvaluacion
      */
-    public function setNumero($numero)
+    public function setFecha($fecha)
     {
-        $this->numero = $numero;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get numero
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        return $this->fecha;
+    }
+
+    /**
+     * Set pilarFortalecimiento
+     *
+     * @param string $pilarFortalecimiento
+     *
+     * @return MsvEvaluacion
+     */
+    public function setPilarFortalecimiento($pilarFortalecimiento)
+    {
+        $this->pilarFortalecimiento = $pilarFortalecimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get pilarFortalecimiento
      *
      * @return string
      */
-    public function getNumero()
+    public function getPilarFortalecimiento()
     {
-        return $this->numero;
+        return $this->pilarFortalecimiento;
     }
 
     /**
-     * Set parametro
+     * Set valorObtenidoFortalecimiento
      *
-     * @param string $parametro
+     * @param float $valorObtenidoFortalecimiento
      *
      * @return MsvEvaluacion
      */
-    public function setParametro($parametro)
+    public function setValorObtenidoFortalecimiento($valorObtenidoFortalecimiento)
     {
-        $this->parametro = $parametro;
+        $this->valorObtenidoFortalecimiento = $valorObtenidoFortalecimiento;
 
         return $this;
     }
 
     /**
-     * Get parametro
+     * Get valorObtenidoFortalecimiento
+     *
+     * @return float
+     */
+    public function getValorObtenidoFortalecimiento()
+    {
+        return $this->valorObtenidoFortalecimiento;
+    }
+
+    /**
+     * Set valorPonderadoFortalecimiento
+     *
+     * @param float $valorPonderadoFortalecimiento
+     *
+     * @return MsvEvaluacion
+     */
+    public function setValorPonderadoFortalecimiento($valorPonderadoFortalecimiento)
+    {
+        $this->valorPonderadoFortalecimiento = $valorPonderadoFortalecimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPonderadoFortalecimiento
+     *
+     * @return float
+     */
+    public function getValorPonderadoFortalecimiento()
+    {
+        return $this->valorPonderadoFortalecimiento;
+    }
+
+    /**
+     * Set resultadoFortalecimiento
+     *
+     * @param float $resultadoFortalecimiento
+     *
+     * @return MsvEvaluacion
+     */
+    public function setResultadoFortalecimiento($resultadoFortalecimiento)
+    {
+        $this->resultadoFortalecimiento = $resultadoFortalecimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadoFortalecimiento
+     *
+     * @return float
+     */
+    public function getResultadoFortalecimiento()
+    {
+        return $this->resultadoFortalecimiento;
+    }
+
+    /**
+     * Set pilarComportamiento
+     *
+     * @param string $pilarComportamiento
+     *
+     * @return MsvEvaluacion
+     */
+    public function setPilarComportamiento($pilarComportamiento)
+    {
+        $this->pilarComportamiento = $pilarComportamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get pilarComportamiento
      *
      * @return string
      */
-    public function getParametro()
+    public function getPilarComportamiento()
     {
-        return $this->parametro;
+        return $this->pilarComportamiento;
     }
 
     /**
-     * Set item
+     * Set valorObtenidoComportamiento
      *
-     * @param string $item
+     * @param float $valorObtenidoComportamiento
      *
      * @return MsvEvaluacion
      */
-    public function setItem($item)
+    public function setValorObtenidoComportamiento($valorObtenidoComportamiento)
     {
-        $this->item = $item;
+        $this->valorObtenidoComportamiento = $valorObtenidoComportamiento;
 
         return $this;
     }
 
     /**
-     * Get item
+     * Get valorObtenidoComportamiento
+     *
+     * @return float
+     */
+    public function getValorObtenidoComportamiento()
+    {
+        return $this->valorObtenidoComportamiento;
+    }
+
+    /**
+     * Set valorPonderadoComportamiento
+     *
+     * @param float $valorPonderadoComportamiento
+     *
+     * @return MsvEvaluacion
+     */
+    public function setValorPonderadoComportamiento($valorPonderadoComportamiento)
+    {
+        $this->valorPonderadoComportamiento = $valorPonderadoComportamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPonderadoComportamiento
+     *
+     * @return float
+     */
+    public function getValorPonderadoComportamiento()
+    {
+        return $this->valorPonderadoComportamiento;
+    }
+
+    /**
+     * Set resultadoComportamiento
+     *
+     * @param float $resultadoComportamiento
+     *
+     * @return MsvEvaluacion
+     */
+    public function setResultadoComportamiento($resultadoComportamiento)
+    {
+        $this->resultadoComportamiento = $resultadoComportamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadoComportamiento
+     *
+     * @return float
+     */
+    public function getResultadoComportamiento()
+    {
+        return $this->resultadoComportamiento;
+    }
+
+    /**
+     * Set pilarVehiculoSeguro
+     *
+     * @param string $pilarVehiculoSeguro
+     *
+     * @return MsvEvaluacion
+     */
+    public function setPilarVehiculoSeguro($pilarVehiculoSeguro)
+    {
+        $this->pilarVehiculoSeguro = $pilarVehiculoSeguro;
+
+        return $this;
+    }
+
+    /**
+     * Get pilarVehiculoSeguro
      *
      * @return string
      */
-    public function getItem()
+    public function getPilarVehiculoSeguro()
     {
-        return $this->item;
+        return $this->pilarVehiculoSeguro;
     }
 
     /**
-     * Set variable
+     * Set valorObtenidoVehiculoSeguro
      *
-     * @param string $variable
+     * @param float $valorObtenidoVehiculoSeguro
      *
      * @return MsvEvaluacion
      */
-    public function setVariable($variable)
+    public function setValorObtenidoVehiculoSeguro($valorObtenidoVehiculoSeguro)
     {
-        $this->variable = $variable;
+        $this->valorObtenidoVehiculoSeguro = $valorObtenidoVehiculoSeguro;
 
         return $this;
     }
 
     /**
-     * Get variable
+     * Get valorObtenidoVehiculoSeguro
+     *
+     * @return float
+     */
+    public function getValorObtenidoVehiculoSeguro()
+    {
+        return $this->valorObtenidoVehiculoSeguro;
+    }
+
+    /**
+     * Set valorPonderadoVehiculoSeguro
+     *
+     * @param float $valorPonderadoVehiculoSeguro
+     *
+     * @return MsvEvaluacion
+     */
+    public function setValorPonderadoVehiculoSeguro($valorPonderadoVehiculoSeguro)
+    {
+        $this->valorPonderadoVehiculoSeguro = $valorPonderadoVehiculoSeguro;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPonderadoVehiculoSeguro
+     *
+     * @return float
+     */
+    public function getValorPonderadoVehiculoSeguro()
+    {
+        return $this->valorPonderadoVehiculoSeguro;
+    }
+
+    /**
+     * Set resultadoVehiculoSeguro
+     *
+     * @param float $resultadoVehiculoSeguro
+     *
+     * @return MsvEvaluacion
+     */
+    public function setResultadoVehiculoSeguro($resultadoVehiculoSeguro)
+    {
+        $this->resultadoVehiculoSeguro = $resultadoVehiculoSeguro;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadoVehiculoSeguro
+     *
+     * @return float
+     */
+    public function getResultadoVehiculoSeguro()
+    {
+        return $this->resultadoVehiculoSeguro;
+    }
+
+    /**
+     * Set pilarInfraestructuraSegura
+     *
+     * @param string $pilarInfraestructuraSegura
+     *
+     * @return MsvEvaluacion
+     */
+    public function setPilarInfraestructuraSegura($pilarInfraestructuraSegura)
+    {
+        $this->pilarInfraestructuraSegura = $pilarInfraestructuraSegura;
+
+        return $this;
+    }
+
+    /**
+     * Get pilarInfraestructuraSegura
      *
      * @return string
      */
-    public function getVariable()
+    public function getPilarInfraestructuraSegura()
     {
-        return $this->variable;
+        return $this->pilarInfraestructuraSegura;
     }
 
     /**
-     * Set criterio
+     * Set valorObtenidoInfraestructuraSegura
      *
-     * @param string $criterio
+     * @param float $valorObtenidoInfraestructuraSegura
      *
      * @return MsvEvaluacion
      */
-    public function setCriterio($criterio)
+    public function setValorObtenidoInfraestructuraSegura($valorObtenidoInfraestructuraSegura)
     {
-        $this->criterio = $criterio;
+        $this->valorObtenidoInfraestructuraSegura = $valorObtenidoInfraestructuraSegura;
 
         return $this;
     }
 
     /**
-     * Get criterio
+     * Get valorObtenidoInfraestructuraSegura
+     *
+     * @return float
+     */
+    public function getValorObtenidoInfraestructuraSegura()
+    {
+        return $this->valorObtenidoInfraestructuraSegura;
+    }
+
+    /**
+     * Set valorPonderadoInfraestructuraSegura
+     *
+     * @param float $valorPonderadoInfraestructuraSegura
+     *
+     * @return MsvEvaluacion
+     */
+    public function setValorPonderadoInfraestructuraSegura($valorPonderadoInfraestructuraSegura)
+    {
+        $this->valorPonderadoInfraestructuraSegura = $valorPonderadoInfraestructuraSegura;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPonderadoInfraestructuraSegura
+     *
+     * @return float
+     */
+    public function getValorPonderadoInfraestructuraSegura()
+    {
+        return $this->valorPonderadoInfraestructuraSegura;
+    }
+
+    /**
+     * Set resultadoInfraestructuraSegura
+     *
+     * @param float $resultadoInfraestructuraSegura
+     *
+     * @return MsvEvaluacion
+     */
+    public function setResultadoInfraestructuraSegura($resultadoInfraestructuraSegura)
+    {
+        $this->resultadoInfraestructuraSegura = $resultadoInfraestructuraSegura;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadoInfraestructuraSegura
+     *
+     * @return float
+     */
+    public function getResultadoInfraestructuraSegura()
+    {
+        return $this->resultadoInfraestructuraSegura;
+    }
+
+    /**
+     * Set pilarAtencionVictima
+     *
+     * @param string $pilarAtencionVictima
+     *
+     * @return MsvEvaluacion
+     */
+    public function setPilarAtencionVictima($pilarAtencionVictima)
+    {
+        $this->pilarAtencionVictima = $pilarAtencionVictima;
+
+        return $this;
+    }
+
+    /**
+     * Get pilarAtencionVictima
      *
      * @return string
      */
-    public function getCriterio()
+    public function getPilarAtencionVictima()
     {
-        return $this->criterio;
+        return $this->pilarAtencionVictima;
     }
 
     /**
-     * Set aplica
+     * Set valorObtenidoAtencionVictima
      *
-     * @param boolean $aplica
+     * @param float $valorObtenidoAtencionVictima
      *
      * @return MsvEvaluacion
      */
-    public function setAplica($aplica)
+    public function setValorObtenidoAtencionVictima($valorObtenidoAtencionVictima)
     {
-        $this->aplica = $aplica;
+        $this->valorObtenidoAtencionVictima = $valorObtenidoAtencionVictima;
 
         return $this;
     }
 
     /**
-     * Get aplica
+     * Get valorObtenidoAtencionVictima
      *
-     * @return bool
+     * @return float
      */
-    public function getAplica()
+    public function getValorObtenidoAtencionVictima()
     {
-        return $this->aplica;
+        return $this->valorObtenidoAtencionVictima;
     }
 
     /**
-     * Set evidencia
+     * Set valorPonderadoAtencionVictima
      *
-     * @param boolean $evidencia
+     * @param float $valorPonderadoAtencionVictima
      *
      * @return MsvEvaluacion
      */
-    public function setEvidencia($evidencia)
+    public function setValorPonderadoAtencionVictima($valorPonderadoAtencionVictima)
     {
-        $this->evidencia = $evidencia;
+        $this->valorPonderadoAtencionVictima = $valorPonderadoAtencionVictima;
 
         return $this;
     }
 
     /**
-     * Get evidencia
+     * Get valorPonderadoAtencionVictima
      *
-     * @return bool
+     * @return float
      */
-    public function getEvidencia()
+    public function getValorPonderadoAtencionVictima()
     {
-        return $this->evidencia;
+        return $this->valorPonderadoAtencionVictima;
     }
 
     /**
-     * Set responde
+     * Set resultadoAtencionVictima
      *
-     * @param boolean $responde
+     * @param float $resultadoAtencionVictima
      *
      * @return MsvEvaluacion
      */
-    public function setResponde($responde)
+    public function setResultadoAtencionVictima($resultadoAtencionVictima)
     {
-        $this->responde = $responde;
+        $this->resultadoAtencionVictima = $resultadoAtencionVictima;
 
         return $this;
     }
 
     /**
-     * Get responde
+     * Get resultadoAtencionVictima
      *
-     * @return bool
+     * @return float
      */
-    public function getResponde()
+    public function getResultadoAtencionVictima()
     {
-        return $this->responde;
+        return $this->resultadoAtencionVictima;
     }
 
     /**
-     * Set observacion
+     * Set pilarValorAgregado
      *
-     * @param string $observacion
+     * @param string $pilarValorAgregado
      *
      * @return MsvEvaluacion
      */
-    public function setObservacion($observacion)
+    public function setPilarValorAgregado($pilarValorAgregado)
     {
-        $this->observacion = $observacion;
+        $this->pilarValorAgregado = $pilarValorAgregado;
 
         return $this;
     }
 
     /**
-     * Get observacion
+     * Get pilarValorAgregado
      *
      * @return string
      */
-    public function getObservacion()
+    public function getPilarValorAgregado()
     {
-        return $this->observacion;
+        return $this->pilarValorAgregado;
     }
 
     /**
-     * Set estado
+     * Set valorObtenidoValorAgregado
      *
-     * @param boolean $estado
+     * @param float $valorObtenidoValorAgregado
      *
      * @return MsvEvaluacion
      */
-    public function setEstado($estado)
+    public function setValorObtenidoValorAgregado($valorObtenidoValorAgregado)
     {
-        $this->estado = $estado;
+        $this->valorObtenidoValorAgregado = $valorObtenidoValorAgregado;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get valorObtenidoValorAgregado
      *
-     * @return bool
+     * @return float
      */
-    public function getEstado()
+    public function getValorObtenidoValorAgregado()
     {
-        return $this->estado;
+        return $this->valorObtenidoValorAgregado;
+    }
+
+    /**
+     * Set valorPonderadoValorAgregado
+     *
+     * @param float $valorPonderadoValorAgregado
+     *
+     * @return MsvEvaluacion
+     */
+    public function setValorPonderadoValorAgregado($valorPonderadoValorAgregado)
+    {
+        $this->valorPonderadoValorAgregado = $valorPonderadoValorAgregado;
+
+        return $this;
+    }
+
+    /**
+     * Get valorPonderadoValorAgregado
+     *
+     * @return float
+     */
+    public function getValorPonderadoValorAgregado()
+    {
+        return $this->valorPonderadoValorAgregado;
+    }
+
+    /**
+     * Set resultadoValorAgregado
+     *
+     * @param float $resultadoValorAgregado
+     *
+     * @return MsvEvaluacion
+     */
+    public function setResultadoValorAgregado($resultadoValorAgregado)
+    {
+        $this->resultadoValorAgregado = $resultadoValorAgregado;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadoValorAgregado
+     *
+     * @return float
+     */
+    public function getResultadoValorAgregado()
+    {
+        return $this->resultadoValorAgregado;
+    }
+
+    /**
+     * Set resultadofinal
+     *
+     * @param float $resultadofinal
+     *
+     * @return MsvEvaluacion
+     */
+    public function setResultadofinal($resultadofinal)
+    {
+        $this->resultadofinal = $resultadofinal;
+
+        return $this;
+    }
+
+    /**
+     * Get resultadofinal
+     *
+     * @return float
+     */
+    public function getResultadofinal()
+    {
+        return $this->resultadofinal;
+    }
+
+    /**
+     * Set aval
+     *
+     * @param boolean $aval
+     *
+     * @return MsvEvaluacion
+     */
+    public function setAval($aval)
+    {
+        $this->aval = $aval;
+
+        return $this;
+    }
+
+    /**
+     * Get aval
+     *
+     * @return boolean
+     */
+    public function getAval()
+    {
+        return $this->aval;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return MsvEvaluacion
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 
     /**
      * Set empresa
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
      *
-     * @return Clase
+     * @return MsvEvaluacion
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
     {
         $this->empresa = $empresa;
 
@@ -364,11 +933,34 @@ class MsvEvaluacion
     /**
      * Get empresa
      *
-     * @return \AppBundle\Entity\Empresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
     public function getEmpresa()
     {
         return $this->empresa;
     }
-}
 
+    /**
+     * Set revision
+     *
+     * @param \AppBundle\Entity\MsvRevision $revision
+     *
+     * @return MsvEvaluacion
+     */
+    public function setRevision(\AppBundle\Entity\MsvRevision $revision = null)
+    {
+        $this->revision = $revision;
+
+        return $this;
+    }
+
+    /**
+     * Get revision
+     *
+     * @return \AppBundle\Entity\MsvRevision
+     */
+    public function getRevision()
+    {
+        return $this->revision;
+    }
+}
