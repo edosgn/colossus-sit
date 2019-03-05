@@ -3,9 +3,9 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\MsvRevision;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Msvrevision controller.
@@ -32,7 +32,7 @@ class MsvRevisionController extends Controller
             'msj' => "Listado revisiones",
             'data' => $msvRevisiones,
         );
-        return $helpers -> json($response);
+        return $helpers->json($response);
     }
 
     /**
@@ -44,78 +44,78 @@ class MsvRevisionController extends Controller
     public function newAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization",null);
+        $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if($authCheck == true){
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
-            
+
             $em = $this->getDoctrine()->getManager();
 
             $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresaId);
-            
-                $revision = new MsvRevision();
-                $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
-                
-                $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
-                $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime);
-                
-                $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
-                $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
-                if($fechaRecepcionDatetime < $fechaRevisionDatetime){
-                    $revision->setFechaRecepcion($fechaRecepcionDatetime);
-                    $revision->setFechaRevision($fechaRevisionDatetime);
-                } else {
-                    $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => "La fecha de recepción debe ser menor a la fecha de revisión.",
-                        );
-                        return $helpers->json($response);
-                }
 
-                if($params->fechaOtorgamiento) {
-                    $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
-                    $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
-                    if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime1 ){
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => "La fecha de la primera visita de control debe ser mayor a un año de la fecha de otorgamiento del aval",
-                        );
-                        return $helpers->json($response);
-                    } else {
-                        $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
-                        $revision->setObservacionVisita1($params->observacionVisita1);
-                        
-                    } if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2) {
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => "La fecha de la segunda visita de control debe ser mayor a dos años de la fecha de otorgamiento del aval",
-                        );
-                        return $helpers->json($response);
-                    } else {
-                        $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
-                        $revision->setObservacionVisita2($params->observacionVisita2);
-                    }
-                }
-                            
-                $revision->setFuncionario($funcionario);
-                $revision->setPersonaContacto($params->personaContacto);
-                $revision->setCargo($params->cargo);
-                $revision->setCorreo($params->correo);
-                $revision->setEmpresa($empresa);
-                $revision->setEstado(true);
-                $em->persist($revision);
-                $em->flush();
+            $revision = new MsvRevision();
+            $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
+
+            $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
+            $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime);
+
+            $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
+            $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
+            if ($fechaRecepcionDatetime < $fechaRevisionDatetime) {
+                $revision->setFechaRecepcion($fechaRecepcionDatetime);
+                $revision->setFechaRevision($fechaRevisionDatetime);
+            } else {
                 $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => "Revisión creada con éxito",
-                );    
-        }else{
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha de recepción debe ser menor a la fecha de revisión.",
+                );
+                return $helpers->json($response);
+            }
+
+            if ($params->fechaOtorgamiento) {
+                $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
+                $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
+                if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime1) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de la primera visita de control debe ser mayor a un año de la fecha de otorgamiento del aval",
+                    );
+                    return $helpers->json($response);
+                } else {
+                    $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
+                    $revision->setObservacionVisita1($params->observacionVisita1);
+
+                }if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de la segunda visita de control debe ser mayor a dos años de la fecha de otorgamiento del aval",
+                    );
+                    return $helpers->json($response);
+                } else {
+                    $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
+                    $revision->setObservacionVisita2($params->observacionVisita2);
+                }
+            }
+
+            $revision->setFuncionario($funcionario);
+            $revision->setPersonaContacto($params->personaContacto);
+            $revision->setCargo($params->cargo);
+            $revision->setCorreo($params->correo);
+            $revision->setEmpresa($empresa);
+            $revision->setEstado(true);
+            $em->persist($revision);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Revisión creada con éxito",
+            );
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
@@ -141,17 +141,17 @@ class MsvRevisionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $revision = $em->getRepository('AppBundle:MsvRevision')->find($id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "revision con nombre"." ".$revision->getNombre(), 
-                    'data'=> $revision,
+                'status' => 'success',
+                'code' => 200,
+                'message' => "revision con nombre" . " " . $revision->getNombre(),
+                'data' => $revision,
             );
-        }else{
+        } else {
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
         return $helpers->json($response);
     }
@@ -159,26 +159,91 @@ class MsvRevisionController extends Controller
     /**
      * Displays a form to edit an existing msvRevision entity.
      *
-     * @Route("/{id}/edit", name="msvrevision_edit")
+     * @Route("/edit", name="msvrevision_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, MsvRevision $msvRevision)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($msvRevision);
-        $editForm = $this->createForm('AppBundle\Form\MsvRevisionType', $msvRevision);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('msvrevision_edit', array('id' => $msvRevision->getId()));
+            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresaId);
+
+            $revision = $em->getRepository('AppBundle:MsvRevision')->find($params->id);
+            $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
+
+            $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
+            $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime);
+
+            $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
+            $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
+            if ($fechaRecepcionDatetime < $fechaRevisionDatetime) {
+                $revision->setFechaRecepcion($fechaRecepcionDatetime);
+                $revision->setFechaRevision($fechaRevisionDatetime);
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha de recepción debe ser menor a la fecha de revisión.",
+                );
+                return $helpers->json($response);
+            }
+
+            if ($params->fechaOtorgamiento) {
+                $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
+                $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
+                if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime1) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de la primera visita de control debe ser mayor a un año de la fecha de otorgamiento del aval",
+                    );
+                    return $helpers->json($response);
+                } else {
+                    $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
+                    $revision->setObservacionVisita1($params->observacionVisita1);
+
+                }if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de la segunda visita de control debe ser mayor a dos años de la fecha de otorgamiento del aval",
+                    );
+                    return $helpers->json($response);
+                } else {
+                    $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
+                    $revision->setObservacionVisita2($params->observacionVisita2);
+                }
+            }
+
+            $revision->setFuncionario($funcionario);
+            $revision->setPersonaContacto($params->personaContacto);
+            $revision->setCargo($params->cargo);
+            $revision->setCorreo($params->correo);
+            $revision->setEmpresa($empresa);
+            $revision->setEstado(true);
+            $em->persist($revision);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Revisión creada con éxito",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('msvrevision/edit.html.twig', array(
-            'msvRevision' => $msvRevision,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -212,26 +277,26 @@ class MsvRevisionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-            $em = $this->getDoctrine()->getManager();
-            $revision = $em->getRepository('AppBundle:MsvRevision')->findBy(array('empresa' =>$id));
+        $em = $this->getDoctrine()->getManager();
+        $revision = $em->getRepository('AppBundle:MsvRevision')->findBy(array('empresa' => $id));
 
-            $response['data'] = array();
+        $response['data'] = array();
 
-            if($revision){
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Revisión encontrada",
-                    'data' => $revision,
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 401,
-                    'msj'=> "Revisión no encontrada",
-                );
-            }
-        
+        if ($revision) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'msj' => "Revisión encontrada",
+                'data' => $revision,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 401,
+                'msj' => "Revisión no encontrada",
+            );
+        }
+
         return $helpers->json($response);
     }
 
@@ -263,8 +328,8 @@ class MsvRevisionController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("json",null);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
             $params = json_decode($json);
 
             $fechaDevolucion = new \Datetime(date('Y-m-d', strtotime('+2 month', strtotime($params->fechaRecepcion))));
@@ -275,13 +340,13 @@ class MsvRevisionController extends Controller
                 'message' => "Fecha de devolución de la revisión calculada con éxito",
                 'fechaDevolucion' => $fechaDevolucion->format('Y-m-d'),
             );
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no válida", 
+                'message' => "Autorizacion no válida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
 }
