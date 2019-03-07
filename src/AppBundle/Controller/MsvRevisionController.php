@@ -58,8 +58,8 @@ class MsvRevisionController extends Controller
             $revision = new MsvRevision();
             $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
 
-            $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
-            $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime);
+            /* $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
+            $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime); */
 
             $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
             $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
@@ -75,7 +75,7 @@ class MsvRevisionController extends Controller
                 return $helpers->json($response);
             }
 
-            if ($params->fechaOtorgamiento) {
+            /* if ($params->fechaOtorgamiento) {
                 $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
                 $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
                 if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime1) {
@@ -100,7 +100,7 @@ class MsvRevisionController extends Controller
                     $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
                     $revision->setObservacionVisita2($params->observacionVisita2);
                 }
-            }
+            } */
 
             $revision->setFuncionario($funcionario);
             $revision->setPersonaContacto($params->personaContacto);

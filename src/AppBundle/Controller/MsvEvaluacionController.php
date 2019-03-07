@@ -6,6 +6,8 @@ use AppBundle\Entity\MsvEvaluacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+
 
 /**
  * Msvevaluacion controller.
@@ -61,10 +63,17 @@ class MsvEvaluacionController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $msvEvaluacion->setFecha(new \Datetime(date('Y-m-d h:i:s')));
-
         $idEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
         $msvEvaluacion->setEmpresa($idEmpresa);
 
+        $revision = $em->getRepository('AppBundle:MsvRevision')->find($params->idRevision);
+        
+        if($revision){
+            $revision->setEvaluacion($msvEvaluacion);
+            $em->persist($revision);
+        }
+        $msvEvaluacion->setRevision($revision);
+        
         $msvEvaluacion->setPilarFortalecimiento("FORTALECIMIENTO EN LA GESTIÓN INSTITUCIONAL");
         $msvEvaluacion->setValorObtenidoFortalecimiento($params->valorObtenidoFortalecimiento);
         $msvEvaluacion->setValorPonderadoFortalecimiento(0.3);
@@ -121,6 +130,7 @@ class MsvEvaluacionController extends Controller
                 'code' => 200,
                 'message' => "Los datos han sido registrados exitosamente.",
                 'message2' => "El resultado final es: " . $resultadoFinal . ", cumple con el aval.",
+                'puntajeEvaluacion' => $resultadoFinal,
             );
         } else {
             $response = array(
@@ -128,6 +138,7 @@ class MsvEvaluacionController extends Controller
                 'code' => 200,
                 'message' => "Los datos han sido registrados exitosamente.",
                 'message2' => "El resultado final es: " . $resultadoFinal . ", no cumple con el aval.",
+                'puntajeEvaluacion' => $resultadoFinal,
             );
 
         }
@@ -298,7 +309,7 @@ class MsvEvaluacionController extends Controller
     }
 
     /**
-     * @Route("/find/aval/evaluacion", name="msvresultado_aval_evaluacion")
+     * @Route("/find/aval/evaluacion", name="msvevaluacion_aval")
      * @Method({"GET","POST"})
      */
     public function findAvalByEvaluacionAction(Request $request)
@@ -312,16 +323,16 @@ class MsvEvaluacionController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             
-            $resultadoAval = $em->getRepository('AppBundle:MsvResultado')->findByEvaluacion($params);
+            $evaluacion = $em->getRepository('AppBundle:MsvEvaluacion')->findOneBy(array('revision' => $params->id));
 
             $response['data'] = array();
 
-            if ($resultados) {
+            if ($evaluacion) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' =>"Registro encontrado",
-                    'data' => $resultadoAval,
+                    'data' => $evaluacion,
                 );
             }
             return $helpers->json($response);
