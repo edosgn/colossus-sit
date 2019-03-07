@@ -1,3 +1,7 @@
+jhweb_vehiculo_vhlo_propietario:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloPropietarioController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
