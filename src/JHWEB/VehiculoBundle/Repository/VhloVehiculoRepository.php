@@ -10,8 +10,8 @@ namespace JHWEB\VehiculoBundle\Repository;
  */
 class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
-	//Obtiene un vehiculo según el campo de búsqueda
-    public function getVehiculoCampo($campo)
+	//Obtiene un vehiculo según el filtro de búsqueda
+    public function getByFiltro($campo)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT v
@@ -73,7 +73,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
     }
 
     //Busca todos los vehiculos que no sean ni maquinaria ni remolques
-    public function getOnlyVehiculos()
+    public function getOneOnlyVehiculos()
     {
         $em = $this->getEntityManager();
         $dql = "SELECT v
@@ -92,12 +92,12 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
     }
  
     //Busca un solo vehiculo que no sean ni maquinaria ni remolques
-    public function getOnlyVehiculo($id)
+    public function getOneOnlyVehiculo($id)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT v
                 FROM JHWEBVehiculoBundle:VhloVehiculo v
-                WHERE v.estado = true 
+                WHERE v.activo = true 
                 AND v.id = :id
                 AND 
                 v.id NOT IN

@@ -52,6 +52,13 @@ class VhloPropietario
     /**
      * @var string
      *
+     * @ORM\Column(name="permiso", type="boolean")
+     */
+    private $permiso;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="estado", type="boolean")
      */
     private $estado;
@@ -69,12 +76,11 @@ class VhloPropietario
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="vehiculos") */
     private $empresa;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="propietarios") */
-    private $vehiculo;
-
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="propietariosVehiculo") */
     private $apoderado;
 
+    /** @ORM\ManyToOne(targetEntity="VhloVehiculo", inversedBy="propietarios") */
+    private $vehiculo;
 
 
     /**
@@ -184,6 +190,30 @@ class VhloPropietario
     }
 
     /**
+     * Set permiso
+     *
+     * @param boolean $permiso
+     *
+     * @return VhloPropietario
+     */
+    public function setPermiso($permiso)
+    {
+        $this->permiso = $permiso;
+
+        return $this;
+    }
+
+    /**
+     * Get permiso
+     *
+     * @return boolean
+     */
+    public function getPermiso()
+    {
+        return $this->permiso;
+    }
+
+    /**
      * Set estado
      *
      * @param boolean $estado
@@ -280,30 +310,6 @@ class VhloPropietario
     }
 
     /**
-     * Set vehiculo
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
-     *
-     * @return VhloPropietario
-     */
-    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
-    }
-
-    /**
      * Set apoderado
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $apoderado
@@ -325,5 +331,29 @@ class VhloPropietario
     public function getApoderado()
     {
         return $this->apoderado;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
+     *
+     * @return VhloPropietario
+     */
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

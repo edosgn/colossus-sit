@@ -296,7 +296,7 @@ class UserCfgMenuController extends Controller
     /* ================================================= */
 
     /**
-     * datos para select 2
+     * Listado de menus para selección con búsqueda
      *
      * @Route("/select", name="usercfgmenu_select")
      * @Method({"GET", "POST"})

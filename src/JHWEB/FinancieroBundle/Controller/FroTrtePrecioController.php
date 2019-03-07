@@ -315,9 +315,49 @@ class FroTrtePrecioController extends Controller
     }
 
     /**
+     * Listado de tramites y valores por modulo para selección con búsqueda
+     *
+     * @Route("/select/modulo", name="frotrteprecio_select_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $em = $this->getDoctrine()->getManager();
+
+        $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
+            $params->idModulo
+        );
+
+        $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
+            array(
+                'modulo' => $modulo->getId(),
+                'activo' => true
+            )
+        );
+
+        $response = null;
+
+        foreach ($tramitesPrecios as $key => $tramitePrecio) {
+            $response[$key] = array(
+                'value' => $tramitePrecio->getId(),
+                'label' => $tramitePrecio->getNombre(),
+            );
+        }
+       
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca todos los tramites y valores por modulo
      *
-     * @Route("/search/modulo", name="frotrteprecio_seacrh_modulo")
+     * @Route("/search/modulo", name="frotrteprecio_search_modulo")
      * @Method({"GET", "POST"})
      */
     public function searchByModuloAction(Request $request)
