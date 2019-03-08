@@ -212,17 +212,41 @@ class UserCiudadanoController extends Controller
     /**
      * Finds and displays a userCiudadano entity.
      *
-     * @Route("/{id}", name="userciudadano_show")
+     * @Route("/show", name="userciudadano_show")
      * @Method("GET")
      */
-    public function showAction(UserCiudadano $userCiudadano)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($userCiudadano);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('userciudadano/show.html.twig', array(
-            'userCiudadano' => $userCiudadano,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
+
+            $em->persist($ciudadano);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado con exito",
+                'data' => $ciudadano
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -426,6 +450,8 @@ class UserCiudadanoController extends Controller
         $ciudadanos = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(
             array('activo' => true)
         );
+        $response = null;
+
         foreach ($ciudadanos as $key => $ciudadano) {
             $response[$key] = array(
                 'value' => $ciudadano->getId(),

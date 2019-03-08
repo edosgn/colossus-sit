@@ -162,6 +162,9 @@ class UserEmpresa
     /** @ORM\ManyToOne(targetEntity="UserCfgEmpresaTipoSociedad", inversedBy="empresas") */
     private $tipoSociedad;
 
+    /** @ORM\ManyToOne(targetEntity="UserEmpresaRepresentante", inversedBy="empresas") */
+    private $empresaRepresentante;
+
     /**
      * Get id
      *
@@ -746,5 +749,29 @@ class UserEmpresa
     public function getTipoSociedad()
     {
         return $this->tipoSociedad;
+    }
+
+    /**
+     * Set empresaRepresentante
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresaRepresentante $empresaRepresentante
+     *
+     * @return UserEmpresa
+     */
+    public function setEmpresaRepresentante(\JHWEB\UsuarioBundle\Entity\UserEmpresaRepresentante $empresaRepresentante = null)
+    {
+        $this->empresaRepresentante = $empresaRepresentante;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaRepresentante
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresaRepresentante
+     */
+    public function getEmpresaRepresentante()
+    {
+        return $this->empresaRepresentante;
     }
 }

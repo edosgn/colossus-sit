@@ -3,9 +3,11 @@
 namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserEmpresa;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use JHWEB\UsuarioBundle\Entity\UserEmpresaRepresentante;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Userempresa controller.
@@ -22,13 +24,23 @@ class UserEmpresaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
+        $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+            array('activo' => true)
+        );
 
-        $userEmpresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findAll();
+        $response['data'] = array();
 
-        return $this->render('userempresa/index.html.twig', array(
-            'userEmpresas' => $userEmpresas,
-        ));
+        if ($empresas) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($empresas) . " registros encontrados",
+                'data' => $empresas,
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +51,78 @@ class UserEmpresaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $userEmpresa = new Userempresa();
-        $form = $this->createForm('JHWEB\UsuarioBundle\Form\UserEmpresaType', $userEmpresa);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($userEmpresa);
+
+            $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
+            $fechaInicial = new \DateTime($params->empresa->fechaInicial);
+
+            $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
+            $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
+            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
+
+            $cfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+
+            $empresa = new UserEmpresa();
+
+            $empresa->setNombre($params->empresa->nombre);
+            $empresa->setSigla($params->empresa->sigla);
+            $empresa->setNit($params->empresa->nit);
+            $empresa->setDv($params->empresa->dv);
+            $empresa->setCapitalPagado($params->empresa->capitalPagado);
+            $empresa->setCapitalLiquido($params->empresa->capitalPagado);
+            $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
+            $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
+            $empresa->setTipoSociedad($tipoSociedad);
+            $empresa->setTipoIdentificacion($tipoIdentificacion);
+            $empresa->setTipoEntidad($params->empresa->tipoEntidad);
+            $empresa->setMunicipio($municipio);
+            $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
+            $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+            $empresa->setTelefono($params->empresa->telefono);
+            $empresa->setDireccion($params->empresa->direccion);
+            $empresa->setCelular($params->empresa->celular);
+            $empresa->setCorreo($params->empresa->correo);
+            $empresa->setFax($params->empresa->fax);
+            $empresa->setCiudadano($ciudadano);
+            $empresa->setEmpresaRepresentante($ciudadano);
+            $empresa->setEmpresaServicio($cfgEmpresaServicio);
+            $empresa->setActivo(true);
+
+            $em->persist($empresa);
+
+            $empresaRepresentante = new UserEmpresaRepresentante();
+
+            $empresaRepresentante->setEmpresa($empresa);
+            $empresaRepresentante->setCiudadano($ciudadano);
+            $empresaRepresentante->setFechaInicial($fechaInicial);
+            $empresaRepresentante->setActivo(true);
+
+            $em->persist($empresaRepresentante);
             $em->flush();
 
-            return $this->redirectToRoute('userempresa_show', array('id' => $userEmpresa->getId()));
-        }
 
-        return $this->render('userempresa/new.html.twig', array(
-            'userEmpresa' => $userEmpresa,
-            'form' => $form->createView(),
-        ));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Empresa creado con éxito",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -69,8 +137,8 @@ class UserEmpresaController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
-            $json = $request->get("data",null);
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -86,15 +154,15 @@ class UserEmpresaController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro encontrado con exito",
-                'data' => $empresa
+                'data' => $empresa,
             );
-        }else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida",
             );
-        }    
+        }
         return $helpers->json($response);
     }
 
@@ -171,40 +239,39 @@ class UserEmpresaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        $json = $request->get("json",null);
+        $json = $request->get("json", null);
         $params = json_decode($json);
-        
+
         $em = $this->getDoctrine()->getManager();
         if ($authCheck == true) {
-            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->getByNitOrNombre($params); 
-              
-            if ($empresa) { 
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->getByNitOrNombre($params);
+
+            if ($empresa) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Empresa encontrada",
                     'data' => $empresa,
                 );
-            }          
-            else{
+            } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Empresa no Encontrada", 
+                    'message' => "Empresa no Encontrada",
                 );
             }
-        } else{
+        } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
             );
-        } 
+        }
         return $helpers->json($response);
     }
 
     /**
-     * Listado de grupos sanguineos para seleccion con busqueda
+     * Listado de empresas
      *
      * @Route("/select", name="userempresa_select")
      * @Method({"GET", "POST"})
