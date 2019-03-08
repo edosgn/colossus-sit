@@ -128,19 +128,16 @@ class MsvEvaluacionController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Los datos han sido registrados exitosamente.",
-                'message2' => "El resultado final es: " . $resultadoFinal . ", cumple con el aval.",
-                'puntajeEvaluacion' => $resultadoFinal,
+                'message' => "Los datos han sido registrados exitosamente. <br> El resultado final es: " . $resultadoFinal . ", cumple con el aval.",
+                'data' => $msvEvaluacion,
             );
         } else {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Los datos han sido registrados exitosamente.",
-                'message2' => "El resultado final es: " . $resultadoFinal . ", no cumple con el aval.",
-                'puntajeEvaluacion' => $resultadoFinal,
+                'message' => "Los datos han sido registrados exitosamente. <br> El resultado final es: " . $resultadoFinal . ", no cumple con el aval.",
+                'data' => $msvEvaluacion,
             );
-
         }
     } else {
         $response = array(
@@ -344,5 +341,38 @@ class MsvEvaluacionController extends Controller
             );
         }
         return $helpers->json($response);
+    }
+
+    /**
+     * Genera pdf de factura seleccionada.
+     *
+     * @Route("/{$id}/aval/pdf", name="aval_pdf")
+     * @Method("GET")
+     */
+    public function pdfAction($cumpleAval, $id)
+    {        
+        $em = $this->getDoctrine()->getManager();
+        
+        setlocale(LC_ALL, "es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $evaluacion = $me->getRepository('AppBundle:MsvEvaluacion')->find($id);
+
+        switch ($cumpleAval) {
+            case 'SI':
+                $html = $this->renderView('@App/msvEvaluacion/pdfAval.template.html.twig', array(
+                    'fechaActual' => $fechaActual,
+                    'evaluacion' => $evaluacion,
+                ));
+                break;        
+            case 'NO':
+                $html = $this->renderView('@App/msvEvaluacion/pdfNoAval.template.html.twig', array(
+                    'fechaActual' => $fechaActual,
+                    'evaluacion' => $evaluacion,
+                ));
+                break;
+        }
+
+        $this->get('app.pdf')->templateEvaluacion($html, $evaluacion);
     }
 }

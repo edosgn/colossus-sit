@@ -17,7 +17,7 @@
             </tr>
         </table>
     <p style="text-align:center;">
-        <b>PLAN ESTRATEGICO DE SEGURIDAD VIAL</b>
+        <b>PLAN ESTRATEGICO DE SEGURIDAD VIAL DEVOLUCION CON OBSERVACIONES</b>
         <br>      
     </p>
     <p>Formato del PESV</p><br>
@@ -47,21 +47,22 @@
             <td>Recomendaciones: </td>
         </table>       
         <br>
+        <p>Fecha límite en que debe retornar documento de PESV: {{ evaluacion.fechaLimite }}</p>
         <br>
         <br>
-        NOTIFICACIÓN DEL AVAL
+        NOTIFICACIÓN A LA EMPRESA
         <p><b>AUTORIDAD DE TRANSITO:</b> {{ evaluacion }}</p>
         <p><b>FUNCIONARIO QUE ADELANTA EL PROCESO:</b> _______________________________________________________________</p><br>
         <p><b>Cargo:</b> _______________________________________________________________</p><br>
         <p><b>Tel:</b> _______________________________________________________________</p><br>
         <p><b>Email:</b> _______________________________________________________________</p><br>
-        <p><b>Entidad, organización que recibe el AVAL:</b> {{ evaluacion.empresa.nombre }}</p>
-        <p><b>NIT:</b> {{ evaluacion.empresa.nit }}</p>
-        <p><b>Dirección Correspondencia:</b> {{ evaluacion.empresa.direccion }}</p>
-        <p><b>Teléfono:</b> {{ evaluacion.empresa.telefono }}</p>
-        <p><b>Email:</b> {{ evaluacion.revision.correo }}</p>
+        <p><b>Entidad, organización o empresa notificada: </b> {{ evaluacion.empresa.nombre }}</p>
+        <p><b>NIT: </b> {{ evaluacion.empresa.nit }}</p>
+        <p><b>Dirección Correspondencia: </b> {{ evaluacion.empresa.direccion }}</p>
+        <p><b>Teléfono: </b> {{ evaluacion.empresa.telefono }}</p>
+        <p><b>Email: </b> {{ evaluacion.revision.correo }}</p>
         <p><b>Persona de contacto de la empresa:</b> {{ evaluacion.revision.personaContacto }}</p><br>
-        <p>En constancia firman:</p>
+        <p>En constancia firman: </p>
         <br>
         <br>
         <br>
@@ -69,7 +70,7 @@
         <p>Autoridad de transito</p>
         <p>__________________________________________</p>
         <p>Por la empresa</p>
-        <p>Dado en {{ fechaActual}}</p>
+        <p>Dado en la ciudad de Pasto, el {{ fechaActual}}</p>
     </p>
   </body>
 </html>
