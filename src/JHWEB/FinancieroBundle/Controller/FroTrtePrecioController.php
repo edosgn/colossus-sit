@@ -79,7 +79,7 @@ class FroTrtePrecioController extends Controller
                 $tramitePrecio->setTramite($tramite);
             }
 
-            if ($params->idTipoVehiculo) {
+            if (isset($params->idTipoVehiculo) && $params->idTipoVehiculo) {
                 $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find(
                     $params->idTipoVehiculo
                 );
@@ -400,6 +400,10 @@ class FroTrtePrecioController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'Ningún registro encontrado.', 
+                    'data' => array(
+                        'modulo' => $modulo,
+                        'tramitesPrecio' => null,
+                    )
                 );
             }
         }else{
@@ -550,8 +554,9 @@ class FroTrtePrecioController extends Controller
                         $em->persist($tramitePrecio);
                         $em->flush();
 
+
+                        $totalConceptos = 0;
                         if ($tramitePrecioNew->conceptos) {
-                            $totalConceptos = 0;
                             foreach ($tramitePrecioNew->conceptos as $key => $conceptos) {
                                 $tramiteConcepto = new FroTrteConcepto();
 
