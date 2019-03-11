@@ -9,67 +9,75 @@
     	<br>
     	<br>
     </p>
-    <table style="border:none;">
-            <tr>
-                <td>
-                    <img src="{{ asset('img/logo-entidad.png') }}" height="40px" />
-                </td>
-            </tr>
-        </table>
-    <p style="text-align:center;">
-        <b>PLAN ESTRATEGICO DE SEGURIDAD VIAL</b>
-        <br>      
-    </p>
-    <p>Formato del PESV</p><br>
-    <p>Consecutivo No: {{ evaluacion.id }}</p>
-    <p>Fecha en que se había radicado el PESV: {{ evaluacion.fecha }}</p>
-    <p>Con número de radicado: ____________________________</p>
-    <p>Puntaje obtenido: {{ evaluacion.resultadoFinal }}</p><br>
+    <p style="text-align:center;"><b>PLAN ESTRATEGICO DE SEGURIDAD VIAL</b></p>
+    <p><b>Formato del PESV 005</b></p><br>
+    <p><b>Consecutivo No:</b> {{ evaluacion.revision.consecutivo }}</p>
+    <p><b>Fecha en que se había radicado el PESV:</b> {{ evaluacion.revision.fechaOtorgamiento }}</p>
+    <p><b>Con número de radicado:</b> {{ evaluacion.revision.numeroRadicado }}</p>
+    <p><b>Puntaje obtenido:</b> {{ evaluacion.resultadoFinal }}%</p><br>
     <p>
-        <table>
-            <tr>
-                <td width="70%">OBSERVACIONES DEL PILAR</td>
-            </tr>
-            <td>a). Gestion institucional: {{ evaluacion.valorObtenidoFortalecimiento }}</td>
-            <tr></tr>
-            <td>b). Comportamiento Humano: {{ evaluacion.valorObtenidoComportamiento }}</td>
-            <tr></tr>
-            <td>c). Vehículos Seguros: {{ evaluacion.valorObtenidoVehiculoSeguro }}</td>
-            <tr></tr>
-            <td>d). Infraestructura Segura: {{ evaluacion.valorObtenidoInfraestructuraSegura }}</td>
-            <tr></tr>
-            <td>e). Atención a víctimas: {{ evaluacion.valorObtenidoAtencionVictima }}</td>
-            <tr></tr>
-            <td>f). Valor Agregado: {{ evaluacion.valorObtenidoValorAgregado }}</td>
-            <tr></tr>
-            <td>Sugerencias: </td>
-            <tr></tr>
-            <td>Recomendaciones: </td>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th> <b>OBSERVACIONES DEL PILAR </b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> a). Gestion institucional: {{ evaluacion.valorObtenidoFortalecimiento }}</td>
+                </tr>
+                <tr>
+                    <td> b). Comportamiento Humano: {{ evaluacion.valorObtenidoComportamiento }}</td>
+                </tr>
+                <tr>
+                    <td> c). Vehículos Seguros: {{ evaluacion.valorObtenidoVehiculoSeguro }}</td>
+                </tr>
+                <tr>
+                    <td> d). Infraestructura Segura: {{ evaluacion.valorObtenidoInfraestructuraSegura }}</td>
+                </tr>
+                <tr>
+                    <td> e). Atención a víctimas: {{ evaluacion.valorObtenidoAtencionVictima }}</td>
+                </tr>
+                <tr>
+                    <td> f). Valor Agregado: {{ evaluacion.valorObtenidoValorAgregado }}</td>
+                </tr>
+                <tr>
+                    <td> Sugerencias: <br></td>
+                </tr>
+                <tr>
+                    <td> Recomendaciones: <br></td>
+                </tr>
+            </tbody>
         </table>       
-        <br>
-        <br>
-        <br>
-        NOTIFICACIÓN DEL AVAL
-        <p><b>AUTORIDAD DE TRANSITO:</b> {{ evaluacion }}</p>
-        <p><b>FUNCIONARIO QUE ADELANTA EL PROCESO:</b> _______________________________________________________________</p><br>
-        <p><b>Cargo:</b> _______________________________________________________________</p><br>
-        <p><b>Tel:</b> _______________________________________________________________</p><br>
-        <p><b>Email:</b> _______________________________________________________________</p><br>
-        <p><b>Entidad, organización que recibe el AVAL:</b> {{ evaluacion.empresa.nombre }}</p>
-        <p><b>NIT:</b> {{ evaluacion.empresa.nit }}</p>
-        <p><b>Dirección Correspondencia:</b> {{ evaluacion.empresa.direccion }}</p>
-        <p><b>Teléfono:</b> {{ evaluacion.empresa.telefono }}</p>
-        <p><b>Email:</b> {{ evaluacion.revision.correo }}</p>
+        <p style="text-align:center;"><b>NOTIFICACIÓN DEL AVAL</b></p>
+        <p><b>Autoridad de transito: </b> {{ evaluacion.id }}</p>
+        <p><b>Funcionario que adelanta el proceso: </b> ______________________</p>
+        <p><b>Cargo:</b> ______________________________          <b>Tel:</b> ______________________________</p>
+        <p><b>Email:</b> ______________________________</p>
+        <p><b>Entidad, organización o empresa notificada: </b> {{ evaluacion.empresa.nombre }}</p>
+        <p><b>NIT: </b> {{ evaluacion.empresa.nit }}</p>
+        <p><b>Dirección Correspondencia: </b> {{ evaluacion.empresa.direccion }}</p>
+        <p><b>Teléfono: </b> {{ evaluacion.empresa.telefono }}                  <b>             Email: </b> {{ evaluacion.revision.correo }}</p>
         <p><b>Persona de contacto de la empresa:</b> {{ evaluacion.revision.personaContacto }}</p><br>
         <p>En constancia firman:</p>
         <br>
         <br>
+        <table>
+            <thead>
+                <tr>
+                    <th>__________________________________</th>
+                    <th>__________________________________</th>
+                </tr>
+            </thead>
+                <tr>
+                    <br>
+                    <td>Autoridad de transito</td>
+                    <td>Por la empresa</td>
+                </tr>
+        </table>
         <br>
-        <p>__________________________________________</p>
-        <p>Autoridad de transito</p>
-        <p>__________________________________________</p>
-        <p>Por la empresa</p>
-        <p>Dado en {{ fechaActual}}</p>
+        <br>
+        <p>Dado en la ciudad de Pasto el {{ fechaActual}}</p>
     </p>
   </body>
 </html>

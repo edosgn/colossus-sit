@@ -344,31 +344,49 @@ class MsvEvaluacionController extends Controller
     }
 
     /**
-     * Genera pdf de factura seleccionada.
+     * Genera pdf del aval o no aval de una evaluacion.
      *
-     * @Route("/{$id}/aval/pdf", name="aval_pdf")
-     * @Method("GET")
+     * @Route("/{idUsuario}/{id}/aval/pdf", name="aval_pdf")
+     * @Method({"GET","POST"})
      */
-    public function pdfAction($cumpleAval, $id)
+    public function pdfAction(Request $request, $id, $idUsuario)
     {        
         $em = $this->getDoctrine()->getManager();
         
         setlocale(LC_ALL, "es_ES");
         $fechaActual = strftime("%d de %B del %Y");
 
-        $evaluacion = $me->getRepository('AppBundle:MsvEvaluacion')->find($id);
+        $evaluacion = $em->getRepository('AppBundle:MsvEvaluacion')->find($id);
 
-        switch ($cumpleAval) {
-            case 'SI':
+        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($idUsuario);
+
+        if ($ciudadano) {
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
+                    'activo' => true,
+                )
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'EL registro no existe en la base de datos.',
+            );
+        }
+        switch ($evaluacion->getAval()) {
+            case true:
                 $html = $this->renderView('@App/msvEvaluacion/pdfAval.template.html.twig', array(
                     'fechaActual' => $fechaActual,
                     'evaluacion' => $evaluacion,
+                    'funcionario' => $funcionario,
                 ));
                 break;        
-            case 'NO':
+            case false:
                 $html = $this->renderView('@App/msvEvaluacion/pdfNoAval.template.html.twig', array(
                     'fechaActual' => $fechaActual,
                     'evaluacion' => $evaluacion,
+                    'funcionario' => $funcionario,
                 ));
                 break;
         }
