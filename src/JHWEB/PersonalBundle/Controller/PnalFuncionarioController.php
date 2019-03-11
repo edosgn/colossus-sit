@@ -158,7 +158,6 @@ class PnalFuncionarioController extends Controller
                 $params->identificacion
             );
 
-
             if ($ciudadano) {
                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
                     array(

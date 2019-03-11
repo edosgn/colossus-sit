@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnalcfgtiponombramiento</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pnalCfgTipoNombramiento.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ pnalCfgTipoNombramiento.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Gestionable</th>
+                <td>{% if pnalCfgTipoNombramiento.gestionable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if pnalCfgTipoNombramiento.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnalcfgtiponombramiento_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pnalcfgtiponombramiento_edit', { 'id': pnalCfgTipoNombramiento.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

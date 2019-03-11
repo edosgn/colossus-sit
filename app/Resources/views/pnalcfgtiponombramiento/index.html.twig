@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnalcfgtiponombramientos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Gestionable</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pnalCfgTipoNombramiento in pnalCfgTipoNombramientos %}
+            <tr>
+                <td><a href="{{ path('pnalcfgtiponombramiento_show', { 'id': pnalCfgTipoNombramiento.id }) }}">{{ pnalCfgTipoNombramiento.id }}</a></td>
+                <td>{{ pnalCfgTipoNombramiento.nombre }}</td>
+                <td>{% if pnalCfgTipoNombramiento.gestionable %}Yes{% else %}No{% endif %}</td>
+                <td>{% if pnalCfgTipoNombramiento.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pnalcfgtiponombramiento_show', { 'id': pnalCfgTipoNombramiento.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pnalcfgtiponombramiento_edit', { 'id': pnalCfgTipoNombramiento.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnalcfgtiponombramiento_new') }}">Create a new pnalCfgTipoNombramiento</a>
+        </li>
+    </ul>
+{% endblock %}

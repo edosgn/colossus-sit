@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnalcfgtipocontratos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Horarios</th>
+                <th>Prorroga</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pnalCfgTipoContrato in pnalCfgTipoContratos %}
+            <tr>
+                <td><a href="{{ path('pnalcfgtipocontrato_show', { 'id': pnalCfgTipoContrato.id }) }}">{{ pnalCfgTipoContrato.id }}</a></td>
+                <td>{{ pnalCfgTipoContrato.nombre }}</td>
+                <td>{% if pnalCfgTipoContrato.horarios %}Yes{% else %}No{% endif %}</td>
+                <td>{% if pnalCfgTipoContrato.prorroga %}Yes{% else %}No{% endif %}</td>
+                <td>{% if pnalCfgTipoContrato.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pnalcfgtipocontrato_show', { 'id': pnalCfgTipoContrato.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pnalcfgtipocontrato_edit', { 'id': pnalCfgTipoContrato.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnalcfgtipocontrato_new') }}">Create a new pnalCfgTipoContrato</a>
+        </li>
+    </ul>
+{% endblock %}
