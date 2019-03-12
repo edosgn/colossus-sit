@@ -482,23 +482,46 @@ class UserCiudadanoController extends Controller
             $ciudadano = null;
             $empresa = null;
 
+            /* if($params->idTipoIdentificacion == 1) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(
+                    array(
+                        'identificacion' => $params->identificacion,
+                        'activo' => true,
+                    )
+                );
+            }
             if($params->idTipoIdentificacion == 4) {
-                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
                     array(
                         'nit' => $params->nit,
                         'activo' => true,
                     )
                 );
-            } else if($params->idTipoIdentificacion == 1) {
-                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+            } */
+
+            switch ($params->idTipoIdentificacion) {
+                case 1:
+                    # code...
+                    $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(
                     array(
                         'identificacion' => $params->identificacion,
-                        'tipoIdentificacion' => $params->idTipoIdentificacion,
                         'activo' => true,
-                    )
-                );
+                        )
+                    );
+                    break;
+                
+                case 4:
+                    # code...
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+                    array(
+                        'nit' => $params->nit,
+                        'activo' => true,
+                        )
+                    );
+                    break;
             }
-
+            /* var_dump($params);
+            die(); */
             if ($ciudadano != null) {
                 $response = array(
                     'status' => 'success',
@@ -510,7 +533,7 @@ class UserCiudadanoController extends Controller
                     )
                 );
             }
-            if ($empresa != null) {
+            else if ($empresa != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

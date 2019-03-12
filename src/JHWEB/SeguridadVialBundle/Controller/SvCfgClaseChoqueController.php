@@ -62,11 +62,11 @@ class SvCfgClaseChoqueController extends Controller
             $claseChoque = new SvCfgClaseChoque();
 
             $em = $this->getDoctrine()->getManager();
-
+            
             if ($params->claseAccidente) {
-                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find(
-                    $params->claseAccidente
-                );
+                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array(
+                    'nombre' => $params->claseAccidente
+                ));
                 $claseChoque->setClaseAccidente($claseAccidente);
             }
             $nombre = strtoupper($params->nombre);
@@ -123,7 +123,13 @@ class SvCfgClaseChoqueController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->id);
-            $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find($params->claseAccidente);
+            
+            if ($params->claseAccidente) {
+                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array(
+                    'nombre' => $params->claseAccidente
+                ));
+                $claseChoque->setClaseAccidente($claseAccidente);
+            }
             
             if ($claseChoque != null) {
                 $nombre = strtoupper($params->nombre);

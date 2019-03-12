@@ -247,7 +247,6 @@ class CfgClaseAccidenteController extends Controller
             $response[$key] = array(
                 'value' => $cfgClaseAccidente->getNombre(),
                 'label' => $cfgClaseAccidente->getNombre(),
-                //'label' => $cfgClaseAccidente->getNombre(),
             );
         }
         return $helpers->json($response);
