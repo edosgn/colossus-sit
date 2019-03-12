@@ -27,14 +27,14 @@ class PdfTemplate extends TCPDF{
         $this->Image($image_file, 5, 270, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     }
 
-    public function templateSummary($html, $solicitud){
+    public function templateEvaluacion($html, $evaluacion){
         // create new PDF document
         $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('JHWEB PASTO SAS');
-        $pdf->SetTitle($solicitud->getNumeroRadicado());
+        $pdf->SetTitle($evaluacion->getId());
         $pdf->SetSubject('PDF PQRSF');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 

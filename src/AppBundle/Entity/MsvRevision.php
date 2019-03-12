@@ -22,6 +22,27 @@ class MsvRevision
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_radicado", type="string", length=10)
+     */
+    private $numeroRadicado;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="integer", length=20)
+     */
+    private $consecutivo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_registro", type="date")
+     */
+    private $fechaRegistro;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_recepcion", type="date")
@@ -501,5 +522,80 @@ class MsvRevision
     public function getEvaluacion()
     {
         return $this->evaluacion;
+    }
+
+    /**
+     * Set numeroRadicado
+     *
+     * @param string $numeroRadicado
+     *
+     * @return MsvRevision
+     */
+    public function setNumeroRadicado($numeroRadicado)
+    {
+        $this->numeroRadicado = $numeroRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRadicado
+     *
+     * @return string
+     */
+    public function getNumeroRadicado()
+    {
+        return $this->numeroRadicado;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return MsvRevision
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set fechaRegistro
+     *
+     * @param \DateTime $fechaRegistro
+     *
+     * @return MsvRevision
+     */
+    public function setFechaRegistro($fechaRegistro)
+    {
+        $this->fechaRegistro = $fechaRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRegistro
+     *
+     * @return \DateTime
+     */
+    public function getFechaRegistro()
+    {
+        if ($this->fechaRegistro) {
+            return $this->fechaRegistro->format('Y-m-d');
+        }
+        return $this->fechaRegistro;
     }
 }

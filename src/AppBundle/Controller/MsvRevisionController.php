@@ -56,6 +56,16 @@ class MsvRevisionController extends Controller
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresaId);
 
             $revision = new MsvRevision();
+            $revision->setNumeroRadicado(strval($params->numeroRadicado));
+
+            //para generar consecutivo automático
+            $fechaRegistro = new \Datetime(date('Y-m-d h:i:s'));
+            $revision->setFechaRegistro($fechaRegistro);
+
+            $consecutivo = $em->getRepository('AppBundle:MsvRevision')->getMaximo($fechaRegistro->format('Y'));
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            $revision->setConsecutivo($consecutivo);
+
             $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
 
             /* $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);

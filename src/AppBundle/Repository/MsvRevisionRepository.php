@@ -10,4 +10,16 @@ namespace AppBundle\Repository;
  */
 class MsvRevisionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de documentos por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(r.consecutivo) AS maximo
+            FROM AppBundle:MsvRevision r
+            WHERE YEAR(r.fechaRegistro) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
 }
