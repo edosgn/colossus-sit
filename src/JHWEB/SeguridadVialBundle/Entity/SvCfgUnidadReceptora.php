@@ -38,14 +38,14 @@ class SvCfgUnidadReceptora
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente", inversedBy="entidadesaccidente")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente", inversedBy="unidadesReceptoras")
      */
     private $entidadAccidente;
 
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="unidadesReceptoras")
      */
     private $municipio;
 
@@ -64,6 +64,30 @@ class SvCfgUnidadReceptora
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return SvCfgUnidadReceptora
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**
@@ -141,11 +165,11 @@ class SvCfgUnidadReceptora
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return SvCfgUnidadReceptora
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -155,34 +179,10 @@ class SvCfgUnidadReceptora
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {
         return $this->municipio;
-    }
-
-    /**
-     * Set codigo
-     *
-     * @param integer $codigo
-     *
-     * @return SvCfgUnidadReceptora
-     */
-    public function setCodigo($codigo)
-    {
-        $this->codigo = $codigo;
-
-        return $this;
-    }
-
-    /**
-     * Get codigo
-     *
-     * @return integer
-     */
-    public function getCodigo()
-    {
-        return $this->codigo;
     }
 }

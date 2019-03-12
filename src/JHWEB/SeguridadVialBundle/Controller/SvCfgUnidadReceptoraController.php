@@ -75,7 +75,7 @@ class SvCfgUnidadReceptoraController extends Controller
             }
 
             if ($params->municipio) {
-                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                     $params->municipio
                 );
                 $unidadReceptora->setMunicipio($municipio);
@@ -163,7 +163,7 @@ class SvCfgUnidadReceptoraController extends Controller
             $em = $this->getDoctrine()->getManager();
             $unidadReceptora = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->id);
             $entidadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->entidadAccidente);
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
+            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->municipio);
 
             if ($unidadReceptora != null) {
                 $nombre = strtoupper($params->nombre);

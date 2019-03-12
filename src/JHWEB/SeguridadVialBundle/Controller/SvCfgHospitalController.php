@@ -67,14 +67,7 @@ class SvCfgHospitalController extends Controller
                 $hospital->setOrganismoTransito($organismoTransito);
             }
 
-            if ($params->municipio) {
-                $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
-                $hospital->setMunicipio($municipio);
-            }
-
-            $nombre = strtoupper($params->nombre);
-
-            $hospital->setNombre($nombre);
+            $hospital->setNombre(strtoupper($params->nombre));
             $hospital->setActivo(true);
             $em->persist($hospital);
             $em->flush();
@@ -128,15 +121,13 @@ class SvCfgHospitalController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $hospital = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find($params->id);
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativa);
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->organismoTransito);
             
             if ($hospital != null) {
                 $nombre = strtoupper($params->nombre);
 
                 $hospital->setNombre($nombre);
-                $hospital->setSedeOperativa($sedeOperativa);
-                $hospital->setMunicipio($municipio);
+                $hospital->setOrganismoTransito($organismoTransito);
 
                 $em->persist($hospital);
                 $em->flush();

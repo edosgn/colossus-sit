@@ -39,10 +39,6 @@ class SvCfgHospital
      */
     private $organismoTransito;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="hosiptales")
-     */
-    private $municipio;
-
     /**
      * Get id
      *
@@ -123,29 +119,5 @@ class SvCfgHospital
     public function getOrganismoTransito()
     {
         return $this->organismoTransito;
-    }
-
-    /**
-     * Set municipio
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
-     *
-     * @return SvCfgHospital
-     */
-    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
-    {
-        $this->municipio = $municipio;
-
-        return $this;
-    }
-
-    /**
-     * Get municipio
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
-     */
-    public function getMunicipio()
-    {
-        return $this->municipio;
     }
 }
