@@ -117,14 +117,14 @@ class FroFacturaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Factura No.".$factura->getNumero()." creada con exito",
+                'message' => 'Factura No. '.$factura->getNumero().' creada con exito.',
                 'data' => $factura
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => 'Autorizacion no valida.', 
             );
         }
 
