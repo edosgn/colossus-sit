@@ -4,17 +4,26 @@
   <body>
 
     <p class="text-justify">
-    	San Juan de Pasto, {{ fechaActual }}.
-    	<br>
-    	<br>
-    	<br>
+    	San Juan de Pasto, {{ fechaActual }}
     </p>
-    <p style="text-align:center;"><b>PLAN ESTRATEGICO DE SEGURIDAD VIAL</b></p>
-    <p><b>Formato del PESV 005</b></p><br>
-    <p><b>Consecutivo No:</b> {{ evaluacion.revision.consecutivo }}</p>
-    <p><b>Fecha en que se había radicado el PESV:</b> {{ evaluacion.revision.fechaOtorgamiento }}</p>
-    <p><b>Con número de radicado:</b> {{ evaluacion.revision.numeroRadicado }}</p>
-    <p><b>Puntaje obtenido:</b> {{ evaluacion.resultadoFinal }}%</p><br>
+    <br>
+    <br>
+    <br>
+    <p style="text-align:center;"><b>PLAN ESTRATÉGICO DE SEGURIDAD VIAL</b></p>
+    <table>
+        <thead>
+            <tr>
+                <th><b>Formato del PESV 005</b></th>
+                <th><b>Puntaje obtenido:</b> {{ evaluacion.resultadoFinal }}%</th>
+            </tr>
+        </thead>
+            <tr>
+                <br>
+                <td><b>Consecutivo No: </b>{{ evaluacion.revision.consecutivo }}</td>
+                <td><b>Con número de radicado:</b> {{ evaluacion.revision.numeroRadicado }}</td>
+            </tr>
+    </table>
+    <p><b>Fecha en que se había radicado el PESV:</b> {{ evaluacion.revision.fechaRecepcion }}</p>
     <p>
         <table border="1">
             <thead>
@@ -50,34 +59,38 @@
             </tbody>
         </table>       
         <p style="text-align:center;"><b>NOTIFICACIÓN DEL AVAL</b></p>
-        <p><b>Autoridad de transito: </b> {{ evaluacion.id }}</p>
-        <p><b>Funcionario que adelanta el proceso: </b> ______________________</p>
-        <p><b>Cargo:</b> ______________________________          <b>Tel:</b> ______________________________</p>
-        <p><b>Email:</b> ______________________________</p>
-        <p><b>Entidad, organización o empresa notificada: </b> {{ evaluacion.empresa.nombre }}</p>
-        <p><b>NIT: </b> {{ evaluacion.empresa.nit }}</p>
-        <p><b>Dirección Correspondencia: </b> {{ evaluacion.empresa.direccion }}</p>
-        <p><b>Teléfono: </b> {{ evaluacion.empresa.telefono }}                  <b>             Email: </b> {{ evaluacion.revision.correo }}</p>
-        <p><b>Persona de contacto de la empresa:</b> {{ evaluacion.revision.personaContacto }}</p><br>
+        <b>  Autoridad de tránsito: </b> {{ evaluacion.id }}<br>
+        <b>Funcionario que adelanta el proceso: </b> {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.segundoNombre }} {{ funcionario.ciudadano.primerApellido }} {{ funcionario.ciudadano.segundoApellido }}<br>
+        <b>Cargo:</b> {{ funcionario.cargo.nombre }}          
+        <b>Teléfono:</b> {{ funcionario.ciudadano.telefono }}<br>
+        <b>Email:</b> {{ funcionario.ciudadano.usuario.correo }}<br>
+        <br>
+        <b>Entidad, organización o empresa notificada: </b> {{ evaluacion.empresa.nombre }}<br>
+        <b>NIT: </b> {{ evaluacion.empresa.nit }}<br>
+        <b>Dirección Correspondencia: </b> {{ evaluacion.empresa.direccion }}<br>
+        <b>Teléfono: </b> {{ evaluacion.empresa.telefono }}                  
+        <b>Email: </b> {{ evaluacion.revision.correo }}<br>
+        <b>Persona de contacto de la empresa:</b> {{ evaluacion.revision.personaContacto }}<br>
         <p>En constancia firman:</p>
         <br>
         <br>
         <table>
             <thead>
                 <tr>
+                    <br>
                     <th>__________________________________</th>
                     <th>__________________________________</th>
                 </tr>
             </thead>
                 <tr>
                     <br>
-                    <td>Autoridad de transito</td>
+                    <td>Autoridad de tránsito</td>
                     <td>Por la empresa</td>
                 </tr>
         </table>
         <br>
         <br>
-        <p>Dado en la ciudad de Pasto el {{ fechaActual}}</p>
+        <p>Dado en la ciudad de Pasto, el {{ fechaActual}}</p>
     </p>
   </body>
 </html>
