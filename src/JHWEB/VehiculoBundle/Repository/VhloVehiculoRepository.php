@@ -11,17 +11,16 @@ namespace JHWEB\VehiculoBundle\Repository;
 class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 {
 	//Obtiene un vehiculo según el filtro de búsqueda
-    public function getByFiltro($campo)
+    public function getByFilter($campo)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT v
             FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p
-            WHERE ((v.placa = p.id)
-            AND (p.numero = :campo))
-            OR (v.vin = :campo)
-            OR (v.chasis = :campo)
-            OR (v.serie = :campo)
-            OR (v.motor = :campo)";
+            WHERE (v.placa = p.id  AND p.numero = :campo)
+            OR (v.vin = :campo
+            OR v.chasis = :campo
+            OR v.serie = :campo
+            OR v.motor = :campo)";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(

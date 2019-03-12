@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\ContravencionalBundle\Controller;
+namespace JHWEB\PersonalBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvCdoCfgInteres;
+use JHWEB\PersonalBundle\Entity\PnalCfgCargo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cvcdocfgintere controller.
+ * Pnalcfgcargo controller.
  *
- * @Route("cvcdocfginteres")
+ * @Route("pnalcfgcargo")
  */
-class CvCdoCfgInteresController extends Controller
+class PnalCfgCargoController extends Controller
 {
     /**
-     * Lists all cvCdoCfgIntere entities.
+     * Lists all pnalCfgCargo entities.
      *
-     * @Route("/", name="cvcdocfginteres_index")
+     * @Route("/", name="pnalcfgcargo_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +26,7 @@ class CvCdoCfgInteresController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $intereses = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->findBy(
+        $cargos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->findBy(
             array(
                 'activo' => true
             )
@@ -34,12 +34,12 @@ class CvCdoCfgInteresController extends Controller
 
         $response['data'] = array();
 
-        if ($intereses) {
+        if ($cargos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($intereses)." registros encontrados", 
-                'data'=> $intereses,
+                'message' => count($cargos).' registros encontrados.', 
+                'data'=> $cargos,
             );
         }
 
@@ -47,9 +47,9 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Creates a new cvCdoCfgIntere entity.
+     * Creates a new pnalCfgCargo entity.
      *
-     * @Route("/new", name="cvcdocfginteres_new")
+     * @Route("/new", name="pnalcfgcargo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -64,20 +64,15 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = new CvCdoCfgInteres();
+            $cargo = new PnalCfgCargo();
 
-            $interes->setPorcentaje($params->porcentaje);
-            $interes->setDias($params->dias);
-            $interes->setActivo(true);
-
-            if ($params->idComparendoEstado) {
-                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                    $params->idComparendoEstado
-                );
-                $interes->setEstado($estado);
-            }
+            $cargo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $cargo->setHorarios($params->horarios);
+            $cargo->setProrroga($params->prorroga);
+            $cargo->setGestionable($params->gestionable);
+            $cargo->setActivo(true);
             
-            $em->persist($interes);
+            $em->persist($cargo);
             
             $em->flush();
 
@@ -98,10 +93,10 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Finds and displays a cvCdoCfgIntere entity.
+     * Finds and displays a pnalCfgCargo entity.
      *
-     * @Route("/show", name="cvcdocfginteres_show")
-     * @Method({"GET", "POST"})
+     * @Route("/show", name="pnalcfgcargo_show")
+     * @Method("POST")
      */
     public function showAction(Request $request)
     {
@@ -115,21 +110,21 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->find(
+            $cargo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->find(
                 $params->id
             );
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Registro encontrado con exito.',
-                'data' => $interes
+                'message' => "Registro encontrado con exito",
+                'data' => $cargo
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'Autorizacion no valida.', 
+                'message' => "Autorizacion no valida", 
             );
         }
         
@@ -137,9 +132,9 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing cvCdoCfgIntere entity.
+     * Displays a form to edit an existing pnalCfgCargo entity.
      *
-     * @Route("/edit", name="cvcdocfginteres_edit")
+     * @Route("/edit", name="pnalcfgcargo_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -154,39 +149,34 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository("JHWEBContravencionalBundle:CvCdoCfgInteres")->find($params->id);
+            $cargo = $em->getRepository("JHWEBPersonalBundle:PnalCfgCargo")->find($params->id);
 
-            if ($interes) {
-                $interes->setPorcentaje($params->porcentaje);
-                $interes->setDias($params->dias);
-
-                if ($params->idComparendoEstado) {
-                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                        $params->idComparendoEstado
-                    );
-                    $interes->setEstado($estado);
-                }
+            if ($cargo) {
+                $cargo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                $cargo->setHorarios($params->horarios);
+                $cargo->setProrroga($params->prorroga);
+                $cargo->setGestionable($params->gestionable);
                 
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro actualizado con exito", 
-                    'data'=> $interes,
+                    'message' => 'Registro actualizado con exito.', 
+                    'data'=> $cargo,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El registro no se encuentra en la base de datos", 
+                    'message' => 'El registro no se encuentra en la base de datos.', 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Autorizacion no valida para editar", 
+                    'message' => 'Autorizacion no valida para editar.', 
                 );
         }
 
@@ -194,10 +184,10 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Deletes a cvCdoCfgIntere entity.
+     * Deletes a pnalCfgCargo entity.
      *
-     * @Route("/delete", name="cvcdocfginteres_delete")
-     * @Method({"GET", "POST"})
+     * @Route("/delete", name="pnalcfgcargo_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request)
     {
@@ -211,11 +201,11 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->find(
+            $cargo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->find(
                 $params->id
             );
 
-            $interes->setActivo(false);
+            $cargo->setActivo(false);
 
             $em->flush();
 
@@ -236,18 +226,48 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Creates a form to delete a cvCdoCfgIntere entity.
+     * Creates a form to delete a pnalCfgCargo entity.
      *
-     * @param CvCdoCfgInteres $cvCdoCfgIntere The cvCdoCfgIntere entity
+     * @param PnalCfgCargo $pnalCfgCargo The pnalCfgCargo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvCdoCfgInteres $cvCdoCfgIntere)
+    private function createDeleteForm(PnalCfgCargo $pnalCfgCargo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvcdocfginteres_delete', array('id' => $cvCdoCfgIntere->getId())))
+            ->setAction($this->generateUrl('pnalcfgcargo_delete', array('id' => $pnalCfgCargo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ============================================== */
+
+    /**
+     * Listado de cargos para selección con búsqueda
+     *
+     * @Route("/select", name="pnalcfgcargo_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $cargos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->findBy(
+            array('activo' => true)
+        );
+        
+        $response = null;
+
+        foreach ($cargos as $key => $cargo) {
+            $response[$key] = array(
+                'value' => $cargo->getId(),
+                'label' => $cargo->getNombre(),
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

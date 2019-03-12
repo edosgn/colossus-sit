@@ -29,6 +29,13 @@ class VhloCfgOrigenRegistro
     private $nombre;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer")
+     */
+    private $codigo;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -68,30 +75,6 @@ class VhloCfgOrigenRegistro
     public function getNombre()
     {
         return $this->nombre;
-    }
-
-    /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return VhloCfgOrigenRegistro
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return bool
-     */
-    public function getActivo()
-    {
-        return $this->activo;
     }
 }
 

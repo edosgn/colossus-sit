@@ -153,16 +153,40 @@ class FroTrtePrecioController extends Controller
     /**
      * Finds and displays a froTrtePrecio entity.
      *
-     * @Route("/{id}/show", name="frotrteprecio_show")
-     * @Method("GET")
+     * @Route("/show", name="frotrteprecio_show")
+     * @Method("POST")
      */
-    public function showAction(FroTrtePrecio $froTrtePrecio)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($froTrtePrecio);
-        return $this->render('froTrtePrecio/show.html.twig', array(
-            'froTrtePrecio' => $froTrtePrecio,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $tramitePrecio
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -344,7 +368,7 @@ class FroTrtePrecioController extends Controller
 
         $response = null;
 
-        foreach ($tramitesPrecios as $key => $tramitePrecio) {
+        foreach ($tramitesPrecio as $key => $tramitePrecio) {
             $response[$key] = array(
                 'value' => $tramitePrecio->getId(),
                 'label' => $tramitePrecio->getNombre(),

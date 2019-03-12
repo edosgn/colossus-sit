@@ -1,23 +1,23 @@
 <?php
 
-namespace JHWEB\ContravencionalBundle\Controller;
+namespace JHWEB\PersonalBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvCdoCfgInteres;
+use JHWEB\PersonalBundle\Entity\PnalCfgTipoNombramiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cvcdocfgintere controller.
+ * Pnalcfgtiponombramiento controller.
  *
- * @Route("cvcdocfginteres")
+ * @Route("pnalcfgtiponombramiento")
  */
-class CvCdoCfgInteresController extends Controller
+class PnalCfgTipoNombramientoController extends Controller
 {
     /**
-     * Lists all cvCdoCfgIntere entities.
+     * Lists all pnalCfgTipoNombramiento entities.
      *
-     * @Route("/", name="cvcdocfginteres_index")
+     * @Route("/", name="pnalcfgtiponombramiento_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +26,7 @@ class CvCdoCfgInteresController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $intereses = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->findBy(
+        $tiposNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->findBy(
             array(
                 'activo' => true
             )
@@ -34,12 +34,12 @@ class CvCdoCfgInteresController extends Controller
 
         $response['data'] = array();
 
-        if ($intereses) {
+        if ($tiposNombramiento) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($intereses)." registros encontrados", 
-                'data'=> $intereses,
+                'message' => count($tiposNombramiento).' registros encontrados.', 
+                'data'=> $tiposNombramiento,
             );
         }
 
@@ -47,9 +47,9 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Creates a new cvCdoCfgIntere entity.
+     * Creates a new pnalCfgTipoNombramiento entity.
      *
-     * @Route("/new", name="cvcdocfginteres_new")
+     * @Route("/new", name="pnalcfgtiponombramiento_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -64,20 +64,13 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = new CvCdoCfgInteres();
+            $tipoContrato = new PnalCfgTipoContrato();
 
-            $interes->setPorcentaje($params->porcentaje);
-            $interes->setDias($params->dias);
-            $interes->setActivo(true);
-
-            if ($params->idComparendoEstado) {
-                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                    $params->idComparendoEstado
-                );
-                $interes->setEstado($estado);
-            }
+            $tipoContrato->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipoContrato->setGestionable($params->gestionable);
+            $tipoContrato->setActivo(true);
             
-            $em->persist($interes);
+            $em->persist($tipoContrato);
             
             $em->flush();
 
@@ -98,10 +91,10 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Finds and displays a cvCdoCfgIntere entity.
+     * Finds and displays a pnalCfgTipoNombramiento entity.
      *
-     * @Route("/show", name="cvcdocfginteres_show")
-     * @Method({"GET", "POST"})
+     * @Route("/show", name="pnalcfgtiponombramiento_show")
+     * @Method("POST")
      */
     public function showAction(Request $request)
     {
@@ -109,13 +102,13 @@ class CvCdoCfgInteresController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
+        if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->find(
+            $tipoNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->find(
                 $params->id
             );
 
@@ -123,7 +116,7 @@ class CvCdoCfgInteresController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => 'Registro encontrado con exito.',
-                'data' => $interes
+                'data' => $tipoNombramiento
             );
         }else{
             $response = array(
@@ -137,9 +130,9 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing cvCdoCfgIntere entity.
+     * Displays a form to edit an existing pnalCfgTipoNombramiento entity.
      *
-     * @Route("/edit", name="cvcdocfginteres_edit")
+     * @Route("/edit", name="pnalcfgtiponombramiento_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -154,39 +147,34 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository("JHWEBContravencionalBundle:CvCdoCfgInteres")->find($params->id);
+            $tipoNombramiento = $em->getRepository("JHWEBPersonalBundle:PnalCfgTipoNombramiento")->find($params->id);
 
-            if ($interes) {
-                $interes->setPorcentaje($params->porcentaje);
-                $interes->setDias($params->dias);
-
-                if ($params->idComparendoEstado) {
-                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
-                        $params->idComparendoEstado
-                    );
-                    $interes->setEstado($estado);
-                }
+            if ($tipoNombramiento) {
+                $tipoNombramiento->setNombre(
+                    mb_strtoupper($params->nombre, 'utf-8')
+                );
+                $tipoNombramiento->setGestionable($params->gestionable);
                 
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro actualizado con exito", 
-                    'data'=> $interes,
+                    'message' => 'Registro actualizado con exito.', 
+                    'data'=> $tipoNombramiento,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El registro no se encuentra en la base de datos", 
+                    'message' => 'El registro no se encuentra en la base de datos.', 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Autorizacion no valida para editar", 
+                    'message' => 'Autorizacion no valida para editar.', 
                 );
         }
 
@@ -194,10 +182,10 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Deletes a cvCdoCfgIntere entity.
+     * Deletes a pnalCfgTipoNombramiento entity.
      *
-     * @Route("/delete", name="cvcdocfginteres_delete")
-     * @Method({"GET", "POST"})
+     * @Route("/delete", name="pnalcfgtiponombramiento_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request)
     {
@@ -211,11 +199,11 @@ class CvCdoCfgInteresController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgInteres')->find(
+            $tipoNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->find(
                 $params->id
             );
 
-            $interes->setActivo(false);
+            $tipoNombramiento->setActivo(false);
 
             $em->flush();
 
@@ -236,18 +224,48 @@ class CvCdoCfgInteresController extends Controller
     }
 
     /**
-     * Creates a form to delete a cvCdoCfgIntere entity.
+     * Creates a form to delete a pnalCfgTipoNombramiento entity.
      *
-     * @param CvCdoCfgInteres $cvCdoCfgIntere The cvCdoCfgIntere entity
+     * @param PnalCfgTipoNombramiento $pnalCfgTipoNombramiento The pnalCfgTipoNombramiento entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvCdoCfgInteres $cvCdoCfgIntere)
+    private function createDeleteForm(PnalCfgTipoNombramiento $pnalCfgTipoNombramiento)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvcdocfginteres_delete', array('id' => $cvCdoCfgIntere->getId())))
+            ->setAction($this->generateUrl('pnalcfgtiponombramiento_delete', array('id' => $pnalCfgTipoNombramiento->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ============================================== */
+
+    /**
+     * Listado de tipos de nombramiento para selección con búsqueda
+     *
+     * @Route("/select", name="pnalcfgtiponombramiento_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $tiposNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->findBy(
+            array('activo' => true)
+        );
+        
+        $response = null;
+
+        foreach ($tiposNombramiento as $key => $tipoNombramiento) {
+            $response[$key] = array(
+                'value' => $tipoNombramiento->getId(),
+                'label' => $tipoNombramiento->getNombre(),
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

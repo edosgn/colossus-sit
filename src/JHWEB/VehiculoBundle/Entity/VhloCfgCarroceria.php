@@ -31,7 +31,7 @@ class VhloCfgCarroceria
     /**
      * @var int
      *
-     * @ORM\Column(name="codigo", type="integer", unique=true)
+     * @ORM\Column(name="codigo", type="integer")
      */
     private $codigo;
 

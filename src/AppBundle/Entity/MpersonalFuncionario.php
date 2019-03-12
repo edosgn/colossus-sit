@@ -111,11 +111,6 @@ class MpersonalFuncionario
     protected $sedeOperativa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato", inversedBy="funcionarios")
-     **/
-    protected $tipoContrato;
-
-    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalCfgCargo", inversedBy="funcionarios")
      **/
     protected $cargo;
@@ -446,30 +441,6 @@ class MpersonalFuncionario
     public function getSedeOperativa()
     {
         return $this->sedeOperativa;
-    }
-
-    /**
-     * Set tipoContrato
-     *
-     * @param \JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato $tipoContrato
-     *
-     * @return MpersonalFuncionario
-     */
-    public function setTipoContrato(\JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato $tipoContrato = null)
-    {
-        $this->tipoContrato = $tipoContrato;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoContrato
-     *
-     * @return \JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato
-     */
-    public function getTipoContrato()
-    {
-        return $this->tipoContrato;
     }
 
     /**

@@ -104,11 +104,6 @@ class PnalFuncionario
     protected $tipoNombramiento;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PnalCfgTipoContrato", inversedBy="funcionarios")
-     **/
-    protected $tipoContrato;
-
-    /**
      * @ORM\ManyToOne(targetEntity="PnalCfgCargo", inversedBy="funcionarios")
      **/
     protected $cargo;
@@ -117,6 +112,11 @@ class PnalFuncionario
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="funcionarios")
      **/
     protected $ciudadano;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="funcionarios")
+     **/
+    protected $organismoTransito;
 
 
     /**
@@ -418,30 +418,6 @@ class PnalFuncionario
     }
 
     /**
-     * Set tipoContrato
-     *
-     * @param \JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato $tipoContrato
-     *
-     * @return PnalFuncionario
-     */
-    public function setTipoContrato(\JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato $tipoContrato = null)
-    {
-        $this->tipoContrato = $tipoContrato;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoContrato
-     *
-     * @return \JHWEB\PersonalBundle\Entity\PnalCfgTipoContrato
-     */
-    public function getTipoContrato()
-    {
-        return $this->tipoContrato;
-    }
-
-    /**
      * Set cargo
      *
      * @param \JHWEB\PersonalBundle\Entity\PnalCfgCargo $cargo
@@ -487,5 +463,29 @@ class PnalFuncionario
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set organismoTransito
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
+     *
+     * @return PnalFuncionario
+     */
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
     }
 }
