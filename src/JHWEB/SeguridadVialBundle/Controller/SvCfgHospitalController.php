@@ -61,10 +61,10 @@ class SvCfgHospitalController extends Controller
             $hospital = new SvCfgHospital();
 
             $em = $this->getDoctrine()->getManager();
-
-            if ($params->sedeOperativa) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativa);
-                $hospital->setSedeOperativa($sedeOperativa);
+        
+            if ($params->organismoTransito) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->organismoTransito);
+                $hospital->setOrganismoTransito($organismoTransito);
             }
 
             if ($params->municipio) {

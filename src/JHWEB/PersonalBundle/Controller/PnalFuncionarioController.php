@@ -197,4 +197,33 @@ class PnalFuncionarioController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/contratistas", name="pnalfuncionario_select_contratistas")
+     * @Method({"GET", "POST"})
+     */
+    public function selectContratistasAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $response = null;
+
+        $funcionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findBy(
+            array(
+                'activo' => true,
+                'tipoNombramiento' => 3,
+            )
+        );
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getPrimerApellido(),
+            );
+        }
+        return $helpers->json($response);
+    }
 }

@@ -61,7 +61,7 @@
             </table>       
             <p>Fecha límite en que debe retornar documento de PESV: <b>{{ evaluacion.revision.fechaDevolucion }}</b></p>
             <p style="text-align:center;"><b>NOTIFICACIÓN A LA EMPRESA</b></p>
-            <b>  Autoridad de tránsito: </b> {{ evaluacion.id }}<br>
+            <b>  Autoridad de tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
             <b>Funcionario que adelanta el proceso: </b>{{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.segundoNombre }} {{ funcionario.ciudadano.primerApellido }} {{ funcionario.ciudadano.segundoApellido }}<br>
             <b>Cargo:</b> {{ funcionario.cargo.nombre }}<br>  
             <b>Teléfono:</b> {{ funcionario.ciudadano.telefono }}<br>
