@@ -132,7 +132,7 @@ class MsvRevision
     protected $empresa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario")
      **/
     protected $funcionario;
 
@@ -477,30 +477,6 @@ class MsvRevision
     }
 
     /**
-     * Set funcionario
-     *
-     * @param \AppBundle\Entity\MpersonalFuncionario $funcionario
-     *
-     * @return MsvRevision
-     */
-    public function setFuncionario(\AppBundle\Entity\MpersonalFuncionario $funcionario = null)
-    {
-        $this->funcionario = $funcionario;
-
-        return $this;
-    }
-
-    /**
-     * Get funcionario
-     *
-     * @return \AppBundle\Entity\MpersonalFuncionario
-     */
-    public function getFuncionario()
-    {
-        return $this->funcionario;
-    }
-
-    /**
      * Set evaluacion
      *
      * @param \AppBundle\Entity\MsvEvaluacion $evaluacion
@@ -597,5 +573,29 @@ class MsvRevision
             return $this->fechaRegistro->format('Y-m-d');
         }
         return $this->fechaRegistro;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return MsvRevision
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }

@@ -477,8 +477,11 @@ class UserCiudadanoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->getDoctrine()->getManager();   
             
+            $ciudadano = null;
+            $empresa = null;
+
             if($params->idTipoIdentificacion == 4) {
                 $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
                     array(
@@ -486,7 +489,7 @@ class UserCiudadanoController extends Controller
                         'activo' => true,
                     )
                 );
-            } else {
+            } else if($params->idTipoIdentificacion == 1) {
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                     array(
                         'identificacion' => $params->identificacion,
@@ -496,7 +499,7 @@ class UserCiudadanoController extends Controller
                 );
             }
 
-            if ($ciudadano) {
+            if ($ciudadano != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -506,7 +509,8 @@ class UserCiudadanoController extends Controller
                         'empresa' => null,
                     )
                 );
-            }elseif ($empresa) {
+            }
+            if ($empresa != null) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

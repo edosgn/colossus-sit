@@ -52,7 +52,8 @@ class MsvRevisionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->funcionarioId);
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find($params->funcionarioId);
+            
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresaId);
 
             $revision = new MsvRevision();
