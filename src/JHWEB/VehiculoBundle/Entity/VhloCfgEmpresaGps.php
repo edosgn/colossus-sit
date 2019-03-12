@@ -29,6 +29,20 @@ class VhloCfgEmpresaGps
     private $nombre;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="nit", type="bigint")
+     */
+    private $nit;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer")
+     */
+    private $codigo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="activo", type="string", length=255)
@@ -71,6 +85,54 @@ class VhloCfgEmpresaGps
     }
 
     /**
+     * Set nit
+     *
+     * @param integer $nit
+     *
+     * @return VhloCfgEmpresaGps
+     */
+    public function setNit($nit)
+    {
+        $this->nit = $nit;
+
+        return $this;
+    }
+
+    /**
+     * Get nit
+     *
+     * @return integer
+     */
+    public function getNit()
+    {
+        return $this->nit;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return VhloCfgEmpresaGps
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
+    }
+
+    /**
      * Set activo
      *
      * @param string $activo
@@ -94,4 +156,3 @@ class VhloCfgEmpresaGps
         return $this->activo;
     }
 }
-

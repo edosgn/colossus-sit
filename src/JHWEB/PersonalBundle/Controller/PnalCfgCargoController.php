@@ -67,6 +67,8 @@ class PnalCfgCargoController extends Controller
             $cargo = new PnalCfgCargo();
 
             $cargo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $cargo->setHorarios($params->horarios);
+            $cargo->setProrroga($params->prorroga);
             $cargo->setGestionable($params->gestionable);
             $cargo->setActivo(true);
             
@@ -151,6 +153,8 @@ class PnalCfgCargoController extends Controller
 
             if ($cargo) {
                 $cargo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                $cargo->setHorarios($params->horarios);
+                $cargo->setProrroga($params->prorroga);
                 $cargo->setGestionable($params->gestionable);
                 
                 $em->flush();

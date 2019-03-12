@@ -60,17 +60,40 @@ class CfgModuloController extends Controller
     /**
      * Finds and displays a cfgModulo entity.
      *
-     * @Route("/{id}/show", name="cfgmodulo_show")
-     * @Method("GET")
+     * @Route("/show", name="cfgmodulo_show")
+     * @Method("POST")
      */
-    public function showAction(CfgModulo $cfgModulo)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgModulo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cfgmodulo/show.html.twig', array(
-            'cfgModulo' => $cfgModulo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $modulo
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**

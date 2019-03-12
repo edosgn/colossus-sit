@@ -1,15 +1,3 @@
-jhweb_personal_pnal_cfg_tipo_contrato:
-    resource: "@JHWEBPersonalBundle/Controller/PnalCfgTipoContratoController.php"
-    type:     annotation
-
-jhweb_personal_pnal_cfg_tipo_nombramiento:
-    resource: "@JHWEBPersonalBundle/Controller/PnalCfgTipoNombramientoController.php"
-    type:     annotation
-
-jhweb_personal_pnal_cfg_cargo:
-    resource: "@JHWEBPersonalBundle/Controller/PnalCfgCargoController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

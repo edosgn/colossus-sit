@@ -479,39 +479,42 @@ class UserCiudadanoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $ciudadano = null;
-            $empresa = null;
-            
-            if($params->idTipoIdentificacion == 1) {
+            if($params->idTipoIdentificacion == 4) {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                    array(
+                        'nit' => $params->nit,
+                        'activo' => true,
+                    )
+                );
+            } else {
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                     array(
                         'identificacion' => $params->identificacion,
                         'tipoIdentificacion' => $params->idTipoIdentificacion,
-                        'activo' => 1,
-                    )
-                );
-            } elseif ($params->idTipoIdentificacion == 4) {
-                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
-                    array(
-                        'nit' => $params->nit,
-                        'activo' => 1,
+                        'activo' => true,
                     )
                 );
             }
-            if ($ciudadano != null) {
+
+            if ($ciudadano) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'ciudadano'=> $ciudadano,
+                    'data'=> array(
+                        'ciudadano' => $ciudadano,
+                        'empresa' => null,
+                    )
                 );
-            }
-            else if ($empresa != null) {
+            }elseif ($empresa) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado", 
-                    'empresa'=> $empresa,
+                    'data'=> array(
+                        'ciudadano' => null,
+                        'empresa' => $empresa,
+                    )
                 );
             }else{
                  $response = array(

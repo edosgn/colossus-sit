@@ -4,6 +4,7 @@ namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroFactura;
 use JHWEB\FinancieroBundle\Entity\FroFacComparendo;
+use JHWEB\FinancieroBundle\Entity\FroFacTramite;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -90,11 +91,11 @@ class FroFacturaController extends Controller
                 $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
             );
             
-            if ($params->idSedeOperativa) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->idSedeOperativa
+            if ($params->idOrganismoTransito) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
                 );
-                $factura->setSedeOperativa($sedeOperativa);
+                $factura->setOrganismoTransito($organismoTransito);
             }
 
             if ($params->idTipoRecaudo) {
@@ -107,7 +108,11 @@ class FroFacturaController extends Controller
             $em->persist($factura);
             $em->flush();
 
-            $this->calculateValueUpdate($params->comparendos, $factura);
+            if (isset($params->comparendos)) {
+                $this->registerComparendos($params->comparendos, $factura);
+            }elseif (isset($params->tramites)) {
+                $this->registerTramites($params->tramites, $factura);
+            }
 
             $response = array(
                 'status' => 'success',
@@ -347,9 +352,9 @@ class FroFacturaController extends Controller
     }
 
     /**
-     * Calcula el valor según los comparendos seleccionados y actualiza los valores.
+     * Registra los comparendos según la factura y calcula el valor según los comparendos seleccionados y actualiza los valores.
      */
-    public function calculateValueUpdate($params, $factura)
+    public function registerComparendos($params, $factura)
     {
         $helpers = $this->get("app.helpers");
 
@@ -433,6 +438,35 @@ class FroFacturaController extends Controller
     }
 
     /**
+     * Registra los trámites según la factura.
+     */
+    public function registerTramites($params, $factura)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($params as $key => $tramitePrecioSelect) {
+            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+                $tramitePrecioSelect->id
+            );
+
+            //Inserta la relación de factura con trámites seleccionados
+            $facturaTramite = new FroFacTramite();
+
+            $facturaTramite->setFactura($factura);
+            $facturaTramite->setPrecio($tramitePrecio);
+            $facturaTramite->setRealizado(false);
+            $facturaTramite->setActivo(true);
+
+            $em->persist($facturaTramite);
+            $em->flush();
+        }
+
+        return true;
+    }
+
+    /**
      * Genera pdf de factura seleccionada.
      *
      * @Route("/{tipoRecaudo}/{id}/pdf", name="froFactura_pdf")
@@ -442,7 +476,7 @@ class FroFacturaController extends Controller
     {
         switch ($tipoRecaudo) {
             case 1:
-                $this->generatePdfInfracciones($id);
+                $this->generatePdfTramites($id);
                 break;
             
             case 2:
@@ -455,6 +489,41 @@ class FroFacturaController extends Controller
         }
 
 
+    }
+
+    protected function generatePdfTramites($id){
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
+
+        $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->findBy(
+            array(
+                'factura' => $factura->getId()
+            )
+        );
+
+        $barcode = new BarcodeGenerator();
+        $barcode->setText('(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd'));
+        $barcode->setNoLengthLimit(true);
+        $barcode->setAllowsUnknownIdentifier(true);
+        $barcode->setType(BarcodeGenerator::Gs1128);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(7);
+        $imgBarcode = $barcode->generate();
+
+        //$imgBarcode = \base64_decode($code);
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'factura'=>$factura,
+            'tramites'=>$tramites,
+            'imgBarcode' => $imgBarcode
+        ));
+
+        $this->get('app.pdf.factura')->templateTramites($html, $factura);
     }
 
     protected function generatePdfInfracciones($id){

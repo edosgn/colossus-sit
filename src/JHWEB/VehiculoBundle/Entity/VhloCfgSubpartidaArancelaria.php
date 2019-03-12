@@ -24,7 +24,14 @@ class VhloCfgSubpartidaArancelaria
     /**
      * @var string
      *
-     * @ORM\Column(name="codigo", type="string", length=255)
+     * @ORM\Column(name="valor", type="string", length=255)
+     */
+    private $valor;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer")
      */
     private $codigo;
 
@@ -47,9 +54,33 @@ class VhloCfgSubpartidaArancelaria
     }
 
     /**
+     * Set valor
+     *
+     * @param string $valor
+     *
+     * @return VhloCfgSubpartidaArancelaria
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return string
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
      * Set codigo
      *
-     * @param string $codigo
+     * @param integer $codigo
      *
      * @return VhloCfgSubpartidaArancelaria
      */
@@ -63,7 +94,7 @@ class VhloCfgSubpartidaArancelaria
     /**
      * Get codigo
      *
-     * @return string
+     * @return integer
      */
     public function getCodigo()
     {
@@ -87,11 +118,10 @@ class VhloCfgSubpartidaArancelaria
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-
