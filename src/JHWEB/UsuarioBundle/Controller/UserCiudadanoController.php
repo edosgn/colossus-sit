@@ -483,7 +483,7 @@ class UserCiudadanoController extends Controller
             $empresa = null;
 
             if($params->idTipoIdentificacion == 4) {
-                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
                     array(
                         'nit' => $params->nit,
                         'activo' => true,

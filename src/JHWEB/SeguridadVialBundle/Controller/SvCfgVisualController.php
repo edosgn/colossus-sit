@@ -63,9 +63,7 @@ class SvCfgVisualController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $visual->setNombre($nombre);
+            $visual->setNombre(strtoupper($params->nombre));
             $visual->setActivo(true);
             $em->persist($visual);
             $em->flush();
@@ -147,9 +145,8 @@ class SvCfgVisualController extends Controller
             $visual = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisual')->find($params->id);
 
             if ($visual != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $visual->setNombre($nombre);
+                
+                $visual->setNombre(strtoupper($params->nombre));
 
                 $em->persist($visual);
                 $em->flush();

@@ -63,9 +63,7 @@ class SvCfgEstadoConductorController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $estadoConductor->setNombre($nombre);
+            $estadoConductor->setNombre(strtoupper($params->nombre));
             $estadoConductor->setActivo(true);
             $em->persist($estadoConductor);
             $em->flush();
@@ -120,9 +118,8 @@ class SvCfgEstadoConductorController extends Controller
             $estadoConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoConductor')->find($params->id);
 
             if ($estadoConductor != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $estadoConductor->setNombre($nombre);
+                $estadoConductor->setNombre(strtoupper($params->nombre));
 
                 $em->persist($estadoConductor);
                 $em->flush();

@@ -69,8 +69,7 @@ class SvCfgClaseChoqueController extends Controller
                 ));
                 $claseChoque->setClaseAccidente($claseAccidente);
             }
-            $nombre = strtoupper($params->nombre);
-            $claseChoque->setNombre($nombre);
+            $claseChoque->setNombre(strtoupper($params->nombre));
             $claseChoque->setActivo(true);
             $em->persist($claseChoque);
             $em->flush();
@@ -132,9 +131,7 @@ class SvCfgClaseChoqueController extends Controller
             }
             
             if ($claseChoque != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $claseChoque->setNombre($nombre);
+                $claseChoque->setNombre(strtoupper($params->nombre));
                 $claseChoque->setClaseAccidente($claseAccidente);
 
                 $em->persist($claseChoque);

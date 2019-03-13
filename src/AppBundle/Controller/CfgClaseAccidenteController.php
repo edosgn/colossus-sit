@@ -178,36 +178,39 @@ class CfgClaseAccidenteController extends Controller
     /**
      * Deletes a cfgClaseAccidente entity.
      *
-     * @Route("/{id}/delete", name="cfgclaseaccidente_delete")
-     * @Method("POST")
+     * @Route("/delete", name="cfgclaseaccidente_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
+        $hash = $request->get("authorization", true);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $cfgClaseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find($id);
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+    
+            $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->find($params->id);
+            $claseAccidente->setEstado(false);
 
-            $cfgClaseAccidente->setEstado(0);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgClaseAccidente);
+            $em->persist($claseAccidente);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "clase accidente eliminado con exito",
+                'message' => "Registro eliminado con éxito.",
             );
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no válida",
             );
         }
         return $helpers->json($response);
-
     }
 
     /**

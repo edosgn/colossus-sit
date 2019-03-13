@@ -63,9 +63,7 @@ class SvCfgEstadoIluminacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $estadoIluminacion->setNombre($nombre);
+            $estadoIluminacion->setNombre(strtoupper($params->nombre));
             $estadoIluminacion->setActivo(true);
             $em->persist($estadoIluminacion);
             $em->flush();
@@ -120,9 +118,8 @@ class SvCfgEstadoIluminacionController extends Controller
             $estadoIluminacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoIluminacion')->find($params->id);
 
             if ($estadoIluminacion != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $estadoIluminacion->setNombre($nombre);
+    
+                $estadoIluminacion->setNombre(strtoupper($params->nombre));
 
                 $em->persist($estadoIluminacion);
                 $em->flush();

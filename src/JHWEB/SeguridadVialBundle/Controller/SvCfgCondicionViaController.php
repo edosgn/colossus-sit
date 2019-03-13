@@ -63,9 +63,7 @@ class SvCfgCondicionViaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $condicionVia->setNombre($nombre);
+            $condicionVia->setNombre(strtoupper($params->nombre));
             $condicionVia->setActivo(true);
             $em->persist($condicionVia);
             $em->flush();
@@ -120,9 +118,8 @@ class SvCfgCondicionViaController extends Controller
             $condicionVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCondicionVia')->find($params->id);
 
             if ($condicionVia != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $condicionVia->setNombre($nombre);
+                $condicionVia->setNombre(strtoupper($params->nombre));
 
                 $em->persist($condicionVia);
                 $em->flush();

@@ -59,13 +59,11 @@ class SvCfgResultadoExamenController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
+            $em = $this->getDoctrine()->getManager();
+            
             $resultadoExamen = new SvCfgResultadoExamen();
 
-            $em = $this->getDoctrine()->getManager();
-
-            $nombre = strtoupper($params->nombre);
-
-            $resultadoExamen->setNombre($nombre);
+            $resultadoExamen->setNombre(strtoupper($params->nombre));
             $resultadoExamen->setActivo(true);
             $em->persist($resultadoExamen);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgResultadoExamenController extends Controller
             $resultadoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find($params->id);
 
             if ($resultadoExamen != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $resultadoExamen->setNombre(nombre);
+                $resultadoExamen->setNombre(strtoupper($params->nombre));
 
                 $em->persist($resultadoExamen);
                 $em->flush();

@@ -63,9 +63,7 @@ class SvCfgEstadoTiempoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $estadoTiempo->setNombre($nombre);
+            $estadoTiempo->setNombre(strtoupper($params->nombre));
             $estadoTiempo->setActivo(true);
             $em->persist($estadoTiempo);
             $em->flush();
@@ -120,9 +118,8 @@ class SvCfgEstadoTiempoController extends Controller
             $estadoTiempo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoTiempo')->find($params->id);
 
             if ($estadoTiempo != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $estadoTiempo->setNombre($nombre);
+                
+                $estadoTiempo->setNombre(strtoupper($params->nombre));
 
                 $em->persist($estadoTiempo);
                 $em->flush();

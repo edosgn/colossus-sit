@@ -80,9 +80,7 @@ class SvCfgTipoAreaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $tipoArea->setNombre($nombre);
+            $tipoArea->setNombre(strtoupper($params->nombre));
             $tipoArea->setActivo(true);
             $em->persist($tipoArea);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgTipoAreaController extends Controller
             $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find($params->id);
 
             if ($tipoArea != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $tipoArea->setNombre($nombre);
+                
+                $tipoArea->setNombre(strtoupper($params->nombre));
 
                 $em->persist($tipoArea);
                 $em->flush();

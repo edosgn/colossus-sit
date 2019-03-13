@@ -63,9 +63,7 @@ class SvCfgNacionalidadController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $nacionalidad->setNombre($nombre);
+            $nacionalidad->setNombre(strtoupper($params->nombre));
             $nacionalidad->setActivo(true);
             $em->persist($nacionalidad);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgNacionalidadController extends Controller
             $nacionalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->id);
 
             if ($nacionalidad != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $nacionalidad->setNombre($nombre);
+                $nacionalidad->setNombre(strtoupper($params->nombre));
 
                 $em->persist($nacionalidad);
                 $em->flush();

@@ -71,9 +71,7 @@ class SvCfgControlViaController extends Controller
                 $controlVia->setTipoControl($tipoControl);
             }
 
-            $nombre = strtoupper($params->nombre);
-
-            $controlVia->setNombre($nombre);
+            $controlVia->setNombre(strtoupper($params->nombre));
             $controlVia->setActivo(true);
             $em->persist($controlVia);
             $em->flush();
@@ -129,9 +127,8 @@ class SvCfgControlViaController extends Controller
 
             $tipoControl = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControl')->find($params->tipoControl);
             if ($controlVia != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $controlVia->setNombre($nombre);
+                $controlVia->setNombre(strtoupper($params->nombre));
                 $controlVia->setTipoControl($tipoControl);
 
                 $em->persist($controlVia);

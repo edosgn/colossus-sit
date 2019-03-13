@@ -64,9 +64,7 @@ class SvCfgTipoControlController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $tipoControl->setNombre($nombre);
+            $tipoControl->setNombre(strtoupper($params->nombre));
             $tipoControl->setActivo(true);
             $em->persist($tipoControl);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgTipoControlController extends Controller
             $tipoControl = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoControl')->find($params->id);
 
             if ($tipoControl != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $tipoControl->setNombre($nombre);
+                
+                $tipoControl->setNombre(strtoupper($params->nombre));
 
                 $em->persist($tipoControl);
                 $em->flush();

@@ -24,7 +24,7 @@ class MsvTalonario
      /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="msvTalonarios")
      **/
-    protected $sedeOperativa;
+    protected $organismoTransito;
 
     /**
      * @var int
@@ -225,26 +225,26 @@ class MsvTalonario
     }
 
     /**
-     * Set sedeOperativa
+     * Set organismoTransito
      *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return MsvTalonario
      */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get organismoTransito
      *
-     * @return \AppBundle\Entity\SedeOperativa
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getSedeOperativa()
+    public function getOrganismoTransito()
     {
-        return $this->sedeOperativa;
+        return $this->organismoTransito;
     }
 }

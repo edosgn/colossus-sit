@@ -63,9 +63,7 @@ class SvCfgGravedadVictimaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $gravedadVictima->setNombre($nombre);
+            $gravedadVictima->setNombre(strtoupper($params->nombre));
             $gravedadVictima->setActivo(true);
             $em->persist($gravedadVictima);
             $em->flush();
@@ -121,9 +119,7 @@ class SvCfgGravedadVictimaController extends Controller
             $gravedadVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find($params->id);
 
             if ($gravedadVictima != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $gravedadVictima->setNombre($nombre);
+                $gravedadVictima->setNombre(strtoupper($params->nombre));
 
                 $em->persist($gravedadVictima);
                 $em->flush();

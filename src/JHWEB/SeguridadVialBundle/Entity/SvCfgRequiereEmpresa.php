@@ -24,7 +24,7 @@ class SvCfgRequiereEmpresa
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Carroceria", inversedBy="tiposvehiculo")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria", inversedBy="requiereEmpresa")
      */
     private $carroceria;
 
@@ -103,11 +103,11 @@ class SvCfgRequiereEmpresa
     /**
      * Set carroceria
      *
-     * @param \AppBundle\Entity\Carroceria $carroceria
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria $carroceria
      *
      * @return SvCfgRequiereEmpresa
      */
-    public function setCarroceria(\AppBundle\Entity\Carroceria $carroceria = null)
+    public function setCarroceria(\JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria $carroceria = null)
     {
         $this->carroceria = $carroceria;
 
@@ -117,7 +117,7 @@ class SvCfgRequiereEmpresa
     /**
      * Get carroceria
      *
-     * @return \AppBundle\Entity\Carroceria
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria
      */
     public function getCarroceria()
     {

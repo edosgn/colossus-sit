@@ -124,9 +124,8 @@ class SvCfgHospitalController extends Controller
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->organismoTransito);
             
             if ($hospital != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $hospital->setNombre($nombre);
+                $hospital->setNombre(strtoupper($params->nombre));
                 $hospital->setOrganismoTransito($organismoTransito);
 
                 $em->persist($hospital);

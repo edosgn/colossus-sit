@@ -63,9 +63,7 @@ class SvCfgSectorController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $sector->setNombre($nombre);
+            $sector->setNombre(strtoupper($params->nombre));
             $sector->setActivo(true);
             $em->persist($sector);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgSectorController extends Controller
             $sector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSector')->find($params->id);
 
             if ($sector != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $sector->setNombre($nombre);
+            
+                $sector->setNombre(strtoupper($params->nombre));
 
                 $em->persist($sector);
                 $em->flush();

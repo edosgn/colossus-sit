@@ -63,9 +63,7 @@ class SvCfgZonaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $zona->setNombre($nombre);
+            $zona->setNombre(strtoupper($params->nombre));
             $zona->setActivo(true);
             $em->persist($zona);
             $em->flush();
@@ -146,9 +144,7 @@ class SvCfgZonaController extends Controller
             $zona = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgZona')->find($params->id);
 
             if ($zona != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $zona->setNombre($nombre);
+                $zona->setNombre(strtoupper($params->nombre));
 
                 $em->persist($zona);
                 $em->flush();

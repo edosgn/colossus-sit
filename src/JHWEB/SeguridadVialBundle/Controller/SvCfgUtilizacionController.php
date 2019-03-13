@@ -67,9 +67,7 @@ class SvCfgUtilizacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $utilizacion->setNombre($nombre);
+            $utilizacion->setNombre(strtoupper($params->nombre));
             $utilizacion->setActivo(true);
             $em->persist($utilizacion);
             $em->flush();
@@ -151,9 +149,7 @@ class SvCfgUtilizacionController extends Controller
             $utilizacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUtilizacion')->find($params->id);
 
             if ($utilizacion != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $utilizacion->setNombre($nombre);
+                $utilizacion->setNombre(strtoupper($params->nombre));
 
                 $em->persist($utilizacion);
                 $em->flush();

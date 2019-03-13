@@ -62,8 +62,8 @@ class SvCfgCalzadaCarrilController extends Controller
             $calzada = new SvCfgCalzadaCarril();
 
             $em = $this->getDoctrine()->getManager();
-            $nombre = strtoupper($params->nombre);
-            $calzada->setNombre($nombre);
+            
+            $calzada->setNombre(strtoupper($params->nombre));
             $calzada->setActivo(true);
             $em->persist($calzada);
             $em->flush();
@@ -118,9 +118,7 @@ class SvCfgCalzadaCarrilController extends Controller
             $calzada = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCalzadaCarril')->find($params->id);
 
             if ($calzada != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $calzada->setNombre($nombre);
+                $calzada->setNombre(strtoupper($params->nombre));
 
                 $em->persist($calzada);
                 $em->flush();

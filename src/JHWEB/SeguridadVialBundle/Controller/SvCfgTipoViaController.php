@@ -70,9 +70,7 @@ class SvCfgTipoViaController extends Controller
                 $tipoVia->setTipoArea($tipoArea);
             }
 
-            $nombre = strtoupper($params->nombre);
-
-            $tipoVia->setNombre($nombre);
+            $tipoVia->setNombre(strtoupper($params->nombre));
             $tipoVia->setActivo(true);
             $em->persist($tipoVia);
             $em->flush();
@@ -126,13 +124,17 @@ class SvCfgTipoViaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $tipoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVia')->find($params->id);
-            $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find($params->tipoArea);
+            
+            if ($params->tipoArea) {
+                $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find(
+                    $params->tipoArea
+                );
+                $tipoVia->setTipoArea($tipoArea);
+            }
 
-            if ($tipoVia != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $tipoVia->setNombre($nombre);
-                $tipoVia->setTipoArea($params->tipoArea);
+            if ($tipoVia != null) 
+            {
+                $tipoVia->setNombre(strtoupper($params->nombre));
 
                 $em->persist($tipoVia);
                 $em->flush();
