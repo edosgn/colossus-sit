@@ -60,17 +60,40 @@ class CfgMunicipioController extends Controller
     /**
      * Finds and displays a cfgMunicipio entity.
      *
-     * @Route("/{id}/show", name="cfgmunicipio_show")
-     * @Method("GET")
+     * @Route("/show", name="cfgmunicipio_show")
+     * @Method("POST")
      */
-    public function showAction(CfgMunicipio $cfgMunicipio)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cfgMunicipio);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cfgmunicipio/show.html.twig', array(
-            'cfgMunicipio' => $cfgMunicipio,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $municipio
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
