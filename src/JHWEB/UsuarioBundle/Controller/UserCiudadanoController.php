@@ -494,8 +494,8 @@ class UserCiudadanoController extends Controller
                     array(
                         'identificacion' => $params->identificacion,
                         'activo' => true,
-                        )
-                    );
+                    )
+                );
             }
 
             if ($ciudadano || $empresa) {
