@@ -489,7 +489,7 @@ class UserCiudadanoController extends Controller
                         'activo' => true,
                     )
                 );
-            } else if($params->idTipoIdentificacion == 1) {
+            } elseif($params->idTipoIdentificacion == 1) {
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                     array(
                         'identificacion' => $params->identificacion,
@@ -499,24 +499,13 @@ class UserCiudadanoController extends Controller
                 );
             }
 
-            if ($ciudadano != null) {
+            if ($ciudadano || $empresa) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado", 
+                    'message' => 'Registro encontrado.', 
                     'data'=> array(
                         'ciudadano' => $ciudadano,
-                        'empresa' => null,
-                    )
-                );
-            }
-            if ($empresa != null) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro encontrado", 
-                    'data'=> array(
-                        'ciudadano' => null,
                         'empresa' => $empresa,
                     )
                 );
@@ -524,16 +513,17 @@ class UserCiudadanoController extends Controller
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se encontró ningun registro en la base de datos", 
+                    'message' => 'No se encontró ningun registro en la base de datos.', 
                 );
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
+
         return $helpers->json($response);
     }
 

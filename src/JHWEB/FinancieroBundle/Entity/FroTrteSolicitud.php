@@ -52,9 +52,9 @@ class FroTrteSolicitud
     /**
      * @var array
      *
-     * @ORM\Column(name="datos", type="array", nullable=true)
+     * @ORM\Column(name="foraneas", type="array", nullable=true)
      */
-    private $datos;
+    private $foraneas;
 
     /**
      * @var string
@@ -78,12 +78,12 @@ class FroTrteSolicitud
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloPropietario", inversedBy="tramitesSolicitud")
      **/
-    protected $solicitante;
+    protected $propietario;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="tramitesSolicitud")
      **/
-    protected $apoderado;
+    protected $solicitante;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="tramitesSolicitud")
@@ -198,27 +198,27 @@ class FroTrteSolicitud
     }
 
     /**
-     * Set datos
+     * Set foraneas
      *
-     * @param array $datos
+     * @param array $foraneas
      *
      * @return FroTrteSolicitud
      */
-    public function setDatos($datos)
+    public function setForaneas($foraneas)
     {
-        $this->datos = $datos;
+        $this->foraneas = $foraneas;
 
         return $this;
     }
 
     /**
-     * Get datos
+     * Get foraneas
      *
      * @return array
      */
-    public function getDatos()
+    public function getForaneas()
     {
-        return $this->datos;
+        return $this->foraneas;
     }
 
     /**
@@ -294,13 +294,37 @@ class FroTrteSolicitud
     }
 
     /**
-     * Set solicitante
+     * Set propietario
      *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloPropietario $solicitante
+     * @param \JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario
      *
      * @return FroTrteSolicitud
      */
-    public function setSolicitante(\JHWEB\VehiculoBundle\Entity\VhloPropietario $solicitante = null)
+    public function setPropietario(\JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario = null)
+    {
+        $this->propietario = $propietario;
+
+        return $this;
+    }
+
+    /**
+     * Get propietario
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloPropietario
+     */
+    public function getPropietario()
+    {
+        return $this->propietario;
+    }
+
+    /**
+     * Set solicitante
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $solicitante
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setSolicitante(\JHWEB\UsuarioBundle\Entity\UserCiudadano $solicitante = null)
     {
         $this->solicitante = $solicitante;
 
@@ -310,35 +334,11 @@ class FroTrteSolicitud
     /**
      * Get solicitante
      *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloPropietario
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getSolicitante()
     {
         return $this->solicitante;
-    }
-
-    /**
-     * Set apoderado
-     *
-     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $apoderado
-     *
-     * @return FroTrteSolicitud
-     */
-    public function setApoderado(\JHWEB\UsuarioBundle\Entity\UserCiudadano $apoderado = null)
-    {
-        $this->apoderado = $apoderado;
-
-        return $this;
-    }
-
-    /**
-     * Get apoderado
-     *
-     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
-     */
-    public function getApoderado()
-    {
-        return $this->apoderado;
     }
 
     /**

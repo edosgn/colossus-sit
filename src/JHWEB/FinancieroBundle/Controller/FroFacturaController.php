@@ -64,7 +64,7 @@ class FroFacturaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -79,7 +79,8 @@ class FroFacturaController extends Controller
             $factura->setValorBruto($params->valor);
             $factura->setValorMora($params->interes);
             $factura->setValorNeto($params->valor + $params->interes);
-            $factura->setEstado('EMITIDA');
+            //$factura->setEstado('EMITIDA');
+            $factura->setEstado('PAGADA');
             $factura->setActivo(true);
 
             $consecutivo = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getMaximo(date('Y'));
@@ -232,27 +233,37 @@ class FroFacturaController extends Controller
 
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
             $froFactura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneBy(
-                array('numero' => $params->numeroFactura)
+                array(
+                    'numero' => $params->numeroFactura,
+                )
             );
 
-            if ($froFactura!=null) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Factura encontrada", 
-                    'data'=> $froFactura,
-            );
+            if ($froFactura) {
+                if ($froFactura->getEstado() == 'PAGADA') {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Factura pagada.', 
+                        'data'=> $froFactura
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'Factura pendiente de pago.' 
+                    );
+                }
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Factura no encontrada", 
+                    'message' => 'La factura no existe.' 
                 );
             }
         }else{

@@ -17,7 +17,7 @@ class FroFacTramiteRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT ft
             FROM JHWEBFinancieroBundle:FroFacTramite ft, JHWEBFinancieroBundle:FroFactura f, JHWEBFinancieroBundle:FroTramite t, JHWEBFinancieroBundle:FroTrtePrecio tp
             WHERE ft.factura = f.id
-            AND ft.tramitePrecio = tp.id
+            AND ft.precio = tp.id
             AND tp.tramite = t.id
             AND t.id = :idTramite
             AND f.id = :idFactura"; 
