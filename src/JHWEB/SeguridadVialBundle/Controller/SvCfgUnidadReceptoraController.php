@@ -81,9 +81,10 @@ class SvCfgUnidadReceptoraController extends Controller
                 $unidadReceptora->setMunicipio($municipio);
             }
 
-            $nombre = strtoupper($params->nombre);
 
-            $unidadReceptora->setNombre($nombre);
+            $unidadReceptora->setNombre(strtoupper($params->nombre));
+            $unidadReceptora->setCodigo($params->codigo);
+
             $unidadReceptora->setActivo(true);
 
             $em->persist($unidadReceptora);
@@ -170,6 +171,7 @@ class SvCfgUnidadReceptoraController extends Controller
 
                 $unidadReceptora->setNombre($nombre);
                 $unidadReceptora->setEntidadAccidente($entidadAccidente);
+                $unidadReceptora->setCodigo($params->codigo);
                 $unidadReceptora->setMunicipio($municipio);
 
                 $em->persist($unidadReceptora);
