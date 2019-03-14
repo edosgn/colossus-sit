@@ -206,10 +206,10 @@ class FroFacTramiteController extends Controller
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'message' => count($tramitesFactura).' tramites facturados. Debera iniciar con el registro de matricula inicial.', 
+                            'message' => count($tramitesFactura).' tramites facturados. Debe iniciar con el registro de matricula inicial.', 
                             'data'=> array(
                                 'tramitesFactura' => $tramitesFactura,
-                                'propietarios' => $propietarios,
+                                'propietarios' => null,
                                 'sustrato' => $sustrato,
                             )
                         );
