@@ -63,9 +63,7 @@ class SvCfgTipoVictimaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $tipoVictima->setNombre($nombre);
+            $tipoVictima->setNombre(strtoupper($params->nombre));
             $tipoVictima->setActivo(true);
             $em->persist($tipoVictima);
             $em->flush();
@@ -146,9 +144,8 @@ class SvCfgTipoVictimaController extends Controller
             $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->find($params->id);
 
             if ($tipoVictima != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $tipoVictima->setNombre($nombre);
+                
+                $tipoVictima->setNombre(strtoupper($params->nombre));
 
                 $em->persist($tipoVictima);
                 $em->flush();

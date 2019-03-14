@@ -57,7 +57,7 @@ class MsvTConsecutivo
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="comparendos")
      **/
-    protected $sedeOperativa;
+    protected $organismoTransito;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
@@ -195,30 +195,6 @@ class MsvTConsecutivo
     }
 
     /**
-     * Set sedeOperativa
-     *
-     * @param \AppBundle\Entity\SedeOperativa $sedeOperativa
-     *
-     * @return MsvTConsecutivo
-     */
-    public function setSedeOperativa(\AppBundle\Entity\SedeOperativa $sedeOperativa = null)
-    {
-        $this->sedeOperativa = $sedeOperativa;
-
-        return $this;
-    }
-
-    /**
-     * Get sedeOperativa
-     *
-     * @return \AppBundle\Entity\SedeOperativa
-     */
-    public function getSedeOperativa()
-    {
-        return $this->sedeOperativa;
-    }
-
-    /**
      * Set funcionario
      *
      * @param \AppBundle\Entity\MpersonalFuncionario $funcionario
@@ -240,5 +216,29 @@ class MsvTConsecutivo
     public function getFuncionario()
     {
         return $this->funcionario;
+    }
+
+    /**
+     * Set organismoTransito
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
+     *
+     * @return MsvTConsecutivo
+     */
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
     }
 }

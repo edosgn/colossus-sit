@@ -263,7 +263,7 @@ class VhloCfgCarroceriaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select", name="carroceria_select")
+     * @Route("/select", name="vhlocfgcarroceria_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -273,10 +273,11 @@ class VhloCfgCarroceriaController extends Controller
         $carrocerias = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findBy(
             array('activo' => 1)
         );
+        $response = null;
         foreach ($carrocerias as $key => $carroceria) {
             $response[$key] = array(
                 'value' => $carroceria->getId(),
-                'label' => $carroceria->getCodigoMt() . "_" . $carroceria->getNombre(),
+                'label' => $carroceria->getCodigo() . "_" . $carroceria->getNombre(),
             );
         }
         return $helpers->json($response);

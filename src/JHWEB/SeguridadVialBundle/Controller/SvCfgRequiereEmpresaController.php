@@ -63,16 +63,14 @@ class SvCfgRequiereEmpresaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($params->carroceria) {
-                $carroceria = $em->getRepository('AppBundle:Carroceria')->find(
-                    $params->carroceria
+            if ($params->idCarroceria) {
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find(
+                    $params->idCarroceria
                 );
                 $requiereEmpresa->setCarroceria($carroceria);
             }
 
-            $nombre = strtoupper($params->nombre);
-
-            $requiereEmpresa->setNombre($nombre);
+            $requiereEmpresa->setNombre(strtoupper($params->nombre));
             $requiereEmpresa->setActivo(true);
             $em->persist($requiereEmpresa);
             $em->flush();
@@ -152,14 +150,17 @@ class SvCfgRequiereEmpresaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $requiereEmpresa = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgRequiereEmpresa')->find($params->id);
-            $carroceria = $em->getRepository('AppBundle:Carroceria')->find($params->carroceria);
             
-
-            if ($requiereEmpresa != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $requiereEmpresa->setNombre($nombre);
+            if ($params->idCarroceria) {
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find(
+                    $params->idCarroceria
+                );
                 $requiereEmpresa->setCarroceria($carroceria);
+            }
+        
+            if ($requiereEmpresa != null) 
+            {
+                $requiereEmpresa->setNombre(strtoupper($params->nombre));
 
                 $em->persist($requiereEmpresa);
                 $em->flush();

@@ -62,7 +62,7 @@ class SvCfgClaseActorViaController extends Controller
 
             $claseActorVia = new SvCfgClaseActorVia();
 
-            $claseActorVia->setNombre($params->nombre);
+            $claseActorVia->setNombre(strtoupper($params->nombre));
             $claseActorVia->setActivo(true);
             $em->persist($claseActorVia);
             $em->flush();
@@ -118,7 +118,7 @@ class SvCfgClaseActorViaController extends Controller
             $claseActor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->find($params->id);
 
             if ($claseActor != null) {
-                $claseActor->setNombre($params->nombre);
+                $claseActor->setNombre(strtoupper($params->nombre));
 
                 $em->persist($claseActor);
                 $em->flush();

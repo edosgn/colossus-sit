@@ -63,9 +63,7 @@ class SvCfgEntidadAccidenteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $entidadAccidente->setNombre($nombre);
+            $entidadAccidente->setNombre(strtoupper($params->nombre));
             $entidadAccidente->setActivo(true);
             $em->persist($entidadAccidente);
             $em->flush();
@@ -120,9 +118,9 @@ class SvCfgEntidadAccidenteController extends Controller
             $entidadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->id);
 
             if ($entidadAccidente != null) {
-                $nombre = strtoupper($params->nombre);
+                
 
-                $entidadAccidente->setNombre($nombre);
+                $entidadAccidente->setNombre(strtoupper($params->nombre));
 
                 $em->persist($entidadAccidente);
                 $em->flush();

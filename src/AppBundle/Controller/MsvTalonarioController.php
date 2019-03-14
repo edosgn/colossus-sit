@@ -63,9 +63,9 @@ class MsvTalonarioController extends Controller
 
             $talonario = new MsvTalonario();
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
 
-            $talonario->setSedeOperativa($sedeOperativa);
+            $talonario->setOrganismoTransito($organismoTransito);
 
             $talonario->setrangoini($params->rangoini);
             $talonario->setrangofin($params->rangofin);
@@ -79,7 +79,7 @@ class MsvTalonarioController extends Controller
             $em->persist($talonario);
             $em->flush();
 
-            $divipo = $sedeOperativa->getCodigoDivipo();
+            $divipo = $organismoTransito->getDivipo();
 
             for ($consecutivo = $talonario->getRangoini(); $consecutivo <= $talonario->getRangoFin(); $consecutivo++) {
 
@@ -87,7 +87,7 @@ class MsvTalonarioController extends Controller
 
                 $msvTConsecutivo->setMsvTalonario($talonario);
                 $msvTConsecutivo->setConsecutivo($divipo.$consecutivo);
-                $msvTConsecutivo->setSedeOperativa($sedeOperativa);
+                $msvTConsecutivo->setOrganismoTransito($organismoTransito);
                 $msvTConsecutivo->setActivo(true);
                 $msvTConsecutivo->setEstado("DISPONIBLE");
 
@@ -153,7 +153,7 @@ class MsvTalonarioController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         if ($authCheck == true) {
-            $talonario = $em->getRepository('AppBundle:MsvTalonario')->findOneBySedeOperativa($id);
+            $talonario = $em->getRepository('AppBundle:MsvTalonario')->findOneByOrganismoTransito($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,

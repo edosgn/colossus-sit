@@ -63,9 +63,7 @@ class SvCfgDisenioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $disenio->setNombre($nombre);
+            $disenio->setNombre(strtoupper($params->nombre));
             $disenio->setActivo(true);
             $em->persist($disenio);
             $em->flush();
@@ -120,9 +118,8 @@ class SvCfgDisenioController extends Controller
             $disenio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgDisenio')->find($params->id);
 
             if ($disenio != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $disenio->setNombre($nombre);
+                $disenio->setNombre(strtoupper($params->nombre));
 
                 $em->persist($disenio);
                 $em->flush();

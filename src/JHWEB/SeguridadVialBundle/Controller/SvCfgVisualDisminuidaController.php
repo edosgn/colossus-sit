@@ -63,9 +63,7 @@ class SvCfgVisualDisminuidaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $visualDisminuida->setNombre($nombre);
+            $visualDisminuida->setNombre(strtoupper($params->nombre));
             $visualDisminuida->setActivo(true);
             $em->persist($visualDisminuida);
             $em->flush();
@@ -149,9 +147,7 @@ class SvCfgVisualDisminuidaController extends Controller
             $visualDisminuida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisualDisminuida')->find($params->id);
 
             if ($visualDisminuida != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $visualDisminuida->setNombre($nombre);
+                $visualDisminuida->setNombre(strtoupper($params->nombre));
 
                 $em->persist($visualDisminuida);
                 $em->flush();

@@ -70,7 +70,7 @@ class SvCfgFuncionCriterioController extends Controller
                 $funcionCriterio->setFuncion($funcion);
             }
 
-            $funcionCriterio->setNombre($params->nombre);
+            $funcionCriterio->setNombre(strtoupper($params->nombre));
             $funcionCriterio->setActivo(true);
             $em->persist($funcionCriterio);
             $em->flush();
@@ -126,7 +126,7 @@ class SvCfgFuncionCriterioController extends Controller
 
             $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->funcion);
             if ($funcionCriterio != null) {
-                $funcionCriterio->setNombre($params->nombre);
+                $funcionCriterio->setNombre(strtoupper($params->nombre));
                 $funcionCriterio->setFuncion($funcion);
 
                 $em->persist($funcionCriterio);

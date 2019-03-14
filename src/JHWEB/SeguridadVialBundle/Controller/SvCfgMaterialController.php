@@ -63,9 +63,7 @@ class SvCfgMaterialController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $material->setNombre($nombre);
+            $material->setNombre(strtoupper($params->nombre));
             $material->setActivo(true);
             $em->persist($material);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgMaterialController extends Controller
             $material = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgMaterial')->find($params->id);
 
             if ($material != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $material->setNombre($nombre);
+                $material->setNombre(strtoupper($params->nombre));
 
                 $em->persist($material);
                 $em->flush();

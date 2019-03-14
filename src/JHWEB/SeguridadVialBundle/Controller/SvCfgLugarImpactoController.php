@@ -63,9 +63,7 @@ class SvCfgLugarImpactoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $lugarImpacto->setNombre($nombre);
+            $lugarImpacto->setNombre(strtoupper($params->nombre));
             $lugarImpacto->setActivo(true);
             $em->persist($lugarImpacto);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgLugarImpactoController extends Controller
             $lugarImpacto = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgLugarImpacto')->find($params->id);
 
             if ($lugarImpacto != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $lugarImpacto->setNombre($nombre);
+                $lugarImpacto->setNombre(strtoupper($params->nombre));
 
                 $em->persist($lugarImpacto);
                 $em->flush();

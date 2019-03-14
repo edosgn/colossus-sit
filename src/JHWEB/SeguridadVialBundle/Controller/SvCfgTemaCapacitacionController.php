@@ -62,7 +62,7 @@ class SvCfgTemaCapacitacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $temaCapacitacion->setNombre($params->nombre);
+            $temaCapacitacion->setNombre(strtoupper($params->nombre));
             $temaCapacitacion->setActivo(true);
 
             $em->persist($temaCapacitacion);
@@ -118,7 +118,7 @@ class SvCfgTemaCapacitacionController extends Controller
             $temaCapacitacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->find($params->id);
 
             if ($temaCapacitacion != null) {
-                $temaCapacitacion->setNombre($params->nombre);
+                $temaCapacitacion->setNombre(strtoupper($params->nombre));
 
                 $em->persist($temaCapacitacion);
                 $em->flush();

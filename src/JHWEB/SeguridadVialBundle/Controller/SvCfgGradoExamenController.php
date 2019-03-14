@@ -63,9 +63,7 @@ class SvCfgGradoExamenController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $gradoExamen->setNombre($nombre);
+            $gradoExamen->setNombre(strtoupper($params->nombre));
             $gradoExamen->setActivo(true);
             $em->persist($gradoExamen);
             $em->flush();
@@ -120,9 +118,7 @@ class SvCfgGradoExamenController extends Controller
             $gradoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->find($params->id);
 
             if ($gradoExamen != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $gradoExamen->setNombre($nombre);
+                $gradoExamen->setNombre(strtoupper($params->nombre));
 
                 $em->persist($gradoExamen);
                 $em->flush();

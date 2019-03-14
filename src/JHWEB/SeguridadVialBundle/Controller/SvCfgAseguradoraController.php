@@ -61,8 +61,7 @@ class SvCfgAseguradoraController extends Controller
             $aseguradora = new SvCfgAseguradora();
 
             $em = $this->getDoctrine()->getManager();
-            $nombre = strtoupper($params->nombre);
-            $aseguradora->setNombre($nombre);
+            $aseguradora->setNombre(strtoupper($params->nombre));
             $aseguradora->setActivo(true);
             $em->persist($aseguradora);
             $em->flush();
@@ -118,9 +117,7 @@ class SvCfgAseguradoraController extends Controller
             $aseguradora = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgAseguradora')->find($params->id);
 
             if ($aseguradora != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $aseguradora->setNombre($nombre);
+                $aseguradora->setNombre(strtoupper($params->nombre));
 
                 $em->persist($aseguradora);
                 $em->flush();

@@ -63,9 +63,7 @@ class SvCfgTipoGeometriaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $tipoGeometria->setNombre($nombre);
+            $tipoGeometria->setNombre(strtoupper($params->nombre));
             $tipoGeometria->setActivo(true);
             $em->persist($tipoGeometria);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgTipoGeometriaController extends Controller
             $tipoGeometria = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoGeometria')->find($params->id);
 
             if ($tipoGeometria != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $tipoGeometria->setNombre($nombre);
+                $tipoGeometria->setNombre(strtoupper($params->nombre));
 
                 $em->persist($tipoGeometria);
                 $em->flush();

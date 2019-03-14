@@ -63,9 +63,7 @@ class SvCfgFallaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $falla->setNombre($nombre);
+            $falla->setNombre(strtoupper($params->nombre));
             $falla->setActivo(true);
             $em->persist($falla);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgFallaController extends Controller
             $falla = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFalla')->find($params->id);
 
             if ($falla != null) {
-                $nombre = strtoupper($params->nombre);
-
-                $falla->setNombre($nombre);
+            
+                $falla->setNombre(strtoupper($params->nombre));
 
                 $em->persist($falla);
                 $em->flush();

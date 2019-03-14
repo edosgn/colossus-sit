@@ -167,9 +167,8 @@ class SvCfgUnidadReceptoraController extends Controller
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->municipio);
 
             if ($unidadReceptora != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $unidadReceptora->setNombre($nombre);
+                $unidadReceptora->setNombre(strtoupper($params->nombre));
                 $unidadReceptora->setEntidadAccidente($entidadAccidente);
                 $unidadReceptora->setCodigo($params->codigo);
                 $unidadReceptora->setMunicipio($municipio);

@@ -64,9 +64,7 @@ class SvCfgEstadoViaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $nombre = strtoupper($params->nombre);
-
-            $estadoVia->setNombre($nombre);
+            $estadoVia->setNombre(strtoupper($params->nombre));
             $estadoVia->setActivo(true);
             $em->persist($estadoVia);
             $em->flush();
@@ -121,9 +119,8 @@ class SvCfgEstadoViaController extends Controller
             $estadoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoVia')->find($params->id);
 
             if ($estadoVia != null) {
-                $nombre = strtoupper($params->nombre);
 
-                $estadoVia->setNombre($nombre);
+                $estadoVia->setNombre(strtoupper($params->nombre));
 
                 $em->persist($estadoVia);
                 $em->flush();

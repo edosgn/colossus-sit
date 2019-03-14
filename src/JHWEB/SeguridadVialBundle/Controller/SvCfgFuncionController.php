@@ -63,7 +63,7 @@ class SvCfgFuncionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $funcion->setNombre($params->nombre);
+            $funcion->setNombre(strtoupper($params->nombre));
             $funcion->setActivo(true);
             $em->persist($funcion);
             $em->flush();
@@ -119,7 +119,7 @@ class SvCfgFuncionController extends Controller
             $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->id);
 
             if ($funcion != null) {
-                $funcion->setNombre($params->nombre);
+                $funcion->setNombre(strtoupper($params->nombre));
 
                 $em->persist($funcion);
                 $em->flush();
