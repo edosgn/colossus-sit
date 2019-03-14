@@ -159,14 +159,87 @@ class FroFacTramiteController extends Controller
             )
         );
 
+        $sustrato = false;
+        
         if ($tramitesFactura) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => count($tramitesFactura).' tramites facturados.', 
-                'data'=> $tramitesFactura,
-            );
-        }else{
+            if (isset($params->idVehiculo)) {
+                $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                    array(
+                        'vehiculo' => $params->idVehiculo
+                    )
+                );
+
+                if ($propietarios) {
+                    foreach ($tramitesFactura as $key => $tramiteFactura) {
+                        //Valida si alguno de los trámites facturados requiere sustrato
+                        if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
+                            $sustrato = true;
+                        }
+                    }
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($tramitesFactura).' tramites facturados.', 
+                        'data'=> array(
+                            'tramitesFactura' => $tramitesFactura,
+                            'propietarios' => $propietarios,
+                            'sustrato' => $sustrato,
+                        )
+                    );
+                }else{
+                    $matriculaInicial = false;
+
+                    foreach ($tramitesFactura as $key => $tramiteFactura) {
+                        //Valida si esta facturado el trámite atricula inicial
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 1) {
+                            $matriculaInicial = true;
+                        }
+
+                        //Valida si alguno de los trámites facturados requiere sustrato
+                        if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
+                            $sustrato = true;
+                        }
+                    }
+
+                    if ($matriculaInicial) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => count($tramitesFactura).' tramites facturados. Debera iniciar con el registro de matricula inicial.', 
+                            'data'=> array(
+                                'tramitesFactura' => $tramitesFactura,
+                                'propietarios' => $propietarios,
+                                'sustrato' => $sustrato,
+                            )
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'Este vehiculo no tiene propietarios registrados, debe realizar una matricula inicial.', 
+                        );
+                    }
+                } 
+            }else{
+                foreach ($tramitesFactura as $key => $tramiteFactura) {
+                    //Valida si alguno de los trámites facturados requiere sustrato
+                    if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
+                        $sustrato = true;
+                    }
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($tramitesFactura).' tramites facturados.', 
+                    'data'=> array(
+                        'tramitesFactura' => $tramitesFactura,
+                        'sustrato' => $sustrato,
+                    )
+                );
+            }
+        }else{                    
             $response = array(
                 'status' => 'error',
                 'code' => 400,

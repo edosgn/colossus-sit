@@ -26,6 +26,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'campo' => $campo,
         ));
+        
         return $consulta->getOneOrNullResult();
     }
 

@@ -157,7 +157,7 @@ class VhloPropietarioController extends Controller
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByFilter($params->filtro);
 
             if ($vehiculo) {
-                $propietarios = $em->getRepository('JHWEBVehiculBundle:VhloPropietario')->findBy(
+                $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
                     array(
                         'vehiculo' => $vehiculo->getId(),
                         'permiso' => true,
@@ -180,7 +180,7 @@ class VhloPropietarioController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'Este vehiculo no tiene propietarios registrados.', 
+                        'message' => 'Este vehiculo no tiene propietarios registrados, debe realizar una matricula inicial.', 
                         'data' => array(
                             'vehiculo' => $vehiculo,
                             'propietarios' => null,
@@ -202,6 +202,55 @@ class VhloPropietarioController extends Controller
             );
         }
 
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all userCfgMenu entities.
+     *
+     * @Route("/search/vehiculo", name="vhlovehiculo_search_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                array(
+                    'vehiculo' => $params->idVehiculo
+                )
+            );
+
+            if ($propietarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($propietarios).' registros encontrados.', 
+                    'data'=> $propietarios
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Este vehiculo no tiene propietarios registrados, debe realizar una matricula inicial.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
 
         return $helpers->json($response);
     }
