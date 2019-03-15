@@ -175,6 +175,11 @@ class FroFacTramiteController extends Controller
                         if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
                             $sustrato = true;
                         }
+
+                        $tramitesFacturaArray[$key] = array(
+                            'value' => $tramiteFactura->getPrecio()->getTramite()->getId(),
+                            'label' => $tramiteFactura->getPrecio()->getNombre(),
+                        );
                     }
 
                     $response = array(
@@ -182,7 +187,7 @@ class FroFacTramiteController extends Controller
                         'code' => 200,
                         'message' => count($tramitesFactura).' tramites facturados.', 
                         'data'=> array(
-                            'tramitesFactura' => $tramitesFactura,
+                            'tramitesFactura' => $tramitesFacturaArray,
                             'propietarios' => $propietarios,
                             'sustrato' => $sustrato,
                         )
@@ -200,16 +205,21 @@ class FroFacTramiteController extends Controller
                         if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
                             $sustrato = true;
                         }
+
+                        $tramitesFacturaArray[$key] = array(
+                            'value' => $tramiteFactura->getPrecio()->getTramite()->getId(),
+                            'label' => $tramiteFactura->getPrecio()->getNombre(),
+                        );
                     }
 
                     if ($matriculaInicial) {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'message' => count($tramitesFactura).' tramites facturados. Debera iniciar con el registro de matricula inicial.', 
+                            'message' => count($tramitesFactura).' tramites facturados. Debe iniciar con el registro de matricula inicial.', 
                             'data'=> array(
-                                'tramitesFactura' => $tramitesFactura,
-                                'propietarios' => $propietarios,
+                                'tramitesFactura' => $tramitesFacturaArray,
+                                'propietarios' => null,
                                 'sustrato' => $sustrato,
                             )
                         );
@@ -227,6 +237,11 @@ class FroFacTramiteController extends Controller
                     if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
                         $sustrato = true;
                     }
+
+                    $tramitesFacturaArray[$key] = array(
+                        'value' => $tramiteFactura->getPrecio()->getTramite()->getId(),
+                        'label' => $tramiteFactura->getPrecio()->getNombre(),
+                    );
                 }
 
                 $response = array(
@@ -234,7 +249,7 @@ class FroFacTramiteController extends Controller
                     'code' => 200,
                     'message' => count($tramitesFactura).' tramites facturados.', 
                     'data'=> array(
-                        'tramitesFactura' => $tramitesFactura,
+                        'tramitesFactura' => $tramitesFacturaArray,
                         'sustrato' => $sustrato,
                     )
                 );
