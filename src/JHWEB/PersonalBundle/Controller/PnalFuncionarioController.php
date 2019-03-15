@@ -3,9 +3,9 @@
 namespace JHWEB\PersonalBundle\Controller;
 
 use JHWEB\PersonalBundle\Entity\PnalFuncionario;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Pnalfuncionario controller.
@@ -20,15 +20,39 @@ class PnalFuncionarioController extends Controller
      * @Route("/", name="pnalfuncionario_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        $pnalFuncionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findAll();
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+            $pnalFuncionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findBy(
+                array(
+                    'activo' => true,
+                )
+            );
+            $response['data'] = array();
 
-        return $this->render('pnalfuncionario/index.html.twig', array(
-            'pnalFuncionarios' => $pnalFuncionarios,
-        ));
+            if ($pnalFuncionarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($pnalFuncionarios) . " registros encontrados",
+                    'data' => $pnalFuncionarios,
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -39,38 +63,129 @@ class PnalFuncionarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $pnalFuncionario = new Pnalfuncionario();
-        $form = $this->createForm('JHWEB\PersonalBundle\Form\PnalFuncionarioType', $pnalFuncionario);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $em->persist($pnalFuncionario);
+
+            $funcionario = new PnalFuncionario();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
+
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
+            );
+
+            $cargo = $em->getRepository('JHWEBConfigBundle:PnalCfgCargo')->find(
+                $params->idCargo
+            );
+
+            $tipoNombramiento = $em->getRepository('JHWEBConfigBundle:PnalCfgTipoNombramiento')->findBy(
+                $params->idTipoNombramiento
+            );
+
+            $funcionario->setCiudadano($ciudadano);
+            $funcionario->setCargo($cargo);
+            $funcionario->setOrganismoTransito($organismoTransito);
+            $funcionario->setTipoNombramiento($idTipoNombramiento);
+
+            if ($params->inhabilidad == 'true') {
+                $funcionario->setActivo(false);
+                $funcionario->setInhabilidad(true);
+            } else {
+                $funcionario->setActivo(true);
+                $funcionario->setInhabilidad(false);
+            }
+
+            if ($params->actaPosesion) {
+                $funcionario->setActaPosesion($params->actaPosesion);
+            }
+
+            if ($params->resolucion) {
+                $funcionario->setResolucion($params->resolucion);
+            }
+
+            if ($params->fechaInicio) {
+                $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
+            }
+
+            if ($params->fechaFin) {
+                $funcionario->setFechaFin(new \Datetime($params->fechaFin));
+            }
+
+            if ($params->numeroContrato) {
+                $funcionario->setNumeroContrato($params->numeroContrato);
+            }
+            if ($params->objetoContrato) {
+                $funcionario->setObjetoContrato($params->objetoContrato);
+            }
+
+            if ($params->numeroPlaca) {
+                $funcionario->setNumeroPlaca($params->numeroPlaca);
+            }
+
+            if ($params->novedad) {
+                $funcionario->setNovedad($params->novedad);
+            }
+
+            $funcionario->setModificatorio(false);
+
+            $em->persist($funcionario);
             $em->flush();
 
-            return $this->redirectToRoute('pnalfuncionario_show', array('id' => $pnalFuncionario->getId()));
-        }
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+                'data' => $funcionario,
+            );
 
-        return $this->render('pnalfuncionario/new.html.twig', array(
-            'pnalFuncionario' => $pnalFuncionario,
-            'form' => $form->createView(),
-        ));
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a pnalFuncionario entity.
      *
-     * @Route("/{id}/show", name="pnalfuncionario_show")
+     * @Route("/show", name="pnalfuncionario_show")
      * @Method("GET")
      */
-    public function showAction(PnalFuncionario $pnalFuncionario)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($pnalFuncionario);
+        $helpers = $this->get("app.helpers");
 
-        return $this->render('pnalfuncionario/show.html.twig', array(
-            'pnalFuncionario' => $pnalFuncionario,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        $em = $this->getDoctrine()->getManager();
+
+        $json = $request->get("data", null);
+        $params = json_decode($json);
+
+        $pnalFuncionario = $em->getRepository('JHWEBConfigBundle:PnalFuncionario')->find($params->id);
+
+        if ($pnalFuncionario) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado",
+                'data' => $pnalFuncionario,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Registro no encontrado",
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -226,4 +341,356 @@ class PnalFuncionarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="pnalfuncionario_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $funcionarios = $em->getRepository('JHWEBConfigBundle:PnalFuncionario')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getCiudadano()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getPrimerApellido(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/agentes", name="pnalfuncionario_select_agentes")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAgentesAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $response = null;
+
+        $funcionarios = $em->getRepository('JHWEBConfigBundle:PnalFuncionario')->findBy(
+            array(
+                'activo' => true,
+                'tipoContrato' => 3,
+            )
+        );
+
+        foreach ($funcionarios as $key => $funcionario) {
+            $response[$key] = array(
+                'value' => $funcionario->getId(),
+                'label' => $funcionario->getNumeroPlaca() . "_" . $funcionario->getCiudadano()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getPrimerApellido(),
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all pnalFuncionario entities.
+     *
+     * @Route("/search/parametros", name="pnalfuncionario_search_parametros")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByParametrosAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $funcionarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $funcionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->getSearch($params);
+
+            if ($funcionarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($funcionarios) . " registros encontrados",
+                    'data' => $funcionarios,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen funcionarios",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all pnalFuncionario entities.
+     *
+     * @Route("/search/ciudadano", name="pnalfuncionario_search_ciudadano")
+     * @Method({"GET", "POST"})
+     */
+    public function searchCiudadanoAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                $params->identificacion
+            );
+
+            if ($ciudadano) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado",
+                    'data' => $ciudadano,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existe el ciudadano registrado con ese número de identificación",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all pnalFuncionario entities.
+     *
+     * @Route("/search/empresa", name="pnalfuncionario_search_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchEmpresaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array(
+                'identificacion' => $params->identificacion,
+                'activo' => true,
+            ));
+
+            if ($ciudadano) {
+                $representante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(array(
+                    array(
+                        'ciudadano' => $ciudadano->getId()
+                    )
+                ));
+                $representante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                    array(
+                        'empresaRepresentante' => $representante->getId(),
+                        'activo' => true,
+                        'empresaServicio' => 1,
+                    )
+                );
+                if ($representante) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro encontrado",
+                        'data' => $representante,
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El ciudadano no tiene concesionarios",
+                    );
+                }
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all pnalFuncionario entities.
+     *
+     * @Route("/record/times", name="pnalfuncionario_record_times")
+     * @Method({"GET", "POST"})
+     */
+    public function recordTimesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $horarios = $em->getRepository('JHWEBPersonalBundle:PnalHorario')->findBy(
+                array(
+                    'funcionario' => $params->id,
+                )
+            );
+
+            if ($horarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados",
+                    'data' => $horarios,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/prorrogas", name="pnalfuncionario_record_prorrogas")
+     * @Method({"GET", "POST"})
+     */
+    public function recordProrrogaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $pnalProrogas = $em->getRepository('JHWEBPersonalBundle:PnalProroga')->findBy(
+                array(
+                    'funcionario' => $params->id,
+                )
+            );
+
+            if ($pnalProrogas) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados",
+                    'data' => $pnalProrogas,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/suspensiones", name="pnalfuncionario_record_suspensiones")
+     * @Method({"GET", "POST"})
+     */
+    public function recordSuspensionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $horarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $pnalSuspensiones = $em->getRepository('JHWEBPersonalBundle:PnalSuspension')->findBy(
+                array(
+                    'funcionario' => $params->id,
+                )
+            );
+
+            if ($pnalSuspensiones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados",
+                    'data' => $pnalSuspensiones,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registro no encontrado",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
 }
