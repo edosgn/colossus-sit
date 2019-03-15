@@ -329,4 +329,52 @@ class FroTrteSolicitudController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca trámites por módulo y parametros (No. placa, No. factura y fecha).
+     *
+     * @Route("/show/tramitefactura", name="frotrtesolicitud_show_tramitefactura")
+     * @Method({"GET", "POST"})
+     */
+    public function showByTramiteFacturaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramiteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findOneBy(
+                array(
+                    'tramiteFactura' => $params->idTramiteFactura
+                )
+            );
+
+            if ($tramiteSolicitud) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data' => $tramiteSolicitud,
+            );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existen trámites para esos filtros de búsqueda, si desea registralo por favor presione el botón "NUEVO"', 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Autorizacion no valida.', 
+                );
+        }
+        return $helpers->json($response);
+    }
 }
