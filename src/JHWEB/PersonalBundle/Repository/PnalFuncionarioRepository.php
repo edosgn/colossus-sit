@@ -14,7 +14,8 @@ class PnalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
     public function getSearch($params){ 
 
 		
-		
+        /* var_dump($params);
+        die(); */
         $em = $this->getEntityManager();
         if (isset($params->nombre)) { 
         	$dql = "SELECT f
@@ -55,13 +56,13 @@ class PnalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 	        $consulta->setParameters(array(
 	            'numeroContrato' => $params->numeroContrato,
 	        ));
-        }elseif(isset($params->nombramiento)){
+        }elseif(isset($params->idTipoNombramiento)){
         	$dql = "SELECT f
             FROM JHWEBPersonalBundle:PnalFuncionario f
             WHERE f.tipoNombramiento = :nombramiento";
 	        $consulta = $em->createQuery($dql);
 	        $consulta->setParameters(array(
-	            'nombramiento' => $params->nombramiento,
+	            'nombramiento' => $params->idTipoNombramiento,
 	        ));
         }elseif(isset($params->fechaInicio) && isset($params->fechaFin)){
            

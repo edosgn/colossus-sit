@@ -148,7 +148,7 @@ class CfgDepartamentoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $departamentos = $em->getRepository('JHWEBConfigBundle:CfgPais')->findBy(
+        $departamentos = $em->getRepository('JHWEBConfigBundle:CfgDepartamento')->findBy(
             array('activo' => true)
         );
 
