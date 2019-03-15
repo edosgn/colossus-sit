@@ -115,7 +115,7 @@ class UserEmpresa
     /**
      * @var string
      *
-     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255, nullable=true)
+     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255)
      */
     private $nroRegistroMercantil;
 
@@ -129,7 +129,7 @@ class UserEmpresa
      /**
      * @var boolean
      *
-     * @ORM\Column(name="empresa_prestadora", type="boolean")
+     * @ORM\Column(name="empresa_prestadora", type="boolean", nullable=true)
      */
     private $empresaPrestadora;
 
@@ -749,29 +749,5 @@ class UserEmpresa
     public function getEmpresaRepresentante()
     {
         return $this->empresaRepresentante;
-    }
-
-    /**
-     * Set empresaServicio
-     *
-     * @param \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio $empresaServicio
-     *
-     * @return UserEmpresa
-     */
-    public function setEmpresaServicio(\JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio $empresaServicio = null)
-    {
-        $this->empresaServicio = $empresaServicio;
-
-        return $this;
-    }
-
-    /**
-     * Get empresaServicio
-     *
-     * @return \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio
-     */
-    public function getEmpresaServicio()
-    {
-        return $this->empresaServicio;
     }
 }

@@ -59,7 +59,8 @@ class UserEmpresaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-
+            var_dump($params);
+            die();
             $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
             $fechaInicial = new \DateTime($params->empresa->fechaInicial);
 

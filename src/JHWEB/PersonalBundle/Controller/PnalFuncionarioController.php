@@ -461,8 +461,9 @@ class PnalFuncionarioController extends Controller
             $params = json_decode($json);
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
-                $params->identificacion
-            );
+                array(
+                    $params->identificacion
+            ));
 
             if ($ciudadano) {
                 $response = array(
