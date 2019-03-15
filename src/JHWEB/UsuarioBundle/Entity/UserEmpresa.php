@@ -153,7 +153,7 @@ class UserEmpresa
     /** @ORM\ManyToOne(targetEntity="UserCfgTipoIdentificacion", inversedBy="empresas") */
     private $tipoIdentificacion;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEmpresaServicio", inversedBy="empresas") */
+    /** @ORM\ManyToOne(targetEntity="UserCfgEmpresaServicio", inversedBy="empresas") */
     private $empresaServicio;
 
     /** @ORM\ManyToOne(targetEntity="UserCfgEmpresaTipo", inversedBy="empresas") */
@@ -680,30 +680,6 @@ class UserEmpresa
     }
 
     /**
-     * Set empresaServicio
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgEmpresaServicio $empresaServicio
-     *
-     * @return UserEmpresa
-     */
-    public function setEmpresaServicio(\JHWEB\ConfigBundle\Entity\CfgEmpresaServicio $empresaServicio = null)
-    {
-        $this->empresaServicio = $empresaServicio;
-
-        return $this;
-    }
-
-    /**
-     * Get empresaServicio
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgEmpresaServicio
-     */
-    public function getEmpresaServicio()
-    {
-        return $this->empresaServicio;
-    }
-
-    /**
      * Set tipoEmpresa
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaTipo $tipoEmpresa
@@ -773,5 +749,29 @@ class UserEmpresa
     public function getEmpresaRepresentante()
     {
         return $this->empresaRepresentante;
+    }
+
+    /**
+     * Set empresaServicio
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio $empresaServicio
+     *
+     * @return UserEmpresa
+     */
+    public function setEmpresaServicio(\JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio $empresaServicio = null)
+    {
+        $this->empresaServicio = $empresaServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaServicio
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio
+     */
+    public function getEmpresaServicio()
+    {
+        return $this->empresaServicio;
     }
 }

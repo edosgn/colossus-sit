@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfgempresaservicio</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userCfgEmpresaServicio.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ userCfgEmpresaServicio.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Gestionable</th>
+                <td>{% if userCfgEmpresaServicio.gestionable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userCfgEmpresaServicio.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfgempresaservicio_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

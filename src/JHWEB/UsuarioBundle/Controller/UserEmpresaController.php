@@ -68,8 +68,11 @@ class UserEmpresaController extends Controller
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
+            $empresaRepresentante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(array(
+                'ciudadano' => $ciudadano
+            ));
 
-            $cfgEmpresaServicio = $em->getRepository('JHWEBConfigBundle:CfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+            $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
 
             $empresa = new UserEmpresa();
 
@@ -93,8 +96,8 @@ class UserEmpresaController extends Controller
             $empresa->setCorreo($params->empresa->correo);
             $empresa->setFax($params->empresa->fax);
             $empresa->setCiudadano($ciudadano);
-            $empresa->setEmpresaRepresentante($ciudadano);
-            $empresa->setEmpresaServicio($cfgEmpresaServicio);
+            $empresa->setEmpresaRepresentante($empresaRepresentante);
+            $empresa->setEmpresaServicio($empresaServicio);
             $empresa->setActivo(true);
 
             $em->persist($empresa);

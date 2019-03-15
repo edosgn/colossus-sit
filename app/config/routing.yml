@@ -1,3 +1,11 @@
+jhweb_personal_pnal_horario:
+    resource: "@JHWEBPersonalBundle/Controller/PnalHorarioController.php"
+    type:     annotation
+
+jhweb_usuario_user_cfg_empresa_servicio:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCfgEmpresaServicioController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
