@@ -680,6 +680,30 @@ class UserEmpresa
     }
 
     /**
+     * Set empresaServicio
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio $empresaServicio
+     *
+     * @return UserEmpresa
+     */
+    public function setEmpresaServicio(\JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio $empresaServicio = null)
+    {
+        $this->empresaServicio = $empresaServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaServicio
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaServicio
+     */
+    public function getEmpresaServicio()
+    {
+        return $this->empresaServicio;
+    }
+
+    /**
      * Set tipoEmpresa
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserCfgEmpresaTipo $tipoEmpresa
