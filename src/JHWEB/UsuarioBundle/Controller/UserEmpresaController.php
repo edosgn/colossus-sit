@@ -59,23 +59,24 @@ class UserEmpresaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-
+    
             $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
             $fechaInicial = new \DateTime($params->empresa->fechaInicial);
 
             $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
+            $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
             $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
-
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
-            $empresaRepresentante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(array(
-                'ciudadano' => $ciudadano
-            ));
-
             $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
 
-            $empresa = new UserEmpresa();
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
+            /* $empresaRepresentante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(array(
+                'ciudadano' => $ciudadano
+            )); */
 
+            
+            $empresa = new UserEmpresa();
+            
             $empresa->setNombre($params->empresa->nombre);
             $empresa->setSigla($params->empresa->sigla);
             $empresa->setNit($params->empresa->nit);
@@ -87,6 +88,7 @@ class UserEmpresaController extends Controller
             $empresa->setTipoSociedad($tipoSociedad);
             $empresa->setTipoIdentificacion($tipoIdentificacion);
             $empresa->setTipoEntidad($params->empresa->tipoEntidad);
+            $empresa->setTipoEmpresa($tipoEmpresa);
             $empresa->setMunicipio($municipio);
             $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
             $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
@@ -96,19 +98,20 @@ class UserEmpresaController extends Controller
             $empresa->setCorreo($params->empresa->correo);
             $empresa->setFax($params->empresa->fax);
             $empresa->setCiudadano($ciudadano);
-            $empresa->setEmpresaRepresentante($empresaRepresentante);
             $empresa->setEmpresaServicio($empresaServicio);
             $empresa->setActivo(true);
-
-            $em->persist($empresa);
-
+            
+            
             $empresaRepresentante = new UserEmpresaRepresentante();
-
+            
             $empresaRepresentante->setEmpresa($empresa);
             $empresaRepresentante->setCiudadano($ciudadano);
             $empresaRepresentante->setFechaInicial($fechaInicial);
             $empresaRepresentante->setActivo(true);
-
+            
+            $empresa->setEmpresaRepresentante($empresaRepresentante);
+            
+            $em->persist($empresa);
             $em->persist($empresaRepresentante);
             $em->flush();
 
@@ -299,4 +302,52 @@ class UserEmpresaController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Search usuario entity.
+     *
+     * @Route("/buscar/ciudadano", name="datos_ciudadano")
+     * @Method({"GET", "POST"})
+     */
+    public function buscarCiudadanoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion
+                ));
+
+            if ($ciudadano) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "ciudadano encontrado",
+                    'data' => $ciudadano,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El ciudadano no se encuentra en la Base de Datos",
+                );
+                return $helpers->json($response);
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
 }

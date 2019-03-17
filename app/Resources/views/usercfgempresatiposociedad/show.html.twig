@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usercfgempresatiposociedad</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userCfgEmpresaTipoSociedad.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ userCfgEmpresaTipoSociedad.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userCfgEmpresaTipoSociedad.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usercfgempresatiposociedad_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

@@ -67,30 +67,30 @@ class PnalFuncionarioController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-
-            $funcionario = new PnalFuncionario();
-
+            
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
-
+            
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                 $params->idOrganismoTransito
             );
-
-            $cargo = $em->getRepository('JHWEBConfigBundle:PnalCfgCargo')->find(
+            
+            $cargo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->find(
                 $params->idCargo
             );
-
-            $tipoNombramiento = $em->getRepository('JHWEBConfigBundle:PnalCfgTipoNombramiento')->findBy(
+            
+            $tipoNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->find(
                 $params->idTipoNombramiento
             );
 
+            $funcionario = new PnalFuncionario();
+            
             $funcionario->setCiudadano($ciudadano);
             $funcionario->setCargo($cargo);
             $funcionario->setOrganismoTransito($organismoTransito);
-            $funcionario->setTipoNombramiento($idTipoNombramiento);
+            $funcionario->setTipoNombramiento($tipoNombramiento);
 
             if ($params->inhabilidad == 'true') {
                 $funcionario->setActivo(false);
@@ -109,11 +109,11 @@ class PnalFuncionarioController extends Controller
             }
 
             if ($params->fechaInicio) {
-                $funcionario->setFechaInicio(new \Datetime($params->fechaInicio));
+                $funcionario->setFechaInicial(new \Datetime($params->fechaInicio));
             }
 
             if ($params->fechaFin) {
-                $funcionario->setFechaFin(new \Datetime($params->fechaFin));
+                $funcionario->setFechaFinal(new \Datetime($params->fechaFin));
             }
 
             if ($params->numeroContrato) {
@@ -451,38 +451,40 @@ class PnalFuncionarioController extends Controller
      */
     public function searchCiudadanoAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
-                $params->identificacion
-            );
+                array(
+                    'identificacion' => $params->identificacion
+                ));
 
             if ($ciudadano) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado",
+                    'message' => "ciudadano encontrado",
                     'data' => $ciudadano,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No existe el ciudadano registrado con ese número de identificación",
+                    'message' => "El ciudadano no se encuentra en la Base de Datos",
                 );
+                return $helpers->json($response);
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida",
+                'message' => "Autorización no válida",
             );
         }
         return $helpers->json($response);

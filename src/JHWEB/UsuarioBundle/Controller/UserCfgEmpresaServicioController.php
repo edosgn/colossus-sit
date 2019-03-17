@@ -40,7 +40,6 @@ class UserCfgEmpresaServicioController extends Controller
                 'data'=> $empresaServicio,
             );
         }
-
         return $helpers->json($response);
     }
 

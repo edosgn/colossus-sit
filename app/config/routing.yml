@@ -1,3 +1,11 @@
+jhweb_usuario_user_cfg_empresa_tipo_sociedad:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCfgEmpresaTipoSociedadController.php"
+    type:     annotation
+
+jhweb_usuario_user_cfg_empresa_tipo:
+    resource: "@JHWEBUsuarioBundle/Controller/UserCfgEmpresaTipoController.php"
+    type:     annotation
+
 jhweb_personal_pnal_horario:
     resource: "@JHWEBPersonalBundle/Controller/PnalHorarioController.php"
     type:     annotation
