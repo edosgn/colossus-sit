@@ -39,22 +39,98 @@ class VhloPropietarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloPropietario = new Vhlopropietario();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloPropietarioType', $vhloPropietario);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloPropietario);
-            $em->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();  
 
-            return $this->redirectToRoute('vhlopropietario_show', array('id' => $vhloPropietario->getId()));
+            if ($params->idVehiculo) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                    $params->idVehiculo
+                );
+            }
+
+            if ($vehiculo) {
+               if ($params->tipoPropiedad == 1) {
+                    $vehiculo->setLeasing(true);
+                }else{
+                    $vehiculo->setLeasing(false);
+                }
+
+                foreach ($params->propietarios as $key => $propietarioArray) {
+                    $propietario = new VhloPropietario();
+
+                    if ($propietarioArray->tipo == 'Empresa') {
+                        $propietario = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                            array(
+                                'id' => $propietarioArray->idPropietario,
+                                'activo' => true,
+                            )
+                        );
+
+                        $propietario->setEmpresa($propietario);
+                    }elseif ($propietarioArray->tipo == 'Ciudadano') {
+                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                            array(
+                                'id' => $propietarioArray->idPropietario,
+                                'activo' => true,
+                            )
+                        );
+
+                        $propietario->setCiudadano($ciudadano);
+                    }
+
+                    if ($propietarioArray->idApoderado) {
+                        $apoderado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                            array(
+                                'id' => $propietarioArray->idApoderado,
+                                'activo' => true,
+                            )
+                        );
+
+                        $propietario->setApoderado($apoderado);
+                    }
+                        
+                    $propietario->setLicenciaTransito(
+                        $params->numeroLicenciaTransito
+                    );
+
+                    $propietario->setPermiso($propietarioArray->permiso);
+                    $propietario->setFechaInicial(new \Datetime(date('Y-m-d')));
+                    $propietario->setActivo(true);
+
+                    $propietario->setVehiculo($vehiculo);
+
+                    $em->persist($propietario);
+                    $em->flush();
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Propietario creado con exito.', 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Vehiculo no encontrado.', 
+                );
+            }                    
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
 
-        return $this->render('vhlopropietario/new.html.twig', array(
-            'vhloPropietario' => $vhloPropietario,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
