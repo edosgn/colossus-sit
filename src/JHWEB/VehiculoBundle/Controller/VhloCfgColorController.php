@@ -90,31 +90,39 @@ class VhloCfgColorController extends Controller
     /**
      * Finds and displays a vhloCfgColor entity.
      *
-     * @Route("/show/{id}", name="vhlocfgcolor_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlocfgcolor_show")
+     * @Method("POST")
      */
-    public function showAction(VhloCfgColor $vhloCfgColor)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($id);
+
+            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
+                $params->id
+            );
+
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Color encontrado", 
-                    'data'=> $color,
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $color
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida.", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
+        
         return $helpers->json($response);
     }
 

@@ -3,6 +3,7 @@
 namespace JHWEB\VehiculoBundle\Controller;
 
 use JHWEB\VehiculoBundle\Entity\VhloVehiculo;
+use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -175,6 +176,161 @@ class VhloVehiculoController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to update an existing Vehiculo entity.
+     *
+     * @Route("/update", name="vhlovehiculo_update")
+     * @Method({"GET", "POST"})
+     */
+    public function updateAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloVehiculo")->find(
+                $params->idVehiculo
+            );
+
+            if ($vehiculo) {
+                foreach ($params->campos as $key => $campo) {
+                    switch ($campo) {
+                        case 'color':
+                            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
+                                $params->idColor
+                            );
+                            $vehiculo->setColor($color);
+                            break;
+
+                        case 'combustible':
+                            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                                $params->idCombustible
+                            );
+                            $vehiculo->setCombustible($combustible);
+                            break;
+
+                        case 'gas':
+                            $gas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                                $params->idCombustibleCambio
+                            );
+                            $vehiculo->setCombustible($gas);
+                            break;
+
+                        case 'organismoTransito':
+                            $organismoTransito = $em->getRepository("JHWEBConfigBundle:CfgOrganismoTransito")->find(
+                                $params->idOrganismoTransito
+                            );
+                            $vehiculo->setSedeOperativa($organismoTransito);
+                            break;
+
+                        case 'blindaje':
+                            $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
+                            $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
+                            $vehiculo->setEmpresaBlindadora(
+                                $params->empresaBlindadora
+                            );
+                            break;
+
+                        case 'carroceria':
+                            $carroceria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCarroceria")->find(
+                                $params->idCarroceria
+                            );
+                            $vehiculo->setCarroceria($carroceria);
+                            break;
+
+                        case 'motor':
+                            $vehiculo->setMotor($params->numeroMotor);
+                            break;
+
+                        case 'placa':
+                            $placa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgPlaca")->findOneByNumero(
+                                $params->nuevaPlaca
+                            );
+
+                            if (!$placa) {
+                                $placa = new VhloCfgPlaca();
+
+                                $placa->setNumero(
+                                    strtoupper($params->nuevaPlaca)
+                                );
+                                $placa->setEstado('FABRICADA');
+                                //Revisar$placa->setClase($clase);
+                                //Revisar$placa->setSedeOperativa($sedeOperativa);
+
+                                $em->persist($placa);
+                                $em->flush();
+                            }
+
+                            $vehiculo->setPlaca($placa);
+                            break;
+                            
+                        case 'servicio':
+                            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                                $params->idServicio
+                            );
+                            $vehiculo->setServicio($servicio);
+                            break;
+                            
+                        case 'cancelacionmatricula':
+                            $vehiculo->setCancelado(true);
+                            break;
+
+                        case 'regrabarchasis':
+                            $vehiculo->setChasis($params->nuevoNumero);
+                            break;
+
+                        case 'regrabarmotor':
+                            $vehiculo->setMotor($params->nuevoNumero);
+                            break;
+
+                        case 'regrabarserie':
+                            $vehiculo->setSerie($params->nuevoNumero);
+                            break;
+
+                        case 'regrabarvin':
+                            $vehiculo->setVin($params->nuevoNumero);
+                            break;
+
+                        case 'conjunto':
+                            $vehiculo->setModelo($params->nuevoModelo);
+                            break;
+
+                        case 'repotenciacion':
+                            $vehiculo->setModelo($params->modelo);
+                            break;
+                    }
+                }
+
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El vehiculo se actualizó con éxito.',
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El vehiculo no se encuentra en la base de datos.',
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida para editar vehiculo.',
             );
         }
 
