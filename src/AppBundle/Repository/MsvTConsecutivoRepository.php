@@ -11,7 +11,7 @@ namespace AppBundle\Repository;
 class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
     //Obtiene el maximo consecutivo disponible según la sede operativa
-    public function getLastBySede($idOragnismoTransito)
+    public function getLastBySede($idOrganismoTransito)
     {
         $em = $this->getEntityManager();
 

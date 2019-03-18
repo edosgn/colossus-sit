@@ -251,6 +251,7 @@ class VhloCfgServicioController extends Controller
     $servicios = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->findBy(
         array('activo' => 1)
     );
+    
       foreach ($servicios as $key => $servicio) {
         $response[$key] = array(
             'value' => $servicio->getId(),
