@@ -241,7 +241,8 @@ class VhloCfgColorController extends Controller
     $colors = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findBy(
         array('activo' => 1)
     );
-    
+    $response = null;
+
     foreach ($colors as $key => $color) {
         $response[$key] = array(
             'value' => $color->getId(),

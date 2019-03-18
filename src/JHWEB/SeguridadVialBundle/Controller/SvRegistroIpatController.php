@@ -67,7 +67,7 @@ class SvRegistroIpatController extends Controller
             $ipat = new SvRegistroIpat();
 
             if ($params[0]->datosLimitacion->idSedeOperativa) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params[0]->datosLimitacion->idSedeOperativa);
+                $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params[0]->datosLimitacion->idSedeOperativa);
                 $ipat->setSedeOperativa($sedeOperativa);
             }
             
@@ -157,7 +157,7 @@ class SvRegistroIpatController extends Controller
             }
 
             if ($params[0]->datosLimitacion->idClaseAccidente) {
-                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(
+                $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->findOneBy(
                     array(
                         'nombre' => $params[0]->datosLimitacion->idClaseAccidente,
                     )
@@ -322,7 +322,7 @@ class SvRegistroIpatController extends Controller
 
             $idSexoConductor = (isset($params[0]->datosLimitacion->sexoConductor)) ? $params[0]->datosLimitacion->sexoConductor : null;
             if ($idSexoConductor) {
-                $sexoConductor = $em->getRepository('AppBundle:Genero')->find($params[0]->datosLimitacion->sexoConductor);
+                $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params[0]->datosLimitacion->sexoConductor);
                 $ipat->setSexoConductor($sexoConductor->getSigla());
             }
 
@@ -492,7 +492,7 @@ class SvRegistroIpatController extends Controller
 
             $idTipoIdentificacion = (isset($params[0]->datosLimitacion->tipoIdentificacionPropietario)) ? $params[0]->datosLimitacion->tipoIdentificacionPropietario : null;
             if($idTipoIdentificacion){
-                $tipoIdentificacionPropietario = $em->getRepository('AppBundle:TipoIdentificacion')->find($idTipoIdentificacion);
+                $tipoIdentificacionPropietario = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($idTipoIdentificacion);
                 $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
             }
             $ipat->setIdentificacionPropietario($params[0]->datosLimitacion->identificacionPropietario);
@@ -519,7 +519,7 @@ class SvRegistroIpatController extends Controller
             $idTipoIdentificacionTestigo = (isset($params[0]->datosLimitacion->tipoIdentificacionTestigo)) ? $params[0]->datosLimitacion->tipoIdentificacionTestigo : null;
 
             if ($idTipoIdentificacionTestigo){
-                $tipoIdentificacionTestigo = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionTestigo);
+                $tipoIdentificacionTestigo = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionTestigo);
                 $ipat->setTipoIdentificacionTestigo($tipoIdentificacionTestigo->getNombre());
             }
             
@@ -530,14 +530,14 @@ class SvRegistroIpatController extends Controller
             $idCiudadResidenciaTestigo = (isset($params[0]->datosLimitacion->ciudadResidenciaTestigo)) ? $params[0]->datosLimitacion->ciudadResidenciaTestigo : null;
 
             if($idCiudadResidenciaTestigo) {
-                $ciudadResidenciaTestigo = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->ciudadResidenciaTestigo);    
+                $ciudadResidenciaTestigo = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params[0]->datosLimitacion->ciudadResidenciaTestigo);    
                 $ipat->setCiudadResidenciaTestigo($ciudadResidenciaTestigo->getNombre());
             }
             $ipat->setTelefonoTestigo($params[0]->datosLimitacion->telefonoTestigo);
             
             $ipat->setGradoAgente($params[0]->datosLimitacion->gradoAgente);
             
-            $tipoIdentificacionAgente = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionAgente);
+            $tipoIdentificacionAgente = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionAgente);
             $ipat->setTipoIdentificacionAgente($tipoIdentificacionAgente->getNombre());
 
             $ipat->setIdentificacionAgente($params[0]->datosLimitacion->identificacionAgente);
@@ -553,7 +553,7 @@ class SvRegistroIpatController extends Controller
 
             $idSexoVictima = (isset($params[0]->datosLimitacion->sexoVictima)) ? $params[0]->datosLimitacion->sexoVictima : null;
             if($idSexoVictima){
-                $sexoVictima = $em->getRepository('AppBundle:Genero')->find($idSexoVictima);
+                $sexoVictima = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($idSexoVictima);
                 $ipat->setSexoVictima($sexoVictima->getSigla());
             }
             /* $ipat->setnombresVictima($params[0]->datosLimitacion->nombresVictima);
@@ -668,7 +668,7 @@ class SvRegistroIpatController extends Controller
             $idMunicipio = (isset($params[0]->datosLimitacion->idMunicipio)) ? $params[0]->datosLimitacion->idMunicipio : null;
 
             if($idMunicipio) {
-                $municipio = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->idMunicipio);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params[0]->datosLimitacion->idMunicipio);
                 $ipat->setMunicipioCorrespondio($municipio);
             }
 
@@ -733,7 +733,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $conductor = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacion));
+            $conductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacion));
             if ($conductor) {
                 $response = array(
                     'status' => 'success',
@@ -775,7 +775,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $placa = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(array('numero' => $params->placa));
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
             $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(array('placa' => $placa));
             if ($vehiculo) {
                 $response = array(
@@ -858,8 +858,8 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $agente = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacionAgente));
-            $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(array('id' => $agente));
+            $agente = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacionAgente));
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(array('ciudadano' => $agente));
             if ($funcionario) {
                 $response = array(
                     'status' => 'success',
@@ -899,7 +899,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $victima = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacionVictima));
+            $victima = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacionVictima));
             if ($victima) {
                 $response = array(
                     'status' => 'success',
@@ -939,7 +939,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $testigo = $em->getRepository('UsuarioBundle:Usuario')->findBy(array('identificacion' => $params->identificacionTestigo));
+            $testigo = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacionTestigo));
             if ($testigo) {
                 $response = array(
                     'status' => 'success',
@@ -1035,10 +1035,10 @@ class SvRegistroIpatController extends Controller
                         //$ipat -> setNombresConductor($dato[7]);
                         //$ipat -> setApellidosConductor($dato[8]);
                         $ipat -> setCiudadResidenciaConductor($dato[0]);
-                        $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
+                        $sexoConductorFile = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->findOneBy(array('nombre' => $dato[6]));
                         $ipat -> setSexoConductor($sexoConductorFile->getSigla());
                         $ipat -> setEdadConductor($dato[10]);
-                        $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
+                        $claseAccidenteFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
                         $ipat -> setClaseAccidente($claseAccidenteFile);
                         $ipat->setActivo(true);
 
@@ -1159,10 +1159,10 @@ class SvRegistroIpatController extends Controller
                             $ipat -> setNombresVictima($dato[7]);
                             $ipat -> setApellidosVictima($dato[8]);
                             $ipat -> setCiudadResidenciaConductor($dato[0]);
-                            $sexoConductorFile = $em->getRepository('AppBundle:Genero')->findOneBy(array('nombre' => $dato[6]));
+                            $sexoConductorFile = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->findOneBy(array('nombre' => $dato[6]));
                             $ipat -> setSexoConductor($sexoConductorFile->getSigla());
                             $ipat -> setEdadConductor($dato[10]);
-                            $claseAccidenteFile = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
+                            $claseAccidenteFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->findOneBy(array('nombre' => $dato[12]));
                             $ipat -> setClaseAccidente($claseAccidenteFile);
                             $ipat->setActivo(true);
 
@@ -1230,7 +1230,7 @@ class SvRegistroIpatController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $idMunicipio = (isset($params->idMunicipio)) ? $params->idMunicipio : null;
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($idMunicipio);
+            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipio);
             $entidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
             $unidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
             $anio = $params->idAnio;
@@ -1292,7 +1292,7 @@ class SvRegistroIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $identificacionConductor = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params->identificacionConductor));
+            $identificacionConductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacionConductor));
             if($identificacionConductor){
                 $response = array(
                 'status' => 'error',
@@ -1301,11 +1301,11 @@ class SvRegistroIpatController extends Controller
                 );
                 return $helpers->json($response);
             } else{
-                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($params->tipoIdentificacionConductor);
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionConductor);
                 $fechaNacimientoDateTime = new \DateTime($params->fechaNacimientoConductor);
 
-                $municipioResidenciaConductor = $em->getRepository('AppBundle:Municipio')->find($params->ciudadResidenciaConductor);
-                $sexoConductor = $em->getRepository('AppBundle:Genero')->find($params->sexoConductor);
+                $municipioResidenciaConductor = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaConductor);
+                $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoConductor);
 
                 $ciudadano = new Ciudadano();
                 $ciudadano->setMunicipioResidencia($municipioResidenciaConductor);
@@ -1374,7 +1374,7 @@ class SvRegistroIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $identificacionVictima = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params->identificacionVictima));
+            $identificacionVictima = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacionVictima));
             if($identificacionVictima){
                 $response = array(
                 'status' => 'error',
@@ -1383,11 +1383,11 @@ class SvRegistroIpatController extends Controller
                 );
                 return $helpers->json($response);
             } else{
-                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find($params->tipoIdentificacionVictima);
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionVictima);
                 $fechaNacimientoDateTime = new \DateTime($params->fechaNacimientoVictima);
 
-                $municipioResidenciaVictima = $em->getRepository('AppBundle:Municipio')->find($params->ciudadResidenciaVictima);
-                $sexoVictima = $em->getRepository('AppBundle:Genero')->find($params->sexoVictima);
+                $municipioResidenciaVictima = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaVictima);
+                $sexoVictima = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoVictima);
 
                 $ciudadano = new Ciudadano();
                 $ciudadano->setMunicipioResidencia($municipioResidenciaVictima);
@@ -1455,7 +1455,7 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager(); 
 
-            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(array('numero' => $params->placa));
+            $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
             if($cfgPlaca) {
                 $response = array(
                     'status' => 'error',
@@ -1463,13 +1463,13 @@ class SvRegistroIpatController extends Controller
                     'message' => "El vehiculo ya se encuentra registrado en la Base de datos",
                 );
             } else {
-                $marca = $em->getRepository('AppBundle:Marca')->findOneBy(array('id' => $params->marca));
-                $linea = $em->getRepository('AppBundle:Linea')->find($params->linea);
-                $color = $em->getRepository('AppBundle:Color')->findOneBy(array('id' => $params->color));
-                $carroceria = $em->getRepository('AppBundle:Carroceria')->findOneBy(array('id' => $params->carroceria));
-                $clase = $em->getRepository('AppBundle:Clase')->findOneBy(array('id' => $params->clase));
-                $servicio = $em->getRepository('AppBundle:Servicio')->findOneBy(array('id' => $params->servicio));
-                $matriculadoEn = $em->getRepository('AppBundle:Municipio')->findOneBy(array('nombre' => $params->matriculadoEn));
+                $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->findOneBy(array('id' => $params->marca));
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->linea);
+                $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findOneBy(array('id' => $params->color));
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findOneBy(array('id' => $params->carroceria));
+                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneBy(array('id' => $params->clase));
+                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->findOneBy(array('id' => $params->servicio));
+                $matriculadoEn = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMunicipio')->findOneBy(array('nombre' => $params->matriculadoEn));
                 $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->findOneBy(array('id' => $params->modalidadTransporte));
                 $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->findOneBy(array('id' => $params->radioAccion));
                 
