@@ -370,4 +370,42 @@ class FroTrteSolicitudController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/{idVehiculo}/{tipo}/pdf/certificadotradicion", name="pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfCertificadoTradicionAction(Request $request, $idVehiculo, $tipo)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+            $idVehiculo 
+        );
+
+        if ($vehiculo) {
+            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
+                $vehiculo->getId()
+            );
+
+            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
+                $vehiculo->getId()
+            );
+        }        
+
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.certificadotradicion.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'vehiculo'=>$vehiculo,
+            'propietarios' => $propietarios,
+            'fechaActual' => $fechaActual,
+            'tramitesSolicitud'=>$tramitesSolicitud
+        ));
+
+        $this->get('app.pdf.factura')->templateCertificadoTradicion($html, $vehiculo);
+    }
 }
