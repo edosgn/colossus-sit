@@ -85,7 +85,7 @@ class SvCfgClaseAccidenteController extends Controller
     /**
      * Finds and displays a svCfgClaseAccidente entity.
      *
-     * @Route("/POST" show, name="svcfgclaseaccidente_show")
+     * @Route("/show", name="svcfgclaseaccidente_show")
      * @Method("POST")
      */
     public function showAction(Request $request)
