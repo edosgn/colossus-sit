@@ -85,31 +85,39 @@ class VhloCfgCarroceriaController extends Controller
     /**
      * Finds and displays a vhloCfgCarroceria entity.
      *
-     * @Route("/show/{id}", name="vhlocfgcarroceria_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlocfgcarroceria_show")
+     * @Method("POST")
      */
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($id);
+
+            $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find(
+                $params->id
+            );
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Carroceria con nombre" . " " . $carroceria->getNombre(),
-                'data' => $carroceria,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $carroceria
             );
-        } else {
+        }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => 'Autorizacion no valida.', 
             );
         }
+        
         return $helpers->json($response);
     }
 

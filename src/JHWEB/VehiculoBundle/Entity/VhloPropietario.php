@@ -31,9 +31,9 @@ class VhloPropietario
     /**
      * @var boolean
      *
-     * @ORM\Column(name="tramites", type="boolean")
+     * @ORM\Column(name="permiso", type="boolean")
      */
-    private $tramites;
+    private $permiso;
 
     /**
      * @var \DateTime
@@ -48,20 +48,6 @@ class VhloPropietario
      * @ORM\Column(name="fecha_final", type="datetime", nullable= true)
      */
     private $fechaFinal;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="permiso", type="boolean")
-     */
-    private $permiso;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="estado", type="boolean")
-     */
-    private $estado;
 
     /**
      * @var boolean
@@ -118,27 +104,27 @@ class VhloPropietario
     }
 
     /**
-     * Set tramites
+     * Set permiso
      *
-     * @param boolean $tramites
+     * @param boolean $permiso
      *
      * @return VhloPropietario
      */
-    public function setTramites($tramites)
+    public function setPermiso($permiso)
     {
-        $this->tramites = $tramites;
+        $this->permiso = $permiso;
 
         return $this;
     }
 
     /**
-     * Get tramites
+     * Get permiso
      *
      * @return boolean
      */
-    public function getTramites()
+    public function getPermiso()
     {
-        return $this->tramites;
+        return $this->permiso;
     }
 
     /**
@@ -187,54 +173,6 @@ class VhloPropietario
     public function getFechaFinal()
     {
         return $this->fechaFinal;
-    }
-
-    /**
-     * Set permiso
-     *
-     * @param boolean $permiso
-     *
-     * @return VhloPropietario
-     */
-    public function setPermiso($permiso)
-    {
-        $this->permiso = $permiso;
-
-        return $this;
-    }
-
-    /**
-     * Get permiso
-     *
-     * @return boolean
-     */
-    public function getPermiso()
-    {
-        return $this->permiso;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return VhloPropietario
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 
     /**

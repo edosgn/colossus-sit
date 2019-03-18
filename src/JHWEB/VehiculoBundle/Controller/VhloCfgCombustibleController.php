@@ -93,31 +93,39 @@ class VhloCfgCombustibleController extends Controller
     /**
      * Finds and displays a vhloCfgCombustible entity.
      *
-     * @Route("/show/{id}", name="vhlocfgcombustible_show")
+     * @Route("/show", name="vhlocfgcombustible_show")
      * @Method({"GET", "POST"})
      */
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($id);
+
+            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                $params->id
+            );
+
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "combustible encontrado", 
-                    'data'=> $combustible,
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $combustible
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorización no válida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
+        
         return $helpers->json($response);
     }
 

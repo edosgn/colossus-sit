@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnalhorario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pnalHorario.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if pnalHorario.fecha %}{{ pnalHorario.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horainicial</th>
+                <td>{% if pnalHorario.horaInicial %}{{ pnalHorario.horaInicial|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Horafinal</th>
+                <td>{% if pnalHorario.horaFinal %}{{ pnalHorario.horaFinal|date('H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Jornada</th>
+                <td>{{ pnalHorario.jornada }}</td>
+            </tr>
+            <tr>
+                <th>Lugar</th>
+                <td>{{ pnalHorario.lugar }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if pnalHorario.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnalhorario_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

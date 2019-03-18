@@ -60,17 +60,40 @@ class FroFacTramiteController extends Controller
     /**
      * Finds and displays a froFacTramite entity.
      *
-     * @Route("/{id}/show", name="frofactramite_show")
-     * @Method("GET")
+     * @Route("/show", name="frofactramite_show")
+     * @Method("POST")
      */
-    public function showAction(FroFacTramite $froFacTramite)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($froFacTramite);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('frofactramite/show.html.twig', array(
-            'froFacTramite' => $froFacTramite,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $tramiteFactura
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -177,7 +200,7 @@ class FroFacTramiteController extends Controller
                         }
 
                         $tramitesFacturaArray[$key] = array(
-                            'value' => $tramiteFactura->getPrecio()->getTramite()->getId(),
+                            'value' => $tramiteFactura->getId(),
                             'label' => $tramiteFactura->getPrecio()->getNombre(),
                         );
                     }
@@ -196,7 +219,7 @@ class FroFacTramiteController extends Controller
                     $matriculaInicial = false;
 
                     foreach ($tramitesFactura as $key => $tramiteFactura) {
-                        //Valida si esta facturado el trámite atricula inicial
+                        //Valida si esta facturado el trámite matricula inicial
                         if ($tramiteFactura->getPrecio()->getTramite()->getId() == 1) {
                             $matriculaInicial = true;
                         }
@@ -207,7 +230,7 @@ class FroFacTramiteController extends Controller
                         }
 
                         $tramitesFacturaArray[$key] = array(
-                            'value' => $tramiteFactura->getPrecio()->getTramite()->getId(),
+                            'value' => $tramiteFactura->getId(),
                             'label' => $tramiteFactura->getPrecio()->getNombre(),
                         );
                     }
@@ -239,7 +262,7 @@ class FroFacTramiteController extends Controller
                     }
 
                     $tramitesFacturaArray[$key] = array(
-                        'value' => $tramiteFactura->getPrecio()->getTramite()->getId(),
+                        'value' => $tramiteFactura->getId(),
                         'label' => $tramiteFactura->getPrecio()->getNombre(),
                     );
                 }

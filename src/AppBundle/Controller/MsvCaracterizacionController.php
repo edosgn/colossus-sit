@@ -61,13 +61,13 @@ class MsvCaracterizacionController extends Controller
 
             $caracterizacion = new MsvCaracterizacion();
             
-            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->nit));
             $caracterizacion->setEmpresa($empresa);
 
             $caracterizacion->setFecha(new \Datetime($params->fecha));
 
             if($params->municipio){
-                $ciudad = $em->getRepository('AppBundle:Municipio')->find($params->municipio);
+                $ciudad = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->municipio);
                 $caracterizacion->setCiudad($ciudad->getNombre());
             }
 
@@ -83,7 +83,7 @@ class MsvCaracterizacionController extends Controller
             $caracterizacion->setEdad($params->edad);
 
             if($params->genero){
-                $genero = $em->getRepository('AppBundle:Genero')->find($params->genero);
+                $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->genero);
                 $caracterizacion->setGenero($genero->getSigla());
             }
             $caracterizacion->setGrupoTrabajo($params->grupoTrabajo);
@@ -127,13 +127,13 @@ class MsvCaracterizacionController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Caracterización creada con éxito",
+                'message' => "Caracterización creada con éxito",
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorización no valida",
+                'message' => "Autorización no valida",
             );
         }
         return $helpers->json($response);
@@ -361,7 +361,7 @@ class MsvCaracterizacionController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->nit));
             /* $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
             $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento()); */ 
      

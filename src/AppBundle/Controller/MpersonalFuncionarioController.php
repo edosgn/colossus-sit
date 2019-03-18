@@ -59,11 +59,6 @@ class MpersonalFuncionarioController extends Controller
             );
             $funcionario->setSedeOperativa($sedeOperativa);
 
-            $tipoContrato = $em->getRepository('AppBundle:MpersonalTipoContrato')->find(
-                $params->tipoContratoId
-            );
-            $funcionario->setTipoContrato($tipoContrato);
-
             $cargo = $em->getRepository('AppBundle:CfgCargo')->find(
                 $params->cargoId
             );

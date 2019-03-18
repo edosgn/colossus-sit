@@ -222,6 +222,9 @@ class PnalFuncionario
      */
     public function getFechaInicial()
     {
+        if ($this->fechaInicial) {
+            return $this->fechaInicial->format('Y/m/d');
+        }
         return $this->fechaInicial;
     }
 
@@ -246,6 +249,9 @@ class PnalFuncionario
      */
     public function getFechaFinal()
     {
+        if ($this->fechaFinal) {
+            return $this->fechaFinal->format('Y/m/d');
+        }
         return $this->fechaFinal;
     }
 

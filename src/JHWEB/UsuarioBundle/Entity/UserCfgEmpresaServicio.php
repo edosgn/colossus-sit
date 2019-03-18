@@ -5,12 +5,12 @@ namespace JHWEB\UsuarioBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserCfgEmpresaTipo
+ * UserCfgEmpresaServicio
  *
- * @ORM\Table(name="user_cfg_empresa_tipo")
- * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserCfgEmpresaTipoRepository")
+ * @ORM\Table(name="user_cfg_empresa_servicio")
+ * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserCfgEmpresaServicioRepository")
  */
-class UserCfgEmpresaTipo
+class UserCfgEmpresaServicio
 {
     /**
      * @var int
@@ -31,10 +31,16 @@ class UserCfgEmpresaTipo
     /**
      * @var bool
      *
+     * @ORM\Column(name="gestionable", type="boolean")
+     */
+    private $gestionable;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo = true; 
-
+    private $activo;
 
     /**
      * Get id
@@ -45,14 +51,13 @@ class UserCfgEmpresaTipo
     {
         return $this->id;
     }
-    
 
     /**
      * Set nombre
      *
      * @param string $nombre
      *
-     * @return UserCfgEmpresaTipo
+     * @return UserCfgEmpresaServicio
      */
     public function setNombre($nombre)
     {
@@ -72,11 +77,35 @@ class UserCfgEmpresaTipo
     }
 
     /**
+     * Set gestionable
+     *
+     * @param boolean $gestionable
+     *
+     * @return UserCfgEmpresaServicio
+     */
+    public function setGestionable($gestionable)
+    {
+        $this->gestionable = $gestionable;
+
+        return $this;
+    }
+
+    /**
+     * Get gestionable
+     *
+     * @return boolean
+     */
+    public function getGestionable()
+    {
+        return $this->gestionable;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return UserCfgEmpresaTipo
+     * @return UserCfgEmpresaServicio
      */
     public function setActivo($activo)
     {

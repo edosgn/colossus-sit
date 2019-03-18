@@ -64,17 +64,10 @@ class FroTrteSolicitudController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($params->foraneas) {
-                if ($params->foraneas->idFactura && $params->foraneas->idTramite) {
-                    $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find(
-                        $params->foraneas->idFactura
-                    );
-                    
-                    $tramite = $em->getRepository('JHWEBFinancieroBundle:FroTramite')->find(
-                        $params->foraneas->idTramite
-                    );
-                    
-                    $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->getByFacturaAndTramite($factura->getId(), $tramite->getId()
+            if ($params->datos->foraneas) {
+                if ($params->datos->foraneas->idTramiteFactura) {
+                    $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                        $params->datos->foraneas->idTramiteFactura
                     );
 
                     if ($tramiteFactura) {
@@ -104,15 +97,15 @@ class FroTrteSolicitudController extends Controller
                             }
 
                             $tramiteSolicitud->setForaneas(
-                                (array)$params->foraneas
+                                (array)$params->datos->foraneas
                             );
                             
-                            $tramiteSolicitud->setResumen($params->resumen);
+                            $tramiteSolicitud->setResumen($params->datos->resumen);
                             $tramiteSolicitud->setActivo(true);
                         
 
                             if (isset($params->idVehiculo) && $params->idVehiculo) {
-                                $vehiculo = $em->getRepository('JWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+                                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
                                 $tramiteSolicitud->setVehiculo($vehiculo);
                             }
 
@@ -325,6 +318,54 @@ class FroTrteSolicitudController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca trámites por módulo y parametros (No. placa, No. factura y fecha).
+     *
+     * @Route("/show/tramitefactura", name="frotrtesolicitud_show_tramitefactura")
+     * @Method({"GET", "POST"})
+     */
+    public function showByTramiteFacturaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramiteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findOneBy(
+                array(
+                    'tramiteFactura' => $params->idTramiteFactura
+                )
+            );
+
+            if ($tramiteSolicitud) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data' => $tramiteSolicitud,
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existen trámites para esos filtros de búsqueda, si desea registralo por favor presione el botón "NUEVO"', 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Autorizacion no valida.', 
                 );
         }
         return $helpers->json($response);
