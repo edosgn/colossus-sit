@@ -29,7 +29,7 @@ class MsvCaracterizacion
     private $fecha;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Empresa", inversedBy="empresas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="empresas")
      **/
     protected $empresa;
 
@@ -1374,11 +1374,11 @@ class MsvCaracterizacion
     /**
      * Set empresa
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
      *
      * @return MsvCaracterizacion
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
     {
         $this->empresa = $empresa;
 
@@ -1388,7 +1388,7 @@ class MsvCaracterizacion
     /**
      * Get empresa
      *
-     * @return \AppBundle\Entity\Empresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
     public function getEmpresa()
     {

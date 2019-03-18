@@ -11,19 +11,19 @@ namespace AppBundle\Repository;
 class MsvTConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
     //Obtiene el maximo consecutivo disponible según la sede operativa
-    public function getLastBySede($idSedeOperativa)
+    public function getLastBySede($idOragnismoTransito)
     {
         $em = $this->getEntityManager();
 
         $dql = "SELECT MAX(c.consecutivo) AS consecutivo, c.id
             FROM AppBundle:MsvTConsecutivo c
-            WHERE c.sedeOperativa = :idSedeOperativa
+            WHERE c.organismoTransito = :idOrganismoTransito
             AND c.estado = :estado
-            GROUP BY c.sedeOperativa";
+            GROUP BY c.organismoTransito";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'idSedeOperativa' => $idSedeOperativa,
+            'idOrganismoTransito' => $idOrganismoTransito,
             'estado' => 'DISPONIBLE',
         ));
 

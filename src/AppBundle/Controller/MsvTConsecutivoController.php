@@ -184,7 +184,7 @@ class MsvTConsecutivoController extends Controller
             $em = $this->getDoctrine()->getManager();
         
             $ipat = $em->getRepository('AppBundle:MsvTConsecutivo')->getLastBySede(
-                $params->sedeOperativa->id
+                $params->organismoTransito->id
             );
 
             if ($ipat) {
