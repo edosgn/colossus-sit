@@ -265,7 +265,7 @@ class VhloVehiculoController extends Controller
                                 $placa->setNumero(
                                     strtoupper($params->nuevaPlaca)
                                 );
-                                $placa->setEstado('FABRICADA');
+                                $placa->setEstado('ASIGNADA');
                                 //Revisar$placa->setClase($clase);
                                 //Revisar$placa->setSedeOperativa($sedeOperativa);
 
