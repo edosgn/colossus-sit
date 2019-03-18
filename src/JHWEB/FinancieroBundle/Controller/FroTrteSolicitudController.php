@@ -374,7 +374,7 @@ class FroTrteSolicitudController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/{idVehiculo}/{tipo}/pdf/certificadotradicion", name="pdf")
+     * @Route("/{idVehiculo}/{tipo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
      * @Method({"GET", "POST"})
      */
     public function pdfCertificadoTradicionAction(Request $request, $idVehiculo, $tipo)

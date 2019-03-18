@@ -121,16 +121,16 @@ class PdfTemplate extends TCPDF{
         $pdf->Output('factura_tramites.pdf', 'I');
     }
 
-    public function templateCertificadoTradicion($html, $factura){
+    public function templateCertificadoTradicion($html, $vehiculo){
         // create new PDF document
         $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('JHWEB PASTO SAS');
-        $pdf->SetTitle('Factura No. '.$factura->getNumero());
+        $pdf->SetTitle('Cert. Tradición '.$vehiculo->getPlaca()->getNumero());
         $pdf->SetSubject('Subsecretaría de transito deptal.');
-        $pdf->SetKeywords('Factura, Trámites');
+        $pdf->SetKeywords('Certificado, Tradición');
 
         // set default header data
         //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -176,7 +176,7 @@ class PdfTemplate extends TCPDF{
         // ---------------------------------------------------------
         // Close and output PDF document
         // This method has several options, check the source code documentation for more information.
-        $pdf->Output('factura_tramites.pdf', 'I');
+        $pdf->Output('certificado_tradicion.pdf', 'I');
     }
 
     public function templatePreview($html, $estado){
