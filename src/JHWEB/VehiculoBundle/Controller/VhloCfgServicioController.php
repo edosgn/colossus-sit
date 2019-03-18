@@ -97,31 +97,39 @@ class VhloCfgServicioController extends Controller
     /**
      * Finds and displays a vhloCfgServicio entity.
      *
-     * @Route("/show/{id}", name="vhlocfgservicio_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlocfgservicio_show")
+     * @Method("POST")
      */
-    public function showAction(Request $request,$id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($id);
+
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                $params->id
+            );
+
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Servicio con nombre"." ".$servicio->getNombre(), 
-                    'data'=> $servicio,
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $servicio
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorización no válida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
+        
         return $helpers->json($response);
     }
 
