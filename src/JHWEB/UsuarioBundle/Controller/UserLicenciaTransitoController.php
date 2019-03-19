@@ -60,7 +60,7 @@ class UserLicenciaTransitoController extends Controller
     /**
      * Finds and displays a userLicenciaTransito entity.
      *
-     * @Route("/{id}", name="userlicenciatransito_show")
+     * @Route("/{id}/show", name="userlicenciatransito_show")
      * @Method("GET")
      */
     public function showAction(UserLicenciaTransito $userLicenciaTransito)
@@ -101,7 +101,7 @@ class UserLicenciaTransitoController extends Controller
     /**
      * Deletes a userLicenciaTransito entity.
      *
-     * @Route("/{id}", name="userlicenciatransito_delete")
+     * @Route("/{id}/delete", name="userlicenciatransito_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, UserLicenciaTransito $userLicenciaTransito)
@@ -132,5 +132,51 @@ class UserLicenciaTransitoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ================================================== */
+
+    /**
+     * Finds and displays a userCfgEmpresaTipo entity.
+     *
+     * @Route("/search/actual", name="usercfgempresatipo_search_actual")
+     * @Method("GET")
+     */
+    public function searchActualAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                array(
+                    'propietario' => $params->idPropietario,
+                    'activo' => true,
+                )
+            );
+
+            $em->persist($licenciaTransito);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado con exito",
+                'data' => $licenciaTransito
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

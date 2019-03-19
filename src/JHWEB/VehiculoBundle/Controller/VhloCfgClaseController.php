@@ -251,8 +251,13 @@ class VhloCfgClaseController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
+        $em = $this->getDoctrine()->getManager();
+
         $json = $request->get("data",null);
         $params = json_decode($json);
+
+        var_dump($params);
+        die();
 
         $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->getByModulo($params->idModulo);
         

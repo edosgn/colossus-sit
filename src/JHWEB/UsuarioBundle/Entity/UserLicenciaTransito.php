@@ -36,6 +36,13 @@ class UserLicenciaTransito
     private $fecha;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="activo", type="string", length=100)
+     */
+    private $activo;
+
+    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloPropietario", inversedBy="licenciasTransito")
      **/
     protected $propietario;
@@ -97,6 +104,30 @@ class UserLicenciaTransito
     public function getFecha()
     {
         return $this->fecha;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param string $activo
+     *
+     * @return UserLicenciaTransito
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return string
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 
     /**

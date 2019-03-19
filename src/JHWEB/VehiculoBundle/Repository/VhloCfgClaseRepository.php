@@ -21,14 +21,13 @@ class VhloCfgClaseRepository extends \Doctrine\ORM\EntityRepository
         AND m.id = :idModulo
         AND tv.modulo = m.id
         AND c.tipoVehiculo = tv.id
-        AND c.activo = true";
+        AND c.activo = 1";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
-            'idModulo' => $idModulo,
+            'idModulo' => $idModulo
         ));
 
         return $consulta->getResult();
-
     }
 }

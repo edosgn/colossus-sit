@@ -315,6 +315,7 @@ class VhloVehiculoController extends Controller
                 }
 
                 $em->flush();
+                
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

@@ -37,16 +37,16 @@ class CfgEntidadJudicial
     private $codigo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inmovilizaciones")
+     * @ORM\ManyToOne(targetEntity="CfgMunicipio", inversedBy="entidadesJudiciales")
      **/
     protected $municipio;
     
     /**
      * @var boolean
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado = true;
+    private $activo;
 
     
 
@@ -133,13 +133,37 @@ class CfgEntidadJudicial
     }
 
     /**
-     * Set municipio
+     * Set activo
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param boolean $activo
      *
      * @return CfgEntidadJudicial
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
+     *
+     * @return CfgEntidadJudicial
+     */
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -149,7 +173,7 @@ class CfgEntidadJudicial
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {
