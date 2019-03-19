@@ -625,7 +625,7 @@ class SvRegistroIpatController extends Controller
                 $ipat->setGravedadVictima($gravedadVictima);
             }
 
-            $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[2]->consecutivo->consecutivo));
+            $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[1]->consecutivo->consecutivo));
             $ipat->setConsecutivo($consecutivo);
 
             if ($consecutivo) {
@@ -732,13 +732,13 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $conductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
-            if ($conductor) {
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
+            if ($ciudadano) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "conductor encontrado",
-                    'data' => $conductor,
+                    'message' => "ciudadano encontrado",
+                    'data' => $ciudadano,
                 );
             } else {
                 $response = array(
@@ -898,7 +898,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $victima = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacionVictima));
+            $victima = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacionVictima));
             if ($victima) {
                 $response = array(
                     'status' => 'success',
@@ -938,7 +938,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $testigo = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacionTestigo));
+            $testigo = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacionTestigo));
             if ($testigo) {
                 $response = array(
                     'status' => 'success',

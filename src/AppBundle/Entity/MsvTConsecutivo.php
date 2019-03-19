@@ -60,7 +60,7 @@ class MsvTConsecutivo
     protected $organismoTransito;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="comparendos")
      **/
     protected $funcionario;
 
@@ -195,30 +195,6 @@ class MsvTConsecutivo
     }
 
     /**
-     * Set funcionario
-     *
-     * @param \AppBundle\Entity\MpersonalFuncionario $funcionario
-     *
-     * @return MsvTConsecutivo
-     */
-    public function setFuncionario(\AppBundle\Entity\MpersonalFuncionario $funcionario = null)
-    {
-        $this->funcionario = $funcionario;
-
-        return $this;
-    }
-
-    /**
-     * Get funcionario
-     *
-     * @return \AppBundle\Entity\MpersonalFuncionario
-     */
-    public function getFuncionario()
-    {
-        return $this->funcionario;
-    }
-
-    /**
      * Set organismoTransito
      *
      * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
@@ -240,5 +216,29 @@ class MsvTConsecutivo
     public function getOrganismoTransito()
     {
         return $this->organismoTransito;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return MsvTConsecutivo
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }
