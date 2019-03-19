@@ -82,7 +82,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgClaseAccidente", inversedBy="clasesaccidentes")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente", inversedBy="clasesaccidentes")
      */
     private $claseAccidente;
 

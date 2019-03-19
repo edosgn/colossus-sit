@@ -219,6 +219,12 @@ class SvCfgClaseAccidenteController extends Controller
         ;
     }
 
+    /**
+     * datos para select 2
+     *
+     * @Route("/select", name="svcfgclaseaccidente_select")
+     * @Method({"GET", "POST"})
+     */
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
