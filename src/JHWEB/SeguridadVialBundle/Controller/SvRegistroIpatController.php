@@ -3,10 +3,10 @@
 namespace JHWEB\SeguridadVialBundle\Controller;
 
 use JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat;
-use AppBundle\Entity\Ciudadano;
+use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use Repository\UsuarioBundle\Entity\Usuario;
 use AppBundle\Entity\Vehiculo;
-use AppBundle\Entity\CfgPlaca;
+use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -631,9 +631,8 @@ class SvRegistroIpatController extends Controller
             if ($consecutivo) {
                 $fechaAsignacion = new \Datetime();
                 $consecutivo->setFechaAsignacion($fechaAsignacion);
-                $usuario = $em->getRepository('UsuarioBundle:Usuario')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->findOneBy(array('usuario' => $usuario));
-                $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
                 $consecutivo->setFuncionario($funcionario);
                 $consecutivo->setEstado('UTILIZADO');
 
@@ -733,7 +732,7 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $conductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacion));
+            $conductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
             if ($conductor) {
                 $response = array(
                     'status' => 'success',
@@ -1307,22 +1306,23 @@ class SvRegistroIpatController extends Controller
                 $municipioResidenciaConductor = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaConductor);
                 $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoConductor);
 
-                $ciudadano = new Ciudadano();
+                $ciudadano = new UserCiudadano();
                 $ciudadano->setMunicipioResidencia($municipioResidenciaConductor);
-                $ciudadano->setDireccion($params->direccionResidenciaConductor);
+                $ciudadano->setDireccionPersonal($params->direccionResidenciaConductor);
                 $ciudadano->setGenero($sexoConductor);
-                $ciudadano->setEstado(true);
+                $ciudadano->setPrimerNombre($params->nombresConductor);
+                $ciudadano->setPrimerApellido($params->apellidosConductor);
+                $ciudadano->setTipoIdentificacion($tipoIdentificacion);
+                $ciudadano->setIdentificacion($params->identificacionConductor);
+                $ciudadano->setTelefono($params->telefonoConductor);
+                $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
+                $ciudadano->setActivo(true);
                 $ciudadano->setEnrolado(false);
 
                 $usuario = new Usuario();
-                $usuario->setPrimerNombre($params->nombresConductor);
-                $usuario->setPrimerApellido($params->apellidosConductor);
-                $usuario->setTipoIdentificacion($tipoIdentificacion);
-                $usuario->setIdentificacion($params->identificacionConductor);
-                $usuario->setTelefono($params->telefonoConductor);
-                $usuario->setFechaNacimiento($fechaNacimientoDateTime);
+                
                 $usuario->setCorreo('null');
-                $usuario->setEstado("Activo");
+                $usuario->setActivo(true);
                 $usuario->setRole("ROLE_USER");
                 $password = $params->nombresConductor[0] . $params->apellidosConductor[0] . $params->identificacionConductor;
                 $pwd = hash('sha256', $password);
@@ -1469,13 +1469,13 @@ class SvRegistroIpatController extends Controller
                 $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findOneBy(array('id' => $params->carroceria));
                 $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneBy(array('id' => $params->clase));
                 $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->findOneBy(array('id' => $params->servicio));
-                $matriculadoEn = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMunicipio')->findOneBy(array('nombre' => $params->matriculadoEn));
+                $matriculadoEn = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->findOneBy(array('nombre' => $params->matriculadoEn));
                 $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->findOneBy(array('id' => $params->modalidadTransporte));
                 $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->findOneBy(array('id' => $params->radioAccion));
                 
                 $vehiculo = new Vehiculo();
                 
-                $placa = new CfgPlaca();
+                $placa = new VhloCfgPlaca();
                 $placa->setNumero($params->placa);
                 $placa->setEstado('FABRICADA');
                 //$placa->setTipoVehiculo($clase);
