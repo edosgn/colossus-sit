@@ -36,6 +36,20 @@ class FroFacTramite
     private $activo;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observacion", type="text", nullable=true)
+     */
+    private $observacion;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="documentacion", type="boolean", nullable=true)
+     */
+    private $documentacion;
+
+    /**
      * @ORM\ManyToOne(targetEntity="FroFactura", inversedBy="tramites")
      */
     private $factura;
@@ -97,11 +111,59 @@ class FroFacTramite
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set observacion
+     *
+     * @param string $observacion
+     *
+     * @return FroFacTramite
+     */
+    public function setObservacion($observacion)
+    {
+        $this->observacion = $observacion;
+
+        return $this;
+    }
+
+    /**
+     * Get observacion
+     *
+     * @return string
+     */
+    public function getObservacion()
+    {
+        return $this->observacion;
+    }
+
+    /**
+     * Set documentacion
+     *
+     * @param boolean $documentacion
+     *
+     * @return FroFacTramite
+     */
+    public function setDocumentacion($documentacion)
+    {
+        $this->documentacion = $documentacion;
+
+        return $this;
+    }
+
+    /**
+     * Get documentacion
+     *
+     * @return boolean
+     */
+    public function getDocumentacion()
+    {
+        return $this->documentacion;
     }
 
     /**

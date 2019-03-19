@@ -36,20 +36,6 @@ class FroTrteSolicitud
     private $hora;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="observacion", type="text", nullable=true)
-     */
-    private $observacion;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="documentacion", type="boolean")
-     */
-    private $documentacion;
-
-    /**
      * @var array
      *
      * @ORM\Column(name="foraneas", type="array", nullable=true)
@@ -147,54 +133,6 @@ class FroTrteSolicitud
     public function getHora()
     {
         return $this->hora;
-    }
-
-    /**
-     * Set observacion
-     *
-     * @param string $observacion
-     *
-     * @return FroTrteSolicitud
-     */
-    public function setObservacion($observacion)
-    {
-        $this->observacion = $observacion;
-
-        return $this;
-    }
-
-    /**
-     * Get observacion
-     *
-     * @return string
-     */
-    public function getObservacion()
-    {
-        return $this->observacion;
-    }
-
-    /**
-     * Set documentacion
-     *
-     * @param boolean $documentacion
-     *
-     * @return FroTrteSolicitud
-     */
-    public function setDocumentacion($documentacion)
-    {
-        $this->documentacion = $documentacion;
-
-        return $this;
-    }
-
-    /**
-     * Get documentacion
-     *
-     * @return boolean
-     */
-    public function getDocumentacion()
-    {
-        return $this->documentacion;
     }
 
     /**
