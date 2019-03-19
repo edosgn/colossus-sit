@@ -123,4 +123,28 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    public function getMatriculaCancelada($idVehiculo)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ts
+            FROM JHWEBFinancieroBundle:FroFacTramite ft, 
+            JHWEBFinancieroBundle:FroTramite t,
+            JHWEBFinancieroBundle:FroTrtePrecio tp,
+            JHWEBFinancieroBundle:FroTrteSolicitud ts
+            WHERE ft.tramitePrecio = tp.id
+            AND tp.tramite = t.id
+            AND t.id = 13
+            AND ts.tramiteFactura = ft.id
+            AND ts.vehiculo = :idVehiculo
+            AND ft.realizado = true";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }  
 }
