@@ -372,6 +372,43 @@ class FroTrteSolicitudController extends Controller
     }
 
     /**
+     * Lists all tramiteSolicitud entities.
+     *
+     * @Route("/search/matricula/cancelada", name="frotrtesolicitud_matricula_cancelada")
+     * @Method({"GET", "POST"})
+     */
+    public function searchMatriculaCanceladaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $matriculaCancelada = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getMatriculaCancelada(
+            $params->idVehiculo
+        );
+
+        if ($matriculaCancelada) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'La matricula se encuentra cancelada',
+                'data' => $matriculaCancelada,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'El vehiculo no presenta un tramite de cancelación previo, no es posible continuar con el trámite de Rematricula.',
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a new Cuenta entity.
      *
      * @Route("/{idVehiculo}/{tipo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
