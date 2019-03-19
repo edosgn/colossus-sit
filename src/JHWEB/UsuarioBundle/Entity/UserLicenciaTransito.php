@@ -5,12 +5,12 @@ namespace JHWEB\UsuarioBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * UserLicenciaTrancito
+ * UserLicenciaTransito
  *
- * @ORM\Table(name="user_licencia_trancito")
- * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserLicenciaTrancitoRepository")
+ * @ORM\Table(name="user_licencia_transito")
+ * @ORM\Entity(repositoryClass="JHWEB\UsuarioBundle\Repository\UserLicenciaTransitoRepository")
  */
-class UserLicenciaTrancito
+class UserLicenciaTransito
 {
     /**
      * @var int
@@ -36,15 +36,15 @@ class UserLicenciaTrancito
     private $fecha;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PropietarioVehiculo", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloPropietario", inversedBy="licenciasTransito")
      **/
-    protected $propietarioVehiculo;
+    protected $propietario;
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -56,7 +56,7 @@ class UserLicenciaTrancito
      *
      * @param string $numero
      *
-     * @return UserLicenciaTrancito
+     * @return UserLicenciaTransito
      */
     public function setNumero($numero)
     {
@@ -80,7 +80,7 @@ class UserLicenciaTrancito
      *
      * @param \DateTime $fecha
      *
-     * @return UserLicenciaTrancito
+     * @return UserLicenciaTransito
      */
     public function setFecha($fecha)
     {
@@ -100,26 +100,26 @@ class UserLicenciaTrancito
     }
 
     /**
-     * Set propietarioVehiculo
+     * Set propietario
      *
-     * @param \AppBundle\Entity\PropietarioVehiculo $propietarioVehiculo
+     * @param \JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario
      *
-     * @return UserLicenciaTrancito
+     * @return UserLicenciaTransito
      */
-    public function setPropietarioVehiculo(\AppBundle\Entity\PropietarioVehiculo $propietarioVehiculo = null)
+    public function setPropietario(\JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario = null)
     {
-        $this->propietarioVehiculo = $propietarioVehiculo;
+        $this->propietario = $propietario;
 
         return $this;
     }
 
     /**
-     * Get propietarioVehiculo
+     * Get propietario
      *
-     * @return \AppBundle\Entity\PropietarioVehiculo
+     * @return \JHWEB\VehiculoBundle\Entity\VhloPropietario
      */
-    public function getPropietarioVehiculo()
+    public function getPropietario()
     {
-        return $this->propietarioVehiculo;
+        return $this->propietario;
     }
 }

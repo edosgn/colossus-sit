@@ -71,78 +71,102 @@ class PnalFuncionarioController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
-            
-            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-                $params->idOrganismoTransito
-            );
-            
-            $cargo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->find(
-                $params->idCargo
-            );
-            
-            $tipoNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->find(
-                $params->idTipoNombramiento
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array('identificacion' => $params->identificacion)
             );
 
-            $funcionario = new PnalFuncionario();
-            
-            $funcionario->setCiudadano($ciudadano);
-            $funcionario->setCargo($cargo);
-            $funcionario->setOrganismoTransito($organismoTransito);
-            $funcionario->setTipoNombramiento($tipoNombramiento);
+            if ($ciudadano) {
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                    array(
+                        'ciudadano' => $ciudadano->getId(),
+                        'activo' => true,
+                    )
+                );
 
-            if ($params->inhabilidad == 'true') {
-                $funcionario->setActivo(false);
-                $funcionario->setInhabilidad(true);
-            } else {
-                $funcionario->setActivo(true);
-                $funcionario->setInhabilidad(false);
+                if (!$funcionario) {
+                    $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                        $params->idOrganismoTransito
+                    );
+                    
+                    $cargo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCargo')->find(
+                        $params->idCargo
+                    );
+                    
+                    $tipoNombramiento = $em->getRepository('JHWEBPersonalBundle:PnalCfgTipoNombramiento')->find(
+                        $params->idTipoNombramiento
+                    );
+
+                    $funcionario = new PnalFuncionario();
+                    
+                    $funcionario->setCiudadano($ciudadano);
+                    $funcionario->setCargo($cargo);
+                    $funcionario->setOrganismoTransito($organismoTransito);
+                    $funcionario->setTipoNombramiento($tipoNombramiento);
+
+                    if ($params->inhabilidad == 'true') {
+                        $funcionario->setActivo(false);
+                        $funcionario->setInhabilidad(true);
+                    } else {
+                        $funcionario->setActivo(true);
+                        $funcionario->setInhabilidad(false);
+                    }
+
+                    if ($params->actaPosesion) {
+                        $funcionario->setActaPosesion($params->actaPosesion);
+                    }
+
+                    if ($params->resolucion) {
+                        $funcionario->setResolucion($params->resolucion);
+                    }
+
+                    if ($params->fechaInicio) {
+                        $funcionario->setFechaInicial(new \Datetime($params->fechaInicio));
+                    }
+
+                    if ($params->fechaFin) {
+                        $funcionario->setFechaFinal(new \Datetime($params->fechaFin));
+                    }
+
+                    if ($params->numeroContrato) {
+                        $funcionario->setNumeroContrato($params->numeroContrato);
+                    }
+                    if ($params->objetoContrato) {
+                        $funcionario->setObjetoContrato($params->objetoContrato);
+                    }
+
+                    if ($params->numeroPlaca) {
+                        $funcionario->setNumeroPlaca($params->numeroPlaca);
+                    }
+
+                    if ($params->novedad) {
+                        $funcionario->setNovedad($params->novedad);
+                    }
+
+                    $funcionario->setModificatorio(false);
+
+                    $em->persist($funcionario);
+                    $em->flush();
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con exito",
+                        'data' => $funcionario,
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El funcionario ya tiene una vinculación activa.",
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existe el ciudadano en la base de datos.",
+                );
             }
-
-            if ($params->actaPosesion) {
-                $funcionario->setActaPosesion($params->actaPosesion);
-            }
-
-            if ($params->resolucion) {
-                $funcionario->setResolucion($params->resolucion);
-            }
-
-            if ($params->fechaInicio) {
-                $funcionario->setFechaInicial(new \Datetime($params->fechaInicio));
-            }
-
-            if ($params->fechaFin) {
-                $funcionario->setFechaFinal(new \Datetime($params->fechaFin));
-            }
-
-            if ($params->numeroContrato) {
-                $funcionario->setNumeroContrato($params->numeroContrato);
-            }
-            if ($params->objetoContrato) {
-                $funcionario->setObjetoContrato($params->objetoContrato);
-            }
-
-            if ($params->numeroPlaca) {
-                $funcionario->setNumeroPlaca($params->numeroPlaca);
-            }
-
-            if ($params->novedad) {
-                $funcionario->setNovedad($params->novedad);
-            }
-
-            $funcionario->setModificatorio(false);
-
-            $em->persist($funcionario);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-                'data' => $funcionario,
-            );
-
         } else {
             $response = array(
                 'status' => 'error',

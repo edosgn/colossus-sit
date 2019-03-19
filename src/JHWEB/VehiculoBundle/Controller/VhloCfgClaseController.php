@@ -50,7 +50,7 @@ class VhloCfgClaseController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
@@ -125,7 +125,7 @@ class VhloCfgClaseController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -242,30 +242,37 @@ class VhloCfgClaseController extends Controller
     /**
      * datos para select 2 por modulo
      *
-     * @Route("/{id}/select/clases/por/modulo", name="select_clases_por_modulo")
+     * @Route("/select/modulo", name="vhlocfgclase_select_modulo")
      * @Method({"GET", "POST"})
      */
-    public function selectClasePorModuloAction($id)
+    public function selectByModuloAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findByModulo($id);
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->getByModulo($params->idModulo);
         
         $response = null;
+
         foreach ($clases as $key => $clase) {
             $response[$key] = array(
                 'value' => $clase->getId(),
                 'label' => $clase->getNombre(),
             );
         }
-       return $helpers->json($response);
+        
+        return $helpers->json($response);
     }
 
     
     /**
      * datos para select 2
      *
-     * @Route("/maquinaria/select", name="clase_maquinaria_select")
+     * @Route("/maquinaria/select", name="vhlocfgclase_maquinaria_select")
      * @Method({"GET", "POST"})
      */
     public function maquinariaSelectAction()
@@ -287,6 +294,7 @@ class VhloCfgClaseController extends Controller
                 'label' => $clase->getCodigoMt()."_".$clase->getNombre(),
             );
         }
-       return $helpers->json($response);
+
+        return $helpers->json($response);
     }
 }
