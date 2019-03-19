@@ -1136,7 +1136,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="municipios")
      */
     private $municipioCorrespondio;
 
@@ -1261,9 +1261,31 @@ class SvRegistroIpat
      */
     public function getFechaAccidente()
     {
-        if ($this->fechaAccidente) {
-            return $this->fechaAccidente->format('d/m/Y');
-        }
+        return $this->fechaAccidente;
+    }
+
+    /**
+     * Set diaAccidente
+     *
+     * @param string $diaAccidente
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDiaAccidente($diaAccidente)
+    {
+        $this->diaAccidente = $diaAccidente;
+
+        return $this;
+    }
+
+    /**
+     * Get diaAccidente
+     *
+     * @return string
+     */
+    public function getDiaAccidente()
+    {
+        return $this->diaAccidente;
     }
 
     /**
@@ -1287,9 +1309,6 @@ class SvRegistroIpat
      */
     public function getHoraAccidente()
     {
-        if ($this->horaAccidente) {
-            return $this->horaAccidente->format('H:i:s');
-        }
         return $this->horaAccidente;
     }
 
@@ -1314,9 +1333,6 @@ class SvRegistroIpat
      */
     public function getFechaLevantamiento()
     {
-        if ($this->fechaLevantamiento) {
-            return $this->fechaLevantamiento->format('d/m/Y');
-        }
         return $this->fechaLevantamiento;
     }
 
@@ -1341,9 +1357,6 @@ class SvRegistroIpat
      */
     public function getHoraLevantamiento()
     {
-        if ($this->horaLevantamiento) {
-            return $this->horaLevantamiento->format('H:i:s');
-        }
         return $this->horaLevantamiento;
     }
 
@@ -2784,9 +2797,6 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoConductor()
     {
-        if ($this->fechaNacimientoConductor) {
-            return $this->fechaNacimientoConductor->format('d/m/Y');
-        }
         return $this->fechaNacimientoConductor;
     }
 
@@ -3223,6 +3233,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set descripcionLesionConductor
+     *
+     * @param string $descripcionLesionConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDescripcionLesionConductor($descripcionLesionConductor)
+    {
+        $this->descripcionLesionConductor = $descripcionLesionConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcionLesionConductor
+     *
+     * @return string
+     */
+    public function getDescripcionLesionConductor()
+    {
+        return $this->descripcionLesionConductor;
+    }
+
+    /**
      * Set victima
      *
      * @param boolean $victima
@@ -3387,9 +3421,6 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoVictima()
     {
-        if ($this->fechaNacimientoVictima) {
-            return $this->fechaNacimientoVictima->format('d/m/Y');
-        }
         return $this->fechaNacimientoVictima;
     }
 
@@ -3679,6 +3710,30 @@ class SvRegistroIpat
     public function getCinturonVictima()
     {
         return $this->cinturonVictima;
+    }
+
+    /**
+     * Set descripcionLesionVictima
+     *
+     * @param string $descripcionLesionVictima
+     *
+     * @return SvRegistroIpat
+     */
+    public function setDescripcionLesionVictima($descripcionLesionVictima)
+    {
+        $this->descripcionLesionVictima = $descripcionLesionVictima;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcionLesionVictima
+     *
+     * @return string
+     */
+    public function getDescripcionLesionVictima()
+    {
+        return $this->descripcionLesionVictima;
     }
 
     /**
@@ -4042,6 +4097,294 @@ class SvRegistroIpat
     }
 
     /**
+     * Set totalPeaton
+     *
+     * @param string $totalPeaton
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalPeaton($totalPeaton)
+    {
+        $this->totalPeaton = $totalPeaton;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPeaton
+     *
+     * @return string
+     */
+    public function getTotalPeaton()
+    {
+        return $this->totalPeaton;
+    }
+
+    /**
+     * Set totalAcompaniante
+     *
+     * @param string $totalAcompaniante
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalAcompaniante($totalAcompaniante)
+    {
+        $this->totalAcompaniante = $totalAcompaniante;
+
+        return $this;
+    }
+
+    /**
+     * Get totalAcompaniante
+     *
+     * @return string
+     */
+    public function getTotalAcompaniante()
+    {
+        return $this->totalAcompaniante;
+    }
+
+    /**
+     * Set totalPasajero
+     *
+     * @param string $totalPasajero
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalPasajero($totalPasajero)
+    {
+        $this->totalPasajero = $totalPasajero;
+
+        return $this;
+    }
+
+    /**
+     * Get totalPasajero
+     *
+     * @return string
+     */
+    public function getTotalPasajero()
+    {
+        return $this->totalPasajero;
+    }
+
+    /**
+     * Set totalConductor
+     *
+     * @param string $totalConductor
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalConductor($totalConductor)
+    {
+        $this->totalConductor = $totalConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get totalConductor
+     *
+     * @return string
+     */
+    public function getTotalConductor()
+    {
+        return $this->totalConductor;
+    }
+
+    /**
+     * Set totalHerido
+     *
+     * @param string $totalHerido
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalHerido($totalHerido)
+    {
+        $this->totalHerido = $totalHerido;
+
+        return $this;
+    }
+
+    /**
+     * Get totalHerido
+     *
+     * @return string
+     */
+    public function getTotalHerido()
+    {
+        return $this->totalHerido;
+    }
+
+    /**
+     * Set totalMuerto
+     *
+     * @param string $totalMuerto
+     *
+     * @return SvRegistroIpat
+     */
+    public function setTotalMuerto($totalMuerto)
+    {
+        $this->totalMuerto = $totalMuerto;
+
+        return $this;
+    }
+
+    /**
+     * Get totalMuerto
+     *
+     * @return string
+     */
+    public function getTotalMuerto()
+    {
+        return $this->totalMuerto;
+    }
+
+    /**
+     * Set anioCorrespondio
+     *
+     * @param integer $anioCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setAnioCorrespondio($anioCorrespondio)
+    {
+        $this->anioCorrespondio = $anioCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get anioCorrespondio
+     *
+     * @return integer
+     */
+    public function getAnioCorrespondio()
+    {
+        return $this->anioCorrespondio;
+    }
+
+    /**
+     * Set consecutivoCorrespondio
+     *
+     * @param integer $consecutivoCorrespondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConsecutivoCorrespondio($consecutivoCorrespondio)
+    {
+        $this->consecutivoCorrespondio = $consecutivoCorrespondio;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivoCorrespondio
+     *
+     * @return integer
+     */
+    public function getConsecutivoCorrespondio()
+    {
+        return $this->consecutivoCorrespondio;
+    }
+
+    /**
+     * Set correspondio
+     *
+     * @param string $correspondio
+     *
+     * @return SvRegistroIpat
+     */
+    public function setCorrespondio($correspondio)
+    {
+        $this->correspondio = $correspondio;
+
+        return $this;
+    }
+
+    /**
+     * Get correspondio
+     *
+     * @return string
+     */
+    public function getCorrespondio()
+    {
+        return $this->correspondio;
+    }
+
+    /**
+     * Set conductores
+     *
+     * @param array $conductores
+     *
+     * @return SvRegistroIpat
+     */
+    public function setConductores($conductores)
+    {
+        $this->conductores = $conductores;
+
+        return $this;
+    }
+
+    /**
+     * Get conductores
+     *
+     * @return array
+     */
+    public function getConductores()
+    {
+        return $this->conductores;
+    }
+
+    /**
+     * Set vehiculos
+     *
+     * @param array $vehiculos
+     *
+     * @return SvRegistroIpat
+     */
+    public function setVehiculos($vehiculos)
+    {
+        $this->vehiculos = $vehiculos;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculos
+     *
+     * @return array
+     */
+    public function getVehiculos()
+    {
+        return $this->vehiculos;
+    }
+
+    /**
+     * Set victimas
+     *
+     * @param array $victimas
+     *
+     * @return SvRegistroIpat
+     */
+    public function setVictimas($victimas)
+    {
+        $this->victimas = $victimas;
+
+        return $this;
+    }
+
+    /**
+     * Get victimas
+     *
+     * @return array
+     */
+    public function getVictimas()
+    {
+        return $this->victimas;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -4090,6 +4433,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set sedeOperativa
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa
+     *
+     * @return SvRegistroIpat
+     */
+    public function setSedeOperativa(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa = null)
+    {
+        $this->sedeOperativa = $sedeOperativa;
+
+        return $this;
+    }
+
+    /**
+     * Get sedeOperativa
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getSedeOperativa()
+    {
+        return $this->sedeOperativa;
+    }
+
+    /**
      * Set gravedad
      *
      * @param \AppBundle\Entity\CfgGravedad $gravedad
@@ -4116,11 +4483,11 @@ class SvRegistroIpat
     /**
      * Set claseAccidente
      *
-     * @param \AppBundle\Entity\CfgClaseAccidente $claseAccidente
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente $claseAccidente
      *
      * @return SvRegistroIpat
      */
-    public function setClaseAccidente(\AppBundle\Entity\CfgClaseAccidente $claseAccidente = null)
+    public function setClaseAccidente(\JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente $claseAccidente = null)
     {
         $this->claseAccidente = $claseAccidente;
 
@@ -4130,7 +4497,7 @@ class SvRegistroIpat
     /**
      * Get claseAccidente
      *
-     * @return \AppBundle\Entity\CfgClaseAccidente
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente
      */
     public function getClaseAccidente()
     {
@@ -4834,301 +5201,13 @@ class SvRegistroIpat
     }
 
     /**
-     * Set diaAccidente
-     *
-     * @param string $diaAccidente
-     *
-     * @return SvRegistroIpat
-     */
-    public function setDiaAccidente($diaAccidente)
-    {
-        $this->diaAccidente = $diaAccidente;
-
-        return $this;
-    }
-
-    /**
-     * Get diaAccidente
-     *
-     * @return string
-     */
-    public function getDiaAccidente()
-    {
-        return $this->diaAccidente;
-    }
-
-    /**
-     * Set descripcionLesionConductor
-     *
-     * @param string $descripcionLesionConductor
-     *
-     * @return SvRegistroIpat
-     */
-    public function setDescripcionLesionConductor($descripcionLesionConductor)
-    {
-        $this->descripcionLesionConductor = $descripcionLesionConductor;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcionLesionConductor
-     *
-     * @return string
-     */
-    public function getDescripcionLesionConductor()
-    {
-        return $this->descripcionLesionConductor;
-    }
-
-    /**
-     * Set descripcionLesionVictima
-     *
-     * @param string $descripcionLesionVictima
-     *
-     * @return SvRegistroIpat
-     */
-    public function setDescripcionLesionVictima($descripcionLesionVictima)
-    {
-        $this->descripcionLesionVictima = $descripcionLesionVictima;
-
-        return $this;
-    }
-
-    /**
-     * Get descripcionLesionVictima
-     *
-     * @return string
-     */
-    public function getDescripcionLesionVictima()
-    {
-        return $this->descripcionLesionVictima;
-    }
-
-    /**
-     * Set totalPeaton
-     *
-     * @param string $totalPeaton
-     *
-     * @return SvRegistroIpat
-     */
-    public function setTotalPeaton($totalPeaton)
-    {
-        $this->totalPeaton = $totalPeaton;
-
-        return $this;
-    }
-
-    /**
-     * Get totalPeaton
-     *
-     * @return string
-     */
-    public function getTotalPeaton()
-    {
-        return $this->totalPeaton;
-    }
-
-    /**
-     * Set totalAcompaniante
-     *
-     * @param string $totalAcompaniante
-     *
-     * @return SvRegistroIpat
-     */
-    public function setTotalAcompaniante($totalAcompaniante)
-    {
-        $this->totalAcompaniante = $totalAcompaniante;
-
-        return $this;
-    }
-
-    /**
-     * Get totalAcompaniante
-     *
-     * @return string
-     */
-    public function getTotalAcompaniante()
-    {
-        return $this->totalAcompaniante;
-    }
-
-    /**
-     * Set totalPasajero
-     *
-     * @param string $totalPasajero
-     *
-     * @return SvRegistroIpat
-     */
-    public function setTotalPasajero($totalPasajero)
-    {
-        $this->totalPasajero = $totalPasajero;
-
-        return $this;
-    }
-
-    /**
-     * Get totalPasajero
-     *
-     * @return string
-     */
-    public function getTotalPasajero()
-    {
-        return $this->totalPasajero;
-    }
-
-    /**
-     * Set totalConductor
-     *
-     * @param string $totalConductor
-     *
-     * @return SvRegistroIpat
-     */
-    public function setTotalConductor($totalConductor)
-    {
-        $this->totalConductor = $totalConductor;
-
-        return $this;
-    }
-
-    /**
-     * Get totalConductor
-     *
-     * @return string
-     */
-    public function getTotalConductor()
-    {
-        return $this->totalConductor;
-    }
-
-    /**
-     * Set totalHerido
-     *
-     * @param string $totalHerido
-     *
-     * @return SvRegistroIpat
-     */
-    public function setTotalHerido($totalHerido)
-    {
-        $this->totalHerido = $totalHerido;
-
-        return $this;
-    }
-
-    /**
-     * Get totalHerido
-     *
-     * @return string
-     */
-    public function getTotalHerido()
-    {
-        return $this->totalHerido;
-    }
-
-    /**
-     * Set totalMuerto
-     *
-     * @param string $totalMuerto
-     *
-     * @return SvRegistroIpat
-     */
-    public function setTotalMuerto($totalMuerto)
-    {
-        $this->totalMuerto = $totalMuerto;
-
-        return $this;
-    }
-
-    /**
-     * Get totalMuerto
-     *
-     * @return string
-     */
-    public function getTotalMuerto()
-    {
-        return $this->totalMuerto;
-    }
-
-    /**
-     * Set anioCorrespondio
-     *
-     * @param integer $anioCorrespondio
-     *
-     * @return SvRegistroIpat
-     */
-    public function setAnioCorrespondio($anioCorrespondio)
-    {
-        $this->anioCorrespondio = $anioCorrespondio;
-
-        return $this;
-    }
-
-    /**
-     * Get anioCorrespondio
-     *
-     * @return integer
-     */
-    public function getAnioCorrespondio()
-    {
-        return $this->anioCorrespondio;
-    }
-
-    /**
-     * Set consecutivoCorrespondio
-     *
-     * @param integer $consecutivoCorrespondio
-     *
-     * @return SvRegistroIpat
-     */
-    public function setConsecutivoCorrespondio($consecutivoCorrespondio)
-    {
-        $this->consecutivoCorrespondio = $consecutivoCorrespondio;
-
-        return $this;
-    }
-
-    /**
-     * Get consecutivoCorrespondio
-     *
-     * @return integer
-     */
-    public function getConsecutivoCorrespondio()
-    {
-        return $this->consecutivoCorrespondio;
-    }
-
-    /**
-     * Set correspondio
-     *
-     * @param string $correspondio
-     *
-     * @return SvRegistroIpat
-     */
-    public function setCorrespondio($correspondio)
-    {
-        $this->correspondio = $correspondio;
-
-        return $this;
-    }
-
-    /**
-     * Get correspondio
-     *
-     * @return string
-     */
-    public function getCorrespondio()
-    {
-        return $this->correspondio;
-    }
-
-    /**
      * Set municipioCorrespondio
      *
-     * @param \AppBundle\Entity\Municipio $municipioCorrespondio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioCorrespondio
      *
      * @return SvRegistroIpat
      */
-    public function setMunicipioCorrespondio(\AppBundle\Entity\Municipio $municipioCorrespondio = null)
+    public function setMunicipioCorrespondio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioCorrespondio = null)
     {
         $this->municipioCorrespondio = $municipioCorrespondio;
 
@@ -5138,7 +5217,7 @@ class SvRegistroIpat
     /**
      * Get municipioCorrespondio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipioCorrespondio()
     {
@@ -5191,101 +5270,5 @@ class SvRegistroIpat
     public function getUnidadCorrespondio()
     {
         return $this->unidadCorrespondio;
-    }
-
-    /**
-     * Set conductores
-     *
-     * @param array $conductores
-     *
-     * @return SvRegistroIpat
-     */
-    public function setConductores($conductores)
-    {
-        $this->conductores = $conductores;
-
-        return $this;
-    }
-
-    /**
-     * Get conductores
-     *
-     * @return array
-     */
-    public function getConductores()
-    {
-        return $this->conductores;
-    }
-
-    /**
-     * Set vehiculos
-     *
-     * @param array $vehiculos
-     *
-     * @return SvRegistroIpat
-     */
-    public function setVehiculos($vehiculos)
-    {
-        $this->vehiculos = $vehiculos;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculos
-     *
-     * @return array
-     */
-    public function getVehiculos()
-    {
-        return $this->vehiculos;
-    }
-
-    /**
-     * Set victimas
-     *
-     * @param array $victimas
-     *
-     * @return SvRegistroIpat
-     */
-    public function setVictimas($victimas)
-    {
-        $this->victimas = $victimas;
-
-        return $this;
-    }
-
-    /**
-     * Get victimas
-     *
-     * @return array
-     */
-    public function getVictimas()
-    {
-        return $this->victimas;
-    }
-
-    /**
-     * Set sedeOperativa
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa
-     *
-     * @return SvRegistroIpat
-     */
-    public function setSedeOperativa(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa = null)
-    {
-        $this->sedeOperativa = $sedeOperativa;
-
-        return $this;
-    }
-
-    /**
-     * Get sedeOperativa
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
-     */
-    public function getSedeOperativa()
-    {
-        return $this->sedeOperativa;
     }
 }

@@ -31,7 +31,7 @@ class SvCfgClaseChoque
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgClaseAccidente", inversedBy="clasesaccidentes")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente", inversedBy="clasesaccidentes")
      */
     private $claseAccidente;
 
@@ -103,11 +103,11 @@ class SvCfgClaseChoque
     /**
      * Set claseAccidente
      *
-     * @param \AppBundle\Entity\CfgClaseAccidente $claseAccidente
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente $claseAccidente
      *
      * @return SvCfgClaseChoque
      */
-    public function setClaseAccidente(\AppBundle\Entity\CfgClaseAccidente $claseAccidente = null)
+    public function setClaseAccidente(\JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente $claseAccidente = null)
     {
         $this->claseAccidente = $claseAccidente;
 
@@ -117,7 +117,7 @@ class SvCfgClaseChoque
     /**
      * Get claseAccidente
      *
-     * @return \AppBundle\Entity\CfgClaseAccidente
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente
      */
     public function getClaseAccidente()
     {

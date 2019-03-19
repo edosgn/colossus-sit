@@ -315,25 +315,34 @@ class MsvCaracterizacionController extends Controller
             /* $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
             $licenciaConduccion =  $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('ciudadano' => $empresa->getCiudadano()));
             $edad = $this->get("app.helpers")->calculateAge($empresa->getCiudadano()->getUsuario()->getFechaNacimiento()); */
-            $empresa = $em->getRepository('AppBundle:Empresa')->findOneBy(array('nit' => $params->nit));
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->nit));
             $registros = $em->getRepository('AppBundle:MsvCaracterizacion')->findBy(array('empresa' => $empresa));
             
             $response['data'] = array();
 
-            if ($registros) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($registros) . " registros encontrados",
-                    'data' => $registros,
-                );
+            if($empresa){
+                if ($registros) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($registros) . " registros encontrados",
+                        'data' => $registros,
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No se encontraron registros de caracterización para la empresa con NIT: " . $empresa->getNit(),
+                    );
+                    return $helpers->json($response);
+                }
             } else {
                 $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "La empresa no se encuentra en la Base de Datos",
-                );
-                return $helpers->json($response);
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La empresa no se encuentra registrada en la Base de Datos",
+                    );
+                    return $helpers->json($response);
             }
         } else {
             $response = array(
