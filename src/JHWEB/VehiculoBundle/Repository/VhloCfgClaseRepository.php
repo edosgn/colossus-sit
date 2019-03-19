@@ -10,20 +10,22 @@ namespace JHWEB\VehiculoBundle\Repository;
  */
 class VhloCfgClaseRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findByModulo($id){
+    public function getByModulo($idModulo){
         $em = $this->getEntityManager();
 
         $dql = "SELECT c
-                    FROM JHWEBVehiculoBundle:VhloCfgClase c, JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, JHWEBConfigBundle:CfgModulo m
-                    WHERE c.
-                    AND m.id = :id
-                    AND tv.modulo = m.id
-                    AND c.tipoVehiculo = tv.id
-                    AND c.activo = 1";
+        FROM JHWEBVehiculoBundle:VhloCfgClase c, 
+        JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, 
+        JHWEBConfigBundle:CfgModulo m
+        WHERE c.
+        AND m.id = :idModulo
+        AND tv.modulo = m.id
+        AND c.tipoVehiculo = tv.id
+        AND c.activo = true";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
-            'id' => $id,
+            'idModulo' => $idModulo,
         ));
 
         return $consulta->getResult();

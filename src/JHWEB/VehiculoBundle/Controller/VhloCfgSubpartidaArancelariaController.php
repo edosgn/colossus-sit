@@ -213,6 +213,8 @@ class VhloCfgSubpartidaArancelariaController extends Controller
         ;
     }
 
+    /* =================================================== */
+
     /**
      * datos para select 2
      *

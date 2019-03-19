@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlicenciatransitos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numero</th>
+                <th>Fecha</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userLicenciaTransito in userLicenciaTransitos %}
+            <tr>
+                <td><a href="{{ path('userlicenciatransito_show', { 'id': userLicenciaTransito.id }) }}">{{ userLicenciaTransito.id }}</a></td>
+                <td>{{ userLicenciaTransito.numero }}</td>
+                <td>{% if userLicenciaTransito.fecha %}{{ userLicenciaTransito.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('userlicenciatransito_show', { 'id': userLicenciaTransito.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('userlicenciatransito_edit', { 'id': userLicenciaTransito.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userlicenciatransito_new') }}">Create a new userLicenciaTransito</a>
+        </li>
+    </ul>
+{% endblock %}
