@@ -55,7 +55,6 @@ class CfgEntidadJudicialController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-
             $cfgEntidadJudicial = new CfgEntidadJudicial();
 
             $cfgEntidadJudicial->setNombre(strtoupper($params->nombre));

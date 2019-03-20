@@ -256,9 +256,6 @@ class VhloCfgClaseController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
 
-        var_dump($params);
-        die();
-
         $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->getByModulo($params->idModulo);
         
         $response = null;

@@ -60,7 +60,10 @@ class VehiculoLimitacionRepository extends \Doctrine\ORM\EntityRepository
     {
         $em = $this->getEntityManager();
         $dql = "SELECT vl
-            FROM AppBundle:VehiculoLimitacion vl, AppBundle:Vehiculo v, AppBundle:Clase c, AppBundle:Modulo m
+            FROM AppBundle:VehiculoLimitacion vl, 
+            AppBundle:Vehiculo v, 
+            AppBundle:Clase c, 
+            AppBundle:Modulo m
             WHERE vl.vehiculo = v.id
             AND v.clase = c.id
             AND c.modulo = m.id

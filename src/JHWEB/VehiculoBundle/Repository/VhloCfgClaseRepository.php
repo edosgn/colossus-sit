@@ -17,11 +17,10 @@ class VhloCfgClaseRepository extends \Doctrine\ORM\EntityRepository
         FROM JHWEBVehiculoBundle:VhloCfgClase c, 
         JHWEBVehiculoBundle:VhloCfgTipoVehiculo tv, 
         JHWEBConfigBundle:CfgModulo m
-        WHERE c.
-        AND m.id = :idModulo
+        WHERE m.id = :idModulo
         AND tv.modulo = m.id
         AND c.tipoVehiculo = tv.id
-        AND c.activo = 1";
+        AND c.activo = true";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
