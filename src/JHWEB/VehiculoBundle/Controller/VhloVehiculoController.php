@@ -24,13 +24,26 @@ class VhloVehiculoController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
 
-        $vhloVehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findAll();
+        $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findBy(
+            array('activo'=>true)
+        );
 
-        return $this->render('vhlovehiculo/index.html.twig', array(
-            'vhloVehiculos' => $vhloVehiculos,
-        ));
+        $response['data'] = array();
+
+        if ($vehiculos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($vehiculos)." Registros encontrados", 
+                'data'=> $vehiculos,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -41,22 +54,96 @@ class VhloVehiculoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloVehiculo = new Vhlovehiculo();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloVehiculoType', $vhloVehiculo);
-        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloVehiculo);
-            $em->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
 
-            return $this->redirectToRoute('vhlovehiculo_show', array('id' => $vhloVehiculo->getId()));
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+            
+            if (!$cfgPlaca) {
+                $placa = new VhloCfgPlaca();
+                $placa->setNumero($params->placa);
+
+                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(3);
+                $placa->setTipoVehiculo($cfgTipoVehiculo);
+
+                $placa->setOrganismoTransito($organismoTransito);
+                $placa->setEstado('ASIGNADA');
+                $em->persist($placa);
+                $em->flush();
+
+                $numeroFactura = $params->vehiculo->numeroFactura;
+                $valor = $params->vehiculo->valor;
+                $fechaFactura = $params->vehiculo->fechaFactura;
+                $fechaFactura = new \DateTime($fechaFactura);
+
+                $vehiculo = new VhloVehiculo();
+
+                $vehiculo->setPlaca($placa);
+                $vehiculo->setOrganismoTransito($organismoTransito);
+                
+                $vehiculo->setNumeroFactura($numeroFactura);
+                $vehiculo->setfechaFactura($fechaFactura);
+                $vehiculo->setValor($valor);
+
+                $vehiculo->setSerie($params->serie);
+                $vehiculo->setVin($params->vin);
+                $vehiculo->setChasis($params->chasis);
+                $vehiculo->setMotor($params->motor);
+                $vehiculo->setModelo($params->modelo);
+                
+                $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
+                    $params->idColor
+                );
+                $vehiculo->setColor($color);
+
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find(
+                    $params->idLinea
+                );
+                $vehiculo->setLinea($linea);
+
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
+                $vehiculo->setCarroceria($carroceria);
+
+                $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
+                $vehiculo->setCombustible($combustible);
+
+                $vehiculo->setActivo(true);
+
+                $em->persist($vehiculo);
+                $em->flush();
+                
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                    'data' => $vehiculoMaquinaria
+                );
+
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El número de placa ya existe",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
         }
 
-        return $this->render('vhlovehiculo/new.html.twig', array(
-            'vhloVehiculo' => $vhloVehiculo,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

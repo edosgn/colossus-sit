@@ -3,8 +3,8 @@
 namespace JHWEB\VehiculoBundle\Controller;
 
 use JHWEB\VehiculoBundle\Entity\VhloRemolque;
-use AppBundle\Entity\CfgPlaca;
-use AppBundle\Entity\Vehiculo;
+use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
+use JHWEB\VehiculoBundle\Entity\VhloVehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -63,12 +63,12 @@ class VhloRemolqueController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             
-            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(array('numero' => $params->placa));
+            $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(1);
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(1);
             
             if (!$cfgPlaca) {
-                $placa = new CfgPlaca();
+                $placa = new VhloCfgPlaca();
                 $placa->setNumero($params->placa);
 
                 $numeroFactura = $params->numeroFactura;
@@ -76,70 +76,64 @@ class VhloRemolqueController extends Controller
                 $fechaFactura = $params->fechaFactura;
                 $fechaFactura = new \DateTime($fechaFactura);
 
-                $cfgTipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->findOneByModulo(4);
+                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(4);
                 $placa->setTipoVehiculo($cfgTipoVehiculo);
 
-                $placa->setSedeOperativa($sedeOperativa);
-                $placa->setEstado('Asignada');
+                $placa->setOrganismoTransito($organismoTransito);
+                $placa->setEstado('ASIGNADA');
                 $em->persist($placa);
                 $em->flush();
 
-                $vehiculo = new Vehiculo();
+                $vehiculo = new VhloVehiculo();
                 
                 $vehiculo->setNumeroFactura($numeroFactura);
                 $vehiculo->setfechaFactura($fechaFactura);
                 $vehiculo->setValor($valor);
 
-
                 $vehiculo->setPlaca($placa);
-                $vehiculo->setSedeOperativa($sedeOperativa);
+                $vehiculo->setOrganismoTransito($organismoTransito);
 
                 $vehiculo->setSerie($params->serie);
                 $vehiculo->setVin($params->vin);
                 $vehiculo->setModelo($params->modelo);
 
                 if (isset($params->idClase)) {
-                    $clase = $em->getRepository('AppBundle:Clase')->find(
+                    $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find(
                         $params->idClase
                     );
                     $vehiculo->setClase($clase);
                 }
                 
                 if (isset($params->idColor)) {
-                    $color = $em->getRepository('AppBundle:Color')->find(
+                    $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
                         $params->idColor
                     );
                     $vehiculo->setColor($color);
                 }
 
                 if (isset($params->idLinea)) {
-                    $linea = $em->getRepository('AppBundle:Linea')->find(
+                    $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find(
                         $params->idLinea
                     );
                     $vehiculo->setLinea($linea);
                 }
 
                 if (isset($params->idCarroceria)) {
-                    $carroceria = $em->getRepository('AppBundle:Carroceria')->find($params->idCarroceria);
+                    $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
                     $vehiculo->setCarroceria($carroceria);
                 }
 
                 if (isset($params->idCombustible)) {
-                    $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
-                    $vehiculo->setCombustible($combustible);
-                }
-
-                if (isset($params->idCombustible)) {
-                    $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
+                    $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
                     $vehiculo->setCombustible($combustible);
                 }
                  
-                if (isset($params->idSedeOperativa)) {
-                    $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->idSedeOperativa);
-                    $vehiculo->setSedeOperativa($sedeOperativa);
+                if (isset($params->idOrganismoTransito)) {
+                    $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+                    $vehiculo->setOrganismoTransito($organismoTransito);
                 }
 
-                $vehiculo->setEstado(true);
+                $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);
                 $em->flush();

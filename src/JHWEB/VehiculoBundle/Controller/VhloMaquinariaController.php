@@ -3,8 +3,8 @@
 namespace JHWEB\VehiculoBundle\Controller;
 
 use JHWEB\VehiculoBundle\Entity\VhloMaquinaria;
-use AppBundle\Entity\CfgPlaca;
-use AppBundle\Entity\Vehiculo;
+use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
+use JHWEB\VehiculoBundle\Entity\VhloVehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -54,27 +54,28 @@ class VhloMaquinariaController extends Controller
     public function newAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
             
-            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->findOneBy(array('numero' => $params->placa));
+            $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->idSedeOperativa);
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
             
             if (!$cfgPlaca) {
-                
-                $placa = new CfgPlaca();
+                $placa = new VhloCfgPlaca();
                 $placa->setNumero($params->placa);
 
-                $cfgTipoVehiculo = $em->getRepository('AppBundle:CfgTipoVehiculo')->findOneByModulo(3);
+                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(3);
                 $placa->setTipoVehiculo($cfgTipoVehiculo);
 
-                $placa->setSedeOperativa($sedeOperativa);
-                $placa->setEstado('Asignada');
+                $placa->setOrganismoTransito($organismoTransito);
+                $placa->setEstado('ASIGNADA');
                 $em->persist($placa);
                 $em->flush();
 
@@ -84,10 +85,10 @@ class VhloMaquinariaController extends Controller
                 $fechaFactura = new \DateTime($fechaFactura);
 
 
-                $vehiculo = new Vehiculo();
+                $vehiculo = new VhloVehiculo();
 
                 $vehiculo->setPlaca($placa);
-                $vehiculo->setSedeOperativa($sedeOperativa);
+                $vehiculo->setOrganismoTransito($organismoTransito);
                 
                 $vehiculo->setNumeroFactura($numeroFactura);
                 $vehiculo->setfechaFactura($fechaFactura);
@@ -116,7 +117,7 @@ class VhloMaquinariaController extends Controller
                 $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
                 $vehiculo->setCombustible($combustible);
 
-                $vehiculo->setEstado(true);
+                $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);
                 $em->flush();

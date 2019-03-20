@@ -26,13 +26,13 @@ class CfgEntidadJudicialController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $cfgEntidadesJudiciales = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->findBy(
-            array('estado' => 1)
+            array('activo' => true)
         );
 
         $response = array(
             'status' => 'success',
             'code' => 200,
-            'msj' => "lista de entidades judiciales",
+            'message' => "lista de entidades judiciales",
             'data' => $cfgEntidadesJudiciales,
         );
         return $helpers->json($response);
@@ -50,7 +50,7 @@ class CfgEntidadJudicialController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -72,14 +72,14 @@ class CfgEntidadJudicialController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro creado con exito",
+                'message' => "Registro creado con exito",
             );
             // }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -88,30 +88,39 @@ class CfgEntidadJudicialController extends Controller
     /**
      * Finds and displays a cfgEntidadJudicial entity.
      *
-     * @Route("/{id}/show", name="cfgentidadjudicial_show")
+     * @Route("/show", name="cfgentidadjudicial_show")
      * @Method({"GET", "POST"})
      */
-    public function showAction(Request $request, CfgEntidadJudicial $cfgEntidadJudicial)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+
+            $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                $params->id
+            );
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro encontrado",
-                'data' => $cfgEntidadJudicial,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $entidadJudicial
             );
-        } else {
+        }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => 'Autorizacion no valida.', 
             );
         }
+        
         return $helpers->json($response);
     }
 
@@ -128,7 +137,7 @@ class CfgEntidadJudicialController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -150,21 +159,21 @@ class CfgEntidadJudicialController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro actualizado con exito",
+                    'message' => "Registro actualizado con exito",
                     'data' => $cfgEntidadJudicial,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro no se encuentra en la base de datos",
+                    'message' => "El registro no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar banco",
+                'message' => "Autorizacion no valida para editar banco",
             );
         }
 
@@ -182,26 +191,30 @@ class CfgEntidadJudicialController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
 
             $cfgEntidadJudicial->setEstado(false);
 
             $em = $this->getDoctrine()->getManager();
+
             $em->persist($cfgEntidadJudicial);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro eliminado con exito",
+                'message' => "Registro eliminado con exito",
             );
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
+
         return $helpers->json($response);
     }
 
@@ -221,20 +234,26 @@ class CfgEntidadJudicialController extends Controller
         ;
     }
 
+    /* =======================================================  */
+
     /**
-     * Datos para select 2
+     * Listado de entidades judiciales para selección con búsqueda
      *
      * @Route("/select", name="cfgEntidadJudicial_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
-        $response = null;
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $cfgEntidadesJudiciales = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->findBy(
-            array('estado' => 1)
+            array('activo' => true)
         );
+        
+        $response = null;
+
         foreach ($cfgEntidadesJudiciales as $key => $cfgEntidadJudicial) {
             $consecutive = substr($cfgEntidadJudicial->getCodigo(), 0, 12);
             $response[$key] = array(
@@ -243,6 +262,7 @@ class CfgEntidadJudicialController extends Controller
                 'consecutive' => $consecutive,
             );
         }
+
         return $helpers->json($response);
     }
 }
