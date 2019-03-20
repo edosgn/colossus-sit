@@ -5,7 +5,7 @@ namespace JHWEB\SeguridadVialBundle\Controller;
 use JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use Repository\UsuarioBundle\Entity\Usuario;
-use AppBundle\Entity\Vehiculo;
+use JHWEB\VehiculoBundle\Entity\VhloVehiculo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -642,14 +642,14 @@ class SvRegistroIpatController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "consecutivo modificado",
+                    'message' => "IPAT registrado con éxito.",
                 );
 
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "no se pudo modificar el consecutivo",
+                    'message' => "El IPAT no pudo ser registrado.",
                 );
             }
 
@@ -775,7 +775,7 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
-            $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneBy(array('placa' => $placa));
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(array('placa' => $placa));
             if ($vehiculo) {
                 $response = array(
                     'status' => 'success',
@@ -829,7 +829,7 @@ class SvRegistroIpatController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "La licencia de conducción no se encuentra en la Base de Datos",
+                    'message' => "La licencia de conducción no se encuentra registrada.",
                 );
             }
         } else {
@@ -1463,36 +1463,41 @@ class SvRegistroIpatController extends Controller
                     'message' => "El vehiculo ya se encuentra registrado en la Base de datos",
                 );
             } else {
+                $nacionalidadVehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->findOneBy(array('id' => $params->nacionalidadVehiculo));
                 $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->findOneBy(array('id' => $params->marca));
                 $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->linea);
                 $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->findOneBy(array('id' => $params->color));
                 $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findOneBy(array('id' => $params->carroceria));
                 $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneBy(array('id' => $params->clase));
                 $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->findOneBy(array('id' => $params->servicio));
-                $matriculadoEn = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->findOneBy(array('nombre' => $params->matriculadoEn));
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->findOneBy(array('nombre' => $params->matriculadoEn));
                 $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->findOneBy(array('id' => $params->modalidadTransporte));
-                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->findOneBy(array('id' => $params->radioAccion));
                 
-                $vehiculo = new Vehiculo();
+                $idRadioAccion = (isset($params->radioAccion)) ? $params->radioAccion : null;
+                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->findOneBy(array('id' => $idRadioAccion));
+                
+                $vehiculo = new VhloVehiculo();
                 
                 $placa = new VhloCfgPlaca();
                 $placa->setNumero($params->placa);
                 $placa->setEstado('FABRICADA');
-                //$placa->setTipoVehiculo($clase);
-                //$placa->setSedeOperativa($matriculadoEn);
 
                 $em->persist($placa);
                 $em->flush();
 
                 $vehiculo->setPlaca($placa);
+                $vehiculo->setNacionalidad($nacionalidadVehiculo);
                 $vehiculo->setLinea($linea);
                 $vehiculo->setColor($color);
+                $vehiculo->setModelo($params->modelo);
                 $vehiculo->setCarroceria($carroceria);
                 $vehiculo->setClase($clase);
                 $vehiculo->setServicio($servicio);
-                $vehiculo->setMunicipio($matriculadoEn);
+                $vehiculo->setMunicipio($municipio);
                 $vehiculo->setModalidadTransporte($modalidadTransporte);
                 $vehiculo->setRadioAccion($radioAccion);
+                $vehiculo->setNumeroPasajeros($params->pasajeros);
+                $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);
                 $em->flush();

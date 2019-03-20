@@ -71,13 +71,9 @@ class SvRegistroIpat
      */
     private $horaLevantamiento;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="ipats")
+    /** @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadAccidente", inversedBy="gravedades")
      */
-    private $sedeOperativa;
-
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgGravedad", inversedBy="gravedades")
-     */
-    private $gravedad;
+    private $gravedadAccidente;
 
     /**
      * @var string
@@ -306,7 +302,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\Column(name="nacionalidadVehiculo", type="string", nullable = true)
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad", inversedBy="ipats")
      */
     private $nacionalidadVehiculo;
 
@@ -897,7 +893,7 @@ class SvRegistroIpat
      *
      * @ORM\Column(name="placa_vehiculo_victima", type="string", nullable = true)
      */
-    private $plavaVehiculoVictima;
+    private $placaVehiculoVictima;
 
     /**
      * @var bool
@@ -1261,7 +1257,9 @@ class SvRegistroIpat
      */
     public function getFechaAccidente()
     {
-        return $this->fechaAccidente;
+        if ($this->fechaAccidente) {
+            return $this->fechaAccidente->format('d/m/Y');
+        }
     }
 
     /**
@@ -1309,6 +1307,9 @@ class SvRegistroIpat
      */
     public function getHoraAccidente()
     {
+        if ($this->horaAccidente) {
+            return $this->horaAccidente->format('H:i:s');
+        }
         return $this->horaAccidente;
     }
 
@@ -1333,6 +1334,9 @@ class SvRegistroIpat
      */
     public function getFechaLevantamiento()
     {
+        if ($this->fechaLevantamiento) {
+            return $this->fechaLevantamiento->format('d/m/Y');
+        }
         return $this->fechaLevantamiento;
     }
 
@@ -1357,6 +1361,9 @@ class SvRegistroIpat
      */
     public function getHoraLevantamiento()
     {
+        if ($this->horaLevantamiento) {
+            return $this->horaLevantamiento->format('H:i:s');
+        }
         return $this->horaLevantamiento;
     }
 
@@ -1646,30 +1653,6 @@ class SvRegistroIpat
     public function getPlacaRemolque()
     {
         return $this->placaRemolque;
-    }
-
-    /**
-     * Set nacionalidadVehiculo
-     *
-     * @param string $nacionalidadVehiculo
-     *
-     * @return SvRegistroIpat
-     */
-    public function setNacionalidadVehiculo($nacionalidadVehiculo)
-    {
-        $this->nacionalidadVehiculo = $nacionalidadVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get nacionalidadVehiculo
-     *
-     * @return string
-     */
-    public function getNacionalidadVehiculo()
-    {
-        return $this->nacionalidadVehiculo;
     }
 
     /**
@@ -2797,6 +2780,9 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoConductor()
     {
+        if ($this->fechaNacimientoConductor) {
+            return $this->fechaNacimientoConductor->format('d/m/Y');
+        }
         return $this->fechaNacimientoConductor;
     }
 
@@ -3421,6 +3407,9 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoVictima()
     {
+        if ($this->fechaNacimientoVictima) {
+            return $this->fechaNacimientoVictima->format('d/m/Y');
+        }
         return $this->fechaNacimientoVictima;
     }
 
@@ -3545,27 +3534,27 @@ class SvRegistroIpat
     }
 
     /**
-     * Set plavaVehiculoVictima
+     * Set placaVehiculoVictima
      *
-     * @param string $plavaVehiculoVictima
+     * @param string $placaVehiculoVictima
      *
      * @return SvRegistroIpat
      */
-    public function setPlavaVehiculoVictima($plavaVehiculoVictima)
+    public function setPlacaVehiculoVictima($placaVehiculoVictima)
     {
-        $this->plavaVehiculoVictima = $plavaVehiculoVictima;
+        $this->placaVehiculoVictima = $placaVehiculoVictima;
 
         return $this;
     }
 
     /**
-     * Get plavaVehiculoVictima
+     * Get placaVehiculoVictima
      *
      * @return string
      */
-    public function getPlavaVehiculoVictima()
+    public function getPlacaVehiculoVictima()
     {
-        return $this->plavaVehiculoVictima;
+        return $this->placaVehiculoVictima;
     }
 
     /**
@@ -4433,51 +4422,27 @@ class SvRegistroIpat
     }
 
     /**
-     * Set sedeOperativa
+     * Set gravedadAccidente
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadAccidente $gravedadAccidente
      *
      * @return SvRegistroIpat
      */
-    public function setSedeOperativa(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $sedeOperativa = null)
+    public function setGravedadAccidente(\JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadAccidente $gravedadAccidente = null)
     {
-        $this->sedeOperativa = $sedeOperativa;
+        $this->gravedadAccidente = $gravedadAccidente;
 
         return $this;
     }
 
     /**
-     * Get sedeOperativa
+     * Get gravedadAccidente
      *
-     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadAccidente
      */
-    public function getSedeOperativa()
+    public function getGravedadAccidente()
     {
-        return $this->sedeOperativa;
-    }
-
-    /**
-     * Set gravedad
-     *
-     * @param \AppBundle\Entity\CfgGravedad $gravedad
-     *
-     * @return SvRegistroIpat
-     */
-    public function setGravedad(\AppBundle\Entity\CfgGravedad $gravedad = null)
-    {
-        $this->gravedad = $gravedad;
-
-        return $this;
-    }
-
-    /**
-     * Get gravedad
-     *
-     * @return \AppBundle\Entity\CfgGravedad
-     */
-    public function getGravedad()
-    {
-        return $this->gravedad;
+        return $this->gravedadAccidente;
     }
 
     /**
@@ -5270,5 +5235,29 @@ class SvRegistroIpat
     public function getUnidadCorrespondio()
     {
         return $this->unidadCorrespondio;
+    }
+
+    /**
+     * Set nacionalidadVehiculo
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidadVehiculo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setNacionalidadVehiculo(\JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidadVehiculo = null)
+    {
+        $this->nacionalidadVehiculo = $nacionalidadVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get nacionalidadVehiculo
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad
+     */
+    public function getNacionalidadVehiculo()
+    {
+        return $this->nacionalidadVehiculo;
     }
 }
