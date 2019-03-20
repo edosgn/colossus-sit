@@ -76,6 +76,16 @@ class FroTrteSolicitud
      **/
     protected $vehiculo;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="tramitesSolicitud")
+     **/
+    protected $organismoTransito;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="tramitesSolicitud")
+     **/
+    protected $funcionario;
+
 
     /**
      * Get id
@@ -301,5 +311,53 @@ class FroTrteSolicitud
     public function getVehiculo()
     {
         return $this->vehiculo;
+    }
+
+    /**
+     * Set organismoTransito
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }
