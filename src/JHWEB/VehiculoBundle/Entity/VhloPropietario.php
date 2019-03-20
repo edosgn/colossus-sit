@@ -22,13 +22,6 @@ class VhloPropietario
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="licencia_transito", type="string", length=255, nullable= true )
-     */
-    private $licenciaTransito;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="permiso", type="boolean")
@@ -48,6 +41,13 @@ class VhloPropietario
      * @ORM\Column(name="fecha_final", type="datetime", nullable= true)
      */
     private $fechaFinal;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="leasing", type="boolean", nullable=true)
+     */
+    private $leasing;
 
     /**
      * @var boolean
@@ -77,30 +77,6 @@ class VhloPropietario
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set licenciaTransito
-     *
-     * @param string $licenciaTransito
-     *
-     * @return VhloPropietario
-     */
-    public function setLicenciaTransito($licenciaTransito)
-    {
-        $this->licenciaTransito = $licenciaTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get licenciaTransito
-     *
-     * @return string
-     */
-    public function getLicenciaTransito()
-    {
-        return $this->licenciaTransito;
     }
 
     /**
@@ -173,6 +149,30 @@ class VhloPropietario
     public function getFechaFinal()
     {
         return $this->fechaFinal;
+    }
+
+    /**
+     * Set leasing
+     *
+     * @param boolean $leasing
+     *
+     * @return VhloPropietario
+     */
+    public function setLeasing($leasing)
+    {
+        $this->leasing = $leasing;
+
+        return $this;
+    }
+
+    /**
+     * Get leasing
+     *
+     * @return boolean
+     */
+    public function getLeasing()
+    {
+        return $this->leasing;
     }
 
     /**

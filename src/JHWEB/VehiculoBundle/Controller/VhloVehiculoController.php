@@ -72,34 +72,57 @@ class VhloVehiculoController extends Controller
                 $placa = new VhloCfgPlaca();
                 $placa->setNumero($params->placa);
 
-                $cfgTipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->findOneByModulo(3);
-                $placa->setTipoVehiculo($cfgTipoVehiculo);
+                if ($params->idClase) {
+                    $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+                }
+                $placa->setTipoVehiculo($clase->getTipoVehiculo());
 
                 $placa->setOrganismoTransito($organismoTransito);
                 $placa->setEstado('ASIGNADA');
                 $em->persist($placa);
                 $em->flush();
 
-                $numeroFactura = $params->vehiculo->numeroFactura;
-                $valor = $params->vehiculo->valor;
-                $fechaFactura = $params->vehiculo->fechaFactura;
+                $fechaFactura = $params->fechaFactura;
                 $fechaFactura = new \DateTime($fechaFactura);
 
                 $vehiculo = new VhloVehiculo();
 
                 $vehiculo->setPlaca($placa);
                 $vehiculo->setOrganismoTransito($organismoTransito);
+                $vehiculo->setClase($clase);
                 
-                $vehiculo->setNumeroFactura($numeroFactura);
+                $vehiculo->setNumeroFactura($params->numeroFactura);
                 $vehiculo->setfechaFactura($fechaFactura);
-                $vehiculo->setValor($valor);
+                $vehiculo->setValor($params->valor);
 
                 $vehiculo->setSerie($params->serie);
                 $vehiculo->setVin($params->vin);
                 $vehiculo->setChasis($params->chasis);
                 $vehiculo->setMotor($params->motor);
+                $vehiculo->setCilindraje($params->cilindraje);
                 $vehiculo->setModelo($params->modelo);
-                
+                $vehiculo->setTipoMatricula($params->tipoMatricula);
+                $vehiculo->setPignorado(false);
+                $vehiculo->setCancelado(false);
+
+                if ($params->numeroManifiesto) {
+                    $vehiculo->setNumeroManifiesto($params->numeroManifiesto);
+                }
+
+                if ($params->fechaManifiesto) {
+                    $vehiculo->setFechaManifiesto(
+                        new \Datetime($params->fechaManifiesto)
+                    );
+                }
+
+                if ($params->numeroPasajeros) {
+                    $vehiculo->setNumeroPasajeros($params->numeroPasajeros);
+                }
+
+                if ($params->capacidadCarga) {
+                    $vehiculo->setCapacidadCarga($params->capacidadCarga);
+                }
+
                 $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
                     $params->idColor
                 );
@@ -116,6 +139,19 @@ class VhloVehiculoController extends Controller
                 $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
                 $vehiculo->setCombustible($combustible);
 
+                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+                $vehiculo->setServicio($servicio);
+
+                if ($params->idRadioAccion) {
+                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
+                    $vehiculo->setRadioAccion($radioAccion);
+                }
+
+                if ($params->idModalidadTransporte) {
+                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
+                    $vehiculo->setModalidadTransporte($modalidadTransporte);
+                }
+
                 $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);
@@ -125,9 +161,8 @@ class VhloVehiculoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito",
-                    'data' => $vehiculoMaquinaria
+                    'data' => $vehiculo
                 );
-
             } else {
                 $response = array(
                     'status' => 'error',

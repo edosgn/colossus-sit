@@ -3,9 +3,11 @@
 namespace JHWEB\VehiculoBundle\Controller;
 
 use JHWEB\VehiculoBundle\Entity\VhloPropietario;
+use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlopropietario controller.
@@ -56,12 +58,6 @@ class VhloPropietarioController extends Controller
             }
 
             if ($vehiculo) {
-               if ($params->tipoPropiedad == 1) {
-                    $vehiculo->setLeasing(true);
-                }else{
-                    $vehiculo->setLeasing(false);
-                }
-
                 foreach ($params->propietarios as $key => $propietarioArray) {
                     $propietario = new VhloPropietario();
 
@@ -95,18 +91,40 @@ class VhloPropietarioController extends Controller
 
                         $propietario->setApoderado($apoderado);
                     }
-                        
-                    $propietario->setLicenciaTransito(
-                        $params->numeroLicenciaTransito
-                    );
 
                     $propietario->setPermiso($propietarioArray->permiso);
                     $propietario->setFechaInicial(new \Datetime(date('Y-m-d')));
+                    if ($propietarioArray->tipoPropiedad == 1) {
+                        $propietario->setLeasing(true);
+                    }else{
+                        $propietario->setLeasing(false);
+                    }
                     $propietario->setActivo(true);
 
                     $propietario->setVehiculo($vehiculo);
 
                     $em->persist($propietario);
+                    $em->flush();
+
+                    $licenciaTransitoOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                        array(
+                            'propietario' => $propietario->getId(),
+                            'activo' => true,
+                        )
+                    );
+
+                    $licenciaTransitoOld->setActivo(false);
+                    $em->flush();
+
+                    $licenciaTransito = new UserLicenciaTransito();
+
+                    $licenciaTransito->setNumero($params->licenciaTransito);
+                    $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
+                    $licenciaTransito->setActivo(true);
+
+                    $licenciaTransito->setPropietario($propietario);
+
+                    $em->persist($licenciaTransito);
                     $em->flush();
                 }
 
@@ -328,6 +346,94 @@ class VhloPropietarioController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Elimina el vehiculo al propietario.
+     *
+     * @Route("/update/vehiculo", name="vhlopropietario_update_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function updateVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                array(
+                    'ciudadano' => $params->idSolicitante,
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true,
+                )
+            );
+
+            if ($params->fecha) {
+                $propietario->setFechaFinal(new \DateTime($params->fecha));
+            }else{
+                $propietario->setFechaFinal(new \DateTime(date('Y-m-d')));
+            }
+            $propietario->setActivo(0);
+
+            $propietarioNew = new VhloPropietario();
+
+            //
+            $propietarioNew->setLicenciaTransito(
+                $propietario->getLicenciaTransito()
+            );
+            $propietarioNew->setFechaInicial($propietario->getFechaInicial());
+            $propietarioNew->setVehiculo($propietario->getVehiculo());
+            $propietarioNew->setTipoPropiedad($propietario->getVehiculo());
+            $propietarioNew->setPermiso(false);
+            $propietarioNew->setActivo(true);
+
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($propietarioNew);
+            $em->flush();
+
+            $licenciaTransitoOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                array(
+                    'propietario' => $propietario->getId(),
+                    'activo' => true,
+                )
+            );
+
+            $licenciaTransitoOld->setActivo(false);
+            $em->flush();
+
+            $licenciaTransito = new UserLicenciaTransito();
+
+            $licenciaTransito->setNumero($params->numeroLicenciaTransito);
+            $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
+            $licenciaTransito->setActivo(true);
+
+            $licenciaTransito->setPropietario($propietario);
+
+            $em->persist($licenciaTransito);
+            $em->flush();
+            
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Propietario actualizado con exito.',
+                    'data' => $propietarioNew
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Autorizacion no valida.', 
+                );
+        }
         return $helpers->json($response);
     }
 }

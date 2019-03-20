@@ -143,13 +143,6 @@ class VhloVehiculo
     /**
      * @var boolean
      *
-     * @ORM\Column(name="leasing", type="boolean", nullable=true)
-     */
-    private $leasing;
-
-    /**
-     * @var boolean
-     *
      * @ORM\Column(name="pignorado", type="boolean", nullable= true)
      */
     private $pignorado;
@@ -630,30 +623,6 @@ class VhloVehiculo
     public function getEmpresaBlindadora()
     {
         return $this->empresaBlindadora;
-    }
-
-    /**
-     * Set leasing
-     *
-     * @param boolean $leasing
-     *
-     * @return VhloVehiculo
-     */
-    public function setLeasing($leasing)
-    {
-        $this->leasing = $leasing;
-
-        return $this;
-    }
-
-    /**
-     * Get leasing
-     *
-     * @return boolean
-     */
-    public function getLeasing()
-    {
-        return $this->leasing;
     }
 
     /**
