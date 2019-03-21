@@ -382,7 +382,7 @@ class PnalFuncionarioController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $funcionarios = $em->getRepository('JHWEBConfigBundle:PnalFuncionario')->findBy(
+        $funcionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findBy(
             array('activo' => true)
         );
 

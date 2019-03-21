@@ -1,0 +1,132 @@
+<html>
+  <header>
+    <style type="text/css">
+        .separator{
+            border-top: 1px dashed #cccccc;
+        }
+
+        .table td{
+            max-height: 15px;
+            padding: 2px;
+        }
+    </style>
+  </header>
+  <body style="font-size:12px">
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>Subsecretaria de transito y transporte departamental de nariño</b>
+        <br>      
+    </p>
+
+    <p>
+        <table>
+            <tr>
+                <td width="70%">El vehículo de placas: {{ vehiculo.placa.numero }} tiene las siguientes características </td>
+            </tr>
+        </table>       
+        <br>
+        <br>
+    </p>
+
+    <table>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Clase</td>
+            {% if vehiculo.clase  %}
+            <td> {{ vehiculo.clase.nombre }}</td>
+            {% endif  %}
+            <td style="font-weight:bold;">No.serie</td>
+            <td>{{ vehiculo.serie }}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Marca</td>
+            <td> {{ vehiculo.linea.marca.nombre }}</td>
+            <td style="font-weight:bold;">No.Chasis</td>
+            <td>{{ vehiculo.chasis }}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Carrocería</td>
+            <td> {{ vehiculo.carroceria.nombre }}</td>
+            <td style="font-weight:bold;">Cilindraje</td>
+            <td>{{ vehiculo.cilindraje }}</td>
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">linea</td>
+            <td> {{ vehiculo.linea.nombre }}</td>
+            <td style="font-weight:bold;">Pasajeros</td>
+            <td>{{ vehiculo.numeroPasajeros }}</td>
+        </tr>
+        <tr> 
+            <td  width="15%" style="font-weight:bold;">Color</td>
+            {% if vehiculo.color  %}
+            <td>{{ vehiculo.color.nombre }}</td>
+            {% endif  %}
+            <td style="font-weight:bold;">Servicio</td>
+            {% if vehiculo.servicio  %}
+            <td>{{ vehiculo.servicio.nombre }}</td>
+            {% endif  %}
+        </tr>
+        <tr>
+            <td  width="15%" style="font-weight:bold;">Modelo</td>
+            <td> {{ vehiculo.modelo }}</td>
+            <td style="font-weight:bold;">No.motor</td>
+            <td>{{ vehiculo.motor }}</td>
+        </tr>
+    </table>
+
+    <p style="text-align:center;">
+        <b>Propietarios</b>
+        <br>      
+    </p>
+
+    {% if propietarios|length > 0 %}
+    <table border="1">
+        <tr>
+            <td>Identificacion</td>
+            <td>Apellidos y apellidos</td>
+            <td>Direccion</td>
+        </tr>
+        {% for propietario in propietarios %}
+            {% if propietario.ciudadano %}
+                <tr>
+                    <td>{{ propietario.ciudadano.identificacion }}</td>
+                    <td>
+                        {{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }} {{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}
+                    </td>
+                    <td>
+                        {{ propietario.ciudadano.direccionPersonal }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <p style="text-align:center;"> 
+        <b>tramites</b>
+        <br>      
+    </p>
+
+    <table border="1">
+        <tr>
+            <td>Fecha</td>
+            <td>Nombre Tramite</td>
+            <td>Datos</td>
+        </tr>
+        {% for tramiteSolicitud in tramitesSolicitud %}
+            <tr>
+                <td>{{ tramiteSolicitud.fecha|date('d/m/Y') }}</td>
+                <td>{{ tramiteSolicitud.tramiteFactura.precio.tramite.nombre }}</td>
+                <td>
+                    
+                </td>
+            </tr>
+
+        {% endfor %}
+    </table>
+  </body>
+</html>
