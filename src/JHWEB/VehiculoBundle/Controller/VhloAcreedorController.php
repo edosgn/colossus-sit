@@ -157,7 +157,7 @@ class VhloAcreedorController extends Controller
             if ($params->tipo == 'CIUDADANO') {
                 $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
                     array(
-                        'ciudadano' => $params->idCiudadano
+                        'ciudadano' => $params->idCiudadano,
                         'activo' => true,
                     )
                 );
@@ -181,7 +181,7 @@ class VhloAcreedorController extends Controller
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'No se encontró ningun registro en la base de datos.', 
+                    'message' => 'El ciudadano o empresa no es acreedor del vehiculo.', 
                 );
             }
         }else{
