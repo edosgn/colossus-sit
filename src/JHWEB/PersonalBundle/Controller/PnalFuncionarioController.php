@@ -181,34 +181,38 @@ class PnalFuncionarioController extends Controller
      * Finds and displays a pnalFuncionario entity.
      *
      * @Route("/show", name="pnalfuncionario_show")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        $em = $this->getDoctrine()->getManager();
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-        $json = $request->get("data", null);
-        $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
 
-        $pnalFuncionario = $em->getRepository('JHWEBConfigBundle:PnalFuncionario')->find($params->id);
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->id
+            );
 
-        if ($pnalFuncionario) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro encontrado",
-                'data' => $pnalFuncionario,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $funcionario
             );
-        } else {
+        }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Registro no encontrado",
+                'message' => 'Autorizacion no valida.', 
             );
         }
-
+        
         return $helpers->json($response);
     }
 
@@ -367,7 +371,7 @@ class PnalFuncionarioController extends Controller
     }
 
     /**
-     * datos para select 2
+     * Listado de todos los funcionarios para selección con búsqueda
      *
      * @Route("/select", name="pnalfuncionario_select")
      * @Method({"GET", "POST"})
