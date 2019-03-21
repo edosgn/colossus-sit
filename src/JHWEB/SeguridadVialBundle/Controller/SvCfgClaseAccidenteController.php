@@ -124,7 +124,7 @@ class SvCfgClaseAccidenteController extends Controller
     /**
      * Displays a form to edit an existing svCfgClaseAccidente entity.
      *
-     * @Route("/{id}/edit", name="svcfgclaseaccidente_edit")
+     * @Route("/edit", name="svcfgclaseaccidente_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)

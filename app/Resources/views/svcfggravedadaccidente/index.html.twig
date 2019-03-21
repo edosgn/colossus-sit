@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svcfggravedadaccidentes list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svCfgGravedadAccidente in svCfgGravedadAccidentes %}
+            <tr>
+                <td><a href="{{ path('svcfggravedadaccidente_show', { 'id': svCfgGravedadAccidente.id }) }}">{{ svCfgGravedadAccidente.id }}</a></td>
+                <td>{{ svCfgGravedadAccidente.nombre }}</td>
+                <td>{% if svCfgGravedadAccidente.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svcfggravedadaccidente_show', { 'id': svCfgGravedadAccidente.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
