@@ -41,12 +41,12 @@ class VhloAcreedor
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="acreedores") */
     private $empresa;
 
+    /** @ORM\ManyToOne(targetEntity="VhloCfgTipoAlerta", inversedBy="acreedores") */
+    private $tipoAlerta;
 
     /** @ORM\ManyToOne(targetEntity="VhloVehiculo", inversedBy="acreedores") */
     private $vehiculo;
 
-    /** @ORM\ManyToOne(targetEntity="VhloCfgTipoAlerta", inversedBy="acreedores") */
-    private $tipoAlerta;
 
 
     /**
@@ -156,30 +156,6 @@ class VhloAcreedor
     }
 
     /**
-     * Set vehiculo
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
-     *
-     * @return VhloAcreedor
-     */
-    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
-    }
-
-    /**
      * Set tipoAlerta
      *
      * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTipoAlerta $tipoAlerta
@@ -201,5 +177,29 @@ class VhloAcreedor
     public function getTipoAlerta()
     {
         return $this->tipoAlerta;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
+     *
+     * @return VhloAcreedor
+     */
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

@@ -462,7 +462,7 @@ class UserCiudadanoController extends Controller
     }
 
     /**
-     * Busca cuidadano por Identificacion.
+     * Busca cuidadano o empresa por Identificacion.
      *
      * @Route("/search/identificacion", name="userciudadano_search_identificacion")
      * @Method({"GET", "POST"})

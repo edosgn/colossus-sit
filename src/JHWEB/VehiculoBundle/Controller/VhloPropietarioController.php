@@ -94,11 +94,13 @@ class VhloPropietarioController extends Controller
 
                     $propietario->setPermiso($propietarioArray->permiso);
                     $propietario->setFechaInicial(new \Datetime(date('Y-m-d')));
-                    if ($propietarioArray->tipoPropiedad == 1) {
+
+                    if ($params->tipoPropiedad == 1) {
                         $propietario->setLeasing(true);
                     }else{
                         $propietario->setLeasing(false);
                     }
+
                     $propietario->setActivo(true);
 
                     $propietario->setVehiculo($vehiculo);
@@ -113,8 +115,10 @@ class VhloPropietarioController extends Controller
                         )
                     );
 
-                    $licenciaTransitoOld->setActivo(false);
-                    $em->flush();
+                    if ($licenciaTransitoOld) {
+                        $licenciaTransitoOld->setActivo(false);
+                        $em->flush();
+                    }
 
                     $licenciaTransito = new UserLicenciaTransito();
 

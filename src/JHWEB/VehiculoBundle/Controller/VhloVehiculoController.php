@@ -70,7 +70,7 @@ class VhloVehiculoController extends Controller
             
             if (!$cfgPlaca) {
                 $placa = new VhloCfgPlaca();
-                $placa->setNumero($params->placa);
+                $placa->setNumero(strtoupper($params->placa));
 
                 if ($params->idClase) {
                     $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
