@@ -25,7 +25,7 @@ class SvCfgGravedadAccidenteController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $cfgGravedades = $em->getRepository('JHWEBSefuridadVialBundle:SvCfgGravedadAccidente')->findBy(
+        $cfgGravedades = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->findBy(
             array('activo' => true)
         );
         $response = array(
@@ -57,7 +57,7 @@ class SvCfgGravedadAccidenteController extends Controller
 
             $cfgGravedad = new SvCfgGravedadAccidente();
 
-            $cfgGravedad->setNombre(strtoupper($params->nombre));
+            $cfgGravedad->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $cfgGravedad->setActivo(true);
 
             $em->persist($cfgGravedad);
@@ -116,7 +116,7 @@ class SvCfgGravedadAccidenteController extends Controller
     /**
      * Displays a form to edit an existing cfgGravedad entity.
      *
-     * @Route("/edit", name="cfggravedad_edit")
+     * @Route("/edit", name="svcfggravedadaccidente_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -126,7 +126,7 @@ class SvCfgGravedadAccidenteController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -134,7 +134,7 @@ class SvCfgGravedadAccidenteController extends Controller
 
             if ($cfgGravedad != null) {
 
-                $cfgGravedad->setNombre($params->nombre);
+                $cfgGravedad->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 $cfgGravedad->setActivo(true);
 
                 $em->persist($cfgGravedad);
@@ -173,33 +173,34 @@ class SvCfgGravedadAccidenteController extends Controller
     public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
+        $hash = $request->get("authorization", true);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
             $json = $request->get("data", null);
             $params = json_decode($json);
-            $em = $this->getDoctrine()->getManager();
 
-            $cfgGravedad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->id);
+            $gravedad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->id);
 
-            $cfgGravedad->setActivo(false);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgGravedad);
+            $gravedad->setActivo(false);
+
+            $em->persist($gravedad);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro eliminado con exito",
+                'message' => "Registro eliminado con éxito.",
             );
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida",
+                'message' => "Autorizacion no válida",
             );
         }
         return $helpers->json($response);
-
     }
 
     /**
