@@ -153,7 +153,6 @@ class VhloAcreedorController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-
             if ($params->tipo == 'CIUDADANO') {
                 $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
                     array(

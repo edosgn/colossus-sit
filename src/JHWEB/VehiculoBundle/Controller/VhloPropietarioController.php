@@ -108,28 +108,30 @@ class VhloPropietarioController extends Controller
                     $em->persist($propietario);
                     $em->flush();
 
-                    $licenciaTransitoOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
-                        array(
-                            'propietario' => $propietario->getId(),
-                            'activo' => true,
-                        )
-                    );
+                    if (isset($params->licenciaTransito) && $params->licenciaTransito) {
+                        $licenciaTransitoOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                            array(
+                                'propietario' => $propietario->getId(),
+                                'activo' => true,
+                            )
+                        );
 
-                    if ($licenciaTransitoOld) {
-                        $licenciaTransitoOld->setActivo(false);
+                        if ($licenciaTransitoOld) {
+                            $licenciaTransitoOld->setActivo(false);
+                            $em->flush();
+                        }
+
+                        $licenciaTransito = new UserLicenciaTransito();
+
+                        $licenciaTransito->setNumero($params->licenciaTransito);
+                        $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
+                        $licenciaTransito->setActivo(true);
+
+                        $licenciaTransito->setPropietario($propietario);
+
+                        $em->persist($licenciaTransito);
                         $em->flush();
                     }
-
-                    $licenciaTransito = new UserLicenciaTransito();
-
-                    $licenciaTransito->setNumero($params->licenciaTransito);
-                    $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
-                    $licenciaTransito->setActivo(true);
-
-                    $licenciaTransito->setPropietario($propietario);
-
-                    $em->persist($licenciaTransito);
-                    $em->flush();
                 }
 
                 $response = array(
