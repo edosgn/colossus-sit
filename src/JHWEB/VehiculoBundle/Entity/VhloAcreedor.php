@@ -22,18 +22,18 @@ class VhloAcreedor
     private $id;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="activo", type="boolean")
-     */
-    private $activo;
-    
-    /**
      * @var int
      *
      * @ORM\Column(name="grado_alerta", type="integer", nullable= true)
      */
     private $gradoAlerta;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
     
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="acreedores") */
     private $ciudadano; 
@@ -60,30 +60,6 @@ class VhloAcreedor
     }
 
     /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return VhloAcreedor
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return boolean
-     */
-    public function getActivo()
-    {
-        return $this->activo;
-    }
-
-    /**
      * Set gradoAlerta
      *
      * @param integer $gradoAlerta
@@ -105,6 +81,30 @@ class VhloAcreedor
     public function getGradoAlerta()
     {
         return $this->gradoAlerta;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return VhloAcreedor
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 
     /**

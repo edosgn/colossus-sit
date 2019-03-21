@@ -60,7 +60,7 @@ class VhloAcreedorController extends Controller
     /**
      * Finds and displays a vhloAcreedor entity.
      *
-     * @Route("/{id}", name="vhloacreedor_show")
+     * @Route("/{id}/show", name="vhloacreedor_show")
      * @Method("GET")
      */
     public function showAction(VhloAcreedor $vhloAcreedor)
@@ -101,7 +101,7 @@ class VhloAcreedorController extends Controller
     /**
      * Deletes a vhloAcreedor entity.
      *
-     * @Route("/{id}", name="vhloacreedor_delete")
+     * @Route("/{id}/delete", name="vhloacreedor_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, VhloAcreedor $vhloAcreedor)
@@ -183,6 +183,114 @@ class VhloAcreedorController extends Controller
                     'message' => 'El ciudadano o empresa no es acreedor del vehiculo.', 
                 );
             }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new vhloAcreedor entity.
+     *
+     * @Route("/update", name="vhloacreedor_update")
+     * @Method({"GET", "POST"})
+     */
+    public function updateAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();  
+
+            if ($params->idVehiculo) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                    $params->idVehiculo
+                );
+            }
+
+            $gradoAlerta = null;
+            $tipoAlerta = null;
+
+            if ($vehiculo) {
+                foreach ($params->acreedoresOld as $key => $acreedorArray) {
+                    $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                        array(
+                            'id' => $acreedorArray->idAcreedor,
+                            'activo' => true,
+                        )
+                    );
+
+                    $gradoAlerta = $acreedor->getGradoAlerta();
+                    $tipoAlerta = $acreedor->getTipoAlerta();
+
+                    if ($acreedor) {
+                        $acreedor->setActivo(true);
+                    }
+
+                    $em->flush();
+                }
+
+                foreach ($params->acreedoresNew as $key => $acreedorArray) {
+                    $acreedor = new VhloAcreedor();
+
+                    if ($acreedorArray->tipo == 'Empresa') {
+                        $acreedor = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                            array(
+                                'id' => $acreedorArray->id,
+                                'activo' => true,
+                            )
+                        );
+
+                        $acreedor->setEmpresa($acreedor);
+                    }elseif ($acreedorArray->tipo == 'Ciudadano') {
+                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                            array(
+                                'id' => $acreedorArray->id,
+                                'activo' => true,
+                            )
+                        );
+
+                        $acreedor->setCiudadano($ciudadano);
+                    }
+
+                    if ($gradoAlerta) {
+                        $acreedor->setGradoAlerta($gradoAlerta);
+                    }
+
+                    if ($tipoAlerta) {
+                        $acreedor->setTipoAlerta($tipoAlerta);
+                    }
+
+                    $acreedor->setActivo(true);
+
+                    $acreedor->setVehiculo($vehiculo);
+
+                    $em->persist($acreedor);
+                    $em->flush();
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registros actualizados con exito.', 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Vehiculo no encontrado.', 
+                );
+            }                    
         }else{
             $response = array(
                 'status' => 'error',

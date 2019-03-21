@@ -62,14 +62,14 @@ class VhloPropietarioController extends Controller
                     $propietario = new VhloPropietario();
 
                     if ($propietarioArray->tipo == 'Empresa') {
-                        $propietario = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
                             array(
                                 'id' => $propietarioArray->idPropietario,
                                 'activo' => true,
                             )
                         );
 
-                        $propietario->setEmpresa($propietario);
+                        $propietario->setEmpresa($empresa);
                     }elseif ($propietarioArray->tipo == 'Ciudadano') {
                         $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                             array(
