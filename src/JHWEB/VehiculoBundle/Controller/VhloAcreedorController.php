@@ -39,22 +39,86 @@ class VhloAcreedorController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloAcreedor = new Vhloacreedor();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloAcreedorType', $vhloAcreedor);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloAcreedor);
-            $em->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();  
 
-            return $this->redirectToRoute('vhloacreedor_show', array('id' => $vhloAcreedor->getId()));
+            if ($params->idVehiculo) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                    $params->idVehiculo
+                );
+            }
+
+            if ($vehiculo) {
+                foreach ($params->acreedores as $key => $acreedorArray) {
+                    $acreedor = new VhloAcreedor();
+
+                    if ($acreedorArray->tipo == 'Empresa') {
+                        $acreedor = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                            array(
+                                'id' => $acreedorArray->id,
+                                'activo' => true,
+                            )
+                        );
+
+                        $acreedor->setEmpresa($acreedor);
+                    }elseif ($acreedorArray->tipo == 'Ciudadano') {
+                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                            array(
+                                'id' => $acreedorArray->id,
+                                'activo' => true,
+                            )
+                        );
+
+                        $acreedor->setCiudadano($ciudadano);
+                    }
+
+                    if ($acreedorArray->gradoAlerta) {
+                        $acreedor->setGradoAlerta($gradoAlerta);
+                    }
+
+                    if ($acreedorArray->idTipoAlerta) {
+                        $tipoAlerta = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoAlerta')->find(
+                            $acreedorArray->idTipoAlerta
+                        );
+                        $acreedor->setTipoAlerta($tipoAlerta);
+                    }
+
+                    $acreedor->setActivo(true);
+
+                    $acreedor->setVehiculo($vehiculo);
+
+                    $em->persist($acreedor);
+                    $em->flush();
+                }
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($params->acreedores).' registros creados con exito.', 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Vehiculo no encontrado.', 
+                );
+            }                    
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
 
-        return $this->render('vhloacreedor/new.html.twig', array(
-            'vhloAcreedor' => $vhloAcreedor,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -101,21 +165,39 @@ class VhloAcreedorController extends Controller
     /**
      * Deletes a vhloAcreedor entity.
      *
-     * @Route("/{id}/delete", name="vhloacreedor_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhloacreedor_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, VhloAcreedor $vhloAcreedor)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloAcreedor);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloAcreedor);
-            $em->flush();
-        }
 
-        return $this->redirectToRoute('vhloacreedor_index');
+            $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->find(
+                $params->id
+            );
+
+            $acreedor->setActivo(false);
+
+            $em->flush();
+
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito", 
+                );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no válida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -135,8 +217,9 @@ class VhloAcreedorController extends Controller
     }
 
     /* ============================================= */
+    
     /**
-     * Busca cuidadano o empresa por Identificacion.
+     * Busca cuidadano o empresa por identificacion.
      *
      * @Route("/search/ciudadano/empresa", name="vhloacreedor_search_ciudadano_empresa")
      * @Method({"GET", "POST"})
@@ -195,6 +278,65 @@ class VhloAcreedorController extends Controller
     }
 
     /**
+     * Busca un acreedor por ciudadano o empresa según el vehiculo
+     *
+     * @Route("/search/ciudadano/empresa/vehiculo", name="vhloacreedor_search_ciudadano_empresa_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByCiudadanoOrEmpresaAndVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->tipo == 'CIUDADANO') {
+                $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                    array(
+                        'ciudadano' => $params->id,
+                        'activo' => true,
+                    )
+                );
+            } elseif($params->tipo == 'EMPRESA') {
+                $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                    array(
+                        'empresa' => $params->id,
+                        'activo' => true,
+                    )
+                );
+            }
+
+            if ($acreedor) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $acreedor
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano o empresa no es acreedor del vehiculo.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a new vhloAcreedor entity.
      *
      * @Route("/update", name="vhloacreedor_update")
@@ -218,72 +360,138 @@ class VhloAcreedorController extends Controller
                 );
             }
 
-            $gradoAlerta = null;
-            $tipoAlerta = null;
+
 
             if ($vehiculo) {
-                foreach ($params->acreedoresOld as $key => $acreedorArray) {
-                    $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                if (isset($params->idAcreedor) && isset($params->idPropietario)) {
+                    $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
                         array(
-                            'id' => $acreedorArray->idAcreedor,
+                            'id' => $params->idAcreedor,
                             'activo' => true,
                         )
                     );
 
-                    $gradoAlerta = $acreedor->getGradoAlerta();
-                    $tipoAlerta = $acreedor->getTipoAlerta();
+                    if ($acreedorOld) {
+                        $gradoAlerta = $acreedorOld->getGradoAlerta();
+                        $tipoAlerta = $acreedorOld->getTipoAlerta();
 
-                    if ($acreedor) {
+                        $acreedorOld->setActivo(true);
+                    }
+
+                    $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                        array(
+                            'id' => $params->idPropietario,
+                            'activo' => true,
+                        )
+                    );
+
+                    if ($propietario) {
+                        $acreedor = new VhloAcreedor();
+
+                        if ($propietario->getEmpresa()) {
+                            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                                array(
+                                    'id' => $params->idPropietario,
+                                    'activo' => true,
+                                )
+                            );
+
+                            $acreedor->setEmpresa($empresa);
+                        }elseif ($propietario->getCiudadano()) {
+                            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                                array(
+                                    'id' => $params->idPropietario,
+                                    'activo' => true,
+                                )
+                            );
+
+                            $acreedor->setCiudadano($ciudadano);
+                        }
+
+                        $acreedor->setGradoAlerta($acreedorOld->getGradoAlerta());
+                        $acreedor->setTipoAlerta($acreedorOld->getTipoAlerta());
+                        
                         $acreedor->setActivo(true);
+
+                        $acreedor->setVehiculo($vehiculo);
+
+                        $em->persist($acreedor);
+                        $em->flush();
                     }
+                    
 
-                    $em->flush();
-                }
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registros actualizados con exito.', 
+                    );
+                }else{
+                    $gradoAlerta = null;
+                    $tipoAlerta = null;
 
-                foreach ($params->acreedoresNew as $key => $acreedorArray) {
-                    $acreedor = new VhloAcreedor();
-
-                    if ($acreedorArray->tipo == 'Empresa') {
-                        $acreedor = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                    foreach ($params->acreedoresOld as $key => $acreedorArray) {
+                        $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
                             array(
-                                'id' => $acreedorArray->id,
+                                'id' => $acreedorArray->idAcreedor,
                                 'activo' => true,
                             )
                         );
 
-                        $acreedor->setEmpresa($acreedor);
-                    }elseif ($acreedorArray->tipo == 'Ciudadano') {
-                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
-                            array(
-                                'id' => $acreedorArray->id,
-                                'activo' => true,
-                            )
-                        );
+                        if ($acreedor) {
+                            $gradoAlerta = $acreedor->getGradoAlerta();
+                            $tipoAlerta = $acreedor->getTipoAlerta();
 
-                        $acreedor->setCiudadano($ciudadano);
+                            $acreedor->setActivo(true);
+                        }
+
+                        $em->flush();
                     }
 
-                    if ($gradoAlerta) {
-                        $acreedor->setGradoAlerta($gradoAlerta);
+                    foreach ($params->acreedoresNew as $key => $acreedorArray) {
+                        $acreedor = new VhloAcreedor();
+
+                        if ($acreedorArray->tipo == 'Empresa') {
+                            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                                array(
+                                    'id' => $acreedorArray->id,
+                                    'activo' => true,
+                                )
+                            );
+
+                            $acreedor->setEmpresa($empresa);
+                        }elseif ($acreedorArray->tipo == 'Ciudadano') {
+                            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                                array(
+                                    'id' => $acreedorArray->id,
+                                    'activo' => true,
+                                )
+                            );
+
+                            $acreedor->setCiudadano($ciudadano);
+                        }
+
+                        if ($gradoAlerta) {
+                            $acreedor->setGradoAlerta($gradoAlerta);
+                        }
+
+                        if ($tipoAlerta) {
+                            $acreedor->setTipoAlerta($tipoAlerta);
+                        }
+
+                        $acreedor->setActivo(true);
+
+                        $acreedor->setVehiculo($vehiculo);
+
+                        $em->persist($acreedor);
+                        $em->flush();
                     }
 
-                    if ($tipoAlerta) {
-                        $acreedor->setTipoAlerta($tipoAlerta);
-                    }
-
-                    $acreedor->setActivo(true);
-
-                    $acreedor->setVehiculo($vehiculo);
-
-                    $em->persist($acreedor);
-                    $em->flush();
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registros actualizados con exito.', 
+                    );
                 }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Registros actualizados con exito.', 
-                );
             }else{
                 $response = array(
                     'status' => 'error',

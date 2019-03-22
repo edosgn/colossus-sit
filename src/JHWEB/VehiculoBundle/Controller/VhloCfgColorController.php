@@ -49,6 +49,7 @@ class VhloCfgColorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
@@ -189,6 +190,7 @@ class VhloCfgColorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+        
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();            
             $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find($id);
