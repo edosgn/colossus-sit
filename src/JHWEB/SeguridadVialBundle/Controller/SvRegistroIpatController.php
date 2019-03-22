@@ -817,7 +817,7 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $licenciaConduccion = $em->getRepository('AppBundle:LicenciaConduccion')->findOneBy(array('numero' => $params->numero));
+            $licenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findOneBy(array('numero' => $params->numero));
             if ($licenciaConduccion) {
                 $response = array(
                     'status' => 'success',
