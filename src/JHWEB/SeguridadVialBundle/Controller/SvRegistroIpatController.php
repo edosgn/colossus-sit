@@ -72,8 +72,8 @@ class SvRegistroIpatController extends Controller
             }
             
             if ($params[0]->datosLimitacion->idGravedad) {
-                $gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params[0]->datosLimitacion->idGravedad);
-                $ipat->setGravedad($gravedad);
+                $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params[0]->datosLimitacion->idGravedad);
+                $ipat->setGravedadAccidente($gravedadAccidente);
             }
 
             $ipat->setLugar($params[0]->datosLimitacion->lugar);
@@ -1291,8 +1291,9 @@ class SvRegistroIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $identificacionConductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacionConductor));
-            if($identificacionConductor){
+            $identificacionConductor = (isset($params->identificacionConductor)) ? $params->identificacionConductor : null;
+            $conductor = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $identificacionConductor));
+            if($conductor){
                 $response = array(
                 'status' => 'error',
                 'code' => 400,
@@ -1300,22 +1301,89 @@ class SvRegistroIpatController extends Controller
                 );
                 return $helpers->json($response);
             } else{
-                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionConductor);
-                $fechaNacimientoDateTime = new \DateTime($params->fechaNacimientoConductor);
-
-                $municipioResidenciaConductor = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaConductor);
-                $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoConductor);
-
                 $ciudadano = new UserCiudadano();
-                $ciudadano->setMunicipioResidencia($municipioResidenciaConductor);
-                $ciudadano->setDireccionPersonal($params->direccionResidenciaConductor);
-                $ciudadano->setGenero($sexoConductor);
-                $ciudadano->setPrimerNombre($params->nombresConductor);
-                $ciudadano->setPrimerApellido($params->apellidosConductor);
-                $ciudadano->setTipoIdentificacion($tipoIdentificacion);
-                $ciudadano->setIdentificacion($params->identificacionConductor);
+
+                $tipoIdentificacionConductor = (isset($params->tipoIdentificacionConductor)) ? $params->tipoIdentificacionConductor : null;
+
+                if($tipoIdentificacionConductor != null){
+                    $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($tipoIdentificacionConductor);
+                    $ciudadano->setTipoIdentificacion($tipoIdentificacion);
+                } else {
+                    $response = 
+                    array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El tipo de identificación del conductor es un campo obligatorio",
+                    );
+                }
+
+                if($params->fechaNacimientoConductor != null){
+                    $fechaNacimientoDateTime = new \DateTime($params->fechaNacimientoConductor);
+                    $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
+                } else {
+                    $response = 
+                    array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de nacimiento del conductor es un campo obligatorio",
+                    );
+                }
+                
+                $ciudadResidenciaConductor = (isset($params->ciudadResidenciaConductor)) ? $params->ciudadResidenciaConductor : null;
+                if($ciudadResidenciaConductor != null){
+                    $municipioResidenciaConductor = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($ciudadResidenciaConductor);
+                    $ciudadano->setMunicipioResidencia($municipioResidenciaConductor);
+                } 
+                $sexo = (isset($params->sexoConductor)) ? $params->sexoConductor : null;
+
+                if($sexo != null) {
+                    $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($sexo);
+                    $ciudadano->setGenero($sexoConductor);
+                }
+                
+                if($params->direccionResidenciaConductor != null){
+                    $ciudadano->setDireccionPersonal($params->direccionResidenciaConductor);
+                }else{
+                    $response = 
+                    array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La dirección del conductor es un campo obligatorio",
+                    );
+                }
+            
+                if($params->nombresConductor){
+                    $ciudadano->setPrimerNombre($params->nombresConductor);
+                } else {
+                    $response = 
+                    array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Los nombres del conductor es un campo obligatorio",
+                    );
+                }
+                if($params->apellidosConductor){
+                    $ciudadano->setPrimerApellido($params->apellidosConductor);
+                } else {
+                    $response = 
+                    array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Los apellidos del conductor es un campo obligatorio",
+                    );
+                }
+                if($params->identificacionConductor){
+                    $ciudadano->setIdentificacion($params->identificacionConductor);
+                } else {
+                    $response = 
+                    array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La identificación del conductor es un campo obligatorio",
+                    );
+                }
                 $ciudadano->setTelefono($params->telefonoConductor);
-                $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
+
                 $ciudadano->setActivo(true);
                 $ciudadano->setEnrolado(false);
 
@@ -1389,28 +1457,27 @@ class SvRegistroIpatController extends Controller
                 $municipioResidenciaVictima = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaVictima);
                 $sexoVictima = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoVictima);
 
-                $ciudadano = new Ciudadano();
+                $ciudadano = new UserCiudadano();
+                $ciudadano->setPrimerNombre($params->nombresVictima);
+                $ciudadano->setPrimerApellido($params->apellidosVictima);
+                $ciudadano->setTipoIdentificacion($tipoIdentificacion);
+                $ciudadano->setIdentificacion($params->identificacionVictima);
+                $ciudadano->setTelefono($params->telefonoVictima);
+                $ciudadano->setFechaNacimiento($fechaNacimientoDateTime);
                 $ciudadano->setMunicipioResidencia($municipioResidenciaVictima);
-                $ciudadano->setDireccion($params->direccionResidenciaVictima);
+                $ciudadano->setDireccionPersonal($params->direccionResidenciaVictima);
                 $ciudadano->setGenero($sexoVictima);
-                $ciudadano->setEstado(true);
+                $ciudadano->setActivo(true);
                 $ciudadano->setEnrolado(false);
 
                 $usuario = new Usuario();
-                $usuario->setPrimerNombre($params->nombresVictima);
-                $usuario->setPrimerApellido($params->apellidosVictima);
-                $usuario->setTipoIdentificacion($tipoIdentificacion);
-                $usuario->setIdentificacion($params->identificacionVictima);
-                $usuario->setTelefono($params->telefonoVictima);
-                $usuario->setFechaNacimiento($fechaNacimientoDateTime);
+                
                 $usuario->setCorreo('null');
-                $usuario->setEstado("Activo");
+                $usuario->setActivo(true);
                 $usuario->setRole("ROLE_USER");
-                $password = $params->nombresVictima[0] . $params->apellidosVictima[0] . $params->identificacionVictima;
+                $password = $params->nombresConductor[0] . $params->apellidosConductor[0] . $params->identificacionConductor;
                 $pwd = hash('sha256', $password);
-                $usuario->setPassword($pwd);
-                    
-                    
+                $usuario->setPassword($pwd);                    
                 $usuario->setCreatedAt();
                 $usuario->setUpdatedAt();     
                 $usuario->setCiudadano($ciudadano);
