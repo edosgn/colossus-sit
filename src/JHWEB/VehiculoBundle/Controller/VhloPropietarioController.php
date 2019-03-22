@@ -356,6 +356,67 @@ class VhloPropietarioController extends Controller
     }
 
     /**
+     * Busca un propietario por ciudadano o empresa según el vehiculo.
+     *
+     * @Route("/search/ciudadano/empresa/vehiculo", name="vhlovehiculo_search_ciudadano_empresa_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByCiudadanoOrEmpresaAndVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->tipo == 'CIUDADANO') {
+                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                    array(
+                        'ciudadano' => $params->id,
+                        'vehiculo' => $params->idVehiculo,
+                        'activo' => true,
+                    )
+                );
+            }elseif ($params->tipo == 'EMPRESA') {
+                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                    array(
+                        'empresa' => $params->id,
+                        'vehiculo' => $params->idVehiculo,
+                        'activo' => true,
+                    )
+                );
+            }
+
+            if ($propietario) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $propietario
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano o empresa no es propietario del vehiculo.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Elimina el vehiculo al propietario.
      *
      * @Route("/update/vehiculo", name="vhlopropietario_update_vehiculo")
