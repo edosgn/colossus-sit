@@ -33,7 +33,7 @@
         <br>
     </p>
 
-    <table>
+    <table cellpadding="5">
         <tr>
             <td  width="15%" style="font-weight:bold;">Clase</td>
             {% if vehiculo.clase  %}
@@ -78,13 +78,13 @@
         </tr>
     </table>
 
-    <p style="text-align:center;">
-        <b>Propietarios</b>
-        <br>      
-    </p>
-
     {% if propietarios|length > 0 %}
     <table border="1">
+        <tr>
+            <th colspan="3" align="center">
+                <b>PROPIETARIOS</b>
+            </th>
+        </tr>
         <tr>
             <td>Identificacion</td>
             <td>Apellidos y apellidos</td>
@@ -106,12 +106,12 @@
     </table>
     {% endif %}
 
-    <p style="text-align:center;"> 
-        <b>tramites</b>
-        <br>      
-    </p>
-
     <table border="1">
+        <tr>
+            <th colspan="3" align="center">
+                <b>TRÁMITES</b>
+            </th>
+        </tr>
         <tr>
             <td>Fecha</td>
             <td>Nombre Tramite</td>
@@ -122,11 +122,14 @@
                 <td>{{ tramiteSolicitud.fecha|date('d/m/Y') }}</td>
                 <td>{{ tramiteSolicitud.tramiteFactura.precio.tramite.nombre }}</td>
                 <td>
-                    
+                    {% if tramiteSolicitud.resumen %}
+                        {{ tramiteSolicitud.resumen }}
+                    {% endif %}
                 </td>
             </tr>
-
         {% endfor %}
+
+        
     </table>
   </body>
 </html>

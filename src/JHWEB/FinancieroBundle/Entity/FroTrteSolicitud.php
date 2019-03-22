@@ -190,6 +190,9 @@ class FroTrteSolicitud
      */
     public function getResumen()
     {
+        if ($this->resumen) {
+            return htmlspecialchars(trim(strip_tags($this->resumen)));
+        }
         return $this->resumen;
     }
 
