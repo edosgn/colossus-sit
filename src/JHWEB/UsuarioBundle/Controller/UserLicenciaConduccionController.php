@@ -46,9 +46,9 @@ class UserLicenciaConduccionController extends Controller
     }
 
     /**
-     * Creates a new licenciaConduccion entity.
+     * Creates a new userLicenciaConduccion entity.
      *
-     * @Route("/new", name="licenciaconduccion_new")
+     * @Route("/new", name="userlicenciaconduccion_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -57,15 +57,15 @@ class UserLicenciaConduccionController extends Controller
         $hash = $request->get("authorization",null);
         $authCheck = $helpers->authCheck($hash);
         if($authCheck == true){
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            
-            
+    
             $licenciaConduccion = new UserLicenciaConduccion();
             
-            $fechaVencimiento = date('Y-m-d',strtotime('+1 years', $params->fechaExpedicion));
+            $fechaExpedicion = strtotime($params->fechaExpedicion);
+            $fechaVencimiento = date('Y-m-d',strtotime('+10 years', $fechaExpedicion));
             
             if ($params->idOrganismoTransito) {
                 $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
@@ -95,11 +95,122 @@ class UserLicenciaConduccionController extends Controller
                 $licenciaConduccion->setServicio($servicio);
             }
 
-            if (isset($params->idTramiteFactura)) {
-                $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
-                    $params->idTramiteFactura
+            if ($params->idCiudadano) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->idCiudadano
                 );
-                $licenciaConduccion->setTramiteFactura($tramiteFactura);
+                $licenciaConduccion->setCiudadano($ciudadano);
+
+                $licenciasOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
+                    array(
+                        'ciudadano' => $ciudadano->getId(),
+                        'activo' => true
+                    )
+                );
+
+                foreach ($licenciasOld as $key => $licenciaOld) {
+                    $licenciaOld->setActivo(false);
+                    $em->flush();
+                }
+            }
+
+            if (isset($params->idPais)) {
+                $pais = $em->getRepository('JHWEBConfigBundle:CfgPais')->find(
+                    $params->idPais
+                );
+                $licenciaConduccion->setPais($pais);
+            }
+
+            $licenciaConduccion->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+            $licenciaConduccion->setFechaVencimiento(new \Datetime($fechaVencimiento));
+            $licenciaConduccion->setNumero($params->numero);
+            $licenciaConduccion->setNumeroRunt($params->numeroRunt);
+            $licenciaConduccion->setEstado($params->estado);
+            $licenciaConduccion->setRestriccion($params->restriccion);
+            
+            $licenciaConduccion->setActivo(true);
+            $em->persist($licenciaConduccion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito.", 
+            );
+
+
+        } else {
+          $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a userLicenciaConduccion entity.
+     *
+     * @Route("/show", name="userlicenciaconduccion_show")
+     * @Method("GET")
+     */
+    public function showAction(UserLicenciaConduccion $userLicenciaConduccion)
+    {
+
+        return $this->render('userlicenciaconduccion/show.html.twig', array(
+            'userLicenciaConduccion' => $userLicenciaConduccion,
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing licenciaConduccion entity.
+     *
+     * @Route("/edit", name="userlicenciaconduccion_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+    
+            $licenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->id);
+            
+            $fechaExpedicion = strtotime($params->fechaExpedicion);
+            $fechaVencimiento = date('Y-m-d',strtotime('+1 years', $fechaExpedicion));
+            
+            if ($params->idOrganismoTransito) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
+                );
+                $licenciaConduccion->setOrganismoTransito($organismoTransito);
+            }
+
+            if ($params->idCategoria) {
+                $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find(
+                    $params->idCategoria
+                );
+                $licenciaConduccion->setCategoria($categoria);
+            }
+
+            if ($params->idClase) {
+                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find(
+                    $params->idClase
+                );
+                $licenciaConduccion->setClase($clase);
+            }
+
+            if ($params->idServicio) {
+                $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                    $params->idServicio
+                );
+                $licenciaConduccion->setServicio($servicio);
             }
 
             if ($params->idCiudadano) {
@@ -128,14 +239,22 @@ class UserLicenciaConduccionController extends Controller
                 $licenciaConduccion->setPais($pais);
             }
 
-            $licencia->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-            $licencia->setNumero($params->numero);
-            $licencia->setNumeroRunt($params->numeroRunt);
+            $licenciaConduccion->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $licenciaConduccion->setFechaVencimiento(new \Datetime($fechaVencimiento));
-            $licencia->setEstado($params->estado);
+            $licenciaConduccion->setNumero($params->numero);
+            $licenciaConduccion->setNumeroRunt($params->numeroRunt);
+            $licenciaConduccion->setEstado($params->estado);
+            $licenciaConduccion->setRestriccion($params->restriccion);
             
-            
-            $licencia->setActivo(true);
+            $licenciaConduccion->setActivo(true);
+            $em->persist($licenciaConduccion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro editado con éxito.", 
+            );
 
 
         } else {
@@ -149,16 +268,42 @@ class UserLicenciaConduccionController extends Controller
     }
 
     /**
-     * Finds and displays a userLicenciaConduccion entity.
+     * Deletes a userLicenciaConduccion entity.
      *
-     * @Route("/show", name="userlicenciaconduccion_show")
-     * @Method("GET")
+     * @Route("/delete", name="userlicenciaconduccion_delete")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(UserLicenciaConduccion $userLicenciaConduccion)
+    public function deleteAction(Request $request)
     {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('userlicenciaconduccion/show.html.twig', array(
-            'userLicenciaConduccion' => $userLicenciaConduccion,
-        ));
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $licenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->find($params->id);
+
+            $licenciaConduccion->setActivo(false);
+
+            $em->persist($licenciaConduccion);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
+
     }
 }

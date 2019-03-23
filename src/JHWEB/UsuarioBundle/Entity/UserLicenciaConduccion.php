@@ -55,6 +55,13 @@ class UserLicenciaConduccion
      * @ORM\Column(name="estado", type="string", length=100)
      */
     private $estado;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="restriccion", type="string", length=200, nullable = true)
+     */
+    private $restriccion;
 
     /**
      * @var bool
@@ -75,9 +82,6 @@ class UserLicenciaConduccion
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgServicio", inversedBy="licenciasConduccion") */
     private $servicio;
-
-    /** @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroFacTramite", inversedBy="licenciasConduccion") */
-    private $tramiteFactura;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="licenciasConduccion") */
     private $ciudadano;
@@ -165,6 +169,9 @@ class UserLicenciaConduccion
      */
     public function getFechaExpedicion()
     {
+        if ($this->fechaExpedicion) {
+            return $this->fechaExpedicion->format('Y-m-d');
+        }
         return $this->fechaExpedicion;
     }
 
@@ -189,6 +196,9 @@ class UserLicenciaConduccion
      */
     public function getFechaVencimiento()
     {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('Y-m-d');
+        }
         return $this->fechaVencimiento;
     }
 
@@ -214,6 +224,30 @@ class UserLicenciaConduccion
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set restriccion
+     *
+     * @param string $restriccion
+     *
+     * @return UserLicenciaConduccion
+     */
+    public function setRestriccion($restriccion)
+    {
+        $this->restriccion = $restriccion;
+
+        return $this;
+    }
+
+    /**
+     * Get restriccion
+     *
+     * @return string
+     */
+    public function getRestriccion()
+    {
+        return $this->restriccion;
     }
 
     /**
@@ -334,30 +368,6 @@ class UserLicenciaConduccion
     public function getServicio()
     {
         return $this->servicio;
-    }
-
-    /**
-     * Set tramiteFactura
-     *
-     * @param \JHWEB\FinancieroBundle\Entity\FroFacTramite $tramiteFactura
-     *
-     * @return UserLicenciaConduccion
-     */
-    public function setTramiteFactura(\JHWEB\FinancieroBundle\Entity\FroFacTramite $tramiteFactura = null)
-    {
-        $this->tramiteFactura = $tramiteFactura;
-
-        return $this;
-    }
-
-    /**
-     * Get tramiteFactura
-     *
-     * @return \JHWEB\FinancieroBundle\Entity\FroFacTramite
-     */
-    public function getTramiteFactura()
-    {
-        return $this->tramiteFactura;
     }
 
     /**
