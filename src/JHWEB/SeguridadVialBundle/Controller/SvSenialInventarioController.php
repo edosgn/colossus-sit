@@ -296,10 +296,10 @@ class SvSenialInventarioController extends Controller
             $params = json_decode($json);          
 
             $inventarios = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialInventario')->getCantidadBySenialAndTipoDestino(
-                    $params->idTipoSenial,
-                    $params->tipoDestino,
-                    $params->idMunicipio
-                );
+                $params->idTipoSenial,
+                $params->tipoDestino,
+                $params->idMunicipio
+            );
 
             if ($inventarios) {
                 $response = array(
