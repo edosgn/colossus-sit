@@ -1,5 +1,5 @@
-jhweb_seguridad_vial_sv_cfg_gravedad_accidente:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgGravedadAccidenteController.php"
+jhweb_usuario_user_lc_cfg_categoria:
+    resource: "@JHWEBUsuarioBundle/Controller/UserLcCfgCategoriaController.php"
     type:     annotation
 
 jhweb_banco_proyecto:
