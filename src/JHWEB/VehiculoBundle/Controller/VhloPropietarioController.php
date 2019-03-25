@@ -160,17 +160,40 @@ class VhloPropietarioController extends Controller
     /**
      * Finds and displays a vhloPropietario entity.
      *
-     * @Route("/{id}/show", name="vhlopropietario_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlopropietario_show")
+     * @Method("POST")
      */
-    public function showAction(VhloPropietario $vhloPropietario)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloPropietario);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlopropietario/show.html.twig', array(
-            'vhloPropietario' => $vhloPropietario,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $propietario,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.',
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
