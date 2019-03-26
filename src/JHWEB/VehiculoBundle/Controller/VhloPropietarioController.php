@@ -160,17 +160,40 @@ class VhloPropietarioController extends Controller
     /**
      * Finds and displays a vhloPropietario entity.
      *
-     * @Route("/{id}/show", name="vhlopropietario_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlopropietario_show")
+     * @Method("POST")
      */
-    public function showAction(VhloPropietario $vhloPropietario)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloPropietario);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlopropietario/show.html.twig', array(
-            'vhloPropietario' => $vhloPropietario,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $propietario,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.',
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -342,6 +365,67 @@ class VhloPropietarioController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'Este vehiculo no tiene propietarios registrados, debe realizar una matricula inicial.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca un propietario por ciudadano o empresa según el vehiculo.
+     *
+     * @Route("/search/ciudadano/empresa/vehiculo", name="vhlovehiculo_search_ciudadano_empresa_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByCiudadanoOrEmpresaAndVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            if ($params->tipo == 'CIUDADANO') {
+                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                    array(
+                        'ciudadano' => $params->id,
+                        'vehiculo' => $params->idVehiculo,
+                        'activo' => true,
+                    )
+                );
+            }elseif ($params->tipo == 'EMPRESA') {
+                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                    array(
+                        'empresa' => $params->id,
+                        'vehiculo' => $params->idVehiculo,
+                        'activo' => true,
+                    )
+                );
+            }
+
+            if ($propietario) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $propietario
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano o empresa no es propietario del vehiculo.', 
                 );
             }            
         }else{

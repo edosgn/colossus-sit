@@ -27,3 +27,7 @@ services:
     app.pdf.factura:
         class: JHWEB\FinancieroBundle\Service\PdfTemplate
         arguments: ["null"]
+
+    app.pdf.factura.membretes:
+        class: JHWEB\FinancieroBundle\Service\PdfTemplateMembretes
+        arguments: ["null"]

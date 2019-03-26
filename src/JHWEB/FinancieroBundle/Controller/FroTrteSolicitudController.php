@@ -78,8 +78,8 @@ class FroTrteSolicitudController extends Controller
                                 'message' => 'El tramite ya fue realizado.', 
                             );
                         }else{
-                            $funcionario = $vehiculo = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                                $params->idFuncionario
+                            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                                $params->datos->foraneas->idFuncionario
                             );
 
                             if (isset($params->idVehiculo) && $params->idVehiculo) {
@@ -498,6 +498,6 @@ class FroTrteSolicitudController extends Controller
             'tramitesSolicitud'=>$tramitesSolicitud
         ));
 
-        $this->get('app.pdf.factura')->templateCertificadoTradicion($html, $vehiculo);
+        $this->get('app.pdf.factura.membretes')->templateCertificadoTradicion($html, $vehiculo);
     }
 }

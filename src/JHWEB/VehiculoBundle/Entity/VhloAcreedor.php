@@ -41,6 +41,9 @@ class VhloAcreedor
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="acreedores") */
     private $empresa;
 
+    /** @ORM\ManyToOne(targetEntity="VhloPropietario", inversedBy="acreedores") */
+    private $propietario; 
+
     /** @ORM\ManyToOne(targetEntity="VhloCfgTipoAlerta", inversedBy="acreedores") */
     private $tipoAlerta;
 
@@ -153,6 +156,30 @@ class VhloAcreedor
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set propietario
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario
+     *
+     * @return VhloAcreedor
+     */
+    public function setPropietario(\JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario = null)
+    {
+        $this->propietario = $propietario;
+
+        return $this;
+    }
+
+    /**
+     * Get propietario
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloPropietario
+     */
+    public function getPropietario()
+    {
+        return $this->propietario;
     }
 
     /**

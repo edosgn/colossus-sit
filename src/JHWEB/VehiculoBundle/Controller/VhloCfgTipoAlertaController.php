@@ -60,17 +60,40 @@ class VhloCfgTipoAlertaController extends Controller
     /**
      * Finds and displays a vhloCfgTipoAlertum entity.
      *
-     * @Route("/{id}/show", name="vhlocfgtipoalerta_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlocfgtipoalerta_show")
+     * @Method("POST")
      */
-    public function showAction(VhloCfgTipoAlerta $vhloCfgTipoAlertum)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgTipoAlertum);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfgtipoalerta/show.html.twig', array(
-            'vhloCfgTipoAlertum' => $vhloCfgTipoAlertum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipoAlerta = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoAlerta')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $tipoAlerta
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**

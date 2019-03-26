@@ -433,6 +433,10 @@ class VhloVehiculoController extends Controller
                         case 'repotenciacion':
                             $vehiculo->setModelo($params->modelo);
                             break;
+
+                        case 'pignorado':
+                            $vehiculo->setPignorado(true);
+                            break;
                     }
                 }
 
