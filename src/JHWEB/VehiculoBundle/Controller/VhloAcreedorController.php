@@ -83,7 +83,7 @@ class VhloAcreedorController extends Controller
                 );
                 $acreedor->setPropietario($propietario);
 
-                $tipoAlerta = $em->getRepository('JHWEBVehiculoBundle:VhloCfgtipoAlerta')->find(
+                $tipoAlerta = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoAlerta')->find(
                     $params->idTipoAlerta
                 );
                 $acreedor->setTipoAlerta($tipoAlerta);
@@ -97,11 +97,10 @@ class VhloAcreedorController extends Controller
                 $em->persist($acreedor);
                 $em->flush();
                 
-
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($params->propietarios).' registros creados con exito.', 
+                    'message' => 'Registro creado con exito.', 
                 );
             }else{
                 $response = array(
@@ -175,6 +174,9 @@ class VhloAcreedorController extends Controller
         $authCheck = $helpers->authCheck($hash);
         
         if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
 
             $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->find(
@@ -217,6 +219,56 @@ class VhloAcreedorController extends Controller
     }
 
     /* ============================================= */
+
+    /**
+     * Busca los acreedores por vehiculo
+     *
+     * @Route("/search/vehiculo", name="vhloacreedor_search_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $acreedores = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true,
+                )
+            );
+
+            if ($acreedores) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($acreedores).' registros encontrados.', 
+                    'data'=> $acreedores
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano o empresa no es acreedor del vehiculo.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
     
     /**
      * Busca cuidadano o empresa por identificacion.
