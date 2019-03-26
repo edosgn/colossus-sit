@@ -1,7 +1,3 @@
-jhweb_seguridad_vial_sv_cfg_gravedad_accidente:
-    resource: "@JHWEBSeguridadVialBundle/Controller/SvCfgGravedadAccidenteController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
