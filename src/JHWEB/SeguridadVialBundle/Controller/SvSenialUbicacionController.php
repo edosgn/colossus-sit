@@ -80,7 +80,7 @@ class SvSenialUbicacionController extends Controller
                         }
 
                         if ($params->idMunicipio) {
-                            $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                                 $params->idMunicipio
                             );
                             $inventario->setMunicipio($municipio);
@@ -101,7 +101,7 @@ class SvSenialUbicacionController extends Controller
                     $ubicacion->setInventario($inventario);
 
                      if ($params->idMunicipio) {
-                        $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                        $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                             $params->idMunicipio
                         );
                         $ubicacion->setMunicipio($municipio);
@@ -228,7 +228,7 @@ class SvSenialUbicacionController extends Controller
                             }
 
                             if ($params->idMunicipio) {
-                                $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                                     $params->idMunicipio
                                 );
                                 $inventario->setMunicipio($municipio);
@@ -249,7 +249,7 @@ class SvSenialUbicacionController extends Controller
                         $ubicacion->setInventario($inventario);
 
                          if ($params->idMunicipio) {
-                            $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                                 $params->idMunicipio
                             );
                             $ubicacion->setMunicipio($municipio);

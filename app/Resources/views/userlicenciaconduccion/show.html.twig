@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userlicenciaconduccion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userLicenciaConduccion.id }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ userLicenciaConduccion.numero }}</td>
+            </tr>
+            <tr>
+                <th>Numerorunt</th>
+                <td>{{ userLicenciaConduccion.numeroRunt }}</td>
+            </tr>
+            <tr>
+                <th>Fechaexpedicion</th>
+                <td>{% if userLicenciaConduccion.fechaExpedicion %}{{ userLicenciaConduccion.fechaExpedicion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechavencimiento</th>
+                <td>{% if userLicenciaConduccion.fechaVencimiento %}{{ userLicenciaConduccion.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ userLicenciaConduccion.estado }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userLicenciaConduccion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userlicenciaconduccion_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

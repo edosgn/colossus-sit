@@ -256,10 +256,11 @@ class CfgEntidadJudicialController extends Controller
 
         foreach ($cfgEntidadesJudiciales as $key => $cfgEntidadJudicial) {
             $consecutive = substr($cfgEntidadJudicial->getCodigo(), 0, 12);
+
             $response[$key] = array(
                 'value' => $cfgEntidadJudicial->getId(),
-                'label' => $cfgEntidadJudicial->getCodigo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $cfgEntidadJudicial->getMunicipio(),
-                'consecutive' => $consecutive,
+                'label' => $cfgEntidadJudicial->getCodigo() . "_" . $cfgEntidadJudicial->getNombre() . "  -  " . $cfgEntidadJudicial->getMunicipio()->getNombre(),
+                'consecutive' => $consecutive, 
             );
         }
 

@@ -241,4 +241,34 @@ class VhloCfgCdaController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca todos los acreedores según el vehiculo.
+     *
+     * @Route("/search/vehiculo", name="vhlocfgcda_search_vehiculo")
+     * @Method("POST")
+     */
+    public function searchByVehiculoAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $cdas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCda')->findBy(
+            array('activo' => true)
+        );
+
+        $response['data'] = array();
+
+        if ($cdas) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($cdas)." registros encontrados", 
+                'data'=> $cdas,
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
