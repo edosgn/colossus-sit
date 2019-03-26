@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Imoinsumos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Estado</th>
+                <th>Numero</th>
+                <th>Fecha</th>
+                <th>Categoria</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for imoInsumo in imoInsumos %}
+            <tr>
+                <td><a href="{{ path('imoinsumo_show', { 'id': imoInsumo.id }) }}">{{ imoInsumo.id }}</a></td>
+                <td>{{ imoInsumo.estado }}</td>
+                <td>{{ imoInsumo.numero }}</td>
+                <td>{% if imoInsumo.fecha %}{{ imoInsumo.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ imoInsumo.categoria }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('imoinsumo_show', { 'id': imoInsumo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('imoinsumo_edit', { 'id': imoInsumo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('imoinsumo_new') }}">Create a new imoInsumo</a>
+        </li>
+    </ul>
+{% endblock %}

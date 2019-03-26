@@ -42,8 +42,10 @@ class ImoCfgValor
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CasoInsumo", inversedBy="soats") */
-    private $casoInsumo;
+    /**
+     * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
+     **/
+    protected $tipoInsumo;
 
 
     /**
@@ -128,27 +130,28 @@ class ImoCfgValor
         return $this->activo;
     }
 
+
     /**
-     * Set casoInsumo
+     * Set tipoInsumo
      *
-     * @param \AppBundle\Entity\CasoInsumo $casoInsumo
+     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo
      *
      * @return ImoCfgValor
      */
-    public function setCasoInsumo(\AppBundle\Entity\CasoInsumo $casoInsumo = null)
+    public function setTipoInsumo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo = null)
     {
-        $this->casoInsumo = $casoInsumo;
+        $this->tipoInsumo = $tipoInsumo;
 
         return $this;
     }
 
     /**
-     * Get casoInsumo
+     * Get tipoInsumo
      *
-     * @return \AppBundle\Entity\CasoInsumo
+     * @return \JHWEB\InsumoBundle\Entity\ImoCfgTipo
      */
-    public function getCasoInsumo()
+    public function getTipoInsumo()
     {
-        return $this->casoInsumo;
+        return $this->tipoInsumo;
     }
 }

@@ -291,14 +291,14 @@ class VhloAcreedorController extends Controller
             if ($params->tipo == 'CIUDADANO') {
                 $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
                     array(
-                        'ciudadano' => $params->idCiudadano,
+                        'ciudadano' => $params->id,
                         'activo' => true,
                     )
                 );
             } elseif($params->tipo == 'EMPRESA') {
                 $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
                     array(
-                        'empresa' => $params->idEmpresa,
+                        'empresa' => $params->id,
                         'activo' => true,
                     )
                 );

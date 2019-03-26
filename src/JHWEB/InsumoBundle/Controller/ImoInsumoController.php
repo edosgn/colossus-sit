@@ -1,74 +1,61 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\InsumoBundle\Controller;
 
-use AppBundle\Entity\Insumo;
-use JHWEB\InsumoBundle\Entity\ImoTrazabilidad;
-use JHWEB\InsumoBundle\Entity\ImoAsignacion;
+use JHWEB\InsumoBundle\Entity\ImoInsumo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Insumo controller.
+ * Imoinsumo controller.
  *
- * @Route("insumo")
+ * @Route("imoinsumo")
  */
-class InsumoController extends Controller
+class ImoInsumoController extends Controller
 {
     /**
-     * Lists all insumo entities.
+     * Lists all imoInsumo entities.
      *
-     * @Route("/sustrato", name="insumo_index")
-     * @Method("GET")
+     * @Route("/", name="imoinsumo_index")
+     * @Method("POST")
      */
-    public function indexAction()
+    public function indexAction(Requesto $request)
     {
         $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
         $em = $this->getDoctrine()->getManager();
-        $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
-            array('estado' => 'disponible','tipo'=>'sustrato')
+        
+        $insumos = $em->getRepository('JHWEBConfigBundle:ImoInsumo')->findBy(
+            array(
+                'estado' => 'disponible',
+                'tipo' => $params->tipo
+            )
         );
 
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "listado lineas", 
-                    'data'=> $insumos,
+        $response['data'] = array();
+
+        if ($insumos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($insumos)." registros encontrados", 
+                'data'=> $insumos,
             );
-         
+        }
+
         return $helpers->json($response);
     }
 
     /**
-     * Lists all insumo entities.
+     * Creates a new imoInsumo entity.
      *
-     * @Route("/insumo", name="insumoInsumos_index")
-     * @Method("GET")
-     */
-    public function indexInsumoAction()
-    {
-        $helpers = $this->get("app.helpers");
-        $em = $this->getDoctrine()->getManager();
-        $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
-            array('estado' => 'disponible','tipo'=>'insumo')
-        );
-
-        $response = array(
-                    'status' => 'success',
-                    'code' => 200, 
-                    'msj' => "listado lineas", 
-                    'data'=> $insumos,
-            );
-         
-        return $helpers->json($response);
-    }
-
-    /**
-     * Creates a new insumo entity.
-     *
-     * @Route("/new", name="insumo_new")
+     * @Route("/new", name="imoinsumo_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -89,8 +76,6 @@ class InsumoController extends Controller
 
             $rangoInicio = (isset($params->rangoInicio)) ? $params->rangoInicio : null;
 
-            // var_dump($params->sedeOperativaId);
-            // die();
             $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
             $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->find($params->loteInsumoId);
 
@@ -139,7 +124,7 @@ class InsumoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "insumo creado con exito", 
+                    'message' => "Insumo creado con exito",
                 );
                 
             }else{
@@ -162,91 +147,57 @@ class InsumoController extends Controller
             }
               
         }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorizacion no valida", 
-            );
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no valida", 
+                );
             } 
         return $helpers->json($response);
     }
 
     /**
-     * Finds and displays a insumo entity.
+     * Finds and displays a imoInsumo entity.
      *
-     * @Route("/{id}/show", name="insumo_show")
+     * @Route("/{id}", name="imoinsumo_show")
      * @Method("GET")
      */
-    public function showAction(Insumo $insumo)
+    public function showAction(ImoInsumo $imoInsumo)
     {
-        $deleteForm = $this->createDeleteForm($insumo);
+        $deleteForm = $this->createDeleteForm($imoInsumo);
 
-        return $this->render('insumo/show.html.twig', array(
-            'insumo' => $insumo,
+        return $this->render('imoinsumo/show.html.twig', array(
+            'imoInsumo' => $imoInsumo,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Finds and displays a insumo entity.
+     * Displays a form to edit an existing imoInsumo entity.
      *
-     * @Route("/show/loteInsumo", name="insumo_show_loteInsumo")
+     * @Route("/{id}/edit", name="imoinsumo_edit")
      * @Method({"GET", "POST"})
      */
-    public function showLoteAction(Request $request)
+    public function editAction(Request $request, ImoInsumo $imoInsumo)
     {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        if ($authCheck== true) {
-            $em = $this->getDoctrine()->getManager();
-            $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
-                array('tipo'=>'sustrato',)
-            );
-    
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'datos' => $insumos,
-                'msj' => "insumo creado con exito", 
-            );
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorizacion no valida", 
-            );
-        }
-
-        return $helpers->json($response);
-    }
-
-    /**
-     * Displays a form to edit an existing insumo entity.
-     *
-     * @Route("/{id}/edit", name="insumo_edit")
-     * @Method({"GET", "POST"})
-     */
-    public function editAction(Request $request, Insumo $insumo)
-    {
-        $deleteForm = $this->createDeleteForm($insumo);
-        $editForm = $this->createForm('AppBundle\Form\InsumoType', $insumo);
+        $deleteForm = $this->createDeleteForm($imoInsumo);
+        $editForm = $this->createForm('JHWEB\InsumoBundle\Form\ImoInsumoType', $imoInsumo);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('insumo_edit', array('id' => $insumo->getId()));
+            return $this->redirectToRoute('imoinsumo_edit', array('id' => $imoInsumo->getId()));
         }
 
-        return $this->render('insumo/edit.html.twig', array(
-            'insumo' => $insumo,
+        return $this->render('imoinsumo/edit.html.twig', array(
+            'imoInsumo' => $imoInsumo,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
- 
-    /**
+
+     /**
      * Deletes a insumo entity.
      *
      * @Route("/{id}/delete", name="insumo_delete")
@@ -266,31 +217,31 @@ class InsumoController extends Controller
             $em->persist($insumo);
             $em->flush();
             $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'msj' => "insumo eliminado con exito", 
-                );
+                'status' => 'success',
+                'code' => 200,
+                'message' => "insumo eliminado con exito", 
+            );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a insumo entity.
+     * Creates a form to delete a imoInsumo entity.
      *
-     * @param Insumo $insumo The insumo entity
+     * @param ImoInsumo $imoInsumo The imoInsumo entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Insumo $insumo)
+    private function createDeleteForm(ImoInsumo $imoInsumo)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('insumo_delete', array('id' => $insumo->getId())))
+            ->setAction($this->generateUrl('imoinsumo_delete', array('id' => $imoInsumo->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -313,14 +264,10 @@ class InsumoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-            // var_dump($params);
-            // die();
             $em = $this->getDoctrine()->getManager();
- 
             $sustrato = $em->getRepository('AppBundle:Insumo')->getNumeroModulo(
                 $params->numero,$params->idModulo,$params->idSedeOperativa
             );
-
             if ($sustrato) {
                 $response = array(
                         'status' => 'success',
@@ -331,20 +278,20 @@ class InsumoController extends Controller
                 $response = array(
                         'status' => 'error',
                         'code' => 300,
-                        'msj'=> 'sustrato no encontrado',
+                        'message'=> 'sustrato no encontrado',
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
     }
 
-    /**
+     /**
      * Lists all insumo entities.
      *
      * @Route("/isExistencia", name="insumo_isExistencia")
@@ -468,4 +415,6 @@ class InsumoController extends Controller
         
         return $helpers->json($response);
     }
+
+
 }

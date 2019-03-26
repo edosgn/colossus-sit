@@ -78,7 +78,7 @@ class Usuario
     private $ciudadano;
 
     /**
-     * Get id
+     * Get id 
      *
      * @return integer
      */
