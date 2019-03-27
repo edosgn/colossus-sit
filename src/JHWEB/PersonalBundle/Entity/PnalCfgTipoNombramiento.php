@@ -38,6 +38,27 @@ class PnalCfgTipoNombramiento
     /**
      * @var bool
      *
+     * @ORM\Column(name="horarios", type="boolean")
+     */
+    private $horarios;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="prorroga", type="boolean")
+     */
+    private $prorroga;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="suspencion", type="boolean")
+     */
+    private $suspencion;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -94,11 +115,83 @@ class PnalCfgTipoNombramiento
     /**
      * Get gestionable
      *
-     * @return bool
+     * @return boolean
      */
     public function getGestionable()
     {
         return $this->gestionable;
+    }
+
+    /**
+     * Set horarios
+     *
+     * @param boolean $horarios
+     *
+     * @return PnalCfgTipoNombramiento
+     */
+    public function setHorarios($horarios)
+    {
+        $this->horarios = $horarios;
+
+        return $this;
+    }
+
+    /**
+     * Get horarios
+     *
+     * @return boolean
+     */
+    public function getHorarios()
+    {
+        return $this->horarios;
+    }
+
+    /**
+     * Set prorroga
+     *
+     * @param boolean $prorroga
+     *
+     * @return PnalCfgTipoNombramiento
+     */
+    public function setProrroga($prorroga)
+    {
+        $this->prorroga = $prorroga;
+
+        return $this;
+    }
+
+    /**
+     * Get prorroga
+     *
+     * @return boolean
+     */
+    public function getProrroga()
+    {
+        return $this->prorroga;
+    }
+
+    /**
+     * Set suspencion
+     *
+     * @param boolean $suspencion
+     *
+     * @return PnalCfgTipoNombramiento
+     */
+    public function setSuspencion($suspencion)
+    {
+        $this->suspencion = $suspencion;
+
+        return $this;
+    }
+
+    /**
+     * Get suspencion
+     *
+     * @return boolean
+     */
+    public function getSuspencion()
+    {
+        return $this->suspencion;
     }
 
     /**
@@ -118,11 +211,10 @@ class PnalCfgTipoNombramiento
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-
