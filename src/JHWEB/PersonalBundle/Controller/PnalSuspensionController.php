@@ -51,30 +51,49 @@ class PnalSuspensionController extends Controller
 
             $pnalSuspension = new PnalSuspension();
 
-            // $ciudadano = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
-            //     $usuario->getId()
-            // );
-
-            $fechaInicio = new \DateTime($params->fechaInicio);
-            $fechaFin = new \DateTime($params->fechaFin);
-            $mPersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->mPersonalFuncionarioId);
-
-            $mPersonalFuncionario->setActivo(0);
-            $em->persist($mPersonalFuncionario);
-
-            $pnalSuspension->setFechaInicio($fechaInicio);
-            $pnalSuspension->setFechaFin($fechaFin);
-            $pnalSuspension->setObservacion($params->observacion);
-            $pnalSuspension->setMPersonalFuncionario($mPersonalFuncionario);
-            
-            $em->persist($pnalSuspension);
-            $em->flush();
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con éxito",
-            );
-        
+            $fechaActual =  new \DateTime();
+            $fechaInicial = new \DateTime($params->fechaInicio);
+            $fechaFinal = new \DateTime($params->fechaFin);
+            if($fechaInicial > $fechaActual){
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find($params->idFuncionario);
+    
+                $funcionario->setActivo(false);
+                $em->persist($funcionario);
+    
+                $pnalSuspension->setFechaInicial($fechaInicial);
+                $pnalSuspension->setFechaFinal($fechaFinal);
+                $pnalSuspension->setObservacion($params->observacion);
+                $pnalSuspension->setFuncionario($funcionario);
+                
+                $em->persist($pnalSuspension);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito",
+                );
+            } elseif($fechaFinal < $fechaActual) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha final debe ser mayor a la fecha actual",
+                );
+                return $helpers->json($response);
+            } elseif($fechaFinal < $fechaInicial) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha inicial debe ser mayor a la fecha final",
+                );
+                return $helpers->json($response);
+            }else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha inicial debe ser mayor o igual a la fecha actual",
+                );
+                return $helpers->json($response);
+            }
         }else{
             $response = array(
                 'status' => 'error',

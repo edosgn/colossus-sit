@@ -63,6 +63,7 @@ class SvCfgEntidadAccidenteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $entidadAccidente->setCodigo($params->codigo);
             $entidadAccidente->setNombre(strtoupper($params->nombre));
             $entidadAccidente->setActivo(true);
             $em->persist($entidadAccidente);
@@ -119,7 +120,7 @@ class SvCfgEntidadAccidenteController extends Controller
 
             if ($entidadAccidente != null) {
                 
-
+                $entidadAccidente->setCodigo($params->codigo);
                 $entidadAccidente->setNombre(strtoupper($params->nombre));
 
                 $em->persist($entidadAccidente);

@@ -22,16 +22,16 @@ class SvCfgUnidadReceptora
     private $id;
 
     /**
-     * @var int
+     * @var string
      *
-     * @ORM\Column(name="codigo", type="integer", nullable= true)
+     * @ORM\Column(name="codigo", type="string")
      */
     private $codigo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", nullable= true)
+     * @ORM\Column(name="nombre", type="string")
      */
     private $nombre;
 
@@ -52,7 +52,7 @@ class SvCfgUnidadReceptora
     /**
      * @var bool
      *
-     * @ORM\Column(name="activo", type="boolean", nullable=true)
+     * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
 

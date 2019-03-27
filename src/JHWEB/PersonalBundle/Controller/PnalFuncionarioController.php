@@ -693,18 +693,18 @@ class PnalFuncionarioController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $pnalSuspensiones = $em->getRepository('JHWEBPersonalBundle:PnalSuspension')->findBy(
+            $suspensiones = $em->getRepository('JHWEBPersonalBundle:PnalSuspension')->findBy(
                 array(
                     'funcionario' => $params->id,
                 )
             );
 
-            if ($pnalSuspensiones) {
+            if ($suspensiones) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registros encontrados",
-                    'data' => $pnalSuspensiones,
+                    'data' => $suspensiones,
                 );
             } else {
                 $response = array(

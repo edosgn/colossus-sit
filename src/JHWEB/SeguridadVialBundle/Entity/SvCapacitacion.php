@@ -39,27 +39,6 @@ class SvCapacitacion
     private $fechaHoraRegistro;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="formador", type="string")
-     */
-    private $formador;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cedula", type="string")
-     */
-    private $cedula;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="emailFormador", type="string")
-     */
-    private $emailFormador;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_actividad", type="date")
@@ -94,6 +73,13 @@ class SvCapacitacion
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion", inversedBy="capacitaciones")
      */
     private $temaCapacitacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGenero", inversedBy="capacitaciones")
+     */
+    private $genero;
 
     /**
      * @var string
@@ -145,6 +131,13 @@ class SvCapacitacion
     private $documento;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="documento_capacitados", type="string")
+     */
+    private $documentoCapacitados;
+
+    /**
      * Get id
      *
      * @return int
@@ -182,78 +175,6 @@ class SvCapacitacion
     }
 
     /**
-     * Set formador
-     *
-     * @param string $formador
-     *
-     * @return SvCapacitacion
-     */
-    public function setFormador($formador)
-    {
-        $this->formador = $formador;
-
-        return $this;
-    }
-
-    /**
-     * Get formador
-     *
-     * @return string
-     */
-    public function getFormador()
-    {
-        return $this->formador;
-    }
-
-    /**
-     * Set cedula
-     *
-     * @param string $cedula
-     *
-     * @return SvCapacitacion
-     */
-    public function setCedula($cedula)
-    {
-        $this->cedula = $cedula;
-
-        return $this;
-    }
-
-    /**
-     * Get cedula
-     *
-     * @return string
-     */
-    public function getCedula()
-    {
-        return $this->cedula;
-    }
-
-    /**
-     * Set emailFormador
-     *
-     * @param string $emailFormador
-     *
-     * @return SvCapacitacion
-     */
-    public function setEmailFormador($emailFormador)
-    {
-        $this->emailFormador = $emailFormador;
-
-        return $this;
-    }
-
-    /**
-     * Get emailFormador
-     *
-     * @return string
-     */
-    public function getEmailFormador()
-    {
-        return $this->emailFormador;
-    }
-
-    /**
      * Set fechaActividad
      *
      * @param \DateTime $fechaActividad
@@ -274,11 +195,7 @@ class SvCapacitacion
      */
     public function getFechaActividad()
     {
-        if ($this->fechaActividad) {
-            return $this->fechaActividad->format('d/m/Y');
-        }
         return $this->fechaActividad;
-
     }
 
     /**
@@ -450,6 +367,30 @@ class SvCapacitacion
     }
 
     /**
+     * Set documentoCapacitados
+     *
+     * @param string $documentoCapacitados
+     *
+     * @return SvCapacitacion
+     */
+    public function setDocumentoCapacitados($documentoCapacitados)
+    {
+        $this->documentoCapacitados = $documentoCapacitados;
+
+        return $this;
+    }
+
+    /**
+     * Get documentoCapacitados
+     *
+     * @return string
+     */
+    public function getDocumentoCapacitados()
+    {
+        return $this->documentoCapacitados;
+    }
+
+    /**
      * Set ciudadano
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
@@ -591,6 +532,30 @@ class SvCapacitacion
     public function getTemaCapacitacion()
     {
         return $this->temaCapacitacion;
+    }
+
+    /**
+     * Set genero
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgGenero $genero
+     *
+     * @return SvCapacitacion
+     */
+    public function setGenero(\JHWEB\UsuarioBundle\Entity\UserCfgGenero $genero = null)
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
+    /**
+     * Get genero
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgGenero
+     */
+    public function getGenero()
+    {
+        return $this->genero;
     }
 
     /**
