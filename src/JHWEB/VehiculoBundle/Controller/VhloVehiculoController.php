@@ -410,6 +410,10 @@ class VhloVehiculoController extends Controller
                             $vehiculo->setCancelado(true);
                             break;
 
+                        case 'rematricula':
+                            $vehiculo->setCancelado(false);
+                            break;
+
                         case 'regrabarchasis':
                             $vehiculo->setChasis($params->nuevoNumero);
                             break;
