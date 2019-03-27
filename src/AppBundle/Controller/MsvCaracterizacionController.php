@@ -184,7 +184,6 @@ class MsvCaracterizacionController extends Controller
                 $caracterizacion->setNombres($params->nombres);
                 $caracterizacion->setApellidos($params->apellidos);
                 $caracterizacion->setCedula($params->cedula);
-                $caracterizacion->setLugarExpedicion($params->lugarExpedicion);
                 $caracterizacion->setClc($params->clc);
                 $caracterizacion->setFechaVigencia($params->fechaVigencia);
                 $caracterizacion->setEdad($params->edad);
