@@ -442,10 +442,10 @@ class VhloPropietarioController extends Controller
     /**
      * Elimina el vehiculo al propietario.
      *
-     * @Route("/update/vehiculo", name="vhlopropietario_update_vehiculo")
+     * @Route("/update", name="vhlopropietario_update")
      * @Method({"GET", "POST"})
      */
-    public function updateVehiculoAction(Request $request)
+    public function updateAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -459,70 +459,70 @@ class VhloPropietarioController extends Controller
             
             $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                 array(
-                    'ciudadano' => $params->idSolicitante,
-                    'vehiculo' => $params->idVehiculo,
+                    'id' => $params->idPropietario,
                     'activo' => true,
                 )
             );
 
-            if ($params->fecha) {
-                $propietario->setFechaFinal(new \DateTime($params->fecha));
-            }else{
+            if ($propietario) {
                 $propietario->setFechaFinal(new \DateTime(date('Y-m-d')));
-            }
-            $propietario->setActivo(0);
+                $propietario->setActivo(false);
 
-            $propietarioNew = new VhloPropietario();
+                $propietarioNew = new VhloPropietario();
 
-            //
-            $propietarioNew->setLicenciaTransito(
-                $propietario->getLicenciaTransito()
-            );
-            $propietarioNew->setFechaInicial($propietario->getFechaInicial());
-            $propietarioNew->setVehiculo($propietario->getVehiculo());
-            $propietarioNew->setTipoPropiedad($propietario->getVehiculo());
-            $propietarioNew->setPermiso(false);
-            $propietarioNew->setActivo(true);
+                if ($params->idEmpresa) {
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                        array(
+                            'id' => $params->idEmpresa,
+                            'activo' => true,
+                        )
+                    );
 
+                    $propietarioNew->setEmpresa($empresa);
+                }elseif ($params->idCiudadano) {
+                    $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                        array(
+                            'id' => $params->idCiudadano,
+                            'activo' => true,
+                        )
+                    );
+
+                    $propietarioNew->setCiudadano($ciudadano);
+                }
+
+                if ($params->tipoPropiedad == 1) {
+                    $propietarioNew->setLeasing(true);
+                }else{
+                    $propietarioNew->setLeasing(false);
+                }
+
+                $propietarioNew->setFechaInicial(new \DateTime(date('Y-m-d')));
+                $propietarioNew->setVehiculo($propietario->getVehiculo());
+                $propietarioNew->setPermiso($params->permiso);
+                $propietarioNew->setActivo(true);
+
+                $em->persist($propietarioNew);
+                $em->flush();
             
-            $em = $this->getDoctrine()->getManager();
-
-            $em->persist($propietarioNew);
-            $em->flush();
-
-            $licenciaTransitoOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
-                array(
-                    'propietario' => $propietario->getId(),
-                    'activo' => true,
-                )
-            );
-
-            $licenciaTransitoOld->setActivo(false);
-            $em->flush();
-
-            $licenciaTransito = new UserLicenciaTransito();
-
-            $licenciaTransito->setNumero($params->numeroLicenciaTransito);
-            $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
-            $licenciaTransito->setActivo(true);
-
-            $licenciaTransito->setPropietario($propietario);
-
-            $em->persist($licenciaTransito);
-            $em->flush();
-            
-            $response = array(
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Propietario actualizado con exito.',
                     'data' => $propietarioNew
                 );
-        }else{
-            $response = array(
+            }else{
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Autorizacion no valida.', 
+                    'message' => 'El propietario .', 
                 );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
         }
         return $helpers->json($response);
     }

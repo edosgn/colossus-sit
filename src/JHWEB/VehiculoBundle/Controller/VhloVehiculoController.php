@@ -353,7 +353,7 @@ class VhloVehiculoController extends Controller
 
                         case 'organismoTransito':
                             $organismoTransito = $em->getRepository("JHWEBConfigBundle:CfgOrganismoTransito")->find(
-                                $params->idOrganismoTransito
+                                $params->idOrganismoTransitoNew
                             );
                             $vehiculo->setOrganismoTransito($organismoTransito);
                             break;
