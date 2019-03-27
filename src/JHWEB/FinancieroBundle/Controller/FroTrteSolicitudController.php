@@ -86,7 +86,13 @@ class FroTrteSolicitudController extends Controller
                                 $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
                             }
 
-                            if ($funcionario->getOrganismoTransito()->getId() == $vehiculo->getOrganismoTransito()->getId()) {
+                            if (isset($params->datos->foraneas->idOrganismoTransitoOld)) {
+                                $organismoTransitoVehiculo = $params->datos->foraneas->idOrganismoTransitoOld;
+                            }else{
+                                $organismoTransitoVehiculo = $vehiculo->getOrganismoTransito()->getId();
+                            }
+
+                            if ($funcionario->getOrganismoTransito()->getId() == $organismoTransitoVehiculo) {
                                 if ($params->documentacion) {
                                     $tramiteFactura->setDocumentacion($params->documentacion);
 

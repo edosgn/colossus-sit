@@ -389,7 +389,57 @@ class VhloAcreedorController extends Controller
     }
 
     /**
-     * Creates a new vhloAcreedor entity.
+     * Busca un acreedor por propietario según el vehiculo
+     *
+     * @Route("/search/propietario/vehiculo", name="vhloacreedor_search_propietario_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPropietarioAndVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                array(
+                    'propietario' => $params->id,
+                    'activo' => true,
+                )
+            );
+           
+            if ($acreedor) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $acreedor
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano o empresa no es acreedor del vehiculo.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Actualiza un acreedor prendario.
      *
      * @Route("/update", name="vhloacreedor_update")
      * @Method({"GET", "POST"})
@@ -465,7 +515,7 @@ class VhloAcreedorController extends Controller
 
                     $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                         array(
-                            'id' => $params->idPropietario,
+                            'id' => $params->idPropietarioNew,
                             'activo' => true,
                         )
                     );
