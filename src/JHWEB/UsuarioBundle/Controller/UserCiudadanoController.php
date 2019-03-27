@@ -485,11 +485,11 @@ class UserCiudadanoController extends Controller
             if($params->idTipoIdentificacion == 4) {
                 $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
                     array(
-                        'nit' => $params->identificacion,
+                        'nit' => $params->nit,
                         'activo' => true,
-                    )
-                );
-            } elseif($params->idTipoIdentificacion != 4) {
+                        )
+                    );
+            } elseif($params->idTipoIdentificacion == 1) {
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                     array(
                         'identificacion' => $params->identificacion,
