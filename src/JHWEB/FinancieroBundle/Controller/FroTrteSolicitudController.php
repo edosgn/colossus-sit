@@ -3,9 +3,11 @@
 namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroTrteSolicitud;
+use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Frotrtesolicitud controller.
@@ -133,7 +135,24 @@ class FroTrteSolicitudController extends Controller
                                     $em->persist($tramiteSolicitud);
                                     $em->flush();
 
-                                    $em->flush();
+                                    if(isset($params->datos->foraneas->numeroActa)){
+                                        $vhloActaTraspaso = new VhloActaTraspaso();
+
+                                        $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
+
+                                        $vhloActaTraspaso->setNumero($params->datos->foraneas->numeroActa);
+                                        $vhloActaTraspaso->setFecha(
+                                            new \DateTime($params->datos->foraneas->fechaActa)
+                                        );
+
+                                        $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                                            $params->datos->foraneas->idEntidadJudicial
+                                        );
+                                        $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
+
+                                        $em->persist($vhloActaTraspaso);
+                                        $em->flush();
+                                    }
 
                                     $response = array(
                                         'status' => 'success',
@@ -197,7 +216,24 @@ class FroTrteSolicitudController extends Controller
                                         $em->persist($tramiteSolicitud);
                                         $em->flush();
 
-                                        $em->flush();
+                                        if(isset($params->datos->foraneas->numeroActa)){
+                                            $vhloActaTraspaso = new VhloActaTraspaso();
+    
+                                            $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
+    
+                                            $vhloActaTraspaso->setNumero($params->datos->foraneas->numeroActa);
+                                            $vhloActaTraspaso->setFecha(
+                                                new \DateTime($params->datos->foraneas->fechaActa)
+                                            );
+    
+                                            $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                                                $params->datos->foraneas->idEntidadJudicial
+                                            );
+                                            $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
+    
+                                            $em->persist($vhloActaTraspaso);
+                                            $em->flush();
+                                        }
 
                                         $response = array(
                                             'status' => 'success',

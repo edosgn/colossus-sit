@@ -515,7 +515,7 @@ class VhloPropietarioController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'El propietario .', 
+                    'message' => 'El solicitante no es propietario del vehiculo.', 
                 );
             }            
         }else{

@@ -5,7 +5,8 @@ namespace JHWEB\VehiculoBundle\Controller;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhloactatraspaso controller.
@@ -46,10 +47,10 @@ class VhloActaTraspasoController extends Controller
             if ($authCheck== true) {
                 $json = $request->get("data",null);
                 $params = json_decode($json);
+                
+                $em = $this->getDoctrine()->getManager();
             
                 $vhloActaTraspaso = new VhloActaTraspaso();
-                $em = $this->getDoctrine()->getManager();
-
 
                 $vhloActaTraspaso->setNumero($params->numero);
 
