@@ -297,8 +297,11 @@ class PnalFuncionarioController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
 
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneByIdentificacion(
-                $params->identificacion
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion,
+                    'activo' => true
+                )
             );
 
             if ($ciudadano) {
@@ -320,7 +323,7 @@ class PnalFuncionarioController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'El ciudadano no tiene registros de nombramientos vigentes.',
+                        'message' => 'No se encontró el funcionario',
                     );
                 }
             } else {
