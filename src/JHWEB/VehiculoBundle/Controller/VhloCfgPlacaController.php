@@ -58,6 +58,7 @@ class VhloCfgPlacaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
             
             $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneByNumero(
@@ -322,7 +323,7 @@ class VhloCfgPlacaController extends Controller
      * @Method({"GET", "POST"})
      */
 
-    public function selectPlacaByOrganismoTransito(Request $request)
+    public function selectByOrganismoTransito(Request $request)
     {
         $helpers = $this->get("app.helpers");
 
