@@ -468,4 +468,70 @@ class VhloVehiculoController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Displays a form to asignacionPlca an existing Vehiculo entity.
+     *
+     * @Route("/assign", name="vhlovehiculo_assign")
+     * @Method({"GET", "POST"})
+     */
+
+    public function assignAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $placa = $params->placa;
+            $sedeOperativaId = $params->sedeOperativaId;
+
+            $em = $this->getDoctrine()->getManager();
+
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
+            );
+
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->find(
+                $params->idPlaca
+            );
+
+            $vehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloVehiculo")->find(
+                $params->idVehiculo
+            );
+
+            if ($vehiculo) {
+                $vehiculo->setPlaca($placa);
+                $vehiculo->setOrganismoTransito($organismoTransito);
+
+                $placa->setEstado('ASIGNADA');
+
+                $em->persist($vehiculo);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Vehiculo editado con exito.",
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehiculo no se encuentra en la base de datos.",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar vehiculo",
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
