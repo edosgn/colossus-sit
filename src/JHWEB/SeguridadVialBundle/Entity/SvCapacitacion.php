@@ -46,13 +46,6 @@ class SvCapacitacion
     private $fechaActividad;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="semana", type="string")
-     */
-    private $semana;
-
-    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="capacitaciones")
      **/
     protected $municipio;

@@ -1027,8 +1027,8 @@ class SvRegistroIpatController extends Controller
                         $ipat -> setFechaAccidente(new \Datetime($dato[2]));
                         $ipat -> setHoraAccidente(new \Datetime($dato[3]));
                         $ipat -> setDiaAccidente($dato[4]);
-                        $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
-                        $ipat -> setGravedad($gravedadFile);
+                        $gravedadFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->findOneBy(array('nombre' => $dato[11]));
+                        $ipat -> setGravedadAccidente($gravedadFile);
                         $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
                         $ipat -> setTipoVictima($tipoVictimaFile);
                         //$ipat -> setNombresConductor($dato[7]);
