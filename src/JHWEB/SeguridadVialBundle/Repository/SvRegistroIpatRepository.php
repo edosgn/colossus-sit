@@ -22,7 +22,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
     
         if ($params->datos->idGravedad) {
-            $gravedad = $em->getRepository('AppBundle:CfgGravedad')->find($params->datos->idGravedad);
+            $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->datos->idGravedad);
         }
         if ($params->datos->idTipoVictima) {
             $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
@@ -32,22 +32,22 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             );
         }
         if ($params->datos->idMunicipio) {
-            $municipio = $em->getRepository('AppBundle:Municipio')->find($params->datos->idMunicipio);
+            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->datos->idMunicipio);
         }
         $municipioNombre = $municipio->getNombre();
 
         if ($params->datos->idGenero) {
-            $genero = $em->getRepository('AppBundle:Genero')->find($params->datos->idGenero);
+            $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->datos->idGenero);
         }
         $sexoConductor = $genero->getSigla();
 
         if ($params->datos->idClase) {
-            $clase = $em->getRepository('AppBundle:Clase')->find($params->datos->idClase);
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->datos->idClase);
         }
         $claseNombre = $clase->getNombre();
 
         if ($params->datos->idClaseAccidente) {
-            $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findBy(
+            $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->findBy(
                 array(
                     'nombre' => $params->datos->idClaseAccidente,
                 )
@@ -73,7 +73,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             WHERE ri.fechaAccidente BETWEEN :fechaInicioDatetime AND :fechaFinDatetime
             AND ri.diaAccidente = :diaAccidente
             AND ri.horaAccidente BETWEEN :horaInicioDatetime AND :horaFinDatetime
-            AND ri.gravedad = :gravedad
+            AND ri.gravedadAccidente = :gravedadAccidente
             AND ri.tipoVictima = :tipoVictima
             AND ri.ciudadResidenciaConductor = :municipioNombre
             AND ri.sexoConductor = :sexoConductor
@@ -93,7 +93,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             'diaAccidente' => $diaAccidente,
             'horaInicioDatetime' => $horaInicioDatetime,
             'horaFinDatetime' => $horaFinDatetime,
-            'gravedad' => $gravedad,
+            'gravedadAccidente' => $gravedadAccidente,
             'tipoVictima' => $tipoVictima,
             'municipioNombre' => $municipioNombre,
             'sexoConductor' => $sexoConductor,

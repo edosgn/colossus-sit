@@ -1027,8 +1027,8 @@ class SvRegistroIpatController extends Controller
                         $ipat -> setFechaAccidente(new \Datetime($dato[2]));
                         $ipat -> setHoraAccidente(new \Datetime($dato[3]));
                         $ipat -> setDiaAccidente($dato[4]);
-                        $gravedadFile = $em->getRepository('AppBundle:CfgGravedad')->findOneBy(array('nombre' => $dato[11]));
-                        $ipat -> setGravedad($gravedadFile);
+                        $gravedadFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->findOneBy(array('nombre' => $dato[11]));
+                        $ipat -> setGravedadAccidente($gravedadFile);
                         $tipoVictimaFile = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(array('nombre' => $dato[13]));
                         $ipat -> setTipoVictima($tipoVictimaFile);
                         //$ipat -> setNombresConductor($dato[7]);
@@ -1229,24 +1229,33 @@ class SvRegistroIpatController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $idMunicipio = (isset($params->idMunicipio)) ? $params->idMunicipio : null;
-            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipio);
-            $entidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
-            $unidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
-            $anio = $params->idAnio;
-            //$consecutivo = strval($params->consecutivo);
-            if(strlen(strval($params->consecutivo)) != 5){
-               $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "El consecutivo debe tener solo 5 dígitos.",
-            ); 
-            return $helpers->json($response);
+            $idEntidad = (isset($params->idEntidad)) ? $params->idEntidad : null;
+            $idUnidad = (isset($params->idUnidad)) ? $params->idUnidad : null;
+            $idAnio = (isset($params->idAnio)) ? $params->idAnio : null;
+
+            $correspondio = null;
+
+            if($idMunicipio != null && $idEntidad != null && $idUnidad  != null && $idAnio != null) {
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipio);
+                $entidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEntidadAccidente')->find($params->idEntidad);
+                $unidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgUnidadReceptora')->find($params->idUnidad);
+                //$anio = $params->idAnio;
+                //$consecutivo = strval($params->consecutivo);
+                if(strlen(strval($params->consecutivo)) != 5){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El consecutivo debe tener solo 5 dígitos.",
+                ); 
+                return $helpers->json($response);
+                }
+                $municipioDane = $municipio->getCodigoDane();
+                if(strlen($municipio->getCodigoDane()) <= 4){
+                    $municipioDane = '0' . $municipio->getCodigoDane();
+                }
+
+                $correspondio = $municipioDane . $entidad->getCodigo() . $unidad->getCodigo() . $idAnio . $params->consecutivo;
             }
-            $municipioDane = $municipio->getCodigoDane();
-            if(strlen($municipio->getCodigoDane()) <= 4){
-                $municipioDane = '0' . $municipio->getCodigoDane();
-            }
-            $correspondio = $municipioDane . $entidad->getCodigo() . $unidad->getCodigo() . $anio . $params->consecutivo;
 
             if ($correspondio) {
                 $response = array(
@@ -1259,7 +1268,7 @@ class SvRegistroIpatController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "no se pudo calcular el número de correspondió",
+                    'message' => "No se pudo calcular el número de correspondió. Por favor complete todos los datos para generar el número único de investigación",
                 );
             }
         }

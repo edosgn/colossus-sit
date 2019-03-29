@@ -133,7 +133,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             JHWEBFinancieroBundle:FroTramite t,
             JHWEBFinancieroBundle:FroTrtePrecio tp,
             JHWEBFinancieroBundle:FroTrteSolicitud ts
-            WHERE ft.tramitePrecio = tp.id
+            WHERE ft.precio = tp.id
             AND tp.tramite = t.id
             AND t.id = 13
             AND ts.tramiteFactura = ft.id

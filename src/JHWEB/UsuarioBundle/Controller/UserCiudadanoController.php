@@ -487,8 +487,8 @@ class UserCiudadanoController extends Controller
                     array(
                         'nit' => $params->identificacion,
                         'activo' => true,
-                    )
-                );
+                        )
+                    );
             } elseif($params->idTipoIdentificacion != 4) {
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                     array(

@@ -55,7 +55,7 @@ class PnalHorarioController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -66,36 +66,42 @@ class PnalHorarioController extends Controller
 
             if ($params->manana) {
                 $horarioMañana = new PnalHorario();
-                $horarioMañana->setHoraInicio(new \Datetime($params->horaInicioManana));
-                $horarioMañana->setHoraFin(new \Datetime($params->horaFinManana));
+                $horarioMañana->setHoraInicial(new \Datetime($params->horaInicioManana));
+                $horarioMañana->setHoraFinal(new \Datetime($params->horaFinManana));
                 $horarioMañana->setFecha(new \Datetime($params->fecha));
                 $horarioMañana->setJornada('Mañana');
                 $horarioMañana->setFuncionario($funcionario);
                 $horarioMañana->setLugar($params->lugarManana);
+                $horarioMañana->setActivo(true);
+
                 $em->persist($horarioMañana);
                 $em->flush();
             }
 
             if ($params->tarde) {
                 $horarioTarde = new PnalHorario();
-                $horarioTarde->setHoraInicio(new \Datetime($params->horaInicioTarde));
-                $horarioTarde->setHoraFin(new \Datetime($params->horaFinTarde));
+                $horarioTarde->setHoraInicial(new \Datetime($params->horaInicioTarde));
+                $horarioTarde->setHoraFinal(new \Datetime($params->horaFinTarde));
                 $horarioTarde->setFecha(new \Datetime($params->fecha));
                 $horarioTarde->setJornada('Tarde');
                 $horarioTarde->setFuncionario($funcionario);
                 $horarioTarde->setLugar($params->lugarTarde);
+                $horarioTarde->setActivo(true);
+
                 $em->persist($horarioTarde);
                 $em->flush();
             }
 
             if ($params->noche) {
                 $horarioNoche = new PnalHorario();
-                $horarioNoche->setHoraInicio(new \Datetime($params->horaInicioNoche));
-                $horarioNoche->setHoraFin(new \Datetime($params->horaFinNoche));
+                $horarioNoche->setHoraInicial(new \Datetime($params->horaInicioNoche));
+                $horarioNoche->setHoraFinal(new \Datetime($params->horaFinNoche));
                 $horarioNoche->setFecha(new \Datetime($params->fecha));
                 $horarioNoche->setJornada('Noche');
                 $horarioNoche->setFuncionario($funcionario);
                 $horarioNoche->setLugar($params->lugarNoche);
+                $horarioNoche->setActivo(true);
+
                 $em->persist($horarioNoche);
                 $em->flush();
             }

@@ -63,31 +63,35 @@ class PnalProrogaController extends Controller
         if($authCheck == true){
             $json = $request->get("data",null);
             $params = json_decode($json);
-
             $em = $this->getDoctrine()->getManager();
 
-            $pnalProroga = new Pnalproroga();
-
-            // $ciudadano = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
-            //     $usuario->getId()
-            // );
-
-            $fechaInicio = new \DateTime($params->fechaInicio);
-            $fechaFin = new \DateTime($params->fechaFin);
-            $mPersonalFuncionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find($params->mPersonalFuncionarioId);
-
-            $mPersonalFuncionario->setFechaFin($fechaFin);
-            $mPersonalFuncionario->setModificatorio(true);
-            $mPersonalFuncionario->setActivo(true);
-            $em->persist($mPersonalFuncionario);
-
-            $pnalProroga->setFechaInicio($fechaInicio);
-            $pnalProroga->setFechaFin($fechaFin);
-            $pnalProroga->setNumeroModificatorio($params->numeroModificatorio);
-            $pnalProroga->setMPersonalFuncionario($mPersonalFuncionario);
-            
-            $em->persist($pnalProroga);
-            $em->flush();
+            $fechaActual =  new \DateTime();
+            $fechaInicial = new \DateTime($params->fechaInicio);
+            $fechaFinal = new \DateTime($params->fechaFin);
+            if($fechaInicial>$fechaActual){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha inicial debe ser menor o igual a la fecha actual",
+                );
+                return $helpers->json($response);
+            } else {
+                $pnalProroga = new PnalProroga();
+                $pnalFuncionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find($params->idFuncionario);
+    
+                $pnalFuncionario->setFechaFinal($fechaFinal);
+                $pnalFuncionario->setModificatorio(true);
+                $pnalFuncionario->setActivo(true);
+                $em->persist($pnalFuncionario);
+    
+                $pnalProroga->setFechaInicial($fechaInicial);
+                $pnalProroga->setFechaFinal($fechaFinal);
+                $pnalProroga->setNumeroModificatorio($params->numeroModificatorio);
+                $pnalProroga->setFuncionario($pnalFuncionario);
+                
+                $em->persist($pnalProroga);
+                $em->flush();
+            }
 
             $response = array(
                 'status' => 'success',

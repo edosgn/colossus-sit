@@ -24,21 +24,21 @@ class SvCfgEntidadAccidente
     /**
      * @var int
      *
-     * @ORM\Column(name="codigo", type="integer", nullable= true)
+     * @ORM\Column(name="codigo", type="integer")
      */
     private $codigo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nombre", type="string", nullable= true)
+     * @ORM\Column(name="nombre", type="string")
      */
     private $nombre;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="activo", type="boolean", nullable=true)
+     * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
 

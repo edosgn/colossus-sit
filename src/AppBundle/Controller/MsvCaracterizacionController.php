@@ -27,7 +27,7 @@ class MsvCaracterizacionController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $caracterizaciones = $em->getRepository('AppBundle:MsvCaracterizacion')->findBy(
-            array('estado' => true)
+            array('activo' => true)
         );
 
         $response['data'] = array();
@@ -103,25 +103,15 @@ class MsvCaracterizacionController extends Controller
             $caracterizacion->setTiempoTrayecto($params->tiempoTrayecto);
             $caracterizacion->setKmMensualesRecorridos($params->kmMensualTrayecto);
 
-            $caracterizacion->setEstadoInfraestructuraFactorRiesgo($params->estadoInfraestructura);
-            $caracterizacion->setOrganizacionTrabajoFactorRiesgo($params->organizacionTrabajo);
-            $caracterizacion->setPropiaConduccionFactorRiesgo($params->propiaConduccion);
-            $caracterizacion->setOtroFactorRiesgo($params->otro2);
+            $caracterizacion->setPrincipalFactorRiesgo(implode(",", $params->arrayFactoresRiesgo));
+            $caracterizacion->setOtroFactorRiesgo($params->otroFactorRiesgo);
             
-            $caracterizacion->setIntensidadTraficoCausaRiesgo($params->intensidadTrafico);
-            $caracterizacion->setCondicionClimatologicaCausaRiesgo($params->condicionClimatologica);
-            $caracterizacion->setTipoVehiculoCausaRiesgo($params->tipoVehiculo);
-            $caracterizacion->setOrganizacionTrabajoCausaRiesgo($params->organizacionTrabajo2);
-            $caracterizacion->setPropiaConduccionCausaRiesgo($params->propiaConduccion2);
-            $caracterizacion->setEstadoCausaRiesgo($params->estado);
-            $caracterizacion->setOtroConductorCausaRiesgo($params->otroConductor);
-            $caracterizacion->setEstadoInfraestructuraCausaRiesgo($params->estadoInfraestructura2);
-            $caracterizacion->setFaltaInformacionCausaRiesgo($params->faltaInformacion);
-            $caracterizacion->setOtraCausaRiesgo($params->otraCausa);
+            $caracterizacion->setCausaRiesgo(implode(",", $params->arrayCausasRiesgo));
+            $caracterizacion->setOtraCausaRiesgo($params->otraCausaRiesgo);
 
             $caracterizacion->setRiesgo($params->riesgoPercibido);
             $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccion);
-            $caracterizacion->setEstado(true);
+            $caracterizacion->setActivo(true);
             $em->persist($caracterizacion);
             $em->flush();
             $response = array(
@@ -194,7 +184,6 @@ class MsvCaracterizacionController extends Controller
                 $caracterizacion->setNombres($params->nombres);
                 $caracterizacion->setApellidos($params->apellidos);
                 $caracterizacion->setCedula($params->cedula);
-                $caracterizacion->setLugarExpedicion($params->lugarExpedicion);
                 $caracterizacion->setClc($params->clc);
                 $caracterizacion->setFechaVigencia($params->fechaVigencia);
                 $caracterizacion->setEdad($params->edad);
@@ -217,7 +206,7 @@ class MsvCaracterizacionController extends Controller
                 $caracterizacion->setCausaRiesgo($params->causaRiesgo);
                 $caracterizacion->setRiesgo($params->riesgo);
                 $caracterizacion->setPropuestaReduccionRiesgo($params->propuestaReduccionRiesgo);
-                $caracterizacion->setEstado(true);
+                $caracterizacion->setActivo(true);
  
                 $em->persist($caracterizacion);
                 $em->flush();
@@ -262,7 +251,7 @@ class MsvCaracterizacionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $caracterizacion = $em->getRepository('AppBundle:MsvCaracterizacion')->find($params);
             
-            $caracterizacion->setEstado(0);
+            $caracterizacion->setActivo(false);
             $em->persist($caracterizacion);
             $em->flush();
             $response = array(

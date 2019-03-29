@@ -261,7 +261,7 @@ class VhloVehiculoController extends Controller
     /* ============================================== */
 
     /**
-     * Lists all userCfgMenu entities.
+     * Lista de vehiculos segun los filtros .
      *
      * @Route("/search/filter", name="vhlovehiculo_search_filter")
      * @Method({"GET", "POST"})
@@ -286,6 +286,51 @@ class VhloVehiculoController extends Controller
                     'code' => 200,
                     'message' => 'Registro encontrado.', 
                     'data'=> $vehiculo
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lista de vehiculos segun uno o varios parametros.
+     *
+     * @Route("/search/parameters", name="vhlovehiculo_search_parameters")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByParametersAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByParameters($params);
+
+            if ($vehiculos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($vehiculos).' registros encontrados.', 
+                    'data'=> $vehiculos
                 );
             }else{
                 $response = array(
@@ -353,7 +398,7 @@ class VhloVehiculoController extends Controller
 
                         case 'organismoTransito':
                             $organismoTransito = $em->getRepository("JHWEBConfigBundle:CfgOrganismoTransito")->find(
-                                $params->idOrganismoTransito
+                                $params->idOrganismoTransitoNew
                             );
                             $vehiculo->setOrganismoTransito($organismoTransito);
                             break;
@@ -410,6 +455,10 @@ class VhloVehiculoController extends Controller
                             $vehiculo->setCancelado(true);
                             break;
 
+                        case 'rematricula':
+                            $vehiculo->setCancelado(false);
+                            break;
+
                         case 'regrabarchasis':
                             $vehiculo->setChasis($params->nuevoNumero);
                             break;
@@ -459,6 +508,72 @@ class VhloVehiculoController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida para editar vehiculo.',
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to asignacionPlca an existing Vehiculo entity.
+     *
+     * @Route("/assign", name="vhlovehiculo_assign")
+     * @Method({"GET", "POST"})
+     */
+
+    public function assignAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $placa = $params->placa;
+            $sedeOperativaId = $params->sedeOperativaId;
+
+            $em = $this->getDoctrine()->getManager();
+
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
+            );
+
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->find(
+                $params->idPlaca
+            );
+
+            $vehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloVehiculo")->find(
+                $params->idVehiculo
+            );
+
+            if ($vehiculo) {
+                $vehiculo->setPlaca($placa);
+                $vehiculo->setOrganismoTransito($organismoTransito);
+
+                $placa->setEstado('ASIGNADA');
+
+                $em->persist($vehiculo);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Vehiculo editado con exito.",
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El vehiculo no se encuentra en la base de datos.",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar vehiculo",
             );
         }
 
