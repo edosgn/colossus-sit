@@ -261,7 +261,7 @@ class VhloVehiculoController extends Controller
     /* ============================================== */
 
     /**
-     * Lists all userCfgMenu entities.
+     * Lista de vehiculos segun los filtros .
      *
      * @Route("/search/filter", name="vhlovehiculo_search_filter")
      * @Method({"GET", "POST"})
@@ -286,6 +286,51 @@ class VhloVehiculoController extends Controller
                     'code' => 200,
                     'message' => 'Registro encontrado.', 
                     'data'=> $vehiculo
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lista de vehiculos segun uno o varios parametros.
+     *
+     * @Route("/search/parameters", name="vhlovehiculo_search_parameters")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByParametersAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByParameters($params);
+
+            if ($vehiculos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($vehiculos).' registros encontrados.', 
+                    'data'=> $vehiculos
                 );
             }else{
                 $response = array(

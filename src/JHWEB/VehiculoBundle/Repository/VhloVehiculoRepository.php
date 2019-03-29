@@ -30,8 +30,8 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    //Obtiene el vehículo según uno o varios parametros al tiempo
-    public function getOneByParametros($parametros)
+    //Obtiene los vehículos según uno o varios parametros al tiempo
+    public function getByParameters($parametros)
     {
         $condicion = null; 
         $em = $this->getEntityManager();
