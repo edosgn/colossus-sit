@@ -20,7 +20,7 @@ class ImoInsumoController extends Controller
      * @Route("/", name="imoinsumo_index")
      * @Method("POST")
      */
-    public function indexAction(Requesto $request)
+    public function indexAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
