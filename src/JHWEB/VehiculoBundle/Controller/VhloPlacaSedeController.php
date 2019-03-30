@@ -76,81 +76,87 @@ class VhloPlacaSedeController extends Controller
             
             $asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->findAll();
 
-            foreach ($asignaciones as $key => $asignacion) {
-                if ($params->numeroFinal < $asignacion->getNumeroInicial() && $asignacion->getLetrasPlaca() == $letrasPlaca && $asignacion->getNumeroInicial() <= $params->numeroInicial && $asignacion->getNumeroFinal() >= $params->numeroInicial) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El rango de placas ya se encuentra registrado",
-                    );
+            $validaAsignacion = true;
 
-                    return $helpers->json($response);
+            foreach ($asignaciones as $key => $asignacion) {
+                if ($asignacion->getLetrasPlaca() == $letrasPlaca && ((intval($params->numeroInicial) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroInicial) <= intval($asignacion->getNumeroFinal())) || (intval($params->numeroFinal) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroFinal) <= intval($asignacion->getNumeroFinal())))) {
+                    $validaAsignacion = false;
                 }
             }
 
-            $automotor = $this->validateTipoVehiculo(
-                $params->numeroInicial,
-                $params->numeroFinal,
-                $letrasPlaca,
-                $tipoVehiculo->getNombre()
-            );
-
-            $contadorPlacas = 0;
-
-            if ($automotor) {
-                for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
-                    $em = $this->getDoctrine()->getManager();
-
-                    //Genera el nuevo numero de placa según el tipo de vehiculo
-                    $numero = $this->generateNumberPlaca(
-                        $letrasPlaca, 
-                        $params->letraFinal, 
-                        $tipoVehiculo->getNombre(),
-                        $contadorPlacas,
-                        $i
-                    );
-
-                    if ($numero['status'] == 'success') {
-                        $numero = $numero['data'];
-                    }elseif ($numero['status'] == 'error') {
-                        return $numero;
-                    }
-
-                    //Inserta la nueva placa
-                    $this->newPlacaAction(
-                        $numero, 
-                        $tipoVehiculo, 
-                        $organismoTransito
-                    );
-
-                    $contadorPlacas += 1;
-
-                }
-
-                $asignacion = new VhloPlacaSede();
-
-                $asignacion->setOrganismoTransito($organismoTransito);
-                $asignacion->setTipoVehiculo($tipoVehiculo);
-                $asignacion->setLetrasPlaca($letrasPlaca);
-                $asignacion->setNumeroInicial($params->numeroInicial);
-                $asignacion->setNumeroFinal($params->numeroFinal);
-                $asignacion->setActivo(true);
-
-                $em->persist($asignacion);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Asignación realizada, ".$contadorPlacas." placas creadas con éxito.",
-                );
-
-            }else {
+            if(!$validaAsignacion){
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se pudieron asignar las placas. Error en el formato de placas",
+                    'message' => "El rango de placas ya se encuentra registrado",
                 );
+                
+                return $helpers->json($response);
+            }else{
+                $validate = $this->validateTipoVehiculo(
+                    $params->numeroInicial,
+                    $params->numeroFinal,
+                    $letrasPlaca,
+                    $tipoVehiculo->getNombre()
+                );
+    
+                $contadorPlacas = 0;
+    
+                if ($validate) {
+                    for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
+                        $em = $this->getDoctrine()->getManager();
+    
+                        //Genera el nuevo numero de placa según el tipo de vehiculo
+                        $numero = $this->generateNumberPlaca(
+                            $letrasPlaca, 
+                            $params->letraFinal, 
+                            $tipoVehiculo->getNombre(),
+                            $contadorPlacas,
+                            $i
+                        );
+    
+                        if ($numero['status'] == 'success') {
+                            $numero = $numero['data'];
+                        }elseif ($numero['status'] == 'error') {
+                            return $numero;
+                        }
+    
+                        //Inserta la nueva placa
+                        $this->newPlacaAction(
+                            $numero, 
+                            $tipoVehiculo, 
+                            $organismoTransito
+                        );
+    
+                        $contadorPlacas += 1;
+    
+                    }
+    
+                    $asignacion = new VhloPlacaSede();
+    
+                    $asignacion->setOrganismoTransito($organismoTransito);
+                    $asignacion->setTipoVehiculo($tipoVehiculo);
+                    $asignacion->setLetrasPlaca($letrasPlaca);
+                    $asignacion->setNumeroInicial($params->numeroInicial);
+                    $asignacion->setNumeroFinal($params->numeroFinal);
+                    $asignacion->setActivo(true);
+    
+                    $em->persist($asignacion);
+                    $em->flush();
+    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Asignación realizada, ".$contadorPlacas." placas creadas con éxito.",
+                    );
+    
+                }else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No se pudieron asignar las placas. Error en el formato de placas",
+                    );
+                }
             }
         }else {
             $response = array(

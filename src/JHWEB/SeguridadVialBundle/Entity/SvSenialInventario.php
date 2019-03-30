@@ -42,7 +42,7 @@ class SvSenialInventario
      */
     private $tipoDestino;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inventarios") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="inventarios") */
     private $municipio;
 
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialTipo", inversedBy="inventarios") */
@@ -131,53 +131,5 @@ class SvSenialInventario
     public function getTipoDestino()
     {
         return $this->tipoDestino;
-    }
-
-    /**
-     * Set municipio
-     *
-     * @param \AppBundle\Entity\Municipio $municipio
-     *
-     * @return SvSenialInventario
-     */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
-    {
-        $this->municipio = $municipio;
-
-        return $this;
-    }
-
-    /**
-     * Get municipio
-     *
-     * @return \AppBundle\Entity\Municipio
-     */
-    public function getMunicipio()
-    {
-        return $this->municipio;
-    }
-
-    /**
-     * Set tipoSenial
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo $tipoSenial
-     *
-     * @return SvSenialInventario
-     */
-    public function setTipoSenial(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo $tipoSenial = null)
-    {
-        $this->tipoSenial = $tipoSenial;
-
-        return $this;
-    }
-
-    /**
-     * Get tipoSenial
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo
-     */
-    public function getTipoSenial()
-    {
-        return $this->tipoSenial;
     }
 }
