@@ -34,32 +34,33 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td> a). Gestion institucional: {{ evaluacion.valorObtenidoFortalecimiento }}</td>
+                        <td><b> a). Gestion institucional:</b> El resultado de este pilar es de {{ evaluacion.valorObtenidoFortalecimiento }}%, se invita a seguir las recomendaciones plasmadas en la tabla 1 para llegar al 100%.</td>
                     </tr>
                     <tr>
-                        <td> b). Comportamiento Humano: {{ evaluacion.valorObtenidoComportamiento }}</td>
+                        <td><b> b). Comportamiento Humano:</b> El resultado de este pilar es de {{ evaluacion.valorObtenidoComportamiento }}%, se invita a seguir las recomendaciones plasmadas en la tabla 2 para llegar al 100%.</td>
                     </tr>
                     <tr>
-                        <td> c). Vehículos Seguros: {{ evaluacion.valorObtenidoVehiculoSeguro }}</td>
+                        <td><b> c). Vehículos Seguros:</b> El resultado de este pilar es de {{ evaluacion.valorObtenidoVehiculoSeguro }}%, se invita a seguir las recomendaciones plasmadas en la tabla 3 para llegar al 100%.</td>
                     </tr>
                     <tr>
-                        <td> d). Infraestructura Segura: {{ evaluacion.valorObtenidoInfraestructuraSegura }}</td>
+                        <td><b> d). Infraestructura Segura:</b> El resultado de este pilar es de {{ evaluacion.valorObtenidoInfraestructuraSegura }}%, se invita a seguir las recomendaciones plasmadas en la tabla 4 para llegar al 100%.</td>
                     </tr>
                     <tr>
-                        <td> e). Atención a víctimas: {{ evaluacion.valorObtenidoAtencionVictima }}</td>
+                        <td><b> e). Atención a víctimas:</b> El resultado de este pilar es de {{ evaluacion.valorObtenidoAtencionVictima }}%, se invita a seguir las recomendaciones plasmadas en la tabla 5 para llegar al 100%.</td>
                     </tr>
                     <tr>
-                        <td> f). Valor Agregado: {{ evaluacion.valorObtenidoValorAgregado }}</td>
+                        <td><b> f). Valor Agregado:</b> El resultado de este pilar es de {{ evaluacion.valorObtenidoValorAgregado }}%, se invita a seguir las recomendaciones plasmadas en la tabla 6 para llegar al 100%.</td>
                     </tr>
                     <tr>
-                        <td> Sugerencias: <br></td>
+                        <td><b> Sugerencias:</b> Es necesario plasmar las acciones desarrolladas dentro de la empresa en el documento presentado de igual manera anexar al PESV los medios magnéticos que se estableazcan necesarios.</td>
                     </tr>
                     <tr>
-                        <td> Recomendaciones: <br></td>
+                        <td><b> Recomendaciones:</b> Solicitar a la ARL un acompañamiento directo para el desarrollo de algunos pilares del PESV.</td>
                     </tr>
                 </tbody>
             </table>       
             <p>Fecha límite en que debe retornar documento de PESV: <b>{{ evaluacion.revision.fechaDevolucion }}</b></p>
+            <span pagebreak = "true"></span>
             <p style="text-align:center;"><b>NOTIFICACIÓN A LA EMPRESA</b></p>
             <b>  Autoridad de tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
             <b>Funcionario que adelanta el proceso: </b>{{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.segundoNombre }} {{ funcionario.ciudadano.primerApellido }} {{ funcionario.ciudadano.segundoApellido }}<br>
@@ -71,7 +72,7 @@
             <b>Dirección Correspondencia: </b> {{ evaluacion.empresa.direccion }}<br>
             <b>Teléfono: </b> {{ evaluacion.empresa.telefono }}<br>                  
             <b>Email: </b> {{ evaluacion.revision.correo }}<br>
-            <b>Persona de contacto de la empresa:</b> {{ evaluacion.revision.personaContacto }}<br>
+            <b>Persona de contacto de la empresa:</b> {{ evaluacion.revision.personaContacto }}<br><br><br><br><br><br>
             <p>En constancia firman: </p><br>
             <p>__________________________________________</p>
             <p>Autoridad de tránsito</p><br>

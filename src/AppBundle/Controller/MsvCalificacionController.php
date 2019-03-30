@@ -63,6 +63,7 @@ class MsvCalificacionController extends Controller
                     $msvCalificacion->setObservacion($criterio->observacion);
                     if ($criterio->responde == true) {
                         $msvCalificacion->setValorObtenido($parametro->valor / $parametro->numeroVariables);
+                        //$msvCalificacion->setValorObtenido(number_format($parametro->valor / $parametro->numeroVariables), 2, '.');
                     } else {
                         $msvCalificacion->setValorObtenido(0);
                     }
