@@ -249,8 +249,7 @@ class SvCapacitacionController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            /* var_dump($params);
-            die(); */
+            
             if ($params->idTipoIdentificacion == 1) {
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
                 $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
@@ -316,9 +315,6 @@ class SvCapacitacionController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            
-            var_dump($json);
-            die();
 
             if ($params->file == null) {
                 $response = array(
@@ -331,65 +327,64 @@ class SvCapacitacionController extends Controller
 
                     $capacitacion = new SvCapacitacion();
 
-                    $capacitacion->setFechaHoraRegistro(new \Datetime($params->fechaHoraRegistro));
+                    $capacitacion->setFechaHoraRegistro(new \Datetime($params->capacitacion->fechaHoraRegistro));
 
-                    $identificacion = (isset($params->identificacion)) ? $params->identificacion : null;
-                    $nit = (isset($params->nit)) ? $params->nit : null;
+                    $identificacion = (isset($params->capacitacion->identificacion)) ? $params->capacitacion->identificacion : null;
+                    $nit = (isset($params->capacitacion->nit)) ? $params->capacitacion->nit : null;
 
-                    if ($params->identificacion) {
-                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
+                    $ciudadano = null;
+                    $empresa = null;
+                    
+                    if ($params->capacitacion->identificacion) {
+                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->capacitacion->identificacion));
                         $capacitacion->setCiudadano($ciudadano);
                     }
-                    if ($params->nit) {
-                        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->nit));
+
+                    if ($params->capacitacion->nit) {
+                        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(array('nit' => $params->capacitacion->nit));
                         $capacitacion->setEmpresa($empresa);
                     }
                     
-                    $capacitacion->setFechaActividad(new \Datetime($params->fechaActividad));
+                    $capacitacion->setFechaActividad(new \Datetime($params->capacitacion->fechaActividad));
                     
                     if ($params->capacitacion->municipio) {
                         $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->capacitacion->municipio);
                         $capacitacion->setMunicipio($municipio);
                     }
 
-                    if ($params->funcion) {
-                        $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->funcion);
+                    if ($params->capacitacion->funcion) {
+                        $funcion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncion')->find($params->capacitacion->funcion);
                         $capacitacion->setFuncion($funcion);
                     }
 
-                    if ($params->funcionCriterio) {
-                        $funcionCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->find($params->funcionCriterio);
+                    if ($params->capacitacion->funcionCriterio) {
+                        $funcionCriterio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgFuncionCriterio')->find($params->capacitacion->funcionCriterio);
                         $capacitacion->setFuncionCriterio($funcionCriterio);
                     }
 
-                    if ($params->temaCapacitacion) {
-                        $temaCapacitacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->find($params->temaCapacitacion);
+                    if ($params->capacitacion->temaCapacitacion) {
+                        $temaCapacitacion = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTemaCapacitacion')->find($params->capacitacion->temaCapacitacion);
                         $capacitacion->setTemaCapacitacion($temaCapacitacion);
                     }
 
-                    $capacitacion->setDescripcionActividad($params->descripcionActividad);
+                    $capacitacion->setDescripcionActividad($params->capacitacion->descripcionActividad);
 
                     //DATOS PERSONAS CAPACITADAS
                     $capacitacion->setNumeroCedulaActorVial($dato[0]);
                     $capacitacion->setNombreActorVial($dato[1]);
                     $capacitacion->setApellidoActorVial($dato[2]);
 
-                    if ($params->genero) {
-                        $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->findOneBy(
-                            array (
-                                'sigla' => $dato[3]
-                            ));
-                        $capacitacion->setGenero($genero);
-                    }
+                    $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->findOneBy(
+                         array (
+                            'sigla' => $dato[3]
+                        ));
+                    $capacitacion->setGenero($genero);
 
-                    if ($params->claseActorVial) {
-                        $claseActorVial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->findOneBy(
-                            array(
-                                'nombre' => $dato[4]
-                            ));
-                        $capacitacion->setClaseActorVial($claseActorVial);
-                    }
-
+                    $claseActorVial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->findOneBy(
+                        array(
+                            'nombre' => $dato[4]
+                        ));
+                    $capacitacion->setClaseActorVial($claseActorVial);
 
                     $capacitacion->setActivo(true);
 
@@ -398,10 +393,31 @@ class SvCapacitacionController extends Controller
 
                 }
 
+                if ($ciudadano) {
+                    $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+                        array(
+                        'ciudadano' => $ciudadano,
+                        'activo' => true,
+                        )
+                    );
+                }
+
+                if ($empresa) {
+                    $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+                        array(
+                        'empresa' => $empresa,
+                        'activo' => true,
+                        )
+                    );
+                }
+
+                $response['data'] = array();
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Los datos se cargaron satisfactoriamente.",
+                    'data' => $capacitaciones
                 );
             }
         } else {
