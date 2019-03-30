@@ -34,10 +34,15 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
     public function getByParameters($parametros)
     {
         $condicion = null; 
+
         $em = $this->getEntityManager();
 
         $dql = "SELECT v
-            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p, AppBundle:PropietarioVehiculo pv, JHWEBUsuarioBundle:UserCiudadano c, UsuarioBundle:Usuario u
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, 
+            JHWEBVehiculoBundle:VhloCfgPlaca p, 
+            JHWEBVehiculoBundle:VhloPropietario vp, 
+            JHWEBUsuarioBundle:UserCiudadano c, 
+            UsuarioBundle:Usuario u
             WHERE v.placa = p.id";
 
         if ($parametros->numeroPlaca) {
@@ -61,7 +66,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
 
         }
         if ($parametros->propietario) {
-            $condicion .= " AND pv.vehiculo = v.id AND pv.ciudadano = c.id AND c.usuario = u.id AND u.identificacion ='" . $parametros->propietario . "'";
+            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND u.identificacion ='" . $parametros->propietario . "'";
 
         }
         if ($condicion) {

@@ -5,7 +5,8 @@ namespace JHWEB\VehiculoBundle\Controller;
 use JHWEB\VehiculoBundle\Entity\VhloCfgTipoVehiculo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlocfgtipovehiculo controller.
@@ -17,7 +18,7 @@ class VhloCfgTipoVehiculoController extends Controller
     /**
      * Lists all vhloCfgTipoVehiculo entities.
      *
-     * @Route("/", name="vhlocfgtipovehiculo_index")
+     * @Route("/index", name="vhlocfgtipovehiculo_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -197,7 +198,7 @@ class VhloCfgTipoVehiculoController extends Controller
     /**
      * Listado de tipos de formato para seleccion con busqueda
      *
-     * @Route("/select/modulo", name="vhlocfgtipovehiculo_select")
+     * @Route("/select/modulo", name="vhlocfgtipovehiculo_select_modulo")
      * @Method({"GET", "POST"})
      */
     public function selectByModuloAction(Request $request)

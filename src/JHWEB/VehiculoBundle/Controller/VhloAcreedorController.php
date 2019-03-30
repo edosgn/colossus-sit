@@ -416,12 +416,12 @@ class VhloAcreedorController extends Controller
     }
 
     /**
-     * Busca un acreedor por propietario según el vehiculo
+     * Busca un acreedor por propietario
      *
-     * @Route("/search/propietario/vehiculo", name="vhloacreedor_search_propietario_vehiculo")
+     * @Route("/search/propietario", name="vhloacreedor_search_propietario")
      * @Method({"GET", "POST"})
      */
-    public function searchByPropietarioAndVehiculoAction(Request $request)
+    public function searchByPropietarioAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
