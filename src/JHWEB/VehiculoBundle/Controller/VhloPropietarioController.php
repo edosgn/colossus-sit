@@ -402,7 +402,7 @@ class VhloPropietarioController extends Controller
                     array(
                         'ciudadano' => $params->id,
                         'vehiculo' => $params->idVehiculo,
-                        'activo' => true,
+                        //'activo' => true,
                     )
                 );
             }elseif ($params->tipo == 'EMPRESA') {
@@ -410,7 +410,7 @@ class VhloPropietarioController extends Controller
                     array(
                         'empresa' => $params->id,
                         'vehiculo' => $params->idVehiculo,
-                        'activo' => true,
+                        //'activo' => true,
                     )
                 );
             }
