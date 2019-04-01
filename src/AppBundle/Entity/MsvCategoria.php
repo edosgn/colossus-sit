@@ -31,9 +31,16 @@ class MsvCategoria
     /**
      * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado;
+    private $activo;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="habilitado", type="boolean")
+     */
+    private $habilitado;
 
 
     /**
@@ -71,27 +78,50 @@ class MsvCategoria
     }
 
     /**
-     * Set estado
+     * Set activo
      *
-     * @param boolean $estado
+     * @param boolean $activo
      *
      * @return MsvCategoria
      */
-    public function setEstado($estado)
+    public function setActivo($activo)
     {
-        $this->estado = $estado;
+        $this->activo = $activo;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get activo
      *
-     * @return bool
+     * @return boolean
      */
-    public function getEstado()
+    public function getActivo()
     {
-        return $this->estado;
+        return $this->activo;
+    }
+
+    /**
+     * Set habilitado
+     *
+     * @param boolean $habilitado
+     *
+     * @return MsvCategoria
+     */
+    public function setHabilitado($habilitado)
+    {
+        $this->habilitado = $habilitado;
+
+        return $this;
+    }
+
+    /**
+     * Get habilitado
+     *
+     * @return boolean
+     */
+    public function getHabilitado()
+    {
+        return $this->habilitado;
     }
 }
-
