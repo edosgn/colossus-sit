@@ -32,7 +32,7 @@ class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
 	        $dql = "SELECT si
             FROM JHWEBSeguridadVialBundle:SvSenialInventario si,
             JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
-            AppBundle:Municipio m
+            JHWEBConfigBundle:CfgMunicipio m
             WHERE si.tipoDestino = :tipoDestino
             AND si.municipio = m.id
             AND si.municipio = :idMunicipio
@@ -82,7 +82,7 @@ class SvSenialInventarioRepository extends \Doctrine\ORM\EntityRepository
             FROM JHWEBSeguridadVialBundle:SvSenialUbicacion su,
             JHWEBSeguridadVialBundle:SvCfgSenialTipo st,
             JHWEBSeguridadVialBundle:SvCfgSenial s,
-            AppBundle:Municipio m
+            JHWEBConfigBundle:CfgMunicipio m
             WHERE su.municipio = m.id
             AND su.municipio = :idMunicipio
             AND s.tipoSenial = st.id
