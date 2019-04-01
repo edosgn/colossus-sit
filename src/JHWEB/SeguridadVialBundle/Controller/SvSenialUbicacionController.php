@@ -149,7 +149,6 @@ class SvSenialUbicacionController extends Controller
                     $em->persist($ubicacion);
                     $em->flush();
 
-                    
                     $proveedor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSenialProveedor')->find(
                         $params->idProveedor);
                     $ubicacion->setProveedor($proveedor);
