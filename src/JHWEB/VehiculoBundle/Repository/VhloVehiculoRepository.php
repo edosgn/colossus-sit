@@ -27,7 +27,7 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             'campo' => $campo,
         ));
         
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
 
     //Obtiene los vehículos según uno o varios parametros al tiempo
