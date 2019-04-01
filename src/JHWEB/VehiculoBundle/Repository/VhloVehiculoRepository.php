@@ -27,11 +27,11 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             'campo' => $campo,
         ));
         
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
 
     //Obtiene los vehículos según uno o varios parametros al tiempo
-    public function getByParameters($parametros)
+    public function getByParameters($params)
     {
         $condicion = null; 
 
@@ -45,28 +45,28 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
             UsuarioBundle:Usuario u
             WHERE v.placa = p.id";
 
-        if ($parametros->numeroPlaca) {
-            $condicion .= " AND p.numero = '" . $parametros->numeroPlaca . "'";
+        if ($params->numeroPlaca) {
+            $condicion .= " AND p.numero = '" . $params->numeroPlaca . "'";
 
         }
-        if ($parametros->numeroVIN) {
-            $condicion .= " AND v.vin ='" . $parametros->numeroVIN . "'";
+        if ($params->numeroVIN) {
+            $condicion .= " AND v.vin ='" . $params->numeroVIN . "'";
 
         }
-        if ($parametros->numeroSerie) {
-            $condicion .= " AND v.serie ='" . $parametros->numeroSerie . "'";
+        if ($params->numeroSerie) {
+            $condicion .= " AND v.serie ='" . $params->numeroSerie . "'";
 
         }
-        if ($parametros->numeroMotor) {
-            $condicion .= " AND v.motor ='" . $parametros->numeroMotor . "'";
+        if ($params->numeroMotor) {
+            $condicion .= " AND v.motor ='" . $params->numeroMotor . "'";
 
         }
-        if ($parametros->numeroChasis) {
-            $condicion .= " AND v.chasis ='" . $parametros->numeroChasis . "'";
+        if ($params->numeroChasis) {
+            $condicion .= " AND v.chasis ='" . $params->numeroChasis . "'";
 
         }
-        if ($parametros->propietario) {
-            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND u.identificacion ='" . $parametros->propietario . "'";
+        if ($params->propietario) {
+            $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'";
 
         }
         if ($condicion) {

@@ -340,7 +340,7 @@ class VhloCfgPlacaController extends Controller
 
         foreach ($placas as $key => $placa) {
             $response[$key] = array(
-                'value' => $placa->getNumero(),
+                'value' => $placa->getId(),
                 'label' => $placa->getNumero(),
             );
         }

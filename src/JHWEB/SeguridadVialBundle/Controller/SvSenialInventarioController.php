@@ -66,7 +66,7 @@ class SvSenialInventarioController extends Controller
                 $inventario->setTipoDestino($params->tipoDestino);
 
                 if ($params->idMunicipio) {
-                    $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                    $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                         $params->idMunicipio
                     );
                     $inventario->setMunicipio($municipio);

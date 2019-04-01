@@ -31,9 +31,10 @@ class ImoLote
     /**
      * @var string
      *
-     * @ORM\Column(name="numeroActa", type="string", length=255)
+     * @ORM\Column(name="numero_acta", type="string", length=255, nullable=true)
      */
     private $numeroActa; 
+
 
     /**
      * @var \DateTime
@@ -45,21 +46,21 @@ class ImoLote
     /**
      * @var string
      *
-     * @ORM\Column(name="rangoInicio", type="string", length=255, nullable=true)
+     * @ORM\Column(name="rango_inicio", type="string", length=255, nullable=true)
      */
     private $rangoInicio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rangoFin", type="string", length=255, nullable=true)
+     * @ORM\Column(name="rango_fin", type="string", length=255, nullable=true)
      */
     private $rangoFin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="referencia", type="string", length=255)
+     * @ORM\Column(name="referencia", type="string", length=255, nullable=true)
      */
     private $referencia;
 
@@ -77,6 +78,13 @@ class ImoLote
      */
     private $cantidad;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="acta", type="string", length=255)
+     */
+    private $acta;
+
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      **/
@@ -93,10 +101,11 @@ class ImoLote
     protected $tipoInsumo;
 
 
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -172,7 +181,7 @@ class ImoLote
      */
     public function getFecha()
     {
-        return $this->fecha->format("Y-m-d");
+        return $this->fecha;
     }
 
     /**
@@ -295,7 +304,54 @@ class ImoLote
         return $this->cantidad;
     }
 
-   
+    /**
+     * Set acta
+     *
+     * @param string $acta
+     *
+     * @return ImoLote
+     */
+    public function setActa($acta)
+    {
+        $this->acta = $acta;
+
+        return $this;
+    }
+
+    /**
+     * Get acta
+     *
+     * @return string
+     */
+    public function getActa()
+    {
+        return $this->acta;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     *
+     * @return ImoLote
+     */
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
+    }
+
     /**
      * Set sedeOperativa
      *
@@ -342,29 +398,5 @@ class ImoLote
     public function getTipoInsumo()
     {
         return $this->tipoInsumo;
-    }
-
-    /**
-     * Set empresa
-     *
-     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
-     *
-     * @return ImoLote
-     */
-    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
-    {
-        $this->empresa = $empresa;
-
-        return $this;
-    }
-
-    /**
-     * Get empresa
-     *
-     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
-     */
-    public function getEmpresa()
-    {
-        return $this->empresa;
     }
 }

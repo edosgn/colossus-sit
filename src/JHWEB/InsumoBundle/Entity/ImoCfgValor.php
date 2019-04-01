@@ -29,7 +29,7 @@ class ImoCfgValor
     private $valor;
 
     /**
-     * @var \DateTime
+     * @var \DateTime 
      *
      * @ORM\Column(name="fecha", type="datetime")
      */
@@ -45,8 +45,10 @@ class ImoCfgValor
     /**
      * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
      **/
-    protected $tipoInsumo;
+    protected $imoCfgTipo;
 
+
+    
 
     /**
      * Get id
@@ -103,7 +105,7 @@ class ImoCfgValor
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');
+        return $this->fecha;
     }
 
     /**
@@ -130,28 +132,27 @@ class ImoCfgValor
         return $this->activo;
     }
 
-
     /**
-     * Set tipoInsumo
+     * Set imoCfgTipo
      *
-     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo
+     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $imoCfgTipo
      *
      * @return ImoCfgValor
      */
-    public function setTipoInsumo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipoInsumo = null)
+    public function setImoCfgTipo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $imoCfgTipo = null)
     {
-        $this->tipoInsumo = $tipoInsumo;
+        $this->imoCfgTipo = $imoCfgTipo;
 
         return $this;
     }
 
     /**
-     * Get tipoInsumo
+     * Get imoCfgTipo
      *
      * @return \JHWEB\InsumoBundle\Entity\ImoCfgTipo
      */
-    public function getTipoInsumo()
+    public function getImoCfgTipo()
     {
-        return $this->tipoInsumo;
+        return $this->imoCfgTipo;
     }
 }

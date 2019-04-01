@@ -55,12 +55,12 @@ class ImoCfgValorController extends Controller
             //     $imoCfgValorActivo->setActivo(false);
             // }
 
-            $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->idCasoInsumo); 
+            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->idCasoInsumo); 
             
             $imoCfgValor = new ImoCfgValor();
             $fecha = new \DateTime($params->fecha);
 
-            $imoCfgValor->setCasoInsumo($casoInsumo);
+            $imoCfgValor->setImoCfgTipo($casoInsumo);
             $imoCfgValor->setValor($params->valor);
             $imoCfgValor->setFecha($fecha);
             $imoCfgValor->setActivo(false);
@@ -74,7 +74,7 @@ class ImoCfgValorController extends Controller
                 'msj' => "Registro creado con exito", 
             );
         }else{
-            $response = array(
+            $response = array( 
                 'status' => 'error',
                 'code' => 400,
                 'msj' => "Autorizacion no valida", 
@@ -86,10 +86,10 @@ class ImoCfgValorController extends Controller
     /**
      * Finds and displays a Cuenta entity.
      *
-     * @Route("/show/casoInsumo/{idCasoInsumo}", name="imocfgvalor_show")
+     * @Route("/show/casoInsumo/{idTipoInsumo}", name="imocfgvalor_show")
      * @Method("POST")
      */
-    public function showAction(Request $request,$idCasoInsumo)
+    public function showAction(Request $request,$idTipoInsumo)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -97,7 +97,7 @@ class ImoCfgValorController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $valores = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findByCasoInsumo($idCasoInsumo);
+            $valores = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findByImoCfgTipo($idTipoInsumo);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -174,4 +174,6 @@ class ImoCfgValorController extends Controller
             ->getForm()
         ;
     }
+
+    
 }

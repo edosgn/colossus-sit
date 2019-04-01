@@ -3,9 +3,12 @@
 namespace JHWEB\InsumoBundle\Controller;
 
 use JHWEB\InsumoBundle\Entity\ImoInsumo;
+use JHWEB\InsumoBundle\Entity\ImoTrazabilidad;
+use JHWEB\InsumoBundle\Entity\ImoAsignacion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Imoinsumo controller.
@@ -20,7 +23,7 @@ class ImoInsumoController extends Controller
      * @Route("/", name="imoinsumo_index")
      * @Method("POST")
      */
-    public function indexAction(Requesto $request)
+    public function indexAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -31,7 +34,7 @@ class ImoInsumoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $insumos = $em->getRepository('JHWEBConfigBundle:ImoInsumo')->findBy(
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
             array(
                 'estado' => 'disponible',
                 'tipo' => $params->tipo
@@ -67,84 +70,97 @@ class ImoInsumoController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
 
-
-            $fecha = $params->fecha;
-            $fecha = new \DateTime($params->fecha);
-           
-            
+            $fecha = new \DateTime($params->asignacionInsumos->fecha);
             $em = $this->getDoctrine()->getManager();
 
-            $rangoInicio = (isset($params->rangoInicio)) ? $params->rangoInicio : null;
 
-            $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeOperativaId);
-            $loteInsumo = $em->getRepository('AppBundle:LoteInsumo')->find($params->loteInsumoId);
+            $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
 
-            $loteInsumo->setEstado('ASIGNADO');
-            $em->persist($loteInsumo);
+            $numActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
+
+            
+
+            if ($numActa['maximo'] == '') {
+                $numActa = 1;
+            }else{
+               $numActa = $numActa['maximo']+1;
+            }
+            
+
+            $imoTrazabilidad = new ImoTrazabilidad();
+            $imoTrazabilidad->setOrganismoTransito($sedeOperativa);
+            $imoTrazabilidad->setFecha($fecha);
+            $imoTrazabilidad->setEstado('asignacion');
+            $imoTrazabilidad->setActivo(1);
+            $em->persist($imoTrazabilidad);
             $em->flush();
             
-            if ($rangoInicio) {
-                $imoTrazabilidad = new ImoTrazabilidad();
-                $imoTrazabilidad->setSedeOperativa($sedeOperativa);
-                $imoTrazabilidad->setFecha($fecha);
-                $imoTrazabilidad->setEstado('asignacion');
-                $imoTrazabilidad->setActivo(1);
-                $em->persist($imoTrazabilidad);
-                $em->flush();
-                $desde = $params->rangoInicio;
-                $hasta = $params->rangoFin;
+            
+            
+            foreach ($params->array as $key => $lote) {
+                $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($lote->idLote);
+                $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($lote->idTipo);
                 
-                while ($desde <= $hasta) {
+                $loteInsumo->setActa($numActa);
+                $loteInsumo->setEstado('ASIGNADO');
+                
+                $em->persist($loteInsumo);
+                $em->flush(); 
+                // var_dump($loteInsumo->getId());
+
+                $desde = $loteInsumo->getRangoInicio();
+                $hasta = $loteInsumo->getRangoFin();
+
+                if ($loteInsumo->getTipo() == 'Sustrato') {
+                    while ($desde <= $hasta) {
+                        $insumo = new ImoInsumo();
+                        $em = $this->getDoctrine()->getManager();
+                        $insumo->setNumero($tipoInsumo->getModulo()->getSiglaSustrato().$desde);
+                        $insumo->setOrganismoTransito($sedeOperativa);
+                        $insumo->setTipo($tipoInsumo);
+                        $insumo->setLote($loteInsumo); 
+                        $insumo->setFecha($fecha);
+                        $insumo->setCategoria('sustrato');
+                        $insumo->setEstado('disponible');
+                        $em->persist($insumo);
+                        $em->flush();
+    
+                        $imoAsignacion = new ImoAsignacion();
+    
+                        $imoAsignacion->setImoTrazabilidad($imoTrazabilidad);
+                        $imoAsignacion->setInsumo($insumo);
+                        $imoAsignacion->setActivo(true);
+                        $em->persist($imoAsignacion);
+                        $em->flush();
+                        $desde++;
+                    }
                     
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Insumo creado con exito",
+                    );
                     
-                    $insumo = new Insumo();
-                    $em = $this->getDoctrine()->getManager();
-                    $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
-                    
-                    $insumo->setNumero($casoInsumo->getModulo()->getSiglaSustrato().$desde);
-                    $insumo->setSedeOperativa($sedeOperativa);
-                    $insumo->setCasoInsumo($casoInsumo);
-                    $insumo->setLoteInsumo($loteInsumo); 
-                    $insumo->setFecha($fecha);
-                    $insumo->setTipo('sustrato');
+                }else{
+                    $insumo = new ImoInsumo();
+                    $insumo->setLote($loteInsumo);
+                    $insumo->setTipo($tipoInsumo);
                     $insumo->setEstado('disponible');
+                    $insumo->setOrganismoTransito($sedeOperativa);
+                    $insumo->setFecha($fecha);
+                    $insumo->setCategoria('insumo');
                     $em->persist($insumo);
                     $em->flush();
-
-                    $imoAsignacion = new ImoAsignacion();
-
-                    $imoAsignacion->setImotrazabilidad($imoTrazabilidad);
-                    $imoAsignacion->setInsumo($insumo);
-                    $imoAsignacion->setActivo(true);
-                    $em->persist($imoAsignacion);
-                    $em->flush();
-                    $desde++;
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'msj' => "insumo creado con exito", 
+                    );
                 }
                 
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Insumo creado con exito",
-                );
-                
-            }else{
-                $insumo = new Insumo();
-                $casoInsumo = $em->getRepository('AppBundle:CasoInsumo')->find($params->casoInsumoId);
-                $insumo->setLoteInsumo($loteInsumo);
-                $insumo->setCasoInsumo($casoInsumo); 
-                $insumo->setEstado('disponible');
-                $insumo->setNumero($params->numero);
-                $insumo->setSedeOperativa($sedeOperativa);
-                $insumo->setFecha($fecha);
-                $insumo->setTipo('insumo');
-                $em->persist($insumo);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "insumo creado con exito", 
-                );
             }
+            // die();
+
               
         }else{
                 $response = array(

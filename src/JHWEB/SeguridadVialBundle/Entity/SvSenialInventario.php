@@ -132,4 +132,52 @@ class SvSenialInventario
     {
         return $this->tipoDestino;
     }
+
+    /**
+     * Set municipio
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
+     *
+     * @return SvSenialInventario
+     */
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
+    }
+
+    /**
+     * Set tipoSenial
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo $tipoSenial
+     *
+     * @return SvSenialInventario
+     */
+    public function setTipoSenial(\JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo $tipoSenial = null)
+    {
+        $this->tipoSenial = $tipoSenial;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoSenial
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgSenialTipo
+     */
+    public function getTipoSenial()
+    {
+        return $this->tipoSenial;
+    }
 }

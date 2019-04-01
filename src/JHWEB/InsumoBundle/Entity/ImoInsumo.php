@@ -31,10 +31,11 @@ class ImoInsumo
     /**
      * @var string
      *
-     * @ORM\Column(name="numero", type="string", length=255)
+     * @ORM\Column(name="numero", type="string", length=255, nullable = true)
      */ 
     private $numero;
 
+   
     /**
      * @var \DateTime
      *
@@ -65,10 +66,13 @@ class ImoInsumo
     protected $lote;
 
 
+
+   
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {

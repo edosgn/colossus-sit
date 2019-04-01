@@ -10,4 +10,47 @@ namespace JHWEB\InsumoBundle\Repository;
  */
 class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    public function getMax()
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(l.rangoFin) AS maximo
+        FROM JHWEBInsumoBundle:ImoLote l";
+        $consulta = $em->createQuery($dql);
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getMaxActa()
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(l.acta) AS maximo
+        FROM JHWEBInsumoBundle:ImoLote l
+        WHERE l.tipo = :tipo";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'tipo' => 'Sustrato',
+        ));
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getTotalesTipo()
+    { 
+        $em = $this->getEntityManager();
+        $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre
+                FROM JHWEBInsumoBundle:ImoLote il,
+                JHWEBInsumoBundle:ImoCfgTipo it
+                WHERE il.tipoInsumo = it.id
+                AND il.tipo = :tipo
+                GROUP BY il.tipoInsumo";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'tipo' => 'Insumo',
+                ));
+                return $consulta->getResult();
+    }
+
+
 }
+ 
