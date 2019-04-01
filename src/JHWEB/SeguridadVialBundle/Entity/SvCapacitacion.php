@@ -119,14 +119,14 @@ class SvCapacitacion
     /**
      * @var string
      *
-     * @ORM\Column(name="documento", type="string")
+     * @ORM\Column(name="documento", type="string", nullable = true)
      */
     private $documento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="documento_capacitados", type="string")
+     * @ORM\Column(name="documento_capacitados", type="string", nullable = true)
      */
     private $documentoCapacitados;
 
@@ -188,31 +188,10 @@ class SvCapacitacion
      */
     public function getFechaActividad()
     {
+        if ($this->fechaActividad) {
+            return $this->fechaActividad->format('d/m/Y');
+        }
         return $this->fechaActividad;
-    }
-
-    /**
-     * Set semana
-     *
-     * @param string $semana
-     *
-     * @return SvCapacitacion
-     */
-    public function setSemana($semana)
-    {
-        $this->semana = $semana;
-
-        return $this;
-    }
-
-    /**
-     * Get semana
-     *
-     * @return string
-     */
-    public function getSemana()
-    {
-        return $this->semana;
     }
 
     /**

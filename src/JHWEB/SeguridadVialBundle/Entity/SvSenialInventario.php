@@ -42,7 +42,7 @@ class SvSenialInventario
      */
     private $tipoDestino;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="inventarios") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="inventarios") */
     private $municipio;
 
     /** @ORM\ManyToOne(targetEntity="SvCfgSenialTipo", inversedBy="inventarios") */
@@ -136,11 +136,11 @@ class SvSenialInventario
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return SvSenialInventario
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -150,7 +150,7 @@ class SvSenialInventario
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {

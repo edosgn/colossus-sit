@@ -416,12 +416,12 @@ class VhloAcreedorController extends Controller
     }
 
     /**
-     * Busca un acreedor por propietario según el vehiculo
+     * Busca un acreedor por propietario
      *
-     * @Route("/search/propietario/vehiculo", name="vhloacreedor_search_propietario_vehiculo")
+     * @Route("/search/propietario", name="vhloacreedor_search_propietario")
      * @Method({"GET", "POST"})
      */
-    public function searchByPropietarioAndVehiculoAction(Request $request)
+    public function searchByPropietarioAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -491,93 +491,174 @@ class VhloAcreedorController extends Controller
 
             if ($vehiculo) {
                 if ($params->tipo == 'ACREEDOR') {
-                    $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->find(
-                        $params->idAcreedor
-                    );
+                    $acreedorOld = null;
 
-                    $acreedorOld->setActivo(false);
-
-                    $acreedor = new VhloAcreedor();
-
-                    if ($params->idEmpresa) {
-                        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                    if ($params->idCiudadano) {
+                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                             array(
-                                'id' => $params->idEmpresa,
+                                'ciudadano' => $params->idCiudadano,
+                                'vehiculo' => $params->idVehiculo,
                                 'activo' => true,
                             )
                         );
-
-                        $acreedor->setEmpresa($empresa);
-                    }elseif ($params->idCiudadano) {
-                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                    }elseif ($params->idEmpresa) {
+                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                             array(
-                                'id' => $params->idCiudadano,
+                                'empresa' => $params->idCiudadano,
+                                'vehiculo' => $params->idVehiculo,
                                 'activo' => true,
                             )
                         );
-
-                        $acreedor->setCiudadano($ciudadano);
+                    }
+                    
+                    if ($propietario) {
+                        if ($propietario->getCiudadano()) {
+                            $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                                array(
+                                    'ciudadano' => $propietario->getCiudadano()->getId(),
+                                    'vehiculo' => $vehiculo->getId(),
+                                    'activo' => true,
+                                )
+                            );
+                        } elseif($propietario->getEmpresa()) {
+                            $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                                array(
+                                    'empresa' => $propietario->getEmpresa()->getId(),
+                                    'vehiculo' => $vehiculo->getId(),
+                                    'activo' => true,
+                                )
+                            );
+                        }
                     }
 
-                    $acreedor->setGradoAlerta($acreedorOld->getGradoAlerta());
-                    $acreedor->setTipoAlerta($acreedorOld->getTipoAlerta());
-                    
-                    $acreedor->setActivo(true);
+                    if (!$acreedorOld) {
+                        $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->find(
+                            $params->idAcreedor
+                        );
 
-                    $acreedor->setVehiculo($vehiculo);
+                        $acreedorOld->setActivo(false);
 
-                    $em->persist($acreedor);
-                    $em->flush();
+                        $acreedor = new VhloAcreedor();
+
+                        if ($params->idEmpresa) {
+                            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                                array(
+                                    'id' => $params->idEmpresa,
+                                    'activo' => true,
+                                )
+                            );
+
+                            $acreedor->setEmpresa($empresa);
+                        }elseif ($params->idCiudadano) {
+                            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                                array(
+                                    'id' => $params->idCiudadano,
+                                    'activo' => true,
+                                )
+                            );
+
+                            $acreedor->setCiudadano($ciudadano);
+                        }
+
+                        $acreedor->setGradoAlerta($acreedorOld->getGradoAlerta());
+                        $acreedor->setTipoAlerta($acreedorOld->getTipoAlerta());
+                        
+                        $acreedor->setActivo(true);
+
+                        $acreedor->setVehiculo($vehiculo);
+
+                        $em->persist($acreedor);
+                        $em->flush();
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'Registros actualizados con exito.', 
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'El propietario no puede ser el mismo acreedor.', 
+                        ); 
+                    }
                 }elseif ($params->tipo == 'PROPIETARIO') {
-                    $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
-                        array(
-                            'id' => $params->idAcreedor,
-                            'activo' => true,
-                        )
-                    );
-
-                    $acreedorOld->setActivo(false);
-
-                    $acreedor = new VhloAcreedor();
-
                     $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                         array(
                             'id' => $params->idPropietarioNew,
                             'activo' => true,
                         )
                     );
-                    $acreedor->setPropietario($propietario);
 
-                    if ($acreedorOld->getEmpresa()) {
-                        $acreedor->setEmpresa(
-                            $acreedorOld->getEmpresa()
+                    if ($propietario->getCiudadano()) {
+                        $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                            array(
+                                'ciudadano' => $propietario->getCiudadano()->getId(),
+                                'vehiculo' => $vehiculo->getId(),
+                                'activo' => true,
+                            )
                         );
-                    }elseif ($acreedorOld->getCiudadano()) {
-                        $acreedor->setCiudadano(
-                            $acreedorOld->getCiudadano()
+                    } elseif($propietario->getEmpresa()) {
+                        $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                            array(
+                                'empresa' => $propietario->getEmpresa()->getId(),
+                                'vehiculo' => $vehiculo->getId(),
+                                'activo' => true,
+                            )
                         );
                     }
 
-                    $acreedor->setGradoAlerta(
-                        $acreedorOld->getGradoAlerta()
-                    );
-                    $acreedor->setTipoAlerta(
-                        $acreedorOld->getTipoAlerta()
-                    );
-                    
-                    $acreedor->setActivo(true);
+                    if (!$acreedorOld) {
+                        $acreedorOld = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                            array(
+                                'id' => $params->idAcreedor,
+                                'activo' => true,
+                            )
+                        );
 
-                    $acreedor->setVehiculo($vehiculo);
+                        $acreedorOld->setActivo(false);
 
-                    $em->persist($acreedor);
-                    $em->flush();
+                        $acreedor = new VhloAcreedor();
+
+                        $acreedor->setPropietario($propietario);
+
+                        if ($acreedorOld->getEmpresa()) {
+                            $acreedor->setEmpresa(
+                                $acreedorOld->getEmpresa()
+                            );
+                        }elseif ($acreedorOld->getCiudadano()) {
+                            $acreedor->setCiudadano(
+                                $acreedorOld->getCiudadano()
+                            );
+                        }
+
+                        $acreedor->setGradoAlerta(
+                            $acreedorOld->getGradoAlerta()
+                        );
+                        $acreedor->setTipoAlerta(
+                            $acreedorOld->getTipoAlerta()
+                        );
+                        
+                        $acreedor->setActivo(true);
+
+                        $acreedor->setVehiculo($vehiculo);
+
+                        $em->persist($acreedor);
+                        $em->flush();
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'Registros actualizados con exito.', 
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'El propietario no puede ser el mismo acreedor.', 
+                        ); 
+                    }
                 }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Registros actualizados con exito.', 
-                );
             }else{
                 $response = array(
                     'status' => 'error',

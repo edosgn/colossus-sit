@@ -64,8 +64,6 @@ class SvCfgSenialController extends Controller
            
             $senial = new SvCfgSenial();
 
-            $senial->setCodigo($params->codigo);
-            $senial->setNombre(strtoupper($params->nombre));
             $senial->setCantidad(0);
 
             $file = $request->files->get('file');
@@ -91,6 +89,13 @@ class SvCfgSenialController extends Controller
                     $params->idColor
                 );
                 $senial->setColor($color);
+            }
+
+            $senial->setCodigo($params->codigo);
+            if ($params->nombre) {
+                $senial->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            }else {
+                $senial->setNombre(mb_strtoupper('PINTURA '.$color->getNombre(), 'utf-8'));
             }
 
             $senial->setActivo(true);

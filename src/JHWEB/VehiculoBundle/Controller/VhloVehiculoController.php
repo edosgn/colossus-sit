@@ -184,17 +184,40 @@ class VhloVehiculoController extends Controller
     /**
      * Finds and displays a vhloVehiculo entity.
      *
-     * @Route("/{id}/show", name="vhlovehiculo_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlovehiculo_show")
+     * @Method("POST")
      */
-    public function showAction(VhloVehiculo $vhloVehiculo)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloVehiculo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlovehiculo/show.html.twig', array(
-            'vhloVehiculo' => $vhloVehiculo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $vehiculo
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -259,6 +282,56 @@ class VhloVehiculoController extends Controller
     }
 
     /* ============================================== */
+
+    /**
+     * Busca si un vehiculo es maquinaria o remolque.
+     *
+     * @Route("/show/maquinaria/remolque", name="vhlovehiculo_show_maquinaria_remolque")
+     * @Method("POST")
+     */
+    public function showMaquinariaOrRemolqueAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $maquinaria = $em->getRepository('JHWEBVehiculoBundle:VhloMaquinaria')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                )
+            );
+
+            $remolque = $em->getRepository('JHWEBVehiculoBundle:VhloRemolque')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                )
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => array(
+                    'maquinaria' => $maquinaria,
+                    'remolque' => $remolque,
+                )
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 
     /**
      * Lista de vehiculos segun los filtros .
