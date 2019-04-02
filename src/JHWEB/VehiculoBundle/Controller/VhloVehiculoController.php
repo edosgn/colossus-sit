@@ -424,6 +424,51 @@ class VhloVehiculoController extends Controller
     }
 
     /**
+     * Lista de vehiculos segun los filtros .
+     *
+     * @Route("/search/placa", name="vhlovehiculo_search_placa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getByPlaca($params->numero);
+
+            if ($vehiculo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $vehiculo
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Displays a form to update an existing Vehiculo entity.
      *
      * @Route("/update", name="vhlovehiculo_update")
