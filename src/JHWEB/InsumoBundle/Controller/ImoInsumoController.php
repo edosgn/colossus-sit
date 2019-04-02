@@ -76,14 +76,14 @@ class ImoInsumoController extends Controller
 
             $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
 
-            $numActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
+            $numeroActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
 
             
 
-            if ($numActa['maximo'] == '') {
-                $numActa = 1;
+            if ($numeroActa['maximo'] == '') {
+                $numeroActa = 1;
             }else{
-               $numActa = $numActa['maximo']+1;
+               $numeroActa = $numeroActa['maximo']+1;
             }
             
 
@@ -101,7 +101,7 @@ class ImoInsumoController extends Controller
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($lote->idLote);
                 $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($lote->idTipo);
                 
-                $loteInsumo->setActa($numActa);
+                $loteInsumo->setActaEntrega($numeroActa);
                 $loteInsumo->setEstado('ASIGNADO');
                 
                 $em->persist($loteInsumo);
@@ -130,38 +130,43 @@ class ImoInsumoController extends Controller
                         $imoAsignacion->setImoTrazabilidad($imoTrazabilidad);
                         $imoAsignacion->setInsumo($insumo);
                         $imoAsignacion->setActivo(true);
+
                         $em->persist($imoAsignacion);
                         $em->flush();
+                        
                         $desde++;
                     }
                     
                     $response = array(
                         'status' => 'success',
-                        'code' => 200,
-                        'message' => "Insumo creado con exito",
+                        'code' => 200, 
+                        'data' => $numeroActa,
+                        'messagge' => "insumo creado con exito", 
                     );
                     
                 }else{
                     $insumo = new ImoInsumo();
+
                     $insumo->setLote($loteInsumo);
                     $insumo->setTipo($tipoInsumo);
                     $insumo->setEstado('disponible');
                     $insumo->setOrganismoTransito($sedeOperativa);
                     $insumo->setFecha($fecha);
                     $insumo->setCategoria('insumo');
+
                     $em->persist($insumo);
                     $em->flush();
+
                     $response = array(
                         'status' => 'success',
-                        'code' => 200,
-                        'msj' => "insumo creado con exito", 
+                        'code' => 200, 
+                        'data' => $numeroActa,
+                        'messagge' => "insumo creado con exito", 
                     );
                 }
                 
             }
             // die();
-
-              
         }else{
                 $response = array(
                     'status' => 'error',

@@ -31,3 +31,11 @@ services:
     app.pdf.factura.membretes:
         class: JHWEB\FinancieroBundle\Service\PdfTemplateMembretes
         arguments: ["null"]
+
+    app.pdf.insumo:
+        class: JHWEB\InsumoBundle\Service\PdfTemplate
+        arguments: ["null"]
+
+    app.pdf.insumo.membretes:
+        class: JHWEB\InsumoBundle\Service\PdfTemplateMembretes
+        arguments: ["null"]    

@@ -25,7 +25,7 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
     { 
         $em = $this->getEntityManager();
 
-        $dql = "SELECT MAX(l.acta) AS maximo
+        $dql = "SELECT MAX(l.actaEntrega) AS maximo
         FROM JHWEBInsumoBundle:ImoLote l
         WHERE l.tipo = :tipo";
         $consulta = $em->createQuery($dql);

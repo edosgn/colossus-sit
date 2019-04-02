@@ -78,12 +78,13 @@ class ImoLote
      */
     private $cantidad;
 
-     /**
+    /**
      * @var string
      *
-     * @ORM\Column(name="acta", type="string", length=255)
+     * @ORM\Column(name="acta_entrega", type="string", length=255, nullable=true)
      */
-    private $acta;
+    private $actaEntrega; 
+
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
@@ -99,6 +100,7 @@ class ImoLote
      * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
      **/
     protected $tipoInsumo;
+
 
 
 
@@ -305,27 +307,27 @@ class ImoLote
     }
 
     /**
-     * Set acta
+     * Set actaEntrega
      *
-     * @param string $acta
+     * @param string $actaEntrega
      *
      * @return ImoLote
      */
-    public function setActa($acta)
+    public function setActaEntrega($actaEntrega)
     {
-        $this->acta = $acta;
+        $this->actaEntrega = $actaEntrega;
 
         return $this;
     }
 
     /**
-     * Get acta
+     * Get actaEntrega
      *
      * @return string
      */
-    public function getActa()
+    public function getActaEntrega()
     {
-        return $this->acta;
+        return $this->actaEntrega;
     }
 
     /**
