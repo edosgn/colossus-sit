@@ -95,7 +95,7 @@ class ImoLoteController extends Controller
                 $loteInsumo->setTipo('Insumo');
             }
             $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->imoCfgTipo);
-
+            // var_dump($params->numeroActa);
             $loteInsumo->setNumeroActa($params->numeroActa);
             $loteInsumo->setEmpresa($empresa);
             $loteInsumo->setTipoInsumo($casoInsumo); 
@@ -296,5 +296,36 @@ class ImoLoteController extends Controller
             );
         }
         return $helpers->json($response);
+    }
+
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/pdf/acta/asignacion/{numeroActa}", name="pdf_loteInsumo")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request,$numeroActa)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $lotesInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findByActaEntrega($numeroActa);
+
+        if ($lotesInsumo) {
+            $organismoTransito = $lotesInsumo[0]->getSedeOperativa();
+            $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findOneByLote($lotesInsumo[0]->getId());
+            $fechaEntrega = $insumo->getFecha()->format('Y-m-d');
+        }
+
+        $html = $this->renderView('@JHWEBInsumo/Default/pdf.asignacion.html.twig', array(
+            'lotesInsumo' => $lotesInsumo,
+            'organismoTransito' => $organismoTransito,
+            'fechaEntrega' => $fechaEntrega,
+        ));
+
+        $this->get('app.pdf.insumo.membretes')->templateEvaluacion($html, $numeroActa);
     }
 }

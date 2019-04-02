@@ -20,9 +20,9 @@ class VhloLimitacionController extends Controller
      * Lists all vhloLimitacion entities.
      *
      * @Route("/", name="vhlolimitacion_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
 

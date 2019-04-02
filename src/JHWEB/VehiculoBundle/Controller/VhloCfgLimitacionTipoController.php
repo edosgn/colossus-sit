@@ -139,7 +139,7 @@ class VhloCfgLimitacionTipoController extends Controller
     /**
      * Listado de tipos de proceso
      *
-     * @Route("/select", name="vhlocfgorigenregistro_select")
+     * @Route("/select", name="vhlocfglimitaciontipo_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()

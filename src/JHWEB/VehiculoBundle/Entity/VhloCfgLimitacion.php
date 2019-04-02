@@ -48,14 +48,6 @@ class VhloCfgLimitacion
      * @ORM\Column(name="observaciones", type="string", length=255)
      */
     private $observaciones;
-
-    /**
-     * @var array
-     *
-     * @ORM\Column(name="datos", type="array", nullable=true)
-     */
-    private $datos;
-
     /**
      * @var bool
      *
@@ -203,31 +195,7 @@ class VhloCfgLimitacion
     {
         return $this->observaciones;
     }
-
-    /**
-     * Set datos
-     *
-     * @param array $datos
-     *
-     * @return VhloCfgLimitacion
-     */
-    public function setDatos($datos)
-    {
-        $this->datos = $datos;
-
-        return $this;
-    }
-
-    /**
-     * Get datos
-     *
-     * @return array
-     */
-    public function getDatos()
-    {
-        return $this->datos;
-    }
-
+    
     /**
      * Set activo
      *

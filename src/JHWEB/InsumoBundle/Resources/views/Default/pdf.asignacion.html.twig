@@ -1,0 +1,56 @@
+
+ <html>
+  <header>
+  </header>
+  <body>
+
+    <h3 style="text-align:center;">
+        <b>Entrega insumos</b>
+        <br>      
+    </h3>
+
+    <table >
+        <tr>
+            <td width="25%">Divipol: {{organismoTransito.divipo}}</td>
+            <td width="75%">Sede: {{organismoTransito.nombre}}</td> 
+        </tr> 
+    </table>
+
+    <br>   <br>  <br>   <br>   
+    
+
+    <table border="1">
+        <tr>
+            <td width="40%" >Nombre insumo</td>
+            <td width="15%">Rango inicial</td> 
+            <td width="15%">Rango final</td>
+            <td width="15%">Cantidad</td>
+            <td width="15%">Referencia</td>
+        </tr>
+        {% for lotesInsumo in lotesInsumo %}
+            <tr>
+                <td>{{ lotesInsumo.tipoInsumo.nombre }}</td>
+                <td>{{ lotesInsumo.rangoInicio}}</td>
+                <td>{{ lotesInsumo.rangoFin}}</td>
+                <td>{{ lotesInsumo.cantidad }}</td>
+                <td>{{ lotesInsumo.numeroActa }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+       <br>
+       <br> 
+
+    <p> 
+        <b>Fecha entrega: {{fechaEntrega}}</b>
+        <br>      
+        <br>      
+        <b>Entrega: ----------------------- </b>
+        <br>      
+        <br>      
+        <b>Recibe: ----------------------- </b>
+        <br>      
+    </p>
+
+  </body>
+</html>
