@@ -22,13 +22,26 @@ class VhloCfgLimitacionCausalController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $causales = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->findBy(
+            array('activo' => true)
+        );
 
-        $vhloCfgLimitacionCausals = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->findAll();
+        $response['data'] = array();
 
-        return $this->render('vhlocfglimitacioncausal/index.html.twig', array(
-            'vhloCfgLimitacionCausals' => $vhloCfgLimitacionCausals,
-        ));
+        if ($causales) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($causales)." registros encontrados", 
+                'data'=> $causales,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -139,7 +152,7 @@ class VhloCfgLimitacionCausalController extends Controller
     /**
      * Listado de causales
      *
-     * @Route("/select", name="vhlocfgorigenregistro_select")
+     * @Route("/select", name="vhlocfglimitacioncausal_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()

@@ -424,6 +424,59 @@ class VhloVehiculoController extends Controller
     }
 
     /**
+     * Obtiene un unico vehiculo segun uno o varios parametros.
+     *
+     * @Route("/show/parameters", name="vhlovehiculo_show_parameters")
+     * @Method({"GET", "POST"})
+     */
+    public function showByParametersAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $vehiculos = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getOneByParameters($params);
+
+            if ($vehiculos) {
+                if (count($vehiculos) > 1) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'Realice un filtro más especifico, la búsqueda esta arrojando varios resultados aún.', 
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data'=> $vehiculos[0]
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado en base de datos.', 
+                );
+            }            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Lista de vehiculos segun los filtros .
      *
      * @Route("/search/placa", name="vhlovehiculo_search_placa")
