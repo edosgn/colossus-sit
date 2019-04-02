@@ -49,6 +49,7 @@ class CfgEntidadJudicialController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
@@ -74,7 +75,6 @@ class CfgEntidadJudicialController extends Controller
                 'code' => 200,
                 'message' => "Registro creado con exito",
             );
-            // }
         } else {
             $response = array(
                 'status' => 'error',
@@ -82,6 +82,7 @@ class CfgEntidadJudicialController extends Controller
                 'message' => "Autorizacion no valida",
             );
         }
+        
         return $helpers->json($response);
     }
 

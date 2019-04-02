@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\VehiculoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgCausalLimitacion
+ * VhloCfgLimitacionCausal
  *
- * @ORM\Table(name="cfg_causal_limitacion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgCausalLimitacionRepository")
+ * @ORM\Table(name="vhlo_cfg_limitacion_causal")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloCfgLimitacionCausalRepository")
  */
-class CfgCausalLimitacion
+class VhloCfgLimitacionCausal
 {
     /**
      * @var int
@@ -33,13 +33,13 @@ class CfgCausalLimitacion
      *
      * @ORM\Column(name="activo", type="boolean")
      */
-    private $activo = true;
+    private $activo;
 
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -51,7 +51,7 @@ class CfgCausalLimitacion
      *
      * @param string $nombre
      *
-     * @return CfgCausalLimitacion
+     * @return VhloCfgLimitacionCausal
      */
     public function setNombre($nombre)
     {
@@ -75,7 +75,7 @@ class CfgCausalLimitacion
      *
      * @param boolean $activo
      *
-     * @return CfgCausalLimitacion
+     * @return VhloCfgLimitacionCausal
      */
     public function setActivo($activo)
     {
@@ -87,10 +87,11 @@ class CfgCausalLimitacion
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
+
