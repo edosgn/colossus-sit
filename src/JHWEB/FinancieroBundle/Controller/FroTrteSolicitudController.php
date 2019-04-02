@@ -474,11 +474,7 @@ class FroTrteSolicitudController extends Controller
             $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
                 $params->idFuncionario
             );
-
-            if (isset($params->idVehiculo) && $params->idVehiculo) {
-                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-            }
-
+    
             if ($tramiteFactura->getRealizado()) {
                 $response = array(
                     'status' => 'error',
@@ -486,59 +482,75 @@ class FroTrteSolicitudController extends Controller
                     'message' => 'El tramite ya fue realizado.', 
                 );
             }else{
-                if (!$vehiculo->getCancelado()) {
-                    /*if (!$params->documentacion) {
-                        $tramiteFactura->setDocumentacion($params->documentacion);
+                if ($tramiteFactura->getPrecio()->getModulo()->getAbreviatura() == 'RNC') {
+                    if (isset($params->idSolicitante) && $params->idSolicitante) {
+                        $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserUsuario')->find($params->idSolicitante);
+                    }
+    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Trámite autorizado.',
+                    );
+                }else{
+                    if (isset($params->idVehiculo) && $params->idVehiculo) {
+                        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+                    }
 
-                        if ($params->observacion) {
-                            $tramiteFactura->setObservacion($observacion);
-                        }
-
-                        $em->flush();
-
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => 'Este trámite no se puede realizar porque no presenta la documentación completa.',
-                        );
-                    }else{*/
-                        if ($funcionario->getOrganismoTransito()->getId() == $vehiculo->getOrganismoTransito()->getId()) {
+                    if (!$vehiculo->getCancelado()) {
+                        /*if (!$params->documentacion) {
+                            $tramiteFactura->setDocumentacion($params->documentacion);
+    
+                            if ($params->observacion) {
+                                $tramiteFactura->setObservacion($observacion);
+                            }
+    
+                            $em->flush();
+    
                             $response = array(
-                                'status' => 'success',
-                                'code' => 200,
-                                'message' => 'Trámite autorizado.',
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => 'Este trámite no se puede realizar porque no presenta la documentación completa.',
                             );
-                        }else{
-                            //Valida si el tramite a realizar es RADICADO DE CUENTA o CERTIFICADO DE TRADICION
-                            if ($tramiteFactura->getPrecio()->getTramite()->getId() == 4 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                        }else{*/
+                            if ($funcionario->getOrganismoTransito()->getId() == $vehiculo->getOrganismoTransito()->getId()) {
                                 $response = array(
                                     'status' => 'success',
                                     'code' => 200,
                                     'message' => 'Trámite autorizado.',
                                 );
                             }else{
-                                $response = array(
-                                    'status' => 'error',
-                                    'code' => 400,
-                                    'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra trasladado a otro organismo de transito.',
-                                );
+                                //Valida si el tramite a realizar es RADICADO DE CUENTA o CERTIFICADO DE TRADICION
+                                if ($tramiteFactura->getPrecio()->getTramite()->getId() == 4 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                                    $response = array(
+                                        'status' => 'success',
+                                        'code' => 200,
+                                        'message' => 'Trámite autorizado.',
+                                    );
+                                }else{
+                                    $response = array(
+                                        'status' => 'error',
+                                        'code' => 400,
+                                        'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra trasladado a otro organismo de transito.',
+                                    );
+                                }
                             }
-                        }
-                    //}
-                }else{
-                    //Valida si el tramite a realizar es REMATRICULA o CERTIFICADO DE TRADICION
-                    if ($tramiteFactura->getPrecio()->getTramite()->getId() == 18 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => 'Trámite autorizado.',
-                        );
+                        //}
                     }else{
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra con matricula cancelada.',
-                        );
+                        //Valida si el tramite a realizar es REMATRICULA o CERTIFICADO DE TRADICION
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 18 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Trámite autorizado.',
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra con matricula cancelada.',
+                            );
+                        }
                     }
                 }
             }

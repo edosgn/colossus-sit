@@ -95,10 +95,16 @@ class UserLicenciaConduccionController extends Controller
                 $licenciaConduccion->setServicio($servicio);
             }
 
-            if ($params->idCiudadano) {
-                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                    $params->idCiudadano
-                );
+            if (isset($params->idCiudadano) || isset($params->idSolicitante)) {
+                if (isset($params->idCiudadano)) {
+                    $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                        $params->idCiudadano
+                    );
+                }elseif (isset($params->idSolicitante)) {
+                    $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                        $params->idSolicitante
+                    );
+                }
                 $licenciaConduccion->setCiudadano($ciudadano);
 
                 $licenciasOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(

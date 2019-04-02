@@ -59,7 +59,7 @@ class UserLicenciaConduccion
     /**
      * @var string
      *
-     * @ORM\Column(name="restriccion", type="string", length=200, nullable = true)
+     * @ORM\Column(name="restriccion", type="text", nullable = true)
      */
     private $restriccion;
 
