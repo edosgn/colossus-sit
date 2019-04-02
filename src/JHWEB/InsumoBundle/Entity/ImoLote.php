@@ -31,9 +31,10 @@ class ImoLote
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_acta", type="string", length=255)
+     * @ORM\Column(name="numero_acta", type="string", length=255, nullable=true)
      */
     private $numeroActa; 
+
 
     /**
      * @var \DateTime
@@ -77,6 +78,13 @@ class ImoLote
      */
     private $cantidad;
 
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="acta", type="string", length=255)
+     */
+    private $acta;
+
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      **/
@@ -93,7 +101,6 @@ class ImoLote
     protected $tipoInsumo;
 
 
-   
 
     /**
      * Get id
@@ -295,6 +302,30 @@ class ImoLote
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set acta
+     *
+     * @param string $acta
+     *
+     * @return ImoLote
+     */
+    public function setActa($acta)
+    {
+        $this->acta = $acta;
+
+        return $this;
+    }
+
+    /**
+     * Get acta
+     *
+     * @return string
+     */
+    public function getActa()
+    {
+        return $this->acta;
     }
 
     /**

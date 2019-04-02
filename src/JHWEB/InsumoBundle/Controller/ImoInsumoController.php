@@ -76,6 +76,17 @@ class ImoInsumoController extends Controller
 
             $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
 
+            $numActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
+
+            
+
+            if ($numActa['maximo'] == '') {
+                $numActa = 1;
+            }else{
+               $numActa = $numActa['maximo']+1;
+            }
+            
+
             $imoTrazabilidad = new ImoTrazabilidad();
             $imoTrazabilidad->setOrganismoTransito($sedeOperativa);
             $imoTrazabilidad->setFecha($fecha);
@@ -85,13 +96,16 @@ class ImoInsumoController extends Controller
             $em->flush();
             
             
+            
             foreach ($params->array as $key => $lote) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($lote->idLote);
                 $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($lote->idTipo);
                 
+                $loteInsumo->setActa($numActa);
                 $loteInsumo->setEstado('ASIGNADO');
+                
                 $em->persist($loteInsumo);
-                $em->flush();
+                $em->flush(); 
                 // var_dump($loteInsumo->getId());
 
                 $desde = $loteInsumo->getRangoInicio();

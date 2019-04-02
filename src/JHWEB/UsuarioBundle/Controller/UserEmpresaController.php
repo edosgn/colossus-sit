@@ -263,7 +263,7 @@ class UserEmpresaController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Empresa no Encontrada",
+                    'message' => "Empresa no encontrada",
                 );
             }
         } else {

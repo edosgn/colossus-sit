@@ -21,6 +21,20 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
+    public function getMaxActa()
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(l.acta) AS maximo
+        FROM JHWEBInsumoBundle:ImoLote l
+        WHERE l.tipo = :tipo";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'tipo' => 'Sustrato',
+        ));
+        return $consulta->getOneOrNullResult();
+    }
+
     public function getTotalesTipo()
     { 
         $em = $this->getEntityManager();
