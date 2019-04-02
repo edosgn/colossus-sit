@@ -24,7 +24,7 @@ class MsvCategoriaController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $categorias = $em->getRepository('AppBundle:MsvCategoria')->findBy( array('estado' => true));
+        $categorias = $em->getRepository('AppBundle:MsvCategoria')->findBy( array('activo' => true));
 
         $response = array(
                     'status' => 'succes',
@@ -54,7 +54,7 @@ class MsvCategoriaController extends Controller
         $response = array(
                     'status' => 'succes',
                     'code' => 200,
-                    'msj' => "Categoria encontrada",
+                    'message' => "Registro encontrado",
                     'data' => $msvCategoria,
         );
 
@@ -82,7 +82,8 @@ class MsvCategoriaController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $categoria->setNombre(strtoupper($params->nombre));
-            $categoria->setEstado(true);
+            $categoria->setHabilitado(true);
+            $categoria->setActivo(true);
             $em->persist($categoria);
             $em->flush();
 
@@ -180,6 +181,53 @@ class MsvCategoriaController extends Controller
     }
 
     /**
+     * Displays a form to edit an existing msvCategoria entity.
+     *
+     * @Route("/edit/estado/categoria", name="msvcategoria_estado_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editEstadoCategoriaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params->id);
+
+            if ($categoria != null) {
+                $categoria->setHabilitado(false);
+
+                $em->persist($categoria);
+                $em->flush();
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Se actualizó el estado con éxito",
+                    'data' => $categoria,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Deletes a msvCategoria entity.
      *
      * @Route("/delete", name="msvcategoria_delete")
@@ -197,7 +245,7 @@ class MsvCategoriaController extends Controller
             $params = json_decode($json);
             $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params);
 
-            $categoria->setEstado(false);
+            $categoria->setActivo(false);
 
             $em->persist($categoria);
             $em->flush();
@@ -237,7 +285,7 @@ class MsvCategoriaController extends Controller
     /**
      * datos para select 2
      *
-     * @Route("/select/categoria", name="msvCategoria_select")
+     * @Route("/select", name="msvCategoria_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -245,7 +293,10 @@ class MsvCategoriaController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         $categorias = $em->getRepository('AppBundle:MsvCategoria')->findBy(
-            array('estado' => 1)
+            array(
+                'habilitado' => 1,
+                'activo' => 1,
+                )
         );
         $response = null;
 

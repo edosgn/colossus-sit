@@ -47,7 +47,7 @@ class MsvRevisionController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -67,17 +67,28 @@ class MsvRevisionController extends Controller
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
             $revision->setConsecutivo($consecutivo);
 
-            $revision->setFechaDevolucion(new \DateTime($params->fechaDevolucion));
+            $fechaDevolucionDatetime = new \DateTime($params->fechaDevolucion);
+            $revision->setFechaDevolucion($fechaDevolucionDatetime);
 
             /* $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
             $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime); */
 
             $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
             $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
+            
+            if($fechaRevisionDatetime > $fechaDevolucionDatetime){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La fecha de revisión debe ser menor o igual a la fecha de devolución.",
+                );
+                return $helpers->json($response);
+            }
             if ($fechaRecepcionDatetime < $fechaRevisionDatetime) {
                 $revision->setFechaRecepcion($fechaRecepcionDatetime);
                 $revision->setFechaRevision($fechaRevisionDatetime);
-            } else {
+            } 
+            else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
@@ -119,8 +130,10 @@ class MsvRevisionController extends Controller
             $revision->setCorreo($params->correo);
             $revision->setEmpresa($empresa);
             $revision->setEstado(true);
+            
             $em->persist($revision);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -139,8 +152,8 @@ class MsvRevisionController extends Controller
     /**
      * Finds and displays a msvRevision entity.
      *
-     * @Route("/{id}/show", name="msvrevision_show")
-     * @Method("GET")
+     * @Route("{id}/show", name="msvrevision_show")
+     * @Method({"GET", "POST"})
      */
     public function showAction(MsvRevision $msvRevision, $id)
     {
@@ -149,8 +162,13 @@ class MsvRevisionController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            /* $json = $request->get("data", null);
+            $params = json_decode($json); */
+            
             $em = $this->getDoctrine()->getManager();
+            
             $revision = $em->getRepository('AppBundle:MsvRevision')->find($id);
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,

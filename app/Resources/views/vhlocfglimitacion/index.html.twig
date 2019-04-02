@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfglimitacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgLimitacion in vhloCfgLimitacions %}
+            <tr>
+                <td><a href="{{ path('vhlocfglimitacion_show', { 'id': vhloCfgLimitacion.id }) }}">{{ vhloCfgLimitacion.id }}</a></td>
+                <td>{{ vhloCfgLimitacion.nombre }}</td>
+                <td>{% if vhloCfgLimitacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfglimitacion_show', { 'id': vhloCfgLimitacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfglimitacion_edit', { 'id': vhloCfgLimitacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfglimitacion_new') }}">Create a new vhloCfgLimitacion</a>
+        </li>
+    </ul>
+{% endblock %}

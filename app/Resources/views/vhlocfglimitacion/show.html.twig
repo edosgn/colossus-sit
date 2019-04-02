@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfglimitacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vhloCfgLimitacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ vhloCfgLimitacion.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if vhloCfgLimitacion.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfglimitacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('vhlocfglimitacion_edit', { 'id': vhloCfgLimitacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

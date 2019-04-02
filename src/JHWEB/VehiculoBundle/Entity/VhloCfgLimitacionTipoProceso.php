@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\VehiculoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CfgLimitacion
+ * VhloCfgLimitacionTipoProceso
  *
- * @ORM\Table(name="limitacion")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgLimitacionRepository")
+ * @ORM\Table(name="vhlo_cfg_limitacion_tipo_proceso")
+ * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloCfgLimitacionTipoProcesoRepository")
  */
-class CfgLimitacion
+class VhloCfgLimitacionTipoProceso
 {
     /**
      * @var int
@@ -28,18 +28,18 @@ class CfgLimitacion
      */
     private $nombre;
 
-    /** 
-     * @var boolean
+    /**
+     * @var bool
      *
-     * @ORM\Column(name="estado", type="boolean")
+     * @ORM\Column(name="activo", type="boolean")
      */
-    private $estado;
-    
+    private $activo;
+
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -51,7 +51,7 @@ class CfgLimitacion
      *
      * @param string $nombre
      *
-     * @return CfgLimitacion
+     * @return VhloCfgLimitacionTipoProceso
      */
     public function setNombre($nombre)
     {
@@ -71,26 +71,27 @@ class CfgLimitacion
     }
 
     /**
-     * Set estado
+     * Set activo
      *
-     * @param boolean $estado
+     * @param boolean $activo
      *
-     * @return CfgLimitacion
+     * @return VhloCfgLimitacionTipoProceso
      */
-    public function setEstado($estado)
+    public function setActivo($activo)
     {
-        $this->estado = $estado;
+        $this->activo = $activo;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get activo
      *
-     * @return boolean
+     * @return bool
      */
-    public function getEstado()
+    public function getActivo()
     {
-        return $this->estado;
+        return $this->activo;
     }
 }
+

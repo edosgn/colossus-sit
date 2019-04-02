@@ -33,8 +33,7 @@ class ImoLote
      *
      * @ORM\Column(name="numero_acta", type="string", length=255, nullable=true)
      */
-    private $numeroActa; 
-
+    private $numeroActa;
 
     /**
      * @var \DateTime

@@ -77,6 +77,45 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    //Obtiene el vehículo según uno o varios parametros al tiempo
+    public function getOneByParameters($parametros)
+    {
+        $condicion = null; 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT v
+            FROM JHWEBVehiculoBundle:VhloVehiculo v, JHWEBVehiculoBundle:VhloCfgPlaca p
+            WHERE v.placa = p.id";
+
+        if ($parametros->numeroPlaca) {
+            $condicion .= " AND p.numero = '" . $parametros->numeroPlaca . "'";
+
+        }
+        if ($parametros->numeroVIN) {
+            $condicion .= " AND v.vin ='" . $parametros->numeroVIN . "'";
+
+        }
+        if ($parametros->numeroSerie) {
+            $condicion .= " AND v.serie ='" . $parametros->numeroSerie . "'";
+
+        }
+        if ($parametros->numeroMotor) {
+            $condicion .= " AND v.motor ='" . $parametros->numeroMotor . "'";
+
+        }
+        if ($parametros->numeroChasis) {
+            $condicion .= " AND v.chasis ='" . $parametros->numeroChasis . "'";
+
+        }
+       
+        if ($condicion) {
+            $dql .= $condicion;
+        }
+        $consulta = $em->createQuery($dql);
+
+        return $consulta->getResult();
+    }
+
     //Busca todos los vehiculos que no sean ni maquinaria ni remolques
     public function getOneOnlyVehiculos()
     {

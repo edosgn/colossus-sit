@@ -110,17 +110,40 @@ class VhloCfgPlacaController extends Controller
     /**
      * Finds and displays a vhloCfgPlaca entity.
      *
-     * @Route("/show/{id}", name="vhlocfgplaca_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlocfgplaca_show")
+     * @Method("POST")
      */
-    public function showAction(VhloCfgPlaca $vhloCfgPlaca)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgPlaca);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfgplaca/show.html.twig', array(
-            'vhloCfgPlaca' => $vhloCfgPlaca,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $placa
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -290,9 +313,9 @@ class VhloCfgPlacaController extends Controller
 
     public function selectByOrganismoTransitoAndTipoVehiculo(Request $request)
     {
+        $helpers = $this->get("app.helpers");
         $json = $request->get("data", null);
         $params = json_decode($json);
-        $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
 
@@ -326,6 +349,8 @@ class VhloCfgPlacaController extends Controller
     public function selectByOrganismoTransito(Request $request)
     {
         $helpers = $this->get("app.helpers");
+        $json = $request->get("data", null);
+        $params = json_decode($json);
 
         $em = $this->getDoctrine()->getManager();
 
