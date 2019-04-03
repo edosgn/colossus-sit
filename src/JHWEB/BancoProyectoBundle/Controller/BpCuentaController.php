@@ -22,13 +22,26 @@ class BpCuentaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $cuentas = $em->getRepository('JHWEBBancoProyectoBundle:BpCuenta')->findBy(
+            array('activo' => true)
+        );
 
-        $bpCuentas = $em->getRepository('JHWEBBancoProyectoBundle:BpCuenta')->findAll();
+        $response['data'] = array();
 
-        return $this->render('bpcuenta/index.html.twig', array(
-            'bpCuentas' => $bpCuentas,
-        ));
+        if ($cuentas) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($cuentas)." registros encontrados", 
+                'data'=> $cuentas,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -60,7 +73,7 @@ class BpCuentaController extends Controller
     /**
      * Finds and displays a bpCuentum entity.
      *
-     * @Route("/{id}", name="bpcuenta_show")
+     * @Route("/{id}/show", name="bpcuenta_show")
      * @Method("GET")
      */
     public function showAction(BpCuenta $bpCuentum)
@@ -101,7 +114,7 @@ class BpCuentaController extends Controller
     /**
      * Deletes a bpCuentum entity.
      *
-     * @Route("/{id}", name="bpcuenta_delete")
+     * @Route("/{id}/delete", name="bpcuenta_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, BpCuenta $bpCuentum)
@@ -132,5 +145,57 @@ class BpCuentaController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ====================================================== */
+
+    /**
+     * Busca las actividades asociadas a una cuenta.
+     *
+     * @Route("/search/actividades", name="bpProyecto_search_activiades")
+     * @Method({"GET", "POST"})
+     */
+    public function searchActividadesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
+                array(
+                    'cuenta' => $params->idCuenta,
+                    'activo' => true
+                )
+            );
+
+            if ($actividades) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($actividades)." registros encontrados.",
+                    'data'=> $actividades,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ninguna actividad registrada aún.",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

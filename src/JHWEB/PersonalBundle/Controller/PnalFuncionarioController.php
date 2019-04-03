@@ -726,4 +726,49 @@ class PnalFuncionarioController extends Controller
         return $helpers->json($response);
     }
 
+
+    /**
+     * Finds and disabled a pnalFuncionario entity.
+     *
+     * @Route("/disabled", name="pnalfuncionario_disabled")
+     * @Method("POST")
+     */
+    public function disabledAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
+            );
+
+            $funcionario->setInhabilidad($params->motivoInhabilidad);
+            $funcionario->setActivo(false);
+
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $funcionario
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
 }

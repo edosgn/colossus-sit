@@ -30,7 +30,7 @@ class PdfTemplateMembretes extends TCPDF{
 
     public function templateEvaluacion($html, $numeroActa){
         // create new PDF document
-        $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new PdfTemplateMembretes('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);

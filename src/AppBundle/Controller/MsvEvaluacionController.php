@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\MsvEvaluacion;
+use AppBundle\Entity\MsvCategoria;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -59,8 +60,8 @@ class MsvEvaluacionController extends Controller
         $json = $request->get("json", null);
         $params = json_decode($json);
 
-        $msvEvaluacion = new MsvEvaluacion();
         $em = $this->getDoctrine()->getManager();
+        $msvEvaluacion = new MsvEvaluacion();
 
         $msvEvaluacion->setFecha(new \Datetime(date('Y-m-d h:i:s')));
         $idEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
@@ -121,6 +122,20 @@ class MsvEvaluacionController extends Controller
             $msvEvaluacion->setAval(false);
         }
         $msvEvaluacion->setActivo(true);
+
+        //volver a esta habilitado todas las categorias de la evaluación
+        $categorias = $em->getRepository('AppBundle:MsvCategoria')->findBy(
+            array(
+                'activo' => 1,
+                'habilitado' => 0,
+            )
+        );
+
+        foreach ($categorias as $key => $categoria) {
+            $categoria->setHabilitado(true);
+            $em->persist($categoria);
+        }
+
         $em->persist($msvEvaluacion);
         $em->flush();
 
@@ -168,21 +183,21 @@ class MsvEvaluacionController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Evaluacion encontrada",
+                    'message' => "Evaluacion encontrada",
                     'data' => $evaluacion,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 401,
-                    'msj'=> "Evaluación no encontrada",
+                    'message'=> "Evaluación no encontrada",
                 );
             }
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj'=> "Autorización no valida",
+                'message'=> "Autorización no valida",
             );
         }
         return $helpers->json($response);
@@ -234,13 +249,13 @@ class MsvEvaluacionController extends Controller
                 $response = array(
                  'status' => 'success',
                  'code' => 200,
-                 'msj' => "Evaluación editada con éxito.", 
+                 'message' => "Evaluación editada con éxito.", 
              );
             }else{
              $response = array(
                  'status' => 'error',
                  'code' => 400,
-                 'msj' => "La evaluación no se encuentra en la base de datos", 
+                 'message' => "La evaluación no se encuentra en la base de datos", 
              );
             }
         }
@@ -248,7 +263,7 @@ class MsvEvaluacionController extends Controller
          $response = array(
              'status' => 'error',
              'code' => 400,
-             'msj' => "Autorización no valida para editar banco", 
+             'message' => "Autorización no valida para editar banco", 
          );
         }
      return $helpers->json($response);
@@ -277,13 +292,13 @@ class MsvEvaluacionController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Evaluación eliminada con éxito", 
+                    'message' => "Evaluación eliminada con éxito", 
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorización no valida", 
+                'message' => "Autorización no valida", 
             );
         }
         return $helpers->json($response);

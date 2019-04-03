@@ -326,6 +326,6 @@ class ImoLoteController extends Controller
             'fechaEntrega' => $fechaEntrega,
         ));
 
-        $this->get('app.pdf.insumo.membretes')->templateEvaluacion($html, $numeroActa);
+        $this->get('app.pdf.insumo.membretes')->templateAsignacion($html, $numeroActa);
     }
 }

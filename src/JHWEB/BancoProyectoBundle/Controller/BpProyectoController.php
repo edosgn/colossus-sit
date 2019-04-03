@@ -249,12 +249,12 @@ class BpProyectoController extends Controller
     /* =========================================== */
 
     /**
-     * busca las actividades de un proyecto.
+     * Busca las cuentas asociadas a un proyecto.
      *
-     * @Route("/search/actividades", name="bpProyecto_search_activiades")
+     * @Route("/search/cuentas", name="bpProyecto_search_cuentas")
      * @Method({"GET", "POST"})
      */
-    public function searchActividadesAction(Request $request)
+    public function searchCuentasAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -266,19 +266,19 @@ class BpProyectoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
+            $cuentas = $em->getRepository('JHWEBBancoProyectoBundle:BpCuenta')->findBy(
                 array(
                     'proyecto' => $params->idProyecto,
                     'activo' => true
                 )
             );
 
-            if ($actividades) {
+            if ($cuentas) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($actividades)." registros encontrados.",
-                    'data'=> $actividades,
+                    'message' => count($cuentas)." registros encontrados.",
+                    'data'=> $cuentas,
                 );
             }else{
                 $response = array(
