@@ -84,7 +84,6 @@ class ImoLote
      */
     private $actaEntrega; 
 
-
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      **/
