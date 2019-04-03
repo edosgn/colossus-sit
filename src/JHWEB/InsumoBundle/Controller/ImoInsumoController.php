@@ -231,7 +231,7 @@ class ImoInsumoController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();
-            $insumo = $em->getRepository('AppBundle:Insumo')->find($id);
+            $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find($id);
 
             $insumo->setEstado('dañado');
             $em = $this->getDoctrine()->getManager();
@@ -286,7 +286,7 @@ class ImoInsumoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $sustrato = $em->getRepository('AppBundle:Insumo')->getNumeroModulo(
+            $sustrato = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getNumeroModulo(
                 $params->numero,$params->idModulo,$params->idSedeOperativa
             );
             if ($sustrato) {
@@ -324,8 +324,8 @@ class ImoInsumoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $json = $request->get("json",null);
         $params = json_decode($json);
-        $insumos = $em->getRepository('AppBundle:Insumo')->findBy(
-            array('tipo'=>'Sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen)
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
+            array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen)
         );
 
         if (count($insumos) >= $params->cantidad) {
@@ -358,14 +358,14 @@ class ImoInsumoController extends Controller
         $json = $request->get("json",null);
         $params = json_decode($json);
 
-        $sustratos = $em->getRepository('AppBundle:Insumo')->findBy(
-            array('tipo'=>'sustrato','estado' => 'disponible','casoInsumo'=>$params->casoInsumo,'sedeOperativa'=>$params->sedeOrigen), 
+        $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumoo')->findBy(
+            array('tipo'=>'sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen), 
             array('id' => 'DESC'),$params->cantidad
         );
 
         $fecha = new \DateTime('now');
 
-        $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find($params->sedeDestino);
+        $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeDestino);
 
         $imoTrazabilidad = new ImoTrazabilidad();
 
@@ -418,7 +418,7 @@ class ImoInsumoController extends Controller
         $params = json_decode($json);
 
         
-        $numeroSustrato = $em->getRepository('AppBundle:Insumo')->getLastByFuncionario($params->sedeOperativa);
+        $numeroSustrato = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->getLastByFuncionario($params->sedeOperativa);
         if ($numeroSustrato['numero']) {
             $response = array(
                 'status' => 'success',
