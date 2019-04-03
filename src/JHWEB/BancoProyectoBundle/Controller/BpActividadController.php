@@ -249,7 +249,7 @@ class BpActividadController extends Controller
     /* ============================================ */
 
     /**
-     * datos para select 2
+     * Listado de actividades para selecciona con búsqueda
      *
      * @Route("/select", name="bpActividad_select")
      * @Method({"GET", "POST"})

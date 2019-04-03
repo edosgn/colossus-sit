@@ -78,12 +78,12 @@ class VhloLimitacionController extends Controller
             $datos->setMunicipio($municipio);
 
             $demandado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                $params->limitacion->idDemandado
+                $params->idDemandado
             );
             $datos->setCiudadanoDemandado($demandado);
             
             $demandante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                $params->limitacion->idDemandante
+                $params->idDemandante
             );
             $datos->setCiudadanoDemandante($demandante);
 
