@@ -19,9 +19,9 @@ class UserEmpresaController extends Controller
     /**
      * Lists all userEmpresa entities.
      *
-     * @Route("/", name="userempresa_index")
-     * @Method("GET")
-     */
+     * @Route("/", name="userempresaA_index")
+     * @Method("GET") 
+     */ 
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
@@ -40,6 +40,32 @@ class UserEmpresaController extends Controller
                 'data' => $empresas,
             );
         }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all Empresa entities.
+     *
+     * @Route("/index/empresaAlcaldia", name="user_empresaAlcaldia_index")
+     * @Method("GET")
+     */
+    public function indexEmpresaAlcaldiaAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+            array('activo' => 1,'tipoEmpresa'=>1)
+        );
+
+        $response['data'] = array();
+
+        $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "listado empresas", 
+                    'data'=> $empresas,
+            );
+         
         return $helpers->json($response);
     }
 
@@ -68,6 +94,7 @@ class UserEmpresaController extends Controller
             $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
             $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundleBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
             /* $empresaRepresentante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(array(
@@ -98,6 +125,7 @@ class UserEmpresaController extends Controller
             $empresa->setCorreo($params->empresa->correo);
             $empresa->setFax($params->empresa->fax);
             $empresa->setCiudadano($ciudadano);
+            $empresa->setModalidadTransporte($modalidadTransporte);
             $empresa->setEmpresaServicio($empresaServicio);
             $empresa->setActivo(true);
             
@@ -348,6 +376,31 @@ class UserEmpresaController extends Controller
             );
         }
         return $helpers->json($response);
-    }
+    } 
 
+    /**
+     * datos para select 2
+     *
+     * @Route("/select/trasporte/publico", name="user_empresa_transporte_publico_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectTrasportePublicoAction()
+    {
+    $helpers = $this->get("app.helpers");
+    $em = $this->getDoctrine()->getManager();
+    $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+        array('activo' => 1,'tipoEmpresa'=>2) 
+    );
+    if ($empresas == null) {
+       $response = null;
+    }
+      foreach ($empresas as $key => $empresa) {
+        $response[$key] = array(
+            'value' => $empresa->getId(),
+            'label' => $empresa->getNit()."_".$empresa->getNombre(),
+            );
+      }
+       return $helpers->json($response);
+    }
 }
+ 
