@@ -45,6 +45,7 @@ class EmpresaController extends Controller
          
         return $helpers->json($response);
     }
+    
     /**
      * Lists all Empresa entities.
      *

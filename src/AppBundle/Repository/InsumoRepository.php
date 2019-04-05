@@ -54,7 +54,7 @@ class InsumoRepository extends \Doctrine\ORM\EntityRepository
             'tipo' => 'sustrato',
             'numero' => $numero,
             'idModulo' => $idModulo,
-        ));
+        )); 
 
         // var_dump($consulta->getResult());
         // die();

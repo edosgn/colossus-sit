@@ -10,4 +10,53 @@ namespace JHWEB\InsumoBundle\Repository;
  */
 class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
 {
+
+    //Obtiene el minimo insumo sustrato disponible
+    public function getLastByFuncionario($idOrnganismoTransito)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(i.id) AS id, i.numero
+            FROM JHWEBInsumoBundle:ImoInsumo i
+            WHERE i.organismoTransito = :idOrnganismoTransito
+            AND i.estado = :estado
+            AND i.tipo = :tipo";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrnganismoTransito' => $idOrnganismoTransito,
+            'estado' => 'disponible',
+            'tipo' => 'sustrato',
+        ));
+ 
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getNumeroModulo($numero,$idModulo,$idOrnganismoTransito)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT i.numero,ci.nombre
+            FROM JHWEBInsumoBundle:ImoInsumo i
+            JOIN i.casoInsumo ci
+            WHERE i.casoInsumo = ci.id
+            AND i.organismoTransito = :idOrnganismoTransito
+            AND ci.modulo = :idModulo
+            AND i.estado = :estado
+            AND i.tipo = :tipo
+            AND i.numero = :numero
+            GROUP BY i.numero";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrnganismoTransito' => $idOrnganismoTransito,
+            'estado' => 'disponible',
+            'tipo' => 'sustrato',
+            'numero' => $numero,
+            'idModulo' => $idModulo,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

@@ -79,41 +79,43 @@ class MsvEvaluacionController extends Controller
         $msvEvaluacion->setValorObtenidoFortalecimiento($params->valorObtenidoFortalecimiento);
         $msvEvaluacion->setValorPonderadoFortalecimiento(0.3);
         $valorResultadoFortalecimiento = $params->valorObtenidoFortalecimiento * 0.3;
-        $msvEvaluacion->setResultadoFortalecimiento($valorResultadoFortalecimiento);
+        $msvEvaluacion->setResultadoFortalecimiento(number_format($valorResultadoFortalecimiento), 2, '.');
 
         $msvEvaluacion->setPilarComportamiento("COMPORTAMIENTO HUMANO");
         $msvEvaluacion->setValorObtenidoComportamiento($params->valorObtenidoComportamiento);
         $msvEvaluacion->setValorPonderadoComportamiento(0.3);
         $valorResultadoComportamiento = $params->valorObtenidoComportamiento * 0.3;
-        $msvEvaluacion->setResultadoComportamiento($valorResultadoComportamiento);
+        $msvEvaluacion->setResultadoComportamiento(number_format($valorResultadoComportamiento), 2, '.');
 
         $msvEvaluacion->setPilarVehiculoSeguro("VEHÍCULOS SEGUROS");
         $msvEvaluacion->setValorObtenidoVehiculoSeguro($params->valorObtenidoVehiculoSeguro);
         $msvEvaluacion->setValorPonderadoVehiculoSeguro(0.2);
         $valorResultadoVehiculoSeguro = $params->valorObtenidoVehiculoSeguro * 0.2;
-        $msvEvaluacion->setResultadoVehiculoSeguro($valorResultadoVehiculoSeguro);
+        $msvEvaluacion->setResultadoVehiculoSeguro(number_format($valorResultadoVehiculoSeguro), 2, '.');
 
         $msvEvaluacion->setPilarInfraestructuraSegura("INFRAESTRUCTURA SEGURA ");
         $msvEvaluacion->setValorObtenidoInfraestructuraSegura($params->valorObtenidoInfraestructuraSegura);
         $msvEvaluacion->setValorPonderadoInfraestructuraSegura(0.1);
         $valorResultadoInfraestructuraSegura = $params->valorObtenidoInfraestructuraSegura * 0.1;
-        $msvEvaluacion->setResultadoInfraestructuraSegura($valorResultadoInfraestructuraSegura);
+        $msvEvaluacion->setResultadoInfraestructuraSegura(number_format($valorResultadoInfraestructuraSegura), 2, '.');
 
         $msvEvaluacion->setPilarAtencionVictima("ATENCIÓN A VÍCTIMAS");
         $msvEvaluacion->setValorObtenidoAtencionVictima($params->valorObtenidoAtencionVictima);
         $msvEvaluacion->setValorPonderadoAtencionVictima(0.1);
         $valorResultadoAtencionVictima = $params->valorObtenidoAtencionVictima * 0.1;
-        $msvEvaluacion->setResultadoAtencionVictima($valorResultadoAtencionVictima);
+        $msvEvaluacion->setResultadoAtencionVictima(number_format($valorResultadoAtencionVictima), 2, '.');
 
-        $msvEvaluacion->setPilarValorAgregado("VALORES AGREGADOS O INNOVACIONES");
+        $datosValorAgregadoArray= (array)$params->datosValorAgregado;
+        
+        $msvEvaluacion->setPilarValorAgregado(implode(",", $datosValorAgregadoArray));
         $msvEvaluacion->setValorObtenidoValorAgregado($params->valorObtenidoValorAgregado);
         $msvEvaluacion->setValorPonderadoValorAgregado(0.05);
         $valorResultadoValorAgregado = $params->valorObtenidoValorAgregado * 0.05;
-        $msvEvaluacion->setResultadoValorAgregado($valorResultadoValorAgregado);
+        $msvEvaluacion->setResultadoValorAgregado(number_format($valorResultadoValorAgregado), 2, '.');
 
         $resultadoFinal = $valorResultadoFortalecimiento + $valorResultadoComportamiento + $valorResultadoVehiculoSeguro + $valorResultadoInfraestructuraSegura + $valorResultadoAtencionVictima + $valorResultadoValorAgregado;
 
-        $msvEvaluacion->setResultadoFinal($resultadoFinal);
+        $msvEvaluacion->setResultadoFinal(number_format($resultadoFinal), 2, '.');
 
         $minimoAval = 95 * 0.75;
         if ($resultadoFinal >= $minimoAval) {

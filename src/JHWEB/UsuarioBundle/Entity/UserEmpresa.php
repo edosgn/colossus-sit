@@ -165,10 +165,14 @@ class UserEmpresa
     /** @ORM\ManyToOne(targetEntity="UserEmpresaRepresentante", inversedBy="empresas") */
     private $empresaRepresentante;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="empresas") */
+    private $modalidadTransporte;
+
+
     /**
      * Get id
      *
-     * @return int
+     * @return integer
      */
     public function getId()
     {
@@ -773,5 +777,29 @@ class UserEmpresa
     public function getEmpresaRepresentante()
     {
         return $this->empresaRepresentante;
+    }
+
+    /**
+     * Set modalidadTransporte
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte
+     *
+     * @return UserEmpresa
+     */
+    public function setModalidadTransporte(\JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte = null)
+    {
+        $this->modalidadTransporte = $modalidadTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadTransporte
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte
+     */
+    public function getModalidadTransporte()
+    {
+        return $this->modalidadTransporte;
     }
 }
