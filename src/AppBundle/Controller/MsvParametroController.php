@@ -71,18 +71,18 @@ class MsvParametroController extends Controller
                     'name'=>$msvParametro->getNombre(),
                     'valor'=>$msvParametro->getValor(),
                     'variables' => null,
-                    'numeroVariables'=> null
                 );
 
-                $variables = $em->getRepository('AppBundle:MsvVariable')->findBy(
+                 $variables = $em->getRepository('AppBundle:MsvVariable')->findBy(
                     array(
                         'parametro' => $msvParametro->getId(),
                         'estado' => 1,
                     )
                 );
 
-                $numeroVariables = count($variables);
-                $msvParametrosArray[$keyParametro]['numeroVariables'] = $numeroVariables;
+                /* $numeroVariables = count($variables);
+                $msvParametrosArray[$keyParametro]['numeroVariables'] = $numeroVariables; */
+
 
                 if($variables){
                     foreach ($variables as $keyVariable => $variable) {
@@ -90,6 +90,7 @@ class MsvParametroController extends Controller
                             'id'=> $variable->getId(),
                             'name' => $variable->getNombre(),
                             'criterios' => null,
+                            'numeroCriterios' => null, 
                         );
 
                         $criterios = $em->getRepository('AppBundle:MsvCriterio')->findBy(
@@ -98,6 +99,9 @@ class MsvParametroController extends Controller
                             'estado' => 1,
                             )
                         );
+
+                        $numeroCriterios = count($criterios);
+                        $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['numeroCriterios'] = $numeroCriterios;
 
                         if($criterios){
                             foreach ($criterios as $keyCriterio => $criterio) {
