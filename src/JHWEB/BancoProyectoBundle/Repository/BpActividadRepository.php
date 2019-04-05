@@ -17,10 +17,13 @@ class BpActividadRepository extends \Doctrine\ORM\EntityRepository
 
         $dql = "SELECT SUM(a.costoTotal) AS total
             FROM JHWEBBancoProyectoBundle:BpActividad a
-            WHERE a.cuenta = :idCuenta";
+            WHERE a.cuenta = :idCuenta
+            AND a.activo = true";
             
         $consulta = $em->createQuery($dql);
+
         $consulta->setParameter('idCuenta', $idCuenta);
+        
         return $consulta->getOneOrNullResult();
     }
 }

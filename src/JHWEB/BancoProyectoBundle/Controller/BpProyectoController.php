@@ -68,8 +68,6 @@ class BpProyectoController extends Controller
             $proyecto->setNumero($params->numero);
             $proyecto->setNombre(strtoupper($params->nombre));
             $proyecto->setFecha(new \Datetime(date('Y-m-d')));
-            $proyecto->setCuentaNumero($params->cuentaNumero);
-            $proyecto->setCuentaNombre($params->cuentaNombre);
             $proyecto->setCostoTotal(0);
             $proyecto->setActivo(true);
 
@@ -95,31 +93,37 @@ class BpProyectoController extends Controller
     /**
      * Finds and displays a BpProyecto entity.
      *
-     * @Route("/show/{id}", name="bpProyecto_show")
+     * @Route("/show", name="bpProyecto_show")
      * @Method("POST")
      */
-    public function showAction(Request  $request, $id)
+    public function showAction(Request  $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($id);
+
+            $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($params->id);
+
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "bpProyecto encontrado", 
+                    'message' => 'Registro encontrado', 
                     'data'=> $proyecto,
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida', 
+            );
         }
+        
         return $helpers->json($response);
     }
 
@@ -284,7 +288,8 @@ class BpProyectoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Ninguna actividad registrada aún.",
+                    'message' => "Ninguna cuenta registrada aún.",
+                    'data' => array(),
                 );
             }
         }else{
@@ -299,12 +304,12 @@ class BpProyectoController extends Controller
     }
 
     /**
-     * Deletes a BpProyecto entity.
+     * Buscar un proyecto por filtro (1-Numero, 2-Fecha)
      *
-     * @Route("/search/numero", name="bpProyecto_search_numero")
+     * @Route("/search/filter", name="bpProyecto_search_filter")
      * @Method({"GET", "POST"})
      */
-    public function searchByNumeroAction(Request $request)
+    public function searchByFilterAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -316,16 +321,16 @@ class BpProyectoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->findOneByNumero(
-                $params->numero
+            $proyectos = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->getByFilter(
+                $params
             );
 
-            if ($proyecto) {
+            if ($proyectos) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro encontrado con éxito.",
-                    'data' => $proyecto
+                    'data' => $proyectos
                 );
             } else {
                 $response = array(

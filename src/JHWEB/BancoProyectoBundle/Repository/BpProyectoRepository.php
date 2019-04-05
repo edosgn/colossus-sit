@@ -10,4 +10,38 @@ namespace JHWEB\BancoProyectoBundle\Repository;
  */
 class BpProyectoRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getByFilter($params)
+    {
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT p
+                FROM JHWEBBancoProyectoBundle:BpProyecto p
+                WHERE p.numero = :filtro
+                ORDER BY p.fecha DESC";
+
+                $consulta = $em->createQuery($dql);
+
+                $consulta->setParameters(array(
+                    'filtro' => $params->filtro,
+                ));
+                break;
+
+            case 2:
+            $dql = "SELECT p
+                FROM JHWEBBancoProyectoBundle:BpProyecto p
+                WHERE p.fecha = :filtro
+                ORDER BY p.fecha DESC";
+
+                $consulta = $em->createQuery($dql);
+
+                $consulta->setParameters(array(
+                    'filtro' => $params->filtro,
+                ));
+                break;
+        }
+
+        return $consulta->getResult();
+    }
 }

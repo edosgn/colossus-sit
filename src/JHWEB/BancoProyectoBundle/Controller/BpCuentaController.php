@@ -5,7 +5,8 @@ namespace JHWEB\BancoProyectoBundle\Controller;
 use JHWEB\BancoProyectoBundle\Entity\BpCuenta;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Bpcuentum controller.
@@ -52,38 +53,83 @@ class BpCuentaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $bpCuentum = new Bpcuentum();
-        $form = $this->createForm('JHWEB\BancoProyectoBundle\Form\BpCuentaType', $bpCuentum);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($bpCuentum);
+
+            $cuenta = new BpCuenta();
+
+            $cuenta->setNumero($params->numero);
+            $cuenta->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $cuenta->setCostoTotal(0);
+            $cuenta->setActivo(true);
+
+            if ($params->idProyecto) {
+                $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($params->idProyecto);
+                $cuenta->setProyecto($proyecto);
+            }
+
+            $em->persist($cuenta);
             $em->flush();
 
-            return $this->redirectToRoute('bpcuenta_show', array('id' => $bpCuentum->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+                'data' => $cuenta
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('bpcuenta/new.html.twig', array(
-            'bpCuentum' => $bpCuentum,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a bpCuentum entity.
      *
-     * @Route("/{id}/show", name="bpcuenta_show")
-     * @Method("GET")
+     * @Route("/show", name="bpcuenta_show")
+     * @Method("POST")
      */
-    public function showAction(BpCuenta $bpCuentum)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($bpCuentum);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('bpcuenta/show.html.twig', array(
-            'bpCuentum' => $bpCuentum,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $cuenta = $em->getRepository('JHWEBBancoProyectoBundle:BpCuenta')->find($params->id);
+
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado', 
+                    'data'=> $cuenta,
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
