@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipattalonarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Rangoinicial</th>
+                <th>Rangofinal</th>
+                <th>Total</th>
+                <th>Saldo</th>
+                <th>Fecha</th>
+                <th>Numeroresolucion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatTalonario in svIpatTalonarios %}
+            <tr>
+                <td><a href="{{ path('svipattalonario_show', { 'id': svIpatTalonario.id }) }}">{{ svIpatTalonario.id }}</a></td>
+                <td>{{ svIpatTalonario.rangoInicial }}</td>
+                <td>{{ svIpatTalonario.rangoFinal }}</td>
+                <td>{{ svIpatTalonario.total }}</td>
+                <td>{{ svIpatTalonario.saldo }}</td>
+                <td>{% if svIpatTalonario.fecha %}{{ svIpatTalonario.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatTalonario.numeroResolucion }}</td>
+                <td>{% if svIpatTalonario.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipattalonario_show', { 'id': svIpatTalonario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svipattalonario_edit', { 'id': svIpatTalonario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svipattalonario_new') }}">Create a new svIpatTalonario</a>
+        </li>
+    </ul>
+{% endblock %}

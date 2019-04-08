@@ -32,16 +32,16 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    public function getNumeroModulo($numero,$idModulo,$idOrnganismoTransito)
+    public function getByNumeroAndModulo($numero, $idModulo, $idOrganismoTransito)
     { 
         $em = $this->getEntityManager();
 
-        $dql = "SELECT i.numero,ci.nombre
-            FROM JHWEBInsumoBundle:ImoInsumo i
-            JOIN i.casoInsumo ci
-            WHERE i.casoInsumo = ci.id
-            AND i.organismoTransito = :idOrnganismoTransito
-            AND ci.modulo = :idModulo
+        $dql = "SELECT i.numero, t.nombre
+            FROM JHWEBInsumoBundle:ImoInsumo i,
+            JHWEBInsumoBundle:ImoCfgTipo t
+            WHERE i.tipo = t.id
+            AND i.organismoTransito = :idOrganismoTransito
+            AND t.modulo = :idModulo
             AND i.estado = :estado
             AND i.tipo = :tipo
             AND i.numero = :numero
@@ -50,10 +50,10 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'idOrnganismoTransito' => $idOrnganismoTransito,
             'estado' => 'disponible',
             'tipo' => 'sustrato',
             'numero' => $numero,
+            'idOrganismoTransito' => $idOrganismoTransito,
             'idModulo' => $idModulo,
         ));
 

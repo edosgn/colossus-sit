@@ -24,7 +24,9 @@ class SvCfgZonaController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+
         $zonas = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgZona')->findBy(
             array('activo' => true)
         );
@@ -39,8 +41,8 @@ class SvCfgZonaController extends Controller
                 'data' => $zonas,
             );
         }
-        return $helpers->json($response);
 
+        return $helpers->json($response);
     }
 
     /**

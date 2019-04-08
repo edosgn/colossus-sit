@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipattalonario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ svIpatTalonario.id }}</td>
+            </tr>
+            <tr>
+                <th>Rangoinicial</th>
+                <td>{{ svIpatTalonario.rangoInicial }}</td>
+            </tr>
+            <tr>
+                <th>Rangofinal</th>
+                <td>{{ svIpatTalonario.rangoFinal }}</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <td>{{ svIpatTalonario.total }}</td>
+            </tr>
+            <tr>
+                <th>Saldo</th>
+                <td>{{ svIpatTalonario.saldo }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if svIpatTalonario.fecha %}{{ svIpatTalonario.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroresolucion</th>
+                <td>{{ svIpatTalonario.numeroResolucion }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if svIpatTalonario.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svipattalonario_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('svipattalonario_edit', { 'id': svIpatTalonario.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

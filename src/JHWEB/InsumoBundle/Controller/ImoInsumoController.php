@@ -73,12 +73,8 @@ class ImoInsumoController extends Controller
             $fecha = new \DateTime($params->asignacionInsumos->fecha);
             $em = $this->getDoctrine()->getManager();
 
-
             $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
-
             $numeroActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
-
-            
 
             if ($numeroActa['maximo'] == '') {
                 $numeroActa = 1;
@@ -86,12 +82,12 @@ class ImoInsumoController extends Controller
                $numeroActa = $numeroActa['maximo']+1;
             }
             
-
             $imoTrazabilidad = new ImoTrazabilidad();
             $imoTrazabilidad->setOrganismoTransito($sedeOperativa);
             $imoTrazabilidad->setFecha($fecha);
             $imoTrazabilidad->setEstado('asignacion');
-            $imoTrazabilidad->setActivo(1);
+            $imoTrazabilidad->setActivo(true);
+
             $em->persist($imoTrazabilidad);
             $em->flush();
             
@@ -273,10 +269,10 @@ class ImoInsumoController extends Controller
     /**
      * Finds and displays a sustrato entity.
      *
-     * @Route("/showInsumo/numero/modulo", name="insumo_show_numero")
+     * @Route("/search/numero/modulo", name="insumo_search_numero")
      * @Method({"GET", "POST"})
      */
-    public function showNumeroAction(Request $request)
+    public function searchByNumeroAndModuloAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -285,30 +281,36 @@ class ImoInsumoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $sustrato = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getNumeroModulo(
-                $params->numero,$params->idModulo,$params->idSedeOperativa
+
+            $sustrato = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getByNumeroAndModulo(
+                $params->numero,
+                $params->idModulo,
+                $params->idOrganismoTransito
             );
+
             if ($sustrato) {
                 $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'data'=> $sustrato,
+                    'status' => 'success',
+                    'code' => 200,
+                    'data'=> $sustrato,
                 );
             }else{
                 $response = array(
-                        'status' => 'error',
-                        'code' => 300,
-                        'message'=> 'sustrato no encontrado',
+                    'status' => 'error',
+                    'code' => 300,
+                    'message'=> 'sustrato no encontrado',
                 );
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
+        
         return $helpers->json($response);
     }
 

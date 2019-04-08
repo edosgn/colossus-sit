@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnaltalonarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Desde</th>
+                <th>Hasta</th>
+                <th>Rangos</th>
+                <th>Fechaasignacion</th>
+                <th>Numeroresolucion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pnalTalonario in pnalTalonarios %}
+            <tr>
+                <td><a href="{{ path('pnaltalonario_show', { 'id': pnalTalonario.id }) }}">{{ pnalTalonario.id }}</a></td>
+                <td>{{ pnalTalonario.desde }}</td>
+                <td>{{ pnalTalonario.hasta }}</td>
+                <td>{{ pnalTalonario.rangos }}</td>
+                <td>{% if pnalTalonario.fechaAsignacion %}{{ pnalTalonario.fechaAsignacion|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ pnalTalonario.numeroResolucion }}</td>
+                <td>{% if pnalTalonario.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pnaltalonario_show', { 'id': pnalTalonario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pnaltalonario_edit', { 'id': pnalTalonario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnaltalonario_new') }}">Create a new pnalTalonario</a>
+        </li>
+    </ul>
+{% endblock %}

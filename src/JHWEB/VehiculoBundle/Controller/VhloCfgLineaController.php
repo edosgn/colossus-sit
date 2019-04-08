@@ -297,14 +297,13 @@ class VhloCfgLineaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if ($params->idMarca) {
+            if ($params) {
                 $lineas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findBy(
-                    array('marca' => $params->idMarca)
+                    array('marca' => $params)
                 );
 
                 if ($lineas) {
                     $response = null;
-
                     foreach ($lineas as $key => $linea) {
                         $response[$key] = array(
                             'value' => $linea->getId(),

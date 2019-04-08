@@ -65,10 +65,6 @@ class ImoInsumo
      **/
     protected $lote;
 
-
-
-   
-
     /**
      * Get id
      *
