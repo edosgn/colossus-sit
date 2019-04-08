@@ -70,6 +70,7 @@ class MsvParametroController extends Controller
                     'id'=>$msvParametro->getId(),
                     'name'=>$msvParametro->getNombre(),
                     'valor'=>$msvParametro->getValor(),
+                    'numeroCriterios' => $msvParametro->getNumeroCriterios(),
                     'variables' => null,
                 );
 
@@ -90,18 +91,19 @@ class MsvParametroController extends Controller
                             'id'=> $variable->getId(),
                             'name' => $variable->getNombre(),
                             'criterios' => null,
-                            'numeroCriterios' => null, 
                         );
+
+                        /** para el numero de criterios por parametro */
+                        /* $criterios = $em->getRepository('AppBundle:MsvCriterio')->getCriteriosByParametro($variable);
+                        $numeroCriterios = count($criterios);   */                    
+                        /* $msvParametrosArray[$keyParametro]['variables'][$keyVariable]; */
 
                         $criterios = $em->getRepository('AppBundle:MsvCriterio')->findBy(
                             array(
-                            'variable' => $variable->getId(),
-                            'estado' => 1,
+                                'variable' => $variable->getId(),
+                                'estado' => 1,
                             )
                         );
-
-                        $numeroCriterios = count($criterios);
-                        $msvParametrosArray[$keyParametro]['variables'][$keyVariable]['numeroCriterios'] = $numeroCriterios;
 
                         if($criterios){
                             foreach ($criterios as $keyCriterio => $criterio) {
@@ -166,7 +168,9 @@ class MsvParametroController extends Controller
             $categoria = $em->getRepository('AppBundle:MsvCategoria')->find($params->idCategoria);
             $parametro->setCategoria($categoria);
             $parametro->setValor($params->valor);
+            $parametro->setNumeroCriterios($params->numeroCriterios);
             $parametro->setEstado(true);
+
             $em->persist($parametro);
             $em->flush();
 
@@ -225,6 +229,8 @@ class MsvParametroController extends Controller
 
                 $parametro->setNombre(strtoupper($params->nombre));
                 $parametro->setCategoria($categoria);
+                $parametro->setValor($params->valor);
+                $parametro->setNumeroCriterios($params->numeroCriterios);
 
                 $em->persist($parametro);
                 $em->flush();
