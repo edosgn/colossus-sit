@@ -16,12 +16,26 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
     public function getIpatByRango($params) {
         $em = $this->getEntityManager();
 
+        $condicion = null; 
+
         $horaInicioDatetime = $params->datos->horaInicio;
         $horaFinDatetime = $params->datos->horaFin;
         $fechaInicioDatetime = new \Datetime($params->datos->fechaInicio);
         $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
     
-        if ($params->datos->idGravedad) {
+        var_dump($params);
+        die();
+        
+        foreach ($params->datos->arrayGravedadAccidente as $key => $idGravedad) {
+            # code...
+            $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($idGravedad);
+            $condicion .= " OR ri.gravedadAccidente = '" . $gravedadAccidente . "'";
+        }
+        
+        foreach ($params->datos->idTipoVictima as $key => $arrayTipoVictima) {
+            # code...
+        }
+        /* if ($params->datos->idGravedad) {
             $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->datos->idGravedad);
         }
         if ($params->datos->idTipoVictima) {
@@ -66,43 +80,16 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         
         $edadInicioConductor = intval($params->datos->idGrupoEdad);
         $edadFinConductor = $edadInicioConductor + 4;
-        $diaAccidente = $params->datos->idDiaSemana;
+        $diaAccidente = $params->datos->idDiaSemana; */
 
         $dql = "SELECT ri
             FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
-            WHERE ri.fechaAccidente BETWEEN :fechaInicioDatetime AND :fechaFinDatetime
-            AND ri.diaAccidente = :diaAccidente
-            AND ri.horaAccidente BETWEEN :horaInicioDatetime AND :horaFinDatetime
-            AND ri.gravedadAccidente = :gravedadAccidente
-            AND ri.tipoVictima = :tipoVictima
-            AND ri.ciudadResidenciaConductor = :municipioNombre
-            AND ri.sexoConductor = :sexoConductor
-            AND ri.sexoVictima = :sexoConductor
-            AND ri.edadConductor BETWEEN :edadInicioConductor AND :edadFinConductor
-            AND ri.edadVictima BETWEEN :edadInicioConductor AND :edadFinConductor
-            AND ri.clase = :claseNombre
-            AND ri.claseAccidente = :claseAccidente
-            AND ri.choqueCon = :choqueCon
-            OR ri.objetoFijo = :objetoFijo
+            WHERE ri.gravedadAccidente = :gravedadAccidente
             AND ri.activo = 1";
         
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
-            'fechaInicioDatetime' => $fechaInicioDatetime,
-            'fechaFinDatetime' => $fechaFinDatetime,
-            'diaAccidente' => $diaAccidente,
-            'horaInicioDatetime' => $horaInicioDatetime,
-            'horaFinDatetime' => $horaFinDatetime,
             'gravedadAccidente' => $gravedadAccidente,
-            'tipoVictima' => $tipoVictima,
-            'municipioNombre' => $municipioNombre,
-            'sexoConductor' => $sexoConductor,
-            'edadInicioConductor' => $edadInicioConductor,
-            'edadFinConductor' => $edadFinConductor,
-            'claseNombre' => $claseNombre,
-            'claseAccidente' => $claseAccidente,
-            'choqueCon' => $choqueCon,
-            'objetoFijo' => $objetoFijo,
         ));
 
         return $consulta->getResult();

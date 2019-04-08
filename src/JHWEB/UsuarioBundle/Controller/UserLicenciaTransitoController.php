@@ -139,8 +139,8 @@ class UserLicenciaTransitoController extends Controller
     /**
      * Finds and displays a userCfgEmpresaTipo entity.
      *
-     * @Route("/search/actual", name="usercfgempresatipo_search_actual")
-     * @Method("GET")
+     * @Route("/search/actual", name="userlicenciatransito_search_actual")
+     * @Method("POST")
      */
     public function searchActualAction(Request $request)
     {
@@ -151,6 +151,7 @@ class UserLicenciaTransitoController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
 
             $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
@@ -159,9 +160,6 @@ class UserLicenciaTransitoController extends Controller
                     'activo' => true,
                 )
             );
-
-            $em->persist($licenciaTransito);
-            $em->flush();
 
             $response = array(
                 'status' => 'success',

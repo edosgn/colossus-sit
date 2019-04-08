@@ -1006,6 +1006,9 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
+            
+            /* var_dump($params);
+            die(); */
 
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
             

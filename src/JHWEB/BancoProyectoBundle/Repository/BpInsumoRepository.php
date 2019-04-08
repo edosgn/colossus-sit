@@ -17,10 +17,13 @@ class BpInsumoRepository extends \Doctrine\ORM\EntityRepository
 
         $dql = "SELECT SUM(i.valorTotal) AS total
             FROM JHWEBBancoProyectoBundle:BpInsumo i
-            WHERE i.actividad = :idActividad";
+            WHERE i.actividad = :idActividad
+            AND i.activo = true";
             
         $consulta = $em->createQuery($dql);
+
         $consulta->setParameter('idActividad', $idActividad);
+
         return $consulta->getOneOrNullResult();
     }
 }

@@ -45,20 +45,6 @@ class BpProyecto
     /**
      * @var int
      *
-     * @ORM\Column(name="cuenta_numero", type="integer")
-     */
-    private $cuentaNumero;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="cuenta_nombre", type="string", length=255)
-     */
-    private $cuentaNombre;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="costo_total", type="integer")
      */
     private $costoTotal;
@@ -154,54 +140,6 @@ class BpProyecto
             return $this->fecha->format('d/m/Y');
         }
         return $this->fecha;
-    }
-
-    /**
-     * Set cuentaNumero
-     *
-     * @param integer $cuentaNumero
-     *
-     * @return BpProyecto
-     */
-    public function setCuentaNumero($cuentaNumero)
-    {
-        $this->cuentaNumero = $cuentaNumero;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaNumero
-     *
-     * @return integer
-     */
-    public function getCuentaNumero()
-    {
-        return $this->cuentaNumero;
-    }
-
-    /**
-     * Set cuentaNombre
-     *
-     * @param string $cuentaNombre
-     *
-     * @return BpProyecto
-     */
-    public function setCuentaNombre($cuentaNombre)
-    {
-        $this->cuentaNombre = $cuentaNombre;
-
-        return $this;
-    }
-
-    /**
-     * Get cuentaNombre
-     *
-     * @return string
-     */
-    public function getCuentaNombre()
-    {
-        return $this->cuentaNombre;
     }
 
     /**

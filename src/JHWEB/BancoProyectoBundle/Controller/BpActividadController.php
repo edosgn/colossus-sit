@@ -96,23 +96,28 @@ class BpActividadController extends Controller
     /**
      * Finds and displays a BpActividad entity.
      *
-     * @Route("/show/{id}", name="bpActividad_show")
+     * @Route("/show", name="bpActividad_show")
      * @Method("POST")
      */
-    public function showAction(Request  $request, $id)
+    public function showAction(Request  $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $bpActividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($id);
+
+            $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->id);
+
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "bpActividad encontrado", 
-                    'data'=> $bpActividad,
+                    'msj' => "Registro encontrado", 
+                    'data'=> $actividad,
             );
         }else{
             $response = array(
