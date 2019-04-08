@@ -42,7 +42,6 @@ class ImoCfgTipo
      */
     private $tipo;
 
-    
     /**
      * @var bool
      *

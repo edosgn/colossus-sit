@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipatconsecutivos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numero</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatConsecutivo in svIpatConsecutivos %}
+            <tr>
+                <td><a href="{{ path('svipatconsecutivo_show', { 'id': svIpatConsecutivo.id }) }}">{{ svIpatConsecutivo.id }}</a></td>
+                <td>{{ svIpatConsecutivo.numero }}</td>
+                <td>{% if svIpatConsecutivo.fecha %}{{ svIpatConsecutivo.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatConsecutivo.estado }}</td>
+                <td>{% if svIpatConsecutivo.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipatconsecutivo_show', { 'id': svIpatConsecutivo.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svipatconsecutivo_edit', { 'id': svIpatConsecutivo.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svipatconsecutivo_new') }}">Create a new svIpatConsecutivo</a>
+        </li>
+    </ul>
+{% endblock %}

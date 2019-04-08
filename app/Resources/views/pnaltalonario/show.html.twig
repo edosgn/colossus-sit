@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pnaltalonario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ pnalTalonario.id }}</td>
+            </tr>
+            <tr>
+                <th>Desde</th>
+                <td>{{ pnalTalonario.desde }}</td>
+            </tr>
+            <tr>
+                <th>Hasta</th>
+                <td>{{ pnalTalonario.hasta }}</td>
+            </tr>
+            <tr>
+                <th>Rangos</th>
+                <td>{{ pnalTalonario.rangos }}</td>
+            </tr>
+            <tr>
+                <th>Fechaasignacion</th>
+                <td>{% if pnalTalonario.fechaAsignacion %}{{ pnalTalonario.fechaAsignacion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numeroresolucion</th>
+                <td>{{ pnalTalonario.numeroResolucion }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if pnalTalonario.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pnaltalonario_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('pnaltalonario_edit', { 'id': pnalTalonario.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

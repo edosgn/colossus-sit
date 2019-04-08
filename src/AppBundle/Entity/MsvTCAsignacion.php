@@ -21,8 +21,7 @@ class MsvTCAsignacion
      */
     private $id;
 
-
-/**
+    /**
      * @var int
      *
      * @ORM\Column(name="desde", type="bigint")

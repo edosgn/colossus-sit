@@ -38,9 +38,9 @@ class PnalAsignacion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_asignacion", type="date")
+     * @ORM\Column(name="fecha", type="date")
      */
-    private $fechaAsignacion;
+    private $fecha;
 
     /**
      * @var int
@@ -121,27 +121,27 @@ class PnalAsignacion
     }
 
     /**
-     * Set fechaAsignacion
+     * Set fecha
      *
-     * @param \DateTime $fechaAsignacion
+     * @param \DateTime $fecha
      *
      * @return PnalAsignacion
      */
-    public function setFechaAsignacion($fechaAsignacion)
+    public function setFecha($fecha)
     {
-        $this->fechaAsignacion = $fechaAsignacion;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
     /**
-     * Get fechaAsignacion
+     * Get fecha
      *
      * @return \DateTime
      */
-    public function getFechaAsignacion()
+    public function getFecha()
     {
-        return $this->fechaAsignacion;
+        return $this->fecha;
     }
 
     /**
