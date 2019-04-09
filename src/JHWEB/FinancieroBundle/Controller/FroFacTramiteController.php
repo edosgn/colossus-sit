@@ -183,6 +183,7 @@ class FroFacTramiteController extends Controller
         );
 
         $sustrato = false;
+        $numeroRunt = false;
         
         if ($tramitesFactura) {
             if (isset($params->idVehiculo)) {
@@ -194,6 +195,11 @@ class FroFacTramiteController extends Controller
 
                 if ($propietarios) {
                     foreach ($tramitesFactura as $key => $tramiteFactura) {
+                        //Valida si alguno de los trámites facturados requiere numero RUNT
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() != 30) {
+                            $numeroRunt = true;
+                        }
+
                         //Valida si alguno de los trámites facturados requiere sustrato
                         if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
                             $sustrato = true;
@@ -213,6 +219,7 @@ class FroFacTramiteController extends Controller
                             'tramitesFactura' => $tramitesFacturaArray,
                             'propietarios' => $propietarios,
                             'sustrato' => $sustrato,
+                            'numeroRunt' => $numeroRunt,
                         )
                     );
                 }else{
