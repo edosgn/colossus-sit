@@ -45,9 +45,9 @@ class SvIpatTalonario
     /**
      * @var int
      *
-     * @ORM\Column(name="saldo", type="integer")
+     * @ORM\Column(name="disponible", type="integer")
      */
-    private $saldo;
+    private $disponible;
 
     /**
      * @var \DateTime
@@ -159,27 +159,27 @@ class SvIpatTalonario
     }
 
     /**
-     * Set saldo
+     * Set disponible
      *
-     * @param integer $saldo
+     * @param integer $disponible
      *
      * @return SvIpatTalonario
      */
-    public function setSaldo($saldo)
+    public function setDisponible($disponible)
     {
-        $this->saldo = $saldo;
+        $this->disponible = $disponible;
 
         return $this;
     }
 
     /**
-     * Get saldo
+     * Get disponible
      *
      * @return integer
      */
-    public function getSaldo()
+    public function getDisponible()
     {
-        return $this->saldo;
+        return $this->disponible;
     }
 
     /**
@@ -204,7 +204,7 @@ class SvIpatTalonario
     public function getFecha()
     {
         if ($this->fecha) {
-            return $this->fecha->fotmat('d/m/Y');
+            return $this->fecha->format('d/m/Y');
         }
         return $this->fecha;
     }

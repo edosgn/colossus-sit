@@ -10,4 +10,18 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvIpatAsignacionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de facturas por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT COUNT(a.id) AS maximo
+            FROM JHWEBSeguridadVialBundle:SvIpatAsignacion a
+            WHERE YEAR(a.fecha) = :ANIO";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+
+        return $consulta->getOneOrNullResult();
+    }
 }

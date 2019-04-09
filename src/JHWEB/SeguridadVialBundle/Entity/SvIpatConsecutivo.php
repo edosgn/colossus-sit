@@ -48,6 +48,11 @@ class SvIpatConsecutivo
     protected $talonario;
 
     /**
+     * @ORM\ManyToOne(targetEntity="SvIpatAsignacion", inversedBy="consecutivos")
+     **/
+    protected $asignacion;
+
+    /**
      * Get id
      *
      * @return int
@@ -151,5 +156,29 @@ class SvIpatConsecutivo
     public function getTalonario()
     {
         return $this->talonario;
+    }
+
+    /**
+     * Set asignacion
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatAsignacion $asignacion
+     *
+     * @return SvIpatConsecutivo
+     */
+    public function setAsignacion(\JHWEB\SeguridadVialBundle\Entity\SvIpatAsignacion $asignacion = null)
+    {
+        $this->asignacion = $asignacion;
+
+        return $this;
+    }
+
+    /**
+     * Get asignacion
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatAsignacion
+     */
+    public function getAsignacion()
+    {
+        return $this->asignacion;
     }
 }

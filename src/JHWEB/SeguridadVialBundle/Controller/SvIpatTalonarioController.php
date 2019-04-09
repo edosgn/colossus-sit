@@ -74,7 +74,7 @@ class SvIpatTalonarioController extends Controller
             $talonario->setRangoInicial($params->rangoInicial);
             $talonario->setRangoFinal($params->rangoFinal);
             $talonario->setTotal($params->total);
-            $talonario->setSaldo($params->total);
+            $talonario->setDisponible($params->total);
             $talonario->setFecha(
                 new \Datetime($params->fecha)
             );

@@ -1,0 +1,74 @@
+<html>
+  <header>
+  </header>
+  <body>
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>ACTA DE ENTREGA No. {{ asignacion.numeroActa }}</b>
+        <br>      
+    </p>
+
+    <table border="1">
+        <tr style="text-align:center;">
+            <td colspan="3">
+                <b>ORGANISMO DE TRANSITO</b>
+                <br>
+                {{ asignacion.talonario.organismoTransito.nombre }}
+            </td>
+        </tr>
+        <tr style="text-align:center;font-weight:bold;">
+            <td>RANGOS</td>
+            <td>UNIDAD DE ENTREGA</td>
+            <td>TOTAL ENTREGADOS</td>
+        </tr>
+        <tr style="text-align:center;">
+            <td>
+                {{ asignacion.rangoInicial }}
+                a
+                {{ asignacion.RangoFinal }}
+            </td>
+            <td>IPAT Impresos</td>
+            <td>{{ asignacion.total }}</td>
+        </tr>
+    </table>
+
+    <table border="1">
+        <tr style="text-align:center;font-weight:bold;">
+            <td>#</td>
+            <td>NUMERO</td>
+        </tr>
+        {% for key, consecutivo in consecutivos %}    
+        <tr style="text-align:center;">
+            <td>{{ key + 1 }}</td>
+            <td>{{ consecutivo.numero }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p style="text-align:justify;">
+NOTA: LA ENTREGA DE TALONARIOS DE COMPARENDOS DEBE REALIZARSE EN FORMA CONSECUTIVA A CADA POLICIA, PUES SE REQUIERE QUE LOS RANGOS SE USEN DE MANERA ASCENDENTE.
+<br>
+<br>
+SI EL AGENTE ASIGNADO ES RETIRADO DEL SERVICIO, AL SALIR DEBERA DEVOLVER FORMALMENTE EL TALONARIO DE COMPARENDOS ASIGNADO, EN EL ESTADO EN QUE SE ENCUENTRE.
+    </p>
+
+    <table style="padding-top:60px;">
+        <tr>
+            <td width="50%">
+FIRMA QUIEN ENTREGA
+Nombre del Funcionario
+Cargo
+            </td>
+            <td style="text-align:right;">
+FIRMA DEL AGENTE DE POLICIA
+Nombre del Agente
+            </td>
+        </tr>
+    </table>
+  </body>
+</html>

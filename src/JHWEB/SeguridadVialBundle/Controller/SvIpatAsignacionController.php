@@ -3,9 +3,12 @@
 namespace JHWEB\SeguridadVialBundle\Controller;
 
 use JHWEB\SeguridadVialBundle\Entity\SvIpatAsignacion;
+use JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo;
+use JHWEB\SeguridadVialBundle\Entity\SvIpatTalonario;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Svipatasignacion controller.
@@ -39,28 +42,78 @@ class SvIpatAsignacionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $svIpatAsignacion = new Svipatasignacion();
-        $form = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvIpatAsignacionType', $svIpatAsignacion);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($svIpatAsignacion);
+
+            $asignacion = new SvIpatAsignacion();
+
+            $talonario = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatTalonario')->find(
+                $params->idTalonario
+            );
+            $asignacion->setTalonario($talonario);
+
+            $fecha = new \Datetime($params->fecha);
+
+            $asignacion->setRangoInicial($params->rangoInicial);
+            $asignacion->setRangoFinal($params->rangoFinal);
+            $asignacion->setTotal($params->total);
+            $asignacion->setFecha($fecha);
+            $asignacion->setActivo(true);
+
+            $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatAsignacion')->getMaximo(date('Y'));
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            
+            $asignacion->setNumeroActa(
+                $fecha->format('Y').$fecha->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
+            );
+
+            $talonario->setDisponible($talonario->getTotal() - $params->total);
+
+            $em->persist($asignacion);
             $em->flush();
 
-            return $this->redirectToRoute('svipatasignacion_show', array('id' => $svIpatAsignacion->getId()));
-        }
+            $divipo = $talonario->getOrganismoTransito()->getDivipo();
 
-        return $this->render('svipatasignacion/new.html.twig', array(
-            'svIpatAsignacion' => $svIpatAsignacion,
-            'form' => $form->createView(),
-        ));
+            for ($rango = $asignacion->getRangoInicial(); $rango <= $asignacion->getRangoFinal(); $rango++) {
+                $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
+                    array(
+                        'numero' => $divipo.$rango,
+                    )
+                );
+                
+                $consecutivo->setAsignacion($asignacion);
+                $consecutivo->setEstado("ASIGNADO");
+
+                $em->flush();
+            }
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registros asignados con exito.', 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        } 
+
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a svIpatAsignacion entity.
      *
-     * @Route("/{id}", name="svipatasignacion_show")
+     * @Route("/{id}/show", name="svipatasignacion_show")
      * @Method("GET")
      */
     public function showAction(SvIpatAsignacion $svIpatAsignacion)
@@ -101,7 +154,7 @@ class SvIpatAsignacionController extends Controller
     /**
      * Deletes a svIpatAsignacion entity.
      *
-     * @Route("/{id}", name="svipatasignacion_delete")
+     * @Route("/{id}/delete", name="svipatasignacion_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, SvIpatAsignacion $svIpatAsignacion)
@@ -132,5 +185,90 @@ class SvIpatAsignacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ============================================================== */
+
+    /**
+     * Busca todas las asignaciones por talonario.
+     *
+     * @Route("/record/talonario", name="svipatasignacion_record_talonario")
+     * @Method({"GET", "POST"})
+     */
+    public function recordByTalonarioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $asignaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatAsignacion')->findBy(
+                array(
+                    'talonario' => $params->idTalonario
+                )
+            );
+                
+            if ($asignaciones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($asignaciones).' Registros encontrados',  
+                    'data'=> $asignaciones,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Ningún registro encontrado.',
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Genera el acta de entrega de impresos.
+     *
+     * @Route("/acta/{id}/pdf", name="svipatasignacion_acta_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $asignacion = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatAsignacion')->find(
+            $id
+        );
+
+        $consecutivos = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findBy(
+            array(
+                'asignacion' => $asignacion->getId(),
+            )
+        );
+
+        $html = $this->renderView('@JHWEBSeguridadVial/Default/pdf.asignacion.html.twig', array(
+            'asignacion' => $asignacion,
+            'consecutivos' => $consecutivos,
+            'fechaActual' => $fechaActual
+        ));
+
+        $this->get('app.pdf')->templateActaIpat($html, $asignacion);
     }
 }
