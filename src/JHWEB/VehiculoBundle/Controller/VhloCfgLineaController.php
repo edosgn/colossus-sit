@@ -296,10 +296,12 @@ class VhloCfgLineaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+            // var_dump($params->idMarca);
+            // die();
 
-            if ($params) {
+            if ($params->idMarca) {
                 $lineas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findBy(
-                    array('marca' => $params)
+                    array('marca' => $params->idMarca)
                 );
 
                 if ($lineas) {
