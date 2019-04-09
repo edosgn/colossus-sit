@@ -203,6 +203,9 @@ class SvIpatTalonario
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->fotmat('d/m/Y');
+        }
         return $this->fecha;
     }
 

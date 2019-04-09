@@ -3,9 +3,11 @@
 namespace JHWEB\SeguridadVialBundle\Controller;
 
 use JHWEB\SeguridadVialBundle\Entity\SvIpatTalonario;
+use JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Svipattalonario controller.
@@ -72,6 +74,7 @@ class SvIpatTalonarioController extends Controller
             $talonario->setRangoInicial($params->rangoInicial);
             $talonario->setRangoFinal($params->rangoFinal);
             $talonario->setTotal($params->total);
+            $talonario->setSaldo($params->total);
             $talonario->setFecha(
                 new \Datetime($params->fecha)
             );
@@ -215,18 +218,73 @@ class SvIpatTalonarioController extends Controller
     /* ============================================================== */
 
     /**
-     * Buscar talonario por organismo de transito.
+     * Buscar todos los talonarios por organismo de transito y fecha.
      *
-     * @Route("/find/organismotransito", name="svipattalonario_find_organismotransito")
+     * @Route("/search/organismotransito/fecha", name="svipattalonario_search_organismotransito_fecha")
      * @Method("POST")
      */
-    public function findByOrganismoTransitoAction(Request $request)
+    public function searchByOrganismoTransitoAndFechaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $fecha = new \Datetime($params->fecha);
+
+            $talonarios = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatTalonario')->findBy(
+                array(
+                    'organismoTransito' => $params->idOrganismoTransito,
+                    'fecha' => $fecha,
+                )
+            );
+
+            if ($talonarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($talonarios) . " registros encontrados.",
+                    'data'=> $talonarios,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 300,
+                    'message' => 'Registro no encontrado.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Buscar talonario por organismo de transito.
+     *
+     * @Route("/search/organismotransito", name="svipattalonario_search_organismotransito")
+     * @Method("POST")
+     */
+    public function searchOneByOrganismoTransitoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
 
             $talonario = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatTalonario')->findOneBy(
