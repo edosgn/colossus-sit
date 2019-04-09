@@ -43,6 +43,13 @@ class MsvParametro
     private $valor;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_criterios", type="integer")
+     */
+    private $numeroCriterios;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MsvCategoria")
      **/
     protected $categoria;
@@ -99,7 +106,7 @@ class MsvParametro
     /**
      * Get estado
      *
-     * @return bool
+     * @return boolean
      */
     public function getEstado()
     {
@@ -123,7 +130,7 @@ class MsvParametro
     /**
      * Get valor
      *
-     * @return int
+     * @return integer
      */
     public function getValor()
     {
@@ -131,11 +138,35 @@ class MsvParametro
     }
 
     /**
+     * Set numeroCriterios
+     *
+     * @param integer $numeroCriterios
+     *
+     * @return MsvParametro
+     */
+    public function setNumeroCriterios($numeroCriterios)
+    {
+        $this->numeroCriterios = $numeroCriterios;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCriterios
+     *
+     * @return integer
+     */
+    public function getNumeroCriterios()
+    {
+        return $this->numeroCriterios;
+    }
+
+    /**
      * Set categoria
      *
      * @param \AppBundle\Entity\MsvCategoria $categoria
      *
-     * @return MsvCategoria
+     * @return MsvParametro
      */
     public function setCategoria(\AppBundle\Entity\MsvCategoria $categoria = null)
     {
@@ -154,4 +185,3 @@ class MsvParametro
         return $this->categoria;
     }
 }
-

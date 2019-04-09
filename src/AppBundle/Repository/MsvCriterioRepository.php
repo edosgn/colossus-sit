@@ -10,4 +10,21 @@ namespace AppBundle\Repository;
  */
 class MsvCriterioRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getCriteriosByParametro($variable) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT c
+            FROM AppBundle:MsvCriterio c, AppBundle:MsvVariable v, AppBundle:MsvParametro p
+            WHERE c.variable = :variable
+            AND v.id = c.variable
+            AND p.id = v.parametro
+            AND c.estado = 1";
+        
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'variable' => $variable,
+        ));
+
+        return $consulta->getResult();
+    }
 }

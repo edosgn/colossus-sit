@@ -1,33 +1,32 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace JHWEB\VehiculoBundle\Controller;
 
-use AppBundle\Entity\CfgValorVehiculo;
+use JHWEB\VehiculoBundle\Entity\VhloCfgValor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cfgvalorvehiculo controller.
+ * Vhlocfgvalor controller.
  *
- * @Route("cfgValorVehiculo")
+ * @Route("vhlocfgvalor")
  */
-class CfgValorVehiculoController extends Controller
+class VhloCfgValorController extends Controller
 {
-     /**
-     * Lists all cfgValorVehiculo entities.
+    /**
+     * Lists all vhloCfgValor entities.
      *
-     * @Route("/", name="cfgvalorvehiculo_index")
+     * @Route("/", name="vhlocfgvalor_index")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction() 
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->findBy(
-            array('estado' => 1)
+        $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->findBy(
+            array('activo' => 1)
         );
 
         $response = array(
@@ -41,9 +40,9 @@ class CfgValorVehiculoController extends Controller
     }
 
     /**
-     * Creates a new cfgValorVehiculo entity.
+     * Creates a new vhloCfgValor entity.
      *
-     * @Route("/new", name="cfgvalorvehiculo_new")
+     * @Route("/new", name="vhlocfgvalor_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -56,19 +55,19 @@ class CfgValorVehiculoController extends Controller
             $params = json_decode($json);
 
                 $em = $this->getDoctrine()->getManager();
-                $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
-                $linea = $em->getRepository('AppBundle:Linea')->find($params->lineaId);
+                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->claseId);
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->lineaId);
 
-                $valorVehiculo = new CfgValorVehiculo();
+                $vhloCfgValor = new VhloCfgValor();
 
-                $valorVehiculo->setClase($clase);
-                $valorVehiculo->setLinea($linea);
-                $valorVehiculo->setCilindraje($params->cilindraje);
-                $valorVehiculo->setValor($params->valor);
-                $valorVehiculo->setAnio($params->anio);
-                $valorVehiculo->setEstado(true);
-
-                $em->persist($valorVehiculo);
+                $vhloCfgValor->setClase($clase);
+                $vhloCfgValor->setLinea($linea);
+                $vhloCfgValor->setCilindraje($params->cilindraje);
+                $vhloCfgValor->setValor($params->valor);
+                $vhloCfgValor->setAnio($params->anio);
+                $vhloCfgValor->setActivo(true);
+ 
+                $em->persist($vhloCfgValor);
                 $em->flush();
                 $response = array(
                     'status' => 'success',
@@ -88,12 +87,12 @@ class CfgValorVehiculoController extends Controller
     }
 
     /**
-     * Finds and displays a cfgValorVehiculo entity.
+     * Finds and displays a vhloCfgValor entity.
      *
-     * @Route("/show/{id}", name="cfgvalorvehiculo_show")
-     * @Method("POST")
+     * @Route("/show/{id}", name="vhlocfgvalor_show")
+     * @Method("GET")
      */
-    public function showAction(CfgValorVehiculo $cfgValorVehiculo)
+    public function showAction(VhloCfgValor $vhloCfgValor)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -101,7 +100,7 @@ class CfgValorVehiculoController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $cfgValorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find($id);
+            $cfgValorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find($id);
             $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -119,9 +118,9 @@ class CfgValorVehiculoController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing cfgValorVehiculo entity.
+     * Displays a form to edit an existing vhloCfgValor entity.
      *
-     * @Route("/edit", name="cfgvalorvehiculo_edit")
+     * @Route("/edit", name="vhlocfgvalor_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -135,9 +134,9 @@ class CfgValorVehiculoController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            $clase = $em->getRepository('AppBundle:Clase')->find($params->claseId);
-            $linea = $em->getRepository('AppBundle:Linea')->find($params->lineaId);
-            $cfgValorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find($params->id);
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->claseId);
+            $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->lineaId);
+            $cfgValorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find($params->id);
             if ($cfgValorVehiculo!=null) {
 
                 $cfgValorVehiculo->setClase($clase);
@@ -145,7 +144,6 @@ class CfgValorVehiculoController extends Controller
                 $cfgValorVehiculo->setCilindraje($params->cilindraje);
                 $cfgValorVehiculo->setValor($params->valor);
                 $cfgValorVehiculo->setAnio($params->anio);
-                $cfgValorVehiculo->setEstado(true);
                
                 $em->persist($cfgValorVehiculo);
                 $em->flush();
@@ -174,19 +172,19 @@ class CfgValorVehiculoController extends Controller
     }
 
     /**
-     * Deletes a cfgValorVehiculo entity.
+     * Deletes a vhloCfgValor entity. 
      *
-     * @Route("/{id}/delete", name="cfgvalorvehiculo_delete")
+     * @Route("/{id}/delete", name="vhlocfgvalor_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request, VhloCfgValor $vhloCfgValor)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck==true) {
             $em = $this->getDoctrine()->getManager();            
-            $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->find($id);
+            $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find($id);
 
             $valorVehiculo->setEstado(0);
             $em = $this->getDoctrine()->getManager();
@@ -208,79 +206,18 @@ class CfgValorVehiculoController extends Controller
     }
 
     /**
-     * Creates a form to delete a cfgValorVehiculo entity.
+     * Creates a form to delete a vhloCfgValor entity.
      *
-     * @param CfgValorVehiculo $cfgValorVehiculo The cfgValorVehiculo entity
+     * @param VhloCfgValor $vhloCfgValor The vhloCfgValor entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CfgValorVehiculo $cfgValorVehiculo)
+    private function createDeleteForm(VhloCfgValor $vhloCfgValor)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cfgvalorvehiculo_delete', array('id' => $cfgValorVehiculo->getId())))
+            ->setAction($this->generateUrl('vhlocfgvalor_delete', array('id' => $vhloCfgValor->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
-    }
-
-        /**
-     * datos para select 
-     *
-     * @Route("/select", name="tipoProducto_select")
-     * @Method({"GET", "POST"})
-     */
-    public function selectAction()
-    {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $valorVehiculos = $em->getRepository('AppBundle:CfgValorVehiculo')->findBy(
-        array('estado' => 1)
-    );
-      foreach ($valorVehiculos as $key => $valorVehiculo) {
-        $response[$key] = array(
-            'value' => $valorVehiculo->getId(),
-            'label' => $valorVehiculo->getNombre(),
-            );
-      }
-       return $helpers->json($response);
-    }
-
-    /**
-     * datos para select1 
-     *
-     * @Route("/show/vehiculo/", name="valor_vehiculo_vehiculo")
-     * @Method({"GET", "POST"})
-     */
-    public function showVehiculoAction(Request $request)
-    {
-    $helpers = $this->get("app.helpers");
-    $hash = $request->get("authorization", null);
-    $authCheck = $helpers->authCheck($hash);
-    if ($authCheck== true) {
-        $json = $request->get("json",null);
-        $params = json_decode($json);
-        $em = $this->getDoctrine()->getManager();
-        $valorVehiculo = $em->getRepository('AppBundle:CfgValorVehiculo')->findOneBy(
-            array(
-                'linea' => $params->linea,
-                'clase' => $params->clase,
-                'anio' => $params->modelo,
-            )
-        );
-        $response = array(
-            'status' => 'success',
-            'code' => 200,
-            'msj' => "valor Vehiculo", 
-            'datos' => $valorVehiculo, 
-        );
- 
-    }else{
-        $response = array(
-            'status' => 'error',
-            'code' => 400,
-            'msj' => "Autorizacion no valida", 
-        );
-    }
-    return $helpers->json($response);
     }
 }

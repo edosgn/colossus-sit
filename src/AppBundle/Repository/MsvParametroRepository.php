@@ -10,4 +10,5 @@ namespace AppBundle\Repository;
  */
 class MsvParametroRepository extends \Doctrine\ORM\EntityRepository
 {
+    
 }
