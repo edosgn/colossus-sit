@@ -282,57 +282,35 @@ class VhloCfgLineaController extends Controller
     /**
      * Busca lineas por Marca.
      *
-     * @Route("/search/marca/select", name="vhlocfglinea_search_marca_select")
+     * @Route("/select/marca", name="vhlocfglinea_select_marca")
      * @Method({"GET", "POST"})
      */
-    public function searchByMarcaSelectAction(Request $request)
+    public function selectByMarcaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck==true) {
-            $json = $request->get("data",null);
-            $params = json_decode($json);
+        $json = $request->get("data",null);
+        $params = json_decode($json);
 
-            $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
-            if ($params) {
-                $lineas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findBy(
-                    array('marca' => $params)
-                );
+        $lineas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findBy(
+            array('marca' => $params->idMarca)
+        );
 
-                if ($lineas) {
-                    $response = null;
-                    foreach ($lineas as $key => $linea) {
-                        $response[$key] = array(
-                            'value' => $linea->getId(),
-                            'label' => $linea->getNombre()
-                        );
-                    }
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El registro no se encuentra en la base de datos", 
-                    );
-                }
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Ninguna marca seleccionada", 
+        $response = null;
+        
+        if ($lineas) {
+            foreach ($lineas as $key => $linea) {
+                $response[$key] = array(
+                    'value' => $linea->getId(),
+                    'label' => $linea->getNombre()
                 );
             }
-
-        }else{
-            $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
         }
-
+        
         return $helpers->json($response);
     }
 }

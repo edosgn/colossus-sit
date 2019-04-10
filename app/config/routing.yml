@@ -1,7 +1,3 @@
-jhweb_vehiculo_vhlo_cfg_valor:
-    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgValorController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

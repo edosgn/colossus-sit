@@ -200,6 +200,9 @@ class VhloVehiculo
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="vehiculos") */
     private $organismoTransito;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="vehiculos") */
+    private $empresa;
+
 
     /**
      * Get id
@@ -1007,5 +1010,29 @@ class VhloVehiculo
     public function getOrganismoTransito()
     {
         return $this->organismoTransito;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     *
+     * @return VhloVehiculo
+     */
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }
