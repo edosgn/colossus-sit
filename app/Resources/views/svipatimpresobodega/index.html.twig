@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipatimpresobodegas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Cantidad</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatImpresoBodega in svIpatImpresoBodegas %}
+            <tr>
+                <td><a href="{{ path('svipatimpresobodega_show', { 'id': svIpatImpresoBodega.id }) }}">{{ svIpatImpresoBodega.id }}</a></td>
+                <td>{% if svIpatImpresoBodega.fecha %}{{ svIpatImpresoBodega.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatImpresoBodega.cantidad }}</td>
+                <td>{% if svIpatImpresoBodega.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipatimpresobodega_show', { 'id': svIpatImpresoBodega.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svipatimpresobodega_edit', { 'id': svIpatImpresoBodega.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svipatimpresobodega_new') }}">Create a new svIpatImpresoBodega</a>
+        </li>
+    </ul>
+{% endblock %}

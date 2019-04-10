@@ -57,6 +57,8 @@ class LicenciaConduccionController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+
+            /*
             
             $licenciaConduccion = new LicenciaConduccion();
 
@@ -134,7 +136,9 @@ class LicenciaConduccionController extends Controller
             }
             
             $em->persist($licenciaConduccion);
-            $em->flush();
+            $em->flush();*/
+
+            
             $response = array(
                 'status' => 'success',
                 'code' => 200,

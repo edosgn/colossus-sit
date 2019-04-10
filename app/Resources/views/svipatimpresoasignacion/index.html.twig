@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipatimpresoasignacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Cantidad</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatImpresoAsignacion in svIpatImpresoAsignacions %}
+            <tr>
+                <td><a href="{{ path('svipatimpresoasignacion_show', { 'id': svIpatImpresoAsignacion.id }) }}">{{ svIpatImpresoAsignacion.id }}</a></td>
+                <td>{% if svIpatImpresoAsignacion.fecha %}{{ svIpatImpresoAsignacion.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatImpresoAsignacion.cantidad }}</td>
+                <td>{% if svIpatImpresoAsignacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipatimpresoasignacion_show', { 'id': svIpatImpresoAsignacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svipatimpresoasignacion_edit', { 'id': svIpatImpresoAsignacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svipatimpresoasignacion_new') }}">Create a new svIpatImpresoAsignacion</a>
+        </li>
+    </ul>
+{% endblock %}

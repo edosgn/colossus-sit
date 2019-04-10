@@ -5,12 +5,12 @@ namespace JHWEB\SeguridadVialBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SvIpatOrganismoTransito
+ * SvIpatImpresoAsignacion
  *
- * @ORM\Table(name="sv_ipat_organismo_transito")
- * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvIpatOrganismoTransitoRepository")
+ * @ORM\Table(name="sv_ipat_impreso_asignacion")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvIpatImpresoAsignacionRepository")
  */
-class SvIpatOrganismoTransito
+class SvIpatImpresoAsignacion
 {
     /**
      * @var int
@@ -45,14 +45,14 @@ class SvIpatOrganismoTransito
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega", inversedBy="SvIpatOrganismosransito")
+     * @ORM\ManyToOne(targetEntity="SvIpatImpresoBodega", inversedBy="asignaciones")
      */
-    private $impresoBodega;
+    private $bodega;
 
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="SvIpatOrganismosransito")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="asignaciones")
      */
     private $organismoTransito;
 
@@ -72,7 +72,7 @@ class SvIpatOrganismoTransito
      *
      * @param \DateTime $fecha
      *
-     * @return SvIpatOrganismoTransito
+     * @return SvIpatImpresoAsignacion
      */
     public function setFecha($fecha)
     {
@@ -96,7 +96,7 @@ class SvIpatOrganismoTransito
      *
      * @param integer $cantidad
      *
-     * @return SvIpatOrganismoTransito
+     * @return SvIpatImpresoAsignacion
      */
     public function setCantidad($cantidad)
     {
@@ -108,7 +108,7 @@ class SvIpatOrganismoTransito
     /**
      * Get cantidad
      *
-     * @return int
+     * @return integer
      */
     public function getCantidad()
     {
@@ -120,7 +120,7 @@ class SvIpatOrganismoTransito
      *
      * @param boolean $activo
      *
-     * @return SvIpatOrganismoTransito
+     * @return SvIpatImpresoAsignacion
      */
     public function setActivo($activo)
     {
@@ -132,7 +132,7 @@ class SvIpatOrganismoTransito
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -140,27 +140,27 @@ class SvIpatOrganismoTransito
     }
 
     /**
-     * Set impresoBodega
+     * Set bodega
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega $impresoBodega
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoBodega $bodega
      *
-     * @return SvIpatOrganismoTransito
+     * @return SvIpatImpresoAsignacion
      */
-    public function setImpresoBodega(\JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega $impresoBodega = null)
+    public function setBodega(\JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoBodega $bodega = null)
     {
-        $this->impresoBodega = $impresoBodega;
+        $this->bodega = $bodega;
 
         return $this;
     }
 
     /**
-     * Get impresoBodega
+     * Get bodega
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoBodega
      */
-    public function getImpresoBodega()
+    public function getBodega()
     {
-        return $this->impresoBodega;
+        return $this->bodega;
     }
 
     /**
@@ -168,7 +168,7 @@ class SvIpatOrganismoTransito
      *
      * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
-     * @return SvIpatOrganismoTransito
+     * @return SvIpatImpresoAsignacion
      */
     public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {

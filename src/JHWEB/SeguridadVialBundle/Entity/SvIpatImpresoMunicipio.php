@@ -52,9 +52,9 @@ class SvIpatImpresoMunicipio
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega", inversedBy="SvIpatOrganismosransito")
+     * @ORM\ManyToOne(targetEntity="SvIpatImpresoAsignacion", inversedBy="municipios")
      */
-    private $impresoBodega;
+    private $asignacion;
 
 
     /**
@@ -164,26 +164,26 @@ class SvIpatImpresoMunicipio
     }
 
     /**
-     * Set impresoBodega
+     * Set asignacion
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega $impresoBodega
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoAsignacion $asignacion
      *
      * @return SvIpatImpresoMunicipio
      */
-    public function setImpresoBodega(\JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega $impresoBodega = null)
+    public function setAsignacion(\JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoAsignacion $asignacion = null)
     {
-        $this->impresoBodega = $impresoBodega;
+        $this->asignacion = $asignacion;
 
         return $this;
     }
 
     /**
-     * Get impresoBodega
+     * Get asignacion
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatImoresoBodega
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoAsignacion
      */
-    public function getImpresoBodega()
+    public function getAsignacion()
     {
-        return $this->impresoBodega;
+        return $this->asignacion;
     }
 }
