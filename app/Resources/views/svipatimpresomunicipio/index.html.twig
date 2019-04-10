@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipatimpresomunicipios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Fecha</th>
+                <th>Cantidad</th>
+                <th>Numeroacta</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatImpresoMunicipio in svIpatImpresoMunicipios %}
+            <tr>
+                <td><a href="{{ path('svipatimpresomunicipio_show', { 'id': svIpatImpresoMunicipio.id }) }}">{{ svIpatImpresoMunicipio.id }}</a></td>
+                <td>{% if svIpatImpresoMunicipio.fecha %}{{ svIpatImpresoMunicipio.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatImpresoMunicipio.cantidad }}</td>
+                <td>{{ svIpatImpresoMunicipio.numeroActa }}</td>
+                <td>{% if svIpatImpresoMunicipio.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipatimpresomunicipio_show', { 'id': svIpatImpresoMunicipio.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('svipatimpresomunicipio_edit', { 'id': svIpatImpresoMunicipio.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('svipatimpresomunicipio_new') }}">Create a new svIpatImpresoMunicipio</a>
+        </li>
+    </ul>
+{% endblock %}
