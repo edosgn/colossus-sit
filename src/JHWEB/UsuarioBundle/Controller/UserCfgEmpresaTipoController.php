@@ -23,17 +23,62 @@ class UserCfgEmpresaTipoController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
-        $empresaTipo = $em->getRepository('JHWBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
+
+        $tipos = $em->getRepository('JHWBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
             array('activo' => true)
         );
+
         $response = 
             array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Listado Tipo Empresa", 
-                'data'=> $empresaTipo,
+                'message' => count($tipos)." registros encontrados.", 
+                'data'=> $tipos,
             );  
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new userCfgMenu entity.
+     *
+     * @Route("/new", name="usercfgempresatipo_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipo = new UserCfgEmpresaTipo();
+
+            $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipo->setActivo(true);
+
+            $em->persist($tipo);
+            $em->flush();
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
         return $helpers->json($response);
     }
 
@@ -41,7 +86,7 @@ class UserCfgEmpresaTipoController extends Controller
      * Finds and displays a userCfgEmpresaTipo entity.
      *
      * @Route("/show", name="usercfgempresatipo_show")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function showAction(Request $request)
     {
@@ -75,6 +120,8 @@ class UserCfgEmpresaTipoController extends Controller
         
         return $helpers->json($response);
     }
+
+    /* ======================================================= */
 
     /**
      * datos para select 2

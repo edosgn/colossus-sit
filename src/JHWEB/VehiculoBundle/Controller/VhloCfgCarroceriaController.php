@@ -185,12 +185,13 @@ class VhloCfgCarroceriaController extends Controller
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
+
             $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($id);
 
             $carroceria->setActivo(false);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($carroceria);
+
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -222,49 +223,42 @@ class VhloCfgCarroceriaController extends Controller
         ;
     }
 
+    /* ===================================================== */
+
     /**
-     * encuentra las carrocerias de una clase.
+     * Busca las carrocerias de una clase.
      *
-     * @Route("/clase/{id}", name="carroceria_clase")
+     * @Route("/select/clase", name="vhlocfgcarroceria_select_clase")
      * @Method("POST")
      */
-    public function carroceriaClaseAction(Request $request, $id)
+    public function selectByClaseAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck == true) {
-            $em = $this->getDoctrine()->getManager();
-            $carrocerias = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findBy(
-                array(
-                    'activo' => 1,
-                    'clase' => $id,
-                )
-            );
+        $json = $request->get("data",null);
+        $params = json_decode($json);
 
-            if ($carrocerias != null) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Carroceria encontrada",
-                    'data' => $carrocerias,
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No existen carrocerias para esta clase",
+        $em = $this->getDoctrine()->getManager();
+
+        $carrocerias = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->findBy(
+            array(
+                'clase' => $params->idClase,
+            )
+        );
+
+        $response = null;
+        
+        if ($carrocerias) {
+            foreach ($carrocerias as $key => $carroceria) {
+                $response[$key] = array(
+                    'value' => $carroceria->getId(),
+                    'label' => $carroceria->getNombre()
                 );
             }
-
-        } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorización no válida",
-            );
         }
+        
         return $helpers->json($response);
     }
 

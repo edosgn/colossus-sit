@@ -51,10 +51,10 @@ class UserCfgEmpresaServicioController extends Controller
      */
     public function newAction(Request $request)
     {
-
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
@@ -80,7 +80,8 @@ class UserCfgEmpresaServicioController extends Controller
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
             );
-        } 
+        }
+        
         return $helpers->json($response);
     }
 
