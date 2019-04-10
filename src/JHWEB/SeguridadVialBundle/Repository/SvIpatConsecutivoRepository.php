@@ -10,4 +10,24 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvIpatConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el maximo consecutivo disponible según la sede operativa
+    public function getBySede($idOrganismoTransito)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ic
+            FROM JHWEBSeguridadVialBundle:SvIpatConsecutivo ic, JHWEBSeguridadVialBundle:SvIpatTalonario it
+            WHERE it.organismoTransito = :idOrganismoTransito
+            AND ic.talonario = it.id
+            AND ic.estado = :estado";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito->id,
+            'estado' => 'ASIGNADO',
+        ));
+
+        /* return $consulta->getOneOrNullResult(); */
+        return $consulta->getResult();
+    }
 }

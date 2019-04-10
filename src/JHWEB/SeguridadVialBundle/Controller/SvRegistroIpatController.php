@@ -63,12 +63,14 @@ class SvRegistroIpatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("json", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+
             $ipat = new SvRegistroIpat();
 
-            if ($params[0]->datosLimitacion->idSedeOperativa) {
-                $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params[0]->datosLimitacion->idSedeOperativa);
-                $ipat->setSedeOperativa($sedeOperativa);
+            if ($params[0]->datosLimitacion->idOrganismoTransito) {
+                $idOrganismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params[0]->datosLimitacion->idOrganismoTransito);
+                $ipat->setOrganismoTransito($idOrganismoTransito);
             }
             
             if ($params[0]->datosLimitacion->idGravedad) {
@@ -320,11 +322,11 @@ class SvRegistroIpatController extends Controller
             $conductores = (isset($params[2]->dataConductores)) ? $params[2]->dataConductores : null;
             $ipat->setConductores($conductores);
 
-            $idSexoConductor = (isset($params[0]->datosLimitacion->sexoConductor)) ? $params[0]->datosLimitacion->sexoConductor : null;
+            /* $idSexoConductor = (isset($params[0]->datosLimitacion->sexoConductor)) ? $params[0]->datosLimitacion->sexoConductor : null;
             if ($idSexoConductor) {
                 $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params[0]->datosLimitacion->sexoConductor);
                 $ipat->setSexoConductor($sexoConductor->getSigla());
-            }
+            } */
 
             /* $ipat->setNombresConductor($params[0]->datosLimitacion->nombresConductor);
             $ipat->setApellidosConductor($params[0]->datosLimitacion->apellidosConductor);
@@ -625,15 +627,20 @@ class SvRegistroIpatController extends Controller
                 $ipat->setGravedadVictima($gravedadVictima);
             }
 
-            $consecutivo = $em->getRepository('AppBundle:MsvTConsecutivo')->findOneBy(array('consecutivo' => $params[1]->consecutivo->consecutivo));
+            
+            $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
+                array(
+                    'numero' => $params[1]->consecutivo->numero
+                )
+            );
             $ipat->setConsecutivo($consecutivo);
 
             if ($consecutivo) {
-                $fechaAsignacion = new \Datetime();
+                /* $fechaAsignacion = new \Datetime();
                 $consecutivo->setFechaAsignacion($fechaAsignacion);
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
-                $consecutivo->setFuncionario($funcionario);
+                $consecutivo->setFuncionario($funcionario); */
                 $consecutivo->setEstado('UTILIZADO');
 
                 $em->persist($consecutivo);
@@ -1006,15 +1013,12 @@ class SvRegistroIpatController extends Controller
             $json = $request->get("json", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            
-            /* var_dump($params);
-            die(); */
 
             $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
             
             //$ipatExport = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneBy(array('consecutivo'=>207));
 
-            if($params->file == null) {
+            /* if($params->file == null) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
@@ -1063,9 +1067,9 @@ class SvRegistroIpatController extends Controller
             $dataNombresConductores = null;
             $dataApellidosConductores = null;
             $dataNombresVictimas = null;
-            $dataApellidosVictimas = null;
+            $dataApellidosVictimas = null; */
 
-            foreach ($ipats as $ipatExport) {
+            /* foreach ($ipats as $ipatExport) {
                 foreach ((array)$ipatExport->getConductores() as $key => $value) {
                     $dataNombresConductores[] = $value->nombres;
                     $dataApellidosConductores[] = $value->apellidos;
@@ -1082,15 +1086,15 @@ class SvRegistroIpatController extends Controller
                     'nombres' => $dataNombresVictimas,
                     'apellidos' => $dataApellidosVictimas,
                 );
-            }
+            } */
             if ($ipats) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($ipats) . " ipats encontrado(s)",
                     'data' => $ipats,
-                    'conductores' => $conductoresArray,
-                    'victimas' => $victimasArray,
+                    /* 'conductores' => $conductoresArray,
+                    'victimas' => $victimasArray, */
                 );
             } else {
                 $response = array(
