@@ -28,21 +28,19 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             WHERE ri.activo = 1";
 
         foreach ($params->datos->arrayGravedadAccidente as $key => $idGravedad) {
-            # code...
-            $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($idGravedad);
-            $condicion .= " OR ri.gravedadAccidente = '" . $gravedadAccidente->getId() . "'";
+            if($key == 0){
+                $condicion .= " OR ri.gravedadAccidente = '" . $idGravedad . "'";
+            } else {
+                $condicion .= " OR ri.gravedadAccidente = '" . $idGravedad . "'";
+            }
         }
 
         /* para consultar tipo victima en conductores */
-        /* $ipats= $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
+        $ipats= $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
             array(
                 'activo' => 1,
             )
-        ); */
-
-        var_dump($condicion);
-        die();
-
+        );
 
 
         /* foreach ($params->datos->arrayTipoVictima as $key => $idTipoVictima) {

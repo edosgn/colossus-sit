@@ -1,0 +1,92 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipatvehiculos list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Placa</th>
+                <th>Placaremolque</th>
+                <th>Marca</th>
+                <th>Linea</th>
+                <th>Color</th>
+                <th>Modelo</th>
+                <th>Carroceria</th>
+                <th>Ton</th>
+                <th>Pasajeros</th>
+                <th>Empresa</th>
+                <th>Nitempresa</th>
+                <th>Matriculadoen</th>
+                <th>Inmovilizadoen</th>
+                <th>Adisposicionde</th>
+                <th>Tarjetaregistro</th>
+                <th>Revisiontecnomecanica</th>
+                <th>Numerotecnomecanica</th>
+                <th>Cantidadacompaniantes</th>
+                <th>Portasoat</th>
+                <th>Soat</th>
+                <th>Numeropoliza</th>
+                <th>Aseguradorasoat</th>
+                <th>Fechavencimientosoat</th>
+                <th>Portaseguroresponsabilidadcivil</th>
+                <th>Numeroseguroresponsabilidadcivil</th>
+                <th>Aseguradoraseguroresponsabilidadcivil</th>
+                <th>Fechavencimientoseguroresponsabilidadcivil</th>
+                <th>Portaseguroextracontractual</th>
+                <th>Numeroseguroextracontractual</th>
+                <th>Aseguradoraseguroextracontractual</th>
+                <th>Fechavencimientoseguroextracontractual</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatVehiculo in svIpatVehiculos %}
+            <tr>
+                <td><a href="{{ path('svipatvehiculo_show', { 'id': svIpatVehiculo.id }) }}">{{ svIpatVehiculo.id }}</a></td>
+                <td>{{ svIpatVehiculo.placa }}</td>
+                <td>{{ svIpatVehiculo.placaRemolque }}</td>
+                <td>{{ svIpatVehiculo.marca }}</td>
+                <td>{{ svIpatVehiculo.linea }}</td>
+                <td>{{ svIpatVehiculo.color }}</td>
+                <td>{{ svIpatVehiculo.modelo }}</td>
+                <td>{{ svIpatVehiculo.carroceria }}</td>
+                <td>{{ svIpatVehiculo.ton }}</td>
+                <td>{{ svIpatVehiculo.pasajeros }}</td>
+                <td>{{ svIpatVehiculo.empresa }}</td>
+                <td>{{ svIpatVehiculo.nitEmpresa }}</td>
+                <td>{{ svIpatVehiculo.matriculadoEn }}</td>
+                <td>{{ svIpatVehiculo.inmovilizadoEn }}</td>
+                <td>{{ svIpatVehiculo.aDisposicionDe }}</td>
+                <td>{{ svIpatVehiculo.tarjetaRegistro }}</td>
+                <td>{{ svIpatVehiculo.revisionTecnoMecanica }}</td>
+                <td>{{ svIpatVehiculo.numeroTecnoMecanica }}</td>
+                <td>{{ svIpatVehiculo.cantidadAcompaniantes }}</td>
+                <td>{{ svIpatVehiculo.portaSoat }}</td>
+                <td>{{ svIpatVehiculo.soat }}</td>
+                <td>{{ svIpatVehiculo.numeroPoliza }}</td>
+                <td>{{ svIpatVehiculo.aseguradoraSoat }}</td>
+                <td>{% if svIpatVehiculo.fechaVencimientoSoat %}{{ svIpatVehiculo.fechaVencimientoSoat|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svIpatVehiculo.portaSeguroResponsabilidadCivil %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svIpatVehiculo.numeroSeguroResponsabilidadCivil }}</td>
+                <td>{{ svIpatVehiculo.aseguradoraSeguroResponsabilidadCivil }}</td>
+                <td>{% if svIpatVehiculo.fechaVencimientoSeguroResponsabilidadCivil %}{{ svIpatVehiculo.fechaVencimientoSeguroResponsabilidadCivil|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svIpatVehiculo.portaSeguroExtracontractual %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svIpatVehiculo.numeroSeguroExtracontractual }}</td>
+                <td>{{ svIpatVehiculo.aseguradoraSeguroExtracontractual }}</td>
+                <td>{% if svIpatVehiculo.fechaVencimientoSeguroExtracontractual %}{{ svIpatVehiculo.fechaVencimientoSeguroExtracontractual|date('Y-m-d') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipatvehiculo_show', { 'id': svIpatVehiculo.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

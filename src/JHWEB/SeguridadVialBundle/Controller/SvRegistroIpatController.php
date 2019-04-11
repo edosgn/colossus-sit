@@ -322,60 +322,7 @@ class SvRegistroIpatController extends Controller
             $conductores = (isset($params[2]->dataConductores)) ? $params[2]->dataConductores : null;
             $ipat->setConductores($conductores);
 
-            /* $idSexoConductor = (isset($params[0]->datosLimitacion->sexoConductor)) ? $params[0]->datosLimitacion->sexoConductor : null;
-            if ($idSexoConductor) {
-                $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params[0]->datosLimitacion->sexoConductor);
-                $ipat->setSexoConductor($sexoConductor->getSigla());
-            } */
-
-            /* $ipat->setNombresConductor($params[0]->datosLimitacion->nombresConductor);
-            $ipat->setApellidosConductor($params[0]->datosLimitacion->apellidosConductor);
-
-            $idTipoIdentificacionTestigo = (isset($params[0]->datosLimitacion->tipoIdentificacionConductor)) ? $params[0]->datosLimitacion->tipoIdentificacionConductor : null;
-
-            if($idTipoIdentificacionConductor) {
-                $tipoIdentificacionConductor = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionConductor);
-                //$ipat->setTipoIdentificacionConductor($params[0]->datosLimitacion->tipoIdentificacionConductor);
-                $ipat->setTipoIdentificacionConductor($tipoIdentificacionConductor->getNombre());
-            }
-
-            $ipat->setIdentificacionConductor($params[0]->datosLimitacion->identificacionConductor);
             
-            $idNacionalidadConductor = (isset($params[0]->datosLimitacion->nacionalidadConductor)) ? $params[0]->datosLimitacion->nacionalidadConductor : null;
-            if($idNacionalidadConductor) {
-                $nacionalidadConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params[0]->datosLimitacion->nacionalidadConductor);
-                //$ipat->setNacionalidadConductor($params[0]->datosLimitacion->nacionalidadConductor);
-                $ipat->setNacionalidadConductor($nacionalidadConductor->getNombre());
-            }
-
-            $ipat->setFechaNacimientoConductor(new \Datetime($params[0]->datosLimitacion->fechaNacimientoConductor));
-
-            $edadConductor = $this->get("app.helpers")->calculateAge($params[0]->datosLimitacion->fechaNacimientoConductor);
-            $ipat->setEdadConductor($edadConductor);
-
-            $idSexoConductor = (isset($params[0]->datosLimitacion->sexoConductor)) ? $params[0]->datosLimitacion->sexoConductor : null;
-            if ($idSexoConductor) {
-                $sexoConductor = $em->getRepository('AppBundle:Genero')->find($params[0]->datosLimitacion->sexoConductor);
-                $ipat->setSexoConductor($sexoConductor->getSigla());
-            }
-
-            $gravedadConductor = (isset($params[0]->datosLimitacion->idGravedadConductor)) ? $params[0]->datosLimitacion->idGravedadConductor : null;
-            if ($gravedadConductor) {
-                $gravedadConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find(
-                    $params[0]->datosLimitacion->idGravedadConductor
-                );
-                $ipat->setGravedadConductor($gravedadConductor);
-            }
-
-            $ipat->setDireccionResidenciaConductor($params[0]->datosLimitacion->direccionResidenciaConductor);
-
-            $idCiudadResidenciaConductor = (isset($params[0]->datosLimitacion->ciudadResidenciaConductor)) ? $params[0]->datosLimitacion->ciudadResidenciaConductor : null;
-            if($idCiudadResidenciaConductor) {
-                $ciudadResidenciaConductor = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->ciudadResidenciaConductor);
-                $ipat->setCiudadResidenciaConductor($ciudadResidenciaConductor->getNombre());
-            }
-
-            $ipat->setTelefonoConductor($params[0]->datosLimitacion->telefonoConductor); */
             $ipat->setPracticoExamenConductor($params[0]->datosLimitacion->practicoExamenConductor);
             $ipat->setAutorizoConductor($params[0]->datosLimitacion->autorizoConductor);
 
@@ -417,76 +364,7 @@ class SvRegistroIpatController extends Controller
 
             $vehiculos = (isset($params[3]->dataVehiculos)) ? $params[3]->dataVehiculos : null;
             $ipat->setVehiculos($vehiculos);
-            /* $ipat->setPlaca($params[0]->datosLimitacion->placa);
-            $ipat->setPlacaRemolque($params[0]->datosLimitacion->placaRemolque);
-
-            $idNacionalidadVehiculo = (isset($params[0]->datosLimitacion->nacionalidadVehiculo)) ? $params[0]->datosLimitacion->nacionalidadVehiculo : null;
-            if ($idNacionalidadVehiculo) {
-                $nacionalidadVehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params[0]->datosLimitacion->nacionalidadVehiculo);
-                $ipat->setNacionalidadVehiculo($nacionalidadVehiculo->getNombre());
-            }
-
-            $idMarca = (isset($params[0]->datosLimitacion->marca)) ? $params[0]->datosLimitacion->marca : null;
-            if($idMarca) {
-                $marca = $em->getRepository('AppBundle:Marca')->find($params[0]->datosLimitacion->nacionalidadVehiculo);
-                $ipat->setMarca($marca->getNombre());
-            }
-
-            $idLinea = (isset($params[0]->datosLimitacion->linea)) ? $params[0]->datosLimitacion->linea : null;
-            if($idLinea) {
-                $linea = $em->getRepository('AppBundle:Linea')->find($params[0]->datosLimitacion->linea);
-                $ipat->setLinea($linea->getNombre());
-            }
-            $idColor = (isset($params[0]->datosLimitacion->color)) ? $params[0]->datosLimitacion->color : null;
-            if($idColor) {
-                $color = $em->getRepository('AppBundle:Color')->find($params[0]->datosLimitacion->color);
-                $ipat->setColor($color->getNombre());
-            }
-            $ipat->setModelo($params[0]->datosLimitacion->modelo);
-            $ipat->setCarroceria($params[0]->datosLimitacion->carroceria);
-            $ipat->setTon($params[0]->datosLimitacion->ton);
-            $ipat->setPasajeros($params[0]->datosLimitacion->pasajeros);
-            $ipat->setEmpresa($params[0]->datosLimitacion->empresa);
-            $ipat->setNitEmpresa($params[0]->datosLimitacion->nitEmpresa);
-            $ipat->setmatriculadoEn($params[0]->datosLimitacion->matriculadoEn);
-            $ipat->setInmovilizadoEn($params[0]->datosLimitacion->inmovilizadoEn);
-            $ipat->setADisposicionDe($params[0]->datosLimitacion->aDisposicionDe);
-            $ipat->setTarjetaRegistro($params[0]->datosLimitacion->tarjetaRegistro);
-            $ipat->setRevisionTecnomecanica($params[0]->datosLimitacion->revisionTecnomecanica);
-            $ipat->setNumeroTecnoMecanica($params[0]->datosLimitacion->numeroTecnoMecanica);
-
-            $cantidadAcompaniantes = $params[0]->datosLimitacion->cantidadAcompaniantes;
-            if ($cantidadAcompaniantes) {
-                if (intval($cantidadAcompaniantes) >= 0) {
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "La cantidad de acompañantes al momento del accidente es válida.",
-                    );
-                    $ipat->setCantidadAcompaniantes($cantidadAcompaniantes);
-                } else {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "La cantidad de acompañantes debe ser mayor o igual a 0.",
-                    );
-                    return $helpers->json($response);
-                }
-            }
-
-            $ipat->setPortaSoat($params[0]->datosLimitacion->portaSoat);
-            $ipat->setSoat($params[0]->datosLimitacion->soat);
-            $ipat->setNumeroPoliza($params[0]->datosLimitacion->numeroPoliza);
-            $ipat->setAseguradoraSoat($params[0]->datosLimitacion->aseguradoraSoat);
-            $ipat->setFechaVencimientoSoat(new \Datetime($params[0]->datosLimitacion->fechaVencimientoSoat));
-            $ipat->setPortaSeguroResponsabilidadCivil($params[0]->datosLimitacion->portaSeguroResponsabilidadCivil);
-            $ipat->setNumeroSeguroResponsabilidadCivil($params[0]->datosLimitacion->numeroSeguroResponsabilidadCivil);
-            $ipat->setAseguradoraSeguroResponsabilidadCivil($params[0]->datosLimitacion->idAseguradoraSeguroResponsabilidadCivil);
-            $ipat->setFechaVencimientoSeguroResponsabilidadCivil(new \Datetime($params[0]->datosLimitacion->fechaVencimientoSeguroResponsabilidadCivil));
-            $ipat->setPortaSeguroExtracontractual($params[0]->datosLimitacion->portaSeguroExtracontractual);
-            $ipat->setNumeroSeguroExtracontractual($params[0]->datosLimitacion->numeroSeguroExtracontractual);
-            $ipat->setAseguradoraSeguroExtracontractual($params[0]->datosLimitacion->idAseguradoraSeguroExtracontractual);
-            $ipat->setFechaVencimientoSeguroExtracontractual(new \Datetime($params[0]->datosLimitacion->fechaVencimientoSeguroExtracontractual)); */
+        
             $ipat->setMismoConductor($params[0]->datosLimitacion->mismoConductor);
             $ipat->setNombresPropietario($params[0]->datosLimitacion->nombresPropietario);
             $ipat->setApellidosPropietario($params[0]->datosLimitacion->apellidosPropietario);
@@ -498,20 +376,6 @@ class SvRegistroIpatController extends Controller
                 $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
             }
             $ipat->setIdentificacionPropietario($params[0]->datosLimitacion->identificacionPropietario);
-
-            /* $claseVehiculo = $em->getRepository('AppBundle:Clase')->find($params[0]->datosLimitacion->clase);
-            $ipat->setClase($claseVehiculo->getNombre());
-
-            $servicio = $em->getRepository('AppBundle:Servicio')->find($params[0]->datosLimitacion->servicio);
-            $ipat->setServicio($servicio->getNombre());
-
-            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params[0]->datosLimitacion->modalidadTransporte);
-            $ipat->setModalidadTransporte($modalidadTransporte->getNombre()); */
-
-            /* if($params[0]->datosLimitacion->radioAccion != null) {
-                $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params[0]->datosLimitacion->radioAccion);
-                $ipat->setRadioAccion($radioAccion);
-            } */
 
             $ipat->setDescripcionDanios($params[0]->datosLimitacion->descripcionDanios);
 
@@ -558,31 +422,6 @@ class SvRegistroIpatController extends Controller
                 $sexoVictima = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($idSexoVictima);
                 $ipat->setSexoVictima($sexoVictima->getSigla());
             }
-            /* $ipat->setnombresVictima($params[0]->datosLimitacion->nombresVictima);
-            $ipat->setApellidosVictima($params[0]->datosLimitacion->apellidosVictima);
-
-            $tipoIdentificacionVictima = $em->getRepository('AppBundle:TipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionVictima);
-            $ipat->setTipoIdentificacionVictima($tipoIdentificacionVictima->getNombre());
-
-            $ipat->setIdentificacionVictima($params[0]->datosLimitacion->identificacionVictima);
-
-            $nacionalidadVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params[0]->datosLimitacion->nacionalidadVictima);
-            $ipat->setNacionalidadVictima($nacionalidadVictima->getNombre());
-
-            $ipat->setFechaNacimientoVictima(new \Datetime($params[0]->datosLimitacion->fechaNacimientoVictima));
-
-            $edadVictima = $this->get("app.helpers")->calculateAge($params[0]->datosLimitacion->fechaNacimientoVictima);
-            $ipat->setEdadVictima($edadVictima);
-
-            $sexoVictima = $em->getRepository('AppBundle:Genero')->find($params[0]->datosLimitacion->sexoVictima);
-            $ipat->setSexoVictima($sexoVictima->getSigla());
-
-            $ipat->setDireccionResidenciaVictima($params[0]->datosLimitacion->direccionResidenciaVictima);
-
-            $ciudadResidenciaVictima = $em->getRepository('AppBundle:Municipio')->find($params[0]->datosLimitacion->ciudadResidenciaVictima);
-            $ipat->setCiudadResidenciaVictima($ciudadResidenciaVictima->getNombre());
-
-            $ipat->setTelefonoVictima($params[0]->datosLimitacion->telefonoVictima); */
 
             if ($params[0]->datosLimitacion->idHospitalVictima) {
                 $hospitalVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find(
@@ -636,11 +475,6 @@ class SvRegistroIpatController extends Controller
             $ipat->setConsecutivo($consecutivo);
 
             if ($consecutivo) {
-                /* $fechaAsignacion = new \Datetime();
-                $consecutivo->setFechaAsignacion($fechaAsignacion);
-                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params[0]->datosLimitacion->identificacionAgente));
-                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(array('ciudadano' => $ciudadano));
-                $consecutivo->setFuncionario($funcionario); */
                 $consecutivo->setEstado('UTILIZADO');
 
                 $em->persist($consecutivo);
