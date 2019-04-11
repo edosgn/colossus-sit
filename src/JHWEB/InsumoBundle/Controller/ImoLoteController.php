@@ -82,27 +82,31 @@ class ImoLoteController extends Controller
                 $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
                 $loteInsumo->setSedeOperativa($sedeOperativa);
                 $loteInsumo->setTipo('Sustrato');
-                $ultimoRango = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMax(); 
-                if ($params->rangoInicio < $ultimoRango['maximo']+1) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 200,
-                        'msj' => "El rango ya se encuentra registrado", 
-                    );
-                    return $helpers->json($response);
+                $ultimoRango = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMax($params->imoCfgTipo); 
+
+                if ($ultimoRango) {
+                    if ($params->rangoInicio < $ultimoRango['maximo']+1) {
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "El rango ya se encuentra registrado", 
+                        );
+                        return $helpers->json($response);
+                    }
                 }
-            }else {
+            }else { 
                 $loteInsumo->setTipo('Insumo');
             }
-            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->imoCfgTipo);
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->imoCfgTipo);
             // var_dump($params->numeroActa);
             $loteInsumo->setNumeroActa($params->numeroActa);
             $loteInsumo->setEmpresa($empresa);
-            $loteInsumo->setTipoInsumo($casoInsumo); 
+            $loteInsumo->setTipoInsumo($tipoInsumo); 
             $loteInsumo->setEstado('REGISTRADO');
             $loteInsumo->setRangoInicio($params->rangoInicio);
             $loteInsumo->setRangoFin($params->rangoFin);
             $loteInsumo->setCantidad($params->cantidad);
+            $loteInsumo->setRecibido($params->cantidad);
             $loteInsumo->setReferencia($params->referencia);
             $loteInsumo->setFecha($fecha);
             $em->persist($loteInsumo);
@@ -270,10 +274,10 @@ class ImoLoteController extends Controller
                     array('estado' => 'REGISTRADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
                 );
             }else{
-                $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findOneBy(
-                    array('estado' => 'REGISTRADO','tipoInsumo'=>$params->tipoInsumo)
-                );
+                $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalTipo('REGISTRADO',$params->tipoInsumo);
             }
+
+
             if ($loteInsumo!=null) { 
                 $response = array(
                     'status' => 'success',
@@ -282,7 +286,7 @@ class ImoLoteController extends Controller
                     'data' => $loteInsumo, 
                 );
             }else{
-                $response = array(
+                $response = array( 
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "no hay sustratos pa la sede", 

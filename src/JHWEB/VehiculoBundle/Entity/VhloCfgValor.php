@@ -38,9 +38,33 @@ class VhloCfgValor
     /**
      * @var string
      *
+     * @ORM\Column(name="pesaje", type="string", length=255)
+     */
+    private $pesaje;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tonelaje", type="string", length=255)
+     */
+    private $tonelaje;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="valor", type="string", length=255)
      */
     private $valor;
+
+    /** @ORM\ManyToOne(targetEntity="VhloCfgMarca", inversedBy="vehiculos") */
+    private $marca;
 
     /** @ORM\ManyToOne(targetEntity="VhloCfgLinea", inversedBy="vehiculos") */
     private $linea;
@@ -48,13 +72,10 @@ class VhloCfgValor
     /** @ORM\ManyToOne(targetEntity="VhloCfgClase", inversedBy="vehiculos") */
     private $clase;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="activo", type="boolean")
-     */
-    private $activo = true;
+    
 
+
+    
 
     /**
      * Get id
@@ -115,27 +136,51 @@ class VhloCfgValor
     }
 
     /**
-     * Set valor
+     * Set pesaje
      *
-     * @param string $valor
+     * @param string $pesaje
      *
      * @return VhloCfgValor
      */
-    public function setValor($valor)
+    public function setPesaje($pesaje)
     {
-        $this->valor = $valor;
+        $this->pesaje = $pesaje;
 
         return $this;
     }
 
     /**
-     * Get valor
+     * Get pesaje
      *
      * @return string
      */
-    public function getValor()
+    public function getPesaje()
     {
-        return $this->valor;
+        return $this->pesaje;
+    }
+
+    /**
+     * Set tonelaje
+     *
+     * @param string $tonelaje
+     *
+     * @return VhloCfgValor
+     */
+    public function setTonelaje($tonelaje)
+    {
+        $this->tonelaje = $tonelaje;
+
+        return $this;
+    }
+
+    /**
+     * Get tonelaje
+     *
+     * @return string
+     */
+    public function getTonelaje()
+    {
+        return $this->tonelaje;
     }
 
     /**
@@ -160,6 +205,54 @@ class VhloCfgValor
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param string $valor
+     *
+     * @return VhloCfgValor
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return string
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
+     * Set marca
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgMarca $marca
+     *
+     * @return VhloCfgValor
+     */
+    public function setMarca(\JHWEB\VehiculoBundle\Entity\VhloCfgMarca $marca = null)
+    {
+        $this->marca = $marca;
+
+        return $this;
+    }
+
+    /**
+     * Get marca
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgMarca
+     */
+    public function getMarca()
+    {
+        return $this->marca;
     }
 
     /**

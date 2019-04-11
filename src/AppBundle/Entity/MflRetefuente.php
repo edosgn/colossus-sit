@@ -55,8 +55,6 @@ class MflRetefuente
     protected $factura;
 
 
-
-
     /**
      * Get id
      *
