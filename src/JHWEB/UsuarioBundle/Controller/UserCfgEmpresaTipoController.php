@@ -23,17 +23,62 @@ class UserCfgEmpresaTipoController extends Controller
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
-        $empresaTipo = $em->getRepository('JHWBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
+
+        $tipos = $em->getRepository('JHWBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
             array('activo' => true)
         );
+
         $response = 
             array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Listado Tipo Empresa", 
-                'data'=> $empresaTipo,
+                'message' => count($tipos)." registros encontrados.", 
+                'data'=> $tipos,
             );  
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new userCfgMenu entity.
+     *
+     * @Route("/new", name="usercfgempresatipo_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipo = new UserCfgEmpresaTipo();
+
+            $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipo->setActivo(true);
+
+            $em->persist($tipo);
+            $em->flush();
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
         return $helpers->json($response);
     }
 
@@ -41,7 +86,7 @@ class UserCfgEmpresaTipoController extends Controller
      * Finds and displays a userCfgEmpresaTipo entity.
      *
      * @Route("/show", name="usercfgempresatipo_show")
-     * @Method("GET")
+     * @Method("POST")
      */
     public function showAction(Request $request)
     {
@@ -54,16 +99,16 @@ class UserCfgEmpresaTipoController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $empresaTipo = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->id);
+            $tipo = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->id);
 
-            $em->persist($empresaTipo);
+            $em->persist($tipo);
             $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro encontrado con exito",
-                'data' => $empresaTipo
+                'data' => $tipo
             );
         }else{
             $response = array(
@@ -77,25 +122,80 @@ class UserCfgEmpresaTipoController extends Controller
     }
 
     /**
-     * datos para select 2
+     * Displays a form to edit an existing userCfgEmpresaTipo entity.
+     *
+     * @Route("/edit", name="cfgempresatipo_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipo = $em->getRepository("JHWEBUsuarioBundle:UserCfgEmpresaTipo")->find($params->id);
+
+            if ($tipo) {
+                $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $tipo,
+                );
+            }else{ 
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /* ======================================================= */
+
+    /**
+     * Listado con los tipos de empresa para selección con búsqueda
      *
      * @Route("/select", name="usercfgempresaTipo_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
 
-    $empresaTipos = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
-        array('activo' => true)
-    );
-      foreach ($empresaTipos as $key => $empresaTipo) {
-        $response[$key] = array(
-            'value' => $empresaTipo->getId(),
-            'label' => $empresaTipo->getNombre(),
+        $em = $this->getDoctrine()->getManager();
+
+        $tipos = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
+            $response[$key] = array(
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre(),
             );
-      }
+        }
        return $helpers->json($response);
     }
 }

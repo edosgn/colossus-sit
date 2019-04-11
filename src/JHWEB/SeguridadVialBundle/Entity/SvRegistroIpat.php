@@ -24,7 +24,7 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MsvTConsecutivo", inversedBy="consecutivos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo", inversedBy="ipats")
      */
     private $consecutivo;
 
@@ -2780,9 +2780,6 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoConductor()
     {
-        if ($this->fechaNacimientoConductor) {
-            return $this->fechaNacimientoConductor->format('d/m/Y');
-        }
         return $this->fechaNacimientoConductor;
     }
 
@@ -3119,7 +3116,10 @@ class SvRegistroIpat
      */
     public function getFechaVencimientoLicenciaConduccion()
     {
-        return $this->fechaVencimientoLicenciaConduccion;
+        if ($this->horaAccidente) {
+            return $this->horaAccidente->format('d/m/Y');
+        }
+        return $this->horaAccidente;
     }
 
     /**
@@ -3407,9 +3407,6 @@ class SvRegistroIpat
      */
     public function getFechaNacimientoVictima()
     {
-        if ($this->fechaNacimientoVictima) {
-            return $this->fechaNacimientoVictima->format('d/m/Y');
-        }
         return $this->fechaNacimientoVictima;
     }
 
@@ -4400,11 +4397,11 @@ class SvRegistroIpat
     /**
      * Set consecutivo
      *
-     * @param \AppBundle\Entity\MsvTConsecutivo $consecutivo
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo
      *
      * @return SvRegistroIpat
      */
-    public function setConsecutivo(\AppBundle\Entity\MsvTConsecutivo $consecutivo = null)
+    public function setConsecutivo(\JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo = null)
     {
         $this->consecutivo = $consecutivo;
 
@@ -4414,7 +4411,7 @@ class SvRegistroIpat
     /**
      * Get consecutivo
      *
-     * @return \AppBundle\Entity\MsvTConsecutivo
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo
      */
     public function getConsecutivo()
     {
@@ -4926,6 +4923,30 @@ class SvRegistroIpat
     }
 
     /**
+     * Set nacionalidadVehiculo
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidadVehiculo
+     *
+     * @return SvRegistroIpat
+     */
+    public function setNacionalidadVehiculo(\JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidadVehiculo = null)
+    {
+        $this->nacionalidadVehiculo = $nacionalidadVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get nacionalidadVehiculo
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad
+     */
+    public function getNacionalidadVehiculo()
+    {
+        return $this->nacionalidadVehiculo;
+    }
+
+    /**
      * Set gravedadConductor
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima $gravedadConductor
@@ -5235,29 +5256,5 @@ class SvRegistroIpat
     public function getUnidadCorrespondio()
     {
         return $this->unidadCorrespondio;
-    }
-
-    /**
-     * Set nacionalidadVehiculo
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidadVehiculo
-     *
-     * @return SvRegistroIpat
-     */
-    public function setNacionalidadVehiculo(\JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad $nacionalidadVehiculo = null)
-    {
-        $this->nacionalidadVehiculo = $nacionalidadVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get nacionalidadVehiculo
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgNacionalidad
-     */
-    public function getNacionalidadVehiculo()
-    {
-        return $this->nacionalidadVehiculo;
     }
 }

@@ -152,6 +152,11 @@ class VhloVehiculoController extends Controller
                     $vehiculo->setModalidadTransporte($modalidadTransporte);
                 }
 
+                if ($params->idEmpresa) {
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->idEmpresa);
+                    $vehiculo->setEmpresa($empresa);
+                }
+
                 $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);

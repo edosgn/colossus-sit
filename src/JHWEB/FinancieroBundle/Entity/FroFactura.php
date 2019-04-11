@@ -85,6 +85,13 @@ class FroFactura
     private $estado;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numeroRunt", type="string", length=50, nullable=true)
+     */
+    private $numeroRunt;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -329,6 +336,30 @@ class FroFactura
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set numeroRunt
+     *
+     * @param string $numeroRunt
+     *
+     * @return FroFactura
+     */
+    public function setNumeroRunt($numeroRunt)
+    {
+        $this->numeroRunt = $numeroRunt;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRunt
+     *
+     * @return string
+     */
+    public function getNumeroRunt()
+    {
+        return $this->numeroRunt;
     }
 
     /**

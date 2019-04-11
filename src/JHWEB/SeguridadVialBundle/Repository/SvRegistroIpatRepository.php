@@ -22,19 +22,43 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         $horaFinDatetime = $params->datos->horaFin;
         $fechaInicioDatetime = new \Datetime($params->datos->fechaInicio);
         $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
-    
-        var_dump($params);
-        die();
         
+        $dql = "SELECT ri
+            FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
+            WHERE ri.activo = 1";
+
         foreach ($params->datos->arrayGravedadAccidente as $key => $idGravedad) {
             # code...
             $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($idGravedad);
-            $condicion .= " OR ri.gravedadAccidente = '" . $gravedadAccidente . "'";
+            $condicion .= " OR ri.gravedadAccidente = '" . $gravedadAccidente->getId() . "'";
         }
-        
-        foreach ($params->datos->idTipoVictima as $key => $arrayTipoVictima) {
+
+        /* para consultar tipo victima en conductores */
+        /* $ipats= $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
+            array(
+                'activo' => 1,
+            )
+        ); */
+
+        var_dump($condicion);
+        die();
+
+
+
+        /* foreach ($params->datos->arrayTipoVictima as $key => $idTipoVictima) {
             # code...
-        }
+            $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->find($idTipoVictima);
+            //$condicion .= " OR ri.conductores. = '" . $tipoVictima->getId() . "'";
+
+            foreach ($ipats as $key => $ipat) {
+                # code...
+                foreach ($ipat->getConductores() as $key => $conductor) {
+                    # code...
+                    var_dump($conductor->tipoidentificacion );
+                }
+            }
+        } */
+       
         /* if ($params->datos->idGravedad) {
             $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->datos->idGravedad);
         }
@@ -82,15 +106,11 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         $edadFinConductor = $edadInicioConductor + 4;
         $diaAccidente = $params->datos->idDiaSemana; */
 
-        $dql = "SELECT ri
-            FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
-            WHERE ri.gravedadAccidente = :gravedadAccidente
-            AND ri.activo = 1";
-        
+        if ($condicion) {
+            $dql .= $condicion;
+        }
+    
         $consulta = $em->createQuery($dql);
-        $consulta->setParameters(array(
-            'gravedadAccidente' => $gravedadAccidente,
-        ));
 
         return $consulta->getResult();
     } 

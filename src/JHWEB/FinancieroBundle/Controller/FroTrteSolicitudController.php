@@ -60,11 +60,27 @@ class FroTrteSolicitudController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
+        if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+
+            if (isset($params->numeroRunt)) {
+                if ($params->idTramiteFactura) {
+                    $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                        $params->idTramiteFactura
+                    );
+
+                    if ($tramiteFactura) {
+                        $factura = $tramiteFactura->getFactura();
+
+                        $factura->setNumeroRunt($params->numeroRunt);
+
+                        $em->flush();
+                    }
+                }
+            }
 
             if ($params->datos->foraneas) {
                 if ($params->datos->foraneas->idTramiteFactura) {
@@ -86,86 +102,137 @@ class FroTrteSolicitudController extends Controller
 
                             if (isset($params->idVehiculo) && $params->idVehiculo) {
                                 $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-                            }
 
-                            if ($params->documentacion) {
-                                $tramiteFactura->setDocumentacion($params->documentacion);
-
-                                $tramiteSolicitud = new FroTrteSolicitud();
-
-                                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-
-                                $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
-                                $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
-
-                                $tramiteSolicitud->setForaneas(
-                                    (array)$params->datos->foraneas
-                                );
-                                
-                                $tramiteSolicitud->setResumen($params->datos->resumen);
-                                $tramiteSolicitud->setActivo(true);
-
-                                $tramiteSolicitud->setVehiculo($vehiculo);
-
-                                if (isset($params->idPropietario) && $params->idPropietario) {
-                                    $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
-                                        $params->idPropietario
+                                if ($params->documentacion) {
+                                    $tramiteFactura->setDocumentacion($params->documentacion);
+    
+                                    $tramiteSolicitud = new FroTrteSolicitud();
+    
+                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+    
+                                    $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
+                                    $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
+    
+                                    $tramiteSolicitud->setForaneas(
+                                        (array)$params->datos->foraneas
                                     );
-                                    $tramiteSolicitud->setPropietario($propietario);
-                                }
-
-                                if (isset($params->idSolicitante) && $params->idSolicitante) {
-                                    $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                                        $params->idSolicitante
-                                    );
-                                    $tramiteSolicitud->setSolicitante($solicitante);
-                                }
-
-                                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-
-                                $tramiteFactura->setRealizado(true);
-
-                                $em->persist($tramiteSolicitud);
-                                $em->flush();
-
-                                if(isset($params->numeroActa)){
-                                    $vhloActaTraspaso = new VhloActaTraspaso();
-
-                                    $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
-
-                                    $vhloActaTraspaso->setNumero($params->numeroActa);
-                                    $vhloActaTraspaso->setFecha(
-                                        new \DateTime($params->fechaActa)
-                                    );
-
-                                    $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                                        $params->idEntidadJudicial
-                                    );
-                                    $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
-
-                                    $em->persist($vhloActaTraspaso);
+                                    
+                                    $tramiteSolicitud->setResumen($params->datos->resumen);
+                                    $tramiteSolicitud->setActivo(true);
+    
+                                    $tramiteSolicitud->setVehiculo($vehiculo);
+    
+                                    if (isset($params->idPropietario) && $params->idPropietario) {
+                                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
+                                            $params->idPropietario
+                                        );
+                                        $tramiteSolicitud->setPropietario($propietario);
+                                    }
+    
+                                    if (isset($params->idSolicitante) && $params->idSolicitante) {
+                                        $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                            $params->idSolicitante
+                                        );
+                                        $tramiteSolicitud->setSolicitante($solicitante);
+                                    }
+    
+                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+    
+                                    $tramiteFactura->setRealizado(true);
+    
+                                    $em->persist($tramiteSolicitud);
                                     $em->flush();
-                                }
-
-                                $response = array(
-                                    'status' => 'success',
-                                    'code' => 200,
-                                    'message' => 'Registro creado con exito.',
-                                    'data' => $tramiteSolicitud
-                                );
+    
+                                    if(isset($params->numeroActa)){
+                                        $vhloActaTraspaso = new VhloActaTraspaso();
+    
+                                        $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
+    
+                                        $vhloActaTraspaso->setNumero($params->numeroActa);
+                                        $vhloActaTraspaso->setFecha(
+                                            new \DateTime($params->fechaActa)
+                                        );
+    
+                                        $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                                            $params->idEntidadJudicial
+                                        );
+                                        $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
+    
+                                        $em->persist($vhloActaTraspaso);
+                                        $em->flush();
+                                    }
+    
+                                    $response = array(
+                                        'status' => 'success',
+                                        'code' => 200,
+                                        'message' => 'Registro creado con exito.',
+                                        'data' => $tramiteSolicitud
+                                    );
+                                }else{
+                                    $tramiteFactura->setDocumentacion($params->documentacion);
+    
+                                    if ($params->observacion) {
+                                        $tramiteFactura->setObservacion($observacion);
+                                    }
+    
+                                    $response = array(
+                                        'status' => 'error',
+                                        'code' => 400,
+                                        'message' => 'Este trámite no se puede realizar porque no presenta la documentación completa.',
+                                    );
+                                }  
                             }else{
-                                $tramiteFactura->setDocumentacion($params->documentacion);
-
-                                if ($params->observacion) {
-                                    $tramiteFactura->setObservacion($observacion);
-                                }
-
-                                $response = array(
-                                    'status' => 'error',
-                                    'code' => 400,
-                                    'message' => 'Este trámite no se puede realizar porque no presenta la documentación completa.',
-                                );
-                            }                          
+                                if ($params->documentacion) {
+                                    $tramiteFactura->setDocumentacion($params->documentacion);
+    
+                                    $tramiteSolicitud = new FroTrteSolicitud();
+    
+                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+    
+                                    $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
+                                    $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
+    
+                                    $tramiteSolicitud->setForaneas(
+                                        (array)$params->datos->foraneas
+                                    );
+                                    
+                                    $tramiteSolicitud->setResumen($params->datos->resumen);
+                                    $tramiteSolicitud->setActivo(true);
+    
+                                    if (isset($params->idSolicitante) && $params->idSolicitante) {
+                                        $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                            $params->idSolicitante
+                                        );
+                                        $tramiteSolicitud->setSolicitante($solicitante);
+                                    }
+    
+                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+    
+                                    $tramiteFactura->setRealizado(true);
+    
+                                    $em->persist($tramiteSolicitud);
+                                    $em->flush();
+    
+                                    $response = array(
+                                        'status' => 'success',
+                                        'code' => 200,
+                                        'message' => 'Registro creado con exito.',
+                                        'data' => $tramiteSolicitud
+                                    );
+                                }else{
+                                    $tramiteFactura->setDocumentacion($params->documentacion);
+    
+                                    if ($params->observacion) {
+                                        $tramiteFactura->setObservacion($observacion);
+                                    }
+    
+                                    $response = array(
+                                        'status' => 'error',
+                                        'code' => 400,
+                                        'message' => 'Este trámite no se puede realizar porque no presenta la documentación completa.',
+                                    );
+                                } 
+                            }                        
                         }
                     }else{
                         $response = array(
@@ -427,8 +494,14 @@ class FroTrteSolicitudController extends Controller
         );
 
         if ($vehiculo) {
-            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
-                $vehiculo->getId()
+            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                array(
+                    'vehiculo' => $vehiculo->getId(),
+                    'activo' => true,
+                ),
+                array(
+                    'fechaInicial' => 'ASC'
+                )
             );
 
             $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
@@ -497,31 +570,18 @@ class FroTrteSolicitudController extends Controller
                         $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
                     }
 
-                    if (!$vehiculo->getCancelado()) {
-                        /*if (!$params->documentacion) {
-                            $tramiteFactura->setDocumentacion($params->documentacion);
-    
-                            if ($params->observacion) {
-                                $tramiteFactura->setObservacion($observacion);
-                            }
-    
-                            $em->flush();
-    
-                            $response = array(
-                                'status' => 'error',
-                                'code' => 400,
-                                'message' => 'Este trámite no se puede realizar porque no presenta la documentación completa.',
+                    if (!$vehiculo->getCancelado()) {                        
+                        if ($funcionario->getOrganismoTransito()->getId() == $vehiculo->getOrganismoTransito()->getId()) {
+                            $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                                array(
+                                    'vehiculo' => $vehiculo->getId(),
+                                    'activo' => true,
+                                )
                             );
-                        }else{*/
-                            if ($funcionario->getOrganismoTransito()->getId() == $vehiculo->getOrganismoTransito()->getId()) {
-                                $response = array(
-                                    'status' => 'success',
-                                    'code' => 200,
-                                    'message' => 'Trámite autorizado.',
-                                );
-                            }else{
-                                //Valida si el tramite a realizar es RADICADO DE CUENTA o CERTIFICADO DE TRADICION
-                                if ($tramiteFactura->getPrecio()->getTramite()->getId() == 4 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+    
+                            if ($limitaciones) {
+                                //Valida si el tramite a realizar es diferente de TRASPASO
+                                if ($tramiteFactura->getPrecio()->getTramite()->getId() != 2) {
                                     $response = array(
                                         'status' => 'success',
                                         'code' => 200,
@@ -531,11 +591,32 @@ class FroTrteSolicitudController extends Controller
                                     $response = array(
                                         'status' => 'error',
                                         'code' => 400,
-                                        'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra trasladado a otro organismo de transito.',
+                                        'message' => 'Este trámite no se puede realizar porque este vehiculo presenta limitación a la propiedad.',
                                     );
                                 }
+                            }else{
+                                $response = array(
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => 'Trámite autorizado.',
+                                );
                             }
-                        //}
+                        }else{
+                            //Valida si el tramite a realizar es RADICADO DE CUENTA o CERTIFICADO DE TRADICION
+                            if ($tramiteFactura->getPrecio()->getTramite()->getId() == 4 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                                $response = array(
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => 'Trámite autorizado.',
+                                );
+                            }else{
+                                $response = array(
+                                    'status' => 'error',
+                                    'code' => 400,
+                                    'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra trasladado a otro organismo de transito.',
+                                );
+                            }
+                        }
                     }else{
                         //Valida si el tramite a realizar es REMATRICULA o CERTIFICADO DE TRADICION
                         if ($tramiteFactura->getPrecio()->getTramite()->getId() == 18 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {

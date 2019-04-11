@@ -64,62 +64,54 @@ class VhloLimitacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $datos = new VhloCfgLimitacion();
-
-            $datos->setFechaRadicacion(new \Datetime($fechaRadicacion));
-            $datos->setFechaExpedicion(new \Datetime($fechaExpedicion));
-            $datos->setNumeroOrdenJudicial($numeroOrdenJudicial);
-            $datos->setObservaciones($observaciones);
-            $datos->setActivo(true);
-
-            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                $params->limitacion->idMunicipio
-            );
-            $datos->setMunicipio($municipio);
-
-            $demandado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                $params->idDemandado
-            );
-            $datos->setCiudadanoDemandado($demandado);
-            
-            $demandante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                $params->idDemandante
-            );
-            $datos->setCiudadanoDemandante($demandante);
-
-            $tipo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->find(
-                $params->limitacion->idTipoLimitacion
-            );
-            $datos->setLimitacion($tipo);
-
-            $tipoProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->find(
-                $params->limitacion->idTipoProcesoLimitacion
-            );
-            $datos->setTipoProceso($tipoProceso);
-
-            $causalLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausalLimitacion')->find(
-                $params->limitacion->idCausalLimitacion
-            );
-            $datos->setCausalLimitacion($causalLimitacion);
-
-            $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                $params->limitacion->idEntidadJudicial
-            );
-            $datos->setEntidadJudicial($entidadJudicial);
-
-            $em->persist($datos);
-            $em->flush();
-
             foreach ($params->vehiculos as $key => $vehiculoArray) {
                 $limitacion = new VhloLimitacion();
+
+                $limitacion->setFechaRadicacion(new \Datetime($params->limitacion->fechaRadicacion));
+                $limitacion->setFechaExpedicion(new \Datetime($params->limitacion->fechaExpedicion));
+                $limitacion->setNumeroOrdenJudicial($params->limitacion->numeroOrdenJudicial);
+                $limitacion->setObservaciones($params->limitacion->observaciones);
+                $limitacion->setActivo(true);
+    
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                    $params->limitacion->idMunicipio
+                );
+                $limitacion->setMunicipio($municipio);
+    
+                $demandado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->idDemandado
+                );
+                $limitacion->setCiudadanoDemandado($demandado);
+                
+                $demandante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->idDemandante
+                );
+                $limitacion->setCiudadanoDemandante($demandante);
+    
+                $tipo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->find(
+                    $params->limitacion->idTipoLimitacion
+                );
+                $limitacion->setLimitacion($tipo);
+    
+                $tipoProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->find(
+                    $params->limitacion->idTipoProcesoLimitacion
+                );
+                $limitacion->setTipoProceso($tipoProceso);
+    
+                $causalLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausalLimitacion')->find(
+                    $params->limitacion->idCausalLimitacion
+                );
+                $limitacion->setCausalLimitacion($causalLimitacion);
+    
+                $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                    $params->limitacion->idEntidadJudicial
+                );
+                $limitacion->setEntidadJudicial($entidadJudicial);
     
                 $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
                     $vehiculoArray->id
                 );
-    
-                $limitacion->setDatos($datos);
                 $limitacion->setVehiculo($vehiculo);
-                $limitacion->setActivo(true);
     
                 $em->persist($limitacion);
                 $em->flush();
@@ -127,7 +119,7 @@ class VhloLimitacionController extends Controller
 
             $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                 array(
-                    'datos' => $datos->getId(),
+                    'numeroOrdenJudicial' => $params->limitacion->numeroOrdenJudicial,
                     'activo' => true
                 )
             );
