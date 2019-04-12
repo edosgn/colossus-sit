@@ -319,11 +319,11 @@ class SvRegistroIpatController extends Controller
 
             $ipat->setOtroDelineadorPiso($params[0]->datosLimitacion->otroDelineadorPiso);
 
-            $conductores = (isset($params[2]->dataConductores)) ? $params[2]->dataConductores : null;
-            $ipat->setConductores($conductores);
+            /* $conductores = (isset($params[2]->dataConductores)) ? $params[2]->dataConductores : null;
+            $ipat->setConductores($conductores); */
 
             
-            $ipat->setPracticoExamenConductor($params[0]->datosLimitacion->practicoExamenConductor);
+            /* $ipat->setPracticoExamenConductor($params[0]->datosLimitacion->practicoExamenConductor);
             $ipat->setAutorizoConductor($params[0]->datosLimitacion->autorizoConductor);
 
             if ($params[0]->datosLimitacion->idResultadoExamenConductor) {
@@ -360,10 +360,10 @@ class SvRegistroIpatController extends Controller
                 $ipat->setHospitalConductor($hospitalConductor);
             }
 
-            $ipat->setDescripcionLesionConductor($params[0]->datosLimitacion->descripcionLesionConductor);
+            $ipat->setDescripcionLesionConductor($params[0]->datosLimitacion->descripcionLesionConductor); */
 
-            $vehiculos = (isset($params[3]->dataVehiculos)) ? $params[3]->dataVehiculos : null;
-            $ipat->setVehiculos($vehiculos);
+           /*  $vehiculos = (isset($params[3]->dataVehiculos)) ? $params[3]->dataVehiculos : null;
+            $ipat->setVehiculos($vehiculos); */
         
             $ipat->setMismoConductor($params[0]->datosLimitacion->mismoConductor);
             $ipat->setNombresPropietario($params[0]->datosLimitacion->nombresPropietario);
@@ -377,10 +377,10 @@ class SvRegistroIpatController extends Controller
             }
             $ipat->setIdentificacionPropietario($params[0]->datosLimitacion->identificacionPropietario);
 
-            $ipat->setDescripcionDanios($params[0]->datosLimitacion->descripcionDanios);
+            /* $ipat->setDescripcionDanios($params[0]->datosLimitacion->descripcionDanios);
 
             $ipat->setFalla($params[0]->datosLimitacion->arrayFallas);
-            $ipat->setLugarImpacto($params[0]->datosLimitacion->arrayLugaresImpacto);
+            $ipat->setLugarImpacto($params[0]->datosLimitacion->arrayLugaresImpacto); */
 
             $idTipoIdentificacionTestigo = (isset($params[0]->datosLimitacion->tipoIdentificacionTestigo)) ? $params[0]->datosLimitacion->tipoIdentificacionTestigo : null;
 
@@ -402,7 +402,7 @@ class SvRegistroIpatController extends Controller
             $ipat->setTelefonoTestigo($params[0]->datosLimitacion->telefonoTestigo);
             
             $ipat->setGradoAgente($params[0]->datosLimitacion->gradoAgente);
-            
+
             $tipoIdentificacionAgente = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params[0]->datosLimitacion->tipoIdentificacionAgente);
             $ipat->setTipoIdentificacionAgente($tipoIdentificacionAgente->getNombre());
 
@@ -412,7 +412,7 @@ class SvRegistroIpatController extends Controller
             $ipat->setPlacaAgente($params[0]->datosLimitacion->placaAgente);
             $ipat->setEntidadAgente($params[0]->datosLimitacion->entidadAgente);
 
-            $ipat->setVictima($params[0]->datosLimitacion->victima);
+            /* $ipat->setVictima($params[0]->datosLimitacion->victima);
 
             $victimas = (isset($params[4]->dataVictimas)) ? $params[4]->dataVictimas : null;
             $ipat->setVictimas($victimas);
@@ -465,7 +465,7 @@ class SvRegistroIpatController extends Controller
                 );
                 $ipat->setGravedadVictima($gravedadVictima);
             }
-
+ */
             
             $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
                 array(
@@ -494,7 +494,7 @@ class SvRegistroIpatController extends Controller
                 );
             }
 
-            $ipat->setDescripcionLesionVictima($params[0]->datosLimitacion->descripcionLesionVictima);
+            /* $ipat->setDescripcionLesionVictima($params[0]->datosLimitacion->descripcionLesionVictima); */
             $ipat->setObservaciones($params[0]->datosLimitacion->observaciones);
             
             $ipat->setTotalPeaton($params[0]->datosLimitacion->totalPeatones);
