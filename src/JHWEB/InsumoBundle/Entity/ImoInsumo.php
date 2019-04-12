@@ -51,6 +51,13 @@ class ImoInsumo
     private $categoria;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="acta_entrega", type="string", length=255, nullable=true)
+     */
+    private $actaEntrega; 
+
+    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito")
      **/
     protected $organismoTransito;
@@ -64,6 +71,8 @@ class ImoInsumo
      * @ORM\ManyToOne(targetEntity="ImoLote")
      **/
     protected $lote;
+
+    
 
     /**
      * Get id
@@ -169,6 +178,30 @@ class ImoInsumo
     public function getCategoria()
     {
         return $this->categoria;
+    }
+
+    /**
+     * Set actaEntrega
+     *
+     * @param string $actaEntrega
+     *
+     * @return ImoInsumo
+     */
+    public function setActaEntrega($actaEntrega)
+    {
+        $this->actaEntrega = $actaEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get actaEntrega
+     *
+     * @return string
+     */
+    public function getActaEntrega()
+    {
+        return $this->actaEntrega;
     }
 
     /**

@@ -92,22 +92,16 @@ class ImoInsumoController extends Controller
             $em->flush();
             
             
-            
             foreach ($params->array as $key => $lote) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($lote->idLote);
                 $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($lote->idTipo);
-                
-                $loteInsumo->setActaEntrega($numeroActa);
-                $loteInsumo->setEstado('ASIGNADO');
-                
-                $em->persist($loteInsumo);
-                $em->flush(); 
-                // var_dump($loteInsumo->getId());
-
+                             
                 $desde = $loteInsumo->getRangoInicio();
                 $hasta = $loteInsumo->getRangoFin();
 
-                if ($loteInsumo->getTipo() == 'Sustrato') {
+                if ($loteInsumo->getTipo() == 'SUSTRATO') {
+                    $loteInsumo->setEstado('ASIGNADO');
+
                     while ($desde <= $hasta) {
                         $insumo = new ImoInsumo();
                         $em = $this->getDoctrine()->getManager();
@@ -116,8 +110,9 @@ class ImoInsumoController extends Controller
                         $insumo->setTipo($tipoInsumo);
                         $insumo->setLote($loteInsumo); 
                         $insumo->setFecha($fecha);
-                        $insumo->setCategoria('sustrato');
-                        $insumo->setEstado('disponible');
+                        $insumo->setActaEntrega($numeroActa);
+                        $insumo->setCategoria('SUSTRATO');
+                        $insumo->setEstado('DISPONIBLE');
                         $em->persist($insumo);
                         $em->flush();
     
@@ -137,32 +132,59 @@ class ImoInsumoController extends Controller
                         'status' => 'success',
                         'code' => 200, 
                         'data' => $numeroActa,
-                        'messagge' => "insumo creado con exito", 
+                        'message' => "insumo creado con exito", 
                     );
                     
                 }else{
                     $insumo = new ImoInsumo();
 
+                    $lotesInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
+                        array('estado' => 'REGISTRADO','tipo'=>'Insumo')
+                    );
+
                     $insumo->setLote($loteInsumo);
+                    $insumo->setNumero($lote->cantidad);
                     $insumo->setTipo($tipoInsumo);
-                    $insumo->setEstado('disponible');
                     $insumo->setOrganismoTransito($sedeOperativa);
+                    $insumo->setEstado('DISPONIBLE');
                     $insumo->setFecha($fecha);
-                    $insumo->setCategoria('insumo');
+                    $insumo->setCategoria('INSUMO');
+                    $insumo->setActaEntrega($numeroActa);
 
                     $em->persist($insumo);
                     $em->flush();
+
+                    foreach ($lotesInsumo as $key => $loteInsumo){
+                        
+                        if ($loteInsumo->getCantidad() <= $lote->cantidad) {
+                            $cantidad =  $lote->cantidad - $loteInsumo->getCantidad();
+                            $lote->cantidad = $cantidad;
+                            $loteInsumo->setCantidad(0);
+                            $loteInsumo->setEstado('ASIGNADO');
+
+                            $em->flush(); 
+                        }else {
+                            if ($lote->cantidad > 0) {
+                                $cantidad =  $loteInsumo->getCantidad() - $lote->cantidad;
+                                $loteInsumo->setCantidad($cantidad);
+                                $loteInsumo->setEstado('REGISTRADO');
+                                $lote->cantidad = 0;
+                                $em->flush(); 
+                            }
+                        }
+                        
+                    }
+                   
 
                     $response = array(
                         'status' => 'success',
                         'code' => 200, 
                         'data' => $numeroActa,
-                        'messagge' => "insumo creado con exito", 
+                        'message' => "insumo creado con exito", 
                     );
                 }
                 
             }
-            // die();
         }else{
                 $response = array(
                     'status' => 'error',
@@ -326,7 +348,7 @@ class ImoInsumoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $json = $request->get("json",null);
         $params = json_decode($json);
-        
+
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
             array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen)
         );
@@ -362,7 +384,7 @@ class ImoInsumoController extends Controller
         $params = json_decode($json);
 
         $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumoo')->findBy(
-            array('tipo'=>'sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen), 
+            array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen), 
             array('id' => 'DESC'),$params->cantidad
         );
 

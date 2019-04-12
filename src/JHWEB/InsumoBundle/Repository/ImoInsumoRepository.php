@@ -26,7 +26,7 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'idOrnganismoTransito' => $idOrnganismoTransito,
             'estado' => 'disponible',
-            'tipo' => 'sustrato',
+            'tipo' => 'SUSTRATO',
         ));
  
         return $consulta->getOneOrNullResult();
@@ -51,12 +51,35 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
 
         $consulta->setParameters(array(
             'estado' => 'disponible',
-            'tipo' => 'sustrato',
+            'tipo' => 'SUSTRATO',
             'numero' => $numero,
             'idOrganismoTransito' => $idOrganismoTransito,
             'idModulo' => $idModulo,
         ));
 
         return $consulta->getOneOrNullResult();
+    }
+
+    public function getTotalesTipoActa($actaEntrega)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(i.id) AS cantidad, it.nombre, ot.id AS idOrganismoTransito, 
+                i.fecha AS fecha, il.rangoInicio AS rangoInicio, il.rangoFin AS rangoFin, i.actaEntrega AS actaEntrega
+                FROM JHWEBInsumoBundle:ImoInsumo i, 
+                JHWEBInsumoBundle:ImoCfgTipo it,
+                JHWEBInsumoBundle:ImoLote il,
+                JHWEBConfigBundle:CfgOrganismoTransito ot
+                WHERE i.actaEntrega = :actaEntrega
+                AND i.tipo = it.id
+                AND i.organismoTransito = ot.id
+                AND i.lote = il.id
+                AND i.categoria = 'SUSTRATO'
+                GROUP BY i.tipo";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'actaEntrega' => $actaEntrega,
+                ));
+                return $consulta->getResult();
     }
 }
