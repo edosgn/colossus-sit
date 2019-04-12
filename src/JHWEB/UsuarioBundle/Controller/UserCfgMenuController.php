@@ -208,13 +208,6 @@ class UserCfgMenuController extends Controller
                 );
                 $menu->setParent($parentMenu);
 
-                if ($params->idRole) {
-                    $role = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->find(
-                        $params->idRole
-                    );
-                    $menu->setRole($role);
-                }
-
                 if ($parentMenu->getTipo() == 'PRIMER_NIVEL') {
                     $menu->setTipo('SEGUNDO_NIVEL');
                     $response = array(
@@ -361,10 +354,12 @@ class UserCfgMenuController extends Controller
             $response = null;
 
             foreach ($menus as $key => $menu) {
-                if ($menu->getParent()->getParent()) {
-                    $titulo = $menu->getParent()->getParent()->getTitulo().' > '.$menu->getParent()->getTitulo().' > '.$menu->getTitulo();
-                }elseif($menu->getParent()){
-                    $titulo = $menu->getParent()->getTitulo().' > '.$menu->getTitulo();
+                if ($menu->getParent()) {
+                    if ($menu->getParent()->getParent()) {
+                        $titulo = $menu->getParent()->getParent()->getTitulo().' > '.$menu->getParent()->getTitulo().' > '.$menu->getTitulo();
+                    }else{
+                        $titulo = $menu->getParent()->getTitulo().' > '.$menu->getTitulo();
+                    }
                 }else{
                     $titulo = $menu->getTitulo();
                 }

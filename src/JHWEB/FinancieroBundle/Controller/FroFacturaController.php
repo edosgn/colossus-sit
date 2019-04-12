@@ -526,7 +526,7 @@ class FroFacturaController extends Controller
         $barcode->setFontSize(7);
         $imgBarcode = $barcode->generate();
 
-        //$imgBarcode = \base64_decode($code);
+        //$imgBarcode = \base64_decode($imgBarcode);
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
@@ -534,7 +534,7 @@ class FroFacturaController extends Controller
             'imgBarcode' => $imgBarcode
         ));
 
-        $this->get('app.pdf.factura')->templateTramites($html, $factura);
+        $this->get('app.pdf')->templateSummary($html, $factura);
     }
 
     protected function generatePdfInfracciones($id){
@@ -573,7 +573,7 @@ class FroFacturaController extends Controller
             'imgBarcode' => $imgBarcode
         ));
 
-        $this->get('app.pdf.factura')->templateInfracciones($html, $factura);
+        $this->get('app.pdf')->templateFactura($html, $factura);
     }
 
     protected function generatePdfAmortizacion($idFactura){
@@ -618,6 +618,6 @@ class FroFacturaController extends Controller
             'imgBarcode' => $imgBarcode
         ));
 
-        $this->get('app.pdf.factura')->templateInfracciones($html, $factura);
+        $this->get('app.pdf.factura')->templateFactura($html, $factura);
     }
 }
