@@ -78,6 +78,13 @@ class ImoLote
     private $cantidad;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="recibido", type="integer")
+     */
+    private $recibido;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="acta_entrega", type="string", length=255, nullable=true)
@@ -98,9 +105,7 @@ class ImoLote
      * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
      **/
     protected $tipoInsumo;
-
-
-
+    
 
     /**
      * Get id
@@ -181,9 +186,6 @@ class ImoLote
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-        }
         return $this->fecha;
     }
 
@@ -305,6 +307,30 @@ class ImoLote
     public function getCantidad()
     {
         return $this->cantidad;
+    }
+
+    /**
+     * Set recibido
+     *
+     * @param integer $recibido
+     *
+     * @return ImoLote
+     */
+    public function setRecibido($recibido)
+    {
+        $this->recibido = $recibido;
+
+        return $this;
+    }
+
+    /**
+     * Get recibido
+     *
+     * @return integer
+     */
+    public function getRecibido()
+    {
+        return $this->recibido;
     }
 
     /**

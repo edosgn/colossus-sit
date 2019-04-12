@@ -11,13 +11,17 @@ namespace JHWEB\InsumoBundle\Repository;
 class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
 {
 
-    public function getMax()
+    public function getMax($imoCfgTipo)
     { 
         $em = $this->getEntityManager();
-
         $dql = "SELECT MAX(l.rangoFin) AS maximo
-        FROM JHWEBInsumoBundle:ImoLote l";
+        FROM JHWEBInsumoBundle:ImoLote l, JHWEBInsumoBundle:ImoCfgTipo t
+        WHERE l.tipoInsumo = t.id
+        AND l.tipoInsumo = :imoTipo";
         $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'imoTipo' => $imoCfgTipo,
+        ));
         return $consulta->getOneOrNullResult();
     }
 
@@ -47,6 +51,23 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
                     'tipo' => 'Insumo',
+                ));
+                return $consulta->getResult();
+    }
+
+    public function getTotalTipo($estado,$tipoInsumo)
+    {  
+        $em = $this->getEntityManager();
+        $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre
+                FROM JHWEBInsumoBundle:ImoLote il,
+                JHWEBInsumoBundle:ImoCfgTipo it
+                WHERE il.tipoInsumo = :tipoInsumo
+                AND il.tipoInsumo = it.id
+                AND il.estado = :estado";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'estado' => $estado,
+                    'tipoInsumo' => $tipoInsumo,
                 ));
                 return $consulta->getResult();
     }

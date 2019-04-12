@@ -317,7 +317,7 @@ class ImoInsumoController extends Controller
      /**
      * Lists all insumo entities.
      *
-     * @Route("/isExistencia", name="insumo_isExistencia")
+     * @Route("/isExistencia", name="imo_insumo_isExistencia")
      * @Method({"GET", "POST"})
      */
     public function isExistenciaAction(Request $request)
@@ -326,6 +326,7 @@ class ImoInsumoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $json = $request->get("json",null);
         $params = json_decode($json);
+        
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
             array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen)
         );

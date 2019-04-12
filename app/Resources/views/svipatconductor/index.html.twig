@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Svipatconductors list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombresconductor</th>
+                <th>Apellidosconductor</th>
+                <th>Tipoidentificacionconductor</th>
+                <th>Identificacionconductor</th>
+                <th>Nacionalidadconductor</th>
+                <th>Fechanacimientoconductor</th>
+                <th>Edadconductor</th>
+                <th>Sexoconductor</th>
+                <th>Direccionresidenciaconductor</th>
+                <th>Ciudadresidenciaconductor</th>
+                <th>Telefonoconductor</th>
+                <th>Practicoexamenconductor</th>
+                <th>Autorizoconductor</th>
+                <th>Sustanciaspsicoactivasconductor</th>
+                <th>Portalicencia</th>
+                <th>Numerolicenciaconduccion</th>
+                <th>Categorialicenciaconduccion</th>
+                <th>Restriccionconductor</th>
+                <th>Fechaexpedicionlicenciaconduccion</th>
+                <th>Fechavencimientolicenciaconduccion</th>
+                <th>Organismotransito</th>
+                <th>Chalecoconductor</th>
+                <th>Cascoconductor</th>
+                <th>Cinturonconductor</th>
+                <th>Descripcionlesionconductor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for svIpatConductor in svIpatConductors %}
+            <tr>
+                <td><a href="{{ path('svipatconductor_show', { 'id': svIpatConductor.id }) }}">{{ svIpatConductor.id }}</a></td>
+                <td>{{ svIpatConductor.nombresConductor }}</td>
+                <td>{{ svIpatConductor.apellidosConductor }}</td>
+                <td>{{ svIpatConductor.tipoIdentificacionConductor }}</td>
+                <td>{{ svIpatConductor.identificacionConductor }}</td>
+                <td>{{ svIpatConductor.nacionalidadConductor }}</td>
+                <td>{% if svIpatConductor.fechaNacimientoConductor %}{{ svIpatConductor.fechaNacimientoConductor|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatConductor.edadConductor }}</td>
+                <td>{{ svIpatConductor.sexoConductor }}</td>
+                <td>{{ svIpatConductor.direccionResidenciaConductor }}</td>
+                <td>{{ svIpatConductor.ciudadResidenciaConductor }}</td>
+                <td>{{ svIpatConductor.telefonoConductor }}</td>
+                <td>{% if svIpatConductor.practicoExamenConductor %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svIpatConductor.autorizoConductor %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svIpatConductor.sustanciasPsicoactivasConductor %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svIpatConductor.portaLicencia %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svIpatConductor.numeroLicenciaConduccion }}</td>
+                <td>{{ svIpatConductor.categoriaLicenciaConduccion }}</td>
+                <td>{{ svIpatConductor.restriccionConductor }}</td>
+                <td>{% if svIpatConductor.fechaExpedicionLicenciaConduccion %}{{ svIpatConductor.fechaExpedicionLicenciaConduccion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if svIpatConductor.fechaVencimientoLicenciaConduccion %}{{ svIpatConductor.fechaVencimientoLicenciaConduccion|date('Y-m-d') }}{% endif %}</td>
+                <td>{{ svIpatConductor.organismoTransito }}</td>
+                <td>{% if svIpatConductor.chalecoConductor %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svIpatConductor.cascoConductor %}Yes{% else %}No{% endif %}</td>
+                <td>{% if svIpatConductor.cinturonConductor %}Yes{% else %}No{% endif %}</td>
+                <td>{{ svIpatConductor.descripcionLesionConductor }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('svipatconductor_show', { 'id': svIpatConductor.id }) }}">show</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}

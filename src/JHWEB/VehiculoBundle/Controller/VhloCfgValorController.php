@@ -51,7 +51,7 @@ class VhloCfgValorController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
                 $em = $this->getDoctrine()->getManager();
@@ -130,7 +130,7 @@ class VhloCfgValorController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -219,5 +219,118 @@ class VhloCfgValorController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    } 
+
+
+    /**
+     * Creates a new vhloCfgValor entity.
+     *
+     * @Route("/new/upload", name="vhlocfgvalor_new_upload")
+     * @Method({"GET", "POST"})
+     */
+    public function newUploadAction(Request $request)
+    { 
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            foreach ($params as $key => $valor) {
+
+                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneByNombre($valor[0]);
+                $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->findOneByNombre($valor[1]);
+                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findOneByNombre($valor[2]);
+                $cilindraje = $valor[3];
+                $tonelaje = $valor[4];
+                $pesaje = $valor[5];
+                $vhloValor = $valor[6];
+                $anio = $valor[7];
+                if ($linea ) {
+                    $vhloCfgValor = new VhloCfgValor();
+    
+                    $vhloCfgValor->setClase($clase);
+                    $vhloCfgValor->setMarca($marca);
+                    $vhloCfgValor->setLinea($linea);
+                    $vhloCfgValor->setCilindraje($cilindraje);
+                    $vhloCfgValor->setTonelaje($tonelaje);
+                    $vhloCfgValor->setPesaje($pesaje);
+                    $vhloCfgValor->setValor($vhloValor);
+                    $vhloCfgValor->setAnio($anio);
+                    $vhloCfgValor->setActivo(true);
+     
+                    $em->persist($vhloCfgValor);
+                    $em->flush();
+                }
+
+            }
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Tipo Producto creado con exito", 
+                );
+
+            //}
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+            } 
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para select1 
+     *
+     * @Route("/show/vehiculo", name="vhlocfgvalor_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function showVehiculoAction(Request $request)
+    {
+    $helpers = $this->get("app.helpers");
+    $hash = $request->get("authorization", null);
+    $authCheck = $helpers->authCheck($hash);
+    if ($authCheck== true) {
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->findOneBy(
+            array(
+                'linea' => $params->linea,
+                'cilindraje' => $params->cilindraje,
+                'marca' => $params->marca,
+                'clase' => $params->clase,
+                'anio' => $params->modelo,
+            )
+        );
+
+        if ($valorVehiculo) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Valor encontrado.", 
+                'data' => $valorVehiculo, 
+            );
+        }else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'messager' => "Valor no encontrado para el vehiculo.", 
+            );
+        } 
+    }else{
+        $response = array(
+            'status' => 'error',
+            'code' => 400,
+            'messager' => "Autorizacion no valida", 
+        );
+    }
+    return $helpers->json($response);
     }
 }
