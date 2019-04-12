@@ -84,12 +84,7 @@ class ImoLote
      */
     private $recibido;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="acta_entrega", type="string", length=255, nullable=true)
-     */
-    private $actaEntrega; 
+    
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
@@ -106,6 +101,8 @@ class ImoLote
      **/
     protected $tipoInsumo;
     
+
+   
 
     /**
      * Get id
@@ -331,30 +328,6 @@ class ImoLote
     public function getRecibido()
     {
         return $this->recibido;
-    }
-
-    /**
-     * Set actaEntrega
-     *
-     * @param string $actaEntrega
-     *
-     * @return ImoLote
-     */
-    public function setActaEntrega($actaEntrega)
-    {
-        $this->actaEntrega = $actaEntrega;
-
-        return $this;
-    }
-
-    /**
-     * Get actaEntrega
-     *
-     * @return string
-     */
-    public function getActaEntrega()
-    {
-        return $this->actaEntrega;
     }
 
     /**
