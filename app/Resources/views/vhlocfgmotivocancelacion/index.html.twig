@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgmotivocancelacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Activo</th>
+                <th>Gestionable</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for vhloCfgMotivoCancelacion in vhloCfgMotivoCancelacions %}
+            <tr>
+                <td><a href="{{ path('vhlocfgmotivocancelacion_show', { 'id': vhloCfgMotivoCancelacion.id }) }}">{{ vhloCfgMotivoCancelacion.id }}</a></td>
+                <td>{{ vhloCfgMotivoCancelacion.nombre }}</td>
+                <td>{% if vhloCfgMotivoCancelacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>{% if vhloCfgMotivoCancelacion.gestionable %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('vhlocfgmotivocancelacion_show', { 'id': vhloCfgMotivoCancelacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('vhlocfgmotivocancelacion_edit', { 'id': vhloCfgMotivoCancelacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgmotivocancelacion_new') }}">Create a new vhloCfgMotivoCancelacion</a>
+        </li>
+    </ul>
+{% endblock %}
