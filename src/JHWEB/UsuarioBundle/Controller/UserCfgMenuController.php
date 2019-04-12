@@ -361,7 +361,7 @@ class UserCfgMenuController extends Controller
             $response = null;
 
             foreach ($menus as $key => $menu) {
-                if ($menu->getParent()->getParet()) {
+                if ($menu->getParent()->getParent()) {
                     $titulo = $menu->getParent()->getParent()->getTitulo().' > '.$menu->getParent()->getTitulo().' > '.$menu->getTitulo();
                 }elseif($menu->getParent()){
                     $titulo = $menu->getParent()->getTitulo().' > '.$menu->getTitulo();

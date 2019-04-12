@@ -1,7 +1,3 @@
-jhweb_vehiculo_vhlo_cfg_motivo_cancelacion:
-    resource: "@JHWEBVehiculoBundle/Controller/VhloCfgMotivoCancelacionController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
