@@ -75,13 +75,6 @@ class UserCfgMenuController extends Controller
                 $menu->setPath($params->path);
             }
 
-            if ($params->idRole) {
-                $role = $em->getRepository('JHWEBUsuarioBundle:UserCfgRole')->find(
-                    $params->idRole
-                );
-                $menu->setRole($role);
-            }
-
             if (isset($params->idParent) && $params->idParent) {
                 $parentMenu = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->find(
                     $params->idParent
@@ -331,7 +324,7 @@ class UserCfgMenuController extends Controller
                 $titulo = $menu->getTitulo();
             }
 
-            if (!$menu->getParent()) {
+            if ($menu->getTipo() == 'PRIMER_NIVEL' || $menu->getTipo() == 'SEGUNDO_NIVEL') {
                 $response[] = array(
                     'value' => $menu->getId(),
                     'label' => $titulo
@@ -346,10 +339,10 @@ class UserCfgMenuController extends Controller
     /**
      * Lists all userCfgMenu entities.
      *
-     * @Route("/select/parent", name="usercfgmenu_select_parent")
+     * @Route("/select/availables", name="usercfgmenu_select_availables")
      * @Method({"GET", "POST"})
      */
-    public function selectByParentAction(Request $request)
+    public function selectAvailablesAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -361,14 +354,24 @@ class UserCfgMenuController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->getAvailablesByUsuario($params->idParent, $params->idUsuario);
+            $menus = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->getAvailablesByUsuario(
+                $params->idUsuario
+            );
 
             $response = null;
 
             foreach ($menus as $key => $menu) {
+                if ($menu->getParent()->getParet()) {
+                    $titulo = $menu->getParent()->getParent()->getTitulo().' > '.$menu->getParent()->getTitulo().' > '.$menu->getTitulo();
+                }elseif($menu->getParent()){
+                    $titulo = $menu->getParent()->getTitulo().' > '.$menu->getTitulo();
+                }else{
+                    $titulo = $menu->getTitulo();
+                }
+                
                 $response[] = array(
                     'value' => $menu->getId(),
-                    'label' => $menu->getTitulo()
+                    'label' => $titulo
                 );
             }
         }else{

@@ -59,10 +59,6 @@ class UserCfgMenu
     /** @ORM\ManyToOne(targetEntity="UserCfgMenu", inversedBy="childrens") */
     private $parent;
 
-    /** @ORM\ManyToOne(targetEntity="UserCfgRole", inversedBy="menus") */
-    private $role;
-
-
     /**
      * Get id
      *
@@ -215,29 +211,5 @@ class UserCfgMenu
     public function getParent()
     {
         return $this->parent;
-    }
-
-    /**
-     * Set role
-     *
-     * @param \JHWEB\UsuarioBundle\Entity\UserCfgRole $role
-     *
-     * @return UserCfgMenu
-     */
-    public function setRole(\JHWEB\UsuarioBundle\Entity\UserCfgRole $role = null)
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    /**
-     * Get role
-     *
-     * @return \JHWEB\UsuarioBundle\Entity\UserCfgRole
-     */
-    public function getRole()
-    {
-        return $this->role;
     }
 }

@@ -11,13 +11,13 @@ namespace JHWEB\UsuarioBundle\Repository;
 class UserCfgMenuRepository extends \Doctrine\ORM\EntityRepository
 {
 	//Obtiene la lista de MENUS disponibles para asignar a un USUARIO
-    public function getAvailablesByUsuario($idParent, $idUsuario)
+    public function getAvailablesByUsuario($idUsuario)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT m
             FROM JHWEBUsuarioBundle:UserCfgMenu m
             WHERE m.activo = true
-            AND m.parent = :idParent
+            AND m.path IS NOT NULL
             AND m.id NOT IN
             (SELECT IDENTITY(um.menu)
             FROM JHWEBUsuarioBundle:UserUsuarioMenu um
@@ -27,7 +27,6 @@ class UserCfgMenuRepository extends \Doctrine\ORM\EntityRepository
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
-	        'idParent' => $idParent,
 	        'idUsuario' => $idUsuario,
 	    ));
 
