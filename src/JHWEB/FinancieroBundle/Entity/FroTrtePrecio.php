@@ -31,9 +31,16 @@ class FroTrtePrecio
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_inicio", type="date")
+     * @ORM\Column(name="fecha_inicial", type="date")
      */
-    private $fechaInicio;
+    private $fechaInicial;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_final", type="date", nullable=true)
+     */
+    private $fechaFinal;
 
     /**
      * @var int
@@ -118,30 +125,57 @@ class FroTrtePrecio
     }
 
     /**
-     * Set fechaInicio
+     * Set fechaInicial
      *
-     * @param \DateTime $fechaInicio
+     * @param \DateTime $fechaInicial
      *
      * @return FroTrtePrecio
      */
-    public function setFechaInicio($fechaInicio)
+    public function setFechaInicial($fechaInicial)
     {
-        $this->fechaInicio = $fechaInicio;
+        $this->fechaInicial = $fechaInicial;
 
         return $this;
     }
 
     /**
-     * Get fechaInicio
+     * Get fechaInicial
      *
      * @return \DateTime
      */
-    public function getFechaInicio()
+    public function getFechaInicial()
     {
-        if ($this->fechaInicio) {
-            return $this->fechaInicio->format('d/m/Y');
+        if($this->fechaInicial){
+            return $this->fechaInicial->format('d/m/Y');
         }
-        return $this->fechaInicio;
+        return $this->fechaInicial;
+    }
+
+    /**
+     * Set fechaFinal
+     *
+     * @param \DateTime $fechaFinal
+     *
+     * @return FroTrtePrecio
+     */
+    public function setFechaFinal($fechaFinal)
+    {
+        $this->fechaFinal = $fechaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaFinal()
+    {
+        if($this->fechaFinal){
+            return $this->fechaFinal->format('d/m/Y');
+        }
+        return $this->fechaFinal;
     }
 
     /**
@@ -161,7 +195,7 @@ class FroTrtePrecio
     /**
      * Get valor
      *
-     * @return int
+     * @return integer
      */
     public function getValor()
     {
@@ -185,7 +219,7 @@ class FroTrtePrecio
     /**
      * Get valorConcepto
      *
-     * @return int
+     * @return integer
      */
     public function getValorConcepto()
     {
@@ -209,7 +243,7 @@ class FroTrtePrecio
     /**
      * Get valorTotal
      *
-     * @return int
+     * @return integer
      */
     public function getValorTotal()
     {

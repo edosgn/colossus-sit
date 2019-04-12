@@ -54,13 +54,13 @@
                 </tr>
                 {% endfor %}
                 <tr style="background-color:#ffffff">
-                    <td style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR 1</b></td>
+                    <td style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR</b></td>
                     <td style="border:1px solid #cccccc">$ {{ factura.valorNeto|number_format(0, ',', '.') }}</td>
                 </tr>
             </table>
         {% endif %}
         <br>
-        <img src="data:image/png;base64,{{ imgBarcode }}" height="60px" />
+        <img src="data:image/png;base64,{{ imgBarcode }}" width="200px" />
         {% if key < 2 %}
         <br>
         <div class="separator"></div>

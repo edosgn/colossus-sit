@@ -15,9 +15,11 @@
             <td width="75%">Sede: {{organismoTransito.nombre}}</td> 
         </tr> 
     </table>
+    <h4>No.Acta {{numeroActa}}</h4>
 
     <br>   <br>  <br>   <br>   
     
+    <h4>Sustratos</h4>
 
     <table border="1">
         <tr>
@@ -27,13 +29,31 @@
             <td width="15%">Cantidad</td>
             <td width="15%">Referencia</td>
         </tr>
-        {% for lotesInsumo in lotesInsumo %}
+        {% for sustratoActa in sustratosActa %}
             <tr>
-                <td>{{ lotesInsumo.tipoInsumo.nombre }}</td>
-                <td>{{ lotesInsumo.rangoInicio}}</td>
-                <td>{{ lotesInsumo.rangoFin}}</td>
-                <td>{{ lotesInsumo.cantidad }}</td>
-                <td>{{ lotesInsumo.numeroActa }}</td>
+                <td>{{ sustratoActa.nombre }}</td>
+                <td>{{ sustratoActa.rangoInicio}}</td>
+                <td>{{ sustratoActa.rangoFin}}</td>
+                <td>{{ sustratoActa.cantidad }}</td>
+                <td>{{ sustratoActa.actaEntrega }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <h4>Insumos</h4>
+
+
+    <table border="1">
+        <tr>
+            <td width="40%" >Nombre insumo</td>
+            <td width="15%">Cantidad</td>
+            <td width="15%">Referencia</td>
+        </tr>
+        {% for insumoActa in insumosActa %}
+            <tr>
+                <td>{{ insumoActa.tipo.nombre }}</td>
+                <td>{{ insumoActa.numero }}</td>
+                <td>{{ insumoActa.actaEntrega }}</td>
             </tr>
         {% endfor %}
     </table>

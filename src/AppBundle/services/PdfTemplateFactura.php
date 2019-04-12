@@ -37,7 +37,7 @@ class PdfTemplateFactura extends TCPDF{
         // var_dump($factura->getNumero());
         // die();
         $barcode = new BarcodeGenerator();
-        $barcode->setText($factura->getFechaCreacion()->format('Y-m-d').$factura->getNumero());
+        $barcode->setText($factura->getNumero());
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);

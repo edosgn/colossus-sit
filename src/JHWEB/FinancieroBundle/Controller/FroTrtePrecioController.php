@@ -464,7 +464,7 @@ class FroTrtePrecioController extends Controller
             );
 
             $fechaAnterior = $helpers->convertDateTime(
-                $tramitePrecio->getFechaInicio()
+                $tramitePrecio->getFechaInicial()
             );
             $fechaNueva = $helpers->convertDateTime($params->date);
             $fechaActual = new \Datetime(date('Y-m-d'));
@@ -530,8 +530,11 @@ class FroTrtePrecioController extends Controller
                         $tramitePrecioNew->id
                     );
 
-                    if ($tramitePrecioOld->getFechaInicio() != $tramitePrecioNew->fechaInicio || $tramitePrecioOld->getValor() != $tramitePrecioNew->valor) {
+                    if ($tramitePrecioOld->getFechaInicial() != $tramitePrecioNew->fechaInicio || $tramitePrecioOld->getValor() != $tramitePrecioNew->valor) {
 
+                        $tramitePrecioOld->setFechaFinal(
+                            new \Datetime('Y-m-d')
+                        );
                         $tramitePrecioOld->setActivo(false);
 
                         $tramitePrecio = new FroTrtePrecio();
@@ -639,6 +642,45 @@ class FroTrtePrecioController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a froTrtePrecio entity.
+     *
+     * @Route("/record", name="frotrteprecio_record")
+     * @Method("POST")
+     */
+    public function recordAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->getRecordByFechas(
+                $params
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tramitesPrecio).' registros encontrados con exito.',
+                'data' => $tramitesPrecio
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
         return $helpers->json($response);
     }
 }
