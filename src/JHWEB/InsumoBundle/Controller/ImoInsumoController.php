@@ -67,7 +67,7 @@ class ImoInsumoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $fecha = new \DateTime($params->asignacionInsumos->fecha);
@@ -346,7 +346,7 @@ class ImoInsumoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $json = $request->get("json",null);
+        $json = $request->get("data",null);
         $params = json_decode($json);
 
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
@@ -373,28 +373,28 @@ class ImoInsumoController extends Controller
     /**
      * Lists all insumo entities.
      *
-     * @Route("/reasignacionSustrato", name="insumo_reasignacionSustrato")
+     * @Route("/reasignacionSustrato", name="imo_insumo_reasignacionSustrato")
      * @Method({"GET", "POST"})
      */
     public function reasignacionByTypeSustratoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager(); 
-        $json = $request->get("json",null);
+        $json = $request->get("data",null);
         $params = json_decode($json);
 
-        $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumoo')->findBy(
+        $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
             array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen), 
             array('id' => 'DESC'),$params->cantidad
         );
 
         $fecha = new \DateTime('now');
 
-        $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeDestino);
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeDestino);
 
         $imoTrazabilidad = new ImoTrazabilidad();
 
-        $imoTrazabilidad->setSedeOperativa($sedeOperativa);
+        $imoTrazabilidad->setOrganismoTransito($organismoTransito);
         $imoTrazabilidad->setFecha($fecha);
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);
@@ -439,7 +439,7 @@ class ImoInsumoController extends Controller
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager(); 
-        $json = $request->get("json",null);
+        $json = $request->get("data",null);
         $params = json_decode($json);
 
         
@@ -459,6 +459,41 @@ class ImoInsumoController extends Controller
             );
         }
         
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a insumo entity.
+     *
+     * @Route("/show/loteInsumo", name="imo_insumo_show_loteInsumo")
+     * @Method({"GET", "POST"})
+     */
+    public function showLoteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $em = $this->getDoctrine()->getManager();
+            
+            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
+                array('categoria'=>'SUSTRATO',)
+            );
+    
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'datos' => $insumos,
+                'msj' => "insumo creado con exito", 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'msj' => "Autorizacion no valida", 
+            );
+        }
+
         return $helpers->json($response);
     }
 

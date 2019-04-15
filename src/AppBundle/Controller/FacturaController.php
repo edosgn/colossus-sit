@@ -77,7 +77,7 @@ class FacturaController extends Controller
                 $params->factura->ciudadanoId
             );
 
-            $fechaCreacion = new \DateTime($params->factura->fechaCreacion);
+            $fechaCreacion = new \DateTime($params->factura->fechaCreacion); 
 
             $consecutivo = $em->getRepository('AppBundle:Factura')->getMaximo();
            
@@ -118,7 +118,7 @@ class FacturaController extends Controller
                     $tramiteValor->idTramitePrecio
                 );
 
-                if($tramitePrecio->getTramite()->getId() == 6){
+                if($tramitePrecio->getTramite()->getId() == 6){ 
                     foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
                     
                         $mflRetefuente = new MflRetefuente();

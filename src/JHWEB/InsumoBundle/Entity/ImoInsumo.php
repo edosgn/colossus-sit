@@ -153,7 +153,7 @@ class ImoInsumo
      */
     public function getFecha()
     {
-        return $this->fecha;
+        return $this->fecha->format('d/m/Y');;
     }
 
     /**
