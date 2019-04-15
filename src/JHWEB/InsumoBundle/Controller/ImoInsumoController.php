@@ -76,8 +76,11 @@ class ImoInsumoController extends Controller
             $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
             $numeroActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
 
-            if ($numeroActa['maximo'] == '') {
-                $numeroActa = 1;
+            // var_dump($numeroActa);
+            // die();
+
+            if ($numeroActa['maximo'] == '') { 
+                $numeroActa = 1; 
             }else{
                $numeroActa = $numeroActa['maximo']+1;
             }
@@ -175,7 +178,6 @@ class ImoInsumoController extends Controller
                         
                     }
                    
-
                     $response = array(
                         'status' => 'success',
                         'code' => 200, 

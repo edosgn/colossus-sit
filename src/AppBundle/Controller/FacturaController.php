@@ -118,7 +118,7 @@ class FacturaController extends Controller
                     $tramiteValor->idTramitePrecio
                 );
 
-                if($tramitePrecio->getTramite()->getId() == 6){ 
+                if($tramitePrecio->getTramite()->getId() == 6){   
                     foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
                     
                         $mflRetefuente = new MflRetefuente();

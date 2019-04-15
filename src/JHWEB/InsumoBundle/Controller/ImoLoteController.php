@@ -267,8 +267,7 @@ class ImoLoteController extends Controller
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
             $tipo = (isset($params->tipo)) ? $params->tipo : null;
             
-            // var_dump($tipo);
-            // die();
+            
 
             if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
@@ -276,6 +275,8 @@ class ImoLoteController extends Controller
                 );
             }else {
                 if ($idOrganismoTransito) {
+            //         var_dump($idOrganismoTransito);
+            // die();
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                         array('estado' => 'REGISTRADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
                     );

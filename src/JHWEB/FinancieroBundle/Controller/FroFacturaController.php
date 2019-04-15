@@ -115,6 +115,51 @@ class FroFacturaController extends Controller
                 $this->registerTramites($params->tramites, $factura);
             }
 
+            // foreach ($params->tramitesValor as $key => $tramiteValor) {
+                
+            //     $tramiteFactura = new TramiteFactura();
+
+            //     $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+            //         $tramiteValor->idTramitePrecio
+            //     );
+
+            //     if($tramitePrecio->getTramite()->getId() == 6){   
+            //         foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
+                    
+            //             $mflRetefuente = new MflRetefuente();
+
+            //             $mflRetefuente->setVehiculo($vehiculo);
+                        
+            //             $propietarioVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find( 
+            //                 $propietarioRetefuenteId
+            //             );
+
+            //             $mflRetefuente->setPropietarioVehiculo($propietarioVehiculo);
+ 
+            //             if (isset($params->valorVehiculoId)) {
+            //                 $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find(
+            //                     $params->valorVehiculoId
+            //                 );
+            //                 $mflRetefuente->setValorVehiculo($valorVehiculo);
+            //             }
+            //             $mflRetefuente->setFactura($factura);
+            //             $mflRetefuente->setFecha(new \DateTime($params->factura->fechaCreacion));
+            //             $mflRetefuente->setRetencion($params->retencion);
+            //             $mflRetefuente->setEstado(true);
+            //             $em->persist($mflRetefuente);
+            //             $em->flush();
+            //         }
+            //     }
+
+            //     $tramiteFactura->setFactura($factura);
+            //     $tramiteFactura->setTramitePrecio($tramitePrecio);
+            //     $tramiteFactura->setEstado(true);
+            //     $tramiteFactura->setRealizado(false);
+            //     $tramiteFactura->setCantidad(1);
+            //     $em->persist($tramiteFactura);
+            //     $em->flush();
+            // }
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
