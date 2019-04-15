@@ -189,7 +189,6 @@ class SvIpatVictima
      */
     private $descripcionLesionVictima;
 
-    
     /**
      * @var string
      *
