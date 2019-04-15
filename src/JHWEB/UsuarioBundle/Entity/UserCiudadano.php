@@ -87,9 +87,16 @@ class UserCiudadano
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono", type="string", length=50, nullable=true)
+     * @ORM\Column(name="telefono_celular", type="string", length=50, nullable=true)
      */
-    private $telefono;
+    private $telefonoCelular;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono_fijo", type="string", length=50, nullable=true)
+     */
+    private $telefonoFijo;
 
     /**
      * @var boolean
@@ -359,27 +366,51 @@ class UserCiudadano
     }
 
     /**
-     * Set telefono
+     * Set telefonoCelular
      *
-     * @param string $telefono
+     * @param string $telefonoCelular
      *
      * @return UserCiudadano
      */
-    public function setTelefono($telefono)
+    public function setTelefonoCelular($telefonoCelular)
     {
-        $this->telefono = $telefono;
+        $this->telefonoCelular = $telefonoCelular;
 
         return $this;
     }
 
     /**
-     * Get telefono
+     * Get telefonoCelular
      *
      * @return string
      */
-    public function getTelefono()
+    public function getTelefonoCelular()
     {
-        return $this->telefono;
+        return $this->telefonoCelular;
+    }
+
+    /**
+     * Set telefonoFijo
+     *
+     * @param string $telefonoFijo
+     *
+     * @return UserCiudadano
+     */
+    public function setTelefonoFijo($telefonoFijo)
+    {
+        $this->telefonoFijo = $telefonoFijo;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonoFijo
+     *
+     * @return string
+     */
+    public function getTelefonoFijo()
+    {
+        return $this->telefonoFijo;
     }
 
     /**

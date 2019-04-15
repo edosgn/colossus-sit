@@ -102,7 +102,11 @@ class UserCiudadanoController extends Controller
                     $params->ciudadano->identificacion
                 );
 
-                $ciudadano->setTelefono($params->ciudadano->telefono);
+                $ciudadano->setTelefonoCelular($params->ciudadano->telefonoCelular);
+
+                if ($params->ciudadano->telefonoFijo) {
+                    $ciudadano->setTelefonoFijo($params->ciudadano->telefonoFijo);
+                }
 
                 if ($params->ciudadano->fechaNacimiento) {
                     $ciudadano->setFechaNacimiento(
@@ -296,7 +300,11 @@ class UserCiudadanoController extends Controller
                     $params->ciudadano->identificacion
                 );
 
-                $ciudadano->setTelefono($params->ciudadano->telefono);
+                $ciudadano->setTelefonoCelular($params->ciudadano->telefonoCelular);
+                
+                if ($params->ciudadano->telefonoFijo) {
+                    $ciudadano->setTelefonoFijo($params->ciudadano->telefonoFijo);
+                }
 
                 if ($params->ciudadano->fechaNacimiento) {
                     $ciudadano->setFechaNacimiento(
