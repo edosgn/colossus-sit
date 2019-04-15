@@ -50,9 +50,18 @@ class SvIpatVehiculoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
+                    array(
+                        'numero' => $params->consecutivo
+                    )
+                );
+            //===========================================0
+
             $vehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->findOneBy(
                 array(
-                    'placa' => $params->placa
+                    'placa' => $params->placa,
+                    'consecutivo' => $consecutivo,
+                    'activo' => true,
                 )
             );
 
@@ -67,14 +76,15 @@ class SvIpatVehiculoController extends Controller
                 $vehiculo = new SvIpatVehiculo();
                 
                 //consecutivo del ipat
-                $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
+                /* $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
                     array(
                         'numero' => $params->consecutivo
                     )
-                );
+                ); */
                 $vehiculo->setConsecutivo($consecutivo);
                 //=======================================
                 
+                $vehiculo->setPortaPlaca($params->portaPlaca);
                 $vehiculo->setPlaca($params->placa);
                 $vehiculo->setPlacaRemolque($params->placaRemolque);
                 
@@ -115,8 +125,10 @@ class SvIpatVehiculoController extends Controller
                 $vehiculo->setEmpresa($params->empresa);
                 $vehiculo->setNitEmpresa($params->nitEmpresa);
                 $vehiculo->setmatriculadoEn($params->matriculadoEn);
+                $vehiculo->setInmovilizado($params->inmovilizado);
                 $vehiculo->setInmovilizadoEn($params->inmovilizadoEn);
                 $vehiculo->setADisposicionDe($params->aDisposicionDe);
+                $vehiculo->setPortaTarjetaRegistro($params->portaTarjetaRegistro);
                 $vehiculo->setTarjetaRegistro($params->tarjetaRegistro);
                 $vehiculo->setRevisionTecnomecanica($params->revisionTecnomecanica);
                 $vehiculo->setNumeroTecnoMecanica($params->numeroTecnoMecanica);

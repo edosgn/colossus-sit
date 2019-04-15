@@ -848,7 +848,10 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
+            /* $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params); */
+            var_dump($params);
+            die();
+            /* $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->find($params); */
             
             //$ipatExport = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneBy(array('consecutivo'=>207));
 
@@ -1102,13 +1105,13 @@ class SvRegistroIpatController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "correspondió generado.",
+                    'message' => "Correspondió generado.",
                     'data' => $correspondio,
                 );
             } else {
                 $response = array(
-                    'status' => 'success',
-                    'code' => 200,
+                    'status' => 'error',
+                    'code' => 400,
                     'message' => "No se pudo calcular el número de correspondió. Por favor complete todos los datos para generar el número único de investigación",
                 );
             }

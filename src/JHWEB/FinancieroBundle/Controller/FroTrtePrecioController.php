@@ -67,7 +67,9 @@ class FroTrtePrecioController extends Controller
 
             $tramitePrecio = new FroTrtePrecio();
 
-            $tramitePrecio->setFechaInicio(new \Datetime($params->fechaInicio));
+            $tramitePrecio->setFechaInicial(
+                new \Datetime($params->fechaInicial
+            ));
             $tramitePrecio->setValor($params->valor);
             $tramitePrecio->setValorTotal(0);
             $tramitePrecio->setActivo(true);

@@ -29,6 +29,13 @@ class SvIpatVehiculo
     private $placa;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="porta_placa", type="boolean", nullable = true)
+     */
+    private $portaPlaca;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="placa_remolque", type="string", nullable = true)
@@ -140,6 +147,13 @@ class SvIpatVehiculo
     private $matriculadoEn;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="inmovilizado", type="boolean", nullable = true)
+     */
+    private $inmovilizado;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="inmovilizado_en", type="string", nullable = true)
@@ -152,6 +166,13 @@ class SvIpatVehiculo
      * @ORM\Column(name="a_disposicion_de", type="string", nullable = true)
      */
     private $aDisposicionDe;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="porta_tarjetaregistro", type="boolean", nullable = true)
+     */
+    private $portaTarjetaRegistro;
 
     /**
      * @var string
@@ -340,6 +361,30 @@ class SvIpatVehiculo
     public function getPlaca()
     {
         return $this->placa;
+    }
+
+    /**
+     * Set portaPlaca
+     *
+     * @param boolean $portaPlaca
+     *
+     * @return SvIpatVehiculo
+     */
+    public function setPortaPlaca($portaPlaca)
+    {
+        $this->portaPlaca = $portaPlaca;
+
+        return $this;
+    }
+
+    /**
+     * Get portaPlaca
+     *
+     * @return boolean
+     */
+    public function getPortaPlaca()
+    {
+        return $this->portaPlaca;
     }
 
     /**
@@ -727,6 +772,30 @@ class SvIpatVehiculo
     }
 
     /**
+     * Set inmovilizado
+     *
+     * @param boolean $inmovilizado
+     *
+     * @return SvIpatVehiculo
+     */
+    public function setInmovilizado($inmovilizado)
+    {
+        $this->inmovilizado = $inmovilizado;
+
+        return $this;
+    }
+
+    /**
+     * Get inmovilizado
+     *
+     * @return boolean
+     */
+    public function getInmovilizado()
+    {
+        return $this->inmovilizado;
+    }
+
+    /**
      * Set inmovilizadoEn
      *
      * @param string $inmovilizadoEn
@@ -772,6 +841,30 @@ class SvIpatVehiculo
     public function getADisposicionDe()
     {
         return $this->aDisposicionDe;
+    }
+
+    /**
+     * Set portaTarjetaRegistro
+     *
+     * @param boolean $portaTarjetaRegistro
+     *
+     * @return SvIpatVehiculo
+     */
+    public function setPortaTarjetaRegistro($portaTarjetaRegistro)
+    {
+        $this->portaTarjetaRegistro = $portaTarjetaRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get portaTarjetaRegistro
+     *
+     * @return boolean
+     */
+    public function getPortaTarjetaRegistro()
+    {
+        return $this->portaTarjetaRegistro;
     }
 
     /**
