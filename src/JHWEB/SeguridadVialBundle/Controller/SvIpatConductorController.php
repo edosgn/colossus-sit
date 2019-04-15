@@ -52,6 +52,14 @@ class SvIpatConductorController extends Controller
             
             $conductor = new SvIpatConductor();
 
+            //consecutivo del ipat
+            $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
+                array(
+                    'numero' => $params->consecutivo
+                )
+            );
+            $conductor->setConsecutivo($consecutivo);
+            //=======================================
             
             $conductor->setNombresConductor($params->nombresConductor);
             $conductor->setApellidosConductor($params->apellidosConductor);
@@ -107,6 +115,10 @@ class SvIpatConductorController extends Controller
             }
 
             $conductor->setTelefonoConductor($params->telefonoConductor);
+
+            $vehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->find($params->placaVehiculoConductor);
+            $conductor->setPlacaVehiculoConductor($vehiculo->getPlaca());
+
             $conductor->setPracticoExamenConductor($params->practicoExamenConductor);
             $conductor->setAutorizoConductor($params->autorizoConductor);
 

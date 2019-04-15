@@ -297,9 +297,9 @@ class SvIpatVehiculo
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat", inversedBy="vehiculos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo", inversedBy="victimas")
      */
-    private $ipat;
+    private $consecutivo;
 
     /**
      * @var bool
@@ -1279,26 +1279,26 @@ class SvIpatVehiculo
     }
 
     /**
-     * Set ipat
+     * Set consecutivo
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat $ipat
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo
      *
      * @return SvIpatVehiculo
      */
-    public function setIpat(\JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat $ipat = null)
+    public function setConsecutivo(\JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo = null)
     {
-        $this->ipat = $ipat;
+        $this->consecutivo = $consecutivo;
 
         return $this;
     }
 
     /**
-     * Get ipat
+     * Get consecutivo
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo
      */
-    public function getIpat()
+    public function getConsecutivo()
     {
-        return $this->ipat;
+        return $this->consecutivo;
     }
 }

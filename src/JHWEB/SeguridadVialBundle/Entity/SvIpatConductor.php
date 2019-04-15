@@ -220,6 +220,13 @@ class SvIpatConductor
     /**
      * @var string
      *
+     * @ORM\Column(name="placa_vehiculo_conductor", type="string", nullable = true)
+     */
+    private $placaVehiculoConductor;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="descripcion_lesion_conductor", type="string", nullable = true)
      */
     private $descripcionLesionConductor;
@@ -227,9 +234,9 @@ class SvIpatConductor
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat", inversedBy="conductores")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo", inversedBy="victimas")
      */
-    private $ipat;
+    private $consecutivo;
 
     /**
      * @var bool
@@ -825,6 +832,30 @@ class SvIpatConductor
     }
 
     /**
+     * Set placaVehiculoConductor
+     *
+     * @param string $placaVehiculoConductor
+     *
+     * @return SvIpatConductor
+     */
+    public function setPlacaVehiculoConductor($placaVehiculoConductor)
+    {
+        $this->placaVehiculoConductor = $placaVehiculoConductor;
+
+        return $this;
+    }
+
+    /**
+     * Get placaVehiculoConductor
+     *
+     * @return string
+     */
+    public function getPlacaVehiculoConductor()
+    {
+        return $this->placaVehiculoConductor;
+    }
+
+    /**
      * Set descripcionLesionConductor
      *
      * @param string $descripcionLesionConductor
@@ -969,26 +1000,26 @@ class SvIpatConductor
     }
 
     /**
-     * Set ipat
+     * Set consecutivo
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat $ipat
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo
      *
      * @return SvIpatConductor
      */
-    public function setIpat(\JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat $ipat = null)
+    public function setConsecutivo(\JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo = null)
     {
-        $this->ipat = $ipat;
+        $this->consecutivo = $consecutivo;
 
         return $this;
     }
 
     /**
-     * Get ipat
+     * Get consecutivo
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo
      */
-    public function getIpat()
+    public function getConsecutivo()
     {
-        return $this->ipat;
+        return $this->consecutivo;
     }
 }
