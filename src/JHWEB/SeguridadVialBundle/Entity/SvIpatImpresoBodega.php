@@ -31,9 +31,16 @@ class SvIpatImpresoBodega
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="cantidad_disponible", type="integer")
      */
-    private $cantidad;
+    private $cantidadDisponible;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad_recibida", type="integer")
+     */
+    private $cantidadRecibida;
 
     /**
      * @var bool
@@ -78,27 +85,51 @@ class SvIpatImpresoBodega
     }
 
     /**
-     * Set cantidad
+     * Set cantidadDisponible
      *
-     * @param integer $cantidad
+     * @param integer $cantidadDisponible
      *
      * @return SvIpatImpresoBodega
      */
-    public function setCantidad($cantidad)
+    public function setCantidadDisponible($cantidadDisponible)
     {
-        $this->cantidad = $cantidad;
+        $this->cantidadDisponible = $cantidadDisponible;
 
         return $this;
     }
 
     /**
-     * Get cantidad
+     * Get cantidadDisponible
      *
-     * @return int
+     * @return integer
      */
-    public function getCantidad()
+    public function getCantidadDisponible()
     {
-        return $this->cantidad;
+        return $this->cantidadDisponible;
+    }
+
+    /**
+     * Set cantidadRecibida
+     *
+     * @param integer $cantidadRecibida
+     *
+     * @return SvIpatImpresoBodega
+     */
+    public function setCantidadRecibida($cantidadRecibida)
+    {
+        $this->cantidadRecibida = $cantidadRecibida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecibida
+     *
+     * @return integer
+     */
+    public function getCantidadRecibida()
+    {
+        return $this->cantidadRecibida;
     }
 
     /**
@@ -118,11 +149,10 @@ class SvIpatImpresoBodega
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-

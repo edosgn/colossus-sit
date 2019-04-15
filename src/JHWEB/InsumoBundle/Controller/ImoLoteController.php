@@ -265,26 +265,34 @@ class ImoLoteController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
+            $tipo = (isset($params->tipo)) ? $params->tipo : null;
             
-            // var_dump($idOrganismoTransito);
-            // die();
+            
 
-            if ($idOrganismoTransito) {
+            if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                    array('estado' => 'REGISTRADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
+                    array('estado' => 'ASIGNADO','sedeOperativa'=> $idOrganismoTransito,'tipo'=>$tipo)
                 );
-            }else{
-                $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalTipo('REGISTRADO',$params->tipoInsumo);
-
-                $loteInsumo = array(
-                    'id'=> $loteInsumo['idLote'],
-                    'tipoInsumo'=>array(
-                        'id' => $loteInsumo['idTipoInsumo'],
-                        'nombre' => $loteInsumo['nombre'],
-                    ),
-                    'cantidad' => $loteInsumo['cantidad']
-                );
+            }else {
+                if ($idOrganismoTransito) {
+            //         var_dump($idOrganismoTransito);
+            // die();
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
+                        array('estado' => 'REGISTRADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
+                    );
+                }else{
+                    $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalTipo('REGISTRADO',$params->tipoInsumo);
+                    $loteInsumo = array(
+                        'id'=> $loteInsumo['idLote'],
+                        'tipoInsumo'=>array(
+                            'id' => $loteInsumo['idTipoInsumo'],
+                            'nombre' => $loteInsumo['nombre'],
+                        ),
+                        'cantidad' => $loteInsumo['cantidad']
+                    );
+                }
             }
+
 
 
             if ($loteInsumo!=null) { 
