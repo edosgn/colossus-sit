@@ -479,19 +479,21 @@ class FroTrteSolicitudController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/{idVehiculo}/{tipo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
+     * @Route("/{id}/{tipo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
      * @Method({"GET", "POST"})
      */
-    public function pdfCertificadoTradicionAction(Request $request, $idVehiculo, $tipo)
+    public function pdfCertificadoTradicionAction(Request $request, $id, $tipo)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
 
         $em = $this->getDoctrine()->getManager();
 
-        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
-            $idVehiculo 
+        $tramiteSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->find(
+            $id
         );
+
+        $vehiculo = $tramiteSolicitud->getVehiculo();
 
         if ($vehiculo) {
             $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
@@ -507,14 +509,18 @@ class FroTrteSolicitudController extends Controller
             $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
                 $vehiculo->getId()
             );
-        }        
+        }   
+        
+        $foraneas = (object)$tramiteSolicitud->getForaneas();
+        $observacion = $foraneas->observacion;
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.certificadotradicion.html.twig', array(
             'fechaActual' => $fechaActual,
             'vehiculo'=>$vehiculo,
             'propietarios' => $propietarios,
             'fechaActual' => $fechaActual,
-            'tramitesSolicitud'=>$tramitesSolicitud
+            'tramitesSolicitud'=>$tramitesSolicitud,
+            'observacion' => $observacion,
         ));
 
         $this->get('app.pdf.factura.membretes')->templateCertificadoTradicion($html, $vehiculo);
