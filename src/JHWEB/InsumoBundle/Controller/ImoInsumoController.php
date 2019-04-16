@@ -418,6 +418,9 @@ class ImoInsumoController extends Controller
             $imoAsignacion->setInsumo($sustrato);
             $imoAsignacion->setActivo(true);
 
+            $sustrato->setOrganismoTransito($organismoTransito);
+
+            $em->persist($sustrato);
             $em->persist($imoAsignacion);
             $em->flush();
 
