@@ -173,10 +173,14 @@ class ImoLoteController extends Controller
                 $loteInsumo->setSedeOperativa($sedeOperativa);
                 
             }
-            
-            
-            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->casoInsumoId);
 
+            $fecha = new \DateTime($params->fecha);
+            
+            
+            // var_dump($params->casoInsumoId);
+            // die();
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->casoInsumoId);
+            
             
             if ($loteInsumo!=null) {
 
@@ -187,6 +191,7 @@ class ImoLoteController extends Controller
                 $loteInsumo->setRangoFin($params->rangoFin);
                 $loteInsumo->setCantidad($params->cantidad);
                 $loteInsumo->setReferencia($params->referencia);
+                $loteInsumo->setFecha($fecha);
                 $em->persist($loteInsumo);
                 $em->flush();
 
@@ -343,9 +348,9 @@ class ImoLoteController extends Controller
        
 
         if ($sustratosActa) {
-            $fechaEntrega = $sustratosActa[0]['fecha'];
+            $fechaEntrega = $sustratosActa[0]['fecha']->format('Y-m-d');
         }else{
-            $fechaEntrega = $insumosActa->getFecha();
+            $fechaEntrega = $insumosActa[0]->getFecha();
         }
 
         // var_dump($fechaEntrega);
@@ -357,7 +362,7 @@ class ImoLoteController extends Controller
             'insumosActa' => $insumosActa,
             'numeroActa' => $numeroActa,
             'organismoTransito' => $organismoTransito, 
-            'fechaEntrega' => $fechaEntrega->format('Y-m-d'),
+            'fechaEntrega' => $fechaEntrega,
         ));
 
         $this->get('app.pdf.insumo.membretes')->templateAsignacion($html, $numeroActa); 
