@@ -588,7 +588,9 @@ class SvRegistroIpat
      */
     public function getFechaAccidente()
     {
-        return $this->fechaAccidente;
+        if ($this->fechaAccidente) {
+            return $this->fechaAccidente->format('d/m/Y');
+        }
     }
 
     /**
@@ -636,6 +638,9 @@ class SvRegistroIpat
      */
     public function getHoraAccidente()
     {
+        if ($this->horaAccidente) {
+            return $this->horaAccidente->format('H:i a');
+        }
         return $this->horaAccidente;
     }
 
