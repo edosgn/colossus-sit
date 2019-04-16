@@ -848,9 +848,32 @@ class SvRegistroIpatController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            /* $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params); */
-            var_dump($params);
-            die();
+            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
+
+
+            /* foreach ($ipats as $key => $ipat) {
+                $conductores = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConductor')->findBy(
+                    array(
+                        'consecutivo' => $ipat->getConsecutivo(),
+                        'activo' => true,
+                    )
+                );
+
+                $victimas = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVictima')->findBy(
+                    array(
+                        'consecutivo' => $ipat->getConsecutivo(),
+                        'activo' => true,
+                    )
+                );
+
+                $arrayIpats[] = array(
+                    'ipat' => $ipat,
+                    'conductores' => $conductores,
+                    'victimas' => $victimas,
+                );
+            } */
+            
+            
             /* $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->find($params); */
             
             //$ipatExport = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneBy(array('consecutivo'=>207));

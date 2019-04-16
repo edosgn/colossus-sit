@@ -14,6 +14,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
 {
 
     public function getIpatByRango($params) {
+
         $em = $this->getEntityManager();
 
         $condicion = null; 
@@ -24,91 +25,141 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
         $fechaFinDatetime = new \Datetime($params->datos->fechaFin);
         
         $dql = "SELECT ri
-            FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri
-            WHERE ri.activo = 1";
+            FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri, JHWEBSeguridadVialBundle:SvIpatVictima iv, JHWEBSeguridadVialBundle:SvIpatConductor ic, JHWEBSeguridadVialBundle:SvIpatVehiculo ive
+            WHERE ri.fechaAccidente BETWEEN :fechaInicioDatetime AND :fechaFinDatetime
+            AND ri.horaAccidente BETWEEN :horaInicioDatetime AND :horaFinDatetime
+            AND ri.activo = 1";
 
-        foreach ($params->datos->arrayGravedadAccidente as $key => $idGravedad) {
-            if($key == 0){
-                $condicion .= " OR ri.gravedadAccidente = '" . $idGravedad . "'";
+        foreach ($params->datos->arrayGravedadAccidente as $keyGravedad => $idGravedad) {
+            if($keyGravedad == 0){
+                $condicion .= " AND ri.gravedadAccidente = '" . $idGravedad . "'";
             } else {
                 $condicion .= " OR ri.gravedadAccidente = '" . $idGravedad . "'";
             }
         }
+        
+        foreach ($params->datos->arrayTipoVictima as $keyTipoVictima => $idTipoVictima) {
+            $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(
+                array(
+                    'nombre' => $idTipoVictima,
+                    'activo' => true,
+                )
+            );            
+            if($keyTipoVictima == 0) {
+                $condicion .= " AND iv.tipoVictima = '" . $tipoVictima->getId() . "'";
+            }
+            else {
+                $condicion .= " OR iv.tipoVictima = '" . $tipoVictima->getId() . "'";
+            }
+        }
 
-        /* para consultar tipo victima en conductores */
-        $ipats= $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
-            array(
-                'activo' => 1,
-            )
-        );
-
-
-        /* foreach ($params->datos->arrayTipoVictima as $key => $idTipoVictima) {
+        foreach ($params->datos->arrayGrupoEdad as $keyGrupoEdad => $idGrupoEdad) {
             # code...
-            $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->find($idTipoVictima);
-            //$condicion .= " OR ri.conductores. = '" . $tipoVictima->getId() . "'";
+            $edadInicio = intval($idGrupoEdad);
+            $edadFin = $edadInicio + 4;
 
-            foreach ($ipats as $key => $ipat) {
-                # code...
-                foreach ($ipat->getConductores() as $key => $conductor) {
-                    # code...
-                    var_dump($conductor->tipoidentificacion );
-                }
+            if($keyGrupoEdad == 0) {
+                $condicion .= " AND iv.edadVictima BETWEEN " . $edadInicio . " AND $edadFin";
+                $condicion .= " AND ic.edadConductor BETWEEN " . $edadInicio . " AND $edadFin";
+            } else {
+                $condicion .= " OR iv.edadVictima BETWEEN " . $edadInicio . " AND $edadFin";
+                $condicion .= " OR ic.edadConductor BETWEEN " . $edadInicio . " AND $edadFin";
+            }
+        }
+
+        /* foreach ($params->datos->arrayMunicipio as $keyMunicipio => $idMunicipio) {
+            # code...
+            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipio);
+
+            if($keyMunicipio == 0) {
+                $condicion .= " AND ic.ciudadResidenciaConductor = '" . $municipio->getNombre() . "'";
+                $condicion .= " AND iv.ciudadResidenciaVictima = '" . $municipio->getNombre() . "'";
+            }
+            else {
+                $condicion .= " OR ic.ciudadResidenciaConductor = '" . $municipio->getNombre() . "'";
+                $condicion .= " OR iv.ciudadResidenciaVictima = '" . $municipio->getNombre() . "'";
+            }
+        }
+
+        foreach ($params->datos->arrayDiaSemana as $keyDiaSemana => $diaSemana) {
+            # code...
+            if($keyDiaSemana == 0) {
+                $condicion .= " AND ri.diaAccidente = '" . $diaSemana . "'";
+            }
+            else {
+                $condicion .= " OR ri.diaAccidente = '" . $diaSemana . "'";
+            }
+        }
+
+        foreach ($params->datos->arrayGenero as $keyGenero => $idGenero) {
+            # code...
+            $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($idGenero);
+
+            if($keyGenero == 0) {
+                $condicion .= " AND ic.sexoConductor = '" . $genero->getSigla() . "'";
+                $condicion .= " AND iv.sexoVictima = '" . $genero->getSigla() . "'";
+            }
+            else {
+                $condicion .= " OR ic.sexoConductor = '" . $genero->getSigla() . "'";
+                $condicion .= " OR iv.sexoVictima = '" . $genero->getSigla() . "'";
+            }
+        }
+
+        foreach ($params->datos->arrayClase as $keyClase => $idClase) {
+            # code...
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($idClase);
+            if($keyClase == 0) {
+                $condicion .= " AND ive.clase = '" . $clase->getNombre() . "'";
+            }
+            else {
+                $condicion .= " OR ive.clase = '" . $clase->getNombre() . "'";
+            }
+        }
+
+        foreach ($params->datos->arrayClaseAccidente as $keyClaseAccidente => $idClaseAccidente) {
+            # code...
+            if($keyClaseAccidente == 0) {
+                $condicion .= " AND ri.claseAccidente = '" . $idClaseAccidente . "'";
+            }
+            else {
+                $condicion .= " OR ri.claseAccidente = '" . $idClaseAccidente . "'";
+            }
+        }
+
+        foreach ($params->datos->arrayChoqueCon as $keyChoqueCon => $idChoqueCon) {
+            # code...
+            if($keyClaseAccidente == 0) {
+                $condicion .= " AND ri.choqueCon = '" . $idChoqueCon . "'";
+            }
+            else {
+                $condicion .= " OR ri.choqueCon = '" . $idChoqueCon . "'";
+            }
+        } 
+
+        foreach ($params->datos->arrayObjetoFijo as $keyObjetoFijo => $idObjetoFijo) {
+            # code...
+            if($keyObjetoFijo == 0) {
+                $condicion .= " AND ri.objetoFijo = '" . $idObjetoFijo . "'";
+            }
+            else {
+                $condicion .= " OR ri.objetoFijo = '" . $idObjetoFijo . "'";
             }
         } */
-       
-        /* if ($params->datos->idGravedad) {
-            $gravedadAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadAccidente')->find($params->datos->idGravedad);
-        }
-        if ($params->datos->idTipoVictima) {
-            $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findBy(
-                array(
-                    'nombre' => $params->datos->idTipoVictima,
-                )
-            );
-        }
-        if ($params->datos->idMunicipio) {
-            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->datos->idMunicipio);
-        }
-        $municipioNombre = $municipio->getNombre();
-
-        if ($params->datos->idGenero) {
-            $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->datos->idGenero);
-        }
-        $sexoConductor = $genero->getSigla();
-
-        if ($params->datos->idClase) {
-            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->datos->idClase);
-        }
-        $claseNombre = $clase->getNombre();
-
-        if ($params->datos->idClaseAccidente) {
-            $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->findBy(
-                array(
-                    'nombre' => $params->datos->idClaseAccidente,
-                )
-            );
-        }
-        if ($params->datos->idChoqueCon) {
-            $choqueCon = $em->getRepository('AppBundle:CfgChoqueCon')->findBy(
-                array(
-                    'nombre' => $params->datos->idChoqueCon,
-                )
-            );
-        }
-        if ($params->datos->idObjetoFijo) {
-            $objetoFijo = $em->getRepository('AppBundle:CfgObjetoFijo')->find($params->datos->idObjetoFijo);
-        }
-        
-        $edadInicioConductor = intval($params->datos->idGrupoEdad);
-        $edadFinConductor = $edadInicioConductor + 4;
-        $diaAccidente = $params->datos->idDiaSemana; */
-
+        //=====================
         if ($condicion) {
             $dql .= $condicion;
         }
-    
+
+        var_dump($dql);
+
         $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'fechaInicioDatetime' => $fechaInicioDatetime,
+            'fechaFinDatetime' => $fechaFinDatetime,
+            'horaInicioDatetime' => $horaInicioDatetime,
+            'horaFinDatetime' => $horaFinDatetime,
+        ));
 
         return $consulta->getResult();
     } 
