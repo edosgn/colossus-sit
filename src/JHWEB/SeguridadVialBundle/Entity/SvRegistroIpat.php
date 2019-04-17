@@ -92,14 +92,14 @@ class SvRegistroIpat
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgChoqueCon", inversedBy="choquescon")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgClaseChoque", inversedBy="choquescon")
      */
-    private $choqueCon;
+    private $claseChoque;
 
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgObjetoFijo", inversedBy="objetosfijos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgObjetoFijo", inversedBy="objetosfijos")
      */
     private $objetoFijo;
 
@@ -588,9 +588,7 @@ class SvRegistroIpat
      */
     public function getFechaAccidente()
     {
-        if ($this->fechaAccidente) {
-            return $this->fechaAccidente->format('d/m/Y');
-        }
+        return $this->fechaAccidente;
     }
 
     /**
@@ -638,9 +636,6 @@ class SvRegistroIpat
      */
     public function getHoraAccidente()
     {
-        if ($this->horaAccidente) {
-            return $this->horaAccidente->format('H:i a');
-        }
         return $this->horaAccidente;
     }
 
@@ -1749,37 +1744,37 @@ class SvRegistroIpat
     }
 
     /**
-     * Set choqueCon
+     * Set claseChoque
      *
-     * @param \AppBundle\Entity\CfgChoqueCon $choqueCon
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseChoque $claseChoque
      *
      * @return SvRegistroIpat
      */
-    public function setChoqueCon(\AppBundle\Entity\CfgChoqueCon $choqueCon = null)
+    public function setClaseChoque(\JHWEB\SeguridadVialBundle\Entity\SvCfgClaseChoque $claseChoque = null)
     {
-        $this->choqueCon = $choqueCon;
+        $this->claseChoque = $claseChoque;
 
         return $this;
     }
 
     /**
-     * Get choqueCon
+     * Get claseChoque
      *
-     * @return \AppBundle\Entity\CfgChoqueCon
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseChoque
      */
-    public function getChoqueCon()
+    public function getClaseChoque()
     {
-        return $this->choqueCon;
+        return $this->claseChoque;
     }
 
     /**
      * Set objetoFijo
      *
-     * @param \AppBundle\Entity\CfgObjetoFijo $objetoFijo
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgObjetoFijo $objetoFijo
      *
      * @return SvRegistroIpat
      */
-    public function setObjetoFijo(\AppBundle\Entity\CfgObjetoFijo $objetoFijo = null)
+    public function setObjetoFijo(\JHWEB\SeguridadVialBundle\Entity\SvCfgObjetoFijo $objetoFijo = null)
     {
         $this->objetoFijo = $objetoFijo;
 
@@ -1789,7 +1784,7 @@ class SvRegistroIpat
     /**
      * Get objetoFijo
      *
-     * @return \AppBundle\Entity\CfgObjetoFijo
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgObjetoFijo
      */
     public function getObjetoFijo()
     {
