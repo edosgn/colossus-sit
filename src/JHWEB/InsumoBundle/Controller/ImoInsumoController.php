@@ -243,7 +243,7 @@ class ImoInsumoController extends Controller
      /**
      * Deletes a insumo entity.
      *
-     * @Route("/{id}/delete", name="insumo_delete")
+     * @Route("/{id}/delete", name="imoinsumo_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request,$id)
@@ -255,7 +255,7 @@ class ImoInsumoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find($id);
 
-            $insumo->setEstado('dañado');
+            $insumo->setEstado('ANULADO');
             $em = $this->getDoctrine()->getManager();
             $em->persist($insumo);
             $em->flush();
@@ -506,6 +506,37 @@ class ImoInsumoController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/pdf/acta/insumos", name="pdf_acta_imoImo")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager(); 
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        // var_dump($params);
+        // die();
+        
+
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(100);
+        
+
+        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig');
+
+        $this->get('app.pdf')->templatePreview($html, $organismoTransito); 
+    }
+
 
 
 }
