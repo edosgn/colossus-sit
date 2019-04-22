@@ -84,7 +84,7 @@ class ImoAsignacionController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($imoAsignacion);
+            $em->persist($imoAsignacion); 
             $em->flush();
 
             return $this->redirectToRoute('imoasignacion_show', array('id' => $imoAsignacion->getId()));
