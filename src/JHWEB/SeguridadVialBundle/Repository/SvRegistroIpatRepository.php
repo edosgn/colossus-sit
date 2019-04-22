@@ -147,14 +147,14 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
             }
         }
 
-        if($params->datos->arrayChoqueCon) {
-            foreach ($params->datos->arrayChoqueCon as $keyChoqueCon => $idChoqueCon) {
+        if($params->datos->arrayClaseChoque) {
+            foreach ($params->datos->arrayClaseChoque as $keyClaseChoque => $idClaseChoque) {
                 # code...
-                if($keyClaseAccidente == 0) {
-                    $condicion .= " AND ri.choqueCon = '" . $idChoqueCon . "'";
+                if($keyClaseChoque == 0) {
+                    $condicion .= " AND ri.claseChoque = '" . $idClaseChoque . "'";
                 }
                 else {
-                    $condicion .= " OR ri.choqueCon = '" . $idChoqueCon . "'";
+                    $condicion .= " OR ri.claseChoque = '" . $idClaseChoque . "'";
                 }
             } 
         }

@@ -147,7 +147,7 @@ class SvCfgObjetoFijoController extends Controller
 
             if ($params->idClaseChoque) {
                 $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->idClaseChoque);
-                $objetoFIjo->setClaseChoque($claseChoque);
+                $objetoFijo->setClaseChoque($claseChoque);
             }
             if ($objetoFijo != null) {
                 $objetoFijo->setNombre(strtoupper($params->nombre));

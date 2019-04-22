@@ -43,28 +43,28 @@ class SvIpatConductorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
-
+            
             $em = $this->getDoctrine()->getManager();
             
             $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
-                    array(
-                        'numero' => $params->consecutivo
+                array(
+                    'numero' => $params->consecutivo
                     )
                 );
-            //===========================================0
-
-            $conductor = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConductor')->findOneBy(
-                array(
+                //===========================================0
+                
+                $conductor = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConductor')->findOneBy(
+                    array(
                     'identificacionConductor' => $params->identificacionConductor,
                     'consecutivo' => $consecutivo,
                     'activo' => true,
                 )
             );
-
+            
             if($conductor) {
                 $response = array(
                     'status' => 'error',
@@ -166,7 +166,15 @@ class SvIpatConductorController extends Controller
                 $conductor->setSustanciasPsicoactivasConductor($params->sustanciasPsicoactivasConductor);
                 $conductor->setPortaLicencia($params->portaLicencia);
                 $conductor->setNumeroLicenciaConduccion($params->numeroLicenciaConduccion);
-                $conductor->setCategoriaLicenciaConduccion($params->categoriaLicenciaConduccion);
+
+                $categoriaLc = (isset($params->categoriaLicenciaConduccion)) ? $params->categoriaLicenciaConduccion : null;
+                
+                if($categoriaLc){
+                    $categoriaLicenciaConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($categoriaLc);
+                    $conductor->setCategoriaLicenciaConduccion($categoriaLicenciaConduccion->getNombre());
+                }
+
+                
                 $conductor->setRestriccionConductor($params->restriccionConductor);
                 $conductor->setFechaExpedicionLicenciaConduccion(new \Datetime($params->fechaExpedicionLicenciaConduccion));
                 $conductor->setFechaVencimientoLicenciaConduccion(new \Datetime($params->fechaVencimientoLicenciaConduccion));

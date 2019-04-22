@@ -56,17 +56,15 @@ class SvCfgClaseChoqueController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
             
             $claseChoque = new SvCfgClaseChoque();
 
-            $em = $this->getDoctrine()->getManager();
-            
-            if ($params->claseAccidente) {
-                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array(
-                    'nombre' => $params->claseAccidente
-                ));
+            if ($params->idClaseAccidente) {
+                $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->find($params->idClaseAccidente);
                 $claseChoque->setClaseAccidente($claseAccidente);
             }
             $claseChoque->setNombre(strtoupper($params->nombre));
@@ -118,15 +116,13 @@ class SvCfgClaseChoqueController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->id);
             
-            if ($params->claseAccidente) {
-                $claseAccidente = $em->getRepository('AppBundle:CfgClaseAccidente')->findOneBy(array(
-                    'nombre' => $params->claseAccidente
-                ));
+            if ($params->idClaseAccidente) {
+                $claseAccidente = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseAccidente')->find($params->idClaseAccidente);
                 $claseChoque->setClaseAccidente($claseAccidente);
             }
             
@@ -173,7 +169,7 @@ class SvCfgClaseChoqueController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->id);

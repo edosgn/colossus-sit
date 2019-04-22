@@ -70,9 +70,6 @@ class MsvRevisionController extends Controller
             $fechaDevolucionDatetime = new \DateTime($params->fechaDevolucion);
             $revision->setFechaDevolucion($fechaDevolucionDatetime);
 
-            /* $fechaOtorgamientoDatetime = new \DateTime($params->fechaOtorgamiento);
-            $revision->setFechaOtorgamiento($fechaOtorgamientoDatetime); */
-
             $fechaRevisionDatetime = new \DateTime($params->fechaRevision);
             $fechaRecepcionDatetime = new \DateTime($params->fechaRecepcion);
             
@@ -96,33 +93,6 @@ class MsvRevisionController extends Controller
                 );
                 return $helpers->json($response);
             }
-
-            /* if ($params->fechaOtorgamiento) {
-                $fechaVisitaControlDatetime1 = new \Datetime(($params->fechaOtorgamiento));
-                $fechaVisitaControlDatetime2 = new \Datetime(($params->fechaOtorgamiento));
-                if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime1) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "La fecha de la primera visita de control debe ser mayor a un año de la fecha de otorgamiento del aval",
-                    );
-                    return $helpers->json($response);
-                } else {
-                    $revision->setFechaVisitaControl1(new \DateTime($params->fechaVisitaControl1));
-                    $revision->setObservacionVisita1($params->observacionVisita1);
-
-                }if ($fechaOtorgamientoDatetime > $fechaVisitaControlDatetime2 && $fechaVisitaControlDatetime1 < $fechaVisitaControlDatetime2) {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "La fecha de la segunda visita de control debe ser mayor a dos años de la fecha de otorgamiento del aval",
-                    );
-                    return $helpers->json($response);
-                } else {
-                    $revision->setFechaVisitaControl2(new \DateTime($params->fechaVisitaControl2));
-                    $revision->setObservacionVisita2($params->observacionVisita2);
-                }
-            } */
 
             $revision->setFuncionario($funcionario);
             $revision->setPersonaContacto($params->personaContacto);
@@ -197,7 +167,7 @@ class MsvRevisionController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
