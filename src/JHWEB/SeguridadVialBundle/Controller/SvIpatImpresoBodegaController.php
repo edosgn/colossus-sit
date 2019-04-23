@@ -67,6 +67,7 @@ class SvIpatImpresoBodegaController extends Controller
             $bodega->setFecha(
                 new \Datetime($params->fecha)
             );
+            
             $bodega->setCantidadDisponible($params->cantidad);
             $bodega->setCantidadRecibida($params->cantidad);
             $bodega->setActivo(true);

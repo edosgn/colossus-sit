@@ -268,6 +268,11 @@ class FroFacTramiteController extends Controller
                         $sustrato = true;
                     }
 
+                    //Valida si alguno de los trámites facturados requiere numero RUNT
+                    if ($tramiteFactura->getPrecio()->getTramite()->getId() != 30) {
+                        $numeroRunt = true;
+                    }
+
                     $tramitesFacturaArray[$key] = array(
                         'value' => $tramiteFactura->getId(),
                         'label' => $tramiteFactura->getPrecio()->getNombre(),
@@ -281,6 +286,7 @@ class FroFacTramiteController extends Controller
                     'data'=> array(
                         'tramitesFactura' => $tramitesFacturaArray,
                         'sustrato' => $sustrato,
+                        'numeroRunt' => $numeroRunt,
                     )
                 );
             }
@@ -288,7 +294,7 @@ class FroFacTramiteController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'Ningún registro encontrado.', 
+                'message' => 'Ningún trámite pendiente.', 
             );
         }
        

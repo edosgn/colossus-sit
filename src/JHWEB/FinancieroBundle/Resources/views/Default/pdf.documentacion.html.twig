@@ -1,0 +1,34 @@
+<html>
+  <header>
+    <style type="text/css">
+        .separator{
+            border-top: 1px dashed #cccccc;
+        }
+
+        .table td{
+            max-height: 15px;
+            padding: 2px;
+        }
+    </style>
+  </header>
+  <body style="font-size:12px">
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>Subsecretaria de transito y transporte departamental de nariño</b>
+        <br>
+        Certifica:
+        <br>
+        Que la factura número {{ factura.numero }} se encuentra pendiente por falta de documentación, con las siguientes observaciones:
+        <br>
+        {% for key, tramiteFactura in tramitesFactura %}
+          <h3>{{ tramiteFactura.precio.tramite.nombre }}</h3>
+          <p style="text-align:justify;">{{ tramiteFactura.observacion }}</p>
+        {% endfor %}
+    </p>
+  </body>
+</html>

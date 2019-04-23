@@ -290,18 +290,26 @@ class FroFacturaController extends Controller
             );
 
             if ($froFactura) {
-                if ($froFactura->getEstado() == 'PAGADA') {
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => 'Factura pagada.', 
-                        'data'=> $froFactura
-                    );
+                if ($froFactura->getEstado() != 'FINALIZADA') {
+                    if ($froFactura->getEstado() == 'PAGADA' || $froFactura->getEstado() == 'PENDIENTE DOCUMENTACION') {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'Factura pagada.', 
+                            'data'=> $froFactura
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'Factura pendiente de pago.' 
+                        );
+                    }
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'Factura pendiente de pago.' 
+                        'message' => 'La factura ya fue tramitada y se encuentra finalizada.' 
                     );
                 }
             }else{
