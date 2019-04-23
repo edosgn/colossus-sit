@@ -35,7 +35,6 @@ class ImoTrazabilidad
      */
     private $estado;
 
-
     /**
      * @var bool
      *

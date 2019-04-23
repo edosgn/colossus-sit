@@ -84,10 +84,8 @@ class ImoInsumoController extends Controller
                $numeroActa = $numeroActa['maximo']+1;
             }
 
-            // var_dump($numeroActa);
-            // die();
-            
             $imoTrazabilidad = new ImoTrazabilidad();
+
             $imoTrazabilidad->setOrganismoTransito($sedeOperativa);
             $imoTrazabilidad->setFecha($fecha);
             $imoTrazabilidad->setEstado('asignacion');
@@ -95,7 +93,6 @@ class ImoInsumoController extends Controller
 
             $em->persist($imoTrazabilidad);
             $em->flush();
-            
             
             foreach ($params->array as $key => $lote) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($lote->idLote);
@@ -109,6 +106,7 @@ class ImoInsumoController extends Controller
 
                     while ($desde <= $hasta) {
                         $insumo = new ImoInsumo();
+
                         $em = $this->getDoctrine()->getManager();
                         $insumo->setNumero($tipoInsumo->getModulo()->getSiglaSustrato().$desde);
                         $insumo->setOrganismoTransito($sedeOperativa);
@@ -160,7 +158,6 @@ class ImoInsumoController extends Controller
                     $em->flush();
 
                     foreach ($lotesInsumo as $key => $loteInsumo){
-                        
                         if ($loteInsumo->getCantidad() <= $lote->cantidad) {
                             $cantidad =  $lote->cantidad - $loteInsumo->getCantidad();
                             $lote->cantidad = $cantidad;

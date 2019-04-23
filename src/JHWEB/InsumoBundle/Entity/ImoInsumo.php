@@ -34,7 +34,6 @@ class ImoInsumo
      * @ORM\Column(name="numero", type="string", length=255, nullable = true)
      */ 
     private $numero;
-
    
     /**
      * @var \DateTime
@@ -71,9 +70,6 @@ class ImoInsumo
      * @ORM\ManyToOne(targetEntity="ImoLote")
      **/
     protected $lote;
-
-    
-
 
     /**
      * Get id

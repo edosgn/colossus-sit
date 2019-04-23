@@ -84,8 +84,6 @@ class ImoLote
      */
     private $recibido;
 
-    
-
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      **/
@@ -99,10 +97,7 @@ class ImoLote
     /**
      * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
      **/
-    protected $tipoInsumo;
-    
-
-   
+    protected $tipoInsumo;   
 
     /**
      * Get id

@@ -71,21 +71,19 @@ class ImoLoteController extends Controller
             
             $fecha = $params->fecha;
             $fecha = new \DateTime($params->fecha);
+
             $em = $this->getDoctrine()->getManager();
+
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
-            // var_dump($params->idOrganismoTransito);
-            // die();
 
             $loteInsumo = new ImoLote();
+            
             if ($idOrganismoTransito) {
                 $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
                 $loteInsumo->setSedeOperativa($sedeOperativa);
                 $loteInsumo->setTipo('SUSTRATO');
                 $ultimoRango = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMax($params->imoCfgTipo); 
-                // var_dump($params->rangoInicio);
-                // var_dump($ultimoRango['maximo']+1);
-                // die();
 
                 if ($ultimoRango['maximo']) {
                     if ($params->rangoInicio < $ultimoRango['maximo']+1) {
@@ -101,8 +99,9 @@ class ImoLoteController extends Controller
             }else { 
                 $loteInsumo->setTipo('INSUMO');
             }
+
             $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->imoCfgTipo);
-            // var_dump($params->numeroActa);
+
             $loteInsumo->setNumeroActa($params->numeroActa);
             $loteInsumo->setEmpresa($empresa);
             $loteInsumo->setTipoInsumo($tipoInsumo); 
@@ -113,6 +112,7 @@ class ImoLoteController extends Controller
             $loteInsumo->setRecibido($params->cantidad);
             $loteInsumo->setReferencia($params->referencia);
             $loteInsumo->setFecha($fecha);
+
             $em->persist($loteInsumo);
             $em->flush();
 
@@ -163,9 +163,9 @@ class ImoLoteController extends Controller
         if ($authCheck==true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            // var_dump($params);
-            // die();
+
             $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($params->id);
             
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresaId);
@@ -175,19 +175,13 @@ class ImoLoteController extends Controller
             if ($sedeOperativaId) {
                 $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($sedeOperativaId);
                 $loteInsumo->setSedeOperativa($sedeOperativa);
-                
             }
 
             $fecha = new \DateTime($params->fecha);
             
-            
-            // var_dump($params->casoInsumoId);
-            // die();
             $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->casoInsumoId);
             
-            
             if ($loteInsumo!=null) {
-
                 $loteInsumo->setNumeroActa($params->numeroActa);
                 $loteInsumo->setEmpresa($empresa);
                 $loteInsumo->setTipoInsumo($tipoInsumo); 
@@ -196,26 +190,27 @@ class ImoLoteController extends Controller
                 $loteInsumo->setCantidad($params->cantidad);
                 $loteInsumo->setReferencia($params->referencia);
                 $loteInsumo->setFecha($fecha);
+
                 $em->persist($loteInsumo);
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "linea editada con exito", 
+                    'message' => "linea editada con exito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La linea no se encuentra en la base de datos", 
+                    'message' => "La linea no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'message' => "Autorizacion no valida para editar banco", 
                 );
         }
 
@@ -272,11 +267,11 @@ class ImoLoteController extends Controller
         if ($authCheck== true) { 
             $json = $request->get("data",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
             $tipo = (isset($params->tipo)) ? $params->tipo : null;
-            
-            
 
             if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
@@ -305,21 +300,21 @@ class ImoLoteController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Lote encontrado con exito", 
+                    'message' => "Lote encontrado con exito", 
                     'data' => $loteInsumo, 
                 );
             }else{
                 $response = array( 
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "no hay sustratos pa la sede", 
+                    'message' => "no hay sustratos pa la sede", 
                 );
             }
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         }
         return $helpers->json($response);
@@ -340,10 +335,11 @@ class ImoLoteController extends Controller
         if ($authCheck== true) { 
             $json = $request->get("data",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
             $tipo = (isset($params->tipo)) ? $params->tipo : null;
-            
 
             $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                 array('estado' => 'ASIGNADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
@@ -359,30 +355,25 @@ class ImoLoteController extends Controller
                 }
             }
 
-            // foreach ($lotesDisponibles as $key => $diponible) {
-            //     var_dump($diponible->getId());
-            // }
-            // die();
-
             if ($lotesDisponibles!=null) { 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Lote encontrado con exito", 
+                    'message' => "Lote encontrado con exito", 
                     'data' => $lotesDisponibles, 
                 );
             }else{
                 $response = array( 
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "No se encontró un lote para reasignar", 
+                    'message' => "No se encontró un lote para reasignar", 
                 );
             }
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         }
         return $helpers->json($response);

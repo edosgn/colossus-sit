@@ -55,7 +55,7 @@ class ImoAsignacionController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => 'listado placas',
+                    'message' => 'listado placas',
                     'data' => $imoAsignacion,
                 );
             }

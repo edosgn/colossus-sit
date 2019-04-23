@@ -33,9 +33,6 @@ class ImoAsignacion
 
     /** @ORM\ManyToOne(targetEntity="ImoTrazabilidad", inversedBy="asignaciones") */
     private $imoTrazabilidad;
-    
-
-   
 
     /**
      * Get id
