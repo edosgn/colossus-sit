@@ -153,7 +153,7 @@ class VhloVehiculoController extends Controller
                 }
 
                 if ($params->idEmpresa) {
-                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->idEmpresa);
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
                     $vehiculo->setEmpresa($empresa);
                 }
 
@@ -725,19 +725,27 @@ class VhloVehiculoController extends Controller
             );
 
             if ($vehiculo) {
-                $vehiculo->setPlaca($placa);
-                $vehiculo->setOrganismoTransito($organismoTransito);
-
-                $placa->setEstado('ASIGNADA');
-
-                $em->persist($vehiculo);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Vehiculo editado con exito.",
-                );
+                if (!$vehiculo->getPlaca()) {
+                    $vehiculo->setPlaca($placa);
+                    $vehiculo->setOrganismoTransito($organismoTransito);
+    
+                    $placa->setEstado('ASIGNADA');
+    
+                    $em->persist($vehiculo);
+                    $em->flush();
+    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Vehiculo editado con exito.",
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El vehiculo ya tiene una placa asignada.",
+                    );
+                }
             } else {
                 $response = array(
                     'status' => 'error',

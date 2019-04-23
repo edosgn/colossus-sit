@@ -22,6 +22,20 @@ class SvIpatImpresoMunicipio
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_acta", type="string", length=255, nullable=true)
+     */
+    private $numeroActa;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="integer")
+     */
+    private $consecutivo;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date")
@@ -31,16 +45,16 @@ class SvIpatImpresoMunicipio
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="cantidad_disponible", type="integer")
      */
-    private $cantidad;
+    private $cantidadDisponible;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="numeroActa", type="string", length=255)
+     * @ORM\Column(name="cantidad_recibida", type="integer")
      */
-    private $numeroActa;
+    private $cantidadRecibida;
 
     /**
      * @var bool
@@ -52,9 +66,16 @@ class SvIpatImpresoMunicipio
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="SvIpatImpresoAsignacion", inversedBy="municipios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="municipios")
      */
-    private $asignacion;
+    private $organismoTransito;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="municipios")
+     */
+    private $municipio;
 
 
     /**
@@ -65,54 +86,6 @@ class SvIpatImpresoMunicipio
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return SvIpatImpresoMunicipio
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        return $this->fecha;
-    }
-
-    /**
-     * Set cantidad
-     *
-     * @param integer $cantidad
-     *
-     * @return SvIpatImpresoMunicipio
-     */
-    public function setCantidad($cantidad)
-    {
-        $this->cantidad = $cantidad;
-
-        return $this;
-    }
-
-    /**
-     * Get cantidad
-     *
-     * @return int
-     */
-    public function getCantidad()
-    {
-        return $this->cantidad;
     }
 
     /**
@@ -140,6 +113,105 @@ class SvIpatImpresoMunicipio
     }
 
     /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
+    }
+
+    /**
+     * Set fecha
+     *
+     * @param \DateTime $fecha
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setFecha($fecha)
+    {
+        $this->fecha = $fecha;
+
+        return $this;
+    }
+
+    /**
+     * Get fecha
+     *
+     * @return \DateTime
+     */
+    public function getFecha()
+    {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
+        return $this->fecha;
+    }
+
+    /**
+     * Set cantidadDisponible
+     *
+     * @param integer $cantidadDisponible
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setCantidadDisponible($cantidadDisponible)
+    {
+        $this->cantidadDisponible = $cantidadDisponible;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadDisponible
+     *
+     * @return integer
+     */
+    public function getCantidadDisponible()
+    {
+        return $this->cantidadDisponible;
+    }
+
+    /**
+     * Set cantidadRecibida
+     *
+     * @param integer $cantidadRecibida
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setCantidadRecibida($cantidadRecibida)
+    {
+        $this->cantidadRecibida = $cantidadRecibida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecibida
+     *
+     * @return integer
+     */
+    public function getCantidadRecibida()
+    {
+        return $this->cantidadRecibida;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -156,7 +228,7 @@ class SvIpatImpresoMunicipio
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -164,26 +236,50 @@ class SvIpatImpresoMunicipio
     }
 
     /**
-     * Set asignacion
+     * Set organismoTransito
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoAsignacion $asignacion
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return SvIpatImpresoMunicipio
      */
-    public function setAsignacion(\JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoAsignacion $asignacion = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->asignacion = $asignacion;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get asignacion
+     * Get organismoTransito
      *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoAsignacion
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getAsignacion()
+    public function getOrganismoTransito()
     {
-        return $this->asignacion;
+        return $this->organismoTransito;
+    }
+
+    /**
+     * Set municipio
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
     }
 }

@@ -10,4 +10,18 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvIpatImpresoMunicipioRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo para acta de impresos en un municipio por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(m.consecutivo) AS maximo
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio m
+            WHERE YEAR(m.fecha) = :ANIO";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+
+        return $consulta->getOneOrNullResult();
+    }
 }

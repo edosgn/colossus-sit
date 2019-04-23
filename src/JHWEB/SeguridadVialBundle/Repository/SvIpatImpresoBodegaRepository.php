@@ -10,4 +10,17 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvIpatImpresoBodegaRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el total de impresos disponibles por organismo de tránsito
+    public function getTotalDisponible()
+    { 
+        $em = $this->getEntityManager();
+        $dql = "SELECT SUM(b.cantidadDisponible) AS cantidad
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoBodega b
+            WHERE b.activo = true
+            AND b.estado = 'DISPONIBLE'";
+
+        $consulta = $em->createQuery($dql);
+        
+        return $consulta->getOneOrNullResult();
+    }
 }

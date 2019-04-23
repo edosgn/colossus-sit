@@ -45,9 +45,16 @@ class SvIpatImpresoAsignacion
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidad", type="integer")
+     * @ORM\Column(name="cantidad_disponible", type="integer")
      */
-    private $cantidad;
+    private $cantidadDisponible;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad_recibida", type="integer")
+     */
+    private $cantidadRecibida;
 
     /**
      * @var bool
@@ -143,31 +150,58 @@ class SvIpatImpresoAsignacion
      */
     public function getFecha()
     {
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
         return $this->fecha;
     }
 
     /**
-     * Set cantidad
+     * Set cantidadDisponible
      *
-     * @param integer $cantidad
+     * @param integer $cantidadDisponible
      *
      * @return SvIpatImpresoAsignacion
      */
-    public function setCantidad($cantidad)
+    public function setCantidadDisponible($cantidadDisponible)
     {
-        $this->cantidad = $cantidad;
+        $this->cantidadDisponible = $cantidadDisponible;
 
         return $this;
     }
 
     /**
-     * Get cantidad
+     * Get cantidadDisponible
      *
      * @return integer
      */
-    public function getCantidad()
+    public function getCantidadDisponible()
     {
-        return $this->cantidad;
+        return $this->cantidadDisponible;
+    }
+
+    /**
+     * Set cantidadRecibida
+     *
+     * @param integer $cantidadRecibida
+     *
+     * @return SvIpatImpresoAsignacion
+     */
+    public function setCantidadRecibida($cantidadRecibida)
+    {
+        $this->cantidadRecibida = $cantidadRecibida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecibida
+     *
+     * @return integer
+     */
+    public function getCantidadRecibida()
+    {
+        return $this->cantidadRecibida;
     }
 
     /**
