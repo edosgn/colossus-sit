@@ -5,6 +5,7 @@ namespace JHWEB\FinancieroBundle\Controller;
 use JHWEB\FinancieroBundle\Entity\FroFactura;
 use JHWEB\FinancieroBundle\Entity\FroFacComparendo;
 use JHWEB\FinancieroBundle\Entity\FroFacTramite;
+use JHWEB\FinancieroBundle\Entity\FroFacRetefuente;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -76,9 +77,9 @@ class FroFacturaController extends Controller
             $factura->setFechaCreacion($fechaCreacion);
             $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
             $factura->setHora(new \Datetime(date('h:i:s A')));
-            $factura->setValorBruto($params->valor);
-            $factura->setValorMora($params->interes);
-            $factura->setValorNeto($params->valor + $params->interes);
+            $factura->setValorBruto($params->factura->valor);
+            $factura->setValorMora($params->factura->interes);
+            $factura->setValorNeto($params->factura->valor + $params->factura->interes);
             //$factura->setEstado('EMITIDA');
             $factura->setEstado('PAGADA');
             $factura->setActivo(true);
@@ -92,16 +93,16 @@ class FroFacturaController extends Controller
                 $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
             );
             
-            if ($params->idOrganismoTransito) {
+            if ($params->factura->idOrganismoTransito) {
                 $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-                    $params->idOrganismoTransito
+                    $params->factura->idOrganismoTransito
                 );
                 $factura->setOrganismoTransito($organismoTransito);
             }
 
-            if ($params->idTipoRecaudo) {
+            if ($params->factura->idTipoRecaudo) {
                 $tipoRecaudo = $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->find(
-                    $params->idTipoRecaudo
+                    $params->factura->idTipoRecaudo
                 );
                 $factura->setTipoRecaudo($tipoRecaudo);
             }
@@ -109,56 +110,11 @@ class FroFacturaController extends Controller
             $em->persist($factura);
             $em->flush();
 
-            if (isset($params->comparendos)) {
-                $this->registerComparendos($params->comparendos, $factura);
-            }elseif (isset($params->tramites)) {
-                $this->registerTramites($params->tramites, $factura);
+            if (isset($params->factura->comparendos)) {
+                $this->registerComparendos($params->factura->comparendos, $factura);
+            }elseif (isset($params->factura->tramites)) {
+                $this->registerTramites($params, $factura);
             }
-
-            // foreach ($params->tramitesValor as $key => $tramiteValor) {
-                
-            //     $tramiteFactura = new TramiteFactura();
-
-            //     $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
-            //         $tramiteValor->idTramitePrecio
-            //     );
-
-            //     if($tramitePrecio->getTramite()->getId() == 6){   
-            //         foreach ($params->propietarios as $key => $propietarioRetefuenteId) {
-                    
-            //             $mflRetefuente = new MflRetefuente();
-
-            //             $mflRetefuente->setVehiculo($vehiculo);
-                        
-            //             $propietarioVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find( 
-            //                 $propietarioRetefuenteId
-            //             );
-
-            //             $mflRetefuente->setPropietarioVehiculo($propietarioVehiculo);
- 
-            //             if (isset($params->valorVehiculoId)) {
-            //                 $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find(
-            //                     $params->valorVehiculoId
-            //                 );
-            //                 $mflRetefuente->setValorVehiculo($valorVehiculo);
-            //             }
-            //             $mflRetefuente->setFactura($factura);
-            //             $mflRetefuente->setFecha(new \DateTime($params->factura->fechaCreacion));
-            //             $mflRetefuente->setRetencion($params->retencion);
-            //             $mflRetefuente->setEstado(true);
-            //             $em->persist($mflRetefuente);
-            //             $em->flush();
-            //         }
-            //     }
-
-            //     $tramiteFactura->setFactura($factura);
-            //     $tramiteFactura->setTramitePrecio($tramitePrecio);
-            //     $tramiteFactura->setEstado(true);
-            //     $tramiteFactura->setRealizado(false);
-            //     $tramiteFactura->setCantidad(1);
-            //     $em->persist($tramiteFactura);
-            //     $em->flush();
-            // }
 
             $response = array(
                 'status' => 'success',
@@ -510,7 +466,7 @@ class FroFacturaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        foreach ($params as $key => $tramitePrecioSelect) {
+        foreach ($params->factura->tramites as $key => $tramitePrecioSelect) {
             $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
                 $tramitePrecioSelect->id
             );
@@ -525,7 +481,62 @@ class FroFacturaController extends Controller
 
             $em->persist($facturaTramite);
             $em->flush();
+
+            if($tramitePrecio->getTramite()->getId() == 2){   
+                foreach ($params->propietarios as $key => $idPropietarioRetefuente) {
+                    $retefuente = new FroFacRetefuente();
+
+                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find( 
+                        $params->factura->idVehiculo
+                    );
+               
+
+                    $retefuente->setVehiculo($vehiculo);
+                    $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find( 
+                        $idPropietarioRetefuente
+                    );
+
+                    $retefuente->setPropietario($propietario);
+
+                    if (isset($params->idVehiculoValor)) {
+                        $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find(
+                            $params->idVehiculoValor
+                        );
+                        $retefuente->setValorVehiculo($valorVehiculo);
+                    }
+                    $fechaCreacion = new \Datetime(date('Y-m-d'));
+                    
+                    $retefuente->setFactura($factura);
+                    $retefuente->setFecha($fechaCreacion);
+                    $retefuente->setRetencion($params->retencion);
+                    $retefuente->setActivo(true);
+
+
+                    $em->persist($retefuente);
+                    $em->flush();
+                }
+            }
         }
+
+
+        /*foreach ($params->tramitesValor as $key => $tramiteValor) {
+                
+            $tramiteFactura = new TramiteFactura();
+
+            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+                $tramiteValor->idTramitePrecio
+            );
+
+            
+
+            $tramiteFactura->setFactura($factura);
+            $tramiteFactura->setTramitePrecio($tramitePrecio);
+            $tramiteFactura->setEstado(true);
+            $tramiteFactura->setRealizado(false);
+            $tramiteFactura->setCantidad(1);
+            $em->persist($tramiteFactura);
+            $em->flush();
+        }*/
 
         return true;
     }
