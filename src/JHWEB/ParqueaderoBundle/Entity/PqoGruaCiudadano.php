@@ -56,7 +56,7 @@ class PqoGruaCiudadano
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="gruas") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="gruas") */
     private $ciudadano;
 
     /** @ORM\ManyToOne(targetEntity="PqoCfgGrua", inversedBy="ciudadanos") */
@@ -196,11 +196,11 @@ class PqoGruaCiudadano
     /**
      * Set ciudadano
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return PqoGruaCiudadano
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -210,7 +210,7 @@ class PqoGruaCiudadano
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {

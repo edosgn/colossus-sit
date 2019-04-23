@@ -84,10 +84,10 @@ class CvMedidaCautelar
      */
     private $observacionesLevantamiento;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="notificaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="notificaciones") */
     private $municipioInscripcion;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="notificaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="notificaciones") */
     private $municipioLevantamiento;
 
     /**
@@ -335,11 +335,11 @@ class CvMedidaCautelar
     /**
      * Set municipioInscripcion
      *
-     * @param \AppBundle\Entity\Municipio $municipioInscripcion
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioInscripcion
      *
      * @return CvMedidaCautelar
      */
-    public function setMunicipioInscripcion(\AppBundle\Entity\Municipio $municipioInscripcion = null)
+    public function setMunicipioInscripcion(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioInscripcion = null)
     {
         $this->municipioInscripcion = $municipioInscripcion;
 
@@ -349,7 +349,7 @@ class CvMedidaCautelar
     /**
      * Get municipioInscripcion
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipioInscripcion()
     {
@@ -359,11 +359,11 @@ class CvMedidaCautelar
     /**
      * Set municipioLevantamiento
      *
-     * @param \AppBundle\Entity\Municipio $municipioLevantamiento
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioLevantamiento
      *
      * @return CvMedidaCautelar
      */
-    public function setMunicipioLevantamiento(\AppBundle\Entity\Municipio $municipioLevantamiento = null)
+    public function setMunicipioLevantamiento(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioLevantamiento = null)
     {
         $this->municipioLevantamiento = $municipioLevantamiento;
 
@@ -373,7 +373,7 @@ class CvMedidaCautelar
     /**
      * Get municipioLevantamiento
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipioLevantamiento()
     {

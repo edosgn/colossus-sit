@@ -126,13 +126,13 @@ class PqoInmovilizacion
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Linea", inversedBy="inmovilizaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgLinea", inversedBy="inmovilizaciones") */
     private $linea;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Color", inversedBy="inmovilizaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgColor", inversedBy="inmovilizaciones") */
     private $color;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="inmovilizaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="inmovilizaciones") */
     private $clase;
 
     /** @ORM\ManyToOne(targetEntity="PqoCfgGrua", inversedBy="inmovilizaciones") */
@@ -518,11 +518,11 @@ class PqoInmovilizacion
     /**
      * Set linea
      *
-     * @param \AppBundle\Entity\Linea $linea
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgLinea $linea
      *
      * @return PqoInmovilizacion
      */
-    public function setLinea(\AppBundle\Entity\Linea $linea = null)
+    public function setLinea(\JHWEB\VehiculoBundle\Entity\VhloCfgLinea $linea = null)
     {
         $this->linea = $linea;
 
@@ -532,7 +532,7 @@ class PqoInmovilizacion
     /**
      * Get linea
      *
-     * @return \AppBundle\Entity\Linea
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgLinea
      */
     public function getLinea()
     {
@@ -542,11 +542,11 @@ class PqoInmovilizacion
     /**
      * Set color
      *
-     * @param \AppBundle\Entity\Color $color
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgColor $color
      *
      * @return PqoInmovilizacion
      */
-    public function setColor(\AppBundle\Entity\Color $color = null)
+    public function setColor(\JHWEB\VehiculoBundle\Entity\VhloCfgColor $color = null)
     {
         $this->color = $color;
 
@@ -556,7 +556,7 @@ class PqoInmovilizacion
     /**
      * Get color
      *
-     * @return \AppBundle\Entity\Color
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgColor
      */
     public function getColor()
     {
@@ -566,11 +566,11 @@ class PqoInmovilizacion
     /**
      * Set clase
      *
-     * @param \AppBundle\Entity\Clase $clase
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase
      *
      * @return PqoInmovilizacion
      */
-    public function setClase(\AppBundle\Entity\Clase $clase = null)
+    public function setClase(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase = null)
     {
         $this->clase = $clase;
 
@@ -580,7 +580,7 @@ class PqoInmovilizacion
     /**
      * Get clase
      *
-     * @return \AppBundle\Entity\Clase
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
      */
     public function getClase()
     {

@@ -155,7 +155,7 @@ class Comparendo
     private $infractorEmail;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="comparendos")
      **/
     protected $organismoTransitoLicencia;
     
@@ -372,17 +372,17 @@ class Comparendo
     /****************************Llaves foraneas****************************/
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="comparendos")
      **/
     protected $municipio;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MflInfraccion", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroInfraccion", inversedBy="comparendos")
      **/
     protected $infraccion;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="comparendos")
      **/
     protected $organismoTransitoMatriculado;
 
@@ -1768,30 +1768,6 @@ class Comparendo
     public function getInfraccion()
     {
         return $this->infraccion;
-    }
-
-    /**
-     * Set organismoTransitoMatriculado
-     *
-     * @param \AppBundle\Entity\OrganismoTransito $organismoTransitoMatriculado
-     *
-     * @return Comparendo
-     */
-    public function setOrganismoTransitoMatriculado(\AppBundle\Entity\OrganismoTransito $organismoTransitoMatriculado = null)
-    {
-        $this->organismoTransitoMatriculado = $organismoTransitoMatriculado;
-
-        return $this;
-    }
-
-    /**
-     * Get organismoTransitoMatriculado
-     *
-     * @return \AppBundle\Entity\OrganismoTransito
-     */
-    public function getOrganismoTransitoMatriculado()
-    {
-        return $this->organismoTransitoMatriculado;
     }
 
     /**

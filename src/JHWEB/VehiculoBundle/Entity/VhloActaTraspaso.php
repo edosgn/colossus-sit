@@ -36,7 +36,7 @@ class VhloActaTraspaso
     private $numero;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\TramiteSolicitud")
+     * @ORM\OneToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroTrteSolicitud")
      */
     private $tramiteSolicitud; 
 

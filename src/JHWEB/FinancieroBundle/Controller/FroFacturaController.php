@@ -225,11 +225,11 @@ class FroFacturaController extends Controller
                 $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
             );
             
-            if ($params->idSedeOperativa) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->idSedeOperativa
+            if ($params->idOrganismoTransito) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
                 );
-                $factura->setSedeOperativa($sedeOperativa);
+                $factura->setOrganismoTransito($organismoTransito);
             }
 
             if ($params->idTipoRecaudo) {

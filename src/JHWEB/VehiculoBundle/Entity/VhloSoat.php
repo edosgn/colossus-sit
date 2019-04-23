@@ -70,10 +70,10 @@ class VhloSoat
      */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="soats") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="soats") */
     private $vehiculo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="municipio") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="municipio") */
     private $municipio;
 
 
@@ -267,11 +267,11 @@ class VhloSoat
     /**
      * Set vehiculo
      *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
      *
      * @return VhloSoat
      */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
     {
         $this->vehiculo = $vehiculo;
 
@@ -281,7 +281,7 @@ class VhloSoat
     /**
      * Get vehiculo
      *
-     * @return \AppBundle\Entity\Vehiculo
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
      */
     public function getVehiculo()
     {
@@ -291,11 +291,11 @@ class VhloSoat
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return VhloSoat
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -305,7 +305,7 @@ class VhloSoat
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {

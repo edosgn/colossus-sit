@@ -107,7 +107,7 @@ class FroAcuerdoPago
     private $activo;
 
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sedesOperativas") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="sedesOperativas") */
     private $ciudadano;
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCfgInteres", inversedBy="acuerdosPago") */
@@ -418,11 +418,11 @@ class FroAcuerdoPago
     /**
      * Set ciudadano
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return FroAcuerdoPago
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -432,7 +432,7 @@ class FroAcuerdoPago
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {

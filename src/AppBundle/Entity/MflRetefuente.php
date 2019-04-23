@@ -42,16 +42,16 @@ class MflRetefuente
      */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="documentos") */
     protected $vehiculo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgValorVehiculo", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgValor", inversedBy="documentos") */
     protected $valorVehiculo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\PropietarioVehiculo", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloPropietario", inversedBy="documentos") */
     protected $propietarioVehiculo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroFactura", inversedBy="documentos") */
     protected $factura;
 
 

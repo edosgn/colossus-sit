@@ -72,11 +72,6 @@ class VhloCfgValor
     /** @ORM\ManyToOne(targetEntity="VhloCfgClase", inversedBy="vehiculos") */
     private $clase;
 
-    
-
-
-    
-
     /**
      * Get id
      *

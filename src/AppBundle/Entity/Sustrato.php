@@ -62,25 +62,24 @@ class Sustrato
     protected $sedeOperativa;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Modulo", inversedBy="sustratos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgModulo", inversedBy="sustratos")
      **/
     protected $modulo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Clase", inversedBy="sustratos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="sustratos")
      **/
     protected $clase;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="sustratos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="sustratos")
      **/
     protected $ciudadano;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="sustratos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroFactura", inversedBy="sustratos")
      **/
     protected $factura;
-
 
 
     /**

@@ -70,6 +70,7 @@ class SvIpatImpresoBodegaController extends Controller
             
             $bodega->setCantidadDisponible($params->cantidad);
             $bodega->setCantidadRecibida($params->cantidad);
+            $bodega->setEstado('DISPONIBLE');
             $bodega->setActivo(true);
 
             $em->persist($bodega);

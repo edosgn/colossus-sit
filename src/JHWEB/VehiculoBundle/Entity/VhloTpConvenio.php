@@ -64,11 +64,9 @@ class VhloTpConvenio
     private $activo;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Empresa")
+     * @ORM\OneToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      */
     private $empresa;
-
-
 
     /**
      * Get id
@@ -236,11 +234,11 @@ class VhloTpConvenio
     /**
      * Set empresa
      *
-     * @param \AppBundle\Entity\Empresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
      *
      * @return VhloTpConvenio
      */
-    public function setEmpresa(\AppBundle\Entity\Empresa $empresa = null)
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
     {
         $this->empresa = $empresa;
 
@@ -250,7 +248,7 @@ class VhloTpConvenio
     /**
      * Get empresa
      *
-     * @return \AppBundle\Entity\Empresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
     public function getEmpresa()
     {

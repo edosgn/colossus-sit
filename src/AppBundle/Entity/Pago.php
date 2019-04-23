@@ -58,7 +58,7 @@ class Pago
     private $estado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Tramite", inversedBy="pagos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroTramite", inversedBy="pagos")
      **/
     protected $tramite; 
 

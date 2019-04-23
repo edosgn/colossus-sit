@@ -203,10 +203,10 @@ class GdDocumento
      */
     private $activo = true;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="documentos") */
     private $tipoIdentificacion;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Municipio", inversedBy="documentos") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="documentos") */
     private $municipio;
 
     /**
@@ -873,11 +873,11 @@ class GdDocumento
     /**
      * Set tipoIdentificacion
      *
-     * @param \AppBundle\Entity\TipoIdentificacion $tipoIdentificacion
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacion
      *
      * @return GdDocumento
      */
-    public function setTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $tipoIdentificacion = null)
+    public function setTipoIdentificacion(\JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacion = null)
     {
         $this->tipoIdentificacion = $tipoIdentificacion;
 
@@ -887,7 +887,7 @@ class GdDocumento
     /**
      * Get tipoIdentificacion
      *
-     * @return \AppBundle\Entity\TipoIdentificacion
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion
      */
     public function getTipoIdentificacion()
     {
@@ -897,11 +897,11 @@ class GdDocumento
     /**
      * Set municipio
      *
-     * @param \AppBundle\Entity\Municipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
      *
      * @return GdDocumento
      */
-    public function setMunicipio(\AppBundle\Entity\Municipio $municipio = null)
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
     {
         $this->municipio = $municipio;
 
@@ -911,11 +911,35 @@ class GdDocumento
     /**
      * Get municipio
      *
-     * @return \AppBundle\Entity\Municipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
      */
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set organismoTransito
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
+     *
+     * @return GdDocumento
+     */
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
     }
 
     /**
@@ -988,29 +1012,5 @@ class GdDocumento
     public function getMedioCorrespondenciaEnvio()
     {
         return $this->medioCorrespondenciaEnvio;
-    }
-
-    /**
-     * Set organismoTransito
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
-     *
-     * @return GdDocumento
-     */
-    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
-    {
-        $this->organismoTransito = $organismoTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get organismoTransito
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
-     */
-    public function getOrganismoTransito()
-    {
-        return $this->organismoTransito;
     }
 }

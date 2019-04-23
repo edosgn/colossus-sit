@@ -45,6 +45,13 @@ class SvIpatImpresoBodega
     /**
      * @var bool
      *
+     * @ORM\Column(name="estado", type="string")
+     */
+    private $estado;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;

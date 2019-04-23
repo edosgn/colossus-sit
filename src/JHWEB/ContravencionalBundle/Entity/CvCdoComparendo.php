@@ -155,7 +155,7 @@ class CvCdoComparendo
     private $infractorEmail;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\OrganismoTransito", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="comparendos")
      **/
     protected $organismoTransitoLicencia;
     
@@ -1769,11 +1769,11 @@ class CvCdoComparendo
     /**
      * Set organismoTransitoLicencia
      *
-     * @param \AppBundle\Entity\OrganismoTransito $organismoTransitoLicencia
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoLicencia
      *
      * @return CvCdoComparendo
      */
-    public function setOrganismoTransitoLicencia(\AppBundle\Entity\OrganismoTransito $organismoTransitoLicencia = null)
+    public function setOrganismoTransitoLicencia(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoLicencia = null)
     {
         $this->organismoTransitoLicencia = $organismoTransitoLicencia;
 
@@ -1783,7 +1783,7 @@ class CvCdoComparendo
     /**
      * Get organismoTransitoLicencia
      *
-     * @return \AppBundle\Entity\OrganismoTransito
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
     public function getOrganismoTransitoLicencia()
     {
@@ -1911,6 +1911,30 @@ class CvCdoComparendo
     }
 
     /**
+     * Set organismoTransito
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
+     *
+     * @return CvCdoComparendo
+     */
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
+    {
+        $this->organismoTransito = $organismoTransito;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransito
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransito()
+    {
+        return $this->organismoTransito;
+    }
+
+    /**
      * Set agenteTransito
      *
      * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $agenteTransito
@@ -2004,29 +2028,5 @@ class CvCdoComparendo
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set organismoTransito
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
-     *
-     * @return CvCdoComparendo
-     */
-    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
-    {
-        $this->organismoTransito = $organismoTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get organismoTransito
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
-     */
-    public function getOrganismoTransito()
-    {
-        return $this->organismoTransito;
     }
 }

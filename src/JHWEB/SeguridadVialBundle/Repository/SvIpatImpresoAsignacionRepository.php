@@ -10,4 +10,18 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvIpatImpresoAsignacionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de asignaciones por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(a.consecutivo) AS maximo
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion a
+            WHERE YEAR(a.fecha) = :ANIO";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+
+        return $consulta->getOneOrNullResult();
+    }
 }

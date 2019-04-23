@@ -22,13 +22,26 @@ class SvIpatImpresoAsignacionController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
 
-        $svIpatImpresoAsignacions = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->findAll();
+        $asignaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->findBy(
+            array('activo' => true)
+        );
 
-        return $this->render('svipatimpresoasignacion/index.html.twig', array(
-            'svIpatImpresoAsignacions' => $svIpatImpresoAsignacions,
-        ));
+        $response['data'] = array();
+
+        if ($asignaciones) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($asignaciones) . " registros encontrados",
+                'data' => $asignaciones,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +52,58 @@ class SvIpatImpresoAsignacionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $svIpatImpresoAsignacion = new Svipatimpresoasignacion();
-        $form = $this->createForm('JHWEB\SeguridadVialBundle\Form\SvIpatImpresoAsignacionType', $svIpatImpresoAsignacion);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($svIpatImpresoAsignacion);
+
+            $asignacion = new SvIpatImpresoAsignacion();
+
+            $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getMaximo(date('Y'));
+           
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            $asignacion->setConsecutivo($consecutivo);
+            
+            $asignacion->setNumeroActa(
+                $fechaCreacion->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
+            );
+
+            $asignacion->setFecha(
+                new \Datetime($params->fecha)
+            );
+            
+            $asignacion->setCantidad($params->cantidad);
+            $asignacion->setActivo(true);
+
+            if ($params->idOrganismoTransito) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
+                );
+                $asignacion->setOrganismoTransito($organismoTransito);
+            }
+
+            $em->persist($asignacion);
             $em->flush();
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro creado con exito.', 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        } 
 
-            return $this->redirectToRoute('svipatimpresoasignacion_show', array('id' => $svIpatImpresoAsignacion->getId()));
-        }
-
-        return $this->render('svipatimpresoasignacion/new.html.twig', array(
-            'svIpatImpresoAsignacion' => $svIpatImpresoAsignacion,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

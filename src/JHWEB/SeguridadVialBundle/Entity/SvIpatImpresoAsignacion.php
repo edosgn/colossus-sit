@@ -22,6 +22,20 @@ class SvIpatImpresoAsignacion
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_acta", type="string", length=255, nullable=true)
+     */
+    private $numeroActa;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="integer")
+     */
+    private $consecutivo;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date")
@@ -45,13 +59,6 @@ class SvIpatImpresoAsignacion
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="SvIpatImpresoBodega", inversedBy="asignaciones")
-     */
-    private $bodega;
-
-    /**
-     * @var string
-     *
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="asignaciones")
      */
     private $organismoTransito;
@@ -65,6 +72,54 @@ class SvIpatImpresoAsignacion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set numeroActa
+     *
+     * @param string $numeroActa
+     *
+     * @return SvIpatImpresoAsignacion
+     */
+    public function setNumeroActa($numeroActa)
+    {
+        $this->numeroActa = $numeroActa;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroActa
+     *
+     * @return string
+     */
+    public function getNumeroActa()
+    {
+        return $this->numeroActa;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return SvIpatImpresoAsignacion
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
@@ -137,30 +192,6 @@ class SvIpatImpresoAsignacion
     public function getActivo()
     {
         return $this->activo;
-    }
-
-    /**
-     * Set bodega
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoBodega $bodega
-     *
-     * @return SvIpatImpresoAsignacion
-     */
-    public function setBodega(\JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoBodega $bodega = null)
-    {
-        $this->bodega = $bodega;
-
-        return $this;
-    }
-
-    /**
-     * Get bodega
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvIpatImpresoBodega
-     */
-    public function getBodega()
-    {
-        return $this->bodega;
     }
 
     /**

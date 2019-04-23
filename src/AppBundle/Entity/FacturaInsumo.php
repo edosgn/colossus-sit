@@ -44,17 +44,17 @@ class FacturaInsumo
     private $entregado;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Ciudadano", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="facturas")
      **/
     protected $ciudadano;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Insumo", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\InsumoBundle\Entity\ImoInsumo", inversedBy="facturas")
      **/
     protected $insumo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Factura", inversedBy="facturas")
+     * @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroFactura", inversedBy="facturas")
      **/
     protected $factura;
 
