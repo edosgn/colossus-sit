@@ -174,7 +174,6 @@ class ImoInsumoController extends Controller
                                 $em->flush(); 
                             }
                         }
-                        
                     }
                    
                     $response = array(

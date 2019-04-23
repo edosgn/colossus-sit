@@ -24,4 +24,22 @@ class SvIpatImpresoAsignacionRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene el total de impresos disponibles por organismo de tránsito
+    public function getTotalDisponibleByOrganismoTransito($idOrganismoTransito)
+    { 
+        $em = $this->getEntityManager();
+        $dql = "SELECT SUM(a.cantidadDisponible) AS cantidad
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion a
+            WHERE a.activo = true
+            AND a.organismoTransito = :organismoTransito
+            GROUP BY a.organismoTransito";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'organismoTransito' => $idOrganismoTransito,
+        ));
+        
+        return $consulta->getOneOrNullResult();
+    }
 }
