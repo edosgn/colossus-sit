@@ -51,11 +51,11 @@ class ImoInsumo
     private $categoria;
 
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="acta_entrega", type="string", length=255, nullable=true)
+     * @ORM\Column(name="actaEntrega", type="integer")
      */
-    private $actaEntrega; 
+    private $actaEntrega;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito")
@@ -73,6 +73,7 @@ class ImoInsumo
     protected $lote;
 
     
+
 
     /**
      * Get id
@@ -153,7 +154,7 @@ class ImoInsumo
      */
     public function getFecha()
     {
-        return $this->fecha->format('d/m/Y');;
+        return $this->fecha->format('d/m/Y');
     }
 
     /**
@@ -183,7 +184,7 @@ class ImoInsumo
     /**
      * Set actaEntrega
      *
-     * @param string $actaEntrega
+     * @param integer $actaEntrega
      *
      * @return ImoInsumo
      */
@@ -197,7 +198,7 @@ class ImoInsumo
     /**
      * Get actaEntrega
      *
-     * @return string
+     * @return integer
      */
     public function getActaEntrega()
     {

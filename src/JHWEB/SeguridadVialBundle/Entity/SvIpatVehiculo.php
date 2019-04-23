@@ -307,7 +307,6 @@ class SvIpatVehiculo
      */
     private $falla;
     
-
     /**
      * @var array
      *

@@ -244,6 +244,7 @@ class ImoCfgTipoController extends Controller
         ;
     }
 
+    
     /**
      * datos para select 2
      *

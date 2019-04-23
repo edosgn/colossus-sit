@@ -74,13 +74,7 @@ class SvIpatVehiculoController extends Controller
                 return $helpers->json($response);
             } else {
                 $vehiculo = new SvIpatVehiculo();
-                
-                //consecutivo del ipat
-                /* $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findOneBy(
-                    array(
-                        'numero' => $params->consecutivo
-                    )
-                ); */
+
                 $vehiculo->setConsecutivo($consecutivo);
                 //=======================================
                 
@@ -90,7 +84,7 @@ class SvIpatVehiculoController extends Controller
                 
                 $idNacionalidadVehiculo = (isset($params->nacionalidadVehiculo)) ? $params->nacionalidadVehiculo : null;
                 if ($idNacionalidadVehiculo) {
-                    $nacionalidadVehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->nacionalidadVehiculo);
+                    $nacionalidadVehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($idNacionalidadVehiculo);
                     $vehiculo->setNacionalidadVehiculo($nacionalidadVehiculo->getNombre());
                 }
 
@@ -165,17 +159,6 @@ class SvIpatVehiculoController extends Controller
                 $vehiculo->setNumeroSeguroExtracontractual($params->numeroSeguroExtracontractual);
                 $vehiculo->setAseguradoraSeguroExtracontractual($params->idAseguradoraSeguroExtracontractual);
                 $vehiculo->setFechaVencimientoSeguroExtracontractual(new \Datetime($params->fechaVencimientoSeguroExtracontractual));
-                /* $vehiculo->setMismoConductor($params->mismoConductor); */
-                /* $vehiculo->setNombresPropietario($params->nombresPropietario);
-                $vehiculo->setApellidosPropietario($params->apellidosPropietario);
-
-
-                $idTipoIdentificacion = (isset($params->tipoIdentificacionPropietario)) ? $params->tipoIdentificacionPropietario : null;
-                if($idTipoIdentificacion){
-                    $tipoIdentificacionPropietario = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($idTipoIdentificacion);
-                    $vehiculo->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
-                }
-                $vehiculo->setIdentificacionPropietario($params->identificacionPropietario); */
 
                 $claseVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->clase);
                 $vehiculo->setClase($claseVehiculo->getNombre());
@@ -188,7 +171,7 @@ class SvIpatVehiculoController extends Controller
                 
                 $idRadioAccion = (isset($params->radioAccion)) ? $params->radioAccion : null;
                 if($idRadioAccion) {
-                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->radioAccion);
+                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($idRadioAccion);
                     $vehiculo->setRadioAccion($radioAccion->getNombre());
                 }
 

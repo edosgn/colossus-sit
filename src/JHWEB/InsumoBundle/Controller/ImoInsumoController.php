@@ -76,14 +76,16 @@ class ImoInsumoController extends Controller
             $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
             $numeroActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
 
-            // var_dump($numeroActa);
-            // die();
+            
 
             if ($numeroActa['maximo'] == '') { 
                 $numeroActa = 1; 
             }else{
                $numeroActa = $numeroActa['maximo']+1;
             }
+
+            // var_dump($numeroActa);
+            // die();
             
             $imoTrazabilidad = new ImoTrazabilidad();
             $imoTrazabilidad->setOrganismoTransito($sedeOperativa);
@@ -241,7 +243,7 @@ class ImoInsumoController extends Controller
      /**
      * Deletes a insumo entity.
      *
-     * @Route("/{id}/delete", name="insumo_delete")
+     * @Route("/{id}/delete", name="imoinsumo_delete")
      * @Method({"GET", "POST"})
      */
     public function deleteAction(Request $request,$id)
@@ -253,7 +255,7 @@ class ImoInsumoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find($id);
 
-            $insumo->setEstado('dañado');
+            $insumo->setEstado('ANULADO');
             $em = $this->getDoctrine()->getManager();
             $em->persist($insumo);
             $em->flush();
@@ -386,13 +388,15 @@ class ImoInsumoController extends Controller
         $params = json_decode($json);
 
         $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen), 
-            array('id' => 'DESC'),$params->cantidad
+            array('lote'=>$params->lote->id)
         );
-
+     
         $fecha = new \DateTime('now');
 
-        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeDestino);
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeOperativaDestino);
+
+        $lote = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($params->lote->id);
+        $lote->setSedeOperativa($organismoTransito); 
 
         $imoTrazabilidad = new ImoTrazabilidad();
 
@@ -401,11 +405,12 @@ class ImoInsumoController extends Controller
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);
 
+        $em->persist($lote);
         $em->persist($imoTrazabilidad);
         $em->flush();
 
-
         foreach ($sustratos as $key => $sustrato) {
+        
             $imoAsignacionOld = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findOneByInsumo($sustrato->getId());
             if ($imoAsignacionOld) {
                 $imoAsignacionOld->setActivo(false);
@@ -423,8 +428,8 @@ class ImoInsumoController extends Controller
             $em->persist($sustrato);
             $em->persist($imoAsignacion);
             $em->flush();
-
         }
+        
         $response = array(
             'status' => 'success',
             'code' => 400,
@@ -501,6 +506,37 @@ class ImoInsumoController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/pdf/acta/insumos", name="pdf_acta_imoImo")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager(); 
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        // var_dump($params);
+        // die();
+        
+
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(100);
+        
+
+        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig');
+
+        $this->get('app.pdf')->templatePreview($html, $organismoTransito); 
+    }
+
 
 
 }
