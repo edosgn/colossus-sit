@@ -219,10 +219,20 @@ class UserCfgMenuController extends Controller
                     $em->persist($menu);
                     $em->flush();
                 }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
+                    $menu->setTipo('TERCER_NIVEL');
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                    );
+
+                    $em->persist($menu);
+                    $em->flush();
+                }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "Debe seleccionar maximo un padre de primer nivel",
+                        'message' => "Debe seleccionar maximo un padre de segundo nivel",
                     );
                 }
             }else{
