@@ -66,20 +66,27 @@ class SvCapacitacion
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTemaCapacitacion", inversedBy="capacitaciones")
      */
     private $temaCapacitacion;
-
-    /**
-     * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGenero", inversedBy="capacitaciones")
-     */
-    private $genero;
-
+    
     /**
      * @var string
      *
      * @ORM\Column(name="descripcion_actividad", type="string")
      */
     private $descripcionActividad;
+    
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="capacitaciones")
+    */
+    private $tipoIdentificacionActorVial;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_cedula_actor_vial", type="string")
+     */
+    private $numeroCedulaActorVial;
 
     /**
      * @var string
@@ -94,13 +101,48 @@ class SvCapacitacion
      * @ORM\Column(name="apellido_actor_vial", type="string")
      */
     private $apellidoActorVial;
+    
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_nacimiento", type="date")
+     */
+    private $fechaNacimientoActorVial;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_actor_vial", type="string")
+     */
+        private $emailActorVial;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_cedula_actor_vial", type="string")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGrupoEtnico", inversedBy="capacitaciones")
      */
-    private $numeroCedulaActorVial;
+    private $grupoEtnicoActorVial;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="discapacidad", type="boolean")
+     */
+    private $discapacidad;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="victima", type="boolean")
+     */
+    private $victima;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgGenero", inversedBy="capacitaciones")
+     */
+    private $genero;
 
     /**
      * @var string
@@ -162,9 +204,8 @@ class SvCapacitacion
     public function getFechaHoraRegistro()
     {
         if ($this->fechaHoraRegistro) {
-            return $this->fechaHoraRegistro->format('d/m/Y h:i:s A');
+            return $this->fechaHoraRegistro->format('d/m/Y H:m a');
         }
-        return $this->fechaHoraRegistro;
     }
 
     /**
@@ -191,7 +232,6 @@ class SvCapacitacion
         if ($this->fechaActividad) {
             return $this->fechaActividad->format('d/m/Y');
         }
-        return $this->fechaActividad;
     }
 
     /**
@@ -216,6 +256,30 @@ class SvCapacitacion
     public function getDescripcionActividad()
     {
         return $this->descripcionActividad;
+    }
+
+    /**
+     * Set numeroCedulaActorVial
+     *
+     * @param string $numeroCedulaActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setNumeroCedulaActorVial($numeroCedulaActorVial)
+    {
+        $this->numeroCedulaActorVial = $numeroCedulaActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCedulaActorVial
+     *
+     * @return string
+     */
+    public function getNumeroCedulaActorVial()
+    {
+        return $this->numeroCedulaActorVial;
     }
 
     /**
@@ -267,27 +331,101 @@ class SvCapacitacion
     }
 
     /**
-     * Set numeroCedulaActorVial
+     * Set fechaNacimientoActorVial
      *
-     * @param string $numeroCedulaActorVial
+     * @param \DateTime $fechaNacimientoActorVial
      *
      * @return SvCapacitacion
      */
-    public function setNumeroCedulaActorVial($numeroCedulaActorVial)
+    public function setFechaNacimientoActorVial($fechaNacimientoActorVial)
     {
-        $this->numeroCedulaActorVial = $numeroCedulaActorVial;
+        $this->fechaNacimientoActorVial = $fechaNacimientoActorVial;
 
         return $this;
     }
 
     /**
-     * Get numeroCedulaActorVial
+     * Get fechaNacimientoActorVial
+     *
+     * @return \DateTime
+     */
+    public function getFechaNacimientoActorVial()
+    {
+        if ($this->fechaNacimientoActorVial) {
+            return $this->fechaNacimientoActorVial->format('d/m/Y');
+        }
+    }
+
+    /**
+     * Set emailActorVial
+     *
+     * @param string $emailActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setEmailActorVial($emailActorVial)
+    {
+        $this->emailActorVial = $emailActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get emailActorVial
      *
      * @return string
      */
-    public function getNumeroCedulaActorVial()
+    public function getEmailActorVial()
     {
-        return $this->numeroCedulaActorVial;
+        return $this->emailActorVial;
+    }
+
+    /**
+     * Set discapacidad
+     *
+     * @param boolean $discapacidad
+     *
+     * @return SvCapacitacion
+     */
+    public function setDiscapacidad($discapacidad)
+    {
+        $this->discapacidad = $discapacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get discapacidad
+     *
+     * @return boolean
+     */
+    public function getDiscapacidad()
+    {
+        return $this->discapacidad;
+    }
+
+    /**
+     * Set victima
+     *
+     * @param boolean $victima
+     *
+     * @return SvCapacitacion
+     */
+    public function setVictima($victima)
+    {
+        $this->victima = $victima;
+
+        return $this;
+    }
+
+    /**
+     * Get victima
+     *
+     * @return boolean
+     */
+    public function getVictima()
+    {
+        return $this->victima;
     }
 
     /**
@@ -504,6 +642,54 @@ class SvCapacitacion
     public function getTemaCapacitacion()
     {
         return $this->temaCapacitacion;
+    }
+
+    /**
+     * Set tipoIdentificacionActorVial
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacionActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setTipoIdentificacionActorVial(\JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacionActorVial = null)
+    {
+        $this->tipoIdentificacionActorVial = $tipoIdentificacionActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionActorVial
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion
+     */
+    public function getTipoIdentificacionActorVial()
+    {
+        return $this->tipoIdentificacionActorVial;
+    }
+
+    /**
+     * Set grupoEtnicoActorVial
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgGrupoEtnico $grupoEtnicoActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setGrupoEtnicoActorVial(\JHWEB\UsuarioBundle\Entity\UserCfgGrupoEtnico $grupoEtnicoActorVial = null)
+    {
+        $this->grupoEtnicoActorVial = $grupoEtnicoActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get grupoEtnicoActorVial
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgGrupoEtnico
+     */
+    public function getGrupoEtnicoActorVial()
+    {
+        return $this->grupoEtnicoActorVial;
     }
 
     /**

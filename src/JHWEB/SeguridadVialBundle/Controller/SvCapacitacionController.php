@@ -71,10 +71,11 @@ class SvCapacitacionController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
 
             $capacitacion = new SvCapacitacion();
 
-            $em = $this->getDoctrine()->getManager();
             if ($params->municipio) {
                 $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->municipio);
                 $capacitacion->setMunicipio($municipio);
@@ -100,10 +101,6 @@ class SvCapacitacionController extends Controller
             }
 
             $capacitacion->setFechaHoraRegistro(new \Datetime($params->fechaHoraRegistro));
-            /* $capacitacion->setEmailFormador($params->emailFormador);
-            $capacitacion->setCedula($params->cedula);
-            $capacitacion->setFormador($params->formador);
-            $capacitacion->setSemana($params->semana); */
             $capacitacion->setFechaActividad(new \Datetime($params->fechaActividad));
 
             if ($params->funcionCriterio) {
@@ -112,19 +109,35 @@ class SvCapacitacionController extends Controller
             }
             $capacitacion->setDescripcionActividad($params->descripcionActividad);
 
+            $idTipoIdentificacion = (isset($params->idTipoIdentificacion)) ? $params->idTipoIdentificacion : null;
+            if ($idTipoIdentificacion) {
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($idTipoIdentificacion);
+                $capacitacion->setTipoIdentificacionActorVial($tipoIdentificacion);
+            }
+
             $capacitacion->setNumeroCedulaActorVial($params->numeroCedulaActorVial);
             $capacitacion->setNombreActorVial($params->nombreActorVial);
             $capacitacion->setApellidoActorVial($params->apellidoActorVial);
+            $capacitacion->setfechaNacimientoActorVial(new \Datetime ($params->fechaNacimientoActorVial));
+            $capacitacion->setEmailActorVial($params->emailActorVial);
+            
+            if ($params->genero) {
+                $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->genero);
+                $capacitacion->setGenero($genero);
+            }
+            
+            if ($params->idGrupoEtnico) {
+                $grupoEtnico = $em->getRepository('JHWEBUsuarioBundle:UserCfgGrupoEtnico')->find($params->idGrupoEtnico);
+                $capacitacion->setGrupoEtnicoActorVial($grupoEtnico);
+            }
 
             if ($params->claseActorVial) {
                 $claseActorVial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->find($params->claseActorVial);
                 $capacitacion->setClaseActorVial($claseActorVial);
             }
 
-            if ($params->genero) {
-                $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->genero);
-                $capacitacion->setGenero($genero);
-            }
+            $capacitacion->setDiscapacidad($params->discapacidad);
+            $capacitacion->setVictima($params->victima);
 
             $capacitacion->setActivo(true);
 
@@ -133,7 +146,7 @@ class SvCapacitacionController extends Controller
             if ($file) {
                 $extension = $file->guessExtension();
                 $filename = md5(rand() . time()) . "." . $extension;
-                $dir = __DIR__ . '/../../../../web/docs/sv_capacitaciones';
+                $dir = __DIR__ . '/../../../../web/docs/capacitaciones';
 
                 $file->move($dir, $filename);
                 $capacitacion->setDocumento($filename);
@@ -215,22 +228,6 @@ class SvCapacitacionController extends Controller
         }
 
         return $this->redirectToRoute('svCapacitacion_index');
-    }
-
-    /**
-     * Creates a form to delete a SvCapacitacion entity.
-     *
-     * @param SvCapacitacion $svCapacitacion The SvCapacitacion entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(SvCapacitacion $svCapacitacion)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('svCapacitacion_delete', array('id' => $svCapacitacion->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
     }
 
     /**
@@ -370,21 +367,40 @@ class SvCapacitacionController extends Controller
                     $capacitacion->setDescripcionActividad($params->capacitacion->descripcionActividad);
 
                     //DATOS PERSONAS CAPACITADAS
-                    $capacitacion->setNumeroCedulaActorVial($dato[0]);
-                    $capacitacion->setNombreActorVial($dato[1]);
-                    $capacitacion->setApellidoActorVial($dato[2]);
+                    $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->findOneBy(
+                        array(
+                            'sigla' => $dato[0],
+                            'activo' => true,
+                        )
+                    );
+                    $capacitacion->setTipoIdentificacionActorVial($tipoIdentificacion);
+
+                    $capacitacion->setNumeroCedulaActorVial($dato[1]);
+                    $capacitacion->setNombreActorVial($dato[2]);
+                    $capacitacion->setApellidoActorVial($dato[3]);
+                    $capacitacion->setFechaNacimientoActorVial(new \Datetime ($dato[4]));
+                    $capacitacion->setEmailActorVial($dato[5]);                    
 
                     $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->findOneBy(
                          array (
-                            'sigla' => $dato[3]
+                            'sigla' => $dato[6]
                         ));
                     $capacitacion->setGenero($genero);
 
+                    $grupoEtnico = $em->getRepository('JHWEBUsuarioBundle:UserCfgGrupoEtnico')->findOneBy(
+                        array(
+                            'nombre' => $dato[7]
+                        ));
+                    $capacitacion->setGrupoEtnicoActorVial($grupoEtnico);
+
                     $claseActorVial = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseActorVia')->findOneBy(
                         array(
-                            'nombre' => $dato[4]
+                            'nombre' => $dato[8]
                         ));
                     $capacitacion->setClaseActorVial($claseActorVial);
+                    
+                    $capacitacion->setDiscapacidad($dato[9]);
+                    $capacitacion->setVictima($dato[10]);
 
                     $capacitacion->setActivo(true);
 
