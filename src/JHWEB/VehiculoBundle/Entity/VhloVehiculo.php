@@ -120,6 +120,13 @@ class VhloVehiculo
     private $capacidadCarga;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_ejes", type="integer", nullable= true)
+     */
+    private $numeroEjes;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="tipo_blindaje", type="string", length=255, nullable= true)
@@ -554,6 +561,30 @@ class VhloVehiculo
     public function getCapacidadCarga()
     {
         return $this->capacidadCarga;
+    }
+
+    /**
+     * Set numeroEjes
+     *
+     * @param integer $numeroEjes
+     *
+     * @return VhloVehiculo
+     */
+    public function setNumeroEjes($numeroEjes)
+    {
+        $this->numeroEjes = $numeroEjes;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroEjes
+     *
+     * @return integer
+     */
+    public function getNumeroEjes()
+    {
+        return $this->numeroEjes;
     }
 
     /**

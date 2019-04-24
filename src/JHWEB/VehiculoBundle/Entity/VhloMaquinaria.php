@@ -52,13 +52,6 @@ class VhloMaquinaria
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_ejes", type="string", length=255)
-     */
-    private $numeroEjes;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="alto", type="string", length=255)
      */
     private $alto;
@@ -228,30 +221,6 @@ class VhloMaquinaria
     public function getNumeroLlantas()
     {
         return $this->numeroLlantas;
-    }
-
-    /**
-     * Set numeroEjes
-     *
-     * @param string $numeroEjes
-     *
-     * @return VhloMaquinaria
-     */
-    public function setNumeroEjes($numeroEjes)
-    {
-        $this->numeroEjes = $numeroEjes;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroEjes
-     *
-     * @return string
-     */
-    public function getNumeroEjes()
-    {
-        return $this->numeroEjes;
     }
 
     /**

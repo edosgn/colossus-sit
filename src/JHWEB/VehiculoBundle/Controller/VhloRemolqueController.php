@@ -147,7 +147,7 @@ class VhloRemolqueController extends Controller
                 $vehiculoRemolque->setCargarUtilMaxima(
                     $params->cargaUtil
                 );
-                $vehiculoRemolque->setNumeroEjes($params->numeroEjes);
+
                 $vehiculoRemolque->setAlto($params->alto);
                 $vehiculoRemolque->setAncho($params->ancho);
                 $vehiculoRemolque->setLargo($params->largo);
@@ -275,7 +275,6 @@ class VhloRemolqueController extends Controller
                         $vehiculoRemolque->getOrigenRegistro()->getId()
                     );
                     $vehiculoRemolque->setOrigenRegistro($origenRegistro);
-                    $vehiculoRemolque->setNumeroEjes($params->nuevoNumeroEjes);
                     $vehiculoRemolque->setNumeroFth($params->numeroFTH);
                     $vehiculoRemolque->setPeso($params->pesoVacio);
                     $vehiculoRemolque->setCargarUtilMaxima($params->cargaUtil);

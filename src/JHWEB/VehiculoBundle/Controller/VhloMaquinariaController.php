@@ -131,7 +131,7 @@ class VhloMaquinariaController extends Controller
                 $vehiculoMaquinaria->setCargarUtilMaxima(
                     $params->cargaUtilMaxima
                 );
-                $vehiculoMaquinaria->setNumeroEjes($params->numeroEjes);
+                
                 $vehiculoMaquinaria->setNumeroLlantas(
                     $params->numeroLlantas
                 );

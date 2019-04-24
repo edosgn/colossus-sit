@@ -123,6 +123,10 @@ class VhloVehiculoController extends Controller
                     $vehiculo->setCapacidadCarga($params->capacidadCarga);
                 }
 
+                if ($params->numeroEjes) {
+                    $vehiculo->setNumeroEjes($params->numeroEjes);
+                }
+
                 $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
                     $params->idColor
                 );
@@ -625,6 +629,10 @@ class VhloVehiculoController extends Controller
                                 $params->idServicio
                             );
                             $vehiculo->setServicio($servicio);
+                            break;
+
+                        case 'ejes':
+                            $vehiculo->setNumeroEjes($paramas->ejesTotal);
                             break;
                             
                         case 'cancelacionmatricula':
