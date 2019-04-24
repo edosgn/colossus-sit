@@ -126,14 +126,14 @@ class SvCapacitacion
     /**
      * @var bool
      *
-     * @ORM\Column(name="discapacidad", type="boolean")
+     * @ORM\Column(name="discapacidad", type="boolean", nullable=true)
      */
     private $discapacidad;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="victima", type="boolean")
+     * @ORM\Column(name="victima", type="boolean", nullable=true)
      */
     private $victima;
 

@@ -428,7 +428,7 @@ class GdDocumentoController extends Controller
                 }
 
                 if ($params->documento->municipio) {
-                    $municipio = $em->getRepository('AppBundle:Municipio')->find(
+                    $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
                         $params->documento->municipio
                     );
                     $documento->setMunicipio($municipio);

@@ -45,13 +45,6 @@ class VhloRemolque
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_ejes", type="string", length=255)
-     */
-    private $numeroEjes;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="alto", type="string", length=255)
      */
     private $alto;
@@ -182,30 +175,6 @@ class VhloRemolque
     public function getCargarUtilMaxima()
     {
         return $this->cargarUtilMaxima;
-    }
-
-    /**
-     * Set numeroEjes
-     *
-     * @param string $numeroEjes
-     *
-     * @return VhloRemolque
-     */
-    public function setNumeroEjes($numeroEjes)
-    {
-        $this->numeroEjes = $numeroEjes;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroEjes
-     *
-     * @return string
-     */
-    public function getNumeroEjes()
-    {
-        return $this->numeroEjes;
     }
 
     /**

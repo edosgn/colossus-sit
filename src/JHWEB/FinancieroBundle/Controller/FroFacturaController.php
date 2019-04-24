@@ -598,7 +598,7 @@ class FroFacturaController extends Controller
             'imgBarcode' => $imgBarcode
         ));
 
-        $this->get('app.pdf')->templateSummary($html, $factura);
+        $this->get('app.pdf')->templateFactura($html, $factura);
     }
 
     protected function generatePdfInfracciones($id){

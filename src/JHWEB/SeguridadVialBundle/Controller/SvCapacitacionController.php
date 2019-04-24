@@ -445,4 +445,51 @@ class SvCapacitacionController extends Controller
         }
         return $helpers->json($response);           
     }
+
+    /**
+     * Lists all show by capacitacion entities.
+     *
+     * @Route("/show/capacitacion", name="show_by_capacitacion")
+     * @Method({"GET", "POST"})
+     */
+    public function showByCapacitacion(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
+
+            var_dump($params);
+            die();
+            
+            $response['data'] = array();
+
+            if ($capacitaciones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($capacitaciones) . " registros encontrados",
+                    'data' => $capacitaciones,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se ha encontrado ningun registro de capacitación.",
+                    'data' => $capacitaciones,
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
