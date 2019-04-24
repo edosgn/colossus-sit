@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Imoinsumo controller.
@@ -529,8 +530,17 @@ class ImoInsumoController extends Controller
         
 
         $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig');
+        
+      
+        return new Response(
+            $this->get('app.pdf')->templatePreview($html, $organismoTransito),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+            )
+        );
 
-        $this->get('app.pdf')->templatePreview($html, $organismoTransito); 
     }
 
 
