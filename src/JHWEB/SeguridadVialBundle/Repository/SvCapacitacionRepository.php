@@ -10,4 +10,25 @@ namespace JHWEB\SeguridadVialBundle\Repository;
  */
 class SvCapacitacionRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByParametros($params) {
+
+        $em = $this->getEntityManager();
+
+        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
+
+        $dql = "SELECT c
+            FROM JHWEBSeguridadVialBundle:SvCapacitacion c
+            WHERE c.ciudadano = :ciudadano
+            AND c.activo = 1
+            GROUP BY c.fechaActividad, c.municipio, c.funcion, c.funcionCriterio, c.temaCapacitacion, c.descripcionActividad";
+
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'ciudadano' => $ciudadano,
+        ));
+
+        return $consulta->getResult();
+    }
 }

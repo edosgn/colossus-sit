@@ -33,10 +33,9 @@ class SvCapacitacionController extends Controller
             $em = $this->getDoctrine()->getManager();
             $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
                 array(
-                    'activo' => true,
+                    'actvo' => true,
                 )
             );
-            $response['data'] = array();
 
             if ($capacitaciones) {
                 $response = array(
@@ -248,13 +247,7 @@ class SvCapacitacionController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             if ($params->idTipoIdentificacion == 1) {
-                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
-                $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
-                    array(
-                        'activo' => true,
-                        'ciudadano' => $ciudadano,
-                    )
-                );
+                $capacitaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findByParametros($params);
             }
 
             if ($params->idTipoIdentificacion == 4) {
@@ -463,24 +456,34 @@ class SvCapacitacionController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            var_dump($params);
-            die();
-            
+            $fechaActividad = new \Datetime($params->fechaActividad);
+
+            $capacitados = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
+                array(
+                    'fechaActividad' => $fechaActividad,
+                    'municipio' => $params->municipio->id,
+                    'funcion' => $params->funcion->id,
+                    'funcionCriterio' => $params->funcionCriterio->id,
+                    'temaCapacitacion' => $params->temaCapacitacion->id,
+                    'descripcionActividad' => $params->descripcionActividad,
+                    'activo' => true,
+                )
+            );
+
             $response['data'] = array();
 
-            if ($capacitaciones) {
+            if ($capacitados) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($capacitaciones) . " registros encontrados",
-                    'data' => $capacitaciones,
+                    'message' => count($capacitados) . " registros encontrados",
+                    'data' => $capacitados,
                 );
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No se ha encontrado ningun registro de capacitación.",
-                    'data' => $capacitaciones,
                 );
             }
         } else {
