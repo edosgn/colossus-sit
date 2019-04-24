@@ -204,7 +204,7 @@ class PdfTemplate extends TCPDF{
         $pdf->SetAuthor('JHWEB PASTO SAS');
         $pdf->SetTitle('Factura No. '.$factura->getNumero());
         $pdf->SetSubject('Subsecretaría de transito deptal.');
-        $pdf->SetKeywords('Factura, Trámites');
+        $pdf->SetKeywords('Factura');
 
         // set default header data
         //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -250,7 +250,7 @@ class PdfTemplate extends TCPDF{
         // ---------------------------------------------------------
         // Close and output PDF document
         // This method has several options, check the source code documentation for more information.
-        $pdf->Output('factura_tramites.pdf', 'I');
+        $pdf->Output('factura_'.$factura->getNumero().'.pdf', 'I');
     }
 
     public function templateDocumentacion($html, $factura){

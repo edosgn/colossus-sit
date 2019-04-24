@@ -67,27 +67,31 @@ class VhloVehiculoController extends Controller
             $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
 
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+
             
             if (!$cfgPlaca) {
-                $placa = new VhloCfgPlaca();
-                $placa->setNumero(strtoupper($params->placa));
+                $vehiculo = new VhloVehiculo();
 
                 if ($params->idClase) {
                     $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
                 }
-                $placa->setTipoVehiculo($clase->getTipoVehiculo());
 
-                $placa->setOrganismoTransito($organismoTransito);
-                $placa->setEstado('ASIGNADA');
-                $em->persist($placa);
-                $em->flush();
+                if (isset($params->placa) && $params->placa) {
+                    $placa = new VhloCfgPlaca();
+                    $placa->setNumero(strtoupper($params->placa));
+                    $placa->setTipoVehiculo($clase->getTipoVehiculo());
+    
+                    $placa->setOrganismoTransito($organismoTransito);
+                    $placa->setEstado('ASIGNADA');
+                    $em->persist($placa);
+                    $em->flush();
+
+                    $vehiculo->setPlaca($placa);
+                }
 
                 $fechaFactura = $params->fechaFactura;
                 $fechaFactura = new \DateTime($fechaFactura);
-
-                $vehiculo = new VhloVehiculo();
-
-                $vehiculo->setPlaca($placa);
+                
                 $vehiculo->setOrganismoTransito($organismoTransito);
                 $vehiculo->setClase($clase);
                 
@@ -745,7 +749,7 @@ class VhloVehiculoController extends Controller
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Vehiculo editado con exito.",
+                        'message' => "Placa asignada con exito.",
                     );
                 }else{
                     $response = array(
