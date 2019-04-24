@@ -47,6 +47,9 @@ class MsvCalificacionController extends Controller
         $params = json_decode($json);
         $em = $this->getDoctrine()->getManager();
 
+        var_dump($params);
+        die();
+
         foreach ($params as $keyParametro => $parametro) {
             
             foreach ($parametro->variables as $keyVariable => $variable) {
