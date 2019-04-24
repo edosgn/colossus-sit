@@ -72,13 +72,13 @@ class VhloVehiculoController extends Controller
             if (!$cfgPlaca) {
                 $vehiculo = new VhloVehiculo();
 
+                if ($params->idClase) {
+                    $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+                }
+
                 if (isset($params->placa) && $params->placa) {
                     $placa = new VhloCfgPlaca();
                     $placa->setNumero(strtoupper($params->placa));
-    
-                    if ($params->idClase) {
-                        $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
-                    }
                     $placa->setTipoVehiculo($clase->getTipoVehiculo());
     
                     $placa->setOrganismoTransito($organismoTransito);
