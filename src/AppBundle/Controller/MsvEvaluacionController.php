@@ -410,4 +410,73 @@ class MsvEvaluacionController extends Controller
 
         $this->get('app.pdf')->templateEvaluacion($html, $evaluacion);
     }
+
+    /**
+     * Displays a form to edit an existing msvevaluacion entity.
+     *
+     * @Route("/show/calificacion/evaluacion", name="msvevaluacion_show")
+     * @Method({"GET", "POST"})
+     */
+    public function shoyCalificacionByEvaluacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if($authCheck==true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);  
+
+            var_dump($params);
+            die();
+ 
+            $em = $this->getDoctrine()->getManager();
+            $evaluacion = $em->getRepository('AppBundle:MsvEvaluacion')->find($params->id);
+            if($evaluacion != null){
+                $evaluacion->setNumero($params->numero);
+                $evaluacion->setParametro($params->parametro);
+                $evaluacion->setItem($params->item);
+                $evaluacion->setVariable($params->variable);
+                $evaluacion->setCriterio($params->criterio);
+                if($params->aplica == 'true'){
+                    $evaluacion->setAplica(true);
+                }else{
+                    $evaluacion->setAplica(false);
+                }
+                if($params->evidencia == 'true'){
+                    $evaluacion->setEvidencia(true);
+                }else{
+                    $evaluacion->setEvidencia(true);
+                }
+                if($params->responde == 'true'){
+                    $evaluacion->setResponde(true);
+                }else{
+                    $evaluacion->setResponde(true);
+                }
+                $evaluacion->setOservacion($params->observacion);
+                $evaluacion->setEstado(true);
+                $em->persist($evaluacion);
+                $em->flush();
+ 
+                $response = array(
+                 'status' => 'success',
+                 'code' => 200,
+                 'message' => "Evaluación editada con éxito.", 
+             );
+            }else{
+             $response = array(
+                 'status' => 'error',
+                 'code' => 400,
+                 'message' => "La evaluación no se encuentra en la base de datos", 
+             );
+            }
+        }
+        else{
+         $response = array(
+             'status' => 'error',
+             'code' => 400,
+             'message' => "Autorización no valida para editar banco", 
+         );
+        }
+     return $helpers->json($response);
+    }
 }
