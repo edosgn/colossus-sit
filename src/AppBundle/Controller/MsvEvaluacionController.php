@@ -426,55 +426,29 @@ class MsvEvaluacionController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);  
 
-            var_dump($params);
-            die();
- 
             $em = $this->getDoctrine()->getManager();
-            $evaluacion = $em->getRepository('AppBundle:MsvEvaluacion')->find($params->id);
-            if($evaluacion != null){
-                $evaluacion->setNumero($params->numero);
-                $evaluacion->setParametro($params->parametro);
-                $evaluacion->setItem($params->item);
-                $evaluacion->setVariable($params->variable);
-                $evaluacion->setCriterio($params->criterio);
-                if($params->aplica == 'true'){
-                    $evaluacion->setAplica(true);
-                }else{
-                    $evaluacion->setAplica(false);
-                }
-                if($params->evidencia == 'true'){
-                    $evaluacion->setEvidencia(true);
-                }else{
-                    $evaluacion->setEvidencia(true);
-                }
-                if($params->responde == 'true'){
-                    $evaluacion->setResponde(true);
-                }else{
-                    $evaluacion->setResponde(true);
-                }
-                $evaluacion->setOservacion($params->observacion);
-                $evaluacion->setEstado(true);
-                $em->persist($evaluacion);
-                $em->flush();
+
+            $revision = $em->getRepository('AppBundle:MsvRevision')->find($params->id);
  
-                $response = array(
-                 'status' => 'success',
-                 'code' => 200,
-                 'message' => "Evaluación editada con éxito.", 
-             );
-            }else{
-             $response = array(
-                 'status' => 'error',
-                 'code' => 400,
-                 'message' => "La evaluación no se encuentra en la base de datos", 
-             );
-            }
+            $calificaciones = $em->getRepository('AppBundle:MsvCalificacion')->findBy(
+                array(
+                    'revision' => $revision,
+                    'estado' => true,
+                )
+            );
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Se encontraron las calificaciones para la evaluación.", 
+                'data' => $calificaciones,
+            );
         }
         else{
          $response = array(
              'status' => 'error',
              'code' => 400,
-             'message' => "Autorización no valida para editar banco", 
+             'message' => "Autorización no válida.", 
          );
         }
      return $helpers->json($response);

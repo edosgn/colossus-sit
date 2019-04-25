@@ -372,10 +372,10 @@ class SvCapacitacionController extends Controller
                         array(
                             'numeroCedulaActorVial' => $dato[1],    
                             'fechaActividad' => $fechaActividad,
-                            'municipio' => $municipio,
-                            'funcion' => $funcion,
-                            'funcionCriterio' => $funcionCriterio,
-                            'temaCapacitacion' => $temaCapacitacion,
+                            'municipio' => $municipio->getId(),
+                            'funcion' => $funcion->getId(),
+                            'funcionCriterio' => $funcionCriterio->getId(),
+                            'temaCapacitacion' => $temaCapacitacion->getId(),
                             'descripcionActividad' => $params->capacitacion->descripcionActividad,
                             'activo' => true
                             )
@@ -385,7 +385,7 @@ class SvCapacitacionController extends Controller
                         $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "El capacitado ya se encuentra registrado dentro de esta capacitación",
+                        'message' => "Los capacitados ya se encuentran registrados dentro de esta capacitación, por favor cargue otro archivo.",
                         );
                     } else {
                         $capacitacion = new SvCapacitacion();
@@ -427,7 +427,7 @@ class SvCapacitacionController extends Controller
                         $capacitacion->setNumeroCedulaActorVial($dato[1]);
                         $capacitacion->setNombreActorVial($dato[2]);
                         $capacitacion->setApellidoActorVial($dato[3]);
-                        $capacitacion->setFechaNacimientoActorVial(new \Datetime ($dato[4]));
+                        $capacitacion->setFechaNacimientoActorVial($helpers->convertDateTime($dato[4]));
                         $capacitacion->setCargoActorVial($dato[5]);                    
                         $capacitacion->setEmailActorVial($dato[6]);                    
                         $capacitacion->setTelefonoActorVial($dato[7]);                    
@@ -477,17 +477,16 @@ class SvCapacitacionController extends Controller
                             );
                         }
                     } */
+                    $response['data'] = array();
+                    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Los datos se cargaron satisfactoriamente.",
+                                    /* 'data' => $capacitaciones */
+                        );
+                    }
                 }
-            }
-
-            $response['data'] = array();
-            
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Los datos se cargaron satisfactoriamente.",
-                            /* 'data' => $capacitaciones */
-                );
             }
         } else {
             $response = array(
