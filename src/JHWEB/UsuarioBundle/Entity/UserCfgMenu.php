@@ -50,6 +50,13 @@ class UserCfgMenu
     private $abreviatura;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="posicion", type="string", length=50)
+     */
+    private $posicion;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -163,6 +170,30 @@ class UserCfgMenu
     public function getAbreviatura()
     {
         return $this->abreviatura;
+    }
+
+    /**
+     * Set posicion
+     *
+     * @param string $posicion
+     *
+     * @return UserCfgMenu
+     */
+    public function setPosicion($posicion)
+    {
+        $this->posicion = $posicion;
+
+        return $this;
+    }
+
+    /**
+     * Get posicion
+     *
+     * @return string
+     */
+    public function getPosicion()
+    {
+        return $this->posicion;
     }
 
     /**

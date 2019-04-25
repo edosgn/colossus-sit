@@ -69,6 +69,7 @@ class UserCfgMenuController extends Controller
 
             $menu->setTitulo($params->titulo);
             $menu->setAbreviatura($params->abreviatura);
+            $menu->setPosicion(1);
             $menu->setActivo(true);
 
             if ($params->path) {
