@@ -105,28 +105,28 @@ class SvCapacitacion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_nacimiento", type="date")
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */
     private $fechaNacimientoActorVial;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="cargo_actor_vial", type="string")
+     * @ORM\Column(name="cargo_actor_vial", type="string", nullable=true)
      */
         private $cargoActorVial;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="email_actor_vial", type="string")
+     * @ORM\Column(name="email_actor_vial", type="string", nullable=true)
      */
         private $emailActorVial;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono_actor_vial", type="string")
+     * @ORM\Column(name="telefono_actor_vial", type="string", nullable=true)
      */
         private $telefonoActorVial;
 

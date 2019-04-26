@@ -144,17 +144,23 @@ class SvCapacitacionController extends Controller
                 $capacitacion->setNumeroCedulaActorVial($params->numeroCedulaActorVial);
                 $capacitacion->setNombreActorVial($params->nombreActorVial);
                 $capacitacion->setApellidoActorVial($params->apellidoActorVial);
-                $capacitacion->setfechaNacimientoActorVial(new \Datetime ($params->fechaNacimientoActorVial));
+
+                $fechaNacimientoActorVial = (isset($params->fechaNacimientoActorVial)) ? $params->fechaNacimientoActorVial : null;
+                if($fechaNacimientoActorVial){
+                    $capacitacion->setfechaNacimientoActorVial(new \Datetime ($params->fechaNacimientoActorVial));
+                }
                 $capacitacion->setCargoActorVial($params->cargoActorVial);
                 $capacitacion->setEmailActorVial($params->emailActorVial);
                 $capacitacion->setTelefonoActorVial($params->telefonoActorVial);
                 
-                if ($params->genero) {
+                $genero = (isset($params->genero)) ? $params->genero : null;
+                if ($genero) {
                     $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->genero);
                     $capacitacion->setGenero($genero);
                 }
                 
-                if ($params->idGrupoEtnico) {
+                $grupoEtnico = (isset($params->grupoEtnico)) ? $params->grupoEtnico : null;
+                if ($grupoEtnico) {
                     $grupoEtnico = $em->getRepository('JHWEBUsuarioBundle:UserCfgGrupoEtnico')->find($params->idGrupoEtnico);
                     $capacitacion->setGrupoEtnicoActorVial($grupoEtnico);
                 }
@@ -450,9 +456,23 @@ class SvCapacitacionController extends Controller
                             ));
                         $capacitacion->setClaseActorVial($claseActorVial);
                         
-                        $capacitacion->setDiscapacidad($dato[11]);
-                        $capacitacion->setVictima($dato[12]);
-                        $capacitacion->setComunidad($dato[13]);
+                        if($dato[11] == 3) {
+                            $capacitacion->setDiscapacidad(null);
+                        } else {
+                            $capacitacion->setDiscapacidad($dato[11]);
+                        }
+
+                        if($dato[12] == 3) {
+                            $capacitacion->setVictima(null);
+                        } else {
+                            $capacitacion->setVictima($dato[12]);
+                        }
+
+                        if($dato[13] == 3) {
+                            $capacitacion->setComunidad(null);
+                        } else {
+                            $capacitacion->setComunidad($dato[13]);
+                        }
 
                         $capacitacion->setActivo(true);
 
