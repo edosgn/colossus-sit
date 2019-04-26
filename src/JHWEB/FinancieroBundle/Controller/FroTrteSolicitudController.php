@@ -680,7 +680,7 @@ class FroTrteSolicitudController extends Controller
             foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
                 if ($tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getId() == 30) {
                     $foraneas = (object)$tramiteSolicitud->getForaneas();
-                    $observacion = $foraneas->observacion;
+                    $observaciones = $foraneas->observaciones;
                 }
             }
 
@@ -698,10 +698,10 @@ class FroTrteSolicitudController extends Controller
             'propietarios' => $propietarios,
             'limitaciones' => $limitaciones,
             'tramitesSolicitud'=>$tramitesSolicitud,
-            'observacion' => $observacion,
+            'observaciones' => $observaciones,
         ));
 
-        $this->get('app.pdf.factura.membretes')->templateCertificadoTradicion($html, $vehiculo);
+        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo);
     }
 
     /**

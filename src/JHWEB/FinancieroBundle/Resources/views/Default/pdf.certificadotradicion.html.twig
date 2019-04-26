@@ -2,9 +2,8 @@
   <header>
     <style type="text/css">
         .separator{
-            border-top: 1px dashed #cccccc;
+            margin-top: 5px;
         }
-
         .table td{
             max-height: 15px;
             padding: 2px;
@@ -18,24 +17,15 @@
     	<br>
     	<br>
     </p>
-    <p style="text-align:center;">
-        <b>Subsecretaria de transito y transporte departamental de nariño</b>
-        <br>      
-    </p>
+    <h2 style="text-align:center;">
+        <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>    
+    </h2>
 
-    <p>
-        <table>
-            <tr>
-                <td width="70%">El vehículo de placas: {{ vehiculo.placa.numero }} tiene las siguientes características </td>
-            </tr>
-        </table>       
-        <br>
-        <br>
-    </p>
+    <p>El vehículo de placas: <b>{{ vehiculo.placa.numero }}</b> tiene las siguientes características</p>
 
-    <table cellpadding="5">
+    <table cellpadding="5" border="1">
         <tr>
-            <td  width="15%" style="font-weight:bold;">Clase</td>
+            <td  style="font-weight:bold;">Clase</td>
             {% if vehiculo.clase  %}
             <td> {{ vehiculo.clase.nombre }}</td>
             {% endif  %}
@@ -43,25 +33,25 @@
             <td>{{ vehiculo.serie }}</td>
         </tr>
         <tr>
-            <td  width="15%" style="font-weight:bold;">Marca</td>
+            <td style="font-weight:bold;">Marca</td>
             <td> {{ vehiculo.linea.marca.nombre }}</td>
             <td style="font-weight:bold;">No.Chasis</td>
             <td>{{ vehiculo.chasis }}</td>
         </tr>
         <tr>
-            <td  width="15%" style="font-weight:bold;">Carrocería</td>
+            <td style="font-weight:bold;">Carrocería</td>
             <td> {{ vehiculo.carroceria.nombre }}</td>
             <td style="font-weight:bold;">Cilindraje</td>
             <td>{{ vehiculo.cilindraje }}</td>
         </tr>
         <tr>
-            <td  width="15%" style="font-weight:bold;">linea</td>
+            <td style="font-weight:bold;">linea</td>
             <td> {{ vehiculo.linea.nombre }}</td>
             <td style="font-weight:bold;">Pasajeros</td>
             <td>{{ vehiculo.numeroPasajeros }}</td>
         </tr>
         <tr> 
-            <td  width="15%" style="font-weight:bold;">Color</td>
+            <td style="font-weight:bold;">Color</td>
             {% if vehiculo.color  %}
             <td>{{ vehiculo.color.nombre }}</td>
             {% endif  %}
@@ -71,24 +61,24 @@
             {% endif  %}
         </tr>
         <tr>
-            <td  width="15%" style="font-weight:bold;">Modelo</td>
+            <td style="font-weight:bold;">Modelo</td>
             <td> {{ vehiculo.modelo }}</td>
             <td style="font-weight:bold;">No.motor</td>
             <td>{{ vehiculo.motor }}</td>
         </tr>
     </table>
-
-    {% if propietarios && propietarios|length > 0 %}
-    <table border="1">
+    <div class="separator"></div>
+    {% if propietarios and propietarios|length > 0 %}
+    <table border="1" cellpadding="3">
         <tr>
             <th colspan="3" align="center">
                 <b>PROPIETARIOS</b>
             </th>
         </tr>
-        <tr>
-            <td>Identificacion</td>
-            <td>Apellidos y apellidos</td>
-            <td>Direccion</td>
+        <tr align="center">
+            <td><b>Identificacion</b></td>
+            <td><b>Apellidos y apellidos</b></td>
+            <td><b>Direccion</b></td>
         </tr>
         {% for propietario in propietarios %}
             {% if propietario.ciudadano %}
@@ -105,24 +95,23 @@
         {% endfor %}
     </table>
     {% endif %}
-
-    <table border="1">
+    <div class="separator"></div>
+    <table border="1" cellpadding="3">
         <tr>
             <th colspan="3" align="center">
                 <b>TRÁMITES</b>
             </th>
         </tr>
-        <tr>
-            <td>Fecha</td>
-            <td>Nombre Tramite</td>
-            <td>Datos</td>
+        <tr align="center">
+            <td width="15%"><b>Fecha</b></td>
+            <td width="40%"><b>Nombre Tramite</b></td>
+            <td width="45%"><b>Datos</b></td>
         </tr>
         {% for key, tramiteSolicitud in tramitesSolicitud %}
-            <tr>
+            <tr style="font-size:11px">
                 <td>{{ tramiteSolicitud.fecha|date('d/m/Y') }}</td>
                 <td>{{ tramiteSolicitud.tramiteFactura.precio.tramite.nombre }}</td>
-                <td>
-                    {% if tramiteSolicitud.resumen %}
+                <td>{% if tramiteSolicitud.resumen %}
                         {{ tramiteSolicitud.resumen }}
                     {% endif %}
                 </td>
@@ -130,17 +119,19 @@
         {% endfor %}
     </table>
 
-    <h3>Observaciones</h3>
-    <p>{{ observacion }}</p>
+    <p>
+        <h3>Observaciones</h3>
+        {{ observaciones }}
+    </p>
 
-    {% if limitaciones && limitaciones|length > 0 %}
+    {% if limitaciones and limitaciones|length > 0 %}
     <table border="1">
         <tr>
             <th colspan="3" align="center">
                 <b>LIMITACIONES</b>
             </th>
         </tr>
-        <tr>
+        <tr align="center">
             <td>Entidad judicial</td>
             <td>Municipio</td>
             <td>Detalles</td>
