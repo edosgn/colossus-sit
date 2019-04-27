@@ -69,34 +69,57 @@ class FroTrteSolicitudController extends Controller
             $documentacionCompleta = true;
             $certificadoTradicion = false;
 
-            foreach ($params->tramitesRealizados as $key => $tramiteRealizado) {
-                if ($tramiteRealizado->idTramiteFactura) {
+            if ($params->documentacionPendiente) {
+                foreach ($params->documentacionPendiente as $key => $novedad) {
                     $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
-                        $tramiteRealizado->idTramiteFactura
+                        $novedad->idTramiteFactura
                     );
-    
+
                     if ($tramiteFactura) {
-                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
-                            $certificadoTradicion = true;
-                        }
+                        $tramiteFactura->setDocumentacion($novedad->documentacion);
+                        $tramiteFactura->setObservacion($novedad->observacion);
+                    }
 
-                        $factura = $tramiteFactura->getFactura();
-    
-                        if (isset($params->numeroRunt)) {
-                            $factura->setNumeroRunt($params->numeroRunt);
-    
-                            $em->flush();
-                        }
+                    $em->flush();
+                }
 
-                        if (!$tramiteRealizado->documentacion) {
-                            $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
-                
-                            if ($tramiteRealizado->observacion) {
-                                $tramiteFactura->setObservacion($tramiteRealizado->observacion);
+                $factura->setEstado('PENDIENTE DOCUMENTACION');
+            
+                $em->flush();
+
+                $response = array(
+                    'status' => 'warning',
+                    'code' => 401,
+                    'message' => 'Esta factura estara pendiente hasta que se entregue la documentación completa o se anule.',
+                    'data' => array(
+                        'factura' => $factura
+                    )
+                );
+            }else{
+                foreach ($params->tramitesRealizados as $key => $tramiteRealizado) {
+                    if ($tramiteRealizado->idTramiteFactura) {
+                        $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                            $tramiteRealizado->idTramiteFactura
+                        );
+        
+                        if ($tramiteFactura) {
+                            /*if (isset($tramiteRealizado->foraneas->campos)) {
+                                return $this->redirectToRoute('vhlovehiculo_update');
+                            }*/
+    
+                            if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                                $certificadoTradicion = true;
                             }
+    
+                            $factura = $tramiteFactura->getFactura();
+        
+                            if (isset($params->numeroRunt)) {
+                                $factura->setNumeroRunt($params->numeroRunt);
+        
+                                $em->flush();
+                            }
+    
 
-                            $documentacionCompleta = false;
-                        }else{
                             if (!$tramiteFactura->getRealizado()) {
                                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
                                     $tramiteRealizado->foraneas->idFuncionario
@@ -104,8 +127,6 @@ class FroTrteSolicitudController extends Controller
     
                                 if (isset($params->idVehiculo) && $params->idVehiculo) {
                                     $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-    
-                                    $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
     
                                     $tramiteSolicitud = new FroTrteSolicitud();
     
@@ -195,25 +216,9 @@ class FroTrteSolicitudController extends Controller
                                 }                      
                             }
                         }
-
                     }
                 }
-            }
 
-            if (!$documentacionCompleta) {
-                $factura->setEstado('PENDIENTE DOCUMENTACION');
-            
-                $em->flush();
-
-                $response = array(
-                    'status' => 'warning',
-                    'code' => 401,
-                    'message' => 'Esta factura estara pendiente hasta que se entregue la documentación completa o se anule.',
-                    'data' => array(
-                        'factura' => $factura
-                    )
-                );
-            }else{
                 $factura->setEstado('FINALIZADA');
             
                 $em->flush();
@@ -821,8 +826,24 @@ class FroTrteSolicitudController extends Controller
                                 );
                             }
                         }else{
-                            //Valida si el tramite a realizar es RADICADO DE CUENTA o CERTIFICADO DE TRADICION
-                            if ($tramiteFactura->getPrecio()->getTramite()->getId() == 4 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Trámite autorizado.',
+                            );
+                        }
+                    }else{
+                        //Valida si el tramite a realizar es REMATRICULA
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 18) {
+                            //Busca el último tramite de cancelación de vehiculo
+                            $tramiteCancelacion = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getOneByVehiculoAndTramite(
+                                $vehiculo->getId(), 18
+                            );
+                            
+                            $foraneas = (object)$tramiteCancelacion->getForaneas();
+                            $motivoCancelacion = $foraneas->idMotivoCancelacion;
+                            
+                            if ($motivoCancelacion == 'HURTO') {
                                 $response = array(
                                     'status' => 'success',
                                     'code' => 200,
@@ -832,25 +853,16 @@ class FroTrteSolicitudController extends Controller
                                 $response = array(
                                     'status' => 'error',
                                     'code' => 400,
-                                    'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra trasladado a otro organismo de transito.',
+                                    'message' => 'Este trámite no se pude realizar porque el motivo de la cancelación es HURTO.',
                                 );
                             }
                         }
-                    }else{
-                        //Valida si el tramite a realizar es REMATRICULA o CERTIFICADO DE TRADICION
-                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 18 || $tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
-                            $response = array(
-                                'status' => 'success',
-                                'code' => 200,
-                                'message' => 'Trámite autorizado.',
-                            );
-                        }else{
-                            $response = array(
-                                'status' => 'error',
-                                'code' => 400,
-                                'message' => 'Este trámite no se puede realizar porque este vehiculo se encuentra con matricula cancelada.',
-                            );
-                        }
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'Trámite autorizado.',
+                        );
                     }
                 }
             }

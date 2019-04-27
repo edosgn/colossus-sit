@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Frofactrtedocumentacions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Observacion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froFacTrteDocumentacion in froFacTrteDocumentacions %}
+            <tr>
+                <td><a href="{{ path('frofactrtedocumentacion_show', { 'id': froFacTrteDocumentacion.id }) }}">{{ froFacTrteDocumentacion.id }}</a></td>
+                <td>{{ froFacTrteDocumentacion.observacion }}</td>
+                <td>{% if froFacTrteDocumentacion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('frofactrtedocumentacion_show', { 'id': froFacTrteDocumentacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('frofactrtedocumentacion_edit', { 'id': froFacTrteDocumentacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('frofactrtedocumentacion_new') }}">Create a new froFacTrteDocumentacion</a>
+        </li>
+    </ul>
+{% endblock %}
