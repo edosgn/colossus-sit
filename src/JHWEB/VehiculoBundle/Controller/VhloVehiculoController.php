@@ -618,8 +618,8 @@ class VhloVehiculoController extends Controller
                                     strtoupper($params->nuevaPlaca)
                                 );
                                 $placa->setEstado('ASIGNADA');
-                                //Revisar$placa->setClase($clase);
-                                //Revisar$placa->setSedeOperativa($sedeOperativa);
+                                $placa->setTipoVehiculo($vehiculo->getTipoVehiculo());
+                                $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
 
                                 $em->persist($placa);
                                 $em->flush();
