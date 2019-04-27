@@ -414,21 +414,18 @@ class MsvEvaluacionController extends Controller
     /**
      * Displays a form to edit an existing msvevaluacion entity.
      *
-     * @Route("/show/calificacion/evaluacion", name="msvevaluacion_show")
+     * @Route("/{id}/calificacion/pdf", name="msvevaluacion_pdf_calificacion")
      * @Method({"GET", "POST"})
      */
-    public function shoyCalificacionByEvaluacionAction(Request $request)
+    public function shoyCalificacionByEvaluacionAction($id)
     {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        if($authCheck==true){
-            $json = $request->get("data",null);
-            $params = json_decode($json);  
-
             $em = $this->getDoctrine()->getManager();
 
-            $revision = $em->getRepository('AppBundle:MsvRevision')->find($params->id);
+            setlocale(LC_ALL, "es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $revision = $em->getRepository('AppBundle:MsvRevision')->find($id);
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($revision->getEmpresa());
  
             $calificaciones = $em->getRepository('AppBundle:MsvCalificacion')->findBy(
                 array(
@@ -436,21 +433,50 @@ class MsvEvaluacionController extends Controller
                     'estado' => true,
                 )
             );
-            
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Se encontraron las calificaciones para la evaluación.", 
-                'data' => $calificaciones,
-            );
-        }
-        else{
-         $response = array(
-             'status' => 'error',
-             'code' => 400,
-             'message' => "Autorización no válida.", 
-         );
-        }
-     return $helpers->json($response);
+
+            foreach ($calificaciones as $key => $calificacion) {
+                # code...
+                switch ($calificacion->getCriterio()->getVariable()->getParametro()->getCategoria()->getId()) {
+                    case 1:
+                        # code...
+                        $calificacionesFortalecimiento[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 2:
+                        $calificacionesComportamiento[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 3:
+                        $calificacionesVehiculoSeguro[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 4:
+                        $calificacionesInfraestructuraSegura[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 5:
+                        $calificacionesAtencionVictima[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                }
+            }
+
+            $html = $this->renderView('@App/msvEvaluacion/pdf.calificacion.evaluacion.html.twig', array(
+                'fechaActual' => $fechaActual,
+                'empresa' => $empresa,
+                'calificacionesFortalecimiento' => $calificacionesFortalecimiento,
+                'calificacionesComportamiento' => $calificacionesComportamiento,
+                'calificacionesVehiculoSeguro' => $calificacionesVehiculoSeguro,
+                'calificacionesInfraestructuraSegura' => $calificacionesInfraestructuraSegura,
+                'calificacionesAtencionVictima' => $calificacionesAtencionVictima,
+        ));
+
+        $this->get('app.pdf')->templateCalificacion($html, $empresa); 
+        
     }
 }

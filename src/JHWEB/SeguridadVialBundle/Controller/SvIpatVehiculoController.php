@@ -90,7 +90,7 @@ class SvIpatVehiculoController extends Controller
 
                 $idMarca = (isset($params->marca)) ? $params->marca : null;
                 if($idMarca) {
-                    $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->find($params->nacionalidadVehiculo);
+                    $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->find($params->marca);
                     $vehiculo->setMarca($marca->getNombre());
                 }
 
@@ -113,19 +113,70 @@ class SvIpatVehiculoController extends Controller
                     $vehiculo->setCarroceria($carroceria->getNombre());
                 }
 
-                $vehiculo->setCarroceria($params->carroceria);
-                $vehiculo->setTon($params->ton);
-                $vehiculo->setPasajeros($params->pasajeros);
-                $vehiculo->setEmpresa($params->empresa);
-                $vehiculo->setNitEmpresa($params->nitEmpresa);
-                $vehiculo->setmatriculadoEn($params->matriculadoEn);
-                $vehiculo->setInmovilizado($params->inmovilizado);
-                $vehiculo->setInmovilizadoEn($params->inmovilizadoEn);
-                $vehiculo->setADisposicionDe($params->aDisposicionDe);
-                $vehiculo->setPortaTarjetaRegistro($params->portaTarjetaRegistro);
-                $vehiculo->setTarjetaRegistro($params->tarjetaRegistro);
-                $vehiculo->setRevisionTecnomecanica($params->revisionTecnomecanica);
-                $vehiculo->setNumeroTecnoMecanica($params->numeroTecnoMecanica);
+                $idCarroceria = (isset($params->carroceria)) ? $params->carroceria : null;
+                if($params->carroceria){
+                    $vehiculo->setCarroceria($params->carroceria);
+                }
+
+                $ton = (isset($params->ton)) ? $params->ton : null;
+                if($ton){
+                    $vehiculo->setTon($params->ton);
+                }
+
+                $pasajeros = (isset($params->pasajeros)) ? $params->pasajeros : null;
+                if($pasajeros){
+                    $vehiculo->setPasajeros($params->pasajeros);
+                }
+
+                $empresa = (isset($params->empresa)) ? $params->empresa : null;
+                if($empresa){
+                    $vehiculo->setEmpresa($params->empresa);
+                }
+
+                $nitEmpresa = (isset($params->nitEmpresa)) ? $params->nitEmpresa : null;
+                if($nitEmpresa){
+                    $vehiculo->setNitEmpresa($params->nitEmpresa);
+                }
+
+                $matriculadoEn = (isset($params->matriculadoEn)) ? $params->matriculadoEn : null;
+                if($matriculadoEn){
+                    $vehiculo->setmatriculadoEn($params->matriculadoEn[0]);
+                }
+
+                $inmovilizado = (isset($params->inmovilizado)) ? $params->inmovilizado : null;
+                if($inmovilizado){
+                    $vehiculo->setInmovilizado($params->inmovilizado);
+                }
+
+                $inmovilizadoEn = (isset($params->inmovilizadoEn)) ? $params->inmovilizadoEn : null;
+                if($inmovilizadoEn){
+                    $vehiculo->setInmovilizadoEn($params->inmovilizadoEn);
+                }
+
+                $aDisposicionDe = (isset($params->aDisposicionDe)) ? $params->aDisposicionDe : null;
+                if($aDisposicionDe){
+                    $vehiculo->setADisposicionDe($params->aDisposicionDe);
+                }
+
+                $portaTarjetaRegistro = (isset($params->portaTarjetaRegistro)) ? $params->portaTarjetaRegistro : null;
+                if($portaTarjetaRegistro){
+                    $vehiculo->setPortaTarjetaRegistro($params->portaTarjetaRegistro);
+                }
+
+                $tarjetaRegistro = (isset($params->tarjetaRegistro)) ? $params->tarjetaRegistro : null;
+                if($tarjetaRegistro){
+                    $vehiculo->setTarjetaRegistro($params->tarjetaRegistro);
+                }
+
+                $revisionTecnomecanica = (isset($params->revisionTecnomecanica)) ? $params->revisionTecnomecanica : null;
+                if($revisionTecnomecanica){
+                    $vehiculo->setRevisionTecnomecanica($params->revisionTecnomecanica);
+                }
+
+                $numeroTecnoMecanica = (isset($params->numeroTecnoMecanica)) ? $params->numeroTecnoMecanica : null;
+                if($numeroTecnoMecanica){
+                    $vehiculo->setNumeroTecnoMecanica($params->numeroTecnoMecanica);
+                }
 
                 $cantidadAcompaniantes = $params->cantidadAcompaniantes;
                 if ($cantidadAcompaniantes) {
@@ -160,18 +211,24 @@ class SvIpatVehiculoController extends Controller
                 $vehiculo->setAseguradoraSeguroExtracontractual($params->idAseguradoraSeguroExtracontractual);
                 $vehiculo->setFechaVencimientoSeguroExtracontractual(new \Datetime($params->fechaVencimientoSeguroExtracontractual));
 
-                $claseVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->clase);
-                $vehiculo->setClase($claseVehiculo->getNombre());
+                $idClase = (isset($params->clase)) ? $params->clase : null;
+                if($idClase) {
+                    $claseVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->clase);
+                    $vehiculo->setClase($claseVehiculo->getNombre());
+                }
 
                 $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->servicio);
                 $vehiculo->setServicio($servicio->getNombre());
 
-                $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->modalidadTransporte);
-                $vehiculo->setModalidadTransporte($modalidadTransporte->getNombre());
-                
-                $idRadioAccion = (isset($params->radioAccion)) ? $params->radioAccion : null;
+                $idModalidadTransporte = (isset($params->modalidadTransporte)) ? $params->modalidadTransporte : null;
+                if($idModalidadTransporte) {
+                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->modalidadTransporte);
+                    $vehiculo->setModalidadTransporte($modalidadTransporte->getNombre());
+                }
+
+                $idRadioAccion = (isset($params->radioAccion[0])) ? $params->radioAccion[0] : null;
                 if($idRadioAccion) {
-                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($idRadioAccion);
+                    $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->radioAccion[0]);
                     $vehiculo->setRadioAccion($radioAccion->getNombre());
                 }
 
