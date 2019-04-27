@@ -170,9 +170,27 @@ class SvCapacitacionController extends Controller
                     $capacitacion->setClaseActorVial($claseActorVial);
                 }
 
-                $capacitacion->setDiscapacidad($params->discapacidad);
+                if($params->discapacidad == 3) {
+                    $capacitacion->setDiscapacidad(null);
+                } else {
+                    $capacitacion->setDiscapacidad(intval($params->discapacidad));
+                }
+
+                if($params->victima == 3) {
+                    $capacitacion->setVictima(null);
+                } else {
+                    $capacitacion->setVictima(intval($params->victima));
+                }
+
+                if($params->comunidad == 3) {
+                    $capacitacion->setComunidad(null);
+                } else {
+                    $capacitacion->setComunidad(intval($params->comunidad));
+                }
+
+                /* $capacitacion->setDiscapacidad($params->discapacidad);
                 $capacitacion->setVictima($params->victima);
-                $capacitacion->setComunidad($params->comunidad);
+                $capacitacion->setComunidad($params->comunidad); */
 
                 $capacitacion->setActivo(true);
 
