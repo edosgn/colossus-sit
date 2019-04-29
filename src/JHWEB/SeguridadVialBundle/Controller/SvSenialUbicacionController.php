@@ -428,4 +428,45 @@ class SvSenialUbicacionController extends Controller
             ->getForm()
         ;
     }
+
+    /* ================================= */
+
+    /**
+     * Busca todos los regitros con georeferenciacion por fechas.
+     *
+     * @Route("/search/fechas/municipio", name="svipatimpresobodega_search_fechas_municipio")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByFechasAndMunicipioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $ubicaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvSenialUbicacion')->getByFechas(
+                $params
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($ubicaciones).' registros encontrados con exito.',
+                'data' => $ubicaciones,
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.',
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

@@ -581,7 +581,9 @@ class FroFacturaController extends Controller
         );
 
         $barcode = new BarcodeGenerator();
-        $barcode->setText('(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd'));
+        $barcode->setText(
+            "123456"
+        );
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
@@ -591,6 +593,7 @@ class FroFacturaController extends Controller
         $imgBarcode = $barcode->generate();
 
         //$imgBarcode = \base64_decode($imgBarcode);
+
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
