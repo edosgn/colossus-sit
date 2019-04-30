@@ -4,11 +4,6 @@
         .separator{
             border-top: 1px dashed #cccccc;
         }
-
-        .table-comparendos td{
-            max-height: 15px;
-            padding: 2px;
-        }
     </style>
   </header>
   <body style="font-size:8px">
@@ -60,7 +55,13 @@
             </table>
         {% endif %}
         <br>
-        <img src="data:image/png;base64,{{ imgBarcode }}" width="200px" />
+        <table cellpadding="20px">
+            <tr>
+                <td>
+                    <img style="display: block;" src="data:image/png;charset=utf-8;base64,{{ imgBarcode }}" height="auto" width="128" />
+                </td>
+            </tr>
+        </table>
         {% if key < 2 %}
         <br>
         <div class="separator"></div>

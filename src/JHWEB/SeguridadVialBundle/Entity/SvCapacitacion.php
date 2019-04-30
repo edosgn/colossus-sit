@@ -105,16 +105,30 @@ class SvCapacitacion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_nacimiento", type="date")
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable=true)
      */
     private $fechaNacimientoActorVial;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="email_actor_vial", type="string")
+     * @ORM\Column(name="cargo_actor_vial", type="string", nullable=true)
+     */
+        private $cargoActorVial;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email_actor_vial", type="string", nullable=true)
      */
         private $emailActorVial;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono_actor_vial", type="string", nullable=true)
+     */
+        private $telefonoActorVial;
 
     /**
      * @var string
@@ -136,6 +150,13 @@ class SvCapacitacion
      * @ORM\Column(name="victima", type="boolean", nullable=true)
      */
     private $victima;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="comunidad", type="boolean", nullable=true)
+     */
+    private $comunidad;
 
     /**
      * @var string
@@ -181,6 +202,7 @@ class SvCapacitacion
     {
         return $this->id;
     }
+
 
     /**
      * Set fechaHoraRegistro
@@ -357,6 +379,30 @@ class SvCapacitacion
     }
 
     /**
+     * Set cargoActorVial
+     *
+     * @param string $cargoActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setCargoActorVial($cargoActorVial)
+    {
+        $this->cargoActorVial = $cargoActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get cargoActorVial
+     *
+     * @return string
+     */
+    public function getCargoActorVial()
+    {
+        return $this->cargoActorVial;
+    }
+
+    /**
      * Set emailActorVial
      *
      * @param string $emailActorVial
@@ -378,6 +424,30 @@ class SvCapacitacion
     public function getEmailActorVial()
     {
         return $this->emailActorVial;
+    }
+
+    /**
+     * Set telefonoActorVial
+     *
+     * @param string $telefonoActorVial
+     *
+     * @return SvCapacitacion
+     */
+    public function setTelefonoActorVial($telefonoActorVial)
+    {
+        $this->telefonoActorVial = $telefonoActorVial;
+
+        return $this;
+    }
+
+    /**
+     * Get telefonoActorVial
+     *
+     * @return string
+     */
+    public function getTelefonoActorVial()
+    {
+        return $this->telefonoActorVial;
     }
 
     /**
@@ -426,6 +496,30 @@ class SvCapacitacion
     public function getVictima()
     {
         return $this->victima;
+    }
+
+    /**
+     * Set comunidad
+     *
+     * @param boolean $comunidad
+     *
+     * @return SvCapacitacion
+     */
+    public function setComunidad($comunidad)
+    {
+        $this->comunidad = $comunidad;
+
+        return $this;
+    }
+
+    /**
+     * Get comunidad
+     *
+     * @return boolean
+     */
+    public function getComunidad()
+    {
+        return $this->comunidad;
     }
 
     /**

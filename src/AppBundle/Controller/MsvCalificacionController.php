@@ -34,32 +34,30 @@ class MsvCalificacionController extends Controller
     /**
      * Creates a new msvCalificacion entity.
      *
-     * @Route("/{id}/new", name="msvcalificacion_new")
+     * @Route("/new", name="msvcalificacion_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request,$id)
+    public function newAction(Request $request)
     {
     $helpers = $this->get("app.helpers");
     $hash = $request->get("authorization", null);
     $authCheck = $helpers->authCheck($hash);
     if ($authCheck == true) {
-        $json = $request->get("json", null);
+        $json = $request->get("data", null);
         $params = json_decode($json);
         $em = $this->getDoctrine()->getManager();
 
-        var_dump($params);
-        die();
-
-        foreach ($params as $keyParametro => $parametro) {
-            
+        foreach ($params->parametros[0] as $keyParametro => $parametro) {
             foreach ($parametro->variables as $keyVariable => $variable) {
                 foreach ($variable->criterios as $keyCriterio => $criterio) {
                     $criterioA = $em->getRepository('AppBundle:MsvCriterio')->find($criterio->id);
-                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($id);
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresa);
+                    $revision = $em->getRepository('AppBundle:MsvRevision')->find($params->revision);
     
                     $msvCalificacion = new MsvCalificacion();
                     $msvCalificacion->setCriterio($criterioA);
                     $msvCalificacion->setEmpresa($empresa);
+                    $msvCalificacion->setRevision($revision);
                     $msvCalificacion->setAplica($criterio->aplica);
                     $msvCalificacion->setEvidencia($criterio->evidencia);
                     $msvCalificacion->setResponde($criterio->responde);

@@ -38,6 +38,20 @@ class FroFactura
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="fecha_pago", type="date")
+     */
+    private $fechaPago;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora_pago", type="time")
+     */
+    private $horaPago;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="hora", type="time")
      */
     private $hora;
@@ -140,9 +154,6 @@ class FroFactura
      */
     public function getFechaCreacion()
     {
-        if ($this->fechaCreacion) {
-            return $this->fechaCreacion->format('d/m/Y');
-        }
         return $this->fechaCreacion;
     }
 
@@ -168,6 +179,54 @@ class FroFactura
     public function getFechaVencimiento()
     {
         return $this->fechaVencimiento;
+    }
+
+    /**
+     * Set fechaPago
+     *
+     * @param \DateTime $fechaPago
+     *
+     * @return FroFactura
+     */
+    public function setFechaPago($fechaPago)
+    {
+        $this->fechaPago = $fechaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaPago
+     *
+     * @return \DateTime
+     */
+    public function getFechaPago()
+    {
+        return $this->fechaPago;
+    }
+
+    /**
+     * Set horaPago
+     *
+     * @param \DateTime $horaPago
+     *
+     * @return FroFactura
+     */
+    public function setHoraPago($horaPago)
+    {
+        $this->horaPago = $horaPago;
+
+        return $this;
+    }
+
+    /**
+     * Get horaPago
+     *
+     * @return \DateTime
+     */
+    public function getHoraPago()
+    {
+        return $this->horaPago;
     }
 
     /**

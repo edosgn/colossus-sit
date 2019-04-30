@@ -73,6 +73,11 @@ class MsvCalificacion
      **/
     protected $empresa;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MsvRevision", inversedBy="calificaciones")
+     **/
+    protected $revision;
+
 
     /**
      * Get id
@@ -274,5 +279,29 @@ class MsvCalificacion
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set revision
+     *
+     * @param \AppBundle\Entity\MsvRevision $revision
+     *
+     * @return MsvCalificacion
+     */
+    public function setRevision(\AppBundle\Entity\MsvRevision $revision = null)
+    {
+        $this->revision = $revision;
+
+        return $this;
+    }
+
+    /**
+     * Get revision
+     *
+     * @return \AppBundle\Entity\MsvRevision
+     */
+    public function getRevision()
+    {
+        return $this->revision;
     }
 }

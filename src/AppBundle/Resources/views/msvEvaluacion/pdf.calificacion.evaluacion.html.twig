@@ -1,0 +1,191 @@
+<html>
+    <header></header>
+    <body>
+
+        <p class="text-justify">
+            San Juan de Pasto,
+            {{ fechaActual }}
+        </p>
+        <br>
+        <br>
+        <br>
+        <h2 style="text-align:center;">
+            <b>CALIFICACIONES EMPRESA {{ empresa.nombre }}</b>
+        </h2>
+        <h3>CALIFICACIÓN FORTALECIMIENTO</h3>
+        <p>
+            <table border="1">
+                <tbody>
+                        {% for calificacion in calificacionesFortalecimiento %}
+                            {% for calif in calificacion %}
+                                <tr>
+                                    <td>
+                                        <b>PARAMETRO: </b> {{ calif.criterio.variable.parametro.nombre }} <br>
+                                        <b>VARIABLE:</b> {{ calif.criterio.variable.nombre }}<br>
+                                        <b>CRITERIO:</b> {{ calif.criterio.nombre }}<br>
+                                        {% if calif.aplica == false %}
+                                            <b>APLICA:</b> NO
+                                        {% else %}
+                                            <b>APLICA:</b> SI
+                                        {% endif %}
+                                        {% if calif.evidencia == false %}
+                                            <b>   EVIDENCIA:</b> NO
+                                        {% else %}
+                                            <b>   EVIDENCIA:</b> SI
+                                        {% endif %}
+                                        {% if calif.responde == false %}
+                                            <b>   RESPONDE:</b> NO<br>
+                                        {% else %}
+                                            <b>   RESPONDE:</b> SI<br>
+                                        {% endif %}
+                                        <b>VALOR OBTENIDO: </b> {{ calif.valorObtenido| number_format( 2, '.', '') }}<br>
+                                        <b>OBSERVACION: </b> {{ calif.observacion }}
+                                    </td>
+                                </tr>
+                            {% endfor %} 
+                        {% endfor %}
+                </tbody>
+            </table>
+        </p>
+        <h3>CALIFICACIÓN COMPORTAMIENTO</h3>
+        <p>
+            <table border="1">
+                <tbody>
+                        {% for calificacion in calificacionesComportamiento %}
+                            {% for calif in calificacion %}
+                                <tr>
+                                    <td>
+                                        <b>PARAMETRO: </b>{{ calif.criterio.variable.parametro.nombre }}<br>
+                                        <b>VARIABLE:</b> {{ calif.criterio.variable.nombre }}<br>
+                                        <b>CRITERIO:</b> {{ calif.criterio.nombre }}<br>
+                                        {% if calif.aplica == false %}
+                                            <b>APLICA:</b> NO
+                                        {% else %}
+                                            <b>APLICA:</b> SI
+                                        {% endif %}
+                                        {% if calif.evidencia == false %}
+                                            <b>   EVIDENCIA:</b> NO
+                                        {% else %}
+                                            <b>   EVIDENCIA:</b> SI
+                                        {% endif %}
+                                        {% if calif.responde == false %}
+                                            <b>   RESPONDE:</b> NO<br>
+                                        {% else %}
+                                            <b>   RESPONDE:</b> SI<br>
+                                        {% endif %}
+                                        <b>VALOR OBTENIDO: </b> {{ calif.valorObtenido| number_format( 2, '.', '') }}<br>
+                                        <b>OBSERVACION: </b> {{ calif.observacion }}
+                                    </td>
+                                </tr>
+                            {% endfor %} 
+                        {% endfor %}
+                </tbody>
+            </table>
+        </p>
+        <h3>CALIFICACIÓN VEHICULOS SEGUROS</h3>
+        <p>
+            <table border="1">
+                <tbody>
+                        {% for calificacion in calificacionesVehiculoSeguro %}
+                            {% for calif in calificacion %}
+                                <tr>
+                                    <td>
+                                        <b>PARAMETRO: </b>{{ calif.criterio.variable.parametro.nombre }}<br>
+                                        <b>VARIABLE:</b> {{ calif.criterio.variable.nombre }}<br>
+                                        <b>CRITERIO:</b> {{ calif.criterio.nombre }}<br>
+                                        {% if calif.aplica == false %}
+                                            <b>APLICA:</b> NO
+                                        {% else %}
+                                            <b>APLICA:</b> SI
+                                        {% endif %}
+                                        {% if calif.evidencia == false %}
+                                            <b>   EVIDENCIA:</b> NO
+                                        {% else %}
+                                            <b>   EVIDENCIA:</b> SI
+                                        {% endif %}
+                                        {% if calif.responde == false %}
+                                            <b>   RESPONDE:</b> NO<br>
+                                        {% else %}
+                                            <b>   RESPONDE:</b> SI<br>
+                                        {% endif %}
+                                        <b>VALOR OBTENIDO: </b> {{ calif.valorObtenido| number_format( 2, '.', '') }}<br>
+                                        <b>OBSERVACION: </b> {{ calif.observacion }}
+                                    </td>
+                                </tr>
+                            {% endfor %} 
+                        {% endfor %}
+                </tbody>
+            </table>
+        </p>
+        <h3>CALIFICACIÓN INFRAESTRUCTURA SEGURA</h3>
+        <p>
+            <table border="1">
+                <tbody>
+                        {% for calificacion in calificacionesInfraestructuraSegura %}
+                            {% for calif in calificacion %}
+                                <tr>
+                                    <td>
+                                        <b>PARAMETRO: </b>{{ calif.criterio.variable.parametro.nombre }}<br>
+                                        <b>VARIABLE:</b> {{ calif.criterio.variable.nombre }}<br>
+                                        <b>CRITERIO:</b> {{ calif.criterio.nombre }}<br>
+                                        {% if calif.aplica == false %}
+                                            <b>APLICA:</b> NO
+                                        {% else %}
+                                            <b>APLICA:</b> SI
+                                        {% endif %}
+                                        {% if calif.evidencia == false %}
+                                            <b>   EVIDENCIA:</b> NO
+                                        {% else %}
+                                            <b>   EVIDENCIA:</b> SI
+                                        {% endif %}
+                                        {% if calif.responde == false %}
+                                            <b>   RESPONDE:</b> NO<br>
+                                        {% else %}
+                                            <b>   RESPONDE:</b> SI<br>
+                                        {% endif %}
+                                        <b>VALOR OBTENIDO: </b> {{ calif.valorObtenido| number_format( 2, '.', '') }}<br>
+                                        <b>OBSERVACION: </b> {{ calif.observacion }}
+                                    </td>
+                                </tr>
+                            {% endfor %} 
+                        {% endfor %}
+                </tbody>
+            </table>
+        </p>
+        <h3>CALIFICACIÓN ATENCIÓN VICTIMAS</h3>
+        <p>
+            <table border="1">
+                <tbody>
+                        {% for calificacion in calificacionesAtencionVictima %}
+                            {% for calif in calificacion %}
+                                <tr>
+                                    <td>
+                                        <b>PARAMETRO: </b>{{ calif.criterio.variable.parametro.nombre }}<br>
+                                        <b>VARIABLE:</b> {{ calif.criterio.variable.nombre }}<br>
+                                        <b>CRITERIO:</b> {{ calif.criterio.nombre }}<br>
+                                        {% if calif.aplica == false %}
+                                            <b>APLICA:</b> NO
+                                        {% else %}
+                                            <b>APLICA:</b> SI
+                                        {% endif %}
+                                        {% if calif.evidencia == false %}
+                                            <b>   EVIDENCIA:</b> NO
+                                        {% else %}
+                                            <b>   EVIDENCIA:</b> SI
+                                        {% endif %}
+                                        {% if calif.responde == false %}
+                                            <b>   RESPONDE:</b> NO<br>
+                                        {% else %}
+                                            <b>   RESPONDE:</b> SI<br>
+                                        {% endif %}
+                                        <b>VALOR OBTENIDO: </b> {{ calif.valorObtenido| number_format( 2, '.', '') }}<br>
+                                        <b>OBSERVACION: </b> {{ calif.observacion }}
+                                    </td>
+                                </tr>
+                            {% endfor %} 
+                        {% endfor %}
+                </tbody>
+            </table>
+        </p>
+    </body>
+</html>

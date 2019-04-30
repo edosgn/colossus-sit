@@ -148,6 +148,40 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
+    public function getOneByVehiculoAndTramite($idVehiculo, $idTramite)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ts
+            FROM JHWEBFinancieroBundle:FroFacTramite ft, 
+            JHWEBFinancieroBundle:FroTramite t,
+            JHWEBFinancieroBundle:FroTrtePrecio tp,
+            JHWEBFinancieroBundle:FroTrteSolicitud ts
+            WHERE ts.fecha = (
+                SELECT MAX(ts2.fecha)
+                WHERE ft2.precio = tp2.id
+                AND tp2.tramite = t2.id
+                AND t2.id = 18
+                AND ts2.tramiteFactura = ft2.id
+                AND ts2.vehiculo = :idVehiculo
+                AND ft2.realizado = true
+            )
+            AND ft.precio = tp.id
+            AND tp.tramite = t.id
+            AND t.id = 18
+            AND ts.tramiteFactura = ft.id
+            AND ts.vehiculo = :idVehiculo
+            AND ft.realizado = true
+            LIMIT 1";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idVehiculo' => $idVehiculo
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
     public function getTrasladoByVehiculo($idVehiculo)
     {
         $em = $this->getEntityManager();

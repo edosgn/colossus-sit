@@ -410,4 +410,73 @@ class MsvEvaluacionController extends Controller
 
         $this->get('app.pdf')->templateEvaluacion($html, $evaluacion);
     }
+
+    /**
+     * Displays a form to edit an existing msvevaluacion entity.
+     *
+     * @Route("/{id}/calificacion/pdf", name="msvevaluacion_pdf_calificacion")
+     * @Method({"GET", "POST"})
+     */
+    public function shoyCalificacionByEvaluacionAction($id)
+    {
+            $em = $this->getDoctrine()->getManager();
+
+            setlocale(LC_ALL, "es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $revision = $em->getRepository('AppBundle:MsvRevision')->find($id);
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($revision->getEmpresa());
+ 
+            $calificaciones = $em->getRepository('AppBundle:MsvCalificacion')->findBy(
+                array(
+                    'revision' => $revision,
+                    'estado' => true,
+                )
+            );
+
+            foreach ($calificaciones as $key => $calificacion) {
+                # code...
+                switch ($calificacion->getCriterio()->getVariable()->getParametro()->getCategoria()->getId()) {
+                    case 1:
+                        # code...
+                        $calificacionesFortalecimiento[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 2:
+                        $calificacionesComportamiento[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 3:
+                        $calificacionesVehiculoSeguro[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 4:
+                        $calificacionesInfraestructuraSegura[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                    case 5:
+                        $calificacionesAtencionVictima[] = array(
+                            'calif' => $calificacion,
+                        );
+                        break;
+                }
+            }
+
+            $html = $this->renderView('@App/msvEvaluacion/pdf.calificacion.evaluacion.html.twig', array(
+                'fechaActual' => $fechaActual,
+                'empresa' => $empresa,
+                'calificacionesFortalecimiento' => $calificacionesFortalecimiento,
+                'calificacionesComportamiento' => $calificacionesComportamiento,
+                'calificacionesVehiculoSeguro' => $calificacionesVehiculoSeguro,
+                'calificacionesInfraestructuraSegura' => $calificacionesInfraestructuraSegura,
+                'calificacionesAtencionVictima' => $calificacionesAtencionVictima,
+        ));
+
+        $this->get('app.pdf')->templateCalificacion($html, $empresa); 
+        
+    }
 }

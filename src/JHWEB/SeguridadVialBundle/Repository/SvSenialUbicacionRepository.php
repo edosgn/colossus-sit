@@ -33,4 +33,27 @@ class SvSenialUbicacionRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    public function getByFechas($params){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT u
+        FROM JHWEBSeguridadVialBundle:SvSenialUbicacion u, 
+        JHWEBSeguridadVialBundle:SvCfgSenial s,
+        JHWEBSeguridadVialBundle:SvCfgSenialTipo t
+        WHERE u.fecha BETWEEN :fechaInicial AND :fechaFinal
+        AND u.municipio = :idMunicipio
+        AND u.senial = s.id
+        AND s.tipoSenial = t.id
+        AND t.id != 1";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'fechaInicial' => $params->fechaInicial,
+            'fechaFinal' => $params->fechaFinal,
+            'idMunicipio' => $params->idMunicipio,
+        ));
+
+        return $consulta->getResult();
+    }
 }

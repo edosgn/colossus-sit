@@ -283,7 +283,7 @@ class VhloAcreedorController extends Controller
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'El ciudadano o empresa no es acreedor del vehiculo.', 
+                    'message' => 'No existen acreedores prendarios para este vehiculo.', 
                 );
             }
         }else{

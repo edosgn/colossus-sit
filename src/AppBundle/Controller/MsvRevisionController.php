@@ -122,22 +122,22 @@ class MsvRevisionController extends Controller
     /**
      * Finds and displays a msvRevision entity.
      *
-     * @Route("{id}/show", name="msvrevision_show")
+     * @Route("/show", name="msvrevision_show")
      * @Method({"GET", "POST"})
      */
-    public function showAction(MsvRevision $msvRevision, $id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            /* $json = $request->get("data", null);
-            $params = json_decode($json); */
+            $json = $request->get("data", null);
+            $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
-            
-            $revision = $em->getRepository('AppBundle:MsvRevision')->find($id);
+
+            $revision = $em->getRepository('AppBundle:MsvRevision')->find($params->id);
 
             $response = array(
                 'status' => 'success',
@@ -268,34 +268,54 @@ class MsvRevisionController extends Controller
     /**
      * Finds and displays a msvRevision entity.
      *
-     * @Route("/{id}/show", name="msvrevision_showByEmpresa")
+     * @Route("/show/revision/empresa", name="msvrevision_showByEmpresa")
      * @Method({"GET", "POST"})
      */
-    public function showRevisionByEmpresa(Request $request, $id)
+    public function showRevisionByEmpresa(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         $em = $this->getDoctrine()->getManager();
-        $revision = $em->getRepository('AppBundle:MsvRevision')->findBy(array('empresa' => $id));
 
-        $response['data'] = array();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            $em = $this->getDoctrine()->getManager();
 
-        if ($revision) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'msj' => "Revisión encontrada",
-                'data' => $revision,
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->id);
+
+            $revisiones = $em->getRepository('AppBundle:MsvRevision')->findBy(
+                array(
+                    'empresa' => $params->id
+                )
             );
+
+            $response['data'] = array();
+
+            if ($revisiones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Revisiones encontradas para la empresa con NIT: " . $empresa->getId(),
+                    'data' => $revisiones,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No encontraron revisiones para la empresa con NIT: " . $empresa->getNit(),
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',
-                'code' => 401,
-                'msj' => "Revisión no encontrada",
+                'code' => 400,
+                'message' => "Autorización no válida",
             );
         }
-
+        
         return $helpers->json($response);
     }
 
