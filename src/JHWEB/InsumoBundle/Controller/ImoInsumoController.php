@@ -522,16 +522,13 @@ class ImoInsumoController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
 
-        // var_dump($params);
-        // die();
+        var_dump($params);
+        die();
         
-
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(100);
         
-
         $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig');
-        
-      
+              
         return new Response(
             $this->get('app.pdf')->templatePreview($html, $organismoTransito),
             200,
