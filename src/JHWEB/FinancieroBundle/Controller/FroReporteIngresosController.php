@@ -71,7 +71,6 @@ class FroReporteIngresosController extends Controller
                     'code' => 200,
                     'message' => "Trámites encontrados.",
                     'data' => $tramites,
-                    'cant' => count($tramites),
                 );
             } else {
                 $response = array(

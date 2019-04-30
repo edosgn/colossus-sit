@@ -17,47 +17,56 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         $fechaInicio = new \Datetime($params->fechaDesde);
         $fechaFin = new \Datetime($params->fechaHasta);
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
-        /* $tipoRecaudo= $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->find($params->idTipoRecaudo); */
+        $tipoRecaudo= $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->find($params->idTipoRecaudo);
 
-        /* var_dump($organismoTransito);
-        die(); */
-        
-        /* $dql = "SELECT fr
-            FROM JHWEBFinancieroBundle:FroRecaudo fr, 
-            JHWEBFinancieroBundle:FroTramite ft, 
-            JHWEBConfigBundle:CfgOrganismoTransito ot, 
-            JHWEBFinancieroBundle:FroFactura ff, 
-            JHWEBFinancieroBundle:FroTrtePrecio ftp
-            WHERE fr.fecha BETWEEN :fechaInicio AND :fechaFin
+        $dqlPagadas = "SELECT ft
+            FROM JHWEBFinancieroBundle:FroTramite ft, JHWEBFinancieroBundle:FroFactura ff, 
+            JHWEBConfigBundle:CfgOrganismoTransito ot, JHWEBFinancieroBundle:FroCfgTipoRecaudo tr,
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBFinancieroBundle:FroFacTramite  fft,
+            JHWEBFinancieroBundle:FroTrteConcepto ftc
+            WHERE ft.id = ftp.tramite
+            AND ftc.precio = ftp.id
+            AND fft.precio = ftp.id
+            AND ff.tipoRecaudo = :tipoRecaudo 
             AND ff.organismoTransito = :organismoTransito
-            AND ff.tipoRecaudo = :tipoRecaudo
-            AND fr.froFactura = ff.id"; */
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+            AND ff.estado = 'PAGADA'";
+
+        $dqlNoPagadas = "SELECT ft
+            FROM JHWEBFinancieroBundle:FroTramite ft, JHWEBFinancieroBundle:FroFactura ff, 
+            JHWEBConfigBundle:CfgOrganismoTransito ot, JHWEBFinancieroBundle:FroCfgTipoRecaudo tr,
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBFinancieroBundle:FroFacTramite  fft,
+            JHWEBFinancieroBundle:FroTrteConcepto ftc
+            WHERE ft.id = ftp.tramite
+            AND ftc.precio = ftp.id
+            AND fft.precio = ftp.id
+            AND ff.tipoRecaudo = :tipoRecaudo 
+            AND ff.organismoTransito = :organismoTransito
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
+
+        $consultaPagadas = $em->createQuery($dqlPagadas);
+        $consultaNoPagadas = $em->createQuery($dqlNoPagadas);
         
-        $dql = "SELECT ftp
-        FROM JHWEBFinancieroBundle: FroTrtePrecio ftp,
-        JHWEBFinancieroBundle: FroFactura ff,
-        JHWEBConfigBundle: CfgOrganismoTransito ot
-        WHERE ot.id = :organismoTransito";
-
-        /* if(ff.estado == 'PAGADA'){
-            $condicion .= " AND ff.fechaPago BETWEEN " . $fechaInicioDatetime . " AND $fechaFinDatetime";
-        } else {
-            $condicion .= " AND ff.fechaCreacion BETWEEN " . $fechaInicioDatetime . " AND $fechaFinDatetime";
-        }
-
-        if ($condicion) {
-            $dql .= $condicion;
-        } */
-
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameters(array(
+        
+        $consultaPagadas->setParameters(array(
+            'organismoTransito' => $organismoTransito, 
+            'tipoRecaudo' => $tipoRecaudo,
             'fechaInicio' => $fechaInicio,
             'fechaFin' => $fechaFin,
-            'organismoTransito' => $organismoTransito,
         ));
-        /* 'tipoRecaudo' => $tipoRecaudo, */
+        
+        $consultaNoPagadas->setParameters(array(
+            'organismoTransito' => $organismoTransito, 
+            'tipoRecaudo' => $tipoRecaudo,
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
+        ));
+        
+        $data[] = array(
+            'pagadas' => $consultaPagadas->getResult(),
+            'noPagadas' => $consultaNoPagadas->getResult(),
+        );
 
-        return $consulta->getResult();
+        return $data;
     }
 }

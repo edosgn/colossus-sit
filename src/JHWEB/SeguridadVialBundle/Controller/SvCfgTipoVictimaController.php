@@ -244,7 +244,7 @@ class SvCfgTipoVictimaController extends Controller
 
         foreach ($tiposVictima as $key => $tipoVictima) {
             $response[$key] = array(
-                'value' => $tipoVictima->getNombre(),
+                'value' => $tipoVictima->getId(),
                 'label' => $tipoVictima->getNombre(),
             );
         }
