@@ -522,12 +522,49 @@ class ImoInsumoController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
 
-        var_dump($params);
-        die();
         
-        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(100);
+        $fechaInicioDatetime = new \Datetime($params->fechaInicio);
+        $fechaFinDatetime = new \Datetime($params->fechaFin);
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->organismoTransito);
+
+
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
+
+        $disponibles = [];
+        $anulados = [];
+        $asignados = [];
+
+        foreach ($insumos as $key => $insumo) {
+            switch ($insumo->getEstado()) {
+                case 'DISPONIBLE':
+                    $disponibles[]=$insumo;
+                    break;
+                case 'ANULADO':
+                    $anulados[]=$insumo;
+                    break;
+                case 'ASIGNADO':
+                    $asignados[]=$insumo;
+                    break;
+            }
+        }
+
+        // var_dump($params);
+        // foreach ($insumos as $key => $insumo) {
+        //     # code...
+        //     var_dump($insumo->getId());
+        // }
+        // die();
         
-        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig');
+        
+        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig', array(
+            'organismoTransito' => $organismoTransito, 
+            'disponibles' => $disponibles,
+            'anulados' => $anulados,
+            'asignados' => $asignados, 
+            'ifDisponibles' => $params->disponibles, 
+            'ifAnulados' => $params->anulado, 
+            'ifAsignado' => $params->asignado, 
+        )); 
               
         return new Response(
             $this->get('app.pdf')->templatePreview($html, $organismoTransito),

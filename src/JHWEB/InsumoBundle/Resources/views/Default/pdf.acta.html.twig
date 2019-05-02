@@ -5,18 +5,69 @@
   </header>
   <body>
 
-    <h3 style="text-align:center;">
-        <b>Entrega insumos</b>
-        <br>      
-    </h3>
+  <br>
 
-    <table >
-        <tr>
-            <td width="25%">Divipol:</td>
-            <td width="75%">Sede: </td> 
-        </tr> 
-    </table>
-    <h4>No.Acta </h4>
+    {% if ifDisponibles %}
+        <h3>Disponibles</h3>
+        <table border="1">
+            <tr>
+                <td>Nombre</td>
+                <td>Estado</td> 
+                <td>Numero final</td>
+                <td>Fecha</td>
+            </tr>
+            {% for disponible in disponibles %}
+                <tr>
+                    <td>{{ disponible.tipo.nombre }}</td>
+                    <td>{{ disponible.estado}}</td>
+                    <td>{{ disponible.numero}}</td>
+                    <td>{{ disponible.fecha }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}   
+
+    {% if ifAsignado %}
+        <h3>Asignados</h3>
+        <table border="1">
+            <tr>
+                <td>Nombre</td>
+                <td>Estado</td> 
+                <td>Numero final</td>
+                <td>Fecha</td>
+            </tr>
+            {% for asignado in asignados %}
+                <tr>
+                    <td>{{ asignado.tipo.nombre }}</td>
+                    <td>{{ asignado.estado}}</td>
+                    <td>{{ asignado.numero}}</td>
+                    <td>{{ asignado.fecha }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}    
+
+    {% if ifAnulados %}
+        <h3>Anulados</h3>
+        <table border="1">
+            <tr>
+                <td>Nombre</td>
+                <td>Estado</td> 
+                <td>Numero final</td>
+                <td>Fecha</td>
+            </tr>
+            {% for anulado in anulados %}
+                <tr>
+                    <td>{{ anulado.tipo.nombre }}</td>
+                    <td>{{ anulado.estado}}</td>
+                    <td>{{ anulado.numero}}</td>
+                    <td>{{ anulado.fecha }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}    
+
+  
 
   </body> 
 </html>
