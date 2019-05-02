@@ -527,7 +527,6 @@ class ImoInsumoController extends Controller
         $fechaFinDatetime = new \Datetime($params->fechaFin);
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->organismoTransito);
 
-
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
 
         $disponibles = [];
@@ -548,17 +547,55 @@ class ImoInsumoController extends Controller
             }
         }
 
-        // var_dump($params);
-        // foreach ($insumos as $key => $insumo) {
-        //     # code...
-        //     var_dump($insumo->getId());
-        // }
+        $tipos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
+            array('tipo'=>'Sustrato')
+        );
+        $tiposArray = [];
+        $total = 0;
+        
+        foreach ($tipos as $key => $tipo) {
+            $disponiblesTipo = null;
+            $anuladosTipo = null;
+            $asignadosTipo = null;
+            foreach ($disponibles as $key => $disponible) {
+                if ($tipo->getId() == $disponible->getTipo()->getId()) {
+                    $disponiblesTipo[] = $disponible;
+                    // var_dump($disponible->getId());
+                }
+            }
+            foreach ($anulados as $key => $anulado) {
+                if ($tipo->getId() == $anulado->getTipo()->getId()) {
+                    $anuladosTipo[] = $anulado;
+                    // var_dump($disponible->getId());
+                }
+            }
+            foreach ($asignados as $key => $asignado) {
+                if ($tipo->getId() == $asignado->getTipo()->getId()) {
+                    $asignadosTipo[] = $asignado;
+                    // var_dump($disponible->getId());
+                }
+            }
+            $totalTipo = COUNT($asignadosTipo) - COUNT($anuladosTipo);
+            $total = $total + $totalTipo;
+            $tiposArray[] = array(
+                'nombre' => $tipo->getNombre(),
+                'disponilbes' => COUNT($disponiblesTipo),
+                'anulados' => COUNT($anuladosTipo),
+                'asignados' => COUNT($asignadosTipo),
+                'totalTipo' => $totalTipo,
+            );
+            $disponiblesTipo = 0;
+            $anuladosTipo = 0;
+            $asignadosTipo = 0;
+        }
+        // var_dump($tiposArray);
         // die();
-        
-        
+
         $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig', array(
             'organismoTransito' => $organismoTransito, 
+            'tiposArray' => $tiposArray, 
             'disponibles' => $disponibles,
+            'total' => $total,
             'anulados' => $anulados,
             'asignados' => $asignados, 
             'ifDisponibles' => $params->disponibles, 
