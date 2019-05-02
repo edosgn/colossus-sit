@@ -5,7 +5,36 @@
   </header>
   <body>
 
+  <h3>Sede: {{organismoTransito.nombre}}</h3> 
+  <h3>Divipo: {{organismoTransito.divipo}}</h3> 
+
   <br>
+
+    {% if tiposArray %}
+        <h3>Totales</h3>
+        <table border="1">
+            <tr>
+                <td>Tipo de licencia</td>
+                <td>Disponilbes</td>
+                <td>Anulados</td>
+                <td>Asignados</td>
+                <td>Total</td>
+            </tr>
+            {% for tipo in tiposArray %}
+                <tr>
+                    <td>{{ tipo.nombre }}</td>
+                    <td>{{ tipo.disponilbes }}</td>
+                    <td>{{ tipo.anulados }}</td>
+                    <td>{{ tipo.asignados }}</td>
+                    <td>{{ tipo.totalTipo }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4">Total</td>
+                <td>{{total}}</td>
+            </tr>
+        </table>
+    {% endif %}  
 
     {% if ifDisponibles %}
         <h3>Disponibles</h3>
