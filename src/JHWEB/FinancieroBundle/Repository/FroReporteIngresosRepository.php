@@ -10,63 +10,23 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findTramitesByFecha($params) {
+    public function findTramitesByFecha($fechaInicioDatetime, $fechaFinDatetime, $organismoTransito) {
         
         $em = $this->getEntityManager();
 
-        $fechaInicio = new \Datetime($params->fechaDesde);
-        $fechaFin = new \Datetime($params->fechaHasta);
-        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
-        $tipoRecaudo= $em->getRepository('JHWEBFinancieroBundle:FroCfgTipoRecaudo')->find($params->idTipoRecaudo);
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts
+            WHERE fts.organismoTransito = :organismoTransito
+            AND fts.fecha BETWEEN :fechaInicio AND :fechaFin";
 
-        $dqlPagadas = "SELECT ft
-            FROM JHWEBFinancieroBundle:FroTramite ft, JHWEBFinancieroBundle:FroFactura ff, 
-            JHWEBConfigBundle:CfgOrganismoTransito ot, JHWEBFinancieroBundle:FroCfgTipoRecaudo tr,
-            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBFinancieroBundle:FroFacTramite  fft,
-            JHWEBFinancieroBundle:FroTrteConcepto ftc
-            WHERE ft.id = ftp.tramite
-            AND ftc.precio = ftp.id
-            AND fft.precio = ftp.id
-            AND ff.tipoRecaudo = :tipoRecaudo 
-            AND ff.organismoTransito = :organismoTransito
-            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
-            AND ff.estado = 'PAGADA'";
-
-        $dqlNoPagadas = "SELECT ft
-            FROM JHWEBFinancieroBundle:FroTramite ft, JHWEBFinancieroBundle:FroFactura ff, 
-            JHWEBConfigBundle:CfgOrganismoTransito ot, JHWEBFinancieroBundle:FroCfgTipoRecaudo tr,
-            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBFinancieroBundle:FroFacTramite  fft,
-            JHWEBFinancieroBundle:FroTrteConcepto ftc
-            WHERE ft.id = ftp.tramite
-            AND ftc.precio = ftp.id
-            AND fft.precio = ftp.id
-            AND ff.tipoRecaudo = :tipoRecaudo 
-            AND ff.organismoTransito = :organismoTransito
-            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
-
-        $consultaPagadas = $em->createQuery($dqlPagadas);
-        $consultaNoPagadas = $em->createQuery($dqlNoPagadas);
+        $consulta = $em->createQuery($dql);
         
-        
-        $consultaPagadas->setParameters(array(
+        $consulta->setParameters(array(
             'organismoTransito' => $organismoTransito, 
-            'tipoRecaudo' => $tipoRecaudo,
-            'fechaInicio' => $fechaInicio,
-            'fechaFin' => $fechaFin,
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
         ));
-        
-        $consultaNoPagadas->setParameters(array(
-            'organismoTransito' => $organismoTransito, 
-            'tipoRecaudo' => $tipoRecaudo,
-            'fechaInicio' => $fechaInicio,
-            'fechaFin' => $fechaFin,
-        ));
-        
-        $data[] = array(
-            'pagadas' => $consultaPagadas->getResult(),
-            'noPagadas' => $consultaNoPagadas->getResult(),
-        );
 
-        return $data;
+        return $consulta->getResult();
     }
 }
