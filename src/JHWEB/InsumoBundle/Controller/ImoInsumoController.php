@@ -552,6 +552,7 @@ class ImoInsumoController extends Controller
         );
         $tiposArray = [];
         $total = 0;
+        $totalValor = 0;
         
         foreach ($tipos as $key => $tipo) {
             $disponiblesTipo = null;
@@ -577,12 +578,26 @@ class ImoInsumoController extends Controller
             }
             $totalTipo = COUNT($asignadosTipo) - COUNT($anuladosTipo);
             $total = $total + $totalTipo;
+
+            $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
+                array('imoCfgTipo'=>$tipo->getId(), 'activo'=>true) 
+            );
+
+            if ($valorTipo) {
+               $valorInsumo = $valorTipo->getValor();
+            }else {
+                $valorInsumo = 0;
+            }
+
+            $totalValor = $totalValor + $valorInsumo;
+
             $tiposArray[] = array(
                 'nombre' => $tipo->getNombre(),
                 'disponilbes' => COUNT($disponiblesTipo),
                 'anulados' => COUNT($anuladosTipo),
                 'asignados' => COUNT($asignadosTipo),
                 'totalTipo' => $totalTipo,
+                'valorInsumo' => $valorInsumo,
             );
             $disponiblesTipo = 0;
             $anuladosTipo = 0;
@@ -600,6 +615,7 @@ class ImoInsumoController extends Controller
             'asignados' => $asignados, 
             'ifDisponibles' => $params->disponibles, 
             'ifAnulados' => $params->anulado, 
+            'totalValor' => $totalValor,
             'ifAsignado' => $params->asignado, 
         )); 
               

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ImoCfgValor
 {
-    /**
+    /** 
      * @var int
      *
      * @ORM\Column(name="id", type="integer")

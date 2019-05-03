@@ -19,6 +19,7 @@
                 <td>Anulados</td>
                 <td>Asignados</td>
                 <td>Total</td>
+                <td>Valor</td>
             </tr>
             {% for tipo in tiposArray %}
                 <tr>
@@ -27,11 +28,13 @@
                     <td>{{ tipo.anulados }}</td>
                     <td>{{ tipo.asignados }}</td>
                     <td>{{ tipo.totalTipo }}</td>
+                    <td>{{ tipo.valorInsumo }}</td>
                 </tr>
             {% endfor %}
             <tr>
                 <td colspan="4">Total</td>
                 <td>{{total}}</td>
+                <td>{{totalValor}}</td>
             </tr>
         </table>
     {% endif %}  
