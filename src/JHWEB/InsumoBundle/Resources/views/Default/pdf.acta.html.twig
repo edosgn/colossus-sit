@@ -5,7 +5,10 @@
   </header>
   <body>
 
-  <h3>Sede: {{organismoTransito.nombre}}</h3> 
+ 
+
+{% if tipoActa == 'subTotales' %}
+ <h3>Sede: {{organismoTransito.nombre}}</h3> 
   <h3>Divipo: {{organismoTransito.divipo}}</h3> 
 
   <br>
@@ -17,18 +20,18 @@
                 <td>Tipo de licencia</td>
                 <td>Disponilbes</td>
                 <td>Anulados</td>
+                <td>Valor unitario</td>
                 <td>Asignados</td>
-                <td>Total</td>
-                <td>Valor</td>
+                <td>SubTotal</td>
             </tr>
             {% for tipo in tiposArray %}
                 <tr>
                     <td>{{ tipo.nombre }}</td>
                     <td>{{ tipo.disponilbes }}</td>
                     <td>{{ tipo.anulados }}</td>
-                    <td>{{ tipo.asignados }}</td>
-                    <td>{{ tipo.totalTipo }}</td>
                     <td>{{ tipo.valorInsumo }}</td>
+                    <td>{{ tipo.asignados }}</td>
+                    <td>{{ tipo.subTotal }}</td>
                 </tr>
             {% endfor %}
             <tr>
@@ -98,8 +101,34 @@
             {% endfor %}
         </table>
     {% endif %}    
-
-  
-
+{% endif %} 
+{% if tipoActa == 'totales' %}
+<h3>Ornagismos transito</h3>
+        <table border="1">
+            <tr>
+                <td>Nombre</td>
+                <td>Cantidad Asignados</td> 
+                <td>Valor</td> 
+            </tr>
+            {% for totalOrganismo in totalOrganismos %}
+                {% if totalOrganismo.sustratosCantidad != 0 %}
+                    <tr>
+                        <td>{{ totalOrganismo.nombreOrganismo }}</td>
+                        <td>{{ totalOrganismo.sustratosCantidad}}</td>
+                        <td>{{ totalOrganismo.valorSerde}}</td>
+                    </tr>
+                {% endif %} 
+            {% endfor %}
+            <tr>
+                <td colspan="1">Total</td>
+                <td>{{totalSede}}</td>
+                <td>{{valorTotalSede}}</td>
+            </tr>    
+            <tr>
+                <td colspan="2">Total consignar</td>
+                <td>{{totalConsignar}}</td>
+            </tr>    
+        </table>
+{% endif %} 
   </body> 
 </html>
