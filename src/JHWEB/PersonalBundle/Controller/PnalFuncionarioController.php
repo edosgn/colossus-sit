@@ -5,7 +5,8 @@ namespace JHWEB\PersonalBundle\Controller;
 use JHWEB\PersonalBundle\Entity\PnalFuncionario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Pnalfuncionario controller.
@@ -414,10 +415,10 @@ class PnalFuncionarioController extends Controller
 
         $response = null;
 
-        $funcionarios = $em->getRepository('JHWEBConfigBundle:PnalFuncionario')->findBy(
+        $funcionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findBy(
             array(
                 'activo' => true,
-                'tipoContrato' => 3,
+                'cargo' => 1,
             )
         );
 
@@ -427,6 +428,7 @@ class PnalFuncionarioController extends Controller
                 'label' => $funcionario->getNumeroPlaca() . "_" . $funcionario->getCiudadano()->getPrimerNombre() . " " . $funcionario->getCiudadano()->getPrimerApellido(),
             );
         }
+        
         return $helpers->json($response);
     }
 

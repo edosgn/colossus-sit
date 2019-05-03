@@ -20,7 +20,7 @@
                 <td><a href="{{ path('cfgsmlmv_show', { 'id': cfgSmlmv.id }) }}">{{ cfgSmlmv.id }}</a></td>
                 <td>{{ cfgSmlmv.valor }}</td>
                 <td>{{ cfgSmlmv.anio }}</td>
-                <td>{% if cfgSmlmv.fecha %}{{ cfgSmlmv.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if cfgSmlmv.fecha %}{{ cfgSmlmv.fecha|date('Y-m-d') }}{% endif %}</td>
                 <td>{% if cfgSmlmv.activo %}Yes{% else %}No{% endif %}</td>
                 <td>
                     <ul>

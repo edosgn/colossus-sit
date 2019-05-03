@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\ConfigBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * CfgSmlmv
  *
  * @ORM\Table(name="cfg_smlmv")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CfgSmlmvRepository")
+ * @ORM\Entity(repositoryClass="JHWEB\ConfigBundle\Repository\CfgSmlmvRepository")
  */
 class CfgSmlmv
 {
@@ -38,7 +38,7 @@ class CfgSmlmv
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha", type="date")
      */
     private $fecha;
 
@@ -101,7 +101,7 @@ class CfgSmlmv
     /**
      * Get anio
      *
-     * @return int
+     * @return integer
      */
     public function getAnio()
     {
@@ -129,7 +129,7 @@ class CfgSmlmv
      */
     public function getFecha()
     {
-        return $this->fecha->format('d/m/Y');
+        return $this->fecha;
     }
 
     /**
@@ -149,11 +149,10 @@ class CfgSmlmv
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
 }
-

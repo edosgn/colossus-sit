@@ -10,4 +10,23 @@ namespace JHWEB\PersonalBundle\Repository;
  */
 class PnalCfgCdoConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el maximo consecutivo disponible según la sede operativa
+    public function getLastByFuncionario($idFuncionario)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(c.numero) AS numero, c.id
+            FROM JHWEBPersonalBundle:PnalCfgCdoConsecutivo c
+            WHERE c.funcionario = :idFuncionario
+            AND c.estado = :estado
+            GROUP BY c.funcionario";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idFuncionario' => $idFuncionario,
+            'estado' => 'ASIGNADO',
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Froinfraccions list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Codigo</th>
+                <th>Descripcion</th>
+                <th>Retiene</th>
+                <th>Inmoviliza</th>
+                <th>Dias</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for froInfraccion in froInfraccions %}
+            <tr>
+                <td><a href="{{ path('froinfraccion_show', { 'id': froInfraccion.id }) }}">{{ froInfraccion.id }}</a></td>
+                <td>{{ froInfraccion.nombre }}</td>
+                <td>{{ froInfraccion.codigo }}</td>
+                <td>{{ froInfraccion.descripcion }}</td>
+                <td>{% if froInfraccion.retiene %}Yes{% else %}No{% endif %}</td>
+                <td>{% if froInfraccion.inmoviliza %}Yes{% else %}No{% endif %}</td>
+                <td>{{ froInfraccion.dias }}</td>
+                <td>{% if froInfraccion.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('froinfraccion_show', { 'id': froInfraccion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('froinfraccion_edit', { 'id': froInfraccion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('froinfraccion_new') }}">Create a new froInfraccion</a>
+        </li>
+    </ul>
+{% endblock %}
