@@ -4,48 +4,153 @@
     </header>
     <body>
         <br>
-        <h3>Disponibles</h3>
-        <table border="1">
-            <tr>
-                <td>COD</td>
-                <td>Concepto</td>
-                <td>Cantidad</td>
-                <td>Valor</td>
-                <td>Total</td>
-            </tr>
-            {% if pagadas %}
+        {% if pagadas %}
+            <h3>PAGADAS</h3>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> COD </b></td>
+                    <td><b> Concepto </b></td>
+                    <td><b> Cantidad </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Total </b></td>
+                </tr>
                 {% for pagada in pagadas %}
                     <tr>
                         <td>{{ pagada.tramiteFactura.precio.tramite.codigo }}</td>
                         <td>{{ pagada.tramiteFactura.precio.tramite.nombre }}</td>
                         <td>{{ cantPagadas }}</td>
                         <td>{{ pagada.tramiteFactura.precio.valor }}</td>
-                        <td>{{ cantPagadas * pagada.tramiteFactura.precio.valor}}</td>
+                        <td>{{ cantPagadas * pagada.tramiteFactura.precio.valor }}</td>
                     </tr>
                 {% endfor %}
-            {% endif %}
-            {% if vencidas %}
+                <tr>
+                    <td style="float:left;" colspan="4"><b>TOTAL INGRESOS</b></td>
+                    <td>{{ valorTramitesPagados }}</td>
+                </tr>
+            </table>
+        {% endif %}
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b> SUSTRATOS CDA </b></td>
+                <td>lklk</td>
+                <td>valor</td>
+                <td>total</td>
+            </tr>
+            <tr>
+                <td><b> Otros Ingresos </b></td>
+                <td><b> - </b></td>
+                <td><b> - </b></td>
+                <td><b> - </b></td>
+            </tr>
+            <tr>
+                <td><b> Total Ingresos SUBDETRA </b></td>
+                <td><b>  </b></td>
+                <td><b>  </b></td>
+                <td><b> total SUBDETRA </b></td>
+            </tr>
+        </table>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b> RBO CAJA ANULADO </b></td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><b> RBO RETEFUENTE ANULADO </b></td>
+                <td><b> 0 </b></td>
+            </tr>
+        </table>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b>iteracion de recibos</b></td>
+                <td><b>Primero</b></td>
+                <td><b>Ultimo</b></td>
+            </tr>
+            <tr>
+                <td>prim</td>
+                <td>ultimo</td>
+            </tr>
+        </table>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b> RBO CAJA ANULADO </b></td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td><b> RBO RETEFUENTE ANULADO </b></td>
+                <td><b> 0 </b></td>
+            </tr>
+        </table>
+        <br>
+        <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> Sustratos CDA </b></td>
+                    <td><b> Cantidad </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Total </b></td>
+                </tr>
+            {% for insumo in insumos %}
+                    <tr>
+                        <td>insumo.categoria</td>
+                        <td>insumo.categoriainsumo.categoria</td>
+                        <td>insumo.categoria</td>
+                        <td>insumo.categoria</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {# {% if vencidas %}
+            <h3>VENCIDAS</h3>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> COD </b></td>
+                    <td><b> Concepto </b></td>
+                    <td><b> Cantidad </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Total </b></td>
+                </tr>
                 {% for vencida in vencidas %}
                     <tr>
                         <td>{{ vencida.tramiteFactura.precio.tramite.codigo }}</td>
                         <td>{{ vencida.tramiteFactura.precio.tramite.nombre }}</td>
                         <td>{{ cantVencidas }}</td>
                         <td>{{ vencida.tramiteFactura.precio.valor }}</td>
-                        <td>{{ cantVencidas * vencida.tramiteFactura.precio.valor}}</td>
+                        <td>{{ cantVencidas * vencida.tramiteFactura.precio.valor }}</td>
                     </tr>
                 {% endfor %}
-            {% endif %}
-            {% if anuladas %}
+                <tr>
+                    <td style="float:left;" colspan="4"><b>TOTAL INGRESOS</b></td>
+                    <td>{{ valorTramitesVencidos }}</td>
+                </tr>
+            </table>
+        {% endif %} #}
+        {% if anuladas %}
+            <h3>ANULADAS</h3>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> COD </b></td>
+                    <td><b> Concepto </b></td>
+                    <td><b> Cantidad </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Total </b></td>
+                </tr>
                 {% for anulada in anuladas %}
                     <tr>
                         <td>{{ anulada.tramiteFactura.precio.tramite.codigo }}</td>
                         <td>{{ anulada.tramiteFactura.precio.tramite.nombre }}</td>
                         <td>{{ cantAnuladas }}</td>
                         <td>{{ anulada.tramiteFactura.precio.valor }}</td>
-                        <td>{{ cantAnuladas * anulada.tramiteFactura.precio.valor}}</td>
+                        <td>{{ cantAnuladas * anulada.tramiteFactura.precio.valor }}</td>
                     </tr>
                 {% endfor %}
-            {% endif %}
-        </table>
+                <tr>
+                    <td style="float:left;" colspan="4"><b>TOTAL INGRESOS</b></td>
+                    <td>{{ valorTramitesAnulados }}</td>
+                </tr>
+            </table>
+        {% endif %}
     </body>
 </html>
+
