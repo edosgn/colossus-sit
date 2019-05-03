@@ -36,11 +36,42 @@ class PqoCfgPatio
     private $direccion;
 
     /**
+     * @var string
+     *s
+     * @ORM\Column(name="correo", type="string", length=255)
+     */
+    private $correo;
+
+    /**
+     * @var string
+     *s
+     * @ORM\Column(name="telefono", type="string", length=255)
+     */
+    private $telefono;
+
+    /**
+     * @var string
+     *s
+     * @ORM\Column(name="administrador", type="string", length=255, nullable=true)
+     */
+    private $administrador;
+
+    /**
+     * @var string
+     *s
+     * @ORM\Column(name="propietario", type="string", length=255, nullable=true)
+     */
+    private $propietario;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="patios") */
+    private $municipio;
 
 
     /**
@@ -102,6 +133,102 @@ class PqoCfgPatio
     }
 
     /**
+     * Set correo
+     *
+     * @param string $correo
+     *
+     * @return PqoCfgPatio
+     */
+    public function setCorreo($correo)
+    {
+        $this->correo = $correo;
+
+        return $this;
+    }
+
+    /**
+     * Get correo
+     *
+     * @return string
+     */
+    public function getCorreo()
+    {
+        return $this->correo;
+    }
+
+    /**
+     * Set telefono
+     *
+     * @param string $telefono
+     *
+     * @return PqoCfgPatio
+     */
+    public function setTelefono($telefono)
+    {
+        $this->telefono = $telefono;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono
+     *
+     * @return string
+     */
+    public function getTelefono()
+    {
+        return $this->telefono;
+    }
+
+    /**
+     * Set administrador
+     *
+     * @param string $administrador
+     *
+     * @return PqoCfgPatio
+     */
+    public function setAdministrador($administrador)
+    {
+        $this->administrador = $administrador;
+
+        return $this;
+    }
+
+    /**
+     * Get administrador
+     *
+     * @return string
+     */
+    public function getAdministrador()
+    {
+        return $this->administrador;
+    }
+
+    /**
+     * Set propietario
+     *
+     * @param string $propietario
+     *
+     * @return PqoCfgPatio
+     */
+    public function setPropietario($propietario)
+    {
+        $this->propietario = $propietario;
+
+        return $this;
+    }
+
+    /**
+     * Get propietario
+     *
+     * @return string
+     */
+    public function getPropietario()
+    {
+        return $this->propietario;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -118,11 +245,34 @@ class PqoCfgPatio
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set municipio
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
+     *
+     * @return PqoCfgPatio
+     */
+    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
+    {
+        $this->municipio = $municipio;
+
+        return $this;
+    }
+
+    /**
+     * Get municipio
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     */
+    public function getMunicipio()
+    {
+        return $this->municipio;
+    }
+}

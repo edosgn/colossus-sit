@@ -64,7 +64,17 @@ class PqoCfgPatioController extends Controller
 
             $patio->setNombre(mb_strtoupper($params->nombre,'utf-8'));
             $patio->setDireccion(mb_strtoupper($params->direccion,'utf-8'));
+            $patio->setCorreo($params->correo);
+            $patio->setTelefono($params->telefono);
             $patio->setActivo(true);
+
+            if ($params->administrador) {
+                $patio->setAdministrador($params->administrador);
+            }
+
+            if ($params->propietario) {
+                $patio->setPropietario($params->propietario);
+            }
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($patio);

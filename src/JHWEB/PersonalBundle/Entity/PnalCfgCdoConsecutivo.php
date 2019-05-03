@@ -55,12 +55,12 @@ class PnalCfgCdoConsecutivo
     protected $organismoTransito;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="consecutivos")
+     * @ORM\ManyToOne(targetEntity="PnalFuncionario", inversedBy="consecutivos")
      **/
     protected $funcionario;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalTalonario", inversedBy="consecutivos")
+     * @ORM\ManyToOne(targetEntity="PnalTalonario", inversedBy="consecutivos")
      **/
     protected $talonario;
 

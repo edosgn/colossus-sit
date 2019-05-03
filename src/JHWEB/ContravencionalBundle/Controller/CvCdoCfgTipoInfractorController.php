@@ -112,15 +112,20 @@ class CvCdoCfgTipoInfractorController extends Controller
                 $params->id
             );
 
-            $em->persist($tipoInfractor);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro encontrado con exito",
-                'data' => $tipoInfractor
-            );
+            if ($tipoInfractor) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito",
+                    'data' => $tipoInfractor
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
         }else{
             $response = array(
                 'status' => 'error',

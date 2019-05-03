@@ -3,9 +3,11 @@
 namespace JHWEB\PersonalBundle\Controller;
 
 use JHWEB\PersonalBundle\Entity\PnalTalonario;
+use JHWEB\PersonalBundle\Entity\PnalCfgCdoConsecutivo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Pnaltalonario controller.
@@ -22,13 +24,26 @@ class PnalTalonarioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
 
-        $pnalTalonarios = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->findAll();
+        $talonarios = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->findBy(
+            array('activo' => true)
+        );
 
-        return $this->render('pnaltalonario/index.html.twig', array(
-            'pnalTalonarios' => $pnalTalonarios,
-        ));
+        $response['data'] = array();
+
+        if ($talonarios) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($talonarios).' Registros encontrados.', 
+                'data'=> $talonarios,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +54,67 @@ class PnalTalonarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $pnalTalonario = new Pnaltalonario();
-        $form = $this->createForm('JHWEB\PersonalBundle\Form\PnalTalonarioType', $pnalTalonario);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+            $talonario = new PnalTalonario();
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($pnalTalonario);
+
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
+            );
+            $talonario->setOrganismoTransito($organismoTransito);
+
+            $talonario->setDesde($params->desde);
+            $talonario->setHasta($params->hasta);
+            $talonario->setRangos($params->rangos);
+            $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+            $talonario->setNumeroResolucion($params->numeroResolucion);
+            $talonario->setActivo(true);
+            
+            $em->persist($talonario);
             $em->flush();
 
-            return $this->redirectToRoute('pnaltalonario_show', array('id' => $pnalTalonario->getId()));
+            $divipo = $organismoTransito->getDivipo();
+            
+            for ($numero = $talonario->getDesde(); $numero <= $talonario->getHasta(); $numero++) {
+                $consecutivo = new PnalCfgCdoConsecutivo();
+
+                $consecutivo->setTalonario($talonario);
+
+                if ($organismoTransito->getAsignacionRango()) {
+                    $consecutivo->setNumero($divipo.$numero);
+                }else{
+                    $consecutivo->setNumero($numero);
+                }
+                
+                $consecutivo->setOrganismoTransito($organismoTransito);
+                $consecutivo->setEstado('DISPONIBLE');
+                $consecutivo->setActivo(true);
+
+                $em->persist($consecutivo);
+                $em->flush();
+            }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "El registro se ha realizado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
         }
 
-        return $this->render('pnaltalonario/new.html.twig', array(
-            'pnalTalonario' => $pnalTalonario,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -76,26 +136,61 @@ class PnalTalonarioController extends Controller
     /**
      * Displays a form to edit an existing pnalTalonario entity.
      *
-     * @Route("/{id}/edit", name="pnaltalonario_edit")
+     * @Route("/edit", name="pnaltalonario_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, PnalTalonario $pnalTalonario)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($pnalTalonario);
-        $editForm = $this->createForm('JHWEB\PersonalBundle\Form\PnalTalonarioType', $pnalTalonario);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('pnaltalonario_edit', array('id' => $pnalTalonario->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $talonario = $em->getRepository("JHWEBPersonalBundle:PnalTalonario")->find(
+                $params->id
+            );
+
+            if ($talonario) {
+                $talonario->setDesde($params->desde);
+                $talonario->setHasta($params->hasta);
+                $talonario->setRangos($params->rangos);
+                $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+                $talonario->setNumeroResolucion($params->numeroResolucion);
+                
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
+                );
+                $talonario->setOrganismoTransito($organismoTransito);
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro actualizado con exito.', 
+                    'data'=> $talonario,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El registro no se encuentra en la base de datos.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar.', 
+            );
         }
 
-        return $this->render('pnaltalonario/edit.html.twig', array(
-            'pnalTalonario' => $pnalTalonario,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

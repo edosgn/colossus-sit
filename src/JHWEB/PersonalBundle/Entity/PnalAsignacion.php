@@ -57,7 +57,7 @@ class PnalAsignacion
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="asignaciones")
+     * @ORM\ManyToOne(targetEntity="PnalFuncionario", inversedBy="asignaciones")
      **/
     protected $funcionario;
 
