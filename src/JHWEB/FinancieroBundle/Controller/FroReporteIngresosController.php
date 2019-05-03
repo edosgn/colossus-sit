@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Froreporteingreso controller.
@@ -49,43 +50,63 @@ class FroReporteIngresosController extends Controller
     /**
      * datos para obtener tramites por rango de fechas
      *
-     * @Route("/tramite/fecha", name="frotramite_rango_fechas")
+     * @Route("/pdf/tramite/fecha", name="frotramite_rango_fechas")
      * @Method({"GET", "POST"})
      */
     public function tramitesByFechaAction(Request $request)
     {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        if ($authCheck == true) {
-            $json = $request->get("data", null);
-            $params = json_decode($json);
-            
-            $em = $this->getDoctrine()->getManager();
-            
-            $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesByFecha($params);
+        $em = $this->getDoctrine()->getManager();
 
-            if($tramites){
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Trámites encontrados.",
-                    'data' => $tramites,
-                );
-            } else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No se encontraron tramites para el organismo de tránsito con los rangos de fecha establecidos para la búsqueda.",
-                );
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager(); 
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
+        $fechaInicioDatetime = new \Datetime($params->fechaDesde);
+        $fechaFinDatetime = new \Datetime($params->fechaHasta);
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+            
+        $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesByFecha($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
+
+        $pagadas = [];
+        $vencidas = [];
+        $anuladas = [];
+
+        foreach ($tramites as $key => $tramite) {
+            switch ($tramite->getTramiteFactura()->getFactura()->getEstado() ) {
+                case 'PAGADA':
+                    $pagadas[] = $tramite;
+                    break;
+                case 'VENCIDA':
+                    $vencidas[] = $tramite;
+                    break;
+                case 'ANULADA':
+                    $anuladas[] = $tramite;
+                    break;
             }
-        } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no válida",
-            );
         }
-        return $helpers->json($response);
+
+        $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
+            'organismoTransito' => $organismoTransito, 
+            'pagadas' => $pagadas, 
+            'vencidas' => $vencidas, 
+            'anuladas' => $anuladas, 
+            'cantPagadas' => count($pagadas), 
+            'cantVencidas' => count($vencidas), 
+            'cantAnuladas' => count($anuladas), 
+        )); 
+
+              
+        return new Response(
+            $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                )
+            );
     }
 }

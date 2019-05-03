@@ -104,7 +104,7 @@ class SvRegistroIpatRepository extends \Doctrine\ORM\EntityRepository
                     $condicion .= " OR ri.diaAccidente = '" . $diaSemana . "'";
                 }
             }
-        }
+        } 
 
         if($params->datos->arrayGenero) {
             foreach ($params->datos->arrayGenero as $keyGenero => $idGenero) {
