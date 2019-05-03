@@ -252,7 +252,7 @@ class CvCdoNotificacionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $comparendos = $em->getRepository('AppBundle:Comparendo')->getForProcessing();
+        $comparendos = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->getForProcessing();
 
         if ($comparendos) {
             foreach ($comparendos as $key => $comparendo) {
