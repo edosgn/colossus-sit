@@ -1,0 +1,51 @@
+<html>
+    <header>
+        <meta charset="utf-8">
+    </header>
+    <body>
+        <br>
+        <h3>Disponibles</h3>
+        <table border="1">
+            <tr>
+                <td>COD</td>
+                <td>Concepto</td>
+                <td>Cantidad</td>
+                <td>Valor</td>
+                <td>Total</td>
+            </tr>
+            {% if pagadas %}
+                {% for pagada in pagadas %}
+                    <tr>
+                        <td>{{ pagada.tramiteFactura.precio.tramite.codigo }}</td>
+                        <td>{{ pagada.tramiteFactura.precio.tramite.nombre }}</td>
+                        <td>{{ cantPagadas }}</td>
+                        <td>{{ pagada.tramiteFactura.precio.valor }}</td>
+                        <td>{{ cantPagadas * pagada.tramiteFactura.precio.valor}}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            {% if vencidas %}
+                {% for vencida in vencidas %}
+                    <tr>
+                        <td>{{ vencida.tramiteFactura.precio.tramite.codigo }}</td>
+                        <td>{{ vencida.tramiteFactura.precio.tramite.nombre }}</td>
+                        <td>{{ cantVencidas }}</td>
+                        <td>{{ vencida.tramiteFactura.precio.valor }}</td>
+                        <td>{{ cantVencidas * vencida.tramiteFactura.precio.valor}}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            {% if anuladas %}
+                {% for anulada in anuladas %}
+                    <tr>
+                        <td>{{ anulada.tramiteFactura.precio.tramite.codigo }}</td>
+                        <td>{{ anulada.tramiteFactura.precio.tramite.nombre }}</td>
+                        <td>{{ cantAnuladas }}</td>
+                        <td>{{ anulada.tramiteFactura.precio.valor }}</td>
+                        <td>{{ cantAnuladas * anulada.tramiteFactura.precio.valor}}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </table>
+    </body>
+</html>
