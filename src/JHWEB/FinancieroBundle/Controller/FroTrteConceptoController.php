@@ -30,4 +30,19 @@ class FroTrteConceptoController extends Controller
             'froTrteConceptos' => $froTrteConceptos,
         ));
     }
+
+    /**
+     * Finds and displays a froTrteConcepto entity.
+     *
+     * @Route("/{id}/show", name="frotrteconcepto_show")
+     * @Method("GET")
+     */
+    public function showAction(FroTrteConcepto $froTrteConcepto)
+    {
+        $deleteForm = $this->createDeleteForm($froTrteConcepto);
+        return $this->render('frotrteconcepto/show.html.twig', array(
+            'froTrteConcepto' => $froTrteConcepto,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
 }

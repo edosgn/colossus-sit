@@ -30,6 +30,23 @@
             </table>
         {% endif %}
         <br>
+        <h3>CONCEPTOS<h3>
+        <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> Nombre </b></td>
+                    <td><b> Valor </b></td>
+                </tr>
+                {% for concepto in conceptos %}
+                    <tr>
+                        <td>{{ concepto.concepto.nombre }}</td>
+                        <td>{{ concepto.concepto.valor }}</td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td>{{ cantConceptos }}</td>
+                    </tr>
+            </table>
+        <p>----------------------------------------------------------------------------------</p>
         <table border="1" style="text-align:center;">
             <tr>
                 <td><b> SUSTRATOS CDA </b></td>
@@ -58,13 +75,13 @@
             </tr>
             <tr>
                 <td><b> RBO RETEFUENTE ANULADO </b></td>
-                <td><b> 0 </b></td>
+                <td><b> {{ cantTraspasos }} </b></td>
             </tr>
         </table>
         <br>
         <table border="1" style="text-align:center;">
             <tr>
-                <td><b>iteracion de recibos</b></td>
+                <td><b>Relación No. de recibos</b></td>
                 <td><b>Primero</b></td>
                 <td><b>Ultimo</b></td>
             </tr>

@@ -74,6 +74,7 @@ class FroReporteIngresosController extends Controller
         $pagadas = [];
         $vencidas = [];
         $anuladas = [];
+        $traspasos = [];
 
         $valorTramitesPagados = 0;
         $valorTramitesVencidos = 0;
@@ -84,17 +85,27 @@ class FroReporteIngresosController extends Controller
                 case 'PAGADA':
                     $pagadas[] = $tramite;
                     $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+    
+                    $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
+                        array(
+                            'precio' => $tramite->getTramiteFactura()->getPrecio()->getId(),
+                        )
+                    );
                     break;
-                    case 'VENCIDA':
+                case 'VENCIDA':
                     $vencidas[] = $tramite;
                     $valorTramitesVencidos += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
                     break;
-                    case 'ANULADA':
+                case 'ANULADA':
                     $anuladas[] = $tramite;
                     $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+                    if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
+                        $traspasos[] = $tramite;
+                    }
                     break;
             }
         }
+
 
         $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
             array (
@@ -136,6 +147,10 @@ class FroReporteIngresosController extends Controller
             'valorTramitesVencidos' => $valorTramitesVencidos, 
             'valorTramitesAnulados' => $valorTramitesAnulados, 
             'insumos' => $sustratos,
+            'conceptos' => $conceptos,
+            'cantConceptos' => count($conceptos),
+            'traspasosAnulados' => $traspasos,
+            'cantTraspasos' => count($traspasos),
         )); 
 
               
