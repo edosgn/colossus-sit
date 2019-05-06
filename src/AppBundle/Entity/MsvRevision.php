@@ -242,7 +242,7 @@ class MsvRevision
         $this->fechaOtorgamiento = $fechaOtorgamiento;
 
         return $this;
-    }
+    } 
 
     /**
      * Get fechaOtorgamiento

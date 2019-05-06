@@ -27,14 +27,14 @@ class ImoLoteController extends Controller
         
 
         $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-            array('tipo'=>'Insumo')
+            array('tipo'=>'INSUMO')
         );
         $loteSustratos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-            array('tipo'=>'Sustrato')
+            array('tipo'=>'SUSTRATO')
         );
 
         $totalesTtpo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalesTipo();
-
+        
         $data = array(
             'loteInsumos' =>  $loteInsumos, 
             'loteSustratos' =>  $loteSustratos, 
