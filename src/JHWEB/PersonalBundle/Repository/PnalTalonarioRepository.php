@@ -10,4 +10,36 @@ namespace JHWEB\PersonalBundle\Repository;
  */
 class PnalTalonarioRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getLastByFecha(){ 
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT pt
+        FROM JHWEBPersonalBundle:PnalTalonario pt
+        WHERE pt.fechaAsignacion = (
+            SELECT MAX(pt2.fechaAsignacion)
+            FROM JHWEBPersonalBundle:PnalTalonario pt2
+            WHERE ft2.precio = tp2.id
+            AND pt2.activo = true
+        ) 
+        AND pt.activo = true
+        LIMIT 1";
+		
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getMaximoByorganismoTransito($idOrganismoTransito)
+    { 
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(pt.hasta) AS maximo
+        FROM JHWEBPersonalBundle:PnalTalonario pt,
+        WHERE pt.organismotransito = :idOrganismoTransito";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

@@ -34,8 +34,6 @@ class ImoLoteController extends Controller
         );
 
         $totalesTtpo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalesTipo();
-        // var_dump($totalesTtpo);
-        // die();
 
         $data = array(
             'loteInsumos' =>  $loteInsumos, 
@@ -95,7 +93,6 @@ class ImoLoteController extends Controller
                         return $helpers->json($response);
                     }
                 }
-
             }else { 
                 $loteInsumo->setTipo('INSUMO');
             }
@@ -181,7 +178,7 @@ class ImoLoteController extends Controller
             
             $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->casoInsumoId);
             
-            if ($loteInsumo!=null) {
+            if ($loteInsumo) {
                 $loteInsumo->setNumeroActa($params->numeroActa);
                 $loteInsumo->setEmpresa($empresa);
                 $loteInsumo->setTipoInsumo($tipoInsumo); 
@@ -197,13 +194,13 @@ class ImoLoteController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "linea editada con exito", 
+                    'message' => "Registro editado con exito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "La linea no se encuentra en la base de datos", 
+                    'message' => "El registro no se encuentra en la base de datos", 
                 );
             }
         }else{
@@ -279,7 +276,6 @@ class ImoLoteController extends Controller
                 );
             }else {
                 if ($idOrganismoTransito) {
-                   
                     $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                         array('estado' => 'REGISTRADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
                     );
@@ -296,7 +292,7 @@ class ImoLoteController extends Controller
                 }
             }
 
-            if ($loteInsumo!=null) { 
+            if ($loteInsumo) { 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -399,8 +395,6 @@ class ImoLoteController extends Controller
             array('actaEntrega' => $numeroActa,'categoria'=> 'INSUMO')
         );
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
-
-       
 
         if ($sustratosActa) {
             $fechaEntrega = $sustratosActa[0]['fecha']->format('Y-m-d');

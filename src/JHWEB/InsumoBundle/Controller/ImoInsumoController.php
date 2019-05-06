@@ -556,25 +556,25 @@ class ImoInsumoController extends Controller
         $totalValor = 0;
         
         foreach ($tipos as $key => $tipo) {
-            $disponiblesTipo = null;
-            $anuladosTipo = null;
-            $asignadosTipo = null;
+            $disponiblesTipo = array();
+            $anuladosTipo = array();
+            $asignadosTipo = array();
+
             foreach ($disponibles as $key => $disponible) {
                 if ($tipo->getId() == $disponible->getTipo()->getId()) {
                     $disponiblesTipo[] = $disponible;
-                    // var_dump($disponible->getId());
                 }
             }
+
             foreach ($anulados as $key => $anulado) {
                 if ($tipo->getId() == $anulado->getTipo()->getId()) {
                     $anuladosTipo[] = $anulado;
-                    // var_dump($disponible->getId());
                 }
             }
+
             foreach ($asignados as $key => $asignado) {
                 if ($tipo->getId() == $asignado->getTipo()->getId()) {
                     $asignadosTipo[] = $asignado;
-                    // var_dump($disponible->getId());
                 }
             }
 
@@ -603,9 +603,10 @@ class ImoInsumoController extends Controller
                 'total' => $total,
                 'subTotal' => $subTotal,
             );
-            $disponiblesTipo = 0;
-            $anuladosTipo = 0;
-            $asignadosTipo = 0;
+
+            /*$disponiblesTipo = array();
+            $anuladosTipo = array();
+            $asignadosTipo = array();*/
         }
 
         $totalSede = 0;

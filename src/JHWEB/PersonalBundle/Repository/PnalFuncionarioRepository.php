@@ -12,10 +12,6 @@ class PnalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
 {
     //Obtiene la lista de documentos por peticionario
     public function getSearch($params){ 
-
-		
-        /* var_dump($params);
-        die(); */
         $em = $this->getEntityManager();
         if (isset($params->nombre)) { 
         	$dql = "SELECT f

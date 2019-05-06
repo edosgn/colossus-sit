@@ -69,8 +69,8 @@ class PqoInmovilizacionController extends Controller
             $inmovilizacion->setFechaIngreso(new \Datetime(date('Y-m-d')));
             $inmovilizacion->setHoraIngreso(new \Datetime(date('h:i:s A')));
             $inmovilizacion->setNumeroInventario($params->numeroInventario);
-            $inmovilizacion->setCostoTrayecto($params->costoTrayecto);
-            $inmovilizacion->setEstado('NO AUTORIZADO');
+            $inmovilizacion->setCostoGrua($params->costoGrua);
+            $inmovilizacion->setEstado('INMOVILIZADO');
             $inmovilizacion->setActivo(true);
 
             if ($params->observaciones) {

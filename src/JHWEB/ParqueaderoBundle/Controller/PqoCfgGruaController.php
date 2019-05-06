@@ -73,13 +73,13 @@ class PqoCfgGruaController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con exito",
+                'message' => 'Registro creado con exito',
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => 'Autorizacion no valida', 
             );
         }
         

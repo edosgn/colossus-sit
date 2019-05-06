@@ -26,12 +26,12 @@ class PqoInmovilizacion
      *
      * @ORM\Column(name="numero_comparendo", type="bigint")
      */
-    private $numero_comparendo;
+    private $numeroComparendo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="placa", type="string", length=255)
+     * @ORM\Column(name="placa", type="string", length=255, nullable=true)
      */
     private $placa;
 
@@ -45,7 +45,7 @@ class PqoInmovilizacion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora_ingreso", type="time", nullable=true)
+     * @ORM\Column(name="hora_ingreso", type="time")
      */
     private $horaIngreso;
 
@@ -101,9 +101,9 @@ class PqoInmovilizacion
     /**
      * @var int
      *
-     * @ORM\Column(name="costo_trayecto", type="integer", nullable=true)
+     * @ORM\Column(name="costo_grua", type="integer", nullable=true)
      */
-    private $costoTrayecto;
+    private $costoGrua;
 
     /**
      * @var string
@@ -161,7 +161,7 @@ class PqoInmovilizacion
      */
     public function setNumeroComparendo($numeroComparendo)
     {
-        $this->numero_comparendo = $numeroComparendo;
+        $this->numeroComparendo = $numeroComparendo;
 
         return $this;
     }
@@ -173,7 +173,7 @@ class PqoInmovilizacion
      */
     public function getNumeroComparendo()
     {
-        return $this->numero_comparendo;
+        return $this->numeroComparendo;
     }
 
     /**
@@ -221,9 +221,6 @@ class PqoInmovilizacion
      */
     public function getFechaIngreso()
     {
-        if ($this->fechaIngreso) {
-            return $this->fechaIngreso->format('d/m/Y');
-        }
         return $this->fechaIngreso;
     }
 
@@ -420,27 +417,27 @@ class PqoInmovilizacion
     }
 
     /**
-     * Set costoTrayecto
+     * Set costoGrua
      *
-     * @param integer $costoTrayecto
+     * @param integer $costoGrua
      *
      * @return PqoInmovilizacion
      */
-    public function setCostoTrayecto($costoTrayecto)
+    public function setCostoGrua($costoGrua)
     {
-        $this->costoTrayecto = $costoTrayecto;
+        $this->costoGrua = $costoGrua;
 
         return $this;
     }
 
     /**
-     * Get costoTrayecto
+     * Get costoGrua
      *
      * @return integer
      */
-    public function getCostoTrayecto()
+    public function getCostoGrua()
     {
-        return $this->costoTrayecto;
+        return $this->costoGrua;
     }
 
     /**

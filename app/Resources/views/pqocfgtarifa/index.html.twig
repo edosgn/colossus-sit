@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Pqocfgtarifas list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Valorhora</th>
+                <th>Numeroactoadministrativo</th>
+                <th>Fecha</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for pqoCfgTarifa in pqoCfgTarifas %}
+            <tr>
+                <td><a href="{{ path('pqocfgtarifa_show', { 'id': pqoCfgTarifa.id }) }}">{{ pqoCfgTarifa.id }}</a></td>
+                <td>{{ pqoCfgTarifa.valorHora }}</td>
+                <td>{{ pqoCfgTarifa.numeroActoAdministrativo }}</td>
+                <td>{% if pqoCfgTarifa.fecha %}{{ pqoCfgTarifa.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if pqoCfgTarifa.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('pqocfgtarifa_show', { 'id': pqoCfgTarifa.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('pqocfgtarifa_edit', { 'id': pqoCfgTarifa.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('pqocfgtarifa_new') }}">Create a new pqoCfgTarifa</a>
+        </li>
+    </ul>
+{% endblock %}

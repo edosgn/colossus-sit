@@ -38,9 +38,16 @@ class PnalTalonario
     /**
      * @var int
      *
-     * @ORM\Column(name="rangos", type="integer")
+     * @ORM\Column(name="cantidad_disponible", type="integer")
      */
-    private $rangos;
+    private $cantidadDisponible;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad_recibida", type="integer")
+     */
+    private $cantidadRecibida;
 
     /**
      * @var \DateTime
@@ -128,27 +135,51 @@ class PnalTalonario
     }
 
     /**
-     * Set rangos
+     * Set cantidadDisponible
      *
-     * @param integer $rangos
+     * @param integer $cantidadDisponible
      *
      * @return PnalTalonario
      */
-    public function setRangos($rangos)
+    public function setCantidadDisponible($cantidadDisponible)
     {
-        $this->rangos = $rangos;
+        $this->cantidadDisponible = $cantidadDisponible;
 
         return $this;
     }
 
     /**
-     * Get rangos
+     * Get cantidadDisponible
      *
      * @return integer
      */
-    public function getRangos()
+    public function getCantidadDisponible()
     {
-        return $this->rangos;
+        return $this->cantidadDisponible;
+    }
+
+    /**
+     * Set cantidadRecibida
+     *
+     * @param integer $cantidadRecibida
+     *
+     * @return PnalTalonario
+     */
+    public function setCantidadRecibida($cantidadRecibida)
+    {
+        $this->cantidadRecibida = $cantidadRecibida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecibida
+     *
+     * @return integer
+     */
+    public function getCantidadRecibida()
+    {
+        return $this->cantidadRecibida;
     }
 
     /**

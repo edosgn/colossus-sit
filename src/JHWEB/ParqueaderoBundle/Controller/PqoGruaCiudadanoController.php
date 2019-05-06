@@ -20,7 +20,7 @@ class PqoGruaCiudadanoController extends Controller
      * @Route("/index", name="pqogruaciudadano_index")
      * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
 
@@ -28,17 +28,18 @@ class PqoGruaCiudadanoController extends Controller
         $params = json_decode($json);
 
         $em = $this->getDoctrine()->getManager();
+
         $gruaCiudadanos = $em->getRepository('JHWEBParqueaderoBundle:PqoGruaCiudadano')->findByGrua(
             $params->idGrua
         );
-
+        
         $response['data'] = array();
 
         if ($gruaCiudadanos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => count($gruaCiudadanos)." Registros encontrados", 
+                'message' => count($gruaCiudadanos)." Registros encontrados", 
                 'data'=> $gruaCiudadanos,
             );
         }
@@ -71,20 +72,22 @@ class PqoGruaCiudadanoController extends Controller
                 $gruaCiudadano->setObservaciones($params->observaciones);
             }
             $gruaCiudadano->setTipo($params->tipo);
-
+            
             if ($params->idGrua) {
                 $grua = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgGrua')->find(
                     $params->idGrua
                 );
                 $gruaCiudadano->setGrua($grua);
             }
-
+            
             if ($params->idCiudadano) {
-                $ciudadano = $em->getRepository('AppBundle:Ciudadano')->find(
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
                     $params->idCiudadano
                 );
                 $gruaCiudadano->setCiudadano($ciudadano);
             }
+
+            $gruaCiudadano->setActivo(true);
 
             $em->persist($gruaCiudadano);
             $em->flush();
@@ -92,13 +95,13 @@ class PqoGruaCiudadanoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro creado con exito",  
+                'message' => "Registro creado con exito",  
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);

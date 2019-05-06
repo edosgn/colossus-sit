@@ -61,56 +61,41 @@ class PnalTalonarioController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $talonario = new PnalTalonario();
-
             $em = $this->getDoctrine()->getManager();
 
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                 $params->idOrganismoTransito
             );
-            $talonario->setOrganismoTransito($organismoTransito);
 
-            $talonario->setDesde($params->desde);
-            $talonario->setHasta($params->hasta);
-            $talonario->setRangos($params->rangos);
-            $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
-            $talonario->setNumeroResolucion($params->numeroResolucion);
-            $talonario->setActivo(true);
-            
-            $em->persist($talonario);
-            $em->flush();
+            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByFecha();
 
-            $divipo = $organismoTransito->getDivipo();
-            
-            for ($numero = $talonario->getDesde(); $numero <= $talonario->getHasta(); $numero++) {
-                $consecutivo = new PnalCfgCdoConsecutivo();
+            if ($rangoDisponible) {
+                $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->getCantidadDisponibleByOrganismoTransito(
+                    $params->idOrganismoTransito
+                );
 
-                $consecutivo->setTalonario($talonario);
+                $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
 
-                if ($organismoTransito->getAsignacionRango()) {
-                    $consecutivo->setNumero($divipo.$numero);
+                $cantidadValidar = ($rangoDisponible->getCantidadEntregada() * 80) / 100;
+                $cantidadValidar = $rangoDisponible->getCantidadEntregada() - $cantidadValidar;
+
+                if ($cantidadDisponible > $cantidadValidar) {
+                    $this->register($params);
                 }else{
-                    $consecutivo->setNumero($numero);
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
+                    );
                 }
-                
-                $consecutivo->setOrganismoTransito($organismoTransito);
-                $consecutivo->setEstado('DISPONIBLE');
-                $consecutivo->setActivo(true);
-
-                $em->persist($consecutivo);
-                $em->flush();
-            }
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "El registro se ha realizado con exito",
-            );
+            }else{
+                $this->register($params);
+            }            
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no valida",
+                'message' => 'Autorización no valida',
             );
         }
 
@@ -227,5 +212,71 @@ class PnalTalonarioController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ===============================================  */
+
+    public function register($params){
+        $em = $this->getDoctrine()->getManager();
+
+        $ultimoRango = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getMax($params->idOrganismoTransito); 
+
+        if ($ultimoRango['maximo']) {
+            if ($params->desde < $ultimoRango['maximo']+1) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El rango ya se encuentra registrado", 
+                );
+
+                return $helpers->json($response);
+            }
+        }
+
+        $talonario = new PnalTalonario();
+            
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+            $params->idOrganismoTransito
+        );
+        $talonario->setOrganismoTransito($organismoTransito);
+
+        $talonario->setDesde($params->desde);
+        $talonario->setHasta($params->hasta);
+        $talonario->setCantidadDisponible($params->rangos);
+        $talonario->setCantidadRecibida($params->rangos);
+        $talonario->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+        $talonario->setNumeroResolucion($params->numeroResolucion);
+        $talonario->setActivo(true);
+        
+        $em->persist($talonario);
+        $em->flush();
+
+        $divipo = $organismoTransito->getDivipo();
+        
+        for ($numero = $talonario->getDesde(); $numero <= $talonario->getHasta(); $numero++) {
+            $consecutivo = new PnalCfgCdoConsecutivo();
+
+            $consecutivo->setTalonario($talonario);
+
+            if ($organismoTransito->getAsignacionRango()) {
+                $consecutivo->setNumero($divipo.$numero);
+            }else{
+                $consecutivo->setNumero($numero);
+            }
+            
+            $consecutivo->setOrganismoTransito($organismoTransito);
+            $consecutivo->setEstado('DISPONIBLE');
+            $consecutivo->setActivo(true);
+
+            $em->persist($consecutivo);
+            $em->flush();
+        }
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'message' => "El registro se ha realizado con exito",
+        );
+
     }
 }

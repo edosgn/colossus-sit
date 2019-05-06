@@ -159,6 +159,10 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             JHWEBFinancieroBundle:FroTrteSolicitud ts
             WHERE ts.fecha = (
                 SELECT MAX(ts2.fecha)
+                FROM JHWEBFinancieroBundle:FroFacTramite ft2, 
+                JHWEBFinancieroBundle:FroTramite t2,
+                JHWEBFinancieroBundle:FroTrtePrecio tp2,
+                JHWEBFinancieroBundle:FroTrteSolicitud ts2
                 WHERE ft2.precio = tp2.id
                 AND tp2.tramite = t2.id
                 AND t2.id = 18
