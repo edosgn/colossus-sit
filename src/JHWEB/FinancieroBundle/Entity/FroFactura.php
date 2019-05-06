@@ -38,14 +38,14 @@ class FroFactura
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_pago", type="date")
+     * @ORM\Column(name="fecha_pago", type="date", nullable=true)
      */
     private $fechaPago;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora_pago", type="time")
+     * @ORM\Column(name="hora_pago", type="time", nullable=true)
      */
     private $horaPago;
 

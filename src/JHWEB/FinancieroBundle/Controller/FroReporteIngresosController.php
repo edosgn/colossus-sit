@@ -74,20 +74,66 @@ class FroReporteIngresosController extends Controller
         $pagadas = [];
         $vencidas = [];
         $anuladas = [];
+        $traspasos = [];
+
+        $valorTramitesPagados = 0;
+        $valorTramitesVencidos = 0;
+        $valorTramitesAnulados = 0;
 
         foreach ($tramites as $key => $tramite) {
             switch ($tramite->getTramiteFactura()->getFactura()->getEstado() ) {
                 case 'PAGADA':
                     $pagadas[] = $tramite;
+                    $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+    
+                    $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
+                        array(
+                            'precio' => $tramite->getTramiteFactura()->getPrecio()->getId(),
+                        )
+                    );
                     break;
                 case 'VENCIDA':
                     $vencidas[] = $tramite;
+                    $valorTramitesVencidos += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
                     break;
                 case 'ANULADA':
                     $anuladas[] = $tramite;
+                    $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+                    if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
+                        $traspasos[] = $tramite;
+                    }
                     break;
             }
         }
+
+
+        $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
+            array (
+                'organismoTransito' => $organismoTransito,
+                'estado' => 'ASIGNADO',
+                'categoria' => 'SUSTRATO',
+            )
+        );
+
+        /* $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
+
+        $disponibles = [];
+        $anulados = [];
+        $asignados = []; */
+
+        /* foreach ($insumos as $key => $insumo) {
+            switch ($insumo->getEstado()) {
+                case 'DISPONIBLE':
+                    $disponibles[]=$insumo;
+                    break;
+                case 'ANULADO':
+                    $anulados[]=$insumo;
+                    break;
+                case 'ASIGNADO':
+                    $asignados[]=$insumo;
+                    break;
+            }
+        } */
 
         $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
             'organismoTransito' => $organismoTransito, 
@@ -97,6 +143,14 @@ class FroReporteIngresosController extends Controller
             'cantPagadas' => count($pagadas), 
             'cantVencidas' => count($vencidas), 
             'cantAnuladas' => count($anuladas), 
+            'valorTramitesPagados' => $valorTramitesPagados, 
+            'valorTramitesVencidos' => $valorTramitesVencidos, 
+            'valorTramitesAnulados' => $valorTramitesAnulados, 
+            'insumos' => $sustratos,
+            'conceptos' => $conceptos,
+            'cantConceptos' => count($conceptos),
+            'traspasosAnulados' => $traspasos,
+            'cantTraspasos' => count($traspasos),
         )); 
 
               
