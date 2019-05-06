@@ -50,7 +50,7 @@ class TramiteTraslado
     private $numeroRunt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo")
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo")
      **/
     protected $vehiculo;
 
@@ -195,11 +195,11 @@ class TramiteTraslado
     /**
      * Set vehiculo
      *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
      *
      * @return TramiteTraslado
      */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
     {
         $this->vehiculo = $vehiculo;
 
@@ -209,7 +209,7 @@ class TramiteTraslado
     /**
      * Get vehiculo
      *
-     * @return \AppBundle\Entity\Vehiculo
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
      */
     public function getVehiculo()
     {

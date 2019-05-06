@@ -52,7 +52,7 @@ class VhloTecnoMecanica
     /** @ORM\ManyToOne(targetEntity="VhloCfgCda", inversedBy="tecnoMecanicas") */
     private $cda;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="tecnoMecanicas") */
+    /** @ORM\ManyToOne(targetEntity="VhloVehiculo", inversedBy="tecnoMecanicas") */
     private $vehiculo;
 
     /**
@@ -194,11 +194,11 @@ class VhloTecnoMecanica
     /**
      * Set vehiculo
      *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
      *
      * @return VhloTecnoMecanica
      */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
     {
         $this->vehiculo = $vehiculo;
 
@@ -208,7 +208,7 @@ class VhloTecnoMecanica
     /**
      * Get vehiculo
      *
-     * @return \AppBundle\Entity\Vehiculo
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
      */
     public function getVehiculo()
     {

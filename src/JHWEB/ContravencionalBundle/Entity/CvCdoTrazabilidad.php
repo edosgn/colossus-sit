@@ -49,14 +49,14 @@ class CvCdoTrazabilidad
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="trazabilidades") */
-    private $comparendo;
-
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo", inversedBy="trazabilidades") */
     private $actoAdministrativo;
 
+    /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="trazabilidades") */
+    private $comparendo;
+
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgComparendoEstado", inversedBy="trazabilidades")
+     * @ORM\ManyToOne(targetEntity="CvCdoCfgEstado", inversedBy="trazabilidades")
      **/
     protected $estado;
 
@@ -147,27 +147,27 @@ class CvCdoTrazabilidad
     }
 
     /**
-     * Set comparendo
+     * Set hora
      *
-     * @param \AppBundle\Entity\Comparendo $comparendo
+     * @param \DateTime $hora
      *
      * @return CvCdoTrazabilidad
      */
-    public function setComparendo(\AppBundle\Entity\Comparendo $comparendo = null)
+    public function setHora($hora)
     {
-        $this->comparendo = $comparendo;
+        $this->hora = $hora;
 
         return $this;
     }
 
     /**
-     * Get comparendo
+     * Get hora
      *
-     * @return \AppBundle\Entity\Comparendo
+     * @return \DateTime
      */
-    public function getComparendo()
+    public function getHora()
     {
-        return $this->comparendo;
+        return $this->hora;
     }
 
     /**
@@ -195,13 +195,37 @@ class CvCdoTrazabilidad
     }
 
     /**
-     * Set estado
+     * Set comparendo
      *
-     * @param \AppBundle\Entity\CfgComparendoEstado $estado
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
      *
      * @return CvCdoTrazabilidad
      */
-    public function setEstado(\AppBundle\Entity\CfgComparendoEstado $estado = null)
+    public function setComparendo(\JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo = null)
+    {
+        $this->comparendo = $comparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get comparendo
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo
+     */
+    public function getComparendo()
+    {
+        return $this->comparendo;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado $estado
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setEstado(\JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado $estado = null)
     {
         $this->estado = $estado;
 
@@ -211,34 +235,10 @@ class CvCdoTrazabilidad
     /**
      * Get estado
      *
-     * @return \AppBundle\Entity\CfgComparendoEstado
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado
      */
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set hora
-     *
-     * @param \DateTime $hora
-     *
-     * @return CvCdoTrazabilidad
-     */
-    public function setHora($hora)
-    {
-        $this->hora = $hora;
-
-        return $this;
-    }
-
-    /**
-     * Get hora
-     *
-     * @return \DateTime
-     */
-    public function getHora()
-    {
-        return $this->hora;
     }
 }

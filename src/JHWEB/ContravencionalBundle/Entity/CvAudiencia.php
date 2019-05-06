@@ -63,7 +63,7 @@ class CvAudiencia
      */
     private $apoderado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="audicencias") */
+    /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audicencias") */
     private $comparendo;
 
 
@@ -225,29 +225,5 @@ class CvAudiencia
     public function getApoderado()
     {
         return $this->apoderado;
-    }
-
-    /**
-     * Set comparendo
-     *
-     * @param \AppBundle\Entity\Comparendo $comparendo
-     *
-     * @return CvAudiencia
-     */
-    public function setComparendo(\AppBundle\Entity\Comparendo $comparendo = null)
-    {
-        $this->comparendo = $comparendo;
-
-        return $this;
-    }
-
-    /**
-     * Get comparendo
-     *
-     * @return \AppBundle\Entity\Comparendo
-     */
-    public function getComparendo()
-    {
-        return $this->comparendo;
     }
 }

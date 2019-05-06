@@ -69,7 +69,7 @@ class GdTrazabilidad
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="trazabilidades") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="trazabilidades") */
     private $responsable;
 
     /**
@@ -264,11 +264,11 @@ class GdTrazabilidad
     /**
      * Set responsable
      *
-     * @param \AppBundle\Entity\MpersonalFuncionario $responsable
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $responsable
      *
      * @return GdTrazabilidad
      */
-    public function setResponsable(\AppBundle\Entity\MpersonalFuncionario $responsable = null)
+    public function setResponsable(\JHWEB\PersonalBundle\Entity\PnalFuncionario $responsable = null)
     {
         $this->responsable = $responsable;
 
@@ -278,7 +278,7 @@ class GdTrazabilidad
     /**
      * Get responsable
      *
-     * @return \AppBundle\Entity\MpersonalFuncionario
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
     public function getResponsable()
     {

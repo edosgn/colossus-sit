@@ -26,7 +26,7 @@ class FroFacComparendo
      */
     private $factura;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Comparendo", inversedBy="facturas") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoComparendo", inversedBy="facturas") */
     private $comparendo;
 
 
@@ -67,11 +67,11 @@ class FroFacComparendo
     /**
      * Set comparendo
      *
-     * @param \AppBundle\Entity\Comparendo $comparendo
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
      *
      * @return FroFacComparendo
      */
-    public function setComparendo(\AppBundle\Entity\Comparendo $comparendo = null)
+    public function setComparendo(\JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo = null)
     {
         $this->comparendo = $comparendo;
 
@@ -81,7 +81,7 @@ class FroFacComparendo
     /**
      * Get comparendo
      *
-     * @return \AppBundle\Entity\Comparendo
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo
      */
     public function getComparendo()
     {

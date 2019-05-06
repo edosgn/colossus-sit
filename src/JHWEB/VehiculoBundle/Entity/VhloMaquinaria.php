@@ -92,7 +92,7 @@ class VhloMaquinaria
     private $numeroActivacionGps;
 
     /**
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Vehiculo")
+     * @ORM\OneToOne(targetEntity="VhloVehiculo")
      */
     private $vehiculo;
 
@@ -394,11 +394,11 @@ class VhloMaquinaria
     /**
      * Set vehiculo
      *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
      *
      * @return VhloMaquinaria
      */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
     {
         $this->vehiculo = $vehiculo;
 
@@ -408,7 +408,7 @@ class VhloMaquinaria
     /**
      * Get vehiculo
      *
-     * @return \AppBundle\Entity\Vehiculo
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
      */
     public function getVehiculo()
     {

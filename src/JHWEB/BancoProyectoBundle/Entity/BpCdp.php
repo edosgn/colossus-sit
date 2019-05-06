@@ -110,7 +110,7 @@ class BpCdp
      **/
     protected $actividad;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="cdps") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="cdps") */
     private $expide;
 
 
@@ -442,11 +442,11 @@ class BpCdp
     /**
      * Set expide
      *
-     * @param \AppBundle\Entity\MpersonalFuncionario $expide
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $expide
      *
      * @return BpCdp
      */
-    public function setExpide(\AppBundle\Entity\MpersonalFuncionario $expide = null)
+    public function setExpide(\JHWEB\PersonalBundle\Entity\PnalFuncionario $expide = null)
     {
         $this->expide = $expide;
 
@@ -456,7 +456,7 @@ class BpCdp
     /**
      * Get expide
      *
-     * @return \AppBundle\Entity\MpersonalFuncionario
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
     public function getExpide()
     {

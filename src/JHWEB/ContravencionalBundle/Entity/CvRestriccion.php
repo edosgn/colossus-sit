@@ -35,10 +35,6 @@ class CvRestriccion
      */
     private $observaciones;
 
- 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vehiculo", inversedBy="notificaciones") */
-    private $vehiculo;
-
     /**
      * @var string
      *
@@ -60,9 +56,11 @@ class CvRestriccion
      */
     private $identificacion;
 
-    
     /** @ORM\ManyToOne(targetEntity="CvCfgTipoRestriccion", inversedBy="notificaciones") */
     private $tipoRestriccion;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="notificaciones") */
+    private $vehiculo;
 
 
     /**
@@ -196,30 +194,6 @@ class CvRestriccion
     }
 
     /**
-     * Set vehiculo
-     *
-     * @param \AppBundle\Entity\Vehiculo $vehiculo
-     *
-     * @return CvRestriccion
-     */
-    public function setVehiculo(\AppBundle\Entity\Vehiculo $vehiculo = null)
-    {
-        $this->vehiculo = $vehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get vehiculo
-     *
-     * @return \AppBundle\Entity\Vehiculo
-     */
-    public function getVehiculo()
-    {
-        return $this->vehiculo;
-    }
-
-    /**
      * Set tipoRestriccion
      *
      * @param \JHWEB\ContravencionalBundle\Entity\CvCfgTipoRestriccion $tipoRestriccion
@@ -241,5 +215,29 @@ class CvRestriccion
     public function getTipoRestriccion()
     {
         return $this->tipoRestriccion;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
+     *
+     * @return CvRestriccion
+     */
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

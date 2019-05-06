@@ -57,7 +57,7 @@ class MsvTCAsignacion
     private $activo = true;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\MpersonalFuncionario", inversedBy="asignaciones")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="asignaciones")
      **/
     protected $funcionario;
 
@@ -195,11 +195,11 @@ class MsvTCAsignacion
     /**
      * Set funcionario
      *
-     * @param \AppBundle\Entity\MpersonalFuncionario $funcionario
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
      *
      * @return MsvTCAsignacion
      */
-    public function setFuncionario(\AppBundle\Entity\MpersonalFuncionario $funcionario = null)
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
     {
         $this->funcionario = $funcionario;
 
@@ -209,7 +209,7 @@ class MsvTCAsignacion
     /**
      * Get funcionario
      *
-     * @return \AppBundle\Entity\MpersonalFuncionario
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
     public function getFuncionario()
     {
