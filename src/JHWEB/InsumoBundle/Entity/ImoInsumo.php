@@ -146,11 +146,11 @@ class ImoInsumo
     /**
      * Get fecha
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getFecha()
     {
-        return $this->fecha->format('d/m/Y');
+        return $this->fecha->format('Y-m-d');  
     }
 
     /**
