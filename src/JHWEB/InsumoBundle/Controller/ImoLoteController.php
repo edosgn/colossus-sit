@@ -256,7 +256,7 @@ class ImoLoteController extends Controller
      /**
      * Lists all loteInsumo entities.
      *
-     * @Route("/insumo/lote/sede", name="limolote_Sede_index")
+     * @Route("/insumo/lote/sede", name="imolote_sede_index")
      * @Method({"GET", "POST"})
      */
     public function loteInsumoSedeAction(Request $request)
@@ -324,7 +324,7 @@ class ImoLoteController extends Controller
     /**
      * Lists all loteInsumo entities.
      *
-     * @Route("/reasignacion/insumo/lote/sede", name="limolote_reasigancion_Sede_index")
+     * @Route("/reasignacion/insumo/lote/sede", name="imolote_reasigancion_Sede_index")
      * @Method({"GET", "POST"})
      */
     public function loteInsumoSedeReasignacionAction(Request $request)
@@ -383,10 +383,10 @@ class ImoLoteController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/pdf/acta/asignacion/{numeroActa}/{idOrganismoTransito}", name="pdf_loteInsumo")
+     * @Route("/{numeroActa}/{idOrganismoTransito}/pdf/acta/asignacion", name="imolote_pdf_acta_asignacion")
      * @Method({"GET", "POST"})
      */
-    public function pdfAction(Request $request,$numeroActa,$idOrganismoTransito)
+    public function pdfAction(Request $request, $numeroActa, $idOrganismoTransito)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -408,10 +408,6 @@ class ImoLoteController extends Controller
             $fechaEntrega = $insumosActa[0]->getFecha();
         }
 
-        // var_dump($fechaEntrega);
-        // die();
-        
-
         $html = $this->renderView('@JHWEBInsumo/Default/pdf.asignacion.html.twig', array(
             'sustratosActa' => $sustratosActa,
             'insumosActa' => $insumosActa,
@@ -420,6 +416,6 @@ class ImoLoteController extends Controller
             'fechaEntrega' => $fechaEntrega,
         ));
 
-        $this->get('app.pdf.insumo.membretes')->templateAsignacion($html, $numeroActa); 
+        $this->get('app.pdf')->templateAsignacion($html, $numeroActa); 
     }
 } 
