@@ -207,4 +207,58 @@ class PqoInmovilizacionController extends Controller
             ->getForm()
         ;
     }
+
+    /* =========================================== */
+
+    /**
+     * Displays a form to edit an existing pqoCfgGrua entity.
+     *
+     * @Route("/exit", name="pqoinmovilizacion_exit")
+     * @Method({"GET", "POST"})
+     */
+    public function exitAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
+                $params->id
+            );
+
+            if ($inmovilizacion) {
+                $inmovilizacion->setSalida(true);
+                $inmovilizacion->setEstado('AUTORIZADO');
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con éxito",
+                    'data' => $inmovilizacion,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
