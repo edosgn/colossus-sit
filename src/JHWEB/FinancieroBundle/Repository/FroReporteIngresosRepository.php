@@ -29,4 +29,38 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    public function getByName($idConcepto, $idPrecio) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ftc.id)
+            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc
+            WHERE ftc.concepto = :idConcepto
+            AND ftc.precio = :idPrecio";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idConcepto' => $idConcepto, 
+            'idPrecio' => $idPrecio, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getTramiteByName($idTramite) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ftp.id)
+            FROM JHWEBFinancieroBundle:FroTrtePrecio ftp
+            WHERE ftp.tramite = :idTramite";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idTramite' => $idTramite, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }
