@@ -72,85 +72,93 @@ class FroReporteIngresosController extends Controller
         $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesByFecha($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
 
         $pagadas = [];
-        $vencidas = [];
+        $finalizadas = [];
         $anuladas = [];
         $traspasos = [];
+        $conceptos = [];
+        $numeros = [];
+        $numerosaAnulados = [];
 
         $valorTramitesPagados = 0;
         $valorTramitesVencidos = 0;
         $valorTramitesAnulados = 0;
+        
+        $totalSustratos = 0;
+        $totalConceptos = 0;
+        $totalTramites = 0;
 
+        $arrayConceptos = [];
+        $arrayTramites = [];
+        
         foreach ($tramites as $key => $tramite) {
+            $numeros[] = $tramite->getTramiteFactura()->getFactura()->getNumero();
             switch ($tramite->getTramiteFactura()->getFactura()->getEstado() ) {
                 case 'PAGADA':
-                    $pagadas[] = $tramite;
-                    $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
-    
+                case 'FINALIZADA':
+                $pagadas[] = $tramite;
+                $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+                
+                //=================================================
+                $cantTramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getTramiteByName($tramite->getTramiteFactura()->getPrecio()->getTramite()->getId());
+                $total2 = intval(implode($cantTramites)) * $tramite->getTramiteFactura()->getPrecio()->getValor();
+                $totalTramites += intval(implode($cantTramites)) * $tramite->getTramiteFactura()->getPrecio()->getValor();
+                $arrayTramites[] = array(
+                    'id' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(),
+                    'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                    'cantidad' => intval(implode($cantTramites)),
+                    'valor' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
+                    'total2' => $total2,
+                );
+                
                     $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
                         array(
                             'precio' => $tramite->getTramiteFactura()->getPrecio()->getId(),
-                        )
-                    );
-                    break;
-                case 'VENCIDA':
-                    $vencidas[] = $tramite;
-                    $valorTramitesVencidos += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+                            )
+                        );
                     break;
                 case 'ANULADA':
                     $anuladas[] = $tramite;
+                    $numerosAnulados[] = $tramite->getTramiteFactura()->getFactura()->getNumero();
                     $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
                     if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
                         $traspasos[] = $tramite;
                     }
                     break;
-            }
+            }     
         }
-
-
-        $sustratos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array (
-                'organismoTransito' => $organismoTransito,
-                'estado' => 'ASIGNADO',
-                'categoria' => 'SUSTRATO',
-            )
-        );
-
-        /* $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
-
-        $disponibles = [];
-        $anulados = [];
-        $asignados = []; */
-
-        /* foreach ($insumos as $key => $insumo) {
-            switch ($insumo->getEstado()) {
-                case 'DISPONIBLE':
-                    $disponibles[]=$insumo;
-                    break;
-                case 'ANULADO':
-                    $anulados[]=$insumo;
-                    break;
-                case 'ASIGNADO':
-                    $asignados[]=$insumo;
-                    break;
-            }
-        } */
+        foreach ($conceptos as $key => $concepto) {
+            $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
+            $total = intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
+            $totalConceptos += intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
+            $arrayConceptos[] = array(
+                'id' => $concepto->getConcepto()->getId(),
+                'nombre' => $concepto->getConcepto()->getNombre(),
+                'cantidad' => intval(implode($cantConceptos)),
+                'valor' => $concepto->getConcepto()->getValor(),
+                'total' => $total,
+            );    
+        }
 
         $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
             'organismoTransito' => $organismoTransito, 
             'pagadas' => $pagadas, 
-            'vencidas' => $vencidas, 
             'anuladas' => $anuladas, 
             'cantPagadas' => count($pagadas), 
-            'cantVencidas' => count($vencidas), 
             'cantAnuladas' => count($anuladas), 
             'valorTramitesPagados' => $valorTramitesPagados, 
-            'valorTramitesVencidos' => $valorTramitesVencidos, 
             'valorTramitesAnulados' => $valorTramitesAnulados, 
-            'insumos' => $sustratos,
             'conceptos' => $conceptos,
-            'cantConceptos' => count($conceptos),
+            'cantConceptos' => $cantConceptos,
+            'arrayConceptos' => $arrayConceptos,
+            'arrayTramites' => $arrayTramites,
+            'totalConceptos' => $totalConceptos,
+            'totalTramites' => $totalTramites,
             'traspasosAnulados' => $traspasos,
             'cantTraspasos' => count($traspasos),
+            'min' =>min($numeros),
+            'max' =>max($numeros),
+            'minAnulados' =>min($numerosAnulados),
+            'maxAnulados' =>max($numerosAnulados),
         )); 
 
               
