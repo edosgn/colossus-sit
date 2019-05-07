@@ -10,6 +10,21 @@ namespace JHWEB\PersonalBundle\Repository;
  */
 class PnalAsignacionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de asignaciones por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT MAX(a.consecutivo) AS maximo
+            FROM JHWEBPersonalBundle:PnalAsignacion a
+            WHERE YEAR(a.fecha) = :ANIO";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+
+        return $consulta->getOneOrNullResult();
+    }
+
     //Obtiene la lista de documentos por peticionario
     public function getFuncionariosByCargo($params, $cargo){   
         $em = $this->getEntityManager();
@@ -35,5 +50,55 @@ class PnalAsignacionRepository extends \Doctrine\ORM\EntityRepository
 
 
         return $consulta->getResult();
+    }
+
+    public function getLastByFecha(){ 
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT pa
+        FROM JHWEBPersonalBundle:PnalAsignacion pa
+        WHERE pa.fecha = (
+            SELECT MAX(pa2.fecha)
+            FROM JHWEBPersonalBundle:PnalAsignacion pa2
+            WHERE pa2.activo = true
+        ) 
+        AND pa.activo = true";
+
+        $consulta = $em->createQuery($dql)->setMaxResults(1);;
+		
+        return $consulta->getOneOrNullResult();
+    }
+
+    //Obtiene la suma de cantidad disponible por organismo de transito
+    public function getCantidadDisponibleByOrganismoTransito($idOrganismoTransito)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(pa.cantidadDisponible) AS total
+            FROM JHWEBPersonalBundle:PnalAsignacion pa
+            WHERE pa.organismoTransito = :idOrganismoTransito
+            AND pa.activo = true";
+            
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
+        
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getMaximoByOrganismoTransito($idOrganismoTransito)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT MAX(pt.hasta) AS maximo
+        FROM JHWEBPersonalBundle:PnalAsignacion pt
+        WHERE pt.organismoTransito = :idOrganismoTransito";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+        ));
+        
+        return $consulta->getOneOrNullResult();
     }
 }

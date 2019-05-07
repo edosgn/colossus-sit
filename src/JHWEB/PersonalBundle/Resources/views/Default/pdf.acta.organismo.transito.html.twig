@@ -10,42 +10,33 @@
     	<br>
     </p>
     <p style="text-align:center;">
-        <b>ACTA DE ENTREGA</b>
+        <b>ACTA DE ENTREGA A SEDE OPERATIVA</b>
         <br>      
     </p>
 
     <p>
         <table>
             <tr>
-                <td width="70%">Nombre de agente: {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}</td>
-                <td>Placa: {{ funcionario.numeroPlaca }}</td>
+                <td width="70%">{{ asignacion.organismoTransito.nombre }}</td>
+                <td>{{ asignacion.fecha|date('d/m/Y') }}</td>
+                <td>{{ asignacion.numeroActa }}</td>
             </tr>
         </table>       
         <br>
         <br>
         <br>
-        Se hace entrega de los documentos que a continuación se relacionan:
+        Se hace entrega de los rangos {{ asignacion.desde }} a {{ asignacion.hasta }} que se relacionan a continuación:
     </p>
 
     <table border="1">
         <tr style="text-align:center;font-weight:bold;">
-            <td>TIPO DE DOCUMENTO</td>
-            <td>UNIDAD DE ENTREGA</td>
-            <td>CANTIDAD</td>
-            <td>TOTAL ENTREGADOS</td>
-            <td>RANGOS</td>
+            <td>#</td>
+            <td>NÚMERO</td>
         </tr>
-        {% for asignacion in asignaciones %}
+        {% for key, consecutivo in consecutivos %}
             <tr style="text-align:center;">
-                <td>Comparendos</td>
-                <td>Talonario</td>
-                <td>1</td>
-                <td>{{ asignacion.rangos }}</td>
-                <td>
-                    {{ asignacion.desde }}
-                    a
-                    {{ asignacion.hasta }}
-                </td>
+                <td>{{ key + 1 }}</td>
+                <td>{{ consecutivo.numero }}</td>
             </tr>
         {% endfor %}
     </table>

@@ -30,20 +30,30 @@ class PnalCfgCdoConsecutivoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    //Obtiene la suma de los consecutivos disponibles por organismo de transito
-    public function getCantidadDisponibleByOrganismoTransito($idOrganismoTransito)
-    {
+    //Obtiene la lista de funcionarios asignados por cargo
+    public function getByFuncionario($params){   
         $em = $this->getEntityManager();
 
-        $dql = "SELECT SUM(pn.cantidadDisponible) AS total
-            FROM JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
-            WHERE pc.organismoTransito = :idOrganismoTransito
-            AND pc.activo = true";
-            
-        $consulta = $em->createQuery($dql);
+    	$dql = "SELECT pc
+        FROM JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc,
+        JHWEBPersonalBundle:PnalFuncionario f, 
+        JHWEBUsuarioBundle:UserCiudadano c,
+        UsuarioBundle:Usuario u
+        WHERE pc.funcionario = f.id
+        AND u.id = c.usuario
+        AND c.id = f.ciudadano
+        AND (c.primerNombre = :parametro 
+        OR c.segundoNombre = :parametro 
+        OR c.primerApellido = :parametro 
+        OR c.segundoApellido = :parametro 
+        OR f.numeroPlaca = :parametro)";
 
-        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
-        
-        return $consulta->getOneOrNullResult();
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'parametro' => $params->parametro,
+        ));
+
+
+        return $consulta->getResult();
     }
 }

@@ -22,6 +22,20 @@ class PnalAsignacion
     private $id;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_acta", type="string", length=255, nullable=true)
+     */
+    private $numeroActa;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="integer")
+     */
+    private $consecutivo;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="desde", type="bigint")
@@ -45,9 +59,16 @@ class PnalAsignacion
     /**
      * @var int
      *
-     * @ORM\Column(name="rangos", type="integer")
+     * @ORM\Column(name="cantidad_disponible", type="integer")
      */
-    private $rangos;
+    private $cantidadDisponible;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cantidad_recibida", type="integer")
+     */
+    private $cantidadRecibida;
 
     /**
      * @var bool
@@ -57,10 +78,9 @@ class PnalAsignacion
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PnalFuncionario", inversedBy="asignaciones")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="consecutivos")
      **/
-    protected $funcionario;
-
+    protected $organismoTransito;
 
     /**
      * Get id
@@ -70,6 +90,54 @@ class PnalAsignacion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set numeroActa
+     *
+     * @param string $numeroActa
+     *
+     * @return PnalAsignacion
+     */
+    public function setNumeroActa($numeroActa)
+    {
+        $this->numeroActa = $numeroActa;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroActa
+     *
+     * @return string
+     */
+    public function getNumeroActa()
+    {
+        return $this->numeroActa;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return PnalAsignacion
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
@@ -145,27 +213,51 @@ class PnalAsignacion
     }
 
     /**
-     * Set rangos
+     * Set cantidadDisponible
      *
-     * @param integer $rangos
+     * @param integer $cantidadDisponible
      *
      * @return PnalAsignacion
      */
-    public function setRangos($rangos)
+    public function setCantidadDisponible($cantidadDisponible)
     {
-        $this->rangos = $rangos;
+        $this->cantidadDisponible = $cantidadDisponible;
 
         return $this;
     }
 
     /**
-     * Get rangos
+     * Get cantidadDisponible
      *
      * @return integer
      */
-    public function getRangos()
+    public function getCantidadDisponible()
     {
-        return $this->rangos;
+        return $this->cantidadDisponible;
+    }
+
+    /**
+     * Set cantidadRecibida
+     *
+     * @param integer $cantidadRecibida
+     *
+     * @return PnalAsignacion
+     */
+    public function setCantidadRecibida($cantidadRecibida)
+    {
+        $this->cantidadRecibida = $cantidadRecibida;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidadRecibida
+     *
+     * @return integer
+     */
+    public function getCantidadRecibida()
+    {
+        return $this->cantidadRecibida;
     }
 
     /**
@@ -193,26 +285,26 @@ class PnalAsignacion
     }
 
     /**
-     * Set funcionario
+     * Set organismoTransito
      *
-     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return PnalAsignacion
      */
-    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->funcionario = $funcionario;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get funcionario
+     * Get organismoTransito
      *
-     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getFuncionario()
+    public function getOrganismoTransito()
     {
-        return $this->funcionario;
+        return $this->organismoTransito;
     }
 }

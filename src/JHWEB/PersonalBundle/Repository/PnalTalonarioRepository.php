@@ -10,7 +10,7 @@ namespace JHWEB\PersonalBundle\Repository;
  */
 class PnalTalonarioRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getLastByFecha(){ 
+    public function getLastByFechaAndOrganismoTransito($idOrganismoTransito){ 
         $em = $this->getEntityManager();
         
         $dql = "SELECT pt
@@ -18,28 +18,50 @@ class PnalTalonarioRepository extends \Doctrine\ORM\EntityRepository
         WHERE pt.fechaAsignacion = (
             SELECT MAX(pt2.fechaAsignacion)
             FROM JHWEBPersonalBundle:PnalTalonario pt2
-            WHERE ft2.precio = tp2.id
-            AND pt2.activo = true
+            WHERE pt2.activo = true
+            AND pt2.organismoTransito = :idOrganismoTransito
         ) 
         AND pt.activo = true
-        LIMIT 1";
-		
+        AND pt.organismoTransito = :idOrganismoTransito";
+
+        $consulta = $em->createQuery($dql)->setMaxResults(1);
+		$consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+        ));
+
         return $consulta->getOneOrNullResult();
     }
 
-    public function getMaximoByorganismoTransito($idOrganismoTransito)
+    public function getMaximoByOrganismoTransito($idOrganismoTransito)
     { 
         $em = $this->getEntityManager();
-        
+
         $dql = "SELECT MAX(pt.hasta) AS maximo
-        FROM JHWEBPersonalBundle:PnalTalonario pt,
-        WHERE pt.organismotransito = :idOrganismoTransito";
+        FROM JHWEBPersonalBundle:PnalTalonario pt
+        WHERE pt.organismoTransito = :idOrganismoTransito";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito,
         ));
+        
+        return $consulta->getOneOrNullResult();
+    }
 
+    //Obtiene la suma de cantidad disponible por organismo de transito
+    public function getCantidadDisponibleByOrganismoTransito($idOrganismoTransito)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(pt.cantidadDisponible) AS total
+            FROM JHWEBPersonalBundle:PnalTalonario pt
+            WHERE pt.organismoTransito = :idOrganismoTransito
+            AND pt.activo = true";
+            
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
+        
         return $consulta->getOneOrNullResult();
     }
 }

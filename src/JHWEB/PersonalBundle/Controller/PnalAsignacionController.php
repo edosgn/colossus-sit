@@ -59,53 +59,66 @@ class PnalAsignacionController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $asignacion = new PnalAsignacion();
-
             $em = $this->getDoctrine()->getManager();
 
-            $fechaAsignacion = new \Datetime($params->fechaAsignacion);
+            $fecha = new \Datetime($params->fecha);
 
-            $asignacion->setDesde($params->desde);
-            $asignacion->setHasta($params->hasta);
-            $asignacion->setRangos(($params->hasta + 1) - $params->desde);
-            $asignacion->setFecha($fechaAsignacion);
-            $asignacion->setActivo(true);
-
-            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                $params->idFuncionario
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
             );
-            $asignacion->setFuncionario($funcionario);
 
-            $em->persist($asignacion);
-            $em->flush();
+            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByFecha();
 
-            $divipo = $funcionario->getOrganismoTransito()->getDivipo();
-
-            for ($numero=$asignacion->getDesde(); $numero <= $asignacion->getHasta(); $numero++) {
-                if ($funcionario->getOrganismoTransito()->getAsignacionRango()) {
-                    $numeroComparendo = $divipo.$numero;
-                }else{
-                    $numeroComparendo = $numero;
-                }
-                
-                $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneByNumero(
-                    $numeroComparendo
+            if ($rangoDisponible) {
+                $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getCantidadDisponibleByOrganismoTransito(
+                    $params->idOrganismoTransito
                 );
+    
+                $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
+    
+                $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
+                $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
+    
+                if ($cantidadDisponible > $cantidadValidar) {
+                    $registro = $this->register($params);
 
-                if ($consecutivo) {
-                    $consecutivo->setFechaAsignacion($fechaAsignacion);
-                    $consecutivo->setFuncionario($funcionario);
-                    $consecutivo->setEstado('ASIGNADO');
+                    if($registro){
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "El registro se ha realizado con exito",
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
+                    );
+                }
+            }else{
+                $registro = $this->register($params);
 
-                    $em->flush();
+                if($registro){
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "El registro se ha realizado con exito",
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                    );
                 }
             }
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Registro creado con exito.',  
-            );
         }else{
             $response = array(
                 'status' => 'error',
@@ -195,6 +208,81 @@ class PnalAsignacionController extends Controller
     }
 
     /* ================================================== */
+
+    public function register($params){
+        $helpers = $this->get("app.helpers");
+        
+        $em = $this->getDoctrine()->getManager();
+
+        $ultimoRango = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getMaximoByOrganismoTransito(
+            $params->idOrganismoTransito
+        ); 
+
+        if ($ultimoRango) {
+            if ($params->desde <= $ultimoRango['maximo']) {
+                return false;
+            }
+        }
+
+        $asignacion = new PnalAsignacion();
+
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+            $params->idOrganismoTransito
+        );
+
+        $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getMaximo(
+            date('Y')
+        );
+           
+        $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+        $asignacion->setConsecutivo($consecutivo);
+
+        $fechaCreacion = new \Datetime(date('Y-m-d'));
+        $asignacion->setNumeroActa(
+            $fechaCreacion->format('Y').$fechaCreacion->format('m').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
+        );
+
+        $asignacion->setDesde($params->desde);
+        $asignacion->setHasta($params->hasta);
+        $asignacion->setCantidadDisponible($params->cantidadRecibida);
+        $asignacion->setCantidadRecibida($params->cantidadRecibida);
+        $asignacion->setFecha(new \Datetime($params->fecha));
+        $asignacion->setActivo(true);
+        
+        $asignacion->setOrganismoTransito($organismoTransito);
+
+        $em->persist($asignacion);
+        $em->flush();
+
+        $divipo = $organismoTransito->getDivipo();
+
+        for ($numero=$asignacion->getDesde(); $numero <= $asignacion->getHasta(); $numero++) {
+            if ($organismoTransito->getAsignacionRango()) {
+                $numeroComparendo = $divipo.$numero;
+            }else{
+                $numeroComparendo = $numero;
+            }
+            
+            $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneByNumero(
+                $numeroComparendo
+            );
+
+            if ($consecutivo) {
+                $consecutivo->setAsignacion($asignacion);
+                $consecutivo->setEstado('ASIGNADO');
+
+                $em->flush();
+            }
+        }
+
+        $response = array(
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Registro creado con exito.',  
+        );
+
+        return true;
+    }
 
     /**
      * Lists all mpersonalFuncionario entities.
@@ -293,9 +381,9 @@ class PnalAsignacionController extends Controller
     }
 
     /**
-     * Busca peticionario por cedula o por nombre entidad y numero de oficio.
+     * Genera pdf con la asignacion solicitada.
      *
-     * @Route("/planilla/{id}/pdf", name="pnalasignacion_pdf")
+     * @Route("/acta/{id}/pdf", name="pnalasignacion_pdf")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request, $id)
@@ -305,55 +393,20 @@ class PnalAsignacionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+        $asignacion = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->find(
             $id
         );
 
-        $asignaciones = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->findByFuncionario(
-            $funcionario->getId()
+        $consecutivos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findByAsignacion(
+            $asignacion->getId()
         );
 
-        $html = $this->renderView('@JHWEBPersonal/Default/pdf.acta.html.twig', array(
-            'funcionario'=>$funcionario,
-            'asignaciones' => $asignaciones,
+        $html = $this->renderView('@JHWEBPersonal/Default/pdf.acta.organismo.transito.html.twig', array(
+            'asignacion' => $asignacion,
+            'consecutivos' => $consecutivos,
             'fechaActual' => $fechaActual
         ));
 
-        $pdf = $this->container->get("white_october.tcpdf")->create(
-            'PORTRAIT',
-            PDF_UNIT,
-            PDF_PAGE_FORMAT,
-            true,
-            'UTF-8',
-            false
-        );
-        $pdf->SetAuthor('qweqwe');
-        $pdf->SetTitle('Planilla');
-        $pdf->SetSubject('Your client');
-        $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
-        $pdf->setFontSubsetting(true);
-
-        $pdf->SetFont('helvetica', '', 11, '', true);
-        $pdf->SetMargins('25', '25', '25');
-        $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-        $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        $pdf->AddPage();
-
-        $pdf->writeHTMLCell(
-            $w = 0,
-            $h = 0,
-            $x = '',
-            $y = '',
-            $html,
-            $border = 0,
-            $ln = 1,
-            $fill = 0,
-            $reseth = true,
-            $align = '',
-            $autopadding = true
-        );
-
-        $pdf->Output("example.pdf", 'I');
-        die();
+        $this->get('app.pdf')->templateAsignacionTalonarios($html, $asignacion);
     }
 }

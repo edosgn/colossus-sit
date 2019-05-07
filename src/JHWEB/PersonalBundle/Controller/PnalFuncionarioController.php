@@ -773,4 +773,50 @@ class PnalFuncionarioController extends Controller
         return $helpers->json($response);
     }
 
+    /**
+     * Busca todos de agentes de transito según parametros.
+     *
+     * @Route("/search/agentes", name="pnalfuncionario_search_agentes")
+     * @Method({"GET", "POST"})
+     */
+    public function searchAgentesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $funcionarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $funcionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->getAgentesByParams(
+                $params, 1
+            );
+                
+            if ($funcionarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data'=> $funcionarios,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Ningún registro encontrado.',
+                );
+            }            
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Autorizacion no valida.', 
+                );
+        }
+        return $helpers->json($response);
+    }
 }

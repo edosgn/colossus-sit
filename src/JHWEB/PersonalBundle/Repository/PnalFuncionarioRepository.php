@@ -85,5 +85,32 @@ class PnalFuncionarioRepository extends \Doctrine\ORM\EntityRepository
         }
 		
         return $consulta->getResult();
+	}
+	
+	//Obtiene la lista de funcionarios asignados por cargo
+    public function getAgentesByParams($params, $cargo){   
+        $em = $this->getEntityManager();
+
+    	$dql = "SELECT f
+        FROM JHWEBPersonalBundle:PnalFuncionario f, 
+        JHWEBUsuarioBundle:UserCiudadano c,
+        UsuarioBundle:Usuario u
+        WHERE u.id = c.usuario
+        AND c.id = f.ciudadano
+        AND (c.primerNombre = :parametro 
+        OR c.segundoNombre = :parametro 
+        OR c.primerApellido = :parametro 
+        OR c.segundoApellido = :parametro 
+        OR f.numeroPlaca = :parametro)
+        AND f.cargo = :cargo";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'parametro' => $params->parametro,
+            'cargo' => $cargo,
+        ));
+
+
+        return $consulta->getResult();
     }
 }

@@ -22,13 +22,26 @@ class PqoCfgTarifaController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $tarifas = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgTarifa')->findBy(
+            array('activo' => true)
+        );
 
-        $pqoCfgTarifas = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgTarifa')->findAll();
+        $response['data'] = array();
 
-        return $this->render('pqocfgtarifa/index.html.twig', array(
-            'pqoCfgTarifas' => $pqoCfgTarifas,
-        ));
+        if ($tarifas) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tarifas)." registros encontrados", 
+                'data'=> $tarifas,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +52,68 @@ class PqoCfgTarifaController extends Controller
      */
     public function newAction(Request $request)
     {
-        $pqoCfgTarifa = new Pqocfgtarifa();
-        $form = $this->createForm('JHWEB\ParqueaderoBundle\Form\PqoCfgTarifaType', $pqoCfgTarifa);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($pqoCfgTarifa);
+
+            $patio = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find(
+                $params->idPatio
+            );
+
+            $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
+                $params->idTipoVehiculo
+            );
+
+            $tarifaOld = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgTarifa')->findOneBy(
+                array(
+                    'patio' => $patio->getId(),
+                    'tipoVehiculo' => $tipoVehiculo->getId(),
+                    'activo' => true
+                )
+            );
+
+            if ($tarifaOld) {
+                $tarifaOld->setActivo(false);
+
+                $em->flush();
+            }
+
+            $tarifa = new PqoCfgTarifa();
+            
+            $tarifa->setFecha(new \Datetime($params->fecha));
+            $tarifa->setValorHora($params->valorHora);
+            $tarifa->setActivo(true);
+            
+            if ($params->numeroActoAdministrativo) {
+                $tarifa->setNumeroActoAdministrativo($params->numeroActoAdministrativo);
+            }
+                
+            $tarifa->setTipoVehiculo($tipoVehiculo);
+            $tarifa->setPatio($patio);
+            
+            $em->persist($tarifa);
             $em->flush();
 
-            return $this->redirectToRoute('pqocfgtarifa_show', array('id' => $pqoCfgTarifa->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('pqocfgtarifa/new.html.twig', array(
-            'pqoCfgTarifa' => $pqoCfgTarifa,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
