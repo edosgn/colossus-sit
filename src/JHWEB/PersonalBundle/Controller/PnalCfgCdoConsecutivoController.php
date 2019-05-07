@@ -179,7 +179,7 @@ class PnalCfgCdoConsecutivoController extends Controller
         $comparendos['data'] = array();
 
         if ($authCheck == true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
             
             $comparendos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findByFuncionario(
@@ -231,15 +231,15 @@ class PnalCfgCdoConsecutivoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $comparendo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->getLastByFuncionario(
+            $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->getLastByFuncionario(
                 $params->funcionario->id
             );
                  
-            if ($comparendo) {
-                $comparendo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->find(
-                    $comparendo['id']
+            if ($consecutivo) {
+                $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->find(
+                    $consecutivo['id']
                 );
-                $comparendo->setEstado('EN TRAMITE');
+                $consecutivo->setEstado('EN TRAMITE');
 
                 $em->flush();
 
@@ -247,7 +247,7 @@ class PnalCfgCdoConsecutivoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Número de comparendo disponible.",  
-                    'data'=> $comparendo,
+                    'data'=> $consecutivo,
                 );
             }else{
                 $response = array(

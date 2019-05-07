@@ -12,9 +12,6 @@
     <p style="text-align:center;">
         <b>ACTA DE ENTREGA A SEDE OPERATIVA No. {{ asignacion.numeroActa }}</b>
         <br>      
-        <br>      
-        <br>      
-        <br>      
     </p>
 
     <p>
@@ -27,55 +24,49 @@
         <br>
         <br>
         <br>
-        <br>
-        <br>
         Se hace entrega de los documentos que a continuación se relacionan:
     </p>
 
     <table border="1">
         <tr style="text-align:center;font-weight:bold;">
             <td>
+                <b>
                 TIPO DE DOCUMENTO
+                </b>
             </td>
             <td>
+                <b>
                 UNIDAD DE ENTREGA
+                </b>
             </td>
             <td>
+                <b>
                 CANTIDAD
+                </b>
             </td>
             <td>
-                RANGOS
-            </td>
-        </tr>
-        <tr style="text-align:center;">
-            <td>Comparendos</td>
-            <td>Talonario</td>
-            <td>{{ asignacion.cantidadRecibida }}</td>
-            <td>
+                <b>
                 {{ asignacion.desde }}
                 <br>
                 a
-                <br>
                 {{ asignacion.hasta }}
+                </b>
             </td>
         </tr>
+        {% for key, consecutivo in consecutivos %}
+            <tr style="text-align:center;">
+                <td>{{ key + 1 }}</td>
+                <td>{{ consecutivo.numero }}</td>
+            </tr>
+        {% endfor %}
     </table>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+
     <table style="padding-top:60px;">
         <tr>
             <td width="50%">
 FIRMA QUIEN ENTREGA
 <br>
 Nombre del Funcionario
-<br>
 Cargo
             </td>
             <td style="text-align:right;">
