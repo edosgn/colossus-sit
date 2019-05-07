@@ -29,21 +29,4 @@ class PnalCfgCdoConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
-
-    //Obtiene la suma de los consecutivos disponibles por organismo de transito
-    public function getCantidadDisponibleByOrganismoTransito($idOrganismoTransito)
-    {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT SUM(pn.cantidadDisponible) AS total
-            FROM JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
-            WHERE pc.organismoTransito = :idOrganismoTransito
-            AND pc.activo = true";
-            
-        $consulta = $em->createQuery($dql);
-
-        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
-        
-        return $consulta->getOneOrNullResult();
-    }
 }

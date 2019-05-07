@@ -60,9 +60,9 @@ class PnalCfgCdoConsecutivo
     protected $funcionario;
 
     /**
-     * @ORM\ManyToOne(targetEntity="PnalTalonario", inversedBy="consecutivos")
+     * @ORM\ManyToOne(targetEntity="PnalAsignacion", inversedBy="consecutivos")
      **/
-    protected $talonario;
+    protected $asignacion;
 
 
     /**
@@ -220,26 +220,26 @@ class PnalCfgCdoConsecutivo
     }
 
     /**
-     * Set talonario
+     * Set asignacion
      *
-     * @param \JHWEB\PersonalBundle\Entity\PnalTalonario $talonario
+     * @param \JHWEB\PersonalBundle\Entity\PnalAsignacion $asignacion
      *
      * @return PnalCfgCdoConsecutivo
      */
-    public function setTalonario(\JHWEB\PersonalBundle\Entity\PnalTalonario $talonario = null)
+    public function setAsignacion(\JHWEB\PersonalBundle\Entity\PnalAsignacion $asignacion = null)
     {
-        $this->talonario = $talonario;
+        $this->asignacion = $asignacion;
 
         return $this;
     }
 
     /**
-     * Get talonario
+     * Get asignacion
      *
-     * @return \JHWEB\PersonalBundle\Entity\PnalTalonario
+     * @return \JHWEB\PersonalBundle\Entity\PnalAsignacion
      */
-    public function getTalonario()
+    public function getAsignacion()
     {
-        return $this->talonario;
+        return $this->asignacion;
     }
 }
