@@ -221,6 +221,9 @@ class PqoInmovilizacion
      */
     public function getFechaIngreso()
     {
+        if ($this->fechaIngreso) {
+            return $this->fechaIngreso->format('d/m/Y');
+        }
         return $this->fechaIngreso;
     }
 

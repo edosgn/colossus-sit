@@ -66,9 +66,14 @@ class PqoCfgTarifaController extends Controller
                 $params->idPatio
             );
 
+            $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
+                $params->idTipoVehiculo
+            );
+
             $tarifaOld = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgTarifa')->findOneBy(
                 array(
                     'patio' => $patio->getId(),
+                    'tipoVehiculo' => $tipoVehiculo->getId(),
                     'activo' => true
                 )
             );
@@ -88,14 +93,8 @@ class PqoCfgTarifaController extends Controller
             if ($params->numeroActoAdministrativo) {
                 $tarifa->setNumeroActoAdministrativo($params->numeroActoAdministrativo);
             }
-
-            if ($params->idTipoVehiculo) {
-                $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
-                    $params->idTipoVehiculo
-                );
-                $tarifa->setTipoVehiculo($tipoVehiculo);
-            }
-
+                
+            $tarifa->setTipoVehiculo($tipoVehiculo);
             $tarifa->setPatio($patio);
             
             $em->persist($tarifa);

@@ -63,8 +63,8 @@ class PnalAsignacionController extends Controller
 
             $fecha = new \Datetime($params->fecha);
 
-            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                $params->idFuncionario
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
             );
 
             $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByFecha();
@@ -214,7 +214,7 @@ class PnalAsignacionController extends Controller
         
         $em = $this->getDoctrine()->getManager();
 
-        $ultimoRango = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getMaximoByOrganismoTransito(
+        $ultimoRango = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getMaximoByOrganismoTransito(
             $params->idOrganismoTransito
         ); 
 
@@ -226,8 +226,8 @@ class PnalAsignacionController extends Controller
 
         $asignacion = new PnalAsignacion();
 
-        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-            $params->idFuncionario
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+            $params->idOrganismoTransito
         );
 
         $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getMaximo(
@@ -246,18 +246,18 @@ class PnalAsignacionController extends Controller
         $asignacion->setHasta($params->hasta);
         $asignacion->setCantidadDisponible($params->cantidadRecibida);
         $asignacion->setCantidadRecibida($params->cantidadRecibida);
-        $asignacion->setFecha($fecha);
+        $asignacion->setFecha(new \Datetime($params->fecha));
         $asignacion->setActivo(true);
         
-        $asignacion->setOrganismoTransito($funcionario->getOrganismoTransito());
+        $asignacion->setOrganismoTransito($organismoTransito);
 
         $em->persist($asignacion);
         $em->flush();
 
-        $divipo = $funcionario->getOrganismoTransito()->getDivipo();
+        $divipo = $organismoTransito->getDivipo();
 
         for ($numero=$asignacion->getDesde(); $numero <= $asignacion->getHasta(); $numero++) {
-            if ($funcionario->getOrganismoTransito()->getAsignacionRango()) {
+            if ($organismoTransito->getAsignacionRango()) {
                 $numeroComparendo = $divipo.$numero;
             }else{
                 $numeroComparendo = $numero;
@@ -269,7 +269,6 @@ class PnalAsignacionController extends Controller
 
             if ($consecutivo) {
                 $consecutivo->setAsignacion($asignacion);
-                $consecutivo->setOrganismoTransito($funcionario->getOrganismoTransito());
                 $consecutivo->setEstado('ASIGNADO');
 
                 $em->flush();

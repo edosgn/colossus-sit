@@ -284,8 +284,6 @@ class PnalTalonarioController extends Controller
         for ($numero = $talonario->getDesde(); $numero <= $talonario->getHasta(); $numero++) {
             $consecutivo = new PnalCfgCdoConsecutivo();
 
-            $consecutivo->setTalonario($talonario);
-
             if ($organismoTransito->getAsignacionRango()) {
                 $consecutivo->setNumero($divipo.$numero);
             }else{

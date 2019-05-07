@@ -62,8 +62,9 @@ class PnalAsignacionRepository extends \Doctrine\ORM\EntityRepository
             FROM JHWEBPersonalBundle:PnalAsignacion pa2
             WHERE pa2.activo = true
         ) 
-        AND pa.activo = true
-        LIMIT 1";
+        AND pa.activo = true";
+
+        $consulta = $em->createQuery($dql)->setMaxResults(1);;
 		
         return $consulta->getOneOrNullResult();
     }
