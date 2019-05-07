@@ -29,4 +29,31 @@ class PnalCfgCdoConsecutivoRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene la lista de funcionarios asignados por cargo
+    public function getByFuncionario($params){   
+        $em = $this->getEntityManager();
+
+    	$dql = "SELECT pc
+        FROM JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc,
+        JHWEBPersonalBundle:PnalFuncionario f, 
+        JHWEBUsuarioBundle:UserCiudadano c,
+        UsuarioBundle:Usuario u
+        WHERE pc.funcionario = f.id
+        AND u.id = c.usuario
+        AND c.id = f.ciudadano
+        AND (c.primerNombre = :parametro 
+        OR c.segundoNombre = :parametro 
+        OR c.primerApellido = :parametro 
+        OR c.segundoApellido = :parametro 
+        OR f.numeroPlaca = :parametro)";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'parametro' => $params->parametro,
+        ));
+
+
+        return $consulta->getResult();
+    }
 }

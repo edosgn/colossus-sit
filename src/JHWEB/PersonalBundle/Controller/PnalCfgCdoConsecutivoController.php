@@ -39,22 +39,50 @@ class PnalCfgCdoConsecutivoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $pnalCfgCdoConsecutivo = new Pnalcfgcdoconsecutivo();
-        $form = $this->createForm('JHWEB\PersonalBundle\Form\PnalCfgCdoConsecutivoType', $pnalCfgCdoConsecutivo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($pnalCfgCdoConsecutivo);
-            $em->flush();
 
-            return $this->redirectToRoute('pnalcfgcdoconsecutivo_show', array('id' => $pnalCfgCdoConsecutivo->getId()));
+            $funcionario = $em->getRepository("JHWEBPersonalBundle:PnalFuncionario")->find(
+                $params->idFuncionario
+            );
+
+            $divipo = $funcionario->getOrganismoTransito()->getDivipo();
+        
+            for ($numero = $params->desde(); $numero <= $params->hasta(); $numero++) {
+                if ($funcionario->getOrganismoTransito()->getAsignacionRango()) {
+                    $numeroComparendo = $divipo.$numero;
+                }else{
+                    $numeroComparendo = $numero;
+                }
+                
+                $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneByNumero(
+                    $numeroComparendo
+                );
+    
+                if ($consecutivo) {
+                    $consecutivo->setFechaAsignacion(new \Datetime($params->fechaAsignacion));
+                    $consecutivo->setFuncionario($funcionario);
+    
+                    $em->flush();
+                }
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida para editar.', 
+            );
         }
 
-        return $this->render('pnalcfgcdoconsecutivo/new.html.twig', array(
-            'pnalCfgCdoConsecutivo' => $pnalCfgCdoConsecutivo,
-            'form' => $form->createView(),
-        ));
+        return $helpers->json($response);
+        
     }
 
     /**
@@ -226,6 +254,55 @@ class PnalCfgCdoConsecutivoController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Ningún número de comparendo disponible para el agente de transito seleccionado.",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/funcionario", name="pnalcfgcdoconsecutivo_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByFuncionarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $consecutivos['data'] = array();
+
+            $consecutivos = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->getByFuncionario(
+                $params
+            );
+                 
+            if ($consecutivos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrados.",  
+                    'data'=> $consecutivos,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.",
                 );
             }
         }else{

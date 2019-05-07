@@ -269,6 +269,7 @@ class PnalAsignacionController extends Controller
 
             if ($consecutivo) {
                 $consecutivo->setAsignacion($asignacion);
+                $consecutivo->setOrganismoTransito($funcionario->getOrganismoTransito());
                 $consecutivo->setEstado('ASIGNADO');
 
                 $em->flush();
