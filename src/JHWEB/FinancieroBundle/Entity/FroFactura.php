@@ -122,6 +122,11 @@ class FroFactura
      **/
     protected $tipoRecaudo;
 
+    /**
+     * @ORM\OneToOne(targetEntity="JHWEB\InsumoBundle\Entity\ImoInsumo")
+     */
+    private $insumo;
+
 
     /**
      * Get id
@@ -491,5 +496,29 @@ class FroFactura
     public function getTipoRecaudo()
     {
         return $this->tipoRecaudo;
+    }
+
+    /**
+     * Set insumo
+     *
+     * @param \JHWEB\InsumoBundle\Entity\ImoInsumo $insumo
+     *
+     * @return FroFactura
+     */
+    public function setInsumo(\JHWEB\InsumoBundle\Entity\ImoInsumo $insumo = null)
+    {
+        $this->insumo = $insumo;
+
+        return $this;
+    }
+
+    /**
+     * Get insumo
+     *
+     * @return \JHWEB\InsumoBundle\Entity\ImoInsumo
+     */
+    public function getInsumo()
+    {
+        return $this->insumo;
     }
 }

@@ -72,6 +72,11 @@ class ImoInsumo
     protected $lote;
 
     /**
+     * @ORM\OneToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroFactura")
+     */
+    private $factura;
+
+    /**
      * Get id
      *
      * @return integer
@@ -146,11 +151,11 @@ class ImoInsumo
     /**
      * Get fecha
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFecha()
     {
-        return $this->fecha->format('Y-m-d');  
+        return $this->fecha->format('Y-m-d');
     }
 
     /**
@@ -271,5 +276,29 @@ class ImoInsumo
     public function getLote()
     {
         return $this->lote;
+    }
+
+    /**
+     * Set factura
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $factura
+     *
+     * @return ImoInsumo
+     */
+    public function setFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $factura = null)
+    {
+        $this->factura = $factura;
+
+        return $this;
+    }
+
+    /**
+     * Get factura
+     *
+     * @return \JHWEB\FinancieroBundle\Entity\FroFactura
+     */
+    public function getFactura()
+    {
+        return $this->factura;
     }
 }

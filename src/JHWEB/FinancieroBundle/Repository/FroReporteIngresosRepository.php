@@ -64,17 +64,17 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    public function getSustratosByName($idOrganismoTransito) {
+    public function getSustratosByName($idFactura) {
         $em = $this->getEntityManager();
 
         $dql = "SELECT COUNT(ii.tipo)
             FROM JHWEBInsumoBundle:ImoInsumo ii
-            WHERE ii.organismoTransito = :idOrganismoTransito";
+            WHERE ii.factura = :idFactura";
 
         $consulta = $em->createQuery($dql);
         
         $consulta->setParameters(array(
-            'idOrganismoTransito' => $idOrganismoTransito, 
+            'idFactura' => $idFactura, 
         ));
 
         return $consulta->getOneOrNullResult();
