@@ -63,4 +63,20 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    public function getSustratosByName($idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ii.tipo)
+            FROM JHWEBInsumoBundle:ImoInsumo ii
+            WHERE ii.organismoTransito = :idOrganismoTransito";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

@@ -58,6 +58,7 @@
             </tr>
         </table>
         <br>
+        <br>
         <table border="1" style="text-align:center;">
             <tr>
                 <td><b> RBO CAJA ANULADO </b></td>
@@ -89,22 +90,22 @@
         </table>
         <br>
         <br>
-        {# <table border="1" style="text-align:center;">
-                <tr>
-                    <td><b> Sustratos CDA </b></td>
-                    <td><b> Cantidad </b></td>
-                    <td><b> Valor </b></td>
-                    <td><b> Total </b></td>
-                </tr>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b> Sustratos CDA </b></td>
+                <td><b> Cantidad </b></td>
+                <td><b> Valor </b></td>
+                <td><b> Total </b></td>
+            </tr>
             {% for insumo in insumos %}
-                    <tr>
-                        <td>{{ insumo.categoria }}</td>
-                        <td>cantidad</td>
-                        <td>{{ insumo.tipo.nombre }}</td>
-                        <td>total</td>
-                    </tr>
-                {% endfor %}
-            </table> #}
+                <tr>
+                    <td>{{ insumo.nombre }}</td>
+                    <td>cantidad</td>
+                    <td>valor112123123</td>
+                    <td>total123123123</td>
+                </tr>
+            {% endfor %}
+        </table>
         {# {% if anuladas %}
             <h3>ANULADAS</h3>
             <table border="1" style="text-align:center;">

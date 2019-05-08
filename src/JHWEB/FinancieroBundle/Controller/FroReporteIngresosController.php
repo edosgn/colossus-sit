@@ -78,6 +78,9 @@ class FroReporteIngresosController extends Controller
         $conceptos = [];
         $numeros = [];
         $numerosaAnulados = [];
+        
+        //SUSTRATO
+        $sustratos = [];
 
         $valorTramitesPagados = 0;
         $valorTramitesVencidos = 0;
@@ -89,6 +92,7 @@ class FroReporteIngresosController extends Controller
 
         $arrayConceptos = [];
         $arrayTramites = [];
+        $arraySustratos = [];
         
         foreach ($tramites as $key => $tramite) {
             $numeros[] = $tramite->getTramiteFactura()->getFactura()->getNumero();
@@ -139,6 +143,39 @@ class FroReporteIngresosController extends Controller
             );    
         }
 
+
+        //para sustratos 
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
+        foreach ($insumos as $key => $insumo) {
+            switch ($insumo->getCategoria()) {
+                case 'SUSTRATO':
+                    $sustratos[] = $insumo;
+                    break;
+            }
+        }
+
+        foreach ($sustratos as $key => $sustrato) {
+            $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getSustratosByName($organismoTransito->getId()); 
+
+            var_dump($sustrato->getTipo()->getId());
+
+            $imoValor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->find(
+                array(
+                    'imoCfgTipo' => $sustrato->getTipo(),
+                )
+            );
+
+            $total3 = intval(implode($cantSustratos)) * $imoValor->getValor();
+            $totalSustratos += intval(implode($cantSustratos)) * $imoValor->getValor();
+
+            $arraySustratos[] = array(
+                'nombre' => $sustrato->getTipo()->getNombre(),
+                'cantidad' => intval(implode($cantSustratos)),
+                'valor' => $imoValor->getValor(),
+                'total' => $total3,
+            );
+        }
+
         $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
             'organismoTransito' => $organismoTransito, 
             'pagadas' => $pagadas, 
@@ -148,10 +185,12 @@ class FroReporteIngresosController extends Controller
             'valorTramitesPagados' => $valorTramitesPagados, 
             'valorTramitesAnulados' => $valorTramitesAnulados, 
             'conceptos' => $conceptos,
+            'arraySustratos' => $arraySustratos,
             'cantConceptos' => $cantConceptos,
             'arrayConceptos' => $arrayConceptos,
             'arrayTramites' => $arrayTramites,
             'totalConceptos' => $totalConceptos,
+            'totalSustratos' => $totalSustratos,
             'totalTramites' => $totalTramites,
             'traspasosAnulados' => $traspasos,
             'cantTraspasos' => count($traspasos),
