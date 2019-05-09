@@ -30,6 +30,25 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    public function findTramitesDiario($fecha, $idOrganismoTransito) {
+        
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts
+            WHERE fts.organismoTransito = :idOrganismoTransito 
+            AND fts.fecha = :fecha";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fecha' => $fecha,
+        ));
+
+        return $consulta->getResult();
+    }
+
     public function getByName($idConcepto, $idPrecio) {
         $em = $this->getEntityManager();
 

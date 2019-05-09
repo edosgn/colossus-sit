@@ -4,137 +4,146 @@
     </header>
     <body>
         <br>
-        {% if pagadas %}
-            <h3>PAGADAS</h3>
+        {% if reporteDiario == false %}
+            {% if pagadas %}
+                <h3>PAGADAS</h3>
+                <table border="1" style="text-align:center;">
+                    <tr>
+                        <td><b> COD </b></td>
+                        <td><b> Tramites </b></td>
+                        <td><b> Cantidad </b></td>
+                        <td><b> Valor </b></td>
+                        <td><b> Total </b></td>
+                    </tr>
+                    {% for tramite in arrayTramites %}
+                        <tr>
+                            <td>{{ tramite.id }}</td>
+                            <td>{{ tramite.nombre }}</td>
+                            <td>{{ tramite.cantidad }}</td>
+                            <td>{{ tramite.valor }}</td>
+                            <td>{{ tramite.total2 }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4"><b>TOTAL INGRESOS</b></td>
+                        <td>{{ totalTramites }}</td>
+                    </tr>
+                </table>
+            {% endif %}
+            <br>
+            <h3>CONCEPTOS<h3>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b> COD </b></td>
-                    <td><b> Tramites </b></td>
+                    <td><b>Id</b></td>
+                    <td><b>Nombre</b></td>
+                    <td><b>Cantidad</b></td>
+                    <td><b>Valor</b></td>
+                    <td><b>Total</b></td>
+                </tr>
+                {% for concepto in arrayConceptos %}
+                        <tr>
+                            <td>{{ concepto.id }}</td>
+                            <td>{{ concepto.nombre }}</td>
+                            <td>{{ concepto.cantidad}}</td>
+                            <td>{{ concepto.valor }}</td>
+                            <td>{{ concepto.total }}</td>
+                        </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><b>TOTAL CONCEPTOS</b></td>
+                    <td>{{ totalConceptos }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
+                    <td>{{ totalTramites - totalSustratos }}</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> RBO CAJA ANULADO </b></td>
+                    <td>{{ cantAnuladas }}</td>
+                </tr>
+                <tr>
+                    <td><b> RBO RETEFUENTE ANULADO </b></td>
+                    <td><b> {{ cantTraspasos }} </b></td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b>Relación No. de recibos</b></td>
+                    <td><b>Desde</b></td>
+                    <td><b>Hasta</b></td>
+                </tr>
+                <tr>
+                    <td>Recibos de trámites</td>
+                    <td>{{ min }}</td>
+                    <td>{{ max }}</td>
+                </tr>
+                <tr>
+                    <td>Recibos de rte. fte.</td>
+                    <td>{{ minAnulados }}</td>
+                    <td>{{ maxAnulados }}</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b> Sustratos CDA </b></td>
                     <td><b> Cantidad </b></td>
                     <td><b> Valor </b></td>
                     <td><b> Total </b></td>
                 </tr>
-                {% for tramite in arrayTramites %}
+                {% for sustrato in arraySustratos %}
                     <tr>
-                        <td>{{ tramite.id }}</td>
-                        <td>{{ tramite.nombre }}</td>
-                        <td>{{ tramite.cantidad }}</td>
-                        <td>{{ tramite.valor }}</td>
-                        <td>{{ tramite.total2 }}</td>
+                        <td>{{ sustrato.nombre }}</td>
+                        <td>{{ sustrato.cantidad }}</td>
+                        <td>{{ sustrato.valor }}</td>
+                        <td>{{ sustrato.total }}</td>
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="4"><b>TOTAL INGRESOS</b></td>
-                    <td>{{ totalTramites }}</td>
+                    <td><b>TOTAL SUSTRATOS</b></td>
+                    <td>{{ totalSustratos }}</td>
                 </tr>
             </table>
         {% endif %}
-        <br>
-        <h3>CONCEPTOS<h3>
-        <table border="1" style="text-align:center;">
-            <tr>
-                <td><b>Id</b></td>
-                <td><b>Nombre</b></td>
-                <td><b>Cantidad</b></td>
-                <td><b>Valor</b></td>
-                <td><b>Total</b></td>
-            </tr>
-            {% for concepto in arrayConceptos %}
-                    <tr>
-                        <td>{{ concepto.id }}</td>
-                        <td>{{ concepto.nombre }}</td>
-                        <td>{{ concepto.cantidad}}</td>
-                        <td>{{ concepto.valor }}</td>
-                        <td>{{ concepto.total }}</td>
-                    </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="4"><b>TOTAL CONCEPTOS</b></td>
-                <td>{{ totalConceptos }}</td>
-            </tr>
-            <tr>
-                <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
-                <td>{{ totalTramites - totalSustratos }}</td>
-            </tr>
-        </table>
-        <br>
-        <br>
-        <table border="1" style="text-align:center;">
-            <tr>
-                <td><b> RBO CAJA ANULADO </b></td>
-                <td>{{ cantAnuladas }}</td>
-            </tr>
-            <tr>
-                <td><b> RBO RETEFUENTE ANULADO </b></td>
-                <td><b> {{ cantTraspasos }} </b></td>
-            </tr>
-        </table>
-        <br>
-        <br>
-        <table border="1" style="text-align:center;">
-            <tr>
-                <td><b>Relación No. de recibos</b></td>
-                <td><b>Desde</b></td>
-                <td><b>Hasta</b></td>
-            </tr>
-            <tr>
-                <td>Recibos de trámites</td>
-                <td>{{ min }}</td>
-                <td>{{ max }}</td>
-            </tr>
-            <tr>
-                <td>Recibos de rte. fte.</td>
-                <td>{{ minAnulados }}</td>
-                <td>{{ maxAnulados }}</td>
-            </tr>
-        </table>
-        <br>
-        <br>
-        <table border="1" style="text-align:center;">
-            <tr>
-                <td><b> Sustratos CDA </b></td>
-                <td><b> Cantidad </b></td>
-                <td><b> Valor </b></td>
-                <td><b> Total </b></td>
-            </tr>
-            {% for sustrato in arraySustratos %}
-                <tr>
-                    <td>{{ sustrato.nombre }}</td>
-                    <td>{{ sustrato.cantidad }}</td>
-                    <td>{{ sustrato.valor }}</td>
-                    <td>{{ sustrato.total }}</td>
-                </tr>
-            {% endfor %}
-            <tr>
-                <td><b>TOTAL SUSTRATOS</b></td>
-                <td>{{ totalSustratos }}</td>
-            </tr>
-        </table>
-        {# {% if anuladas %}
-            <h3>ANULADAS</h3>
+        {# fin tramites diarios #}
+        {% if reporteDiario %}
+            <b>Fecha de informe: </b> {{ mesReporte }}<br>
+            <b>Organismo tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
+            <b>Nombre del inspector: </b> {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}<br>
+            <b>Fecha de expedición del informe: </b> 
+            <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b> COD </b></td>
-                    <td><b> Concepto </b></td>
-                    <td><b> Cantidad </b></td>
-                    <td><b> Valor </b></td>
-                    <td><b> Total </b></td>
+                    <td><b> Nro. Factura </b></td>
+                    {# <td><b> Fecha </b></td>
+                    <td><b> Placa/Cédula </b></td>
+                    <td><b> Nro. Sustrato </b></td>
+                    <td><b> Clasificaciones </b></td>
+                    <td><b> Trámite </b></td>
+                    <td><b> Valor Pagado </b></td>
+                    <td><b> Observaciones </b></td> #}
                 </tr>
-                {% for anulada in anuladas %}
+                {% for tramite in arrayReporteDiario %}
                     <tr>
-                        <td>{{ anulada.tramiteFactura.precio.tramite.codigo }}</td>
-                        <td>{{ anulada.tramiteFactura.precio.tramite.nombre }}</td>
-                        <td>{{ cantAnuladas }}</td>
-                        <td>{{ anulada.tramiteFactura.precio.valor }}</td>
-                        <td>{{ cantAnuladas * anulada.tramiteFactura.precio.valor }}</td>
+                        <td>{{ tramite.numeroFactura }}</td>
+                        {# <td>{{ tramite.cantidad }}</td>
+                        <td>{{ tramite.valor }}</td>
+                        <td>{{ tramite.total }}</td> #}
                     </tr>
                 {% endfor %}
-                <tr>
-                    <td style="float:left;" colspan="4"><b>TOTAL INGRESOS</b></td>
-                    <td>{{ valorTramitesAnulados }}</td>
-                </tr>
+                {# <tr>
+                    <td><b>TOTAL </b></td>
+                    <td>{{ totalReporteDiario }}</td>
+                </tr> #}
             </table>
-        {% endif %} #}
+        {% endif %}
     </body>
 </html>
 
