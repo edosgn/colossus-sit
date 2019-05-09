@@ -52,9 +52,37 @@ class SvIpatImpresoMunicipio
     /**
      * @var int
      *
-     * @ORM\Column(name="cantidad_recibida", type="integer")
+     * @ORM\Column(name="cantidad_entregada", type="integer")
      */
-    private $cantidadRecibida;
+    private $cantidadEntregada;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="corregimiento", type="string", length=255, nullable=true)
+     */
+    private $corregimiento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="responsable_nombre", type="string", length=255, nullable=true)
+     */
+    private $responsableNombre;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="responsable_identificacion", type="integer", nullable=false)
+     */
+    private $responsableIdentificacion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="responsable_cargo", type="string", length=255, nullable=true)
+     */
+    private $responsableCargo;
 
     /**
      * @var bool
@@ -188,27 +216,123 @@ class SvIpatImpresoMunicipio
     }
 
     /**
-     * Set cantidadRecibida
+     * Set cantidadEntregada
      *
-     * @param integer $cantidadRecibida
+     * @param integer $cantidadEntregada
      *
      * @return SvIpatImpresoMunicipio
      */
-    public function setCantidadRecibida($cantidadRecibida)
+    public function setCantidadEntregada($cantidadEntregada)
     {
-        $this->cantidadRecibida = $cantidadRecibida;
+        $this->cantidadEntregada = $cantidadEntregada;
 
         return $this;
     }
 
     /**
-     * Get cantidadRecibida
+     * Get cantidadEntregada
      *
      * @return integer
      */
-    public function getCantidadRecibida()
+    public function getCantidadEntregada()
     {
-        return $this->cantidadRecibida;
+        return $this->cantidadEntregada;
+    }
+
+    /**
+     * Set corregimiento
+     *
+     * @param string $corregimiento
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setCorregimiento($corregimiento)
+    {
+        $this->corregimiento = $corregimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get corregimiento
+     *
+     * @return string
+     */
+    public function getCorregimiento()
+    {
+        return $this->corregimiento;
+    }
+
+    /**
+     * Set responsableNombre
+     *
+     * @param string $responsableNombre
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setResponsableNombre($responsableNombre)
+    {
+        $this->responsableNombre = $responsableNombre;
+
+        return $this;
+    }
+
+    /**
+     * Get responsableNombre
+     *
+     * @return string
+     */
+    public function getResponsableNombre()
+    {
+        return $this->responsableNombre;
+    }
+
+    /**
+     * Set responsableIdentificacion
+     *
+     * @param integer $responsableIdentificacion
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setResponsableIdentificacion($responsableIdentificacion)
+    {
+        $this->responsableIdentificacion = $responsableIdentificacion;
+
+        return $this;
+    }
+
+    /**
+     * Get responsableIdentificacion
+     *
+     * @return integer
+     */
+    public function getResponsableIdentificacion()
+    {
+        return $this->responsableIdentificacion;
+    }
+
+    /**
+     * Set responsableCargo
+     *
+     * @param string $responsableCargo
+     *
+     * @return SvIpatImpresoMunicipio
+     */
+    public function setResponsableCargo($responsableCargo)
+    {
+        $this->responsableCargo = $responsableCargo;
+
+        return $this;
+    }
+
+    /**
+     * Get responsableCargo
+     *
+     * @return string
+     */
+    public function getResponsableCargo()
+    {
+        return $this->responsableCargo;
     }
 
     /**

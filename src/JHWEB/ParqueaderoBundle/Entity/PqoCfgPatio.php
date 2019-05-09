@@ -64,6 +64,34 @@ class PqoCfgPatio
     private $propietario;
 
     /**
+     * @var string
+     *s
+     * @ORM\Column(name="numero_resolucion", type="string", length=20, nullable=true)
+     */
+    private $numeroResolucion;
+
+    /**
+     * @var string
+     *s
+     * @ORM\Column(name="archivo", type="string", length=255, nullable=true)
+     */
+    private $archivo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_inicial", type="date")
+     */
+    private $fechaInicial;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_final", type="date", nullable=true)
+     */
+    private $fechaFinal;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -226,6 +254,102 @@ class PqoCfgPatio
     public function getPropietario()
     {
         return $this->propietario;
+    }
+
+    /**
+     * Set numeroResolucion
+     *
+     * @param string $numeroResolucion
+     *
+     * @return PqoCfgPatio
+     */
+    public function setNumeroResolucion($numeroResolucion)
+    {
+        $this->numeroResolucion = $numeroResolucion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroResolucion
+     *
+     * @return string
+     */
+    public function getNumeroResolucion()
+    {
+        return $this->numeroResolucion;
+    }
+
+    /**
+     * Set archivo
+     *
+     * @param string $archivo
+     *
+     * @return PqoCfgPatio
+     */
+    public function setArchivo($archivo)
+    {
+        $this->archivo = $archivo;
+
+        return $this;
+    }
+
+    /**
+     * Get archivo
+     *
+     * @return string
+     */
+    public function getArchivo()
+    {
+        return $this->archivo;
+    }
+
+    /**
+     * Set fechaInicial
+     *
+     * @param \DateTime $fechaInicial
+     *
+     * @return PqoCfgPatio
+     */
+    public function setFechaInicial($fechaInicial)
+    {
+        $this->fechaInicial = $fechaInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInicial
+     *
+     * @return \DateTime
+     */
+    public function getFechaInicial()
+    {
+        return $this->fechaInicial;
+    }
+
+    /**
+     * Set fechaFinal
+     *
+     * @param \DateTime $fechaFinal
+     *
+     * @return PqoCfgPatio
+     */
+    public function setFechaFinal($fechaFinal)
+    {
+        $this->fechaFinal = $fechaFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaFinal
+     *
+     * @return \DateTime
+     */
+    public function getFechaFinal()
+    {
+        return $this->fechaFinal;
     }
 
     /**

@@ -36,6 +36,20 @@ class PqoInmovilizacion
     private $placa;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="motor", type="string", length=255, nullable=true)
+     */
+    private $motor;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="chasis", type="string", length=255, nullable=true)
+     */
+    private $chasis;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_ingreso", type="date")
@@ -48,6 +62,20 @@ class PqoInmovilizacion
      * @ORM\Column(name="hora_ingreso", type="time")
      */
     private $horaIngreso;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_inmovilizacion", type="date")
+     */
+    private $fechaInmovilizacion;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora_inmovilizacion", type="time")
+     */
+    private $horaInmovilizacion;
 
     /**
      * @var \DateTime
@@ -201,6 +229,54 @@ class PqoInmovilizacion
     }
 
     /**
+     * Set motor
+     *
+     * @param string $motor
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setMotor($motor)
+    {
+        $this->motor = $motor;
+
+        return $this;
+    }
+
+    /**
+     * Get motor
+     *
+     * @return string
+     */
+    public function getMotor()
+    {
+        return $this->motor;
+    }
+
+    /**
+     * Set chasis
+     *
+     * @param string $chasis
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setChasis($chasis)
+    {
+        $this->chasis = $chasis;
+
+        return $this;
+    }
+
+    /**
+     * Get chasis
+     *
+     * @return string
+     */
+    public function getChasis()
+    {
+        return $this->chasis;
+    }
+
+    /**
      * Set fechaIngreso
      *
      * @param \DateTime $fechaIngreso
@@ -221,9 +297,6 @@ class PqoInmovilizacion
      */
     public function getFechaIngreso()
     {
-        if ($this->fechaIngreso) {
-            return $this->fechaIngreso->format('d/m/Y');
-        }
         return $this->fechaIngreso;
     }
 
@@ -249,6 +322,54 @@ class PqoInmovilizacion
     public function getHoraIngreso()
     {
         return $this->horaIngreso;
+    }
+
+    /**
+     * Set fechaInmovilizacion
+     *
+     * @param \DateTime $fechaInmovilizacion
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setFechaInmovilizacion($fechaInmovilizacion)
+    {
+        $this->fechaInmovilizacion = $fechaInmovilizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaInmovilizacion
+     *
+     * @return \DateTime
+     */
+    public function getFechaInmovilizacion()
+    {
+        return $this->fechaInmovilizacion;
+    }
+
+    /**
+     * Set horaInmovilizacion
+     *
+     * @param \DateTime $horaInmovilizacion
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setHoraInmovilizacion($horaInmovilizacion)
+    {
+        $this->horaInmovilizacion = $horaInmovilizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get horaInmovilizacion
+     *
+     * @return \DateTime
+     */
+    public function getHoraInmovilizacion()
+    {
+        return $this->horaInmovilizacion;
     }
 
     /**
