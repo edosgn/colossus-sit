@@ -285,4 +285,29 @@ class SvIpatImpresoAsignacionController extends Controller
 
         return true;
     }
+
+    /**
+     * Genera pdf con la asignacion solicitada.
+     *
+     * @Route("/acta/{id}/pdf", name="svipatimpresoasignacion_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $asignacion = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->find(
+            $id
+        );
+
+        $html = $this->renderView('@JHWEBSeguridadVial/Default/pdf.acta.asignacion.html.twig', array(
+            'asignacion' => $asignacion,
+            'fechaActual' => $fechaActual
+        ));
+
+        $this->get('app.pdf')->templateAsignacionTalonarios($html, $asignacion);
+    }
 }

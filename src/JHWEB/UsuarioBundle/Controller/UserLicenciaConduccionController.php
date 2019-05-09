@@ -130,7 +130,6 @@ class UserLicenciaConduccionController extends Controller
             $licenciaConduccion->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $licenciaConduccion->setFechaVencimiento(new \Datetime($fechaVencimiento));
             $licenciaConduccion->setNumero($params->numero);
-            $licenciaConduccion->setNumeroRunt($params->numeroRunt);
             $licenciaConduccion->setEstado($params->estado);
             $licenciaConduccion->setRestriccion($params->restriccion);
             
@@ -248,7 +247,6 @@ class UserLicenciaConduccionController extends Controller
             $licenciaConduccion->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $licenciaConduccion->setFechaVencimiento(new \Datetime($fechaVencimiento));
             $licenciaConduccion->setNumero($params->numero);
-            $licenciaConduccion->setNumeroRunt($params->numeroRunt);
             $licenciaConduccion->setEstado($params->estado);
             $licenciaConduccion->setRestriccion($params->restriccion);
             

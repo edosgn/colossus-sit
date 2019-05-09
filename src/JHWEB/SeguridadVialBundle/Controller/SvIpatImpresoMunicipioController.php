@@ -316,4 +316,30 @@ class SvIpatImpresoMunicipioController extends Controller
 
         return true;
     }
+
+
+    /**
+     * Genera acta en formato pdf con el rango solicitado.
+     *
+     * @Route("/acta/{id}/pdf", name="svipatimpresomunicipio_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $municipio = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->find(
+            $id
+        );
+
+        $html = $this->renderView('@JHWEBSeguridadVial/Default/pdf.acta.municipio.html.twig', array(
+            'municipio' => $municipio,
+            'fechaActual' => $fechaActual
+        ));
+
+        $this->get('app.pdf')->templateAsignacionTalonarios($html, $municipio);
+    }
 }

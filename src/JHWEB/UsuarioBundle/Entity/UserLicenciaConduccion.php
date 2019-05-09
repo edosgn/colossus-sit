@@ -29,13 +29,6 @@ class UserLicenciaConduccion
     private $numero;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="numeroRunt", type="bigint")
-     */
-    private $numeroRunt;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_expedicion", type="date")
@@ -125,30 +118,6 @@ class UserLicenciaConduccion
     }
 
     /**
-     * Set numeroRunt
-     *
-     * @param integer $numeroRunt
-     *
-     * @return UserLicenciaConduccion
-     */
-    public function setNumeroRunt($numeroRunt)
-    {
-        $this->numeroRunt = $numeroRunt;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroRunt
-     *
-     * @return integer
-     */
-    public function getNumeroRunt()
-    {
-        return $this->numeroRunt;
-    }
-
-    /**
      * Set fechaExpedicion
      *
      * @param \DateTime $fechaExpedicion
@@ -169,9 +138,6 @@ class UserLicenciaConduccion
      */
     public function getFechaExpedicion()
     {
-        if ($this->fechaExpedicion) {
-            return $this->fechaExpedicion->format('Y-m-d');
-        }
         return $this->fechaExpedicion;
     }
 
@@ -196,9 +162,6 @@ class UserLicenciaConduccion
      */
     public function getFechaVencimiento()
     {
-        if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('Y-m-d');
-        }
         return $this->fechaVencimiento;
     }
 
