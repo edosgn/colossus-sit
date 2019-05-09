@@ -91,7 +91,11 @@ class SvIpatImpresoMunicipioController extends Controller
                     $municipio->setFecha($fecha);
                     
                     $municipio->setCantidadDisponible($params->cantidad);
-                    $municipio->setCantidadRecibida($params->cantidad);
+                    $municipio->setCantidadEntregada($params->cantidad);
+                    $municipio->setCorregimiento($params->corregimiento);
+                    $municipio->setResponsableNombre($params->responsableNombre);
+                    $municipio->setResponsableIdentificacion($params->responsableIdentificacion);
+                    $municipio->setResponsableCargo($params->responsableCargo);
                     $municipio->setActivo(true);
 
                     if ($organismoTransito) {
@@ -110,6 +114,7 @@ class SvIpatImpresoMunicipioController extends Controller
 
                     $asignaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->findBy(
                         array(
+                            'organismoTransito' => $organismoTransito->getId(),
                             'activo' => true
                         )
                     );

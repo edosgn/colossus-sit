@@ -65,9 +65,22 @@ class PqoInmovilizacionController extends Controller
             $inmovilizacion = new PqoInmovilizacion();
 
             $inmovilizacion->setNumeroComparendo($params->numeroComparendo);
-            $inmovilizacion->setPlaca($params->placa);
+            if ($params->placa) {
+                $inmovilizacion->setPlaca($params->placa);
+            }
+
+            if ($params->motor) {
+                $inmovilizacion->setMotor($params->motor);
+            }
+
+            if ($params->chasis) {
+                $inmovilizacion->setChasis($params->chasis);
+            }
+            
             $inmovilizacion->setFechaIngreso(new \Datetime(date('Y-m-d')));
             $inmovilizacion->setHoraIngreso(new \Datetime(date('h:i:s A')));
+            $inmovilizacion->setFechaInmovilizacion(new \Datetime($params->fechaInmovilizacion));
+            $inmovilizacion->setHoraInmovilizacion(new \Datetime($params->horaInmovilizacion));
             $inmovilizacion->setNumeroInventario($params->numeroInventario);
             $inmovilizacion->setCostoGrua($params->costoGrua);
             $inmovilizacion->setEstado('INMOVILIZADO');
