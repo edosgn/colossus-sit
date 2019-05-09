@@ -54,7 +54,7 @@
             </tr>
             <tr>
                 <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
-                <td>{{ totalTramites + totalConceptos }}</td>
+                <td>{{ totalTramites - totalSustratos }}</td>
             </tr>
         </table>
         <br>
@@ -106,7 +106,7 @@
                 </tr>
             {% endfor %}
             <tr>
-                <td colspan="4"><b>TOTAL SUSTRATOS</b></td>
+                <td><b>TOTAL SUSTRATOS</b></td>
                 <td>{{ totalSustratos }}</td>
             </tr>
         </table>
