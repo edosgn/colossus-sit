@@ -408,7 +408,7 @@ class PqoCfgPatioController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => 'Autorizacion no valida.', 
             );
         }
         

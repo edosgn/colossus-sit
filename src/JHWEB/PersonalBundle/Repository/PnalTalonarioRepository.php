@@ -10,7 +10,7 @@ namespace JHWEB\PersonalBundle\Repository;
  */
 class PnalTalonarioRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getLastByFechaAndOrganismoTransito($idOrganismoTransito){ 
+    public function getLastByLastFechaAndOrganismoTransito($idOrganismoTransito){ 
         $em = $this->getEntityManager();
         
         $dql = "SELECT pt

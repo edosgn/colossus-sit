@@ -62,85 +62,92 @@ class SvIpatImpresoAsignacionController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
-            $cantidadDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoBodega')->getTotalDisponible();
-            $cantidadDisponible = (empty($cantidadDisponible['cantidad']) ? 0 : $cantidadDisponible['cantidad']);
+            $rangoDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getLastByLastFechaAndOrganismoTransito(
+                $params->idOrganismoTransito
+            );
 
-            if ($cantidadDisponible > 0) {
-                if ($params->cantidad <= $cantidadDisponible) {
-                    $asignacion = new SvIpatImpresoAsignacion();
+            if ($rangoDisponible) {
+                $cantidadDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoBodega')->getTotalDisponible();
+                $cantidadDisponible = (empty($cantidadDisponible['cantidad']) ? 0 : $cantidadDisponible['cantidad']);
     
-                    $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getMaximo(date('Y'));
-                   
-                    $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-                    $asignacion->setConsecutivo($consecutivo);
-
-                    $fecha = new \Datetime($params->fecha);
-                    
-                    $asignacion->setNumeroActa(
-                        $fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
-                    );
+                if ($cantidadDisponible > 0) {
+                    if ($params->cantidad <= $cantidadDisponible) {
+                        $asignacion = new SvIpatImpresoAsignacion();
         
-                    $asignacion->setFecha($fecha);
-                    
-                    $asignacion->setCantidadDisponible($params->cantidad);
-                    $asignacion->setCantidadRecibida($params->cantidad);
-                    $asignacion->setActivo(true);
-        
-                    if ($params->idOrganismoTransito) {
-                        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-                            $params->idOrganismoTransito
+                        $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getMaximo(date('Y'));
+                       
+                        $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+                        $asignacion->setConsecutivo($consecutivo);
+    
+                        $fecha = new \Datetime($params->fecha);
+                        
+                        $asignacion->setNumeroActa(
+                            $fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
                         );
+            
+                        $asignacion->setFecha($fecha);
+                        
+                        $asignacion->setCantidadDisponible($params->cantidad);
+                        $asignacion->setCantidadRecibida($params->cantidad);
+                        $asignacion->setActivo(true);
+            
+                        if ($params->idOrganismoTransito) {
+                            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                                $params->idOrganismoTransito
+                            );
+                        }
                         $asignacion->setOrganismoTransito($organismoTransito);
-                    }
+                        
+                        $em->persist($asignacion);
+                        $em->flush();
         
-                    $em->persist($asignacion);
-                    $em->flush();
-    
-                    $bodegas = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoBodega')->findBy(
-                        array(
-                            'estado' => 'DISPONIBLE'
-                        )
-                    );
-    
-                    foreach ($bodegas as $key => $bodega){
-                        if ($bodega->getCantidadDisponible() <= $params->cantidad) {
-                            $cantidad =  $params->cantidad - $bodega->getCantidadDisponible();
-                            $params->cantidad = $cantidad;
-                            $bodega->setCantidadDisponible(0);
-                            $bodega->setEstado('ASIGNADO');
-    
-                            $em->flush(); 
-                        }else {
-                            if ($params->cantidad > 0) {
-                                $cantidad =  $bodega->getCantidadDisponible() - $params->cantidad;
-                                $bodega->setCantidadDisponible($cantidad);
-                                $params->cantidad = 0;
-    
+                        $bodegas = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoBodega')->findBy(
+                            array(
+                                'estado' => 'DISPONIBLE'
+                            )
+                        );
+        
+                        foreach ($bodegas as $key => $bodega){
+                            if ($bodega->getCantidadDisponible() <= $params->cantidad) {
+                                $cantidad =  $params->cantidad - $bodega->getCantidadDisponible();
+                                $params->cantidad = $cantidad;
+                                $bodega->setCantidadDisponible(0);
+                                $bodega->setEstado('ASIGNADO');
+        
                                 $em->flush(); 
+                            }else {
+                                if ($params->cantidad > 0) {
+                                    $cantidad =  $bodega->getCantidadDisponible() - $params->cantidad;
+                                    $bodega->setCantidadDisponible($cantidad);
+                                    $params->cantidad = 0;
+        
+                                    $em->flush(); 
+                                }
                             }
                         }
+                    
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'Registro creado con exito.',
+                            'data' => $asignacion
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'La cantidad solicitada supera los '.$cantidadDisponible.' impresos disponibles en bodega.', 
+                        );
                     }
-                
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => 'Registro creado con exito.',
-                        'data' => $asignacion
-                    );
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'La cantidad solicitada supera los '.$cantidadDisponible.' impresos disponibles en bodega.', 
+                        'message' => 'No tiene impresos disponibles en bodega.', 
                     );
                 }
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'No tiene impresos disponibles en bodega.', 
-                );
             }
+
         }else{
             $response = array(
                 'status' => 'error',

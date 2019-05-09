@@ -67,7 +67,7 @@ class PnalTalonarioController extends Controller
                 $params->idOrganismoTransito
             );
 
-            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByFechaAndOrganismoTransito(
+            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByLastFechaAndOrganismoTransito(
                 $params->idOrganismoTransito
             );
 
