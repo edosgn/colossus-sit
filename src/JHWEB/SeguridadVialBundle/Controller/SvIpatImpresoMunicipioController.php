@@ -18,7 +18,7 @@ class SvIpatImpresoMunicipioController extends Controller
      * Lists all svIpatImpresoMunicipio entities.
      *
      * @Route("/", name="svipatimpresomunicipio_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function indexAction()
     {
@@ -250,6 +250,12 @@ class SvIpatImpresoMunicipioController extends Controller
         $helpers = $this->get("app.helpers");
 
         $em = $this->getDoctrine()->getManager();
+
+        if ($params->idOrganismoTransito) {
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                $params->idOrganismoTransito
+            );
+        }
 
         $municipio = new SvIpatImpresoMunicipio();
     

@@ -648,7 +648,7 @@ class ImoInsumoController extends Controller
         }
         $totalConsignar = $valorTotalSede * $totalSede;
 
-        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.html.twig', array(
+        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.insumo.html.twig', array(
             'organismoTransito' => $organismoTransito, 
             'tiposArray' => $tiposArray, 
             'disponibles' => $disponibles,

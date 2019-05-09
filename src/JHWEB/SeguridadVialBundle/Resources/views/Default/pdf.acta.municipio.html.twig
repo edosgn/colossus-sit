@@ -9,7 +9,7 @@
     	<br>
     </p>
     <p style="text-align:center;">
-        <b>ACTA DE ENTREGA No. {{ asignacion.numeroActa }}</b>
+        <b>ACTA DE ENTREGA No. {{ municipio.numeroActa }}</b>
         <br>      
     </p>
 
@@ -18,51 +18,38 @@
             <td colspan="3">
                 <b>ORGANISMO DE TRANSITO</b>
                 <br>
-                {{ asignacion.talonario.organismoTransito.nombre }}
+                {{ municipio.organismoTransito.nombre }}
             </td>
         </tr>
         <tr style="text-align:center;font-weight:bold;">
-            <td>RANGOS</td>
+            <td>CANTIDAD</td>
             <td>UNIDAD DE ENTREGA</td>
-            <td>TOTAL ENTREGADOS</td>
         </tr>
         <tr style="text-align:center;">
             <td>
-                {{ asignacion.rangoInicial }}
-                a
-                {{ asignacion.RangoFinal }}
+                {{ municipio.cantidadEntregada }}
             </td>
             <td>IPAT Impresos</td>
-            <td>{{ asignacion.total }}</td>
         </tr>
-    </table>
-
-    <table border="1">
-        <tr style="text-align:center;font-weight:bold;">
-            <td>#</td>
-            <td>NUMERO</td>
-        </tr>
-        {% for key, consecutivo in consecutivos %}    
-        <tr style="text-align:center;">
-            <td>{{ key + 1 }}</td>
-            <td>{{ consecutivo.numero }}</td>
-        </tr>
-        {% endfor %}
     </table>
 
     <table style="padding-top:60px;">
         <tr>
             <td width="50%">
-FIRMA QUIEN ENTREGA
+FIRMA DEL INSPECTOR
 <br>
-Nombre del funcionario
+Nombre del inspector
 <br>
 Cargo
             </td>
             <td style="text-align:right;">
-FIRMA DEL INSPECTOR
+FIRMA
 <br>
-Nombre del inspector
+{{ responsableNombre }}
+<br>
+{{ responsableIdentificacion }}
+<br>
+{{ responsableCargo }}
             </td>
         </tr>
     </table>

@@ -89,7 +89,7 @@ class PqoCfgPatioController extends Controller
             if ($file) {
                 $extension = $file->guessExtension();
 
-                if ($extension != 'pdf' || $extension != 'PDF') {
+                if ($extension != 'pdf' && $extension != 'PDF') {
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
