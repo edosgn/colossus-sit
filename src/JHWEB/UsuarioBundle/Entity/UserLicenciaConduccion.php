@@ -138,6 +138,9 @@ class UserLicenciaConduccion
      */
     public function getFechaExpedicion()
     {
+        if ($this->fechaExpedicion) {
+            return $this->fechaExpedicion->format('Y-m-d');
+        }
         return $this->fechaExpedicion;
     }
 
@@ -162,6 +165,9 @@ class UserLicenciaConduccion
      */
     public function getFechaVencimiento()
     {
+        if ($this->fechaVencimiento) {
+            return $this->fechaVencimiento->format('Y-m-d');
+        }
         return $this->fechaVencimiento;
     }
 

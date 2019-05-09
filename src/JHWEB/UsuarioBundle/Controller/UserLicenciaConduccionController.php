@@ -116,6 +116,7 @@ class UserLicenciaConduccionController extends Controller
 
                 foreach ($licenciasOld as $key => $licenciaOld) {
                     $licenciaOld->setActivo(false);
+                    $licenciaOld->setEstado('INACTIVO');
                     $em->flush();
                 }
             }
