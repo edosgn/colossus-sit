@@ -3,9 +3,11 @@
 namespace JHWEB\ParqueaderoBundle\Controller;
 
 use JHWEB\ParqueaderoBundle\Entity\PqoCfgPatio;
+use JHWEB\ParqueaderoBundle\Entity\PqoCfgPatioCiudadano;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Pqocfgpatio controller.
@@ -59,6 +61,8 @@ class PqoCfgPatioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
            
             $patio = new PqoCfgPatio();
 
@@ -66,6 +70,9 @@ class PqoCfgPatioController extends Controller
             $patio->setDireccion(mb_strtoupper($params->direccion,'utf-8'));
             $patio->setCorreo($params->correo);
             $patio->setTelefono($params->telefono);
+            $patio->setNumeroResolucion($params->numeroResolucion);
+            $patio->setFechaInicial(new \Datetime($params->fechaInicial));
+            $patio->setFechaFinal(new \Datetime($params->fechaFinal));
             $patio->setActivo(true);
 
             if ($params->administrador) {
@@ -76,15 +83,35 @@ class PqoCfgPatioController extends Controller
                 $patio->setPropietario($params->propietario);
             }
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($patio);
-            $em->flush();
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-            );
+            $file = $request->files->get('file');
+               
+            if ($file) {
+                $extension = $file->guessExtension();
+
+                if ($extension != 'pdf' || $extension != 'PDF') {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "EL documento debe ser formato .pdf", 
+                    );
+                }else{     
+                    $filename = md5(rand().time()).".".$extension;
+                    $dir=__DIR__.'/../../../../web/docs/patio';
+    
+                    $file->move($dir,$filename);
+                    $patio->setArchivo($filename);
+
+                    $em->persist($patio);
+                    $em->flush();
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con exito.",
+                    );
+                }
+            }
         }else{
             $response = array(
                 'status' => 'error',
@@ -256,6 +283,135 @@ class PqoCfgPatioController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Asigna un patio a un ciudadano.
+     *
+     * @Route("/assign", name="pqocfgpatio_assign")
+     * @Method({"GET", "POST"})
+     */
+    public function assignAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $patio = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find(
+                $params->id
+            );
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                $params->idCiudadano
+            );
+
+            $patioCiudadanoOld = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->findBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
+                    'activo' => true
+                )
+            );
+
+            if ($patioCiudadanoOld) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano seleccionado tiene una asignación vigente.', 
+                );
+            }else{
+                $patioCiudadano = new PqoPatioCiudadano();
+
+                $patioCiudadanoOld->setActivo(false);
+    
+                $patioCiudadano->setCiudadano($ciudadano);
+                $patioCiudadano->setPatio($patio);
+                $patioCiudadano->setActivo(true);
+
+                $em->persist($patioCiudadano);
+                $em->flush();
+               
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro creado con exito.',
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Asigna un patio a un ciudadano.
+     *
+     * @Route("/search/ciudadano", name="pqocfgpatio_search_ciudadano")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByCiudadanoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'tipoIdentificacion' => 1,
+                    'identificacion' => $params->identificacion
+                )
+            );
+
+            if ($ciudadano) {
+                $patioCiudadano = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->findOneBy(
+                    array(
+                        'ciudadano' => $ciudadano->getId(),
+                        'activo' => true
+                    )
+                );
+
+                if ($patioCiudadano) {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado con exito.',
+                        'data' => $patioCiudadano
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El ciudadano no tiene activa una vinculacion a un patio actualmente.', 
+                    );
+                }
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El ciudadano con la identificación digitada no existe.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
         return $helpers->json($response);
     }
 }
