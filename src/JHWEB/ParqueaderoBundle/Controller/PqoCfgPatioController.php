@@ -306,39 +306,47 @@ class PqoCfgPatioController extends Controller
                 $params->id
             );
 
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                $params->idCiudadano
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                $params->identificacion
             );
 
-            $patioCiudadanoOld = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->findBy(
-                array(
-                    'ciudadano' => $ciudadano->getId(),
-                    'activo' => true
-                )
-            );
-
-            if ($patioCiudadanoOld) {
+            if ($ciudadano) {
+                $patioCiudadanoOld = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->findBy(
+                    array(
+                        'ciudadano' => $ciudadano->getId(),
+                        'activo' => true
+                    )
+                );
+    
+                if ($patioCiudadanoOld) {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El ciudadano seleccionado tiene una asignación en el patio '.$patio->getNombre(), 
+                    );
+                }else{
+                    $patioCiudadano = new PqoPatioCiudadano();
+    
+                    $patioCiudadanoOld->setActivo(false);
+        
+                    $patioCiudadano->setCiudadano($ciudadano);
+                    $patioCiudadano->setPatio($patio);
+                    $patioCiudadano->setActivo(true);
+    
+                    $em->persist($patioCiudadano);
+                    $em->flush();
+                   
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro creado con exito.',
+                    );
+                }
+            }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'El ciudadano seleccionado tiene una asignación vigente.', 
-                );
-            }else{
-                $patioCiudadano = new PqoPatioCiudadano();
-
-                $patioCiudadanoOld->setActivo(false);
-    
-                $patioCiudadano->setCiudadano($ciudadano);
-                $patioCiudadano->setPatio($patio);
-                $patioCiudadano->setActivo(true);
-
-                $em->persist($patioCiudadano);
-                $em->flush();
-               
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Registro creado con exito.',
+                    'message' => 'El ciudadano con la identificación digitada no existe.', 
                 );
             }
         }else{
@@ -353,7 +361,7 @@ class PqoCfgPatioController extends Controller
     }
 
     /**
-     * Asigna un patio a un ciudadano.
+     * Busca si un ciudadano esta asignado a un patio.
      *
      * @Route("/search/ciudadano", name="pqocfgpatio_search_ciudadano")
      * @Method({"GET", "POST"})
@@ -409,6 +417,106 @@ class PqoCfgPatioController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca todos los ciudadanos activos que se encuentran vinculados a un patio.
+     *
+     * @Route("/search/ciudadanos", name="pqocfgpatio_search_ciudadanos")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByCiudadanosAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $patio = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find(
+                $params->id
+            );
+
+            $patioCiudadanos = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->findBy(
+                array(
+                    'patio' => $patio->getId(),
+                    'activo' => true
+                )
+            );
+
+            if ($patioCiudadanos) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($patioCiudadanos).' registros encontrados con exito.',
+                    'data' => $patioCiudadanos
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Ningún ciudadano vinculado actualmente.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Asigna un patio a un ciudadano.
+     *
+     * @Route("/delete/ciudadano", name="pqocfgpatio_delete_ciudadano")
+     * @Method({"GET", "POST"})
+     */
+    public function deleteCiudadanoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $patioCiudadano = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->find(
+                $params->idPatioCiudadano
+            );
+
+            if ($patioCiudadano) {
+                $patioCiudadano->setActivo(false);
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Ciudadano eliminado con exito.', 
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El registro no se encuentra en la base de datos.', 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
             );
         }
         
