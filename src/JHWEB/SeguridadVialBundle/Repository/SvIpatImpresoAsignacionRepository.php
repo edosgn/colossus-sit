@@ -25,7 +25,7 @@ class SvIpatImpresoAsignacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    public function getLastByLastFechaAndOrganismoTransito($idOrganismoTransito){ 
+    public function getLastByFechaAndOrganismoTransito($idOrganismoTransito){ 
         $em = $this->getEntityManager();
         
         $dql = "SELECT a
@@ -47,20 +47,20 @@ class SvIpatImpresoAsignacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    //Obtiene el total de impresos disponibles por organismo de tránsito
-    public function getTotalDisponibleByOrganismoTransito($idOrganismoTransito)
-    { 
+    //Obtiene la suma de cantidad disponible por organismo de transito
+    public function getCantidadDisponibleByOrganismoTransito($idOrganismoTransito)
+    {
         $em = $this->getEntityManager();
-        $dql = "SELECT SUM(a.cantidadDisponible) AS cantidad
-            FROM JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion a
-            WHERE a.activo = true
-            AND a.organismoTransito = :organismoTransito
-            GROUP BY a.organismoTransito";
 
+        $dql = "SELECT SUM(a.cantidadDisponible) AS total
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion a
+            WHERE a.organismoTransito = :idOrganismoTransito
+            AND a.activo = true
+            GROUP BY a.organismoTransito";
+            
         $consulta = $em->createQuery($dql);
-        $consulta->setParameters(array(
-            'organismoTransito' => $idOrganismoTransito,
-        ));
+
+        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
         
         return $consulta->getOneOrNullResult();
     }

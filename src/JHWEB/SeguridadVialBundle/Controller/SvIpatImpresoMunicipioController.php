@@ -24,10 +24,21 @@ class SvIpatImpresoMunicipioController extends Controller
     {
         $helpers = $this->get("app.helpers");
 
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+
         $em = $this->getDoctrine()->getManager();
 
+        $cantidadDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->getCantidadDisponibleByOrganismoTransito(
+            $params->idOrganismoTransito
+        );
+        $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
+
         $municipios = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->findBy(
-            array('activo' => true)
+            array(
+                'organismoTransito' =>  $params->idOrganismoTransito,
+                'activo' => true
+            )
         );
 
         $response['data'] = array();
@@ -37,7 +48,10 @@ class SvIpatImpresoMunicipioController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => count($municipios) . " registros encontrados",
-                'data' => $municipios,
+                'data' => array(
+                    'cantidadDisponible' => $cantidadDisponible,
+                    'municipios' => $municipios
+                ),
             );
         }
 
@@ -68,95 +82,79 @@ class SvIpatImpresoMunicipioController extends Controller
                 );
             }
 
-            $cantidadDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getTotalDisponibleByOrganismoTransito(
-                $organismoTransito->getId()
+            $rangoDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->getLastByFechaAndOrganismoTransito(
+                $params->idOrganismoTransito
             );
-            $cantidadDisponible = (empty($cantidadDisponible['cantidad']) ? 0 : $cantidadDisponible['cantidad']);
 
-            if ($cantidadDisponible > 0) {
-                if ($params->cantidad <= $cantidadDisponible) {
-                    $municipio = new SvIpatImpresoMunicipio();
-
-                    $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->getMaximo(date('Y'));
+            if ($rangoDisponible) {
+                $cantidadDisponibleAsignacion = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getCantidadDisponibleByOrganismoTransito(
+                    $organismoTransito->getId()
+                );
+                $cantidadDisponibleAsignacion = (empty($cantidadDisponibleAsignacion['cantidad']) ? 0 : $cantidadDisponibleAsignacion['cantidad']);
                 
-                    $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-                    $municipio->setConsecutivo($consecutivo);
-
-                    $fecha = new \Datetime($params->fecha);
-                    
-                    $municipio->setNumeroActa(
-                        $fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
-                    );
-
-                    $municipio->setFecha($fecha);
-                    
-                    $municipio->setCantidadDisponible($params->cantidad);
-                    $municipio->setCantidadEntregada($params->cantidad);
-                    $municipio->setCorregimiento($params->corregimiento);
-                    $municipio->setResponsableNombre($params->responsableNombre);
-                    $municipio->setResponsableIdentificacion($params->responsableIdentificacion);
-                    $municipio->setResponsableCargo($params->responsableCargo);
-                    $municipio->setActivo(true);
-
-                    if ($organismoTransito) {
-                        $municipio->setOrganismoTransito($organismoTransito);
-                    }
-
-                    if ($params->idMunicipio) {
-                        $municipioDistribucion = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                            $params->idMunicipio
+                if ($cantidadDisponibleAsignacion > 0) {
+                    if ($params->cantidad <= $cantidadDisponibleAsignacion) {
+                        $cantidadDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->getCantidadDisponibleByOrganismoTransito(
+                            $params->idOrganismoTransito
                         );
-                        $municipio->setMunicipio($municipioDistribucion);
-                    }
+                        $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
 
-                    $em->persist($municipio);
-                    $em->flush();
+                        $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
+                        $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
 
-                    $asignaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->findBy(
-                        array(
-                            'organismoTransito' => $organismoTransito->getId(),
-                            'activo' => true
-                        )
-                    );
-    
-                    foreach ($asignaciones as $key => $asignacion){
-                        if ($asignacion->getCantidadDisponible() <= $params->cantidad) {
-                            $cantidad =  $params->cantidad - $asignacion->getCantidadDisponible();
-                            $params->cantidad = $cantidad;
-                            $asignacion->setCantidadDisponible(0);
-                            $asignacion->setActivo(false);
-    
-                            $em->flush(); 
-                        }else {
-                            if ($params->cantidad > 0) {
-                                $cantidad =  $asignacion->getCantidadDisponible() - $params->cantidad;
-                                $asignacion->setCantidadDisponible($cantidad);
-                                $params->cantidad = 0;
-    
-                                $em->flush(); 
+                        if ($cantidadDisponible > $cantidadValidar) {
+                            $registro = $this->register($params);
+
+                            if($registro){
+                                $response = array(
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => "El registro se ha realizado con exito",
+                                );
+                            }else{
+                                $response = array(
+                                    'status' => 'error',
+                                    'code' => 400,
+                                    'message' => "No se asignaron los impresos.", 
+                                );
                             }
+                        }else{
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
+                            );
                         }
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'La cantidad solicitada supera los '.$cantidadDisponibleAsignacion.' disponibles en el organismo de tránsito.', 
+                        );
                     }
-                
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'No tiene impresos disponibles en el organismo de tránsito.', 
+                    );
+                }
+            }else{
+                $registro = $this->register($params);
+
+                if($registro){
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'message' => 'Registro creado con exito.',
-                        'data' => $municipio
+                        'message' => "El registro se ha realizado con exito",
                     );
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'La cantidad solicitada supera los '.$cantidadDisponible.' disponibles en el organismo de tránsito.', 
+                        'message' => "No se asignaron los impresos.", 
                     );
                 }
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'No tiene impresos disponibles en el organismo de tránsito.', 
-                );
             }
         }else{
             $response = array(
@@ -244,5 +242,78 @@ class SvIpatImpresoMunicipioController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ======================================================= */
+
+    public function register($params){
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $municipio = new SvIpatImpresoMunicipio();
+    
+        $consecutivo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio')->getMaximo(date('Y'));
+    
+        $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+        $municipio->setConsecutivo($consecutivo);
+
+        $fecha = new \Datetime($params->fecha);
+        
+        $municipio->setNumeroActa(
+            $fecha->format('Y').str_pad($consecutivo, 3, '0', STR_PAD_LEFT)
+        );
+
+        $municipio->setFecha($fecha);
+        
+        $municipio->setCantidadDisponible($params->cantidad);
+        $municipio->setCantidadEntregada($params->cantidad);
+        $municipio->setCorregimiento($params->corregimiento);
+        $municipio->setResponsableNombre($params->responsableNombre);
+        $municipio->setResponsableIdentificacion($params->responsableIdentificacion);
+        $municipio->setResponsableCargo($params->responsableCargo);
+        $municipio->setActivo(true);
+
+        if ($organismoTransito) {
+            $municipio->setOrganismoTransito($organismoTransito);
+        }
+
+        if ($params->idMunicipio) {
+            $municipioDistribucion = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                $params->idMunicipio
+            );
+            $municipio->setMunicipio($municipioDistribucion);
+        }
+
+        $em->persist($municipio);
+        $em->flush();
+
+        $asignaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->findBy(
+            array(
+                'organismoTransito' => $organismoTransito->getId(),
+                'activo' => true
+            )
+        );
+
+        foreach ($asignaciones as $key => $asignacion){
+            if ($asignacion->getCantidadDisponible() <= $params->cantidad) {
+                $cantidad =  $params->cantidad - $asignacion->getCantidadDisponible();
+                $params->cantidad = $cantidad;
+                $asignacion->setCantidadDisponible(0);
+                $asignacion->setActivo(false);
+
+                $em->flush(); 
+            }else {
+                if ($params->cantidad > 0) {
+                    $cantidad =  $asignacion->getCantidadDisponible() - $params->cantidad;
+                    $asignacion->setCantidadDisponible($cantidad);
+                    $params->cantidad = 0;
+
+                    $em->flush(); 
+                }
+            }
+        }
+
+        return true;
     }
 }

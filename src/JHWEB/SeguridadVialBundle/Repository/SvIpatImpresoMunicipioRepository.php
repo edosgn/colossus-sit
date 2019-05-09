@@ -24,4 +24,44 @@ class SvIpatImpresoMunicipioRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    public function getLastByFechaAndOrganismoTransito($idOrganismoTransito){ 
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT m
+        FROM JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio m
+        WHERE m.fecha = (
+            SELECT MAX(m2.fecha)
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio m2
+            WHERE m2.activo = true
+            AND m2.organismoTransito = :idOrganismoTransito
+        ) 
+        AND m.activo = true
+        AND m.organismoTransito = :idOrganismoTransito";
+
+        $consulta = $em->createQuery($dql)->setMaxResults(1);
+		$consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+     //Obtiene la suma de cantidad disponible por organismo de transito
+    public function getCantidadDisponibleByOrganismoTransito($idOrganismoTransito)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(m.cantidadDisponible) AS total
+            FROM JHWEBSeguridadVialBundle:SvIpatImpresoMunicipio m
+            WHERE m.organismoTransito = :idOrganismoTransito
+            AND m.activo = true
+            GROUP BY a.organismoTransito";
+            
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
+        
+        return $consulta->getOneOrNullResult();
+    }
 }
