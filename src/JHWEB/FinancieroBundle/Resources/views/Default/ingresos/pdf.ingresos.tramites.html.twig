@@ -24,7 +24,7 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td style="float:left;" colspan="4"><b>TOTAL INGRESOS</b></td>
+                    <td colspan="4"><b>TOTAL INGRESOS</b></td>
                     <td>{{ totalTramites }}</td>
                 </tr>
             </table>
@@ -49,14 +49,15 @@
                     </tr>
             {% endfor %}
             <tr>
-                <td style="float:left;" colspan="4"><b>TOTAL CONCEPTOS</b></td>
+                <td colspan="4"><b>TOTAL CONCEPTOS</b></td>
                 <td>{{ totalConceptos }}</td>
             </tr>
             <tr>
-                <td style="float:left;" colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
+                <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
                 <td>{{ totalTramites + totalConceptos }}</td>
             </tr>
         </table>
+        <br>
         <br>
         <table border="1" style="text-align:center;">
             <tr>
@@ -89,22 +90,26 @@
         </table>
         <br>
         <br>
-        {# <table border="1" style="text-align:center;">
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b> Sustratos CDA </b></td>
+                <td><b> Cantidad </b></td>
+                <td><b> Valor </b></td>
+                <td><b> Total </b></td>
+            </tr>
+            {% for sustrato in arraySustratos %}
                 <tr>
-                    <td><b> Sustratos CDA </b></td>
-                    <td><b> Cantidad </b></td>
-                    <td><b> Valor </b></td>
-                    <td><b> Total </b></td>
+                    <td>{{ sustrato.nombre }}</td>
+                    <td>{{ sustrato.cantidad }}</td>
+                    <td>{{ sustrato.valor }}</td>
+                    <td>{{ sustrato.total }}</td>
                 </tr>
-            {% for insumo in insumos %}
-                    <tr>
-                        <td>{{ insumo.categoria }}</td>
-                        <td>cantidad</td>
-                        <td>{{ insumo.tipo.nombre }}</td>
-                        <td>total</td>
-                    </tr>
-                {% endfor %}
-            </table> #}
+            {% endfor %}
+            <tr>
+                <td colspan="4"><b>TOTAL SUSTRATOS</b></td>
+                <td>{{ totalSustratos }}</td>
+            </tr>
+        </table>
         {# {% if anuladas %}
             <h3>ANULADAS</h3>
             <table border="1" style="text-align:center;">

@@ -312,4 +312,53 @@ class UserLicenciaConduccionController extends Controller
         return $helpers->json($response);
 
     }
+
+    /**
+     * Search a userLicenciaConduccion by Ciudadano entity.
+     *
+     * @Route("/search/ciudadano/id", name="search_userlicenciaconduccion_ciudadano")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByCiudadanoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $licenciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
+                array(
+                    'ciudadano' => $params->idCiudadano
+                )
+            );
+
+            if($licenciasConduccion) { 
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($licenciasConduccion)." registros encontrados",
+                    'data' => $licenciasConduccion
+                );
+            } else 
+            {
+                $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "No se encontraron licencias para el ciudadano",
+            );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
+
+    }
 }
