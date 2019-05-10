@@ -85,14 +85,11 @@ class FroReporteIngresosController extends Controller
             )
         );
         
-        
         $reporteDiario = false;
         
         if($fechaInicioDatetime ==  $fechaFinDatetime) {
             $arrayReporteDiario = [];
             
-            $mesReporte = $fechaInicioDatetime->format('%B');
-
             $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesDiario($fechaInicioDatetime, $organismoTransito->getId());
             if($tramites){
                 $reporteDiario = true;
@@ -113,7 +110,8 @@ class FroReporteIngresosController extends Controller
                 'arrayReporteDiario' => $arrayReporteDiario,
                 'reporteDiario' => $reporteDiario,
                 'funcionario' => $funcionario,
-                'mesReporte' => $mesReporte,
+                'mesReporte' => strftime("%B del %Y", strtotime($params->filtros->fechaDesde)),
+                'fechaActual' => $fechaActual,
                 /* 'totalSustratos' => $totalSustratos, */
             )); 
                 

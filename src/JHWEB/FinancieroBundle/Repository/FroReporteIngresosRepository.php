@@ -35,9 +35,13 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
 
         $dql = "SELECT fts
-            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft
             WHERE fts.organismoTransito = :idOrganismoTransito 
-            AND fts.fecha = :fecha";
+            AND fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND ff.fechaPago = :fecha";
 
         $consulta = $em->createQuery($dql);
         

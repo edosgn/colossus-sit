@@ -114,10 +114,13 @@
         {% endif %}
         {# fin tramites diarios #}
         {% if reporteDiario %}
+            <h2 style="text-align:center;">Reporte mensual de tramites</h2 style="text-align:center;">
+            <br>
             <b>Fecha de informe: </b> {{ mesReporte }}<br>
             <b>Organismo tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
             <b>Nombre del inspector: </b> {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}<br>
-            <b>Fecha de expedición del informe: </b> 
+            <b>Fecha de expedición del informe: </b>  {{ fechaActual }}
+            <br>
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
