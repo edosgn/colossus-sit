@@ -389,11 +389,15 @@ class ImoLoteController extends Controller
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
         
-
         $sustratosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getTotalesTipoActa($numeroActa);
+
         $insumosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array('actaEntrega' => $numeroActa,'categoria'=> 'INSUMO')
+            array(
+                'actaEntrega' => $numeroActa,
+                'categoria'=> 'INSUMO'
+            )
         );
+
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
 
         if ($sustratosActa) {
@@ -402,7 +406,7 @@ class ImoLoteController extends Controller
             $fechaEntrega = $insumosActa[0]->getFecha();
         }
 
-        $html = $this->renderView('@JHWEBInsumo/Default/pdf.asignacion.html.twig', array(
+        $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.asignacion.html.twig', array(
             'sustratosActa' => $sustratosActa,
             'insumosActa' => $insumosActa,
             'numeroActa' => $numeroActa,

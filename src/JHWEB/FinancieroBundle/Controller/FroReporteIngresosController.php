@@ -73,9 +73,10 @@ class FroReporteIngresosController extends Controller
         $fechaFinDatetime = new \Datetime($params->filtros->fechaHasta);
         
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->filtros->idOrganismoTransito);
+
         $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
             array(
-                'identificacion' => $params->identificacionUsuario,
+                'identificacion' => $params->identificacion,
                 )
             );
             
