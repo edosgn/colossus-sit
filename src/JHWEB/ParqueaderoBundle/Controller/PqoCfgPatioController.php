@@ -3,7 +3,7 @@
 namespace JHWEB\ParqueaderoBundle\Controller;
 
 use JHWEB\ParqueaderoBundle\Entity\PqoCfgPatio;
-use JHWEB\ParqueaderoBundle\Entity\PqoCfgPatioCiudadano;
+use JHWEB\ParqueaderoBundle\Entity\PqoPatioCiudadano;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -67,7 +67,7 @@ class PqoCfgPatioController extends Controller
             $patio = new PqoCfgPatio();
 
             $patio->setNombre(mb_strtoupper($params->nombre,'utf-8'));
-            $patio->setDireccion(mb_strtoupper($params->direccion,'utf-8'));
+            $patio->setDireccion($params->direccion);
             $patio->setCorreo($params->correo);
             $patio->setTelefono($params->telefono);
             $patio->setNumeroResolucion($params->numeroResolucion);
@@ -76,11 +76,11 @@ class PqoCfgPatioController extends Controller
             $patio->setActivo(true);
 
             if ($params->administrador) {
-                $patio->setAdministrador($params->administrador);
+                $patio->setAdministrador(mb_strtoupper($params->administrador,'utf-8'));
             }
 
             if ($params->propietario) {
-                $patio->setPropietario($params->propietario);
+                $patio->setPropietario(mb_strtoupper($params->propietario,'utf-8'));
             }
 
 
@@ -268,6 +268,7 @@ class PqoCfgPatioController extends Controller
     public function selectAction()
     {
         $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
 
         $patios = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->findBy(
@@ -301,13 +302,17 @@ class PqoCfgPatioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
            
             $patio = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find(
-                $params->id
+                $params->idPatio
             );
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
-                $params->identificacion
+                array(
+                    'identificacion' => $params->identificacion
+                )
             );
 
             if ($ciudadano) {
@@ -326,8 +331,6 @@ class PqoCfgPatioController extends Controller
                     );
                 }else{
                     $patioCiudadano = new PqoPatioCiudadano();
-    
-                    $patioCiudadanoOld->setActivo(false);
         
                     $patioCiudadano->setCiudadano($ciudadano);
                     $patioCiudadano->setPatio($patio);
@@ -375,6 +378,8 @@ class PqoCfgPatioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
            
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                 array(
@@ -438,6 +443,8 @@ class PqoCfgPatioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
            
             $patio = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find(
                 $params->id
@@ -490,6 +497,8 @@ class PqoCfgPatioController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
            
             $patioCiudadano = $em->getRepository('JHWEBParqueaderoBundle:PqoPatioCiudadano')->find(
                 $params->idPatioCiudadano
