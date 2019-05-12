@@ -36,6 +36,13 @@ class ImoLote
     private $numeroActa;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_acta_entrega", type="string", length=255, nullable=true)
+     */
+    private $numeroActaEntrega;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha", type="date")
@@ -99,6 +106,8 @@ class ImoLote
      **/
     protected $tipoInsumo;   
 
+    
+
     /**
      * Get id
      *
@@ -158,6 +167,30 @@ class ImoLote
     }
 
     /**
+     * Set numeroActaEntrega
+     *
+     * @param string $numeroActaEntrega
+     *
+     * @return ImoLote
+     */
+    public function setNumeroActaEntrega($numeroActaEntrega)
+    {
+        $this->numeroActaEntrega = $numeroActaEntrega;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroActaEntrega
+     *
+     * @return string
+     */
+    public function getNumeroActaEntrega()
+    {
+        return $this->numeroActaEntrega;
+    }
+
+    /**
      * Set fecha
      *
      * @param \DateTime $fecha
@@ -178,9 +211,6 @@ class ImoLote
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('Y-m-d');
-        }
         return $this->fecha;
     }
 

@@ -32,11 +32,11 @@
         </tr>
         {% for sustratoActa in sustratosActa %} 
             <tr>
-                <td>{{ sustratoActa.nombre }}</td>
+                <td>{{ sustratoActa.tipoInsumo.nombre }}</td>
                 <td>{{ sustratoActa.rangoInicio}}</td>
                 <td>{{ sustratoActa.rangoFin}}</td>
                 <td>{{ sustratoActa.cantidad }}</td>
-                <td>{{ sustratoActa.actaEntrega }}</td>
+                <td>{{ sustratoActa.numeroActaEntrega }}</td>
             </tr>
         {% endfor %}
     </table>

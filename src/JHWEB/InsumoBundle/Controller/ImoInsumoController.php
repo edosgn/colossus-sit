@@ -104,6 +104,7 @@ class ImoInsumoController extends Controller
 
                 if ($loteInsumo->getTipo() == 'SUSTRATO') {
                     $loteInsumo->setEstado('ASIGNADO');
+                    $loteInsumo->setNumeroActaEntrega($numeroActa);
 
                     while ($desde <= $hasta) {
                         $insumo = new ImoInsumo();
@@ -119,7 +120,7 @@ class ImoInsumoController extends Controller
                         $insumo->setEstado('DISPONIBLE');
                         $em->persist($insumo);
                         $em->flush();
-    
+      
                         $imoAsignacion = new ImoAsignacion();
     
                         $imoAsignacion->setImoTrazabilidad($imoTrazabilidad);

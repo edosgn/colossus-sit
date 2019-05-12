@@ -71,6 +71,8 @@ class ImoLoteController extends Controller
             $fecha = new \DateTime($params->fecha);
 
             $em = $this->getDoctrine()->getManager();
+            // var_dump($params);
+            // die();
 
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
@@ -269,7 +271,8 @@ class ImoLoteController extends Controller
 
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
             $tipo = (isset($params->tipo)) ? $params->tipo : null;
-
+            var_dump($tipo);
+            die();
             if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                     array('estado' => 'ASIGNADO','sedeOperativa'=> $idOrganismoTransito,'tipo'=>$tipo)
@@ -389,19 +392,20 @@ class ImoLoteController extends Controller
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
         
-        $sustratosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getTotalesTipoActa($numeroActa);
+        $sustratosActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findByNumeroActaEntrega($numeroActa);
 
         $insumosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
             array(
                 'actaEntrega' => $numeroActa,
                 'categoria'=> 'INSUMO'
-            )
+            ) 
         );
 
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);
 
         if ($sustratosActa) {
-            $fechaEntrega = $sustratosActa[0]['fecha']->format('Y-m-d');
+            $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findOneByActaEntrega($numeroActa);
+            $fechaEntrega = $insumo->getFecha();
         }else{
             $fechaEntrega = $insumosActa[0]->getFecha();
         }
@@ -412,8 +416,8 @@ class ImoLoteController extends Controller
             'numeroActa' => $numeroActa,
             'organismoTransito' => $organismoTransito, 
             'fechaEntrega' => $fechaEntrega,
-        ));
-
+        )); 
+ 
         $this->get('app.pdf')->templateAsignacion($html, $numeroActa); 
     }
 } 
