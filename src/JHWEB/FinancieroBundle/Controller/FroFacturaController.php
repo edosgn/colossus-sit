@@ -68,6 +68,9 @@ class FroFacturaController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
+            /* var_dump($params->factura);
+            die(); */
+            
             $em = $this->getDoctrine()->getManager();
            
             $factura = new FroFactura();
@@ -298,7 +301,7 @@ class FroFacturaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -307,7 +310,7 @@ class FroFacturaController extends Controller
             $totalInteres = 0;
 
             foreach ($params as $key => $comparendoSelect) {
-                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                     $comparendoSelect->id
                 );
 
@@ -384,7 +387,7 @@ class FroFacturaController extends Controller
         $totalInteres = 0;
 
         foreach ($params as $key => $comparendoSelect) {
-            $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                 $comparendoSelect->id
             );
 

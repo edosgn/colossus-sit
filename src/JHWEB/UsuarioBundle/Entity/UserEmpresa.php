@@ -45,14 +45,14 @@ class UserEmpresa
     /**
      * @var int
      *
-     * @ORM\Column(name="telefono", type="bigint", length=20)
+     * @ORM\Column(name="telefono", type="bigint", length=20, nullable = true)
      */
     private $telefono;
 
      /**
      * @var int
      *
-     * @ORM\Column(name="celular", type="bigint", length=20)
+     * @ORM\Column(name="celular", type="bigint", length=20, nullable = true)
      */
     private $celular;
 
@@ -66,14 +66,14 @@ class UserEmpresa
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion", type="string", length=255)
+     * @ORM\Column(name="direccion", type="string", length=255, nullable = true)
      */
     private $direccion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="correo", type="string", length=255)
+     * @ORM\Column(name="correo", type="string", length=255, nullable = true)
      */
     private $correo;
 
@@ -115,7 +115,7 @@ class UserEmpresa
     /**
      * @var string
      *
-     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255)
+     * @ORM\Column(name="nro_registro_mercantil", type="string", length=255, nullable = true)
      */
     private $nroRegistroMercantil;
 
@@ -136,7 +136,7 @@ class UserEmpresa
      /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_vencimiento_registro_mercantil", type="datetime")
+     * @ORM\Column(name="fecha_vencimiento_registro_mercantil", type="datetime", nullable = true)
      */
     private $fechaVencimientoRegistroMercantil;
     

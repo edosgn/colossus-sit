@@ -225,7 +225,7 @@ class UserLicenciaConduccionController extends Controller
                 );
                 $licenciaConduccion->setCiudadano($ciudadano);
 
-                $licenciasOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
+                /* $licenciasOld = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
                     array(
                         'ciudadano' => $ciudadano->getId(),
                         'activo' => true
@@ -235,7 +235,7 @@ class UserLicenciaConduccionController extends Controller
                 foreach ($licenciasOld as $key => $licenciaOld) {
                     $licenciaOld->setActivo(false);
                     $em->flush();
-                }
+                } */
             }
 
             if (isset($params->idPais)) {
@@ -331,7 +331,8 @@ class UserLicenciaConduccionController extends Controller
 
             $licenciasConduccion = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaConduccion')->findBy(
                 array(
-                    'ciudadano' => $params->idCiudadano
+                    'ciudadano' => $params->idCiudadano,
+                    'activo' => true,
                 )
             );
 
