@@ -10,28 +10,7 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findTramitesByFecha($fechaInicioDatetime, $fechaFinDatetime, $organismoTransito) {
-        
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT fts
-            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts
-            WHERE fts.organismoTransito = :organismoTransito
-            AND fts.fecha BETWEEN :fechaInicio AND :fechaFin";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'organismoTransito' => $organismoTransito, 
-            'fechaInicio' => $fechaInicioDatetime,
-            'fechaFin' => $fechaFinDatetime,
-        ));
-
-        return $consulta->getResult();
-    }
-
     public function findTramitesDiario($fecha, $idOrganismoTransito) {
-        
         $em = $this->getEntityManager();
 
         $dql = "SELECT fts
@@ -48,6 +27,29 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito, 
             'fecha' => $fecha,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    public function findTramitesMensual($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft
+            WHERE fts.organismoTransito = :idOrganismoTransito 
+            AND fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
         ));
 
         return $consulta->getResult();
@@ -101,5 +103,25 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         ));
 
         return $consulta->getOneOrNullResult();
+    }
+    /*  =============== para infracciones ================= */
+
+    public function getInfraccionesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ccc
+            FROM JHWEBContravencionalBundle:CvCdoComparendo ccc,
+            WHERE ccc.organismoTransito = :idOrganismoTransito 
+            AND ccc.fecha BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
+        ));
+
+        return $consulta->getResult();
     }
 }

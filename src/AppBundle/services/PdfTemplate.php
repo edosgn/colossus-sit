@@ -481,7 +481,7 @@ class PdfTemplate extends TCPDF{
 
     public function templateIngresos($html, $organismoTransito){
         // create new PDF document
-        $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new PdfTemplate('L', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);

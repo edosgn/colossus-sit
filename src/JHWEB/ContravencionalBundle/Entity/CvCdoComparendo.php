@@ -169,7 +169,7 @@ class CvCdoComparendo
     /**************************DATOS PROPIETARIO************************/
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\TipoIdentificacion", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="comparendos")
      **/
     protected $propietarioTipoIdentificacion;
 
@@ -1793,11 +1793,11 @@ class CvCdoComparendo
     /**
      * Set propietarioTipoIdentificacion
      *
-     * @param \AppBundle\Entity\TipoIdentificacion $propietarioTipoIdentificacion
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $propietarioTipoIdentificacion
      *
      * @return CvCdoComparendo
      */
-    public function setPropietarioTipoIdentificacion(\AppBundle\Entity\TipoIdentificacion $propietarioTipoIdentificacion = null)
+    public function setPropietarioTipoIdentificacion(\JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $propietarioTipoIdentificacion = null)
     {
         $this->propietarioTipoIdentificacion = $propietarioTipoIdentificacion;
 
@@ -1807,7 +1807,7 @@ class CvCdoComparendo
     /**
      * Get propietarioTipoIdentificacion
      *
-     * @return \AppBundle\Entity\TipoIdentificacion
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion
      */
     public function getPropietarioTipoIdentificacion()
     {
