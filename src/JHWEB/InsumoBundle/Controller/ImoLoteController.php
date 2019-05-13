@@ -255,14 +255,15 @@ class ImoLoteController extends Controller
      /**
      * Lists all loteInsumo entities.
      *
-     * @Route("/insumo/lote/sede", name="imolote_sede_index")
+     * @Route("/search/sedeoperativa", name="imolote_search_sedeoperativa")
      * @Method({"GET", "POST"})
      */
-    public function loteInsumoSedeAction(Request $request)
+    public function searchBySedeAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) { 
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -271,7 +272,7 @@ class ImoLoteController extends Controller
 
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
             $tipo = (isset($params->tipo)) ? $params->tipo : null;
-            var_dump($tipo);
+
             die();
             if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
@@ -299,8 +300,8 @@ class ImoLoteController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Lote encontrado con exito", 
                     'data' => $loteInsumo, 
+                    'message' => "Lote encontrado con exito", 
                 );
             }else{
                 $response = array( 

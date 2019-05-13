@@ -293,7 +293,7 @@ class ImoInsumoController extends Controller
     /**
      * Finds and displays a sustrato entity.
      *
-     * @Route("/search/numero/modulo", name="insumo_search_numero")
+     * @Route("/search/numero/modulo", name="imoinsumo_search_numero")
      * @Method({"GET", "POST"})
      */
     public function searchByNumeroAndModuloAction(Request $request)
@@ -341,7 +341,7 @@ class ImoInsumoController extends Controller
      /**
      * Lists all insumo entities.
      *
-     * @Route("/isExistencia", name="imo_insumo_isExistencia")
+     * @Route("/isExistencia", name="imoinsumo_isExistencia")
      * @Method({"GET", "POST"})
      */
     public function isExistenciaAction(Request $request)
@@ -359,13 +359,13 @@ class ImoInsumoController extends Controller
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'msj' => 'Total de registros encontrados',
+                'message' => 'Total de registros encontrados',
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => 'la sede tiene '.count($insumos).' sustratos para reasignar',
+                'message' => 'la sede tiene '.count($insumos).' sustratos para reasignar',
             );
         }
 
@@ -375,7 +375,7 @@ class ImoInsumoController extends Controller
     /**
      * Lists all insumo entities.
      *
-     * @Route("/reasignacionSustrato", name="imo_insumo_reasignacionSustrato")
+     * @Route("/reasignacionSustrato", name="imoinsumo_reasignacionSustrato")
      * @Method({"GET", "POST"})
      */
     public function reasignacionByTypeSustratoAction(Request $request)
@@ -431,7 +431,7 @@ class ImoInsumoController extends Controller
         $response = array(
             'status' => 'success',
             'code' => 400,
-            'msj' => 'Sustratos reasignados:'.count($sustratos),
+            'message' => 'Sustratos reasignados:'.count($sustratos),
         );
         
         return $helpers->json($response);
@@ -440,7 +440,7 @@ class ImoInsumoController extends Controller
     /**
      * Lists all insumo entities.
      *
-     * @Route("/show/ultimo/sustrato/disponible", name="insumo_sustrato_ultimo_disponible")
+     * @Route("/show/ultimo/sustrato/disponible", name="imoinsumo_sustrato_ultimo_disponible")
      * @Method({"GET", "POST"})
      */
     public function showUltimoSustratoDisponibleAction(Request $request)
@@ -463,7 +463,7 @@ class ImoInsumoController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 200,
-                'msj' => 'sin sustratos',
+                'message' => 'sin sustratos',
             );
         }
         
@@ -473,7 +473,7 @@ class ImoInsumoController extends Controller
     /**
      * Finds and displays a insumo entity.
      *
-     * @Route("/show/loteInsumo", name="imo_insumo_show_loteInsumo")
+     * @Route("/show/loteInsumo", name="imoinsumo_show_loteinsumo")
      * @Method({"GET", "POST"})
      */
     public function showLoteAction(Request $request)
@@ -481,24 +481,27 @@ class ImoInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $em = $this->getDoctrine()->getManager();
             
             $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-                array('categoria'=>'SUSTRATO',)
+                array(
+                    'categoria'=>'SUSTRATO',
+                )
             );
     
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'datos' => $insumos,
-                'msj' => "insumo creado con exito", 
+                'data' => $insumos,
+                'message' => "insumo creado con exito", 
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         }
 
@@ -508,7 +511,7 @@ class ImoInsumoController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/pdf/acta/insumos", name="pdf_acta_imoImo")
+     * @Route("/pdf/acta/insumos", name="imoinsumo_pdf_acta")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request)
@@ -622,6 +625,7 @@ class ImoInsumoController extends Controller
                    'estado' => 'ASIGNADO'
                 )
             );
+
             $totalSede = $totalSede + COUNT($insumosOrganismos);
 
             foreach ($insumosOrganismos as $key => $insumoOrganismo) {
@@ -677,7 +681,4 @@ class ImoInsumoController extends Controller
         );
 
     }
-
-
-
 }
