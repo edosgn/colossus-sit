@@ -4,16 +4,17 @@
     </header>
     <body>
         <br>
-        {% if reporteDiario == false %}
+        {% if reporteMensual == false %}
             {% if pagadas %}
-                <h3>PAGADAS</h3>
+                <h3 style="text-align:center"> REPORTE DETALLADO DE ARQUEO DE CAJA DIARIO</h3>
+                <br>
                 <table border="1" style="text-align:center;">
                     <tr>
-                        <td><b> COD </b></td>
-                        <td><b> Tramites </b></td>
-                        <td><b> Cantidad </b></td>
-                        <td><b> Valor </b></td>
-                        <td><b> Total </b></td>
+                        <td><b>Código</b></td>
+                        <td><b>Tramites</b></td>
+                        <td><b>Cantidad</b></td>
+                        <td><b>Valor</b></td>
+                        <td><b>Total</b></td>
                     </tr>
                     {% for tramite in arrayTramites %}
                         <tr>
@@ -31,11 +32,11 @@
                 </table>
             {% endif %}
             <br>
-            <h3>CONCEPTOS<h3>
+            <br>
             <table border="1" style="text-align:center;">
                 <tr>
                     <td><b>Id</b></td>
-                    <td><b>Nombre</b></td>
+                    <td><b>Nombre Concepto</b></td>
                     <td><b>Cantidad</b></td>
                     <td><b>Valor</b></td>
                     <td><b>Total</b></td>
@@ -62,12 +63,12 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b> RBO CAJA ANULADO </b></td>
+                    <td><b>RBO CAJA ANULADO</b></td>
                     <td>{{ cantAnuladas }}</td>
                 </tr>
                 <tr>
-                    <td><b> RBO RETEFUENTE ANULADO </b></td>
-                    <td><b> {{ cantTraspasos }} </b></td>
+                    <td><b>RBO RETEFUENTE ANULADO</b></td>
+                    <td>{{ cantTraspasos }}</td>
                 </tr>
             </table>
             <br>
@@ -107,13 +108,13 @@
                     </tr>
                 {% endfor %}
                 <tr>
-                    <td><b>TOTAL SUSTRATOS</b></td>
+                    <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
                     <td>{{ totalSustratos }}</td>
                 </tr>
             </table>
         {% endif %}
         {# fin tramites diarios #}
-        {% if reporteDiario %}
+        {% if reporteMensual %}
             <h2 style="text-align:center;">Reporte mensual de tramites</h2 style="text-align:center;">
             <br>
             <b>Fecha de informe: </b> {{ mesReporte }}<br>
@@ -125,26 +126,30 @@
             <table border="1" style="text-align:center;">
                 <tr>
                     <td><b> Nro. Factura </b></td>
-                    {# <td><b> Fecha </b></td>
+                    <td><b> Fecha Pago </b></td>
                     <td><b> Placa/Cédula </b></td>
                     <td><b> Nro. Sustrato </b></td>
                     <td><b> Clasificaciones </b></td>
                     <td><b> Trámite </b></td>
                     <td><b> Valor Pagado </b></td>
-                    <td><b> Observaciones </b></td> #}
+                    <td><b> Observaciones </b></td>
                 </tr>
-                {% for tramite in arrayReporteDiario %}
+                {% for tramite in arrayReporteMensual %}
                     <tr>
                         <td>{{ tramite.numeroFactura }}</td>
-                        {# <td>{{ tramite.cantidad }}</td>
-                        <td>{{ tramite.valor }}</td>
-                        <td>{{ tramite.total }}</td> #}
+                        <td>{{ tramite.fecha | date('Y-m-d') }}</td>
+                        <td>{{ tramite.placaCedula }}</td>
+                        <td>numero sustrato</td>
+                        <td>imoInsumo->tipo->modulo->abreviatura</td>
+                        <td>{{ tramite.nombre }}</td>
+                        <td>{{ tramite.valorPagado }}</td>
+                        <td>observaciones</td>
                     </tr>
                 {% endfor %}
-                {# <tr>
-                    <td><b>TOTAL </b></td>
-                    <td>{{ totalReporteDiario }}</td>
-                </tr> #}
+                 <tr>
+                    <td colspan="6"><b>TOTAL </b></td>
+                    <td>{{ totalReporteMensual }}</td>
+                </tr>
             </table>
         {% endif %}
     </body>

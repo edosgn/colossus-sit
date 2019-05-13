@@ -1,0 +1,35 @@
+<html>
+    <header>
+        <meta charset="utf-8">
+    </header>
+    <body>
+        <h2 style="text-align:center;">Reporte comparendos</h2style="text-align:center;">
+        <br>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td><b>Nro. Factura</b></td>
+                <td><b>Fecha Pago</b></td>
+                <td><b>Placa/Cédula</b></td>
+                <td><b>Nro. Sustrato</b></td>
+                <td><b>Clasificaciones</b></td>
+                <td><b>Trámite</b></td>
+                <td><b>Valor Pagado</b></td>
+                <td><b>Observaciones</b></td>
+            </tr>
+            {% for comparendo in arrayReporteComparendos %}
+                <tr>
+                    <td>{{ comparendo.numeroFactura }}</td>
+                    <td>{{ comparendo.numero }}</td>
+                    <td>{{ comparendo.placaCedula }}</td>
+                    <td>{{ comparendo.valor }}</td>
+                    <td>observaciones</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="4"><b>TOTAL</b></td>
+                <td>{{ totalReporteMensual }}</td>
+            </tr>
+        </table>
+    </body>
+</html>
