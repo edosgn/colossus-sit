@@ -67,7 +67,7 @@ class PnalAsignacionController extends Controller
                 $params->idOrganismoTransito
             );
 
-            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByFecha();
+            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByFechaAndOrganismoTransito($organismoTransito->getId());
 
             if ($rangoDisponible) {
                 $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getCantidadDisponibleByOrganismoTransito(

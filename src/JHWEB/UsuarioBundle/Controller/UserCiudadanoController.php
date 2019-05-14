@@ -520,7 +520,7 @@ class UserCiudadanoController extends Controller
                  $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'No se encontró ningun registro en la base de datos.', 
+                    'message' => 'No se encontró ningun registro en la base de datos, por favor registrelo en inscripción de persona natural.', 
                 );
             }
         }else{

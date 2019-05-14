@@ -23,3 +23,7 @@ services:
     app.pdf:
         class: AppBundle\services\PdfTemplate
         arguments: ["null"]
+
+    app.pdf.factura:
+        class: AppBundle\services\PdfTemplateFactura
+        arguments: ["null"]

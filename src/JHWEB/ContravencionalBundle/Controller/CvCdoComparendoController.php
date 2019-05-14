@@ -342,6 +342,7 @@ class CvCdoComparendoController extends Controller
 
                 $estado = $helpers->comparendoState($params);
                 $comparendo->setEstado($estado);
+                $comparendo->setActivo(true);
                 
                 $em->persist($comparendo);
                 $em->flush();
@@ -362,31 +363,6 @@ class CvCdoComparendoController extends Controller
                 $em->persist($trazabilidad);
                 $em->flush();
 
-                //Inmovilización
-                /*if ($params->comparendo->inmovilizacion) {
-                    $inmovilizacion = new Inmovilizacion();
-
-                    $inmovilizacion->setNumero(123);
-                    $inmovilizacion->setConsecutivo(0);
-                    $inmovilizacion->setFecha(
-                        new \Datetime($params->comparendo->fecha)
-                    );
-
-                    $grua = $em->getRepository('JHWEBPaqueaderoBundle:PqoCfgGrua')->find(
-                        $params->inmovilizacion->idGrua
-                    );
-                    $inmovilizacion->setGrua($grua);
-
-                    $patio = $em->getRepository('JHWEBPaqueaderoBundle:PqoCfgPatio')->find(
-                        $params->inmovilizacion->idPatio
-                    );
-                    $inmovilizacion->setPatio($patio);
-                    $inmovilizacion->setComparendo($comparendo);
-
-                    $em->persist($inmovilizacion);
-                    $em->flush();
-                }*/
-
                 if ($consecutivo) {
                     $consecutivo->setEstado('UTILIZADO');
                     $consecutivo->setActivo(false);
@@ -405,7 +381,6 @@ class CvCdoComparendoController extends Controller
                     'message' => "No se ha registrado el valor del SMLMV.",
                 );
             }
-
         }else {
             $response = array(
                 'status' => 'error',

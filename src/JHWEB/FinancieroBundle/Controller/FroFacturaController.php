@@ -261,14 +261,16 @@ class FroFacturaController extends Controller
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => 'Factura pendiente de pago.' 
+                            'message' => 'Factura pendiente de pago.', 
+                            'data'=> $froFactura
                         );
                     }
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'La factura ya fue tramitada y se encuentra finalizada.' 
+                        'message' => 'La factura ya fue tramitada y se encuentra finalizada.', 
+                        'data'=> $froFactura
                     );
                 }
             }else{
@@ -565,8 +567,6 @@ class FroFacturaController extends Controller
                 $this->generatePdfAmortizacion($id);
                 break;
         }
-
-
     }
 
     protected function generatePdfTramites($id){
@@ -585,7 +585,7 @@ class FroFacturaController extends Controller
 
         $barcode = new BarcodeGenerator();
         $barcode->setText(
-            "123456"
+            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
         );
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
@@ -593,14 +593,15 @@ class FroFacturaController extends Controller
         $barcode->setScale(1);
         $barcode->setThickness(25);
         $barcode->setFontSize(7);
-        $imgBarcode = $barcode->generate();
+        $code = $barcode->generate();
 
         //$imgBarcode = \base64_decode($imgBarcode);
+        $imgBarcode = $code;
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
             'fechaActual' => $fechaActual,
-            'factura'=>$factura,
-            'tramites'=>$tramites,
+            'factura'=> $factura,
+            'tramites'=> $tramites,
             'imgBarcode' => $imgBarcode
         ));
 

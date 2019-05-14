@@ -55,7 +55,7 @@ class PnalCfgCdoConsecutivoController extends Controller
 
             $divipo = $funcionario->getOrganismoTransito()->getDivipo();
         
-            for ($numero = $params->desde(); $numero <= $params->hasta(); $numero++) {
+            for ($numero = $params->desde; $numero <= $params->hasta; $numero++) {
                 if ($funcionario->getOrganismoTransito()->getAsignacionRango()) {
                     $numeroComparendo = $divipo.$numero;
                 }else{
@@ -73,6 +73,12 @@ class PnalCfgCdoConsecutivoController extends Controller
                     $em->flush();
                 }
             }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registros creados con exito.',
+            );
         }else{
             $response = array(
                 'status' => 'error',
