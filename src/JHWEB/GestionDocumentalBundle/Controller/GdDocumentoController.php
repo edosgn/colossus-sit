@@ -111,7 +111,7 @@ class GdDocumentoController extends Controller
             }
 
             if (isset($params->idTipoIdentificacion)) {
-                $tipoIdentificacion = $em->getRepository('AppBundle:TipoIdentificacion')->find(
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
                     $params->idTipoIdentificacion
                 );
                 $documento->setTipoIdentificacion($tipoIdentificacion);
@@ -525,7 +525,7 @@ class GdDocumentoController extends Controller
 
                 $trazabilidad->setDocumento($documento);
 
-                $funcionario = $em->getRepository('AppBundle:MpersonalFuncionario')->find(
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
                     $params->idFuncionario
                 );
                 $trazabilidad->setResponsable($funcionario);
