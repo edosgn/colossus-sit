@@ -94,14 +94,15 @@ class UserEmpresaController extends Controller
             $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
             $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
-            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundleBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
+
+            $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte)) ? $params->empresa->idModalidadTransporte : null;
+            if($idModalidadTransporte){
+                $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
+                $empresa->setModalidadTransporte($modalidadTransporte);
+            }
 
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
-            /* $empresaRepresentante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(array(
-                'ciudadano' => $ciudadano
-            )); */
-
-            
+ 
             $empresa = new UserEmpresa();
             
             $empresa->setNombre($params->empresa->nombre);
@@ -125,10 +126,8 @@ class UserEmpresaController extends Controller
             $empresa->setCorreo($params->empresa->correo);
             $empresa->setFax($params->empresa->fax);
             $empresa->setCiudadano($ciudadano);
-            $empresa->setModalidadTransporte($modalidadTransporte);
             $empresa->setEmpresaServicio($empresaServicio);
             $empresa->setActivo(true);
-            
             
             $empresaRepresentante = new UserEmpresaRepresentante();
             
@@ -206,32 +205,110 @@ class UserEmpresaController extends Controller
      * @Route("/{id}/edit", name="userempresa_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, UserEmpresa $userEmpresa)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($userEmpresa);
-        $editForm = $this->createForm('JHWEB\UsuarioBundle\Form\UserEmpresaType', $userEmpresa);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('userempresa_edit', array('id' => $userEmpresa->getId()));
+            $nombre = $params->nombre;
+
+            $em = $this->getDoctrine()->getManager();
+            $empresa = $em->getRepository("AppBundle:Empresa")->find($params->id);
+
+            if ($empresa!=null) {
+
+                    $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
+                $fechaInicial = new \DateTime($params->empresa->fechaInicial);
+
+                $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
+                $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
+                $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+
+                $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte)) ? $params->empresa->idModalidadTransporte : null;
+                if($idModalidadTransporte){
+                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
+                    $empresa->setModalidadTransporte($modalidadTransporte);
+                }
+
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
+    
+                $empresa = new UserEmpresa();
+                
+                $empresa->setNombre($params->empresa->nombre);
+                $empresa->setSigla($params->empresa->sigla);
+                $empresa->setNit($params->empresa->nit);
+                $empresa->setDv($params->empresa->dv);
+                $empresa->setCapitalPagado($params->empresa->capitalPagado);
+                $empresa->setCapitalLiquido($params->empresa->capitalPagado);
+                $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
+                $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
+                $empresa->setTipoSociedad($tipoSociedad);
+                $empresa->setTipoIdentificacion($tipoIdentificacion);
+                $empresa->setTipoEntidad($params->empresa->tipoEntidad);
+                $empresa->setTipoEmpresa($tipoEmpresa);
+                $empresa->setMunicipio($municipio);
+                $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
+                $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+                $empresa->setTelefono($params->empresa->telefono);
+                $empresa->setDireccion($params->empresa->direccion);
+                $empresa->setCelular($params->empresa->celular);
+                $empresa->setCorreo($params->empresa->correo);
+                $empresa->setFax($params->empresa->fax);
+                $empresa->setCiudadano($ciudadano);
+                $empresa->setEmpresaServicio($empresaServicio);
+                $empresa->setActivo(true);
+                
+                $empresaRepresentante = new UserEmpresaRepresentante();
+                
+                $empresaRepresentante->setEmpresa($empresa);
+                $empresaRepresentante->setCiudadano($ciudadano);
+                $empresaRepresentante->setFechaInicial($fechaInicial);
+                $empresaRepresentante->setActivo(true);
+                
+                $empresa->setEmpresaRepresentante($empresaRepresentante);
+                
+                $em->persist($empresa);
+                $em->persist($empresaRepresentante);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Empresa editada con exito", 
+                );
+
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La empresa no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar banco", 
+                );
         }
 
-        return $this->render('userempresa/edit.html.twig', array(
-            'userEmpresa' => $userEmpresa,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a userEmpresa entity.
      *
-     * @Route("/{id}/delete", name="userempresa_delete")
+     * @Route("/delete", name="userempresa_delete")
      * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, UserEmpresa $userEmpresa)
+    public function deleteAction(Request $request)
     {
         $form = $this->createDeleteForm($userEmpresa);
         $form->handleRequest($request);

@@ -3,32 +3,27 @@
         <meta charset="utf-8">
     </header>
     <body>
-        <h2 style="text-align:center;">Reporte comparendos</h2style="text-align:center;">
+        <h2 style="text-align:center;">Reporte comparendos</h2>
         <br>
         <br>
         <table border="1" style="text-align:center;">
             <tr>
                 <td><b>Nro. Factura</b></td>
-                <td><b>Fecha Pago</b></td>
-                <td><b>Placa/Cédula</b></td>
-                <td><b>Nro. Sustrato</b></td>
-                <td><b>Clasificaciones</b></td>
-                <td><b>Trámite</b></td>
-                <td><b>Valor Pagado</b></td>
-                <td><b>Observaciones</b></td>
+                <td><b>Nro. Comparendo</b></td>
+                <td><b>Indentificacion Infractor</b></td>
+                <td><b>Total</b></td>
             </tr>
-            {% for comparendo in arrayReporteComparendos %}
+            {% for infraccion in arrayInfracciones %}
                 <tr>
-                    <td>{{ comparendo.numeroFactura }}</td>
-                    <td>{{ comparendo.numero }}</td>
-                    <td>{{ comparendo.placaCedula }}</td>
-                    <td>{{ comparendo.valor }}</td>
-                    <td>observaciones</td>
+                    <td>{{ infraccion.numeroFactura }}</td>
+                    <td>{{ infraccion.numeroConsecutivo }}</td>
+                    <td>{{ infraccion.infractorIdentificacion }}</td>
+                    <td>{{ infraccion.total }}</td>
                 </tr>
             {% endfor %}
             <tr>
-                <td colspan="4"><b>TOTAL</b></td>
-                <td>{{ totalReporteMensual }}</td>
+                <td colspan="3"><b>TOTAL</b></td>
+                <td>{{ totalInfracciones }}</td>
             </tr>
         </table>
     </body>

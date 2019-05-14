@@ -491,7 +491,9 @@ class CvCdoComparendo
      */
     public function getFecha()
     {
-        return $this->fecha;
+        if ($this->fecha) {
+            return $this->fecha->format('d/m/Y');
+        }
     }
 
     /**

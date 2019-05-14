@@ -214,8 +214,8 @@ class FroReporteIngresosController extends Controller
                         'min' =>min($numeros),
                         'max' =>max($numeros),
                         'reporteMensual' =>$reporteMensual,
-                        'minAnulados' =>min($numerosAnulados),
-                        'maxAnulados' =>max($numerosAnulados),
+                        /* 'minAnulados' =>min($numerosAnulados),
+                        'maxAnulados' =>max($numerosAnulados), */
                     )); 
         
                     return new Response(
@@ -224,8 +224,8 @@ class FroReporteIngresosController extends Controller
                         array(
                             'Content-Type'        => 'application/pdf',
                             'Content-Disposition' => 'attachment; filename="fichero.pdf"'
-                            )
-                        );
+                        )
+                    );
                 } else {
                     $response = array(
                         'status' => 'error',
@@ -314,10 +314,10 @@ class FroReporteIngresosController extends Controller
     /**
      * datos para obtener comparendos por rango de fechas
      *
-     * @Route("/pdf/comparendo/fecha", name="frocomparendo_rango_fechas")
+     * @Route("/pdf/infraccion/fecha", name="froinfraccion_rango_fechas")
      * @Method({"GET", "POST"})
      */
-    public function comparendosByFechaAction(Request $request) {
+    public function infraccionesByFechaAction(Request $request) {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
@@ -331,10 +331,10 @@ class FroReporteIngresosController extends Controller
             setlocale(LC_ALL,"es_ES");
             $fechaActual = strftime("%d de %B del %Y");
 
-            $fechaInicioDatetime = new \Datetime($params->filtros->fechaDesde);
-            $fechaFinDatetime = new \Datetime($params->filtros->fechaHasta);
+            $fechaInicioDatetime = new \Datetime($params->fechaDesde);
+            $fechaFinDatetime = new \Datetime($params->fechaHasta);
             
-            $organismoTransito = $em->getRepository('JHWEBContravencialBundle:CvCdoComparendo')->find($params->filtros->idOrganismoTransito);
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
 
             /* $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
                 array(
@@ -349,52 +349,46 @@ class FroReporteIngresosController extends Controller
                 );
         
             $totalReporteMensual = 0; */
-                
-            $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesMensual($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
-            if($tramites){
-                $reporteMensual = true;
-                foreach ($tramites as $key => $tramite) {
-                    $placaCedula;
-                    if($tramite->getVehiculo() != null) {
-                        $placaCedula = $tramite->getVehiculo()->getPlaca()->getNumero();
-                        } else if($tramite->getVehiculo() == null) {
-                            $placaCedula = $tramite->getSolicitante()->getIdentificacion();
-                        }
+            $arrayInfracciones = []; 
+            $totalInfracciones = 0;
 
-                        $totalReporteMensual += $tramite->getTramiteFactura()->getPrecio()->getValor();
+            $infracciones = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getInfraccionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
-                        $arrayReporteMensual[] = array(
-                            'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
-                            'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
-                            'placaCedula' => $placaCedula,
-                            'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
-                            'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
-                        );
-                    }
-                    
+            if($infracciones){
+                foreach ($infracciones as $key => $infraccion) {
+                    $factura = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneBy(
+                        array(
+                            'comparendo' => $infraccion->getId(),
+                        )
+                    );
+
+                    $totalInfracciones += $factura->getFactura()->getValorNeto();
+
+                    $arrayInfracciones[] = array(
+                        'numeroConsecutivo' => $infraccion->getConsecutivo()->getNumero(),
+                        'numeroFactura' => $factura->getFactura()->getNumero(),
+                        'infractorIdentificacion' => $infraccion->getInfractorIdentificacion(),
+                        'total' => $factura->getFactura()->getValorNeto(),
+                    );
+                }
                     $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "registros encontrados",
-                );
-                
-                $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
-                    'organismoTransito' => $organismoTransito, 
-                    'arrayReporteMensual' => $arrayReporteMensual,
-                    'reporteMensual' => $reporteMensual,
-                    'funcionario' => $funcionario,
-                    'mesReporte' => strftime("%B del %Y", strtotime($params->filtros->fechaDesde)),
-                    'fechaActual' => $fechaActual,
-                    'totalReporteMensual' => $totalReporteMensual
-                    /* 'totalSustratos' => $totalSustratos, */
-                )); 
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'registros encontrados"',
+                    );
                     
-                return new Response(
-                    $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
-                    200,
-                    array(
-                        'Content-Type'        => 'application/pdf',
-                        'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.infracciones.html.twig', array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayInfracciones' => $arrayInfracciones,
+                        'totalInfracciones' => $totalInfracciones,
+                    )); 
+    
+                    return new Response(
+                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        200,
+                        array(
+                            'Content-Type'        => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
                     );
                 } else {

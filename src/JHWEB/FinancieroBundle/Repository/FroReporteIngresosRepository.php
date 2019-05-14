@@ -110,7 +110,7 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
 
         $dql = "SELECT ccc
-            FROM JHWEBContravencionalBundle:CvCdoComparendo ccc,
+            FROM JHWEBContravencionalBundle:CvCdoComparendo ccc
             WHERE ccc.organismoTransito = :idOrganismoTransito 
             AND ccc.fecha BETWEEN :fechaInicio AND :fechaFin";
 
