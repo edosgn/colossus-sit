@@ -31,7 +31,7 @@ class UserEmpresaSucursal
     /**
      * @var string
      *
-     * @ORM\Column(name="sigla", type="string", length=255)
+     * @ORM\Column(name="sigla", type="string", length=255, nullable=true)
      */
     private $sigla;
     
@@ -45,33 +45,37 @@ class UserEmpresaSucursal
     /**
      * @var int
      *
-     * @ORM\Column(name="telefono", type="integer", length=255)
+     * @ORM\Column(name="telefono", type="integer", length=255, nullable=true)
      */
     private $telefono;
     
     /**
      * @var int
      *
-     * @ORM\Column(name="celular", type="integer", length=255)
+     * @ORM\Column(name="celular", type="integer", length=255, nullable=true)
      */
     private $celular;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="correo", type="string", length=255)
+     * @ORM\Column(name="correo", type="string", length=255, nullable=true)
      */
     private $correo;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="fax", type="string", length=255)
+     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      */
+    
     private $fax;
     
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="empresas_sucursales") */
     private $municipio;
+    
+    /** @ORM\ManyToOne(targetEntity="UserEmpresa", inversedBy="empresas_sucursales") */
+    private $empresa;
     
     /**
      * @var boolean
@@ -304,5 +308,29 @@ class UserEmpresaSucursal
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     *
+     * @return UserEmpresaSucursal
+     */
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }
