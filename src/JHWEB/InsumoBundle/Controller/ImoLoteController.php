@@ -273,7 +273,6 @@ class ImoLoteController extends Controller
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
             $tipo = (isset($params->tipo)) ? $params->tipo : null;
 
-            die();
             if ($tipo) {
                 $loteInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                     array('estado' => 'ASIGNADO','sedeOperativa'=> $idOrganismoTransito,'tipo'=>$tipo)
@@ -317,6 +316,7 @@ class ImoLoteController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         }
+
         return $helpers->json($response);
     }
 
