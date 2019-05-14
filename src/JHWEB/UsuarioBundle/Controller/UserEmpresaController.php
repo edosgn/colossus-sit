@@ -86,8 +86,10 @@ class UserEmpresaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
     
-            $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
-            $fechaInicial = new \DateTime($params->empresa->fechaInicial);
+            if($params->empresa->fechaVencimientoRegistroMercantil) {
+                $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
+                $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+            }
 
             $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
             $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
@@ -119,7 +121,6 @@ class UserEmpresaController extends Controller
             $empresa->setTipoEmpresa($tipoEmpresa);
             $empresa->setMunicipio($municipio);
             $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
-            $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
             $empresa->setTelefono($params->empresa->telefono);
             $empresa->setDireccion($params->empresa->direccion);
             $empresa->setCelular($params->empresa->celular);
@@ -202,7 +203,7 @@ class UserEmpresaController extends Controller
     /**
      * Displays a form to edit an existing userEmpresa entity.
      *
-     * @Route("/{id}/edit", name="userempresa_edit")
+     * @Route("/edit", name="userempresa_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -215,31 +216,31 @@ class UserEmpresaController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $nombre = $params->nombre;
-
             $em = $this->getDoctrine()->getManager();
-            $empresa = $em->getRepository("AppBundle:Empresa")->find($params->id);
+
+            $empresa = $em->getRepository("JHWEBUsuarioBundle:UserEmpresa")->find($params->empresa->id);
 
             if ($empresa!=null) {
 
+                if($params->empresa->fechaVencimientoRegistroMercantil) {
                     $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
-                $fechaInicial = new \DateTime($params->empresa->fechaInicial);
+                    $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+                }   
 
+                
                 $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
                 $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
                 $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
                 $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
                 $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
-
-                $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte)) ? $params->empresa->idModalidadTransporte : null;
+                
+                $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte[0])) ? $params->empresa->idModalidadTransporte[0] : null;
                 if($idModalidadTransporte){
-                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
+                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte[0]);
                     $empresa->setModalidadTransporte($modalidadTransporte);
                 }
-
+                
                 $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
-    
-                $empresa = new UserEmpresa();
                 
                 $empresa->setNombre($params->empresa->nombre);
                 $empresa->setSigla($params->empresa->sigla);
@@ -255,27 +256,65 @@ class UserEmpresaController extends Controller
                 $empresa->setTipoEmpresa($tipoEmpresa);
                 $empresa->setMunicipio($municipio);
                 $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
-                $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
                 $empresa->setTelefono($params->empresa->telefono);
                 $empresa->setDireccion($params->empresa->direccion);
                 $empresa->setCelular($params->empresa->celular);
                 $empresa->setCorreo($params->empresa->correo);
-                $empresa->setFax($params->empresa->fax);
-                $empresa->setCiudadano($ciudadano);
+                $empresa->setFax($params->empresa->fax);                
                 $empresa->setEmpresaServicio($empresaServicio);
                 $empresa->setActivo(true);
                 
-                $empresaRepresentante = new UserEmpresaRepresentante();
+                $ciudadanoOld = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
+                    array(
+                        'empresa' => $params->empresa->id,
+                        'ciudadano' => $params->empresa->idCiudadano,
+                        'activo' => true
+                        )
+                );
+                    
+                if($ciudadanoOld) {    
+                    $empresa->setCiudadano($ciudadano);
+
+                    $representanteOld = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
+                    array(
+                        'empresa' => $params->empresa->id,
+                        'activo' => true
+                        )
+                    );
                 
-                $empresaRepresentante->setEmpresa($empresa);
-                $empresaRepresentante->setCiudadano($ciudadano);
-                $empresaRepresentante->setFechaInicial($fechaInicial);
-                $empresaRepresentante->setActivo(true);
-                
-                $empresa->setEmpresaRepresentante($empresaRepresentante);
+                    if($representanteOld){
+                        $representanteOld->setActivo(false);
+                        $representanteOld->setFechaFinal(new \Datetime());
+                    }
+
+                    $empresaRepresentante = new UserEmpresaRepresentante();
+                    $empresaRepresentante->setCiudadano($ciudadano);
+                    $empresaRepresentante->setEmpresa($empresa);
+                    $fechaInicial = (isset($params->empresa->fechaInicial)) ? $params->empresa->fechaInicial : null;
+                    if($fechaInicial){
+                        $fechaInicial = new \DateTime($params->empresa->fechaInicial);
+                        $empresaRepresentante->setFechaInicial($fechaInicial);
+                    }
+    
+                    $empresaRepresentante->setActivo(true);
+                    $empresa->setEmpresaRepresentante($empresaRepresentante);
+                    $em->persist($empresaRepresentante);
+                }
+                    /* $empresaRepresentante = new UserEmpresaRepresentante();
+                    $empresaRepresentante->setCiudadano($ciudadano);
+                    $empresaRepresentante->setEmpresa($empresa);
+                    $fechaInicial = (isset($params->empresa->fechaInicial)) ? $params->empresa->fechaInicial : null;
+                    if($fechaInicial){
+                        $fechaInicial = new \DateTime($params->empresa->fechaInicial);
+                        $empresaRepresentante->setFechaInicial($fechaInicial);
+                    }
+    
+                    $empresaRepresentante->setActivo(true);
+                    $empresa->setEmpresaRepresentante($empresaRepresentante);
+                    $em->persist($empresaRepresentante); */
                 
                 $em->persist($empresa);
-                $em->persist($empresaRepresentante);
+                $em->persist($representanteOld);
                 $em->flush();
 
                 $response = array(

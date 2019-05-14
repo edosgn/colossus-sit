@@ -24,7 +24,7 @@ class UserEmpresaRepresentante
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaInicial", type="date")
+     * @ORM\Column(name="fechaInicial", type="date", nullable=true)
      */
     private $fechaInicial;
 
@@ -81,6 +81,9 @@ class UserEmpresaRepresentante
      */
     public function getFechaInicial()
     {
+        if ($this->fechaInicial) {
+            return $this->fechaInicial->format('Y-m-d');
+        }
         return $this->fechaInicial;
     }
 
@@ -105,6 +108,9 @@ class UserEmpresaRepresentante
      */
     public function getFechaFinal()
     {
+        if ($this->fechaFinal) {
+            return $this->fechaFinal->format('Y-m-d');
+        }
         return $this->fechaFinal;
     }
 

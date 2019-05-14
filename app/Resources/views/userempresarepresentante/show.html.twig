@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Userempresarepresentante</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userEmpresaRepresentante.id }}</td>
+            </tr>
+            <tr>
+                <th>Fechainicial</th>
+                <td>{% if userEmpresaRepresentante.fechaInicial %}{{ userEmpresaRepresentante.fechaInicial|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechafinal</th>
+                <td>{% if userEmpresaRepresentante.fechaFinal %}{{ userEmpresaRepresentante.fechaFinal|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userEmpresaRepresentante.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('userempresarepresentante_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}
