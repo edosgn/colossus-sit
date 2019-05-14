@@ -3,6 +3,7 @@
 namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroTrteSolicitud;
+use JHWEB\FinancieroBundle\Entity\FroFacInsumo;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -118,7 +119,6 @@ class FroTrteSolicitudController extends Controller
         
                                 $em->flush();
                             }
-    
 
                             if (!$tramiteFactura->getRealizado()) {
                                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
@@ -219,9 +219,37 @@ class FroTrteSolicitudController extends Controller
                     }
                 }
 
+                
                 $factura->setEstado('FINALIZADA');
-            
+                
                 $em->flush();
+                
+                if ($params->insumoEntregado) {
+                    $facturaInsumo = new FroFacInsumo();
+    
+                    $facturaInsumo->setFactura($factura);
+
+                    $facturaInsumo->setFecha(new \DateTime(date('Y-m-d')));
+                    $facturaInsumo->setdescripcion($params->insumoEntregado->descripcion);
+                    $facturaInsumo->setEntregado(true);
+
+                    if ($params->insumoEntregado->idCiudadano) {
+                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                            $params->insumoEntregado->idCiudadano
+                        );
+                        $facturaInsumo->setCiudadano($ciudadano);
+                    }
+
+                    if ($params->insumoEntregado->idInsumo) {
+                        $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
+                            $params->insumoEntregado->idInsumo
+                        );
+                        $facturaInsumo->setInsumo($insumo);
+                    }
+
+                    $em->persist($facturaInsumo);
+                    $em->flush();
+                }
 
                 if ($certificadoTradicion) {
                     $response = array(

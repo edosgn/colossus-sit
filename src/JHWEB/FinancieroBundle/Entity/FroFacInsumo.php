@@ -1,16 +1,16 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace JHWEB\FinancieroBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * FacturaInsumo
+ * FroFacInsumo
  *
- * @ORM\Table(name="factura_insumo")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\FacturaInsumoRepository")
+ * @ORM\Table(name="fro_fac_insumo")
+ * @ORM\Entity(repositoryClass="JHWEB\FinancieroBundle\Repository\FroFacInsumoRepository")
  */
-class FacturaInsumo
+class FroFacInsumo
 {
     /**
      * @var int
@@ -31,15 +31,14 @@ class FacturaInsumo
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion", type="string", length=900, nullable=true)
+     * @ORM\Column(name="descripcion", type="text")
      */
     private $descripcion;
-    
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="entregado", type="boolean", nullable=true)
+     * @ORM\Column(name="entregado", type="boolean")
      */
     private $entregado;
 
@@ -58,10 +57,11 @@ class FacturaInsumo
      **/
     protected $factura;
 
+
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -73,7 +73,7 @@ class FacturaInsumo
      *
      * @param \DateTime $fecha
      *
-     * @return FacturaInsumo
+     * @return FroFacInsumo
      */
     public function setFecha($fecha)
     {
@@ -97,7 +97,7 @@ class FacturaInsumo
      *
      * @param string $descripcion
      *
-     * @return FacturaInsumo
+     * @return FroFacInsumo
      */
     public function setDescripcion($descripcion)
     {
@@ -121,7 +121,7 @@ class FacturaInsumo
      *
      * @param boolean $entregado
      *
-     * @return FacturaInsumo
+     * @return FroFacInsumo
      */
     public function setEntregado($entregado)
     {
@@ -133,7 +133,7 @@ class FacturaInsumo
     /**
      * Get entregado
      *
-     * @return boolean
+     * @return bool
      */
     public function getEntregado()
     {
@@ -143,11 +143,11 @@ class FacturaInsumo
     /**
      * Set ciudadano
      *
-     * @param \AppBundle\Entity\Ciudadano $ciudadano
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
-     * @return FacturaInsumo
+     * @return FroFacInsumo
      */
-    public function setCiudadano(\AppBundle\Entity\Ciudadano $ciudadano = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
         $this->ciudadano = $ciudadano;
 
@@ -157,7 +157,7 @@ class FacturaInsumo
     /**
      * Get ciudadano
      *
-     * @return \AppBundle\Entity\Ciudadano
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
     public function getCiudadano()
     {
@@ -167,11 +167,11 @@ class FacturaInsumo
     /**
      * Set insumo
      *
-     * @param \AppBundle\Entity\Insumo $insumo
+     * @param \JHWEB\InsumoBundle\Entity\ImoInsumo $insumo
      *
-     * @return FacturaInsumo
+     * @return FroFacInsumo
      */
-    public function setInsumo(\AppBundle\Entity\Insumo $insumo = null)
+    public function setInsumo(\JHWEB\InsumoBundle\Entity\ImoInsumo $insumo = null)
     {
         $this->insumo = $insumo;
 
@@ -181,7 +181,7 @@ class FacturaInsumo
     /**
      * Get insumo
      *
-     * @return \AppBundle\Entity\Insumo
+     * @return \JHWEB\InsumoBundle\Entity\ImoInsumo
      */
     public function getInsumo()
     {
@@ -191,11 +191,11 @@ class FacturaInsumo
     /**
      * Set factura
      *
-     * @param \AppBundle\Entity\Factura $factura
+     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $factura
      *
-     * @return FacturaInsumo
+     * @return FroFacInsumo
      */
-    public function setFactura(\AppBundle\Entity\Factura $factura = null)
+    public function setFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $factura = null)
     {
         $this->factura = $factura;
 
@@ -205,7 +205,7 @@ class FacturaInsumo
     /**
      * Get factura
      *
-     * @return \AppBundle\Entity\Factura
+     * @return \JHWEB\FinancieroBundle\Entity\FroFactura
      */
     public function getFactura()
     {
