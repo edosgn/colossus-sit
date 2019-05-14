@@ -4,7 +4,9 @@ namespace JHWEB\FinancieroBundle\Controller;
 
 use JHWEB\FinancieroBundle\Entity\FroTrteSolicitud;
 use JHWEB\FinancieroBundle\Entity\FroFacInsumo;
+use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
+use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -103,11 +105,7 @@ class FroTrteSolicitudController extends Controller
                             $tramiteRealizado->idTramiteFactura
                         );
         
-                        if ($tramiteFactura) {
-                            /*if (isset($tramiteRealizado->foraneas->campos)) {
-                                return $this->redirectToRoute('vhlovehiculo_update');
-                            }*/
-    
+                        if ($tramiteFactura) {    
                             if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
                                 $certificadoTradicion = true;
                             }
@@ -126,93 +124,101 @@ class FroTrteSolicitudController extends Controller
                                 );
     
                                 if (isset($params->idVehiculo) && $params->idVehiculo) {
-                                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-    
-                                    $tramiteSolicitud = new FroTrteSolicitud();
-    
-                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-    
-                                    $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
-                                    $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
-    
-                                    $tramiteSolicitud->setForaneas(
-                                        (array)$tramiteRealizado->foraneas
-                                    );
-                                    
-                                    $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
-                                    $tramiteSolicitud->setActivo(true);
-    
-                                    $tramiteSolicitud->setVehiculo($vehiculo);
-    
-                                    if (isset($params->idPropietario) && $params->idPropietario) {
-                                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
-                                            $params->idPropietario
+                                    $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas);
+
+                                    if ($vehiculoUpdate->code == 200) {
+                                        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+        
+                                        $tramiteSolicitud = new FroTrteSolicitud();
+        
+                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+        
+                                        $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
+                                        $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
+        
+                                        $tramiteSolicitud->setForaneas(
+                                            (array)$tramiteRealizado->foraneas
                                         );
-                                        $tramiteSolicitud->setPropietario($propietario);
-                                    }
-    
-                                    if (isset($params->idSolicitante) && $params->idSolicitante) {
-                                        $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                                            $params->idSolicitante
-                                        );
-                                        $tramiteSolicitud->setSolicitante($solicitante);
-                                    }
-    
-                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-    
-                                    $tramiteFactura->setRealizado(true);
-    
-                                    $em->persist($tramiteSolicitud);
-                                    $em->flush();
-    
-                                    if(isset($params->numeroActa)){
-                                        $vhloActaTraspaso = new VhloActaTraspaso();
-    
-                                        $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
-    
-                                        $vhloActaTraspaso->setNumero($params->numeroActa);
-                                        $vhloActaTraspaso->setFecha(
-                                            new \DateTime($params->fechaActa)
-                                        );
-    
-                                        $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                                            $params->idEntidadJudicial
-                                        );
-                                        $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
-    
-                                        $em->persist($vhloActaTraspaso);
+                                        
+                                        $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
+                                        $tramiteSolicitud->setActivo(true);
+        
+                                        $tramiteSolicitud->setVehiculo($vehiculo);
+        
+                                        if (isset($params->idPropietario) && $params->idPropietario) {
+                                            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
+                                                $params->idPropietario
+                                            );
+                                            $tramiteSolicitud->setPropietario($propietario);
+                                        }
+        
+                                        if (isset($params->idSolicitante) && $params->idSolicitante) {
+                                            $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                                $params->idSolicitante
+                                            );
+                                            $tramiteSolicitud->setSolicitante($solicitante);
+                                        }
+        
+                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+        
+                                        $tramiteFactura->setRealizado(true);
+        
+                                        $em->persist($tramiteSolicitud);
                                         $em->flush();
+        
+                                        if(isset($params->numeroActa)){
+                                            $vhloActaTraspaso = new VhloActaTraspaso();
+        
+                                            $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
+        
+                                            $vhloActaTraspaso->setNumero($params->numeroActa);
+                                            $vhloActaTraspaso->setFecha(
+                                                new \DateTime($params->fechaActa)
+                                            );
+        
+                                            $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                                                $params->idEntidadJudicial
+                                            );
+                                            $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
+        
+                                            $em->persist($vhloActaTraspaso);
+                                            $em->flush();
+                                        }
                                     }
                                 }else{
-                                    $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
-    
-                                    $tramiteSolicitud = new FroTrteSolicitud();
-    
-                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-    
-                                    $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
-                                    $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
-    
-                                    $tramiteSolicitud->setForaneas(
-                                        (array)$tramiteRealizado->foraneas
-                                    );
-                                    
-                                    $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
-                                    $tramiteSolicitud->setActivo(true);
-    
-                                    if (isset($params->idSolicitante) && $params->idSolicitante) {
-                                        $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                                            $params->idSolicitante
+                                    $usuarioUpdate = $this->usuarioUpdateAction($tramiteRealizado->foraneas);
+
+                                    if ($usuarioUpdate->code == 200) {
+                                        $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
+        
+                                        $tramiteSolicitud = new FroTrteSolicitud();
+        
+                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+        
+                                        $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
+                                        $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
+        
+                                        $tramiteSolicitud->setForaneas(
+                                            (array)$tramiteRealizado->foraneas
                                         );
-                                        $tramiteSolicitud->setSolicitante($solicitante);
+                                        
+                                        $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
+                                        $tramiteSolicitud->setActivo(true);
+        
+                                        if (isset($params->idSolicitante) && $params->idSolicitante) {
+                                            $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                                $params->idSolicitante
+                                            );
+                                            $tramiteSolicitud->setSolicitante($solicitante);
+                                        }
+        
+                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+        
+                                        $tramiteFactura->setRealizado(true);
+        
+                                        $em->persist($tramiteSolicitud);
+                                        $em->flush();
                                     }
-    
-                                    $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-    
-                                    $tramiteFactura->setRealizado(true);
-    
-                                    $em->persist($tramiteSolicitud);
-                                    $em->flush();
                                 }                      
                             }
                         }
@@ -249,6 +255,8 @@ class FroTrteSolicitudController extends Controller
 
                     $em->persist($facturaInsumo);
                     $em->flush();
+
+                    //Insertar licencia de conducción o tránsito
                 }
 
                 if ($certificadoTradicion) {
@@ -546,6 +554,265 @@ class FroTrteSolicitudController extends Controller
     }
 
     /* ================================================ */
+
+    public function vehiculoUpdateAction($params)
+    {           
+        $em = $this->getDoctrine()->getManager();
+
+        $vehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloVehiculo")->find(
+            $params->idVehiculo
+        );
+
+        if ($vehiculo) {
+            foreach ($params->campos as $key => $campo) {
+                switch ($campo) {
+                    case 'color':
+                        $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
+                            $params->idColor
+                        );
+                        $vehiculo->setColor($color);
+                        break;
+
+                    case 'combustible':
+                        $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                            $params->idCombustible
+                        );
+                        $vehiculo->setCombustible($combustible);
+                        break;
+
+                    case 'gas':
+                        $gas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                            $params->idCombustibleCambio
+                        );
+                        $vehiculo->setCombustible($gas);
+                        break;
+
+                    case 'organismoTransito':
+                        $organismoTransito = $em->getRepository("JHWEBConfigBundle:CfgOrganismoTransito")->find(
+                            $params->idOrganismoTransitoNew
+                        );
+                        $vehiculo->setOrganismoTransito($organismoTransito);
+                        break;
+
+                    case 'blindaje':
+                        $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
+                        $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
+                        $vehiculo->setEmpresaBlindadora(
+                            $params->empresaBlindadora
+                        );
+                        break;
+
+                    case 'carroceria':
+                        $carroceria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCarroceria")->find(
+                            $params->idCarroceria
+                        );
+                        $vehiculo->setCarroceria($carroceria);
+                        break;
+
+                    case 'motor':
+                        $vehiculo->setMotor($params->numeroMotor);
+                        break;
+
+                    case 'placa':
+                        $placa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgPlaca")->findOneByNumero(
+                            $params->nuevaPlaca
+                        );
+
+                        if (!$placa) {
+                            $placa = new VhloCfgPlaca();
+
+                            $placa->setNumero(
+                                strtoupper($params->nuevaPlaca)
+                            );
+                            $placa->setEstado('ASIGNADA');
+                            $placa->setTipoVehiculo($vehiculo->getTipoVehiculo());
+                            $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
+
+                            $em->persist($placa);
+                            $em->flush();
+                        }
+
+                        $vehiculo->setPlaca($placa);
+                        break;
+                        
+                    case 'servicio':
+                        $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                            $params->idServicio
+                        );
+                        $vehiculo->setServicio($servicio);
+                        break;
+
+                    case 'ejes':
+                        $vehiculo->setNumeroEjes($params->ejesTotal);
+                        break;
+                        
+                    case 'cancelacionmatricula':
+                        $vehiculo->setCancelado(true);
+                        break;
+
+                    case 'rematricula':
+                        $vehiculo->setCancelado(false);
+                        break;
+
+                    case 'regrabarchasis':
+                        $vehiculo->setChasis($params->nuevoNumero);
+                        break;
+
+                    case 'regrabarmotor':
+                        $vehiculo->setMotor($params->nuevoNumero);
+                        break;
+
+                    case 'regrabarserie':
+                        $vehiculo->setSerie($params->nuevoNumero);
+                        break;
+
+                    case 'regrabarvin':
+                        $vehiculo->setVin($params->nuevoNumero);
+                        break;
+
+                    case 'conjunto':
+                        $vehiculo->setModelo($params->nuevoModelo);
+                        break;
+
+                    case 'repotenciacion':
+                        $vehiculo->setModelo($params->modelo);
+                        break;
+
+                    case 'pignorado':
+                        $vehiculo->setPignorado(true);
+                        break;
+                }
+            }
+
+            $em->flush();
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'El vehiculo se actualizó con éxito.',
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'El vehiculo no se encuentra en la base de datos.',
+            );
+        }
+       
+
+        return $helpers->json($response);
+    }
+
+    public function usuarioUpdateAction($params)
+    {           
+        $em = $this->getDoctrine()->getManager();
+
+        $ciudadano = $em->getRepository("JHWEBUsuarioBundle:UserCiudadano")->find(
+            $params->idSolicitante
+        );
+
+        if ($ciudadano) {
+            foreach ($params->campos as $key => $campo) {
+                switch ($campo) {
+                    case 'cambioDocumento':
+                        $ciudadanoNew = new UserCiudadano();
+
+                        $ciudadanoNew->setPrimerNombre($ciudadano->getPrimerNombre());
+                        $ciudadanoNew->setSegundoNombre($ciudadano->getSegundoNombre());
+                        $ciudadanoNew->setPrimerApellido($ciudadano->getPrimerApellido());
+                        $ciudadanoNew->setSegundoApellido($ciudadano->getSegundoApellido());
+        
+                        $ciudadanoNew->setIdentificacion(
+                            $params->identificacionActual
+                        );
+        
+                        $ciudadanoNew->setTelefonoCelular($ciudadano->getTelefonoCelular());
+        
+                        if ($ciudadano->getTelefonoFijo()) {
+                            $ciudadanoNew->setTelefonoFijo($ciudadano->getTelefonoFijo());
+                        }
+        
+                        if ($ciudadano->getFechaNacimiento()) {
+                            $ciudadanoNew->setFechaNacimiento(
+                                $ciudadano->getFechaNacimiento()
+                            );
+                        }
+        
+                        if ($ciudadano->getFechaExpedicionDocumento()) {
+                            $ciudadanoNew->setFechaExpedicionDocumento(
+                                $ciudadano->getFechaExpedicionDocumento()
+                            );
+                        }
+        
+                        $ciudadanoNew->setDireccionPersonal(
+                            $ciudadano->getDireccionPersonal()
+                        );
+        
+                        if ($ciudadano->getDireccionTrabajo()) {
+                            $ciudadanoNew->setDireccionTrabajo(
+                                $ciudadano->getDireccionTrabajo()
+                            );
+                        }
+        
+                        $ciudadanoNew->setEnrolado(true);
+                        $ciudadanoNew->setActivo(true);
+        
+                        $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
+                            1
+                        );
+                        $ciudadanoNew->setTipoIdentificacion($tipoIdentificacion);
+        
+                        if ($ciudadano->getMunicipioNacimiento()) {
+                            $ciudadanoNew->setMunicipioNacimiento($ciudadano->getMunicipioNacimiento());
+                        }
+        
+                        if ($ciudadano->getMunicipioResidencia()) {
+                            $ciudadanoNew->setMunicipioResidencia($ciudadano->getMunicipioResidencia());
+                        }
+        
+                        if ($ciudadano->getGenero()) {
+                            $ciudadanoNew->setGenero($ciudadano->getGenero());
+                        }
+        
+                        if ($ciudadano->getGrupoSanguineo()) {
+                            $ciudadanoNew->setGrupoSanguineo($ciudadano->getGrupoSanguineo());
+                        }
+
+                        $usuario = $ciudadano->getUsuario();
+        
+                        $password = $ciudadano->getPrimerNombre()[0].$ciudadano->getPrimerApellido()[0].$params->identificacionActual;
+                        $password = hash('sha256', $password);
+                        $usuario->setPassword($password);
+
+                        $ciudadano->setUsuario(null);
+
+                        $em->flush();
+        
+                        $em->persist($ciudadanoNew);
+                        $usuario->setCiudadano($ciudadanoNew);
+                        
+                    break;
+                }
+            }
+
+            $em->flush();
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'El usuario se actualizó con éxito.',
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'El usuario no se encuentra en la base de datos.',
+            );
+        }
+       
+
+        return $helpers->json($response);
+    }
 
     /**
      * Busca trámites por módulo y parametros (No. placa, No. factura y fecha).

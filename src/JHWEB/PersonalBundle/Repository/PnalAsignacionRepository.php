@@ -52,7 +52,7 @@ class PnalAsignacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getLastByFecha(){ 
+    public function getLastByFechaAndOrganismoTransito($idOrganismoTransito){ 
         $em = $this->getEntityManager();
         
         $dql = "SELECT pa
@@ -61,10 +61,14 @@ class PnalAsignacionRepository extends \Doctrine\ORM\EntityRepository
             SELECT MAX(pa2.fecha)
             FROM JHWEBPersonalBundle:PnalAsignacion pa2
             WHERE pa2.activo = true
+            AND pa2.organismoTransito = :idOrganismoTransito
         ) 
+        AND pa.organismoTransito = :idOrganismoTransito
         AND pa.activo = true";
 
-        $consulta = $em->createQuery($dql)->setMaxResults(1);;
+        $consulta = $em->createQuery($dql)->setMaxResults(1);
+
+        $consulta->setParameter('idOrganismoTransito', $idOrganismoTransito);
 		
         return $consulta->getOneOrNullResult();
     }

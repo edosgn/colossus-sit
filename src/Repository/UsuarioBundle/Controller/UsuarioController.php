@@ -68,6 +68,7 @@ class UsuarioController extends Controller
         $params = json_decode($json);
 
         $usuario = new Usuario();
+
         $nombres = (isset($params->nombres)) ? $params->nombres : null;
         $apellidos = (isset($params->apellidos)) ? $params->apellidos : null;
         $identificacion = (isset($params->identificacion)) ? $params->identificacion : null;
@@ -114,13 +115,11 @@ class UsuarioController extends Controller
                 $data["code"] = 200;
                 $data["msg"] = 'Nuevo usuario creado';
             }else{
-
                 $data = array(
-                        "status" => "error",
-                        "code" => 400,
-                        "msg" => "Usuario no creado email repetido"
-                    );
-
+                    "status" => "error",
+                    "code" => 400,
+                    "msg" => "Usuario no creado email repetido"
+                );
             }
         }
         return $helpers->json($data);

@@ -261,14 +261,16 @@ class FroFacturaController extends Controller
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => 'Factura pendiente de pago.' 
+                            'message' => 'Factura pendiente de pago.', 
+                            'data'=> $froFactura
                         );
                     }
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'La factura ya fue tramitada y se encuentra finalizada.' 
+                        'message' => 'La factura ya fue tramitada y se encuentra finalizada.', 
+                        'data'=> $froFactura
                     );
                 }
             }else{

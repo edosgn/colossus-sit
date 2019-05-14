@@ -297,6 +297,9 @@ class PqoInmovilizacion
      */
     public function getFechaIngreso()
     {
+        if ($this->fechaIngreso) {
+            return $this->fechaIngreso->format('d/m/Y');
+        }
         return $this->fechaIngreso;
     }
 
@@ -345,6 +348,9 @@ class PqoInmovilizacion
      */
     public function getFechaInmovilizacion()
     {
+        if ($this->fechaInmovilizacion) {
+            return $this->fechaInmovilizacion->format('d/m/Y');
+        }
         return $this->fechaInmovilizacion;
     }
 
