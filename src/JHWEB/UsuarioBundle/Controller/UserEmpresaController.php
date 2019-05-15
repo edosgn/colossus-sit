@@ -86,25 +86,23 @@ class UserEmpresaController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            if($params->empresa->fechaVencimientoRegistroMercantil) {
-                $fechaDeVencimiento = new \Datetime($params->empresa->fechaVencimientoRegistroMercantil);
-                $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
-            }
-
+            $fechaDeVencimiento = new \Datetime($params->empresa->fechaVencimientoRegistroMercantil);
+            $fechaInicial = new \Datetime($params->empresa->fechaInicial);
+            
             $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
             $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
             $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
             $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
-
+            
             $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte)) ? $params->empresa->idModalidadTransporte : null;
             if($idModalidadTransporte){
                 $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
                 $empresa->setModalidadTransporte($modalidadTransporte);
             }
-
+            
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
- 
+            
             $empresa = new UserEmpresa();
             
             $empresa->setNombre($params->empresa->nombre);
@@ -121,6 +119,7 @@ class UserEmpresaController extends Controller
             $empresa->setTipoEmpresa($tipoEmpresa);
             $empresa->setMunicipio($municipio);
             $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
+            $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
             $empresa->setTelefono($params->empresa->telefono);
             $empresa->setDireccion($params->empresa->direccion);
             $empresa->setCelular($params->empresa->celular);
