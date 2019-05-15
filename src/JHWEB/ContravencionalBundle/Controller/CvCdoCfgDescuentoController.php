@@ -2,23 +2,22 @@
 
 namespace JHWEB\ContravencionalBundle\Controller;
 
-use JHWEB\ContravencionalBundle\Entity\CvAuCfgAtencion;
+use JHWEB\ContravencionalBundle\Entity\CvCdoCfgDescuento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Cvaucfgatencion controller.
+ * Cvcdocfgdescuento controller.
  *
- * @Route("cvaucfgatencion")
+ * @Route("cvcdocfgdescuento")
  */
-class CvAuCfgAtencionController extends Controller
+class CvCdoCfgDescuentoController extends Controller
 {
     /**
-     * Lists all cvAuCfgAtencion entities.
+     * Lists all cvCdoCfgDescuento entities.
      *
-     * @Route("/", name="cvaucfgatencion_index")
+     * @Route("/", name="cvcdocfgdescuento_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -27,7 +26,7 @@ class CvAuCfgAtencionController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $atenciones = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgAtencion')->findBy(
+        $descuentos = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgDescuento')->findBy(
             array(
                 'activo' => true
             )
@@ -35,12 +34,12 @@ class CvAuCfgAtencionController extends Controller
 
         $response['data'] = array();
 
-        if ($atenciones) {
+        if ($descuentos) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($atenciones)." registros encontrados", 
-                'data'=> $atenciones,
+                'message' => count($descuentos)." registros encontrados", 
+                'data'=> $descuentos,
             );
         }
 
@@ -48,9 +47,9 @@ class CvAuCfgAtencionController extends Controller
     }
 
     /**
-     * Creates a new cvAuCfgAtencion entity.
+     * Creates a new cvCdoCfgDescuento entity.
      *
-     * @Route("/new", name="cvaucfgatencion_new")
+     * @Route("/new", name="cvcdocfgdescuento_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -63,35 +62,71 @@ class CvAuCfgAtencionController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            if ($params->dias) {
-                foreach ($params->dias as $key => $dia) {
-                    $atencion = new CvAuCfgAtencion();
+            $em = $this->getDoctrine()->getManager();
 
-                    $atencion->setDia($dia);
-                    $atencion->setHoraManianaInicial(new \Datetime($params->horaManianaInicial));
-                    $atencion->setHoraManianaFinal(new \Datetime($params->horaManianaFinal));
-                    $atencion->setHoraTardeInicial(new \Datetime($params->horaTardeInicial));
-                    $atencion->setHoraTardeFinal(new \Datetime($params->horaTardeFinal));
-                    $atencion->setActivo(true);
+            $descuento = new CvCdoCfgDescuento();
 
-                    $em = $this->getDoctrine()->getManager();
-                    
-                    $em->persist($atencion);
-                    $em->flush();
-                }
-            }
-           
+            $descuento->setPorcentaje($params->porcentaje);
+            $descuento->setFechaInicial(
+                new \Datetime($params->fechaInicial)
+            );
+            $descuento->setFechaFinal(
+                new \Datetime($params->fechaFinal)
+            );
+            $descuento->setActivo(true);
+
+            $em->persist($descuento);
+            $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con exito",
+                'message' => 'Registro creado con exito.',
             );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Finds and displays a cvCdoCfgDescuento entity.
+     *
+     * @Route("/show", name="cvcdocfgdescuento_show")
+     * @Method({"GET", "POST"})
+     */
+    public function showAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $descuento = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgDescuento')->find(
+                $params->id
+            );
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Registro encontrado con exito.',
+                'data' => $descuento
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
             );
         }
         
@@ -99,25 +134,9 @@ class CvAuCfgAtencionController extends Controller
     }
 
     /**
-     * Finds and displays a cvAuCfgAtencion entity.
+     * Displays a form to edit an existing cvCdoCfgDescuento entity.
      *
-     * @Route("/{id}/show", name="cvaucfgatencion_show")
-     * @Method("GET")
-     */
-    public function showAction(CvAuCfgAtencion $cvAuCfgAtencion)
-    {
-        $deleteForm = $this->createDeleteForm($cvAuCfgAtencion);
-
-        return $this->render('cvaucfgatencion/show.html.twig', array(
-            'cvAuCfgAtencion' => $cvAuCfgAtencion,
-            'delete_form' => $deleteForm->createView(),
-        ));
-    }
-
-    /**
-     * Displays a form to edit an existing cvAuCfgAtencion entity.
-     *
-     * @Route("/edit", name="cvaucfgatencion_edit")
+     * @Route("/edit", name="cvcdocfgdescuento_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request)
@@ -132,32 +151,26 @@ class CvAuCfgAtencionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $atencion = $em->getRepository("JHWEBContravencionalBundle:CvAuCfgAtencion")->find(
+            $descuento = $em->getRepository("JHWEBContravencionalBundle:CvCdoCfgDescuento")->find(
                 $params->id
             );
 
-            if ($atencion) {
-                $atencion->setDia($params->dia);
-                $atencion->setHoraManianaInicial(
-                    new \Datetime($params->horaManianaInicial)
+            if ($descuento) {
+                $descuento->setPorcentaje($params->porcentaje);
+                $descuento->setFechaInicial(
+                    new \Datetime($params->fechaInicial)
                 );
-                $atencion->setHoraManianaFinal(
-                    new \Datetime($params->horaManianaFinal)
+                $descuento->setFechaFinal(
+                    new \Datetime($params->fechaFinal)
                 );
-                $atencion->setHoraTardeInicial(
-                    new \Datetime($params->horaTardeInicial)
-                );
-                $atencion->setHoraTardeFinal(
-                    new \Datetime($params->horaTardeFinal)
-                );
-                
+
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $atencion,
+                    'data'=> $descuento,
                 );
             }else{
                 $response = array(
@@ -178,9 +191,9 @@ class CvAuCfgAtencionController extends Controller
     }
 
     /**
-     * Deletes a cvAuCfgAtencion entity.
+     * Deletes a cvCdoCfgDescuento entity.
      *
-     * @Route("/delete", name="cvaucfgatencion_delete")
+     * @Route("/delete", name="cvcdocfgdescuento_delete")
      * @Method("POST")
      */
     public function deleteAction(Request $request)
@@ -195,11 +208,11 @@ class CvAuCfgAtencionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $atencion = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgAtencion')->find(
+            $descuento = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgDescuento')->find(
                 $params->id
             );
 
-            $atencion->setActivo(false);
+            $descuento->setActivo(false);
 
             $em->flush();
 
@@ -220,16 +233,16 @@ class CvAuCfgAtencionController extends Controller
     }
 
     /**
-     * Creates a form to delete a cvAuCfgAtencion entity.
+     * Creates a form to delete a cvCdoCfgDescuento entity.
      *
-     * @param CvAuCfgAtencion $cvAuCfgAtencion The cvAuCfgAtencion entity
+     * @param CvCdoCfgDescuento $cvCdoCfgDescuento The cvCdoCfgDescuento entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(CvAuCfgAtencion $cvAuCfgAtencion)
+    private function createDeleteForm(CvCdoCfgDescuento $cvCdoCfgDescuento)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('cvaucfgatencion_delete', array('id' => $cvAuCfgAtencion->getId())))
+            ->setAction($this->generateUrl('cvcdocfgdescuento_delete', array('id' => $cvCdoCfgDescuento->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
