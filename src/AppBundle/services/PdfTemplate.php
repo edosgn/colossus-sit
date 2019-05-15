@@ -27,14 +27,14 @@ class PdfTemplate extends TCPDF{
         $this->Image($image_file, 5, 270, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
     }
 
-    public function templatePreview($html){
+    public function templatePreview($html, $titulo){
         // create new PDF document
         $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('JHWEB PASTO SAS');
-        $pdf->SetTitle('PDF pruebas');
+        $pdf->SetTitle($titulo);
         $pdf->SetSubject('TCPDF Tutorial');
         $pdf->SetKeywords('TCPDF, PDF, example, test, guide');
 
@@ -79,7 +79,7 @@ class PdfTemplate extends TCPDF{
         // ---------------------------------------------------------
         // Close and output PDF document
         // This method has several options, check the source code documentation for more information.
-        $pdf->Output('example_065.pdf', 'I');
+        $pdf->Output($titulo, 'I');
     }
 
     public function templateEvaluacion($html, $evaluacion){

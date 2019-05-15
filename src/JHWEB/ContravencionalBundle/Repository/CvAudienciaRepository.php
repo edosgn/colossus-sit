@@ -51,4 +51,16 @@ class CvAudienciaRepository extends \Doctrine\ORM\EntityRepository
         
         return $consulta->getResult();
     }
+
+    //Obtiene la ultima audiencia programada
+    public function getLast()
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(a.fecha), a.id
+            FROM JHWEBContravencionalBundle:CvAudiencia a
+            WHERE a.activo = true";
+        $consulta = $em->createQuery($dql);
+
+        return $consulta->getOneOrNullResult();
+    }
 }

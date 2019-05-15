@@ -459,4 +459,51 @@ class CvAudienciaController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Busca ultima audiencia programada.
+     *
+     * @Route("/search/last", name="cvaudiencia_search_last")
+     * @Method({"GET","POST"})
+     */
+    public function searchLast(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+
+            $audienciaLast = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->getLast();
+            
+            
+            if ($audienciaLast) {
+                $audiencia = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->find(
+                    $audienciaLast['id']
+                );
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Ultima audiencia programada para el ".$audiencia->getFecha(), 
+                    'data' => $audiencia,
+                );
+            }else{
+                 $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen audiencias programadas.", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
 }

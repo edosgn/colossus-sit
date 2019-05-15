@@ -1,0 +1,41 @@
+<html>
+  <header>
+    <style type="text/css">
+        .separator{
+            border-top: 1px dashed #cccccc;
+        }
+
+        .table td{
+            max-height: 15px;
+            padding: 2px;
+        }
+    </style>
+  </header>
+  <body style="font-size:10px">
+    <p style="text-align:center;font-weight:bold;">
+    SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL<br>ESTADO NÚMERO 3<br>{{ fechaActual }}
+    </p>
+    <table border="1">
+        <tr style="text-align:center;font-weight:bold;">
+            <td>ITEM</td>
+            <td>PROCESO</td>
+            <td>CLASE DE PROCESO</td>
+            <td>PERSONA NOTIFICADA</td>
+            <td>TIPO DE AUTO</td>
+            <td>FECHA DE AUTO</td>
+            <td>No. DE <br> CUADERNO</td>
+        </tr>
+        {% for key, trazabilidad in trazabilidades %}
+            <tr style="text-align:center;">
+                <td>{{ key + 1 }}</td>
+                <td>{{ trazabilidad.comparendo.consecutivo.numero }}</td>
+                <td>Contravencional Administrativo</td>
+                <td>{{ trazabilidad.comparendo.infractorNombre }}</td>
+                <td>De no comparecencia y fijación fecha y hora de audiencia pública</td>
+                <td>{{ trazabilidad.fecha|date('d/m/Y') }}</td>
+                <td>1</td>
+            </tr>
+        {% endfor %}
+    </table>
+  </body>
+</html>

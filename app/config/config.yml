@@ -87,13 +87,16 @@ doctrine:
         resolve_target_entities:
             UsuarioBundle\Entity\Usuario: Repository\UsuarioBundle\Entity\Usuario
 
-# Swiftmailer Configuration
+# Swiftmailer Configuration port 587
 swiftmailer:
-    transport: "%mailer_transport%"
-    host:      "%mailer_host%"
-    username:  "%mailer_user%"
-    password:  "%mailer_password%"
-    spool:     { type: memory }
+    transport:              smtp
+    encryption:             null
+    auth_mode:              null
+    host:                   mail.apps.hospitalsanpedro.org
+    username:               no-responder@apps.hospitalsanpedro.org
+    password:               Yxi06d6?
+    port:                   587
+    #delivery_address:      edgargn87@gmail.com
 
 #white_october_tcpdf:
     #class: 'AppBundle\services\PdfTemplate'
