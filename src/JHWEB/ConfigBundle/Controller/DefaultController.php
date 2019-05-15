@@ -4,6 +4,7 @@ namespace JHWEB\ConfigBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class DefaultController extends Controller
 {
@@ -39,7 +40,7 @@ class DefaultController extends Controller
             )
         );
 
-        $html = $this->renderView('@JHWEBConfig/default/pdf.minuta.estados.html.twig', array(
+        $html = $this->renderView('@JHWEBConfig/Default/pdf.minuta.estados.html.twig', array(
             'trazabilidades' => $trazabilidades,
             'fechaActual' => $fechaActual,
         ));
