@@ -1033,7 +1033,7 @@ class CvCdoComparendoController extends Controller
                     'comparendo' => $params->id
                 ),
                 array(
-                    'fecha' => 'DESC'
+                    'fecha' => 'ASC'
                 )
             );
 

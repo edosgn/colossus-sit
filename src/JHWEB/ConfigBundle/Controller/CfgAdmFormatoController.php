@@ -117,7 +117,7 @@ class CfgAdmFormatoController extends Controller
                 $params->id
             );
 
-            $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                 $params->idComparendo
             );
 

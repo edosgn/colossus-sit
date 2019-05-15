@@ -437,7 +437,7 @@ class Helpers
             $documento = new CfgAdmActoAdministrativo();
 
             $documento->setNumero(
-                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getNumero()
             );
             $documento->setFecha(new \Datetime(date('Y-m-d')));
             $documento->setActivo(true);
@@ -466,7 +466,7 @@ class Helpers
         
         $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
         $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
-        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getNumero()); 
         $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
 
         if ($comparendo->getInfraccion()) {

@@ -19,7 +19,7 @@ class CvAudienciaRepository extends \Doctrine\ORM\EntityRepository
             case 1:
                 $dql = "SELECT a
                     FROM JHWEBContravencionalBundle:CvAudiencia a,
-                    AppBundle:Comparendo c
+                    JHWEBContravencionalBundle:CvCdoComparendo c
                     WHERE a.comparendo = c.id
                     AND c.infractorIdentificacion = :identificacion";
                 $consulta = $em->createQuery($dql);
@@ -29,11 +29,11 @@ class CvAudienciaRepository extends \Doctrine\ORM\EntityRepository
             case 2:
                 $dql = "SELECT a
                     FROM JHWEBContravencionalBundle:CvAudiencia a,
-                    AppBundle:Comparendo c,
-                    AppBundle:MpersonalComparendo pc,
+                    JHWEBContravencionalBundle:CvCdoComparendo c,
+                    JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
                     WHERE a.comparendo = c.id
                     AND c.consecutivo = pc.id
-                    AND pc.consecutivo = :numero";
+                    AND pc.numero = :numero";
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameter('numero', $params->filtro);
                 break;
@@ -41,7 +41,7 @@ class CvAudienciaRepository extends \Doctrine\ORM\EntityRepository
             case 3:
                 $dql = "SELECT a
                     FROM JHWEBContravencionalBundle:CvAudiencia a,
-                    AppBundle:Comparendo c
+                    JHWEBContravencionalBundle:CvCdoComparendo c
                     WHERE a.comparendo = c.id
                     AND a.fecha = :fecha";
                 $consulta = $em->createQuery($dql);
@@ -56,7 +56,7 @@ class CvAudienciaRepository extends \Doctrine\ORM\EntityRepository
     public function getLast()
     {
         $em = $this->getEntityManager();
-        $dql = "SELECT MAX(a.fecha), a.id
+        $dql = "SELECT MAX(a.fecha) AS fecha, a.id AS id
             FROM JHWEBContravencionalBundle:CvAudiencia a
             WHERE a.activo = true";
         $consulta = $em->createQuery($dql);

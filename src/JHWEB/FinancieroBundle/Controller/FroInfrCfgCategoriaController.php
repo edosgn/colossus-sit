@@ -102,10 +102,10 @@ class FroInfrCfgCategoriaController extends Controller
     /**
      * Displays a form to edit an existing froInfrCfgCategorium entity.
      *
-     * @Route("/{id}/edit", name="froinfrcfgcategoria_edit")
+     * @Route("/edit", name="froinfrcfgcategoria_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, FroInfrCfgCategoria $froInfrCfgCategorium)
+    public function editAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);

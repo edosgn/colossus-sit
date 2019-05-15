@@ -15,24 +15,24 @@
     <p style="text-align:center;font-weight:bold;">
     SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL<br>ESTADO NÚMERO 3<br>{{ fechaActual }}
     </p>
-    <table border="1">
+    <table border="1" cellpadding="3" style="font-size:8px">
         <tr style="text-align:center;font-weight:bold;">
-            <td>ITEM</td>
-            <td>PROCESO</td>
-            <td>CLASE DE PROCESO</td>
-            <td>PERSONA NOTIFICADA</td>
-            <td>TIPO DE AUTO</td>
-            <td>FECHA DE AUTO</td>
-            <td>No. DE <br> CUADERNO</td>
+            <td width="5%">ITEM</td>
+            <td width="15%">PROCESO</td>
+            <td width="15%">CLASE DE PROCESO</td>
+            <td width="24%">PERSONA NOTIFICADA</td>
+            <td width="24%">TIPO DE AUTO</td>
+            <td width="10%">FECHA DE AUTO</td>
+            <td width="8%">No. DE <br> CUADER<br>NO</td>
         </tr>
         {% for key, trazabilidad in trazabilidades %}
             <tr style="text-align:center;">
                 <td>{{ key + 1 }}</td>
                 <td>{{ trazabilidad.comparendo.consecutivo.numero }}</td>
                 <td>Contravencional Administrativo</td>
-                <td>{{ trazabilidad.comparendo.infractorNombre }}</td>
+                <td>{{ trazabilidad.comparendo.infractorNombres }}</td>
                 <td>De no comparecencia y fijación fecha y hora de audiencia pública</td>
-                <td>{{ trazabilidad.fecha|date('d/m/Y') }}</td>
+                <td>{{ trazabilidad.fecha }}</td>
                 <td>1</td>
             </tr>
         {% endfor %}

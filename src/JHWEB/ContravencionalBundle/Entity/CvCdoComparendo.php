@@ -494,6 +494,7 @@ class CvCdoComparendo
         if ($this->fecha) {
             return $this->fecha->format('d/m/Y');
         }
+        return $this->fecha;
     }
 
     /**
@@ -517,6 +518,9 @@ class CvCdoComparendo
      */
     public function getHora()
     {
+        if ($this->hora) {
+            return $this->hora->format('h:i:s A');
+        }
         return $this->hora;
     }
 

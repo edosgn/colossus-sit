@@ -5,6 +5,7 @@ namespace JHWEB\ConfigBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -24,6 +25,8 @@ class DefaultController extends Controller
      */
     public function minutaEstadosPdfAction(Request $request, $id)
     {
+        $helpers = $this->get("app.helpers");
+        
         $em = $this->getDoctrine()->getManager();
 
         setlocale(LC_ALL,"es_ES");
@@ -33,10 +36,12 @@ class DefaultController extends Controller
             $id
         );
 
+        $fecha = $helpers->convertDateTime($trazabilidad->getFecha());
+
         $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
             array(
                 'estado' => 14,
-                'fecha' => $trazabilidad->getFecha()
+                'fecha' => $fecha
             )
         );
 

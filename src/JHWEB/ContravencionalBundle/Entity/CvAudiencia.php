@@ -63,7 +63,7 @@ class CvAudiencia
      */
     private $apoderado;
 
-    /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audicencias") */
+    /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audiencias") */
     private $comparendo;
 
 
@@ -225,5 +225,29 @@ class CvAudiencia
     public function getApoderado()
     {
         return $this->apoderado;
+    }
+
+    /**
+     * Set comparendo
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
+     *
+     * @return CvAudiencia
+     */
+    public function setComparendo(\JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo = null)
+    {
+        $this->comparendo = $comparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get comparendo
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo
+     */
+    public function getComparendo()
+    {
+        return $this->comparendo;
     }
 }

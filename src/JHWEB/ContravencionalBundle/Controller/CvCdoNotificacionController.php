@@ -552,7 +552,7 @@ class CvCdoNotificacionController extends Controller
             $documento = new CfgAdmActoAdministrativo();
 
             $documento->setNumero(
-                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getNumero()
             );
 
             if ($estado->getId() == 15) {
@@ -593,7 +593,7 @@ class CvCdoNotificacionController extends Controller
         
         $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
         $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
-        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getNumero()); 
         $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
 
         if ($comparendo->getInfraccion()) {

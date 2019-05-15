@@ -49,7 +49,7 @@ class PdfTemplate extends TCPDF{
         $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
         // set margins
-        $pdf->SetMargins('30', '25', '30');
+        $pdf->SetMargins('15', '25', '15');
         $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 

@@ -82,7 +82,7 @@ class CvAudienciaController extends Controller
             $audiencia->setHora($hora);
 
             if ($params->idComparendo) {
-                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                     $params->idComparendo
                 );
                 $audiencia->setComparendo($comparendo);
@@ -115,7 +115,7 @@ class CvAudienciaController extends Controller
             }*/
 
             //Registra trazabilidad de notificación
-            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(19);
+            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(19);
 
             $this->generateTrazabilidad($comparendo, $estado);
             
@@ -157,26 +157,58 @@ class CvAudienciaController extends Controller
     /**
      * Displays a form to edit an existing cvAudiencium entity.
      *
-     * @Route("/{id}/edit", name="cvaudiencia_edit")
+     * @Route("/edit", name="cvaudiencia_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CvAudiencia $cvAudiencium)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cvAudiencium);
-        $editForm = $this->createForm('JHWEB\ContravencionalBundle\Form\CvAudienciaType', $cvAudiencium);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cvaudiencia_edit', array('id' => $cvAudiencium->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $audiencia = $em->getRepository("JHWEBContravencionalBundle:CvAudiencia")->find(
+                $params->id
+            );
+
+            if ($audiencia) {
+                $audiencia->setPorcentaje($params->porcentaje);
+                $audiencia->setFechaInicial(
+                    new \Datetime($params->fechaInicial)
+                );
+                $audiencia->setFechaFinal(
+                    new \Datetime($params->fechaFinal)
+                );
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $audiencia,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
         }
 
-        return $this->render('cvaudiencia/edit.html.twig', array(
-            'cvAudiencium' => $cvAudiencium,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
@@ -257,7 +289,7 @@ class CvAudienciaController extends Controller
                     $audiencia->setActivo(true);
 
                     if ($params->idComparendo) {
-                        $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                        $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                             $params->idComparendo
                         );
                         $audiencia->setComparendo($comparendo);
@@ -279,7 +311,7 @@ class CvAudienciaController extends Controller
             $audiencia->setActivo(true);
 
             if ($params->idComparendo) {
-                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                     $params->idComparendo
                 );
                 $audiencia->setComparendo($comparendo);
@@ -358,7 +390,7 @@ class CvAudienciaController extends Controller
             $documento = new CfgAdmActoAdministrativo();
 
             $documento->setNumero(
-                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getConsecutivo()
+                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getNumero()
             );
             $documento->setFecha(new \Datetime(date('Y-m-d')));
             $documento->setActivo(true);
@@ -390,7 +422,7 @@ class CvAudienciaController extends Controller
         
         $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
         $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
-        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getConsecutivo()); 
+        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getNumero()); 
         $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
 
         if ($comparendo->getInfraccion()) {
@@ -476,9 +508,8 @@ class CvAudienciaController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $audienciaLast = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->getLast();
-            
-            
-            if ($audienciaLast) {
+ 
+            if ($audienciaLast['id']) {
                 $audiencia = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->find(
                     $audienciaLast['id']
                 );
@@ -486,7 +517,7 @@ class CvAudienciaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Ultima audiencia programada para el ".$audiencia->getFecha(), 
+                    'message' => "Ultima audiencia programada para el ".$audiencia->getFecha()." ".$audiencia->getHora(), 
                     'data' => $audiencia,
                 );
             }else{
@@ -501,6 +532,57 @@ class CvAudienciaController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'msj' => "Autorizacion no valida", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing cvAudiencium entity.
+     *
+     * @Route("/update/borrador", name="cvaudiencia_update_borrador")
+     * @Method({"GET", "POST"})
+     */
+    public function updateBorradorAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $audiencia = $em->getRepository("JHWEBContravencionalBundle:CvAudiencia")->find(
+                $params->id
+            );
+
+            if ($audiencia) {
+                $audiencia->setBorrador($params->borrador);
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $audiencia,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
                 );
         }
 

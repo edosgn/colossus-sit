@@ -70,36 +70,44 @@ class PnalAsignacionController extends Controller
             $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByFechaAndOrganismoTransito($organismoTransito->getId());
 
             if ($rangoDisponible) {
-                $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getCantidadDisponibleByOrganismoTransito(
-                    $params->idOrganismoTransito
-                );
+                if ($rangoDisponible->getHasta() > $params->hasta) {
+                    $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getCantidadDisponibleByOrganismoTransito(
+                        $params->idOrganismoTransito
+                    );
+        
+                    $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
+        
+                    $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
+                    $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
+        
+                    if ($cantidadDisponible > $cantidadValidar) {
+                        $registro = $this->register($params);
     
-                $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
-    
-                $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
-                $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
-    
-                if ($cantidadDisponible > $cantidadValidar) {
-                    $registro = $this->register($params);
-
-                    if($registro){
-                        $response = array(
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => "El registro se ha realizado con exito",
-                        );
+                        if($registro){
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => "El registro se ha realizado con exito",
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                            );
+                        }
                     }else{
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                            'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
                         );
                     }
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
+                        'message' => "El rango que desea asignar supera el maximo de rangos para la sede operativa.", 
                     );
                 }
             }else{
