@@ -85,9 +85,9 @@ class UserEmpresaController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-    
+
             if($params->empresa->fechaVencimientoRegistroMercantil) {
-                $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
+                $fechaDeVencimiento = new \Datetime($params->empresa->fechaVencimientoRegistroMercantil);
                 $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
             }
 

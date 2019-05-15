@@ -44,4 +44,52 @@ class UserEmpresaSucursalController extends Controller
             'userEmpresaSucursal' => $userEmpresaSucursal,
         ));
     }
+
+    /**
+     * Busca sucursales por empresa.
+     *
+     * @Route("/sucursales/by/empresa", name="userempresasucursal_by_empresa")
+     * @Method({"GET", "POST"})
+     */
+    public function getSucursalesByEmpresaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $sucursales = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaSucursal')->findBy(
+                array(
+                    'empresa' => $params->id
+                )
+            );
+
+            if ($sucursales) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Empresa encontrada",
+                    'data' => $sucursales,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Empresa no encontrada",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
