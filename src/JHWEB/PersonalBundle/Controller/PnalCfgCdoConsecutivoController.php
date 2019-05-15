@@ -321,4 +321,55 @@ class PnalCfgCdoConsecutivoController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/numero/funcionario", name="pnalcfgcdoconsecutivo_numero_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByNumeroAndFuncionarioAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $consecutivo = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoConsecutivo')->findOneBy(
+                array(
+                    'funcionario' => $params->idFuncionario,
+                    'numero' => $params->numero,
+                    'estado' => 'ASIGNADO',
+                )
+            );
+                 
+            if ($consecutivo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito.",  
+                    'data'=> $consecutivo,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

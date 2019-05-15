@@ -80,18 +80,18 @@ class Helpers
 		//Valida si el comparendo esta en proceso de anulación
         if ($params->comparendo->anulado) {
             //En proceso de anulación
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
 	            13
 	        );
         }else{
 			//Pendiente
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
 	            1
 	        );
 
 			if (!$params->infractor->identificacion || !$params->comparendo->idInfraccion) {
 				//Inhibitorio
-	            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+	            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
 	                6
 	            );
 	        }
@@ -106,7 +106,7 @@ class Helpers
 
 		if ($caducidad) {
 			//Caducidad
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                 7
             );
 		}
@@ -117,7 +117,7 @@ class Helpers
 
 		if ($caducidad) {
 			//Caducidad
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                 7
             );
 		}*/
@@ -133,7 +133,7 @@ class Helpers
 		//Valida si el comparendo esta en proceso de anulación
         if ($comparendo->getEstado()->getId() == 13) {
             //En proceso de anulación
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
 	            13
 	        );
         }else{
@@ -145,13 +145,13 @@ class Helpers
 			}
 
 			//Pendiente
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
 	            1
 	        );
 
 			if (!$comparendo->getInfractorIdentificacion() || !$comparendo->getInfraccion()) {
 				//Inhibitorio
-	            $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+	            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
 	                6
 	            );
 	        }
@@ -166,7 +166,7 @@ class Helpers
 
 		if ($caducidad) {
 			//Caducidad
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                 7
             );
 		}
@@ -177,7 +177,7 @@ class Helpers
 
 		if ($caducidad) {
 			//Caducidad
-			$estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+			$estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                 7
             );
 		}*/

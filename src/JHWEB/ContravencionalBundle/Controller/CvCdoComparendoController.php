@@ -359,7 +359,7 @@ class CvCdoComparendoController extends Controller
                 );
                 $trazabilidad->setActivo(true); 
                 $trazabilidad->setComparendo($comparendo);
-                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(1);
+                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(1);
                 $trazabilidad->setEstado($estado);
 
                 $em->persist($trazabilidad);

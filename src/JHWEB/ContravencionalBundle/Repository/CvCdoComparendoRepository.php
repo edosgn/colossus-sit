@@ -128,7 +128,7 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
                 FROM JHWEBContravencionalBundle:CvCdoComparendo c
                 WHERE (c.infractorNombres LIKE :nombres
                 OR c.infractorApellidos LIKE :apellidos)
-                AND (c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -141,7 +141,7 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
                 $dql = "SELECT c
                 FROM JHWEBContravencionalBundle:CvCdoComparendo c
                 WHERE c.infractorIdentificacion = :identificacion
-                AND (c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -153,7 +153,7 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
                 $dql = "SELECT c
                 FROM JHWEBContravencionalBundle:CvCdoComparendo c
                 WHERE c.placa LIKE :placa
-                AND (c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
@@ -166,7 +166,7 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
                 FROM JHWEBContravencionalBundle:CvCdoComparendo c, JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
                 WHERE pc.numero = :numero
                 AND c.consecutivo = pc.id
-                AND (c.estado = 2 OR c.estado = 3)";
+                AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
 
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
