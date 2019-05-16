@@ -775,4 +775,53 @@ class VhloVehiculoController extends Controller
 
         return $helpers->json($response);
     }
+
+    /**
+     * Validaciones de tramites.
+     *
+     * @Route("/validations", name="frotrtesolicitud_validations")
+     * @Method("POST")
+     */
+    public function validationsAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);    
+            
+            $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                array(
+                    'vehiculo' => $vehiculo->getId(),
+                    'activo' => true,
+                )
+            );
+
+            if ($limitaciones) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Trámite autorizado porque el vehiculo presenta limitaciones a la propiedad.',
+                );
+            }else{
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Trámite autorizado.',
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorización no válida.',
+            );
+        }        
+
+        return $helpers->json($response);
+    }
 }
