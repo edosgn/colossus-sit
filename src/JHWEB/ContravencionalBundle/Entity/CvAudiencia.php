@@ -38,16 +38,23 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="borrador", type="text", nullable=true)
+     * @ORM\Column(name="acta", type="text", nullable=true)
      */
-    private $borrador;
+    private $acta;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=50, nullable=true)
+     * @ORM\Column(name="tipo", type="string", length=255, nullable=true)
      */
     private $tipo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=50, nullable=true)
+     */
+    private $estado;
 
     /**
      * @var bool

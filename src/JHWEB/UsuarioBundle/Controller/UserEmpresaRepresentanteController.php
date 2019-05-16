@@ -19,17 +19,49 @@ class UserEmpresaRepresentanteController extends Controller
      * Lists all userEmpresaRepresentante entities.
      *
      * @Route("/", name="userempresarepresentante_index")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        $userEmpresaRepresentantes = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findAll();
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-        return $this->render('userempresarepresentante/index.html.twig', array(
-            'userEmpresaRepresentantes' => $userEmpresaRepresentantes,
-        ));
+            $em = $this->getDoctrine()->getManager();
+
+            $representantes = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findBy(
+                array(
+                    'empresa' => $params->idEmpresa
+                )
+            );
+
+            if ($representantes) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($representantes)." registros encontrados con exito.", 
+                    'data'=> $representantes
+                );
+            }else{
+                $response = array(
+                    'titlr' => 'Alerta!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "La empresa no tiene ningún representante registrado.",
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -50,32 +82,83 @@ class UserEmpresaRepresentanteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $representantes = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findBy(
-                array(
-                    'empresa' => $params,
-                    'activo' => false
-                    )
+            $representante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->find(
+                $params->id
             );
-            $representanteVigente = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
-                array(
-                    'empresa' => $params,
-                    'activo' => true
-                    )
-            );
-            $response = array(
+
+            if ($representante) {
+                $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
-                    'representantes'=> $representantes,
-                    'representanteVigente'=> $representanteVigente,
-            );
-        }else{
-            $response = array(
+                    'message' => "Registro encontrado con exito.", 
+                    'data'=> $representante,
+                );
+            }else{
+                $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "El registro no se encuentra en la base de datos.", 
                 );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
+
+        return $helpers->json($response);
+    }
+
+    /* ==================================================== */
+    /**
+     * Lists all userEmpresaRepresentante entities.
+     *
+     * @Route("/active", name="userempresarepresentante_active")
+     * @Method({"GET", "POST"})
+     */
+    public function activeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $representante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
+                array(
+                    'empresa' => $params->idEmpresa,
+                    'activo' => true
+                )
+            );
+
+            if ($representante) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito.", 
+                    'data'=> $representante
+                );
+            }else{
+                $response = array(
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No tiene reresentantes activos", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
         return $helpers->json($response);
     }
 }

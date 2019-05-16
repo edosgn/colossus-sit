@@ -219,19 +219,26 @@ class UserEmpresaController extends Controller
 
             $empresa = $em->getRepository("JHWEBUsuarioBundle:UserEmpresa")->find($params->empresa->id);
 
-            if ($empresa!=null) {
-
+            if ($empresa) {
                 if($params->empresa->fechaVencimientoRegistroMercantil) {
-                    $fechaDeVencimiento = new \DateTime($params->empresa->fechaVencimientoRegistroMercantil);
-                    $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+                    $fechaVencimiento = $helpers->convertDatetime($params->empresa->fechaVencimientoRegistroMercantil);
+                    $empresa->setFechaVencimientoRegistroMercantil($fechaVencimiento);
                 }   
 
-                
                 $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
+                $empresa->setTipoSociedad($tipoSociedad);
+
                 $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
+                $empresa->setTipoEmpresa($tipoEmpresa);
+
                 $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
+                $empresa->setTipoIdentificacion($tipoIdentificacion);
+
                 $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
+                $empresa->setMunicipio($municipio);
+
                 $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+                $empresa->setEmpresaServicio($empresaServicio);
                 
                 $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte[0])) ? $params->empresa->idModalidadTransporte[0] : null;
                 if($idModalidadTransporte){
@@ -249,18 +256,13 @@ class UserEmpresaController extends Controller
                 $empresa->setCapitalLiquido($params->empresa->capitalPagado);
                 $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
                 $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
-                $empresa->setTipoSociedad($tipoSociedad);
-                $empresa->setTipoIdentificacion($tipoIdentificacion);
                 $empresa->setTipoEntidad($params->empresa->tipoEntidad);
-                $empresa->setTipoEmpresa($tipoEmpresa);
-                $empresa->setMunicipio($municipio);
                 $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
                 $empresa->setTelefono($params->empresa->telefono);
                 $empresa->setDireccion($params->empresa->direccion);
                 $empresa->setCelular($params->empresa->celular);
                 $empresa->setCorreo($params->empresa->correo);
-                $empresa->setFax($params->empresa->fax);                
-                $empresa->setEmpresaServicio($empresaServicio);
+                $empresa->setFax($params->empresa->fax);
                 $empresa->setActivo(true);
                 
                 $ciudadanoOld = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
