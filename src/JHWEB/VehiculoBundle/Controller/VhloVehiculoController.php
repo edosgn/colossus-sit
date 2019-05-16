@@ -779,7 +779,7 @@ class VhloVehiculoController extends Controller
     /**
      * Validaciones de tramites.
      *
-     * @Route("/validations", name="frotrtesolicitud_validations")
+     * @Route("/validations", name="vhlovehiculo_validations")
      * @Method("POST")
      */
     public function validationsAction(Request $request)
