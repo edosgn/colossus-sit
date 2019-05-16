@@ -519,5 +519,36 @@ class UserEmpresaController extends Controller
       }
        return $helpers->json($response);
     }
+
+    
+    /**
+     * Listado de empresas aseguradoras
+     *
+     * @Route("/select/empresas/aseguradoras", name="userempresasaseguradoras_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectEmpresasAseguradorasAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findBy(
+            array(
+                'tipoEmpresa' => 4,
+                'activo' => true
+                )
+        );
+
+        $response = null;
+
+        foreach ($empresas as $key => $empresa) {
+            $response[$key] = array(
+                'value' => $empresa->getId(),
+                'label' => $empresa->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
  

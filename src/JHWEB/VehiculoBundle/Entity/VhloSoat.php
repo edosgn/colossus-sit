@@ -49,12 +49,8 @@ class VhloSoat
      */
     private $numeroPoliza;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="nombre_empresa", type="string")
-     */
-    private $nombreEmpresa;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="soats") */
+    private $empresa;
 
     /**
      * @var bool
@@ -193,30 +189,6 @@ class VhloSoat
     }
 
     /**
-     * Set nombreEmpresa
-     *
-     * @param string $nombreEmpresa
-     *
-     * @return VhloSoat
-     */
-    public function setNombreEmpresa($nombreEmpresa)
-    {
-        $this->nombreEmpresa = $nombreEmpresa;
-
-        return $this;
-    }
-
-    /**
-     * Get nombreEmpresa
-     *
-     * @return string
-     */
-    public function getNombreEmpresa()
-    {
-        return $this->nombreEmpresa;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
@@ -310,5 +282,29 @@ class VhloSoat
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set empresa
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     *
+     * @return VhloSoat
+     */
+    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    {
+        $this->empresa = $empresa;
+
+        return $this;
+    }
+
+    /**
+     * Get empresa
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
+     */
+    public function getEmpresa()
+    {
+        return $this->empresa;
     }
 }

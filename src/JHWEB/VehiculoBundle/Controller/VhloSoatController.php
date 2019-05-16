@@ -28,12 +28,12 @@ class VhloSoatController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $soats = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findBy(
                 array(
-                    'activo' => true,
+                    /* 'activo' => true, */
                     'vehiculo' => $params->idVehiculo,
                 )
             );
@@ -78,41 +78,82 @@ class VhloSoatController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             
-            $soat = new VhloSoat();
-
             $em = $this->getDoctrine()->getManager();
-            if ($params->idMunicipio) {
-                $municipio = $em->getRepository('AppBundle:Municipio')->find(
-                    $params->idMunicipio
-                );
-                $soat->setMunicipio($municipio);
-            }
 
-            if ($params->idVehiculo) {
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
-                    $params->idVehiculo
-                );
-                $soat->setVehiculo($vehiculo);
-            }
-
-            $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-            $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
-            $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
-            $soat->setNumeroPoliza($params->numeroPoliza);
-            $soat->setNombreEmpresa($params->nombreEmpresa);
-            $soat->setActivo(true);
-            $soat->setEstado("Disponible");
-            $em->persist($soat);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Los datos han sido registrados exitosamente.",
+            $numeroPoliza = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findOneBy(
+                array(
+                    'numeroPoliza' => $params->numeroPoliza,
+                    'empresa' => $params->idEmpresa,
+                    'estado' => 'UTILIZADO',
+                    'activo' => true,
+                )
             );
+
+            $soatsOld = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true,
+                )
+            );
+
+            if($numeroPoliza){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El número de póliza ya se encuentra registrados en la base de datos.',
+                );
+            } else {   
+                //para inactivar los demas soat
+                if($soatsOld) {
+                    foreach ($soatsOld as $key => $soatOld) {
+                        $soatOld->setEstado('VENCIDO');
+                        $em->persist($soatOld);
+                    }
+                }
+                //=============================
+
+                $soat = new VhloSoat();
+
+                if ($params->idMunicipio) {
+                    $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                        $params->idMunicipio
+                    );
+                    $soat->setMunicipio($municipio);
+                }
+
+                if ($params->idVehiculo) {
+                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                        $params->idVehiculo
+                    );
+                    $soat->setVehiculo($vehiculo);
+                }
+
+                if ($params->idEmpresa) {
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                        $params->idEmpresa
+                    );
+                    $soat->setEmpresa($empresa);
+                }
+
+                $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+                $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
+                $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+                $soat->setNumeroPoliza($params->numeroPoliza);
+                $soat->setEstado("UTILIZADO");
+                $soat->setActivo(true);
+
+                $em->persist($soat);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Los datos han sido registrados exitosamente.",
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',
@@ -212,7 +253,7 @@ class VhloSoatController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));
