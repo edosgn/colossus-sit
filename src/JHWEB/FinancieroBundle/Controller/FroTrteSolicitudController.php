@@ -556,7 +556,9 @@ class FroTrteSolicitudController extends Controller
     /* ================================================ */
 
     public function vehiculoUpdateAction($params)
-    {           
+    {    
+        $helpers = $this->get("app.helpers");
+               
         $em = $this->getDoctrine()->getManager();
 
         $vehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloVehiculo")->find(
@@ -704,8 +706,8 @@ class FroTrteSolicitudController extends Controller
     }
 
     public function usuarioUpdateAction($params)
-    {           
-        $em = $this->getDoctrine()->getManager();
+    {    
+        $helpers = $this->get("app.helpers");
 
         $ciudadano = $em->getRepository("JHWEBUsuarioBundle:UserCiudadano")->find(
             $params->idSolicitante

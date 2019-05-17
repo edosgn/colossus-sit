@@ -639,8 +639,8 @@ class FroFacturaController extends Controller
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
-            'factura'=>$factura,
-            'comparendos'=>$comparendos,
+            'factura'=> $factura,
+            'comparendos'=> $comparendos,
             'imgBarcode' => $imgBarcode
         ));
 
