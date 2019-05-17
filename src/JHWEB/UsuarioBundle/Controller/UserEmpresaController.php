@@ -303,16 +303,52 @@ class UserEmpresaController extends Controller
      */
     public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($userEmpresa);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($userEmpresa);
-            $em->flush();
+
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                $params->id
+            );
+
+            if ($empresa) {
+                $empresa->setActivo(false);
+    
+                $em->persist($empresa);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito.",
+                    'data' => $empresa,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos.",
+                );
+            }
+
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida.",
+            );
         }
 
-        return $this->redirectToRoute('userempresa_index');
+        return $helpers->json($response);
     }
 
     /**
@@ -332,6 +368,51 @@ class UserEmpresaController extends Controller
     }
 
     /* ============================================================*/
+
+    /**
+     * Activa el registro seleccionado.
+     *
+     * @Route("/active", name="userempresa_active")
+     * @Method("POST")
+     */
+    public function activeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                $params->id
+            );
+
+            $empresa->setActivo(true);
+
+            $em->persist($empresa);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro activado con éxito.",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
     /**
      * Busca empresas por NIT o Nombre.
      *
