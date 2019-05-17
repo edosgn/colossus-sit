@@ -32,7 +32,7 @@
         <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:50%">
             <tr>
                 <td><b>Ciudad:</b><br>  {{ factura.organismoTransito.municipio }}</td> 
-                <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion }}</td>
+                <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
             </tr>
         </table>
@@ -56,7 +56,7 @@
                 {% for key, facturaComparendo in comparendos %}
                     {% set total = total + facturaComparendo.comparendo.valorPagar %}
                 <tr>
-                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.consecutivo.consecutivo }}</td>
+                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.consecutivo.numero }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.fecha }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infraccion.codigo }}</td>
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.valorInfraccion|number_format(0, ',', '.') }}</td>

@@ -402,20 +402,34 @@ class UserCiudadanoController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->id);
-
-            $ciudadano->setActivo(false);
-
-            $em->persist($ciudadano);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro eliminado con éxito.",
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                $params->id
             );
+
+            if ($ciudadano) {
+                $ciudadano->setActivo(false);
+    
+                $em->persist($ciudadano);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito.",
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 200,
+                    'message' => "El registro no se encuentra en la base de datos.",
+                );
+            }
+
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no válida",

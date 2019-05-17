@@ -622,9 +622,11 @@ class FroFacturaController extends Controller
             )
         );
 
+        //.$factura->getFechaVencimiento()->format('Ymd')
+
         $barcode = new BarcodeGenerator();
         $barcode->setText(
-            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
+            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'
         );
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
@@ -639,8 +641,8 @@ class FroFacturaController extends Controller
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
-            'factura'=>$factura,
-            'comparendos'=>$comparendos,
+            'factura'=> $factura,
+            'comparendos'=> $comparendos,
             'imgBarcode' => $imgBarcode
         ));
 

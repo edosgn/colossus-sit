@@ -220,6 +220,7 @@ class UserLcCfgCategoriaController extends Controller
                 'message' => "Autorización no valida",
             );
         }
+        
         return $helpers->json($response);
     }
 
