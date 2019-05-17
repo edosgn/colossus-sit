@@ -35,4 +35,36 @@ class UserEmpresaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    public function getByFilter($params){
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT e
+                FROM JHWEBUsuarioBundle:UserEmpresa e
+                WHERE e.nit = :nit
+                ORDER BY e.nombre ASC";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'nit' => $params->filtro,
+                ));
+                break;
+
+            case 2:
+                $dql = "SELECT e
+                FROM JHWEBUsuarioBundle:UserEmpresa e
+                WHERE e.nombre LIKE :nombre
+                ORDER BY e.nombre ASC";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'nombre' => '%'.$params->filtro.'%',
+                ));
+                break;
+        }
+
+        return $consulta->getResult();
+    }
 }

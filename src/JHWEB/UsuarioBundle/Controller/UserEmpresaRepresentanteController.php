@@ -65,6 +65,82 @@ class UserEmpresaRepresentanteController extends Controller
     }
 
     /**
+     * Creates a new userEmpresaRepresentante entity.
+     *
+     * @Route("/new", name="userempresarepresentante_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $representanteOld = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
+                array(
+                    'empresa' => $params->idEmpresa,
+                    'activo' => true
+                )
+            );
+        
+            if($representanteOld){
+                $representanteOld->setActivo(false);
+                $representanteOld->setFechaFinal(new \Datetime(date('Y-m-d')));
+
+                $em->flush();
+            }
+            
+
+            $representante = new UserEmpresaRepresentante();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                $params->idCiudadano
+            );
+            $representante->setCiudadano($ciudadano);
+
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                $params->idEmpresa
+            );
+            $representante->setEmpresa($empresa);
+
+            if($params->fechaInicial){
+                $representante->setFechaInicial(
+                    new \DateTime($params->fechaInicial)
+                );
+            }
+
+            $representante->setActivo(true);
+            
+            $em->persist($representante);
+            $em->flush();
+            
+            $empresa->setEmpresaRepresentante($representante);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Finds and displays a userEmpresaRepresentante entity.
      *
      * @Route("/show", name="userempresarepresentante_show")

@@ -470,6 +470,50 @@ class UserCiudadanoController extends Controller
     }
 
     /**
+     * Activa el registro seleccionado.
+     *
+     * @Route("/active", name="userciudadano_active")
+     * @Method("POST")
+     */
+    public function activeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                $params->id
+            );
+
+            $ciudadano->setActivo(true);
+
+            $em->persist($ciudadano);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro activado con éxito.",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca cuidadano o empresa por Identificacion.
      *
      * @Route("/search/identificacion", name="userciudadano_search_identificacion")

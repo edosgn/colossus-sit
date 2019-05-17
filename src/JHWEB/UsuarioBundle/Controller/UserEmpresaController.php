@@ -220,102 +220,55 @@ class UserEmpresaController extends Controller
             $empresa = $em->getRepository("JHWEBUsuarioBundle:UserEmpresa")->find($params->empresa->id);
 
             if ($empresa) {
-                if($params->empresa->fechaVencimientoRegistroMercantil) {
-                    $fechaVencimiento = $helpers->convertDatetime($params->empresa->fechaVencimientoRegistroMercantil);
+                if($params->fechaVencimientoRegistroMercantil) {
+                    $fechaVencimiento = $helpers->convertDatetime($params->fechaVencimientoRegistroMercantil);
                     $empresa->setFechaVencimientoRegistroMercantil($fechaVencimiento);
                 }   
 
-                $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
+                $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->idTipoSociedad);
                 $empresa->setTipoSociedad($tipoSociedad);
 
-                $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
+                $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->idTipoEmpresa);
                 $empresa->setTipoEmpresa($tipoEmpresa);
 
-                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->idTipoIdentificacion);
                 $empresa->setTipoIdentificacion($tipoIdentificacion);
 
-                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->idMunicipio);
                 $empresa->setMunicipio($municipio);
 
-                $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+                $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->idEmpresaServicio);
                 $empresa->setEmpresaServicio($empresaServicio);
                 
-                $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte[0])) ? $params->empresa->idModalidadTransporte[0] : null;
+                $idModalidadTransporte = (isset($params->idModalidadTransporte[0])) ? $params->idModalidadTransporte[0] : null;
                 if($idModalidadTransporte){
-                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte[0]);
+                    $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte[0]);
                     $empresa->setModalidadTransporte($modalidadTransporte);
                 }
                 
-                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->idCiudadano
+                );
                 
-                $empresa->setNombre($params->empresa->nombre);
-                $empresa->setSigla($params->empresa->sigla);
-                $empresa->setNit($params->empresa->nit);
-                $empresa->setDv($params->empresa->dv);
-                $empresa->setCapitalPagado($params->empresa->capitalPagado);
-                $empresa->setCapitalLiquido($params->empresa->capitalPagado);
-                $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
-                $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
-                $empresa->setTipoEntidad($params->empresa->tipoEntidad);
-                $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
-                $empresa->setTelefono($params->empresa->telefono);
-                $empresa->setDireccion($params->empresa->direccion);
-                $empresa->setCelular($params->empresa->celular);
-                $empresa->setCorreo($params->empresa->correo);
-                $empresa->setFax($params->empresa->fax);
+                $empresa->setNombre($params->nombre);
+                $empresa->setSigla($params->sigla);
+                $empresa->setNit($params->nit);
+                $empresa->setDv($params->dv);
+                $empresa->setCapitalPagado($params->capitalPagado);
+                $empresa->setCapitalLiquido($params->capitalPagado);
+                $empresa->setEmpresaPrestadora($params->empresaPrestadora);
+                $empresa->setCertificadoExistencial($params->certificadoExistencial);
+                $empresa->setTipoEntidad($params->tipoEntidad);
+                $empresa->setNroRegistroMercantil($params->nroRegistroMercantil);
+                $empresa->setTelefono($params->telefono);
+                $empresa->setDireccion($params->direccion);
+                $empresa->setCelular($params->celular);
+                $empresa->setCorreo($params->correo);
+                $empresa->setFax($params->fax);
                 $empresa->setActivo(true);
                 
-                $ciudadanoOld = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
-                    array(
-                        'empresa' => $params->empresa->id,
-                        'ciudadano' => $params->empresa->idCiudadano,
-                        'activo' => true
-                        )
-                );
-                    
-                if($ciudadanoOld) {    
-                    $empresa->setCiudadano($ciudadano);
-
-                    $representanteOld = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findOneBy(
-                    array(
-                        'empresa' => $params->empresa->id,
-                        'activo' => true
-                        )
-                    );
-                
-                    if($representanteOld){
-                        $representanteOld->setActivo(false);
-                        $representanteOld->setFechaFinal(new \Datetime());
-                    }
-
-                    $empresaRepresentante = new UserEmpresaRepresentante();
-                    $empresaRepresentante->setCiudadano($ciudadano);
-                    $empresaRepresentante->setEmpresa($empresa);
-                    $fechaInicial = (isset($params->empresa->fechaInicial)) ? $params->empresa->fechaInicial : null;
-                    if($fechaInicial){
-                        $fechaInicial = new \DateTime($params->empresa->fechaInicial);
-                        $empresaRepresentante->setFechaInicial($fechaInicial);
-                    }
-    
-                    $empresaRepresentante->setActivo(true);
-                    $empresa->setEmpresaRepresentante($empresaRepresentante);
-                    $em->persist($empresaRepresentante);
-                }
-                    /* $empresaRepresentante = new UserEmpresaRepresentante();
-                    $empresaRepresentante->setCiudadano($ciudadano);
-                    $empresaRepresentante->setEmpresa($empresa);
-                    $fechaInicial = (isset($params->empresa->fechaInicial)) ? $params->empresa->fechaInicial : null;
-                    if($fechaInicial){
-                        $fechaInicial = new \DateTime($params->empresa->fechaInicial);
-                        $empresaRepresentante->setFechaInicial($fechaInicial);
-                    }
-    
-                    $empresaRepresentante->setActivo(true);
-                    $empresa->setEmpresaRepresentante($empresaRepresentante);
-                    $em->persist($empresaRepresentante); */
                 
                 $em->persist($empresa);
-                $em->persist($representanteOld);
                 $em->flush();
 
                 $response = array(
@@ -548,6 +501,57 @@ class UserEmpresaController extends Controller
             );
         }
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca empresas por parametros (nit y nombre).
+     *
+     * @Route("/search/filtros", name="userempresa_search_filtros")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFiltros(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $empresas = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->getByFilter(
+                $params
+            );
+
+            if ($empresas) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($empresas)." empresas encontradas", 
+                    'data' => $empresas,
+            );
+            }else{
+                 $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existen empresas para esos filtros de búsqueda, si desea registralo por favor presione el botón "NUEVO"', 
+                );
+            }
+
+            
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
         return $helpers->json($response);
     }
 }
