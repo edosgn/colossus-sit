@@ -36,6 +36,9 @@ class UserEmpresaRepresentanteController extends Controller
             $representantes = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->findBy(
                 array(
                     'empresa' => $params->idEmpresa
+                ),
+                array(
+                    'fechaInicial' => 'DESC'
                 )
             );
 
