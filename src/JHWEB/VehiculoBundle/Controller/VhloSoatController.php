@@ -33,7 +33,7 @@ class VhloSoatController extends Controller
             $em = $this->getDoctrine()->getManager();
             $soats = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findBy(
                 array(
-                    /* 'activo' => true, */
+                    'activo' => true,
                     'vehiculo' => $params->idVehiculo,
                 )
             );
@@ -92,12 +92,12 @@ class VhloSoatController extends Controller
                 )
             );
 
-            $soatsOld = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findBy(
+            /* $soatsOld = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findBy(
                 array(
                     'vehiculo' => $params->idVehiculo,
                     'activo' => true,
                 )
-            );
+            ); */
 
             if($numeroPoliza){
                 $response = array(
@@ -107,12 +107,12 @@ class VhloSoatController extends Controller
                 );
             } else {   
                 //para inactivar los demas soat
-                if($soatsOld) {
+                /* if($soatsOld) {
                     foreach ($soatsOld as $key => $soatOld) {
                         $soatOld->setEstado('VENCIDO');
                         $em->persist($soatOld);
                     }
-                }
+                } */
                 //=============================
 
                 $soat = new VhloSoat();
@@ -142,7 +142,7 @@ class VhloSoatController extends Controller
                 $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
                 $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
                 $soat->setNumeroPoliza($params->numeroPoliza);
-                $soat->setEstado("UTILIZADO");
+                $soat->setEstado($params->estado);
                 $soat->setActivo(true);
 
                 $em->persist($soat);
@@ -182,62 +182,122 @@ class VhloSoatController extends Controller
     /**
      * Displays a form to edit an existing VhloSoat entity.
      *
-     * @Route("/{id}/edit", name="vhlosoat_edit")
+     * @Route("/edit", name="vhlosoat_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloSoat $vhloSoat)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhlosoat);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\vhloSoatType', $vhloSoat);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('vhlosoat_edit', array('id' => $vhloSoat->getId()));
+            /* $numeroPoliza = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findOneBy(
+                array(
+                    'numeroPoliza' => $params->numeroPoliza,
+                    'empresa' => $params->idEmpresa,
+                    'estado' => 'UTILIZADO',
+                    'activo' => true,
+                )
+            ); */
+
+            $soat = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->find($params->id);
+
+            /* if($numeroPoliza){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El número de póliza ya se encuentra registrados en la base de datos.',
+                );
+            } else {  */
+                if ($params->idMunicipio) {
+                    $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                        $params->idMunicipio
+                    );
+                    $soat->setMunicipio($municipio);
+                }
+
+                /* if ($params->idVehiculo) {
+                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                        $params->idVehiculo
+                    );
+                    $soat->setVehiculo($vehiculo);
+                } */
+
+                if ($params->idEmpresa) {
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                        $params->idEmpresa
+                    );
+                    $soat->setEmpresa($empresa);
+                }
+
+                $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+                $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
+                $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+                $soat->setEstado($params->estado);
+                $soat->setActivo(true);
+
+                $em->persist($soat);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Los datos han sido registrados exitosamente.",
+                );
+            /* } */
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('vhlosoat/edit.html.twig', array(
-            'vhlosoat' => $vhloSoat,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a VhloSoat entity.
      *
-     * @Route("/{id}", name="vhlosoat_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlosoat_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloSoat $vhloSoat)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloSoat);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloSoat);
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $soat = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->find($params->id);
+
+            $soat->setActivo(false);
+
+            $em->persist($soat);
             $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
         }
-
-        return $this->redirectToRoute('vhlosoat_index');
-    }
-
-    /**
-     * Creates a form to delete a vhloSoat entity.
-     *
-     * @param VhloSoat $vhloSoat The vhloSoat entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm(VhloSoat $vhloSoat)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('vhlosoat_delete', array('id' => $vhloSoat->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        return $helpers->json($response);
     }
 
     /**

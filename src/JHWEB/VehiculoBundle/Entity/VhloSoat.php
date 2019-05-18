@@ -105,7 +105,7 @@ class VhloSoat
     public function getFechaExpedicion()
     {
         if ($this->fechaExpedicion) {
-            return $this->fechaExpedicion->format('d/m/Y');
+            return $this->fechaExpedicion->format('Y-m-d');
         }
         return $this->fechaExpedicion;
     }
@@ -132,7 +132,7 @@ class VhloSoat
     public function getFechaVigencia()
     {
         if ($this->fechaVigencia) {
-            return $this->fechaVigencia->format('d/m/Y');
+            return $this->fechaVigencia->format('Y-m-d');
         }
         return $this->fechaVigencia;
     }
@@ -159,7 +159,7 @@ class VhloSoat
     public function getFechaVencimiento()
     {
         if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('d/m/Y');
+            return $this->fechaVencimiento->format('Y-m-d');
         }
         return $this->fechaVencimiento;
     }
