@@ -266,9 +266,29 @@ class FroTrteSolicitudController extends Controller
                             if ($insumo->getTipo()->getId() == 1) {
                                 //Si el tipo de insumo es Licencia de Transito
                                 $licenciaTransito = new UserLicenciaTransito();
+
+                                $licenciaTransito->setPropietario($propietario);
+                                $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
+                                $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
+                                $licenciaTransito->setActivo(true);
+                                
+                                $em->persist($licenciaTransito);
+                                $em->flush();
                             }elseif ($insumo->getTipo()->getId() == 2) {
                                 //Si el tipo de insumo es Licencia de Conducción
                                 $licenciaConduccion = new UserLicenciaConduccion();
+                                
+                                $licenciaConduccion->setFechaExpedicion(new \Datetime(date('Y-m-d')));
+                                $licenciaConduccion->setFechavencimiento(new \Datetime(date('Y-m-d')));
+                                $licenciaConduccion->setNumero($params->insumoEntregado->licenciaConduccion);
+                                $licenciaConduccion->setEstado('ACTIVA');
+                                $licenciaConduccion->setActivo(true);
+
+                                $licenciaConduccion->setFuncionario($funcionario->getOrganismoTransito());
+                                $licenciaConduccion->setCiudadano($solicitante);
+
+                                $em->persist($licenciaConduccion);
+                                $em->flush();
                             }
                         }
                     }
