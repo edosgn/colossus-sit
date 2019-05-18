@@ -29,7 +29,7 @@ class VhloTecnoMecanicaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
@@ -82,42 +82,58 @@ class VhloTecnoMecanicaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $tecnoMecanica = new VhloTecnoMecanica();
-
             $em = $this->getDoctrine()->getManager();
 
-            if ($params->idCda) {
-                $cfgCda = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCda')->find(
-                    $params->idCda
-                );
-                $tecnoMecanica->setCda($cfgCda);
-            }
-
-            if ($params->idVehiculo) {
-                $vehiculo = $em->getRepository('AppBundle:Vehiculo')->find(
-                    $params->idVehiculo
-                );
-                $tecnoMecanica->setVehiculo($vehiculo);
-            }
-
-
-            $tecnoMecanica->setNumeroControl($params->numeroControl);
-            $tecnoMecanica->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-            $tecnoMecanica->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
-            $tecnoMecanica->setActivo(true);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($tecnoMecanica);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
+            $numeroPoliza = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->findOneBy(
+                array(
+                    'numeroControl' => $params->numeroControl,
+                    'cda' => $params->idCda,
+                    'estado' => 'UTILIZADO',
+                    'activo' => true,
+                )
             );
+
+            if($numeroPoliza){
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El número de control ya se encuentra registrado en la base de datos para este CDA.',
+                );
+            } else { 
+                $tecnoMecanica = new VhloTecnoMecanica();
+
+                if ($params->idCda) {
+                    $cfgCda = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCda')->find(
+                        $params->idCda
+                    );
+                    $tecnoMecanica->setCda($cfgCda);
+                }
+
+                if ($params->idVehiculo) {
+                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                        $params->idVehiculo
+                    );
+                    $tecnoMecanica->setVehiculo($vehiculo);
+                }
+
+                $tecnoMecanica->setNumeroControl($params->numeroControl);
+                $tecnoMecanica->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+                $tecnoMecanica->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+                $tecnoMecanica->setEstado($params->estado);
+                $tecnoMecanica->setActivo(true);
+
+                $em->persist($tecnoMecanica);
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                );
+            }
         }else{
             $response = array(
                 'status' => 'error',
@@ -147,46 +163,89 @@ class VhloTecnoMecanicaController extends Controller
     /**
      * Displays a form to edit an existing vhloTecnoMecanica entity.
      *
-     * @Route("/{id}/edit", name="vhlotecnomecanica_edit")
+     * @Route("/edit", name="vhlotecnomecanica_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloTecnoMecanica $vhloTecnoMecanica)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloTecnoMecanica);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloTecnoMecanicaType', $vhloTecnoMecanica);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
 
-            return $this->redirectToRoute('vhlotecnomecanica_edit', array('id' => $vhloTecnoMecanica->getId()));
+            $tecnoMecanica = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->find($params->id);
+
+             if ($params->idCda) {
+                $cfgCda = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCda')->find(
+                    $params->idCda
+                );
+                $tecnoMecanica->setCda($cfgCda);
+            }
+
+            $tecnoMecanica->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+            $tecnoMecanica->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+            $tecnoMecanica->setEstado($params->estado);
+
+            $em->persist($tecnoMecanica);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido editados exitosamente.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
         }
-
-        return $this->render('vhlotecnomecanica/edit.html.twig', array(
-            'vhlotecnoMecanica' => $vhloTecnoMecanica,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloTecnoMecanica entity.
      *
-     * @Route("/{id}", name="vhlotecnomecanica_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlotecnomecanica_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloTecnoMecanica $vhloTecnoMecanica)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloTecnoMecanica);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloTecnoMecanica);
-            $em->flush();
-        }
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('vhlotecnomecanica_index');
+            $tecnoMecanica = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->find($params->id);
+
+            $tecnoMecanica->setActivo(false);
+
+            $em->persist($tecnoMecanica);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -218,7 +277,7 @@ class VhloTecnoMecanicaController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck== true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
 
             $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));

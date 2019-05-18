@@ -20,27 +20,34 @@ class VhloTecnoMecanica
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-
+        
     /**
-     * @var string
+     * @var int
      *
-     * @ORM\Column(name="numero_control", type="string", length=255)
+     * @ORM\Column(name="numero_control", type="integer", length=255)
      */
     private $numeroControl;
-
+    
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_expedicion", type="date")
      */
     private $fechaExpedicion;
-
+    
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_vencimiento", type="date")
      */
     private $fechaVencimiento;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=20)
+     */
+    private $estado;
 
     /**
      * @var bool
@@ -68,7 +75,7 @@ class VhloTecnoMecanica
     /**
      * Set numeroControl
      *
-     * @param string $numeroControl
+     * @param integer $numeroControl
      *
      * @return VhloTecnoMecanica
      */
@@ -82,7 +89,7 @@ class VhloTecnoMecanica
     /**
      * Get numeroControl
      *
-     * @return string
+     * @return integer
      */
     public function getNumeroControl()
     {
@@ -111,7 +118,7 @@ class VhloTecnoMecanica
     public function getFechaExpedicion()
     {
         if ($this->fechaExpedicion) {
-            return $this->fechaExpedicion->format('d/m/Y');
+            return $this->fechaExpedicion->format('Y-m-d');
         }
         return $this->fechaExpedicion;
     }
@@ -138,9 +145,33 @@ class VhloTecnoMecanica
     public function getFechaVencimiento()
     {
         if ($this->fechaVencimiento) {
-            return $this->fechaVencimiento->format('d/m/Y');
+            return $this->fechaVencimiento->format('Y-m-d');
         }
         return $this->fechaVencimiento;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return VhloTecnoMecanica
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**
