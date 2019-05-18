@@ -144,7 +144,10 @@ class ImoInsumoController extends Controller
                     $insumo = new ImoInsumo();
 
                     $lotesInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                        array('estado' => 'REGISTRADO','tipo'=>'Insumo')
+                        array(
+                            'estado' => 'REGISTRADO',
+                            'tipo' => 'INSUMO'
+                        )
                     );
 
                     $insumo->setLote($loteInsumo);
@@ -352,7 +355,12 @@ class ImoInsumoController extends Controller
         $params = json_decode($json);
 
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array('tipo'=>'Sustrato','estado' => 'disponible','tipo'=>$params->casoInsumo,'organismoTransito'=>$params->sedeOrigen)
+            array(
+                'tipo'=>'SUSTRATO',
+                'estado' => 'disponible',
+                'tipo'=>$params->casoInsumo,
+                'organismoTransito'=>$params->sedeOrigen
+            )
         );
 
         if (count($insumos) >= $params->cantidad) {
@@ -552,8 +560,11 @@ class ImoInsumoController extends Controller
         }
 
         $tipos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
-            array('tipo'=>'Sustrato')
+            array(
+                'tipo'=>'SUSTRATO'
+            )
         );
+        
         $tiposArray = [];
         $totalOrganismos=[];
         $total = 0;

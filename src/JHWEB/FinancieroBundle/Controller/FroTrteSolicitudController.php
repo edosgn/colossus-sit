@@ -7,6 +7,8 @@ use JHWEB\FinancieroBundle\Entity\FroFacInsumo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
+use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
+use JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -103,6 +105,12 @@ class FroTrteSolicitudController extends Controller
                     )
                 );
             }else{
+                if (isset($params->numeroRunt)) {
+                    $factura->setNumeroRunt($params->numeroRunt);
+
+                    $em->flush();
+                }
+
                 foreach ($params->tramitesRealizados as $key => $tramiteRealizado) {
                     if ($tramiteRealizado->idTramiteFactura) {
                         $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
@@ -112,12 +120,6 @@ class FroTrteSolicitudController extends Controller
                         if ($tramiteFactura) {    
                             if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
                                 $certificadoTradicion = true;
-                            }
-        
-                            if (isset($params->numeroRunt)) {
-                                $factura->setNumeroRunt($params->numeroRunt);
-        
-                                $em->flush();
                             }
 
                             if (!$tramiteFactura->getRealizado()) {
@@ -227,7 +229,6 @@ class FroTrteSolicitudController extends Controller
                     }
                 }
 
-                
                 $factura->setEstado('FINALIZADA');
                 
                 $em->flush();
@@ -253,12 +254,24 @@ class FroTrteSolicitudController extends Controller
                             $params->insumoEntregado->idInsumo
                         );
                         $facturaInsumo->setInsumo($insumo);
+                        $insumo->setEstado('ENTREGADO');
                     }
 
                     $em->persist($facturaInsumo);
                     $em->flush();
 
                     //Insertar licencia de conducción o tránsito
+                    if ($insumo) {
+                        if ($insumo->getTipo()->getNombre() == 'SUSTRATO') {
+                            if ($insumo->getTipo()->getId() == 1) {
+                                //Si el tipo de insumo es Licencia de Transito
+                                $licenciaTransito = new UserLicenciaTransito();
+                            }elseif ($insumo->getTipo()->getId() == 2) {
+                                //Si el tipo de insumo es Licencia de Conducción
+                                $licenciaConduccion = new UserLicenciaConduccion();
+                            }
+                        }
+                    }
                 }
 
                 if ($certificadoTradicion) {

@@ -38,9 +38,9 @@ class ImoCfgTipo
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=255)
+     * @ORM\Column(name="categoria", type="string", length=255)
      */
-    private $tipo;
+    private $categoria;
 
     /**
      * @var bool
@@ -114,27 +114,27 @@ class ImoCfgTipo
     }
 
     /**
-     * Set tipo
+     * Set categoria
      *
-     * @param string $tipo
+     * @param string $categoria
      *
      * @return ImoCfgTipo
      */
-    public function setTipo($tipo)
+    public function setCategoria($categoria)
     {
-        $this->tipo = $tipo;
+        $this->categoria = $categoria;
 
         return $this;
     }
 
     /**
-     * Get tipo
+     * Get categoria
      *
      * @return string
      */
-    public function getTipo()
+    public function getCategoria()
     {
-        return $this->tipo;
+        return $this->categoria;
     }
 
     /**

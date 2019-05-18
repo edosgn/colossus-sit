@@ -43,13 +43,6 @@ class ImoInsumo
     private $fecha;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="categoria", type="string")
-     */
-    private $categoria;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="actaEntrega", type="integer")
@@ -156,30 +149,6 @@ class ImoInsumo
     public function getFecha()
     {
         return $this->fecha->format('Y-m-d');
-    }
-
-    /**
-     * Set categoria
-     *
-     * @param string $categoria
-     *
-     * @return ImoInsumo
-     */
-    public function setCategoria($categoria)
-    {
-        $this->categoria = $categoria;
-
-        return $this;
-    }
-
-    /**
-     * Get categoria
-     *
-     * @return string
-     */
-    public function getCategoria()
-    {
-        return $this->categoria;
     }
 
     /**
