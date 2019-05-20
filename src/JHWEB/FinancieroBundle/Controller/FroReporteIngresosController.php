@@ -631,13 +631,21 @@ class FroReporteIngresosController extends Controller
                         'retencion' => $retefuente->getRetencion()
                     );
                 }
+
+                    $data = array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayRetefuentes' => $arrayRetefuentes,
+                        'totalRetefuentes' => $totalRetefuentes,
+                    );
+
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'registros encontrados"',
+                        'data' => $data
                     );
                     
-                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.retefuente.html.twig', array(
+                    /* $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.retefuente.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'arrayRetefuentes' => $arrayRetefuentes,
                         'totalRetefuentes' => $totalRetefuentes,
@@ -650,7 +658,7 @@ class FroReporteIngresosController extends Controller
                             'Content-Type'        => 'application/pdf',
                             'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
-                    );
+                    ); */
                 } else {
                     $response = array(
                         'status' => 'error',
