@@ -190,9 +190,65 @@ class UserEmpresaRepresentanteController extends Controller
         return $helpers->json($response);
     }
 
-    /* ==================================================== */
     /**
-     * Lists all userEmpresaRepresentante entities.
+     * Deletes a userCfgRole entity.
+     *
+     * @Route("/delete", name="userempresarepresentante_delete")
+     * @Method("POST")
+     */
+    public function deleteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $representante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->find(
+                $params->id
+            );
+
+            if ($representante) {
+                $representante->setActivo(false);
+    
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito",
+                );
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 200,
+                    'message' => "El registro no se encuentra en la base de datos.",
+                );
+            }
+
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+    
+
+    /* ==================================================== */
+    
+    /**
+     * Cambia el estado a activo al registro seleccionado.
      *
      * @Route("/active", name="userempresarepresentante_active")
      * @Method({"GET", "POST"})

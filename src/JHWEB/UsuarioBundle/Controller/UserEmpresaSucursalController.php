@@ -117,13 +117,17 @@ class UserEmpresaSucursalController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $sucursal = $em->getRepository("JHWEBUsuarioBundle:UserEmpresaSucursal")->find($params->id);
+            $sucursal = $em->getRepository("JHWEBUsuarioBundle:UserEmpresaSucursal")->find(
+                $params->id
+            );
 
-            if ($sucursal!=null) {
+            if ($sucursal) {
                 $sucursal->setNombre($params->nombre);
                 $sucursal->setSigla($params->sigla);
                 
-                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->idMunicipio);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                    $params->municipio->id
+                );
                 $sucursal->setMunicipio($municipio);
 
                 $sucursal->setDireccion($params->direccion);
