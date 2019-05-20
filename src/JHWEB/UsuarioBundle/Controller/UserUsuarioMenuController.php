@@ -121,21 +121,53 @@ class UserUsuarioMenuController extends Controller
     /**
      * Deletes a userUsuarioMenu entity.
      *
-     * @Route("/{id}/delete", name="userusuariomenu_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="userusuariomenu_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, UserUsuarioMenu $userUsuarioMenu)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($userUsuarioMenu);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization",null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if($authCheck == true){
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($userUsuarioMenu);
-            $em->flush();
-        }
 
-        return $this->redirectToRoute('userusuariomenu_index');
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->find(
+                $params->idUsuario
+            );
+
+            foreach ($params->menus as $key => $idMenu) {
+                $usuarioMenu = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findOneBy(
+                    array(
+                        'usuario' => $usuario->getId(),
+                        'menu' => $idMenu,
+                        'activo' => $idMenu,
+                    )
+                );
+                
+                $usuarioMenu->setActivo(false);
+
+                $em->flush();
+            }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registros eliminados con exito."
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
