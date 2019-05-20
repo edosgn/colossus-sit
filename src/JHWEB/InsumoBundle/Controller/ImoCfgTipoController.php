@@ -259,7 +259,7 @@ class ImoCfgTipoController extends Controller
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
             array(
                 'activo' => 1, 
-                'tipo' => 'SUSTRATO'
+                'categoria' => 'SUSTRATO'
             )
         );
 
@@ -286,7 +286,10 @@ class ImoCfgTipoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
-            array('activo' => 1, 'tipo' => 'Insumo')
+            array(
+                'activo' => 1,
+                'categoria' => 'INSUMO'
+                )
         );
 
         $response = null;
