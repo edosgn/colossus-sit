@@ -82,6 +82,15 @@ class PqoInmovilizacionController extends Controller
             $inmovilizacion->setFechaInmovilizacion(new \Datetime($params->fechaInmovilizacion));
             $inmovilizacion->setHoraInmovilizacion(new \Datetime($params->horaInmovilizacion));
             $inmovilizacion->setNumeroInventario($params->numeroInventario);
+
+            if ($params->costoGrua) {
+                $inmovilizacion->setCostoGrua($params->costoGrua);
+            }
+
+            if ($params->numeroRecibo) {
+                $inmovilizacion->setNumeroRecibo($params->numeroRecibo);
+            }
+
             $inmovilizacion->setCostoGrua($params->costoGrua);
             $inmovilizacion->setEstado('INMOVILIZADO');
             $inmovilizacion->setActivo(true);

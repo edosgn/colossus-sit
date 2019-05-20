@@ -83,6 +83,13 @@ class PqoCfgPatioController extends Controller
                 $patio->setPropietario(mb_strtoupper($params->propietario,'utf-8'));
             }
 
+            if ($params->idOrganismoTransito) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
+                );
+                $patio->setOrganismoTransito($organismoTransito);
+            }
+
 
             $file = $request->files->get('file');
                

@@ -98,9 +98,8 @@ class PqoCfgPatio
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="patios") */
-    private $municipio;
-
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="patios") */
+    private $organismoTransito;
 
     /**
      * Get id
@@ -377,26 +376,26 @@ class PqoCfgPatio
     }
 
     /**
-     * Set municipio
+     * Set organismoTransito
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
      *
      * @return PqoCfgPatio
      */
-    public function setMunicipio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipio = null)
+    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
     {
-        $this->municipio = $municipio;
+        $this->organismoTransito = $organismoTransito;
 
         return $this;
     }
 
     /**
-     * Get municipio
+     * Get organismoTransito
      *
-     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getMunicipio()
+    public function getOrganismoTransito()
     {
-        return $this->municipio;
+        return $this->organismoTransito;
     }
 }

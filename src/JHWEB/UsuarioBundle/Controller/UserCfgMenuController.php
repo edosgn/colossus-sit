@@ -395,6 +395,61 @@ class UserCfgMenuController extends Controller
     /**
      * Lists all userCfgMenu entities.
      *
+     * @Route("/select/registered", name="usercfgmenu_select_registered")
+     * @Method({"GET", "POST"})
+     */
+    public function selectRegisteredAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $usuarioMenus = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findBy(
+                array(
+                    'usuario' => $params->idUsuario,
+                    'activo' => true,
+                )
+            );
+
+            $response = null;
+
+            foreach ($usuarioMenus as $key => $usuarioMenu) {
+                if ($usuarioMenu->getMenu()->getParent()) {
+                    if ($usuarioMenu->getMenu()->getParent()->getParent()) {
+                        $titulo = $usuarioMenu->getMenu()->getParent()->getParent()->getTitulo().' > '.$usuarioMenu->getMenu()->getParent()->getTitulo().' > '.$usuarioMenu->getMenu()->getTitulo();
+                    }else{
+                        $titulo = $usuarioMenu->getMenu()->getParent()->getTitulo().' > '.$usuarioMenu->getMenu()->getTitulo();
+                    }
+                }else{
+                    $titulo = $usuarioMenu->getMenu()->getTitulo();
+                }
+                
+                $response[] = array(
+                    'value' => $usuarioMenu->getMenu()->getId(),
+                    'label' => $titulo
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all userCfgMenu entities.
+     *
      * @Route("/select/role", name="usercfgmenu_select_role")
      * @Method({"GET", "POST"})
      */
