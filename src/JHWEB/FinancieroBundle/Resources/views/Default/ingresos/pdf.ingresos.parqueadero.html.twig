@@ -1,0 +1,59 @@
+<html>
+    <header>
+        <meta charset="utf-8">
+    </header>
+    <body>
+        <h2 style="text-align:center;">Reporte de Parqueadero</h2>
+        <br>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td>
+                    <b>Nro. Recibo Inmovilizacion</b>
+                </td>
+                <td>
+                    <b>Placa Vehículo</b>
+                </td>
+                <td>
+                    <b>Fecha Entrada</b>
+                </td>
+                <td>
+                    <b>Fecha Salida</b>
+                </td>
+                <td>
+                    <b>Horas</b>
+                </td>
+                <td>
+                    <b>Costo Grua</b>
+                </td>
+                <td>
+                    <b>Valor</b>
+                </td>
+            </tr>
+            {% for inmovilizacion in arrayInmovilizaciones %}
+                <tr>
+                    <td>{{ inmovilizacion.numeroRecibo }}</td>
+                    <td>{{ inmovilizacion.placa }}</td>
+                    <td>{{ inmovilizacion.fechaIngreso | date('Y-m-d') }}</td>
+                    <td>{{ inmovilizacion.fechaSalida | date('Y-m-d') }}</td>
+                    <td>{{ inmovilizacion.horas }}</td>
+                    <td >
+                    {% if inmovilizacion.costoGrua == null %}
+                        0
+                    {% else %}
+                        {{ inmovilizacion.costoGrua }}
+                    {% endif %}
+                    </td>
+                    <td>{{ inmovilizacion.valor }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="6">
+                    <b>TOTAL</b>
+                </td>
+                <td>{{ totalInmovilizaciones }}</td>
+            </tr>
+        </table>
+    </body>
+</html>
+

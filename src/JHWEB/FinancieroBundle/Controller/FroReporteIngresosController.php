@@ -407,4 +407,272 @@ class FroReporteIngresosController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * datos para obtener acuerdos de pago por rango de fechas
+     *
+     * @Route("/pdf/acuerdopago/fecha", name="froacuerdo_pago_rango_fechas")
+     * @Method({"GET", "POST"})
+     */
+    public function acuerdosPagoByFechaAction(Request $request) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            setlocale(LC_ALL,"es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $fechaInicioDatetime = new \Datetime($params->fechaDesde);
+            $fechaFinDatetime = new \Datetime($params->fechaHasta);
+            
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+
+            $arrayAcuerdosPago = []; 
+            $totalAcuerdosPago = 0;
+
+            $acuerdosPago = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getAcuerdosPagoByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+
+            if($acuerdosPago){
+                foreach ($acuerdosPago as $key => $acuerdoPago) {
+                    $factura = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneBy(
+                        array(
+                            'comparendo' => $acuerdoPago->getId(),
+                        )
+                    );
+
+                    $totalAcuerdosPago += $factura->getFactura()->getValorNeto();
+
+                    $arrayAcuerdosPago[] = array(
+                        'numeroAcuerdoPago' => $acuerdoPago->getAcuerdoPago()->getNumero(),
+                        'numeroComparendo' => $acuerdoPago->getConsecutivo()->getNumero(),
+                        'numeroFactura' => $factura->getFactura()->getNumero(),
+                        'total' => $factura->getFactura()->getValorNeto(),
+                    );
+                }
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'registros encontrados"',
+                    );
+                    
+                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.acuerdosPago.html.twig', array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayAcuerdosPago' => $arrayAcuerdosPago,
+                        'totalAcuerdosPago' => $totalAcuerdosPago,
+                    )); 
+    
+                    return new Response(
+                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        200,
+                        array(
+                            'Content-Type'        => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                        )
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No existen registros aún para la fecha estipulada.",
+                    );
+                }
+        } else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida',
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para obtener inmovilizaciones por rango de fechas
+     *
+     * @Route("/pdf/parqueadero/fecha", name="froinmovilizacion_rango_fechas")
+     * @Method({"GET", "POST"})
+     */
+    public function inmovilizacionByFechaAction(Request $request) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            setlocale(LC_ALL,"es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $fechaInicioDatetime = new \Datetime($params->fechaDesde);
+            $fechaFinDatetime = new \Datetime($params->fechaHasta);
+            
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+
+            $arrayInmovilizaciones = []; 
+            $totalInmovilizaciones = 0;
+
+            $inmovilizaciones = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getInmovilizacionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+
+            if($inmovilizaciones){
+                foreach ($inmovilizaciones as $key => $inmovilizacion) {
+                    $factura = $em->getRepository('JHWEBFinancieroBundle:FroFacParqueadero')->findOneBy(
+                        array(
+                            'inmovilizacion' => $inmovilizacion->getId(),
+                        )
+                    );
+
+                    $totalInmovilizaciones += $factura->getFactura()->getValorNeto();
+
+                    $arrayInmovilizaciones[] = array(
+                        'numeroRecibo' => $inmovilizacion->getInmovilizacion()->getNumeroRecibo(),
+                        'placa' => $inmovilizacion->getPlaca(),
+                        'fechaIngreso' => $inmovilizacion->getInmovilizacion()->getfechaIngreso(),
+                        'fechaSalida' => $inmovilizacion->getInmovilizacion()->getfechaSalida(),
+                        'horas' => $inmovilizacion->getHoras(),
+                        'costoGrua' => $inmovilizacion->getInmovilizacion()->getCostoGrua(),
+                        'valor' => $factura->getFactura()->getValorNeto(),
+                    );
+                }
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'registros encontrados"',
+                    );
+                    
+                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.parqueadero.html.twig', array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayInmovilizaciones' => $arrayInmovilizaciones,
+                        'totalInmovilizaciones' => $totalInmovilizaciones,
+                    )); 
+    
+                    return new Response(
+                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        200,
+                        array(
+                            'Content-Type'        => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                        )
+                    );
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No existen registros aún para la fecha estipulada.",
+                    );
+                }
+        } else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida',
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * datos para obtener retefuente por rango de fechas
+     *
+     * @Route("/pdf/retefuente/fecha", name="froretefuente_rango_fechas")
+     * @Method({"GET", "POST"})
+     */
+    public function retefuenteByFechaAction(Request $request) {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            setlocale(LC_ALL,"es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $fechaInicioDatetime = new \Datetime($params->datos->fechaDesde);
+            $fechaFinDatetime = new \Datetime($params->datos->fechaHasta);
+            
+            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->datos->idOrganismoTransito);
+
+            $arrayRetefuentes = []; 
+            $totalRetefuentes = 0;
+
+            $retefuentes = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getRetefuentesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+
+            if($retefuentes){
+                foreach ($retefuentes as $key => $retefuente) {
+                    $totalRetefuentes += $retefuente->getRetencion();
+
+                    $arrayRetefuentes[] = array(
+                        'concepto' => "concepto",
+                        'tipoDocumento' => $retefuente->getPropietario()->getCiudadano()->getTipoIdentificacion()->getId(),
+                        'identificación' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
+                        'dv' => "dv",
+                        'primerApellido' => $retefuente->getPropietario()->getCiudadano()->getPrimerApellido(),
+                        'segundoApellido' => $retefuente->getPropietario()->getCiudadano()->getSegundoApellido(),
+                        'primerNombre' => $retefuente->getPropietario()->getCiudadano()->getPrimerNombre(),
+                        'segundoNombre' => $retefuente->getPropietario()->getCiudadano()->getSegundoNombre(),
+                        'razonSocial' => $retefuente->getPropietario()->getEmpresa()->getNombre(),
+                        'direccion' => $retefuente->getPropietario()->getCiudadano()->getDireccionPersonal(),
+                        'departamento' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getNombre(),
+                        'municipio' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getNombre(),
+                        'pais' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getPais()->getNombre(),
+                        'valorVehiculo' => $retefuente->getValorVehiculo()->getValor(),
+                        'retencion' => $retefuente->getRetencion()
+                    );
+                }
+
+                    $data = array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayRetefuentes' => $arrayRetefuentes,
+                        'totalRetefuentes' => $totalRetefuentes,
+                    );
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'registros encontrados"',
+                        'data' => $data
+                    );
+                    
+                    /* $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.retefuente.html.twig', array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayRetefuentes' => $arrayRetefuentes,
+                        'totalRetefuentes' => $totalRetefuentes,
+                    )); 
+    
+                    return new Response(
+                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        200,
+                        array(
+                            'Content-Type'        => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                        )
+                    ); */
+                } else {
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "No existen registros aún para la fecha estipulada.",
+                    );
+                }
+        } else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida',
+            );
+        }
+        return $helpers->json($response);
+    }
 }

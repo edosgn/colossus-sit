@@ -74,7 +74,7 @@ class ImoCfgTipoController extends Controller
                 $casoInsumo->setNombre(strtoupper($params->nombre));
                 $casoInsumo->setModulo($modulo);
                 $casoInsumo->setReferencia($params->referencia);
-                $casoInsumo->setTipo($params->tipo);
+                $casoInsumo->setCategoria($params->tipo);
                 $casoInsumo->setActivo(true);
 
                 $em->persist($casoInsumo);
@@ -83,20 +83,20 @@ class ImoCfgTipoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro creado con exito", 
+                    'message' => "Registro creado con exito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El registro ya se encuentra registrado", 
+                    'message' => "El registro ya se encuentra registrado", 
                 );
             }
         }else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
