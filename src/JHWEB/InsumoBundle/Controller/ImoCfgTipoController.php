@@ -71,10 +71,10 @@ class ImoCfgTipoController extends Controller
             if (!$casoInsumo) {
                 $casoInsumo = new ImoCfgTipo();
 
-                $casoInsumo->setNombre(strtoupper($params->nombre));
+                $casoInsumo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 $casoInsumo->setModulo($modulo);
                 $casoInsumo->setReferencia($params->referencia);
-                $casoInsumo->setCategoria($params->tipo);
+                $casoInsumo->setCategoria(mb_strtoupper($params->categoria, 'utf-8'));
                 $casoInsumo->setActivo(true);
 
                 $em->persist($casoInsumo);
