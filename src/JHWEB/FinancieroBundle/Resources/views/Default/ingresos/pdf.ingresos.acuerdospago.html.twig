@@ -1,0 +1,41 @@
+<html>
+    <header>
+        <meta charset="utf-8">
+    </header>
+    <body>
+        <h2 style="text-align:center;">Reporte Acuerdos de Pago</h2>
+        <br>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td>
+                    <b>Nro. Acuerdo Pago</b>
+                </td>
+                <td>
+                    <b>Nro. Comparendo</b>
+                </td>
+                <td>
+                    <b>Nro. Factura</b>
+                </td>
+                <td>
+                    <b>Valor</b>
+                </td>
+            </tr>
+            {% for infraccion in arrayAcuerdosPago %}
+                <tr>
+                    <td>{{ infraccion.numeroAcuerdoPago }}</td>
+                    <td>{{ infraccion.numeroComparendo }}</td>
+                    <td>{{ infraccion.numeroFactura }}</td>
+                    <td>{{ infraccion.total }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3">
+                    <b>TOTAL</b>
+                </td>
+                <td>{{ totalAcuerdosPago }}</td>
+            </tr>
+        </table>
+    </body>
+</html>
+

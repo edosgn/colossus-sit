@@ -1,0 +1,121 @@
+<html>
+    <header>
+        <meta charset="utf-8">
+    </header>
+    <body>
+        <h2 style="text-align:center;">Reporte Retención en la fuente Exogena {{ organismoTransito.nombre }}</h2>
+        <br>
+        <br>
+        <table border="1" style="text-align:center;">
+            <tr>
+                <td>
+                    <b>Concepto</b>
+                </td>
+                <td>
+                    <b>Tipo Documento</b>
+                </td>
+                <td>
+                    <b>Identificación</b>
+                </td>
+                <td>
+                    <b>DV</b>
+                </td>
+                <td>
+                    <b>Primer Apellido</b>
+                </td>
+                <td>
+                    <b>Segundo Apellido</b>
+                </td>
+                <td>
+                    <b>Primer Nombre</b>
+                </td>
+                <td>
+                    <b>Otros Nombres</b>
+                </td>
+                <td>
+                    <b>Razón Social del informado</b>
+                </td>
+                <td>
+                    <b>DIRECCIÓN</b>
+                </td>
+                <td>
+                    <b>DEPARTAMENTO</b>
+                </td>
+                <td>
+                    <b>MUNICIPIO</b>
+                </td>
+                <td>
+                    <b>PAIS</b>
+                </td>
+                <td>
+                    <b>PAGO O ABANDONO EN CUENTA DEDUCIBLE</b>
+                </td>
+                <td>
+                    <b>PAGO O ABONO EN CUENTA NO DEDUCIBLE</b>
+                </td>
+                <td>
+                    <b>IVA MAYOR DEL COSTO O GASTO DEDUCIBLE</b>
+                </td>
+                <td>
+                    <b>IVA MAYOR DEL COSTO O GASTO NO DEDUCIBLE</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE PRACTICADA RENTA</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE ASUMIDA RENTA</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE PRACTICADA IVA REGIMEN COMUN</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE PRACTICADA IVA REGIMEN SIMPLIFICADO</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE PRACTICADA IVA NO DOMICILIADOS</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE PRACTICADA CREE</b>
+                </td>
+                <td>
+                    <b>RETENCION EN LA FUENTE ASUMIDA CREE</b>
+                </td>
+            </tr>
+            {% for retefuente in arrayRetefuentes %}
+                <tr>
+                    <td>{{ retefuente.concepto }}</td>
+                    <td>{{ retefuente.tipoDocumento }}</td>
+                    <td>{{ retefuente.identificación }}</td>
+                    <td>{{ retefuente.dv }}</td>
+                    <td>{{ retefuente.primerApellido }}</td>
+                    <td>{{ retefuente.segundoApellido }}</td>
+                    <td>{{ retefuente.primerNombre }}</td>
+                    <td>{{ retefuente.segundoNombre }}</td>
+                    <td>{{ retefuente.razonSocial }}</td>
+                    <td>{{ retefuente.direccion }}</td>
+                    <td>{{ retefuente.departamento }}</td>
+                    <td>{{ retefuente.municipio }}</td>
+                    <td>{{ retefuente.pais }}</td>
+                    <td>{{ retefuente.valorVehiculo }}</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>{{ retefuente.retencion }}</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="17">
+                    <b>TOTAL</b>
+                </td>
+                <td>{{ totalRetefuentes }}</td>
+            </tr>
+        </table>
+    </body>
+</html>
+
