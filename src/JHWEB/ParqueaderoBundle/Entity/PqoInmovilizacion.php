@@ -106,25 +106,11 @@ class PqoInmovilizacion
     private $numeroInventario;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="dias", type="integer", nullable=true)
-     */
-    private $dias;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="observaciones", type="text", nullable=true)
      */
     private $observaciones;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="valor", type="integer", nullable=true)
-     */
-    private $valor;
 
     /**
      * @var int
@@ -136,16 +122,16 @@ class PqoInmovilizacion
     /**
      * @var string
      *
+     * @ORM\Column(name="numero_recibo", type="string", length=255, nullable=true)
+     */
+    private $numeroRecibo;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="estado", type="string", length=100)
      */
     private $estado;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="salida", type="boolean")
-     */
-    private $salida = false;
 
     /**
      * @var bool
@@ -297,9 +283,6 @@ class PqoInmovilizacion
      */
     public function getFechaIngreso()
     {
-        if ($this->fechaIngreso) {
-            return $this->fechaIngreso->format('d/m/Y');
-        }
         return $this->fechaIngreso;
     }
 
@@ -348,9 +331,6 @@ class PqoInmovilizacion
      */
     public function getFechaInmovilizacion()
     {
-        if ($this->fechaInmovilizacion) {
-            return $this->fechaInmovilizacion->format('d/m/Y');
-        }
         return $this->fechaInmovilizacion;
     }
 
@@ -475,30 +455,6 @@ class PqoInmovilizacion
     }
 
     /**
-     * Set dias
-     *
-     * @param integer $dias
-     *
-     * @return PqoInmovilizacion
-     */
-    public function setDias($dias)
-    {
-        $this->dias = $dias;
-
-        return $this;
-    }
-
-    /**
-     * Get dias
-     *
-     * @return integer
-     */
-    public function getDias()
-    {
-        return $this->dias;
-    }
-
-    /**
      * Set observaciones
      *
      * @param string $observaciones
@@ -520,30 +476,6 @@ class PqoInmovilizacion
     public function getObservaciones()
     {
         return $this->observaciones;
-    }
-
-    /**
-     * Set valor
-     *
-     * @param integer $valor
-     *
-     * @return PqoInmovilizacion
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return integer
-     */
-    public function getValor()
-    {
-        return $this->valor;
     }
 
     /**
@@ -571,6 +503,30 @@ class PqoInmovilizacion
     }
 
     /**
+     * Set numeroRecibo
+     *
+     * @param string $numeroRecibo
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setNumeroRecibo($numeroRecibo)
+    {
+        $this->numeroRecibo = $numeroRecibo;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroRecibo
+     *
+     * @return string
+     */
+    public function getNumeroRecibo()
+    {
+        return $this->numeroRecibo;
+    }
+
+    /**
      * Set estado
      *
      * @param string $estado
@@ -592,30 +548,6 @@ class PqoInmovilizacion
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set salida
-     *
-     * @param boolean $salida
-     *
-     * @return PqoInmovilizacion
-     */
-    public function setSalida($salida)
-    {
-        $this->salida = $salida;
-
-        return $this;
-    }
-
-    /**
-     * Get salida
-     *
-     * @return boolean
-     */
-    public function getSalida()
-    {
-        return $this->salida;
     }
 
     /**

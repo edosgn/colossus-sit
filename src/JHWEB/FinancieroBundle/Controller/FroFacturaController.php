@@ -67,9 +67,6 @@ class FroFacturaController extends Controller
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-
-            /* var_dump($params->factura);
-            die(); */
             
             $em = $this->getDoctrine()->getManager();
            
@@ -108,6 +105,13 @@ class FroFacturaController extends Controller
                     $params->factura->idTipoRecaudo
                 );
                 $factura->setTipoRecaudo($tipoRecaudo);
+            }
+
+            if ($params->factura->idCiudadano) {
+                $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->factura->idCiudadano
+                );
+                $factura->setSolicitante($solicitante);
             }
 
             $em->persist($factura);

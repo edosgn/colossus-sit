@@ -61,6 +61,11 @@ class FroFacParqueadero
      */
     private $factura;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ParqueaderoBundle\Entity\PqoInmovilizacion", inversedBy="parqueaderos")
+     */
+    private $inmovilizacion;
+
 
     /**
      * Get id
@@ -89,7 +94,7 @@ class FroFacParqueadero
     /**
      * Get horas
      *
-     * @return int
+     * @return integer
      */
     public function getHoras()
     {
@@ -113,7 +118,7 @@ class FroFacParqueadero
     /**
      * Get valorHora
      *
-     * @return int
+     * @return integer
      */
     public function getValorHora()
     {
@@ -214,5 +219,29 @@ class FroFacParqueadero
     public function getFactura()
     {
         return $this->factura;
+    }
+
+    /**
+     * Set inmovilizacion
+     *
+     * @param \JHWEB\ParqueaderoBundle\Entity\PqoInmovilizacion $inmovilizacion
+     *
+     * @return FroFacParqueadero
+     */
+    public function setInmovilizacion(\JHWEB\ParqueaderoBundle\Entity\PqoInmovilizacion $inmovilizacion = null)
+    {
+        $this->inmovilizacion = $inmovilizacion;
+
+        return $this;
+    }
+
+    /**
+     * Get inmovilizacion
+     *
+     * @return \JHWEB\ParqueaderoBundle\Entity\PqoInmovilizacion
+     */
+    public function getInmovilizacion()
+    {
+        return $this->inmovilizacion;
     }
 }

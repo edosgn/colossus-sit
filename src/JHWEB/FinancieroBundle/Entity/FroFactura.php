@@ -123,9 +123,9 @@ class FroFactura
     protected $tipoRecaudo;
 
     /**
-     * @ORM\OneToOne(targetEntity="JHWEB\InsumoBundle\Entity\ImoInsumo")
-     */
-    private $insumo;
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="facturas")
+     **/
+    protected $solicitante;
 
 
     /**
@@ -499,26 +499,26 @@ class FroFactura
     }
 
     /**
-     * Set insumo
+     * Set solicitante
      *
-     * @param \JHWEB\InsumoBundle\Entity\ImoInsumo $insumo
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $solicitante
      *
      * @return FroFactura
      */
-    public function setInsumo(\JHWEB\InsumoBundle\Entity\ImoInsumo $insumo = null)
+    public function setSolicitante(\JHWEB\UsuarioBundle\Entity\UserCiudadano $solicitante = null)
     {
-        $this->insumo = $insumo;
+        $this->solicitante = $solicitante;
 
         return $this;
     }
 
     /**
-     * Get insumo
+     * Get solicitante
      *
-     * @return \JHWEB\InsumoBundle\Entity\ImoInsumo
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
-    public function getInsumo()
+    public function getSolicitante()
     {
-        return $this->insumo;
+        return $this->solicitante;
     }
 }
