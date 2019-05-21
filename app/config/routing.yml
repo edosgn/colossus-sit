@@ -1,3 +1,7 @@
+jhweb_config_cfg_propietario:
+    resource: "@JHWEBConfigBundle/Controller/CfgPropietarioController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

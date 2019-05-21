@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgpropietario</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ cfgPropietario.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ cfgPropietario.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Nit</th>
+                <td>{{ cfgPropietario.nit }}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td>{{ cfgPropietario.direccion }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ cfgPropietario.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Correo</th>
+                <td>{{ cfgPropietario.correo }}</td>
+            </tr>
+            <tr>
+                <th>Imagencabecera</th>
+                <td>{{ cfgPropietario.imagenCabecera }}</td>
+            </tr>
+            <tr>
+                <th>Imagenpie</th>
+                <td>{{ cfgPropietario.imagenPie }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgpropietario_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('cfgpropietario_edit', { 'id': cfgPropietario.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

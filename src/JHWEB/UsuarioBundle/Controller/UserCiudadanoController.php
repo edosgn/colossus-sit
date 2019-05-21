@@ -193,7 +193,8 @@ class UserCiudadanoController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro creado con exito.", 
+                    'message' => "Registro creado con exito.",
+                    'data' =>  $ciudadano 
                 );
             }else{
                 $response = array(

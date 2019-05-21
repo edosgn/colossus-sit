@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cfgpropietarios list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Nit</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Imagencabecera</th>
+                <th>Imagenpie</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cfgPropietario in cfgPropietarios %}
+            <tr>
+                <td><a href="{{ path('cfgpropietario_show', { 'id': cfgPropietario.id }) }}">{{ cfgPropietario.id }}</a></td>
+                <td>{{ cfgPropietario.nombre }}</td>
+                <td>{{ cfgPropietario.nit }}</td>
+                <td>{{ cfgPropietario.direccion }}</td>
+                <td>{{ cfgPropietario.telefono }}</td>
+                <td>{{ cfgPropietario.correo }}</td>
+                <td>{{ cfgPropietario.imagenCabecera }}</td>
+                <td>{{ cfgPropietario.imagenPie }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cfgpropietario_show', { 'id': cfgPropietario.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cfgpropietario_edit', { 'id': cfgPropietario.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cfgpropietario_new') }}">Create a new cfgPropietario</a>
+        </li>
+    </ul>
+{% endblock %}
