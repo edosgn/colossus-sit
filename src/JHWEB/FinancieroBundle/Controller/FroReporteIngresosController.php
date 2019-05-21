@@ -614,19 +614,17 @@ class FroReporteIngresosController extends Controller
                     $totalRetefuentes += $retefuente->getRetencion();
 
                     $arrayRetefuentes[] = array(
-                        'concepto' => "concepto",
                         'tipoDocumento' => $retefuente->getPropietario()->getCiudadano()->getTipoIdentificacion()->getId(),
                         'identificación' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
-                        'dv' => "dv",
                         'primerApellido' => $retefuente->getPropietario()->getCiudadano()->getPrimerApellido(),
                         'segundoApellido' => $retefuente->getPropietario()->getCiudadano()->getSegundoApellido(),
                         'primerNombre' => $retefuente->getPropietario()->getCiudadano()->getPrimerNombre(),
                         'segundoNombre' => $retefuente->getPropietario()->getCiudadano()->getSegundoNombre(),
                         'razonSocial' => $retefuente->getPropietario()->getEmpresa()->getNombre(),
                         'direccion' => $retefuente->getPropietario()->getCiudadano()->getDireccionPersonal(),
-                        'departamento' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getNombre(),
-                        'municipio' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getNombre(),
-                        'pais' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getPais()->getNombre(),
+                        'departamento' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getCodigoDane(),
+                        'municipio' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getCodigoDane(),
+                        'pais' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getPais()->getCodigo(),
                         'valorVehiculo' => $retefuente->getValorVehiculo()->getValor(),
                         'retencion' => $retefuente->getRetencion()
                     );
