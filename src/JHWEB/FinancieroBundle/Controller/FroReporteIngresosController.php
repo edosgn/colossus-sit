@@ -604,18 +604,21 @@ class FroReporteIngresosController extends Controller
             
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->datos->idOrganismoTransito);
 
-            $arrayRetefuentes = []; 
-            $totalRetefuentes = 0;
+            $arrayRetefuentesExogena = []; 
+            $arrayRetefuentesTesoreria = []; 
+            $totalRetefuentesExogena = 0;
+            $totalRetefuentesTesoreria = 0;
 
             $retefuentes = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getRetefuentesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
             if($retefuentes){
                 foreach ($retefuentes as $key => $retefuente) {
-                    $totalRetefuentes += $retefuente->getRetencion();
+                    $totalRetefuentesExogena += $retefuente->getRetencion();
+                    $totalRetefuentesTesoreria += $retefuente->getRetencion();
 
-                    $arrayRetefuentes[] = array(
+                    $arrayRetefuentesExogena[] = array(
                         'tipoDocumento' => $retefuente->getPropietario()->getCiudadano()->getTipoIdentificacion()->getId(),
-                        'identificación' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
+                        'identificacion' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
                         'primerApellido' => $retefuente->getPropietario()->getCiudadano()->getPrimerApellido(),
                         'segundoApellido' => $retefuente->getPropietario()->getCiudadano()->getSegundoApellido(),
                         'primerNombre' => $retefuente->getPropietario()->getCiudadano()->getPrimerNombre(),
@@ -628,21 +631,56 @@ class FroReporteIngresosController extends Controller
                         'valorVehiculo' => $retefuente->getValorVehiculo()->getValor(),
                         'retencion' => $retefuente->getRetencion()
                     );
-                }
 
-                    $data = array(
-                        'organismoTransito' => $organismoTransito, 
-                        'arrayRetefuentes' => $arrayRetefuentes,
-                        'totalRetefuentes' => $totalRetefuentes,
+                    $arrayRetefuentesTesoreria[] = array(
+                        'fechaFactura' => $retefuente->getFactura()->getFechaCreacion(),
+                        'placa' => $retefuente->getVehiculo()->getPlaca()->getNumero(),
+                        'reciboCaja' => $retefuente->getFactura()->getNumero(),
+                        'estadoFactura' => $retefuente->getFactura()->getEstado(),
+                        'marca' => $retefuente->getVehiculo()->getLinea()->getMarca()->getNombre(),
+                        'clase' => $retefuente->getVehiculo()->getClase()->getNombre(),
+                        'modelo' => $retefuente->getVehiculo()->getModelo(),
+                        'primerApellido' => $retefuente->getPropietario()->getCiudadano()->getPrimerApellido(),
+                        'segundoApellido' => $retefuente->getPropietario()->getCiudadano()->getSegundoApellido(),
+                        'primerNombre' => $retefuente->getPropietario()->getCiudadano()->getPrimerNombre(),
+                        'segundoNombre' => $retefuente->getPropietario()->getCiudadano()->getSegundoNombre(),
+                        'identificacion' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
+                        'direccion' => $retefuente->getPropietario()->getCiudadano()->getDireccionPersonal(),
+                        'municipio' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getNombre(),
+                        'telefono' => $retefuente->getPropietario()->getCiudadano()->getTelefonoCelular(),
+                        'valorVehiculo' => $retefuente->getValorVehiculo()->getValor(),
+                        'retencion' => $retefuente->getRetencion(),
                     );
 
+                }
+                
+                if(intval($params->tipoArchivo) == 1){
+                    $dataExogena = array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayRetefuentesExogena' => $arrayRetefuentesExogena,
+                        'totalRetefuentesExogena' => $totalRetefuentesExogena,
+                    );
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'registros encontrados"',
-                        'data' => $data
+                        'dataExogena' => $dataExogena
                     );
-                    
+                }
+                if(intval($params->tipoArchivo) == 0){
+                    $dataTesoreria = array(
+                        'organismoTransito' => $organismoTransito, 
+                        'arrayRetefuentesTesoreria' => $arrayRetefuentesTesoreria,
+                        'totalRetefuentesTesoreria' => $totalRetefuentesTesoreria,
+                    );
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'registros encontrados"',
+                        'dataTesoreria' => $dataTesoreria
+                    );
+                }
+
                     /* $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.retefuente.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'arrayRetefuentes' => $arrayRetefuentes,
@@ -657,13 +695,13 @@ class FroReporteIngresosController extends Controller
                             'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
                     ); */
-                } else {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "No existen registros aún para la fecha estipulada.",
-                    );
-                }
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No existen registros aún para la fecha estipulada.",
+                );
+            }
         } else{
             $response = array(
                 'status' => 'error',
