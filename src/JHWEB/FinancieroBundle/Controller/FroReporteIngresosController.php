@@ -87,7 +87,8 @@ class FroReporteIngresosController extends Controller
             
             $reporteMensual = false;
             
-            if($fechaInicioDatetime ==  $fechaFinDatetime) {
+            /* if($fechaInicioDatetime ==  $fechaFinDatetime) { */
+            if(intval($params->tipoArchivoTramite) == 1) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesDiario($fechaInicioDatetime, $organismoTransito->getId());
 
                 $pagadas = [];
@@ -141,31 +142,41 @@ class FroReporteIngresosController extends Controller
                                     );
 
                                 //================================================================para sustratos ====================================================================
-                                $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
+                                /* $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
                                     array(
                                         'factura' => $tramite->getTramiteFactura()->getFactura(),
                                         'categoria' => 'SUSTRATO'
                                     )
+                                ); */
+                                $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFacInsumo')->findBy(
+                                    array(
+                                        'factura' => $tramite->getTramiteFactura()->getFactura(),
+                                        /* 'categoria' => 'SUSTRATO' */
+                                    )
                                 );
 
-                                foreach ($insumos as $key => $sustrato) {
-                                    $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getSustratosByName($tramite->getTramiteFactura()->getFactura()->getId()); 
-
-                                    $imoValor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
-                                        array(
-                                            'imoCfgTipo' => $sustrato->getTipo(),
-                                        )
-                                    );
-
-                                    $total3 = intval(implode($cantSustratos)) * $imoValor->getValor();
-                                    $totalSustratos += intval(implode($cantSustratos)) * $imoValor->getValor();
-
-                                    $arraySustratos[] = array(
-                                        'nombre' => $sustrato->getTipo()->getNombre(),
-                                        'cantidad' => intval(implode($cantSustratos)),
-                                        'valor' => $imoValor->getValor(),
-                                        'total' => $total3,
-                                    );
+                                foreach ($sustratos as $key => $sustrato) {
+                                    switch ($sustrato->getInsumo()->getTipo()->getCategoria()) {
+                                        case 'SUSTRATO':
+                                            $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getSustratosByName($tramite->getTramiteFactura()->getFactura()->getId()); 
+    
+                                            $imoValor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
+                                                array(
+                                                    'imoCfgTipo' => $sustrato->getInsumo()->getTipo(),
+                                                )
+                                            );
+    
+                                            $total3 = intval(implode($cantSustratos)) * $imoValor->getValor();
+                                            $totalSustratos += intval(implode($cantSustratos)) * $imoValor->getValor();
+    
+                                            $arraySustratos[] = array(
+                                                'nombre' => $sustrato->getInsumo()->getTipo()->getNombre(),
+                                                'cantidad' => intval(implode($cantSustratos)),
+                                                'valor' => $imoValor->getValor(),
+                                                'total' => $total3,
+                                            );
+                                            break;
+                                    }
                                 }
                                 //==================================================================================================================================================
 
@@ -214,8 +225,8 @@ class FroReporteIngresosController extends Controller
                         'min' =>min($numeros),
                         'max' =>max($numeros),
                         'reporteMensual' =>$reporteMensual,
-                        /* 'minAnulados' =>min($numerosAnulados),
-                        'maxAnulados' =>max($numerosAnulados), */
+                        'minAnulados' =>min($numerosAnulados),
+                        'maxAnulados' =>max($numerosAnulados),
                     )); 
         
                     return new Response(
@@ -233,7 +244,8 @@ class FroReporteIngresosController extends Controller
                         'message' => "No se encontraron registros.",
                     );
                 }
-            } else if ($fechaInicioDatetime < $fechaFinDatetime) {
+            /* } else if ($fechaInicioDatetime < $fechaFinDatetime) { */
+            } else if ($params->tipoArchivoTramite == 0) {
                 $arrayReporteMensual = [];
                 $totalReporteMensual = 0;
                 
@@ -250,10 +262,27 @@ class FroReporteIngresosController extends Controller
 
                         $totalReporteMensual += $tramite->getTramiteFactura()->getPrecio()->getValor();
 
+                        $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFacInsumo')->findBy(
+                            array(
+                                'factura' => $tramite->getTramiteFactura()->getFactura(),
+                            )
+                        );
+
+                        foreach ($sustratos as $key => $sustrato) {
+                            switch ($sustrato->getInsumo()->getTipo()->getCategoria()) {
+                                case 'SUSTRATO':
+                                    $numeroSustrato = $sustrato->getInsumo()->getNumero();
+                                    $moduloSustrato = $sustrato->getInsumo()->getTipo()->getModulo()->getAbreviatura();
+                                    break;
+                            }
+                        }
+
                         $arrayReporteMensual[] = array(
                             'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
                             'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
                             'placaCedula' => $placaCedula,
+                            'numeroSustrato' => $numeroSustrato,
+                            'moduloSustrato' => $moduloSustrato,
                             'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
                             'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
                         );
@@ -270,9 +299,9 @@ class FroReporteIngresosController extends Controller
                     'arrayReporteMensual' => $arrayReporteMensual,
                     'reporteMensual' => $reporteMensual,
                     'funcionario' => $funcionario,
-                    'mesReporte' => strftime("%B del %Y", strtotime($params->filtros->fechaDesde)),
+                    'mesReporte' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
                     'fechaActual' => $fechaActual,
-                    'totalReporteMensual' => $totalReporteMensual
+                    'totalReporteMensual' => $totalReporteMensual,
                     /* 'totalSustratos' => $totalSustratos, */
                 )); 
                     

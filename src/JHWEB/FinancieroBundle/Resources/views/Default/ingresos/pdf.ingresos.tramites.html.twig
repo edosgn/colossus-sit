@@ -6,7 +6,8 @@
         <br>
         {% if reporteMensual == false %}
             {% if pagadas %}
-                <h3 style="text-align:center"> REPORTE DETALLADO DE ARQUEO DE CAJA DIARIO</h3>
+                <h3 style="text-align:center"> INFORME INGRESOS DIARIO SUBSECRETARIA TRANSITO</h3>
+                <h5 style="text-align:center;">General</h5>
                 <br>
                 <table border="1" style="text-align:center;">
                     <tr>
@@ -115,7 +116,8 @@
         {% endif %}
         {# fin tramites diarios #}
         {% if reporteMensual %}
-            <h2 style="text-align:center;">Reporte mensual de tramites</h2 style="text-align:center;">
+            <h2 style="text-align:center;">INFORME INGRESO MES DE {{ mesReporte }} SEGÚN RECIBOS DE CAJA</h2>
+            <h5 style="text-align:center;">Detallado</h5>
             <br>
             <b>Fecha de informe: </b> {{ mesReporte }}<br>
             <b>Organismo tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
@@ -139,8 +141,8 @@
                         <td>{{ tramite.numeroFactura }}</td>
                         <td>{{ tramite.fecha | date('Y-m-d') }}</td>
                         <td>{{ tramite.placaCedula }}</td>
-                        <td>numero sustrato</td>
-                        <td>imoInsumo->tipo->modulo->abreviatura</td>
+                        <td>{{ tramite.numeroSustrato }}</td>
+                        <td>{{ tramite.moduloSustrato }}</td>
                         <td>{{ tramite.nombre }}</td>
                         <td>{{ tramite.valorPagado }}</td>
                         <td>observaciones</td>
