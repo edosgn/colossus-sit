@@ -42,14 +42,12 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
             WHERE i.tipo = t.id
             AND i.organismoTransito = :idOrganismoTransito
             AND t.modulo = :idModulo
-            AND i.estado = :estado
             AND i.numero = :numero
             GROUP BY i.numero";
 
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
-            'estado' => 'DISPONIBLE',
             'numero' => $numero,
             'idOrganismoTransito' => $idOrganismoTransito,
             'idModulo' => $idModulo,

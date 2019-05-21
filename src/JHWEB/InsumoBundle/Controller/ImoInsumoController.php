@@ -315,16 +315,24 @@ class ImoInsumoController extends Controller
             );
 
             if ($sustrato) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'data'=> $sustrato,
-                );
+                if ($sustrato->getEstado() == 'DISPONIBLE') {
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'data'=> $sustrato,
+                    );
+                }else{
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message'=> 'El sustrato no esta disponible.',
+                    );
+                }
             }else{
                 $response = array(
                     'status' => 'error',
-                    'code' => 300,
-                    'message'=> 'sustrato no encontrado',
+                    'code' => 400,
+                    'message'=> 'Sustrato no encontrado en la base de datos.',
                 );
             }
         }else{
