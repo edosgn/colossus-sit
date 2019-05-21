@@ -72,10 +72,12 @@ class FroFacturaController extends Controller
            
             $factura = new FroFactura();
 
-            $fechaCreacion = new \Datetime(date('Y-m-d'));
+            $fechaActual = new \Datetime(date('Y-m-d'));
+            $fechaCreacion = $fechaActual;
+            $fechaVencimiento = new \Datetime(date("Y-m-d",strtotime($fechaActual."+ 1 days"))); 
 
             $factura->setFechaCreacion($fechaCreacion);
-            $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
+            $factura->setFechaVencimiento($fechaVencimiento);
             $factura->setHora(new \Datetime(date('h:i:s A')));
             $factura->setValorBruto($params->factura->valor);
             $factura->setValorMora($params->factura->interes);
@@ -162,7 +164,8 @@ class FroFacturaController extends Controller
            
             $factura = new FroFactura();
 
-            $fechaCreacion = new \Datetime(date('Y-m-d'));
+            $fechaActual = new \Datetime(date('Y-m-d'));
+            $fechaCreacion = $fechaActual;
 
             if ($params->idAmortizacion) {
                 $amortizacion = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->find(
@@ -171,7 +174,7 @@ class FroFacturaController extends Controller
             }
 
             $factura->setFechaCreacion($fechaCreacion);
-            $factura->setFechaVencimiento($fechaCreacion->modify('+1 days'));
+            $factura->setFechaVencimiento($fechaActual->modify('+1 days'));
             $factura->setHora(new \Datetime(date('h:i:s A')));
             $factura->setValorBruto($amortizacion->getValorBruto());
             $factura->setValorMora($amortizacion->getValorMora());

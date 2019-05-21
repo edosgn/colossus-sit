@@ -124,13 +124,13 @@ class FroTrteSolicitudController extends Controller
 
                             if (!$tramiteFactura->getRealizado()) {
                                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                                    $tramiteRealizado->foraneas->idFuncionario
+                                    $params->idFuncionario
                                 );
     
                                 if (isset($params->idVehiculo) && $params->idVehiculo) {
                                     $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas);
 
-                                    if ($vehiculoUpdate->code == 200) {
+                                    if ($vehiculoUpdate) {
                                         $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
         
                                         $tramiteSolicitud = new FroTrteSolicitud();
@@ -164,6 +164,8 @@ class FroTrteSolicitudController extends Controller
                                         }
         
                                         $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                                        $tramiteSolicitud->setFuncionario($funcionario);
+                                        $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
         
                                         $tramiteFactura->setRealizado(true);
         
@@ -192,7 +194,7 @@ class FroTrteSolicitudController extends Controller
                                 }else{
                                     $usuarioUpdate = $this->usuarioUpdateAction($tramiteRealizado->foraneas);
 
-                                    if ($usuarioUpdate->code == 200) {
+                                    if ($usuarioUpdate) {
                                         $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
         
                                         $tramiteSolicitud = new FroTrteSolicitud();
@@ -217,6 +219,8 @@ class FroTrteSolicitudController extends Controller
                                         }
         
                                         $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                                        $tramiteSolicitud->setFuncionario($funcionario);
+                                        $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
         
                                         $tramiteFactura->setRealizado(true);
         
@@ -539,17 +543,9 @@ class FroTrteSolicitudController extends Controller
 
             $em->flush();
             
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'El vehiculo se actualizó con éxito.',
-            );
+            return true;
         } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => 'El vehiculo no se encuentra en la base de datos.',
-            );
+            return false;
         }
        
 
@@ -654,17 +650,9 @@ class FroTrteSolicitudController extends Controller
             }
 
             
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'El usuario se actualizó con éxito.',
-            );
+            return true;
         } else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => 'El usuario no se encuentra en la base de datos.',
-            );
+            return false;
         }
        
 

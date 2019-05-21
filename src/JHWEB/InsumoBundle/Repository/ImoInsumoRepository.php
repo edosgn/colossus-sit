@@ -36,7 +36,7 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
     { 
         $em = $this->getEntityManager();
 
-        $dql = "SELECT i.numero, t.nombre
+        $dql = "SELECT i.id, i.numero, i.estado, t.nombre
             FROM JHWEBInsumoBundle:ImoInsumo i,
             JHWEBInsumoBundle:ImoCfgTipo t
             WHERE i.tipo = t.id

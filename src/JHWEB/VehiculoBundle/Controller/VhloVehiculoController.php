@@ -796,7 +796,7 @@ class VhloVehiculoController extends Controller
             
             $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                 array(
-                    'vehiculo' => $vehiculo->getId(),
+                    'vehiculo' => $params->idVehiculo,
                     'activo' => true,
                 )
             );
@@ -805,7 +805,7 @@ class VhloVehiculoController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'Trámite autorizado porque el vehiculo presenta limitaciones a la propiedad.',
+                    'message' => 'Trámite no autorizado porque el vehiculo presenta limitaciones a la propiedad.',
                 );
             }else{
                 $response = array(
