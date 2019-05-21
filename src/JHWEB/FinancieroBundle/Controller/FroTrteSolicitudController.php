@@ -632,24 +632,27 @@ class FroTrteSolicitudController extends Controller
                         if ($ciudadano->getGrupoSanguineo()) {
                             $ciudadanoNew->setGrupoSanguineo($ciudadano->getGrupoSanguineo());
                         }
-
-                        $usuario = $ciudadano->getUsuario();
-        
-                        $password = $ciudadano->getPrimerNombre()[0].$ciudadano->getPrimerApellido()[0].$params->identificacionActual;
-                        $password = hash('sha256', $password);
-                        $usuario->setPassword($password);
-
-                        $ciudadano->setUsuario(null);
-                        $ciudadano->setActivo(false);
                         
                         $em->persist($ciudadanoNew);
                         $em->flush();
-                        $usuario->setCiudadano($ciudadanoNew);
+
+                        $usuario = $ciudadano->getUsuario();
+                        
+                        if ($usuario) {
+                            $password = $ciudadano->getPrimerNombre()[0].$ciudadano->getPrimerApellido()[0].$params->identificacionActual;
+                            $password = hash('sha256', $password);
+                            $usuario->setPassword($password);
+    
+                            $ciudadano->setUsuario(null);
+                            $ciudadano->setActivo(false);
+                            
+                            $usuario->setCiudadano($ciudadanoNew);
+                            $em->flush();
+                        }
                     break;
                 }
             }
 
-            $em->flush();
             
             $response = array(
                 'status' => 'success',

@@ -67,6 +67,7 @@ class ImoInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -76,8 +77,6 @@ class ImoInsumoController extends Controller
 
             $sedeOperativa = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->asignacionInsumos->sedeOperativaId);
             $numeroActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getMaxActa();
-
-            
 
             if ($numeroActa['maximo'] == '') { 
                 $numeroActa = 1; 
@@ -116,7 +115,6 @@ class ImoInsumoController extends Controller
                         $insumo->setLote($loteInsumo); 
                         $insumo->setFecha($fecha);
                         $insumo->setActaEntrega($numeroActa);
-                        $insumo->setCategoria('SUSTRATO');
                         $insumo->setEstado('DISPONIBLE');
                         $em->persist($insumo);
                         $em->flush();
@@ -156,7 +154,6 @@ class ImoInsumoController extends Controller
                     $insumo->setOrganismoTransito($sedeOperativa);
                     $insumo->setEstado('DISPONIBLE');
                     $insumo->setFecha($fecha);
-                    $insumo->setCategoria('INSUMO');
                     $insumo->setActaEntrega($numeroActa);
 
                     $em->persist($insumo);

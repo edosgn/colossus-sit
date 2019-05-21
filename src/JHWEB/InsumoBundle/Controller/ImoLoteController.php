@@ -25,7 +25,6 @@ class ImoLoteController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
         
-
         $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
             array('tipo'=>'INSUMO')
         );
@@ -71,8 +70,6 @@ class ImoLoteController extends Controller
             $fecha = new \DateTime($params->fecha);
 
             $em = $this->getDoctrine()->getManager();
-            // var_dump($params);
-            // die();
 
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
@@ -395,11 +392,8 @@ class ImoLoteController extends Controller
         
         $sustratosActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findByNumeroActaEntrega($numeroActa);
 
-        $insumosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-            array(
-                'actaEntrega' => $numeroActa,
-                'categoria'=> 'INSUMO'
-            ) 
+        $insumosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getByNumeroActa(
+            $numeroActa
         );
 
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($idOrganismoTransito);

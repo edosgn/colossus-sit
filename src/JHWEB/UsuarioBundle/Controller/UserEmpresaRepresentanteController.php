@@ -191,6 +191,66 @@ class UserEmpresaRepresentanteController extends Controller
     }
 
     /**
+     * Edit a userEmpresaRepresentante entity.
+     *
+     * @Route("/edit", name="userempresarepresentante_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $representante = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaRepresentante')->find(
+                $params->id
+            );
+
+            if ($representante) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->idCiudadano
+                );
+                $representante->setCiudadano($ciudadano);
+    
+                if($params->fechaInicial){
+                    $representante->setFechaInicial(
+                        new \DateTime($params->fechaInicial)
+                    );
+                }
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito.", 
+                    'data'=> $representante,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos.", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Deletes a userCfgRole entity.
      *
      * @Route("/delete", name="userempresarepresentante_delete")

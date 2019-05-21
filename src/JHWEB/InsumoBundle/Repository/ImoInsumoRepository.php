@@ -58,6 +58,26 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
+    public function getByNumeroActa($numeroActa)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT i
+            FROM JHWEBInsumoBundle:ImoInsumo i,
+            JHWEBInsumoBundle:ImoCfgTipo t
+            WHERE i.tipo = t.id
+            AND t.categoria = 'INSUMO'
+            AND i.actaEntrega = :numeroActa";
+
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'numeroActa' => $numeroActa,
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
     public function getTotalesTipoActa($actaEntrega)
     { 
         $em = $this->getEntityManager();
