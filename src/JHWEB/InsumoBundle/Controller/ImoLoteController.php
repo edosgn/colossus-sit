@@ -303,7 +303,7 @@ class ImoLoteController extends Controller
                 $response = array( 
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "no hay sustratos pa la sede", 
+                    'message' => "No hay sustratos para la sede", 
                 );
             }
         }else{

@@ -45,7 +45,7 @@ class ImoCfgValor
     /**
      * @ORM\ManyToOne(targetEntity="ImoCfgTipo")
      **/
-    protected $imoCfgTipo;
+    protected $tipo;
 
 
     
@@ -136,26 +136,26 @@ class ImoCfgValor
     }
 
     /**
-     * Set imoCfgTipo
+     * Set tipo
      *
-     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $imoCfgTipo
+     * @param \JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipo
      *
      * @return ImoCfgValor
      */
-    public function setImoCfgTipo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $imoCfgTipo = null)
+    public function setTipo(\JHWEB\InsumoBundle\Entity\ImoCfgTipo $tipo = null)
     {
-        $this->imoCfgTipo = $imoCfgTipo;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get imoCfgTipo
+     * Get tipo
      *
      * @return \JHWEB\InsumoBundle\Entity\ImoCfgTipo
      */
-    public function getImoCfgTipo()
+    public function getTipo()
     {
-        return $this->imoCfgTipo;
+        return $this->tipo;
     }
 }

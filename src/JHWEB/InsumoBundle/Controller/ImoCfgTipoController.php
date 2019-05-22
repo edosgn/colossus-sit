@@ -26,17 +26,18 @@ class ImoCfgTipoController extends Controller
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
 
-        $casoInsumos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
+        $tiposInsumos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
             array('activo' => 1)
         );
 
         $response['data'] = array();
 
         $response = array(
+            'title' => 'Perfecto!',
             'status' => 'success',
             'code' => 200,
-            'msj' => "listado casoInsumos",
-            'data' => $casoInsumos,
+            'message' => "listado tipos de insumos",
+            'data' => $tiposInsumos,
         );
 
         return $helpers->json($response);
@@ -59,34 +60,36 @@ class ImoCfgTipoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->moduloId);
+            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
             
-            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findOneBy(
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findOneBy(
                 array(
                     'nombre' => $params->nombre,
                     'modulo' => $modulo->getId()
                 )
             );
             
-            if (!$casoInsumo) {
-                $casoInsumo = new ImoCfgTipo();
+            if (!$tipoInsumo) {
+                $tipoInsumo = new ImoCfgTipo();
 
-                $casoInsumo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
-                $casoInsumo->setModulo($modulo);
-                $casoInsumo->setReferencia($params->referencia);
-                $casoInsumo->setCategoria(mb_strtoupper($params->categoria, 'utf-8'));
-                $casoInsumo->setActivo(true);
+                $tipoInsumo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                $tipoInsumo->setModulo($modulo);
+                $tipoInsumo->setReferencia($params->referencia);
+                $tipoInsumo->setCategoria(mb_strtoupper($params->categoria, 'utf-8'));
+                $tipoInsumo->setActivo(true);
 
-                $em->persist($casoInsumo);
+                $em->persist($tipoInsumo);
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito", 
                 );
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El registro ya se encuentra registrado", 
@@ -94,6 +97,7 @@ class ImoCfgTipoController extends Controller
             }
         }else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",
@@ -105,29 +109,35 @@ class ImoCfgTipoController extends Controller
     /**
      * Finds and displays a ImoCfgTipo entity.
      *
-     * @Route("/show/{id}", name="imocfgtipo_show")
+     * @Route("/show", name="imocfgtipo_show")
      * @Method("POST")
      */
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($id);
+
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->id);
+
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "casoInsumo encontrado",
-                'data' => $casoInsumo,
+                'message' => "Registro encontrado",
+                'data' => $tipoInsumo,
             );
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);
@@ -148,44 +158,42 @@ class ImoCfgTipoController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
-
-            $nombre = $params->nombre;
-            $moduloId = $params->moduloId;
-            $referencia = $params->referencia;
-            $tipo = $params->tipo;
             $em = $this->getDoctrine()->getManager();
-            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->id);
-            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($moduloId);
 
-            if ($casoInsumo != null) {
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->id);
+            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
 
-                $casoInsumo->setNombre(strtoupper($params->nombre));
-                $casoInsumo->setModulo($modulo);
-                $casoInsumo->setReferencia($params->referencia);
-                $casoInsumo->setTipo($params->tipo);
-                $casoInsumo->setActivo(true);
+            if ($tipoInsumo != null) {
 
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($casoInsumo);
+                $tipoInsumo->setNombre(strtoupper($params->nombre));
+                $tipoInsumo->setModulo($modulo);
+                $tipoInsumo->setReferencia($params->referencia);
+                $tipoInsumo->setCategoria($params->categoria);
+                $tipoInsumo->setActivo(true);
+
+                $em->persist($tipoInsumo);
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "casoInsumo editada con exito",
+                    'message' => "Registro editado con éxito",
                 );
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La casoInsumo no se encuentra en la base de datos",
+                    'message' => "El tipo de insumo no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida para editar banco",
+                'message' => "Autorización no valida.",
             );
         }
 
@@ -204,25 +212,29 @@ class ImoCfgTipoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
-            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->id);
 
-            $casoInsumo->setActivo(0);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($casoInsumo);
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->id);
+
+            $tipoInsumo->setActivo(false);
+            
+            $em->persist($tipoInsumo);
             $em->flush();
+            
             $response = array(
+                'title'=> 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "casoInsumo eliminado con exito",
+                'message' => "Registro eliminado con exito",
             );
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida",
+                'message' => "Autorizacion no valida",
             );
         }
         return $helpers->json($response);

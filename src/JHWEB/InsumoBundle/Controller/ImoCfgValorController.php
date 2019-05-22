@@ -42,42 +42,41 @@ class ImoCfgValorController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
-            $em = $this->getDoctrine()->getManager();
             $json = $request->get("data",null);
             $params = json_decode($json);
-            // var_dump($params);
-            // die();
-
             
-            // $imoCfgValorActivo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneByActivo(true);
-            // if ($imoCfgValorActivo) {
-            //     $imoCfgValorActivo->setActivo(false);
-            // }
-
-            $casoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find($params->idCasoInsumo); 
+            $em = $this->getDoctrine()->getManager();
             
-            $imoCfgValor = new ImoCfgValor();
             $fecha = new \DateTime($params->fecha);
 
-            $imoCfgValor->setImoCfgTipo($casoInsumo);
-            $imoCfgValor->setValor($params->valor);
-            $imoCfgValor->setFecha($fecha);
-            $imoCfgValor->setActivo(false);
+            $tipoInsumo = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->find(
+                $params->idTipoInsumo
+            ); 
+            
+            $valor = new ImoCfgValor();
 
-            $em->persist($imoCfgValor);
+            $valor->setTipo($tipoInsumo);
+            $valor->setValor($params->valorUnitario);
+            $valor->setFecha($fecha);
+            $valor->setActivo(false);
+
+            $em->persist($valor);
             $em->flush();
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
-                'msj' => "Registro creado con exito", 
+                'message' => "Registro creado con exito", 
             );
         }else{
             $response = array( 
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
         } 
         return $helpers->json($response);
@@ -86,30 +85,37 @@ class ImoCfgValorController extends Controller
     /**
      * Finds and displays a Cuenta entity.
      *
-     * @Route("/show/casoInsumo/{idTipoInsumo}", name="imocfgvalor_show")
+     * @Route("/show", name="imocfgvalor_show")
      * @Method("POST")
      */
-    public function showAction(Request $request,$idTipoInsumo)
+    public function showAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $valores = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findByImoCfgTipo($idTipoInsumo);
+
+            $valores = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findByTipo($params);
+            
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "valores encontrada", 
-                    'data'=> $valores,
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado", 
+                'data'=> $valores,
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }
