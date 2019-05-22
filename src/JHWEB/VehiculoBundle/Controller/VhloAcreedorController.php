@@ -5,7 +5,8 @@ namespace JHWEB\VehiculoBundle\Controller;
 use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhloacreedor controller.
@@ -118,12 +119,14 @@ class VhloAcreedorController extends Controller
                     $em->flush();
                     
                     $response = array(
+                        'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'Registro creado con exito.', 
                     );
                 }else{
                     $response = array(
+                        'title' => 'Error!',
                         'status' => 'error',
                         'code' => 400,
                         'message' => 'El propietario no puede ser el mismo acreedor.', 
@@ -131,6 +134,7 @@ class VhloAcreedorController extends Controller
                 }
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => 'Vehiculo no encontrado.', 

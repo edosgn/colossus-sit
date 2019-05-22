@@ -326,7 +326,7 @@ class ImoInsumoController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message'=> 'El sustrato no esta disponible.',
+                        'message'=> 'El sustrato ya fue asignado.',
                     );
                 }
             }else{

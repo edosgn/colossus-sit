@@ -16,14 +16,14 @@ use CodeItNow\BarcodeBundle\Utils\BarcodeGenerator;
 /**
  * FrofroFactura controller.
  *
- * @Route("froFactura")
+ * @Route("frofactura")
  */
 class FroFacturaController extends Controller
 {
     /**
      * Lists all cvCfgIntere entities.
      *
-     * @Route("/", name="froFactura_index")
+     * @Route("/", name="frofactura_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -55,7 +55,7 @@ class FroFacturaController extends Controller
     /**
      * Creates a new cvCfgIntere entity.
      *
-     * @Route("/new", name="froFactura_new")
+     * @Route("/new", name="frofactura_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -145,9 +145,62 @@ class FroFacturaController extends Controller
     /* =================================== */
 
     /**
+     * Displays a form to edit an existing Combustible entity.
+     *
+     * @Route("/complete", name="frofactura_complete")
+     * @Method({"GET", "POST"})
+     */
+    public function completeAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("json",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $factura = $em->getRepository('JHWEBFinancieroBundle:froFactura')->find(
+                $params->id
+            );
+
+            if ($factura) {
+                $factura->setEstado('COMPLETAR TRAMITES');
+
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Factura lista para completar trámites.", 
+                    'data' => $factura, 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no válida.", 
+                );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a new cvCfgIntere entity.
      *
-     * @Route("/new/amortizacion", name="froFactura_new_amortizacion")
+     * @Route("/new/amortizacion", name="frofactura_new_amortizacion")
      * @Method({"GET", "POST"})
      */
     public function newAmortizacionAction(Request $request)
@@ -233,7 +286,7 @@ class FroFacturaController extends Controller
     /**
      * busca vehiculos por id.
      *
-     * @Route("/search/numero", name="froFactura_search_numero")
+     * @Route("/search/numero", name="frofactura_search_numero")
      * @Method({"GET", "POST"})
      */
     public function searchByNumero(Request $request)
@@ -300,7 +353,7 @@ class FroFacturaController extends Controller
     /**
      * Calcula el valor según los comparendos seleecionados.
      *
-     * @Route("/calculate/value", name="froFactura_calculate_value")
+     * @Route("/calculate/value", name="frofactura_calculate_value")
      * @Method("POST")
      */
     public function calculateValueByComparendosAction(Request $request)
@@ -556,7 +609,7 @@ class FroFacturaController extends Controller
     /**
      * Genera pdf de factura seleccionada.
      *
-     * @Route("/{tipoRecaudo}/{id}/pdf", name="froFactura_pdf")
+     * @Route("/{tipoRecaudo}/{id}/pdf", name="frofactura_pdf")
      * @Method("GET")
      */
     public function pdfAction(Request $request, $tipoRecaudo, $id)
