@@ -72,8 +72,8 @@ class FroFacturaController extends Controller
            
             $factura = new FroFactura();
 
-            $fechaActual = new \Datetime(date('Y-m-d'));
-            $fechaCreacion = $fechaActual;
+            $fechaActual = date('Y-m-d');
+            $fechaCreacion = new \Datetime($fechaActual);
             $fechaVencimiento = new \Datetime(date("Y-m-d",strtotime($fechaActual."+ 1 days"))); 
 
             $factura->setFechaCreacion($fechaCreacion);

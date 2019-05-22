@@ -44,6 +44,7 @@
                     <td colspan="7" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
                 </tr>
                 <tr>
+                    <td style="border:1px solid #cccccc"><b>Infractor</b></td>
                     <td style="border:1px solid #cccccc"><b>Número</b></td>
                     <td style="border:1px solid #cccccc"><b>Fecha</b></td>
                     <td style="border:1px solid #cccccc"><b>Cod. Infracción</b></td>
@@ -56,6 +57,7 @@
                 {% for key, facturaComparendo in comparendos %}
                     {% set total = total + facturaComparendo.comparendo.valorPagar %}
                 <tr>
+                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infractorNombres }} {{ facturaComparendo.comparendo.infractorApellidos }}<br>{{ facturaComparendo.comparendo.infractorIdentificacion }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.consecutivo.numero }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.fecha }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infraccion.codigo }}</td>
