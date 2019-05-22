@@ -93,8 +93,9 @@ class FroReporteIngresosRepository extends \Doctrine\ORM\EntityRepository
         $em = $this->getEntityManager();
 
         $dql = "SELECT COUNT(ii.tipo)
-            FROM JHWEBInsumoBundle:ImoInsumo ii
-            WHERE ii.factura = :idFactura";
+            FROM JHWEBInsumoBundle:ImoInsumo ii, JHWEBFinancieroBundle:FroFacInsumo ffi
+            WHERE ii.id = ffi.factura
+            AND ffi.factura = :idFactura";
 
         $consulta = $em->createQuery($dql);
         
