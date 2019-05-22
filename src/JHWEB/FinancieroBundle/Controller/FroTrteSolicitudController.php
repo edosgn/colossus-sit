@@ -272,7 +272,7 @@ class FroTrteSolicitudController extends Controller
                                 $licenciaTransito = new UserLicenciaTransito();
 
                                 $licenciaTransito->setPropietario($propietario);
-                                $licenciaTransito->setFecha(new \Datetime(date('Y-m-d')));
+                                $licenciaTransito->setFecha(new \Datetime(date('Y-m-d h:i:s')));
                                 $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
                                 $licenciaTransito->setActivo(true);
                                 
@@ -421,128 +421,136 @@ class FroTrteSolicitudController extends Controller
         );
 
         if ($vehiculo) {
-            foreach ($params->campos as $key => $campo) {
-                switch ($campo) {
-                    case 'color':
-                        $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
-                            $params->idColor
-                        );
-                        $vehiculo->setColor($color);
-                        break;
-
-                    case 'combustible':
-                        $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
-                            $params->idCombustible
-                        );
-                        $vehiculo->setCombustible($combustible);
-                        break;
-
-                    case 'gas':
-                        $gas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
-                            $params->idCombustibleCambio
-                        );
-                        $vehiculo->setCombustible($gas);
-                        break;
-
-                    case 'organismoTransito':
-                        $organismoTransito = $em->getRepository("JHWEBConfigBundle:CfgOrganismoTransito")->find(
-                            $params->idOrganismoTransitoNew
-                        );
-                        $vehiculo->setOrganismoTransito($organismoTransito);
-                        break;
-
-                    case 'blindaje':
-                        $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
-                        $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
-                        $vehiculo->setEmpresaBlindadora(
-                            $params->empresaBlindadora
-                        );
-                        break;
-
-                    case 'carroceria':
-                        $carroceria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCarroceria")->find(
-                            $params->idCarroceria
-                        );
-                        $vehiculo->setCarroceria($carroceria);
-                        break;
-
-                    case 'motor':
-                        $vehiculo->setMotor($params->numeroMotor);
-                        break;
-
-                    case 'placa':
-                        $placa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgPlaca")->findOneByNumero(
-                            $params->nuevaPlaca
-                        );
-
-                        if (!$placa) {
-                            $placa = new VhloCfgPlaca();
-
-                            $placa->setNumero(
-                                strtoupper($params->nuevaPlaca)
+            if (isset($params->campos)) {
+                foreach ($params->campos as $key => $campo) {
+                    switch ($campo) {
+                        case 'color':
+                            $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
+                                $params->idColor
                             );
-                            $placa->setEstado('ASIGNADA');
-                            $placa->setTipoVehiculo($vehiculo->getTipoVehiculo());
-                            $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
+                            $vehiculo->setColor($color);
+                            break;
+    
+                        case 'combustible':
+                            $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                                $params->idCombustible
+                            );
+                            $vehiculo->setCombustible($combustible);
+                            break;
+    
+                        case 'gas':
+                            $gas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find(
+                                $params->idCombustibleCambio
+                            );
+                            $vehiculo->setCombustible($gas);
+                            break;
+    
+                        case 'organismoTransito':
+                            $organismoTransito = $em->getRepository("JHWEBConfigBundle:CfgOrganismoTransito")->find(
+                                $params->idOrganismoTransitoNew
+                            );
+                            $vehiculo->setOrganismoTransito($organismoTransito);
+                            break;
+    
+                        case 'blindaje':
+                            $vehiculo->setTipoBlindaje($params->idTipoBlindaje);
+                            $vehiculo->setNivelBlindaje($params->idNivelBlindaje);
+                            $vehiculo->setEmpresaBlindadora(
+                                $params->empresaBlindadora
+                            );
+                            break;
+    
+                        case 'carroceria':
+                            $carroceria = $em->getRepository("JHWEBVehiculoBundle:VhloCfgCarroceria")->find(
+                                $params->idCarroceria
+                            );
+                            $vehiculo->setCarroceria($carroceria);
+                            break;
+    
+                        case 'motor':
+                            $vehiculo->setMotor($params->numeroMotor);
+                            break;
+    
+                        case 'placa':
+                            $placa = $em->getRepository("JHWEBVehiculoBundle:VhloCfgPlaca")->findOneByNumero(
+                                $params->nuevaPlaca
+                            );
+    
+                            if (!$placa) {
+                                $placa = new VhloCfgPlaca();
+    
+                                $placa->setNumero(
+                                    strtoupper($params->nuevaPlaca)
+                                );
+                                $placa->setEstado('ASIGNADA');
+                                $placa->setTipoVehiculo($vehiculo->getTipoVehiculo());
+                                $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
+    
+                                $em->persist($placa);
+                                $em->flush();
+                            }
+    
+                            $vehiculo->setPlaca($placa);
+                            break;
+                            
+                        case 'servicio':
+                            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
+                                $params->idServicio
+                            );
+                            $vehiculo->setServicio($servicio);
+                            break;
+    
+                        case 'ejes':
+                            $vehiculo->setNumeroEjes($params->ejesTotal);
+                            break;
+                            
+                        case 'cancelacionmatricula':
+                            $vehiculo->setCancelado(true);
+                            break;
+    
+                        case 'rematricula':
+                            $vehiculo->setCancelado(false);
+                            break;
+    
+                        case 'regrabarchasis':
+                            $vehiculo->setChasis($params->nuevoNumero);
+                            break;
+    
+                        case 'regrabarmotor':
+                            $vehiculo->setMotor($params->nuevoNumero);
+                            break;
+    
+                        case 'regrabarserie':
+                            $vehiculo->setSerie($params->nuevoNumero);
+                            break;
+    
+                        case 'regrabarvin':
+                            $vehiculo->setVin($params->nuevoNumero);
+                            break;
+    
+                        case 'conjunto':
+                            $vehiculo->setModelo($params->nuevoModelo);
+                            break;
+    
+                        case 'repotenciacion':
+                            $vehiculo->setModelo($params->modelo);
+                            break;
+    
+                        case 'registrarPignorado':
+                            $registro = $this->redirectToRoute('vhloacreedor_register', array('params' => $params));
+                            $vehiculo->setPignorado(true);
+                            break;
 
-                            $em->persist($placa);
-                            $em->flush();
-                        }
-
-                        $vehiculo->setPlaca($placa);
-                        break;
-                        
-                    case 'servicio':
-                        $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
-                            $params->idServicio
-                        );
-                        $vehiculo->setServicio($servicio);
-                        break;
-
-                    case 'ejes':
-                        $vehiculo->setNumeroEjes($params->ejesTotal);
-                        break;
-                        
-                    case 'cancelacionmatricula':
-                        $vehiculo->setCancelado(true);
-                        break;
-
-                    case 'rematricula':
-                        $vehiculo->setCancelado(false);
-                        break;
-
-                    case 'regrabarchasis':
-                        $vehiculo->setChasis($params->nuevoNumero);
-                        break;
-
-                    case 'regrabarmotor':
-                        $vehiculo->setMotor($params->nuevoNumero);
-                        break;
-
-                    case 'regrabarserie':
-                        $vehiculo->setSerie($params->nuevoNumero);
-                        break;
-
-                    case 'regrabarvin':
-                        $vehiculo->setVin($params->nuevoNumero);
-                        break;
-
-                    case 'conjunto':
-                        $vehiculo->setModelo($params->nuevoModelo);
-                        break;
-
-                    case 'repotenciacion':
-                        $vehiculo->setModelo($params->modelo);
-                        break;
-
-                    case 'pignorado':
-                        $vehiculo->setPignorado(true);
-                        break;
+                        case 'eliminarPignorado':
+                            $registro = $this->redirectToRoute('vhloacreedor_register', array('params' => $params));
+                            $vehiculo->setPignorado(true);
+                            break;
+                    }
                 }
+    
+                $em->flush();
             }
 
-            $em->flush();
-            
             return true;
         } else {
             return false;
@@ -793,7 +801,7 @@ class FroTrteSolicitudController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/{idVehiculo}/{tipo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
+     * @Route("/{idVehiculo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
      * @Method({"GET", "POST"})
      */
     public function pdfCertificadoTradicionAction(Request $request, $idVehiculo, $tipo)
