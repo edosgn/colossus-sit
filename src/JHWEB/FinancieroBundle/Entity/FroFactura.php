@@ -159,9 +159,6 @@ class FroFactura
      */
     public function getFechaCreacion()
     {
-        if ($this->fechaCreacion) {
-            return $this->fechaCreacion->format('Y-m-d');
-        }
         return $this->fechaCreacion;
     }
 
