@@ -67,7 +67,6 @@ class VhloVehiculoRepository extends \Doctrine\ORM\EntityRepository
         }
         if ($params->propietario) {
             $condicion .= " AND vp.vehiculo = v.id AND vp.ciudadano = c.id AND c.usuario = u.id AND c.identificacion ='" . $params->propietario . "'";
-
         }
         if ($condicion) {
             $dql .= $condicion;
