@@ -11,8 +11,8 @@
 
     <table >
         <tr>
-            <td width="25%">Divipol: {{organismoTransito.divipo}}</td>
-            <td width="75%">Sede: {{organismoTransito.nombre}}</td> 
+            <td width="25%"><b>Divipo:</b> {{organismoTransito.divipo}}</td>
+            <td width="75%"><b>Sede:</b> {{organismoTransito.nombre}}</td> 
         </tr> 
     </table>
     <h4>No.Acta {{numeroActa}}</h4>
@@ -66,13 +66,13 @@
        <br> 
 
     <p> 
-        <b>Fecha entrega: {{fechaEntrega}}</b>
+        <b>Fecha entrega: {{ fechaEntrega | date('Y-m-d') }}</b>
         <br>      
         <br>      
-        <b>Entrega: ----------------------- </b>
+        <b>Entrega: ____________________________ </b>
         <br>      
         <br>      
-        <b>Recibe: ----------------------- </b>
+        <b>Recibe: ____________________________ </b>
         <br>      
     </p>
 

@@ -499,18 +499,33 @@ class ImoInsumoController extends Controller
         if ($authCheck== true) {
             $em = $this->getDoctrine()->getManager();
             
-            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-                array(
-                    'categoria'=>'SUSTRATO',
-                )
-            );
-    
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'data' => $insumos,
-                'message' => "insumo creado con exito", 
-            );
+            $sustratos = [];
+            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findAll();
+
+            foreach ($insumos as $key => $insumo) {
+                switch ($insumo->getTipo()->getCategoria()) {
+                    case 'SUSTRATO':
+                        $sustratos = array(
+                            $insumo
+                        );
+                        break;
+                }
+            }
+
+            if($sustratos){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'data' => $sustratos,
+                    'message' => "Registros encontrados", 
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Registros no encontrados", 
+                );
+            }
         }else{
             $response = array(
                 'status' => 'error',

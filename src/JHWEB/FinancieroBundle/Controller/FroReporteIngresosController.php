@@ -239,9 +239,10 @@ class FroReporteIngresosController extends Controller
                     );
                 } else {
                     $response = array(
+                        'title' => 'Error!',
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "No se encontraron registros.",
+                        'message' => 'No se encontraron registros.',
                     );
                 }
             /* } else if ($fechaInicioDatetime < $fechaFinDatetime) { */
@@ -289,9 +290,9 @@ class FroReporteIngresosController extends Controller
                     }
                     
                     $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "registros encontrados",
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registros encontrados",
                 );
                 
                 $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
@@ -320,14 +321,13 @@ class FroReporteIngresosController extends Controller
                         'message' => "No existen registros aún para la fecha estipulada.",
                     );
                 }
-            } else {
+            } /* else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No existen registros para la generación de reportes en el rango de las fechas estipuladas.",
                 );
-            }
-            return $helpers->json($response);
+            } */
         } else {
             $response = array(
                 'status' => 'error',
@@ -692,7 +692,7 @@ class FroReporteIngresosController extends Controller
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'message' => 'registros encontrados"',
+                        'message' => 'Registros encontrados"',
                         'dataExogena' => $dataExogena
                     );
                 }
@@ -705,7 +705,7 @@ class FroReporteIngresosController extends Controller
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
-                        'message' => 'registros encontrados"',
+                        'message' => 'Registros encontrados"',
                         'dataTesoreria' => $dataTesoreria
                     );
                 }
