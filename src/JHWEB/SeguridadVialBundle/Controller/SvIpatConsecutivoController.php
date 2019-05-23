@@ -208,17 +208,21 @@ class SvIpatConsecutivoController extends Controller
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(
                 array(
                     'identificacion' => $params->identificacionUsuario,
-                ));
+                )
+            );
 
             $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
                 array(
                     'ciudadano' => $ciudadano,
-                ));
+                    'activo' => true
+                )
+            );
 
             $talonario = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatTalonario')->findOneBy(
                 array(
                     'organismoTransito' => $funcionario->getOrganismoTransito()
-                ));
+                )
+            );
 
             $consecutivos = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findBy(
                 array(
