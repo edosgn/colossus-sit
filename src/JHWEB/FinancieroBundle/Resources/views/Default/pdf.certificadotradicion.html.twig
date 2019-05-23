@@ -21,55 +21,23 @@
         <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>    
     </h2>
 
-    <p>El vehículo de placas: <b>{{ vehiculo.placa.numero }}</b> tiene las siguientes características</p>
+    <p style="font-size:11px;">Vehículo con número de placa: <b>{{ vehiculo.placa.numero }}, </b> {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, {% endif  %}
+    <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
+    <b>Linea: </b>{{ vehiculo.linea.nombre }},
+    <b>No.serie: </b> {{ vehiculo.serie }},
+    <b>No.Chasis: </b> {{ vehiculo.chasis }},
+    <b>Carrocería: </b> {{ vehiculo.carroceria.nombre }}.
+    <b>Cilindraje: </b> {{ vehiculo.cilindraje }},
+    <b>Pasajeros: </b> {{ vehiculo.numeroPasajeros }},
+    {% if vehiculo.color  %}<b>Color: </b> {{ vehiculo.color.nombre }}, {% endif  %}            
+    {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }}, 
+    {% endif  %} <b>Modelo: <b> {{ vehiculo.modelo }}, <b>No.motor: <b> {{ vehiculo.motor }}
+    </p>
 
-    <table cellpadding="5" border="1">
-        <tr>
-            <td  style="font-weight:bold;">Clase</td>
-            {% if vehiculo.clase  %}
-            <td> {{ vehiculo.clase.nombre }}</td>
-            {% endif  %}
-            <td style="font-weight:bold;">No.serie</td>
-            <td>{{ vehiculo.serie }}</td>
-        </tr>
-        <tr>
-            <td style="font-weight:bold;">Marca</td>
-            <td> {{ vehiculo.linea.marca.nombre }}</td>
-            <td style="font-weight:bold;">No.Chasis</td>
-            <td>{{ vehiculo.chasis }}</td>
-        </tr>
-        <tr>
-            <td style="font-weight:bold;">Carrocería</td>
-            <td> {{ vehiculo.carroceria.nombre }}</td>
-            <td style="font-weight:bold;">Cilindraje</td>
-            <td>{{ vehiculo.cilindraje }}</td>
-        </tr>
-        <tr>
-            <td style="font-weight:bold;">linea</td>
-            <td> {{ vehiculo.linea.nombre }}</td>
-            <td style="font-weight:bold;">Pasajeros</td>
-            <td>{{ vehiculo.numeroPasajeros }}</td>
-        </tr>
-        <tr> 
-            <td style="font-weight:bold;">Color</td>
-            {% if vehiculo.color  %}
-            <td>{{ vehiculo.color.nombre }}</td>
-            {% endif  %}
-            <td style="font-weight:bold;">Servicio</td>
-            {% if vehiculo.servicio  %}
-            <td>{{ vehiculo.servicio.nombre }}</td>
-            {% endif  %}
-        </tr>
-        <tr>
-            <td style="font-weight:bold;">Modelo</td>
-            <td> {{ vehiculo.modelo }}</td>
-            <td style="font-weight:bold;">No.motor</td>
-            <td>{{ vehiculo.motor }}</td>
-        </tr>
-    </table>
+ 
     <div class="separator"></div>
     {% if propietarios and propietarios|length > 0 %}
-    <table border="1" cellpadding="3">
+    <table border="1" cellpadding="3" style="font-size:11px;">
         <tr>
             <th colspan="3" align="center">
                 <b>PROPIETARIOS</b>
@@ -125,18 +93,18 @@
     </p>
 
     {% if limitaciones and limitaciones|length > 0 %}
-    <table border="1">
+    <table border="1" cellpadding="3" style="font-size: 10px;">
         <tr>
-            <th colspan="3" align="center">
+            <th colspan="5" align="center">
                 <b>LIMITACIONES</b>
             </th>
         </tr>
         <tr align="center">
-            <td>Entidad judicial</td>
-            <td>Municipio</td>
-            <td>Detalles</td>
-            <td>Demandante</td>
-            <td>Demandado</td>
+            <td><b>Entidad judicial</b></td>
+            <td><b>Municipio</b></td>
+            <td><b>Detalles</b></td>
+            <td><b>Demandante</b></td>
+            <td><b>Demandado</b></td>
         </tr>
         {% for limitacion in limitaciones %}
             <tr>
@@ -147,30 +115,17 @@
                     {{ limitacion.municipio.nombre }}
                 </td>
                 <td>
-                    <b>Tipo</b>
-                    {{ limitacion.tipo.nombre }}
-                    <br>
-                    <b>Causal</b>
-                    {{ limitacion.causal.nombre }}
-                    <br>
-                    <b>Tipo</b>
-                    {{ limitacion.tipoProceso.nombre }}
+                    <b>Tipo:</b> {{ limitacion.tipo.nombre }}, <b>Causal: </b> {{ limitacion.causal.nombre }}, <b>Tipo: </b> {{ limitacion.tipoProceso.nombre }}
                 </td>
                 <td>
-                    <b>Tipo Identificación:</b>
-                    {{ limitacion.demandante.identificacion }}
-                    <br>
-                    <b>
                     {{ limitacion.demandante.primerNombre }} {{ limitacion.demandante.segundoNombre }} {{ limitacion.demandante.primerApellido }} {{ limitacion.demandante.segundoApellido }}
-                    </b>
+                    <br>
+                    {{ limitacion.demandante.identificacion }}
                 </td>
                 <td>
-                    <b>Tipo Identificación:</b>
-                    {{ limitacion.demandado.identificacion }}
-                    <br>
-                    <b>
                     {{ limitacion.demandado.primerNombre }} {{ limitacion.demandado.segundoNombre }} {{ limitacion.demandado.primerApellido }} {{ limitacion.demandado.segundoApellido }}
-                    </b>
+                    <br>
+                    {{ limitacion.demandado.identificacion }}
                 </td>
             </tr>
         {% endfor %}

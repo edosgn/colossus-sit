@@ -63,75 +63,93 @@ class VhloLimitacionController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-            
-            foreach ($params->vehiculos as $key => $vehiculoArray) {
-                $limitacion = new VhloLimitacion();
 
-                $limitacion->setFechaRadicacion(new \Datetime($params->limitacion->fechaRadicacion));
-                $limitacion->setFechaExpedicion(new \Datetime($params->limitacion->fechaExpedicion));
-                $limitacion->setNumeroOrdenJudicial($params->limitacion->numeroOrdenJudicial);
-                $limitacion->setObservaciones($params->limitacion->observaciones);
-                $limitacion->setActivo(true);
-    
-                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                    $params->limitacion->idMunicipio
-                );
-                $limitacion->setMunicipio($municipio);
-    
+            $limitacionesOld = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                array(
+                    'numeroOrdenJudicial' => $params->limitacion->numeroOrdenJudicial,
+                )
+            );
+
+            if (!$limitacionesOld) {
                 $demandado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
                     $params->idDemandado
                 );
-                $limitacion->setCiudadanoDemandado($demandado);
-                
-                $demandante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                    $params->idDemandante
+
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                    $params->limitacion->idMunicipio
                 );
-                $limitacion->setCiudadanoDemandante($demandante);
-    
+
                 $tipo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->find(
                     $params->limitacion->idTipoLimitacion
                 );
-                $limitacion->setLimitacion($tipo);
-    
+
                 $tipoProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->find(
                     $params->limitacion->idTipoProcesoLimitacion
                 );
-                $limitacion->setTipoProceso($tipoProceso);
-    
-                $causalLimitacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausalLimitacion')->find(
+
+                $causal = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->find(
                     $params->limitacion->idCausalLimitacion
                 );
-                $limitacion->setCausalLimitacion($causalLimitacion);
-    
+
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
                     $params->limitacion->idEntidadJudicial
                 );
-                $limitacion->setEntidadJudicial($entidadJudicial);
+                
+                foreach ($params->vehiculos as $key => $vehiculoArray) {
+                    foreach ($params->demandantes as $key => $demandanteArray) {
+                        $limitacion = new VhloLimitacion();
+                        
+                        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                            $vehiculoArray->id
+                        );
+                        $limitacion->setVehiculo($vehiculo);
+                        
+                        $demandante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                            $demandanteArray->id
+                        );
+                        $limitacion->setDemandante($demandante);
+
+                        $limitacion->setDemandado($demandado);
+                        $limitacion->setMunicipio($municipio);                        
+                        $limitacion->setTipo($tipo);
+                        $limitacion->setTipoProceso($tipoProceso);
+                        $limitacion->setCausal($causal);
+                        $limitacion->setEntidadJudicial($entidadJudicial);
+                        $limitacion->setFechaRadicacion(new \Datetime($params->limitacion->fechaRadicacion));
+                        $limitacion->setFechaExpedicion(new \Datetime($params->limitacion->fechaExpedicion));
+                        $limitacion->setNumeroOrdenJudicial($params->limitacion->numeroOrdenJudicial);
+                        $limitacion->setObservaciones($params->limitacion->observaciones);
+                        $limitacion->setActivo(true);
+            
+                        $em->persist($limitacion);
+                        $em->flush();
+                    }
+                }
     
-                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
-                    $vehiculoArray->id
+                $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                    array(
+                        'numeroOrdenJudicial' => $params->limitacion->numeroOrdenJudicial,
+                        'activo' => true
+                    )
                 );
-                $limitacion->setVehiculo($vehiculo);
     
-                $em->persist($limitacion);
-                $em->flush();
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con exito",
+                    'data' => $limitaciones
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Las limitaciones asociadas al número de orden judicial ".$params->limitacion->numeroOrdenJudicial." ya se encuentras registradas en el sistema.",
+                    'data' => $limitacionesOld
+                );
             }
-
-            $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
-                array(
-                    'numeroOrdenJudicial' => $params->limitacion->numeroOrdenJudicial,
-                    'activo' => true
-                )
-            );
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con exito",
-                'data' => array(
-                    'limitaciones' => $limitaciones
-                )
-            );
+            
         } else {
             $response = array(
                 'status' => 'error',
@@ -240,5 +258,98 @@ class VhloLimitacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ============================================== */
+
+    /**
+     * Busca las limitaciones activas por numero de placa.
+     *
+     * @Route("/search/placa", name="vhlolimitacion_search_placa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
+                array(
+                    'numero' => $params->numero
+                )
+            );
+
+            if ($placa) {
+                if ($placa->getTipoVehiculo()->getModulo()->getId() == $params->idModulo) {
+                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                        array(
+                            'placa' => $placa->getId()
+                        )
+                    );
+    
+                    if ($vehiculo) {
+                        $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                            array(
+                                'vehiculo' => $vehiculo->getId(),
+                                'activo' => true,
+                            )
+                        );
+    
+                        if (!$limitaciones) {
+                            $response = array(
+                                'title' => 'Perfecto!',
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'El vehiculo no tiene limitaciones a la propiedad.',
+                            );
+                        }else{
+                            $response = array(
+                                'title' => 'Atención!',
+                                'status' => 'warning',
+                                'code' => 400,
+                                'message' => count($limitaciones).' limitaciones encontradas.',
+                                'data' => $limitaciones,
+                            );
+                        }
+                    }else{
+                        $response = array(
+                            'title' => 'Error!',
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'No se encuentra ningún vehiculo con el número de placa digitada.',
+                        );
+                    }
+                }else{
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El número de placa digitado no pertenece a un vehiculo de tipo RNA.',
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existe ningún registro con el número de placa digitado.',
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

@@ -542,7 +542,11 @@ class FroTrteSolicitudController extends Controller
                             break;
 
                         case 'eliminarPignorado':
-                            $this->vehiculoAcreedorDelete($params);
+                            $this->vehiculoAcreedorDeleteAction($params);
+                            break;
+
+                        case 'traspaso':
+                            $this->vehiculoPropietarioUpdateAction($params);
                             break;
                     }
                 }
@@ -659,7 +663,7 @@ class FroTrteSolicitudController extends Controller
         return $helpers->json($response);
     }
 
-    public function vehiculoAcreedorDelete($params)
+    public function vehiculoAcreedorDeleteAction($params)
     {     
         $helpers = $this->get("app.helpers");
               
@@ -681,6 +685,73 @@ class FroTrteSolicitudController extends Controller
             'message' => "Registro eliminado con éxito.", 
         );
 
+        return $helpers->json($response);
+    }
+
+    public function vehiculoPropietarioUpdateAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+       
+        $em = $this->getDoctrine()->getManager();
+
+        foreach ($params->retenciones as $key => $retencion) {
+            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
+               $retencion->propietario->id
+            );
+
+            if ($propietario) {
+                $propietario->setFechaFinal(new \DateTime(date('Y-m-d')));
+                $propietario->setActivo(false);
+
+                $em->flush();
+            }
+        }
+
+        foreach ($params->propietarios as $key => $propietario) {
+            $propietarioNew = new VhloPropietario();
+
+            if ($propietario->tipo == 'EMPRESA') {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                    array(
+                        'id' => $propietario->id,
+                        'activo' => true,
+                    )
+                );
+
+                $propietarioNew->setEmpresa($empresa);
+            }elseif ($propietario->tipo == 'CIUDADANO') {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                    array(
+                        'id' => $propietario->id,
+                        'activo' => true,
+                    )
+                );
+
+                $propietarioNew->setCiudadano($ciudadano);
+            }
+
+            if ($propietario->tipoPropiedad == 1) {
+                $propietarioNew->setLeasing(true);
+            }else{
+                $propietarioNew->setLeasing(false);
+            }
+
+            $propietarioNew->setFechaInicial(new \DateTime(date('Y-m-d')));
+            $propietarioNew->setVehiculo($propietario->getVehiculo());
+            $propietarioNew->setPermiso($params->permiso);
+            $propietarioNew->setActivo(true);
+
+            $em->persist($propietarioNew);
+            $em->flush();
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Propietario actualizado con exito.',
+                'data' => $propietarioNew
+            );
+        }
+        
         return $helpers->json($response);
     }
 
@@ -781,10 +852,19 @@ class FroTrteSolicitudController extends Controller
                 }
             }
 
-            
-            return true;
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro actualizado con éxito.", 
+            );
         } else {
-            return false;
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Ciudadano no encontrado.", 
+            );
         }
        
 

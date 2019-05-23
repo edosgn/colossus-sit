@@ -21,7 +21,6 @@ class CfgEntidadJudicial
      */
     private $id;
 
-
      /**
      * @var string
      *
@@ -48,7 +47,6 @@ class CfgEntidadJudicial
      */
     private $activo;
 
-    
 
     /**
      * Get id
@@ -106,30 +104,6 @@ class CfgEntidadJudicial
     public function getCodigo()
     {
         return $this->codigo;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param boolean $estado
-     *
-     * @return CfgEntidadJudicial
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return boolean
-     */
-    public function getEstado()
-    {
-        return $this->estado;
     }
 
     /**
