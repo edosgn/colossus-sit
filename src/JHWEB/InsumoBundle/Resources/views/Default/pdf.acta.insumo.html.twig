@@ -1,134 +1,130 @@
-
- <html>
-  <header>
-    <meta charset="utf-8">
-  </header>
-  <body>
-
- 
-
-{% if tipoActa == 'subTotales' %}
- <h3>Sede: {{organismoTransito.nombre}}</h3> 
-  <h3>Divipo: {{organismoTransito.divipo}}</h3> 
-
-  <br>
-
-    {% if tiposArray %}
-        <h3>Totales</h3>
-        <table border="1">
-            <tr>
-                <td>Tipo de licencia</td>
-                <td>Disponilbes</td>
-                <td>Anulados</td>
-                <td>Valor unitario</td>
-                <td>Asignados</td>
-                <td>SubTotal</td>
-            </tr>
-            {% for tipo in tiposArray %}
-                <tr>
-                    <td>{{ tipo.nombre }}</td>
-                    <td>{{ tipo.disponilbes }}</td>
-                    <td>{{ tipo.anulados }}</td>
-                    <td>{{ tipo.valorInsumo }}</td>
-                    <td>{{ tipo.asignados }}</td>
-                    <td>{{ tipo.subTotal }}</td>
-                </tr>
-            {% endfor %}
-            <tr>
-                <td colspan="4">Total</td>
-                <td>{{total}}</td>
-                <td>{{totalValor}}</td>
-            </tr>
-        </table>
-    {% endif %}  
-
-    {% if ifDisponibles %}
-        <h3>Disponibles</h3>
-        <table border="1">
-            <tr>
-                <td>Nombre</td>
-                <td>Estado</td> 
-                <td>Numero final</td>
-                <td>Fecha</td>
-            </tr>
-            {% for disponible in disponibles %}
-                <tr>
-                    <td>{{ disponible.tipo.nombre }}</td>
-                    <td>{{ disponible.estado}}</td>
-                    <td>{{ disponible.numero}}</td>
-                    <td>{{ disponible.fecha }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}   
-
-    {% if ifAsignado %}
-        <h3>Asignados</h3>
-        <table border="1">
-            <tr>
-                <td>Nombre</td>
-                <td>Estado</td> 
-                <td>Numero final</td>
-                <td>Fecha</td>
-            </tr>
-            {% for asignado in asignados %}
-                <tr>
-                    <td>{{ asignado.tipo.nombre }}</td>
-                    <td>{{ asignado.estado}}</td>
-                    <td>{{ asignado.numero}}</td>
-                    <td>{{ asignado.fecha }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}    
-
-    {% if ifAnulados %}
-        <h3>Anulados</h3>
-        <table border="1">
-            <tr>
-                <td>Nombre</td>
-                <td>Estado</td> 
-                <td>Numero final</td>
-                <td>Fecha</td>
-            </tr>
-            {% for anulado in anulados %}
-                <tr>
-                    <td>{{ anulado.tipo.nombre }}</td>
-                    <td>{{ anulado.estado}}</td>
-                    <td>{{ anulado.numero}}</td>
-                    <td>{{ anulado.fecha }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}    
-{% endif %} 
-{% if tipoActa == 'totales' %}
-<h3>Ornagismos transito</h3>
-        <table border="1">
-            <tr>
-                <td>Nombre</td>
-                <td>Cantidad Asignados</td> 
-                <td>Valor</td> 
-            </tr>
-            {% for totalOrganismo in totalOrganismos %}
-                {% if totalOrganismo.sustratosCantidad != 0 %}
+<html>
+    <header>
+        <meta charset="utf-8">
+    </header>
+    <body>
+        {% if tipoActa == 'subTotales' %}
+         <h3>Sede: {{organismoTransito.nombre}}</h3> 
+          <h3>Divipo: {{organismoTransito.divipo}}</h3> 
+        
+          <br>
+        
+            {% if tiposArray %}
+                <h3>Totales</h3>
+                <table border="1">
                     <tr>
-                        <td>{{ totalOrganismo.nombreOrganismo }}</td>
-                        <td>{{ totalOrganismo.sustratosCantidad}}</td>
-                        <td>{{ totalOrganismo.valorSerde}}</td>
+                        <td>Tipo de licencia</td>
+                        <td>Disponilbes</td>
+                        <td>Anulados</td>
+                        <td>Valor unitario</td>
+                        <td>Asignados</td>
+                        <td>SubTotal</td>
                     </tr>
-                {% endif %} 
-            {% endfor %}
-            <tr>
-                <td colspan="1">Total</td>
-                <td>{{totalSede}}</td>
-                <td>{{valorTotalSede}}</td>
-            </tr>    
-            <tr>
-                <td colspan="2">Total consignar</td>
-                <td>{{totalConsignar}}</td>
-            </tr>    
-        </table>
-{% endif %} 
-  </body> 
+                    {% for tipo in tiposArray %}
+                        <tr>
+                            <td>{{ tipo.nombre }}</td>
+                            <td>{{ tipo.disponilbes }}</td>
+                            <td>{{ tipo.anulados }}</td>
+                            <td>{{ tipo.valorInsumo }}</td>
+                            <td>{{ tipo.asignados }}</td>
+                            <td>{{ tipo.subTotal }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4">Total</td>
+                        <td>{{total}}</td>
+                        <td>{{totalValor}}</td>
+                    </tr>
+                </table>
+            {% endif %}  
+        
+            {% if ifDisponibles  and disponibles %}
+                <h3>Disponibles</h3>
+                <table border="1">
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Estado</td> 
+                        <td>Numero final</td>
+                        <td>Fecha</td>
+                    </tr>
+                    {% for disponible in disponibles %}
+                        <tr>
+                            <td>{{ disponible.tipo.nombre }}</td>
+                            <td>{{ disponible.estado}}</td>
+                            <td>{{ disponible.numero}}</td>
+                            <td>{{ disponible.fecha | date('d/m/Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}   
+        
+            {% if ifAsignado and asignados%}
+                <h3>Asignados</h3>
+                <table border="1">
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Estado</td> 
+                        <td>Numero final</td>
+                        <td>Fecha</td>
+                    </tr>
+                    {% for asignado in asignados %}
+                        <tr>
+                            <td>{{ asignado.tipo.nombre }}</td>
+                            <td>{{ asignado.estado}}</td>
+                            <td>{{ asignado.numero}}</td>
+                            <td>{{ asignado.fecha | date('Y-m-d') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}    
+        
+            {% if ifAnulados and anulados%}
+                <h3>Anulados</h3>
+                <table border="1">
+                    <tr>
+                        <td>Nombre</td>
+                        <td>Estado</td> 
+                        <td>Numero final</td>
+                        <td>Fecha</td>
+                    </tr>
+                    {% for anulado in anulados %}
+                        <tr>
+                            <td>{{ anulado.tipo.nombre }}</td>
+                            <td>{{ anulado.estado}}</td>
+                            <td>{{ anulado.numero}}</td>
+                            <td>{{ anulado.fecha | date('Y-m-d') }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}    
+        {% endif %} 
+        {% if tipoActa == 'totales' %}
+        <h3>Organismos transito</h3>
+            <table border="1">
+                <tr>
+                    <td>Nombre</td>
+                    <td>Cantidad Asignados</td> 
+                    <td>Valor</td> 
+                </tr>
+                {% for totalOrganismo in totalOrganismos %}
+                    {% if totalOrganismo.sustratosCantidad != 0 %}
+                        <tr>
+                            <td>{{ totalOrganismo.nombreOrganismo }}</td>
+                            <td>{{ totalOrganismo.sustratosCantidad }}</td>
+                            <td>{{ totalOrganismo.valorSerde }}</td>
+                        </tr>
+                    {% endif %} 
+                {% endfor %}
+                <tr>
+                    <td colspan="1">Total</td>
+                    <td>{{totalSede }}</td>
+                    <td>{{valorTotalSede }}</td>
+                </tr>    
+                <tr>
+                    <td colspan="2">Total consignar</td>
+                    <td>{{ totalConsignar }}</td>
+                </tr>    
+            </table>
+        {% endif %} 
+    </body>
 </html>

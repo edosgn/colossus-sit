@@ -99,22 +99,25 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
                 return $consulta->getResult();
     }
 
-    public function getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito)
+    public function getInsumoRango($fechaInicio, $fechaFin, $idOrganismoTransito)
     {
         $em = $this->getEntityManager();
-        $dql ="SELECT i
+        
+        $dql = "SELECT i
         FROM JHWEBInsumoBundle:ImoInsumo i, 
-        JHWEBConfigBundle:CfgOrganismoTransito ot
-        WHERE i.fecha BETWEEN :fechaInicioDatetime AND :fechaFinDatetime
-        AND i.organismoTransito = :organismoTransito
-        AND i.categoria = 'SUSTRATO'
-        "; 
+        JHWEBConfigBundle:CfgOrganismoTransito ot,
+        JHWEBInsumoBundle:ImoCfgTipo ict
+        WHERE i.fecha BETWEEN :fechaInicio AND :fechaFin
+        AND i.organismoTransito = ot.id
+        AND i.tipo = ict.id
+        AND i.organismoTransito = :idOrganismoTransito
+        AND ict.categoria = 'SUSTRATO'"; 
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(
-            'organismoTransito' => $organismoTransito,
-            'fechaInicioDatetime' => $fechaInicioDatetime,
-            'fechaFinDatetime' => $fechaFinDatetime,
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
         ));
         return $consulta->getResult();
     }

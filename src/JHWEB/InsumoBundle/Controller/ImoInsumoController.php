@@ -495,20 +495,19 @@ class ImoInsumoController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        $json = $request->get("data",null);
+        $params = json_decode($json);
+        
+      
         if ($authCheck== true) {
             $em = $this->getDoctrine()->getManager();
             
             $sustratos = [];
-            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findAll();
+            $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findByLote($params);
 
             foreach ($insumos as $key => $insumo) {
-                switch ($insumo->getTipo()->getCategoria()) {
-                    case 'SUSTRATO':
-                        $sustratos = array(
-                            $insumo
-                        );
-                        break;
+                if($insumo->getTipo()->getCategoria() == 'SUSTRATO')  {
+                    $sustratos[] = $insumo;
                 }
             }
 
@@ -555,12 +554,18 @@ class ImoInsumoController extends Controller
         $json = $request->get("data",null);
         $params = json_decode($json);
 
-        
-        $fechaInicioDatetime = new \Datetime($params->fechaInicio);
-        $fechaFinDatetime = new \Datetime($params->fechaFin);
-        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->organismoTransito);
+        $fechaInicio = new \Datetime($params->fechaInicio);
+        $fechaFin = new \Datetime($params->fechaFin);
+         
+        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+            $params->idOrganismoTransito
+        );
 
-        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango($fechaInicioDatetime,$fechaFinDatetime,$organismoTransito->getId());
+        $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango(
+            $fechaInicio,
+            $fechaFin,
+            $organismoTransito->getId()
+        );
 
         $disponibles = [];
         $anulados = [];
@@ -569,20 +574,20 @@ class ImoInsumoController extends Controller
         foreach ($insumos as $key => $insumo) {
             switch ($insumo->getEstado()) {
                 case 'DISPONIBLE':
-                    $disponibles[]=$insumo;
+                    $disponibles[] = $insumo;
                     break;
                 case 'ANULADO':
-                    $anulados[]=$insumo;
+                    $anulados[] = $insumo;
                     break;
                 case 'ASIGNADO':
-                    $asignados[]=$insumo;
+                    $asignados[] = $insumo;
                     break;
             }
         }
 
         $tipos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
             array(
-                'tipo'=>'SUSTRATO'
+                'categoria'=>'SUSTRATO'
             )
         );
         
@@ -615,7 +620,7 @@ class ImoInsumoController extends Controller
             }
 
             $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
-                array('imoCfgTipo'=>$tipo->getId(), 'activo'=>true) 
+                array('tipo'=>$tipo->getId(), 'activo'=>true) 
             );
 
             if ($valorTipo) {
@@ -646,11 +651,12 @@ class ImoInsumoController extends Controller
         }
 
         $totalSede = 0;
-        $valorSerde = 0;
+        $valorSede = 0;
         $valorTotalSede = 0;
         
-        $OrganismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findByActivo(true);
-        foreach ($OrganismosTransito as $key => $organismoTransitoTotal) {
+        $organismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findByActivo(true);
+
+        foreach ($organismosTransito as $key => $organismoTransitoTotal) {
             $insumosOrganismos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
                 array(
                    'organismoTransito' =>  $organismoTransitoTotal->getId(),
@@ -662,7 +668,7 @@ class ImoInsumoController extends Controller
 
             foreach ($insumosOrganismos as $key => $insumoOrganismo) {
                 $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
-                    array('imoCfgTipo'=>$insumoOrganismo->getTipo()->getId(), 'activo'=>true) 
+                    array('tipo'=>$insumoOrganismo->getTipo()->getId(), 'activo'=>true) 
                 );
     
                 if ($valorTipo) {
@@ -670,18 +676,18 @@ class ImoInsumoController extends Controller
                 }else {
                     $valorInsumo = 0;
                 }
-                $valorSerde = $valorSerde + $valorInsumo;
+                $valorSede = $valorSede + $valorInsumo;
             }
 
-            $valorTotalSede =  $valorTotalSede +$valorSerde;
+            $valorTotalSede =  $valorTotalSede +$valorSede;
 
             $totalOrganismos[] = array(
                 'nombreOrganismo' => $organismoTransitoTotal->getNombre(),
                 'sustratosCantidad' => COUNT($insumosOrganismos),
-                'valorSerde' => $valorSerde, 
+                'valorSede' => $valorSede, 
 
             );
-            $valorSerde=0;
+            $valorSede=0;
         }
         $totalConsignar = $valorTotalSede * $totalSede;
 
@@ -702,9 +708,9 @@ class ImoInsumoController extends Controller
             'valorTotalSede' => $valorTotalSede, 
             'totalConsignar' => $totalConsignar, 
         )); 
-              
+
         return new Response(
-            $this->get('app.pdf')->templatePreview($html, $organismoTransito),
+            $this->get('app.pdf')->templatePreview($html, 'Acta '.$organismoTransito->getNombre()),
             200,
             array(
                 'Content-Type'        => 'application/pdf',
