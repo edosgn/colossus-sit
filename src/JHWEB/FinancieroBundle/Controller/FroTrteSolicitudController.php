@@ -666,7 +666,7 @@ class FroTrteSolicitudController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $acreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->find(
-            $params->id
+            $params->idAcreedor
         );
 
         $acreedor->getVehiculo()->setPignorado(false);
@@ -928,7 +928,7 @@ class FroTrteSolicitudController extends Controller
      * @Route("/{idVehiculo}/pdf/certificadotradicion", name="frotrtesolicitud_pdf_certificadotradicion")
      * @Method({"GET", "POST"})
      */
-    public function pdfCertificadoTradicionAction(Request $request, $idVehiculo, $tipo)
+    public function pdfCertificadoTradicionAction(Request $request, $idVehiculo)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
@@ -954,6 +954,7 @@ class FroTrteSolicitudController extends Controller
                 $vehiculo->getId()
             );
 
+            $observaciones = null;
             foreach ($tramitesSolicitud as $key => $tramiteSolicitud) {
                 if ($tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getId() == 30) {
                     $foraneas = (object)$tramiteSolicitud->getForaneas();

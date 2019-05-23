@@ -21,8 +21,6 @@ class FroFacRetefuente
      */
     private $id;
 
-
-    
     /**
      * @var \DateTime
      *

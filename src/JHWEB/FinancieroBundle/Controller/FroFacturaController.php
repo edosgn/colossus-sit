@@ -555,8 +555,8 @@ class FroFacturaController extends Controller
                         $params->factura->idVehiculo
                     );
                
-
                     $retefuente->setVehiculo($vehiculo);
+
                     $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find( 
                         $idPropietarioRetefuente
                     );
@@ -578,30 +578,11 @@ class FroFacturaController extends Controller
 
 
                     $em->persist($retefuente);
+
                     $em->flush();
                 }
             }
         }
-
-
-        /*foreach ($params->tramitesValor as $key => $tramiteValor) {
-                
-            $tramiteFactura = new TramiteFactura();
-
-            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
-                $tramiteValor->idTramitePrecio
-            );
-
-            
-
-            $tramiteFactura->setFactura($factura);
-            $tramiteFactura->setTramitePrecio($tramitePrecio);
-            $tramiteFactura->setEstado(true);
-            $tramiteFactura->setRealizado(false);
-            $tramiteFactura->setCantidad(1);
-            $em->persist($tramiteFactura);
-            $em->flush();
-        }*/
 
         return true;
     }

@@ -73,6 +73,9 @@ class CvAudiencia
     /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audiencias") */
     private $comparendo;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo", inversedBy="trazabilidades") */
+    private $actoAdministrativo;
+
 
     /**
      * Get id
@@ -256,5 +259,77 @@ class CvAudiencia
     public function getComparendo()
     {
         return $this->comparendo;
+    }
+
+    /**
+     * Set acta
+     *
+     * @param string $acta
+     *
+     * @return CvAudiencia
+     */
+    public function setActa($acta)
+    {
+        $this->acta = $acta;
+
+        return $this;
+    }
+
+    /**
+     * Get acta
+     *
+     * @return string
+     */
+    public function getActa()
+    {
+        return $this->acta;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return CvAudiencia
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set actoAdministrativo
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo
+     *
+     * @return CvAudiencia
+     */
+    public function setActoAdministrativo(\JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo = null)
+    {
+        $this->actoAdministrativo = $actoAdministrativo;
+
+        return $this;
+    }
+
+    /**
+     * Get actoAdministrativo
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo
+     */
+    public function getActoAdministrativo()
+    {
+        return $this->actoAdministrativo;
     }
 }

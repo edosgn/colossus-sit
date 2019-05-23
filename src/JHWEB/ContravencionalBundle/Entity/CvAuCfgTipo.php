@@ -35,6 +35,9 @@ class CvAuCfgTipo
      */
     private $activo;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="actosAdministrativos") */
+    private $formato;
+
 
     /**
      * Get id
@@ -93,5 +96,28 @@ class CvAuCfgTipo
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set formato
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato
+     *
+     * @return CvAuCfgTipo
+     */
+    public function setFormato(\JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato = null)
+    {
+        $this->formato = $formato;
+
+        return $this;
+    }
+
+    /**
+     * Get formato
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgAdmFormato
+     */
+    public function getFormato()
+    {
+        return $this->formato;
+    }
+}

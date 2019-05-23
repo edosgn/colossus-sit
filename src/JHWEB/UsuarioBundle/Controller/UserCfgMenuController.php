@@ -204,13 +204,40 @@ class UserCfgMenuController extends Controller
                 $menu->setPath($params->path);
 
                 if (isset($params->idParent) && $params->idParent) {
-                $parentMenu = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->find(
-                    $params->idParent
-                );
-                $menu->setParent($parentMenu);
+                    $parentMenu = $em->getRepository('JHWEBUsuarioBundle:UserCfgMenu')->find(
+                        $params->idParent
+                    );
+                    $menu->setParent($parentMenu);
 
-                if ($parentMenu->getTipo() == 'PRIMER_NIVEL') {
-                    $menu->setTipo('SEGUNDO_NIVEL');
+                    if ($parentMenu->getTipo() == 'PRIMER_NIVEL') {
+                        $menu->setTipo('SEGUNDO_NIVEL');
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro creado con éxito",
+                        );
+
+                        $em->persist($menu);
+                        $em->flush();
+                    }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
+                        $menu->setTipo('TERCER_NIVEL');
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro creado con éxito",
+                        );
+
+                        $em->persist($menu);
+                        $em->flush();
+                    }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "Debe seleccionar maximo un padre de segundo nivel",
+                        );
+                    }
+                }else{
+                    $menu->setTipo('PRIMER_NIVEL');
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
@@ -219,34 +246,7 @@ class UserCfgMenuController extends Controller
 
                     $em->persist($menu);
                     $em->flush();
-                }elseif ($parentMenu->getTipo() == 'SEGUNDO_NIVEL') {
-                    $menu->setTipo('TERCER_NIVEL');
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Registro creado con éxito",
-                    );
-
-                    $em->persist($menu);
-                    $em->flush();
-                }elseif ($parentMenu->getTipo() == 'TERCER_NIVEL') {
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "Debe seleccionar maximo un padre de segundo nivel",
-                    );
                 }
-            }else{
-                $menu->setTipo('PRIMER_NIVEL');
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con éxito",
-                );
-
-                $em->persist($menu);
-                $em->flush();
-            }
             }else{
                 $response = array(
                     'status' => 'error',
@@ -268,21 +268,53 @@ class UserCfgMenuController extends Controller
     /**
      * Deletes a userCfgMenu entity.
      *
-     * @Route("/{id}/delete", name="usercfgmenu_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="usercfgmenu_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, UserCfgMenu $userCfgMenu)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($userCfgMenu);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($userCfgMenu);
-            $em->flush();
+            $menu = $em->getRepository("JHWEBUsuarioBundle:UserCfgMenu")->find(
+                $params->id
+            );
+
+            if ($menu) {
+                $menu->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito.",
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra registrado en la base de datos.",
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
-        return $this->redirectToRoute('usercfgmenu_index');
+        return $helpers->json($response);
     }
 
     /**
