@@ -421,6 +421,13 @@ class SvRegistroIpatController extends Controller
             $ipat->setActivo(true);
             $em->persist($ipat);
             $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 4200,
+                'message' => "Registro creado con éxito.",
+                'data' => $ipat
+            );
         } else {
             $response = array(
                 'status' => 'error',
