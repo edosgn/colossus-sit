@@ -254,7 +254,6 @@ class ImoInsumoController extends Controller
             $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find($id);
 
             $insumo->setEstado('ANULADO');
-            $em = $this->getDoctrine()->getManager();
             $em->persist($insumo);
             $em->flush();
             $response = array(
@@ -560,6 +559,11 @@ class ImoInsumoController extends Controller
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
             $params->idOrganismoTransito 
         );
+
+        
+
+        // var_dump($loteArray);
+        // die();
  
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango(
             $fechaInicio,
@@ -585,6 +589,59 @@ class ImoInsumoController extends Controller
             }
         }
 
+        $lotesOrganismo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBySedeOperativa(
+            $params->idOrganismoTransito 
+        );
+
+        $loteArray=[];
+        $disponiblesLote=[];
+        $anuladosLote=[];
+        $asignadosLote=[];
+
+        $disponiblesLoteTotal=0;
+        $anuladosLoteTotal=0;
+        $asignadosLoteTotal=0;
+        
+        foreach ($lotesOrganismo as $key => $loteOrganismo) {
+            foreach ($insumos as $key => $insumo) {
+                switch ($insumo->getEstado()) {
+                    case 'DISPONIBLE':
+                        if($loteOrganismo->getId() == $insumo->getLote()->getId()){
+                            $disponiblesLote[] = $insumo;
+                        }
+                        break;
+                    case 'ANULADO':
+                        if($loteOrganismo->getId() == $insumo->getLote()->getId()){
+                            $anuladosLote[] = $insumo;
+                        }
+                        break;
+                    case 'ASIGNADO':
+                        if($loteOrganismo->getId() == $insumo->getLote()->getId()){
+                            $asignadosLote[] = $insumo;
+                        }
+                        break;
+                }
+            }
+            $disponiblesLoteTotal=$disponiblesLoteTotal + COUNT($disponiblesLote);
+            $anuladosLoteTotal=$anuladosLoteTotal + COUNT($anuladosLote);
+            $asignadosLoteTotal=$asignadosLoteTotal + COUNT($asignadosLote);
+
+            if($loteOrganismo->getTipo() == 'SUSTRATO'){
+                $loteArray[] = array(
+                    'id'=>$loteOrganismo->getRangoInicio(),
+                    'rangoInicio'=>$loteOrganismo->getRangoInicio(),
+                    'rangoFIn'=>$loteOrganismo->getRangoFIn(),
+                    'disponiblesLote'=>COUNT($disponiblesLote),
+                    'anuladosLote'=>COUNT($anuladosLote),
+                    'asignadosLote'=>COUNT($asignadosLote),
+                );
+            }
+            $disponiblesLote=[];
+            $anuladosLote=[];
+            $asignadosLote=[];
+
+        }
+
         $tipos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
             array(
                 'categoria'=>'SUSTRATO'
@@ -606,10 +663,6 @@ class ImoInsumoController extends Controller
                     $disponiblesTipo[] = $disponible;
                 }
             }
-
-            // var_dump($tipo->getId());
-            
-
 
             foreach ($anulados as $key => $anulado) {
                 if ($tipo->getId() == $anulado->getTipo()->getId()) {
@@ -649,12 +702,7 @@ class ImoInsumoController extends Controller
                 'subTotal' => $subTotal,
             );
 
-            /*$disponiblesTipo = array();
-            $anuladosTipo = array();
-            $asignadosTipo = array();*/
         }
-
-        // die();
 
 
         $totalSede = 0;
@@ -700,6 +748,7 @@ class ImoInsumoController extends Controller
         $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.insumo.html.twig', array(
             'organismoTransito' => $organismoTransito, 
             'tiposArray' => $tiposArray, 
+            'loteArray' => $loteArray, 
             'disponibles' => $disponibles,
             'total' => $total,
             'anulados' => $anulados,
@@ -713,6 +762,9 @@ class ImoInsumoController extends Controller
             'totalSede' => $totalSede, 
             'valorTotalSede' => $valorTotalSede, 
             'totalConsignar' => $totalConsignar, 
+            'disponiblesLoteTotal'=>$disponiblesLoteTotal,
+            'anuladosLoteTotal'=>$anuladosLoteTotal,
+            'asignadosLoteTotal'=>$asignadosLoteTotal,
         )); 
 
         return new Response(

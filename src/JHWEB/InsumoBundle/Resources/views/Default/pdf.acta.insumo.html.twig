@@ -8,6 +8,36 @@
           <h3>Divipo: {{organismoTransito.divipo}}</h3> 
         
           <br>
+
+            {% if loteArray %}
+                <h3>Lotes</h3>
+                <table border="1">
+                    <tr>
+                        <td>ID</td>
+                        <td>Rango inicio</td>
+                        <td>Rango fin</td>
+                        <td>Asignados</td>
+                        <td>Anulados</td>
+                        <td>Disponibles</td>
+                    </tr>
+                    {% for lote in loteArray %}
+                        <tr>
+                            <td>{{ lote.id }}</td>
+                            <td>{{ lote.rangoInicio }}</td>
+                            <td>{{ lote.rangoFIn }}</td>
+                            <td>{{ lote.asignadosLote }}</td>
+                            <td>{{ lote.anuladosLote }}</td>
+                            <td>{{ lote.disponiblesLote }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="3">Total</td>
+                        <td>{{asignadosLoteTotal}}</td>
+                        <td>{{anuladosLoteTotal}}</td>
+                        <td>{{disponiblesLoteTotal}}</td>
+                    </tr>
+                </table>
+            {% endif %}     
         
             {% if tiposArray %}
                 <h3>Totales</h3>
@@ -83,13 +113,17 @@
                 <table border="1">
                     <tr>
                         <td>Nombre</td>
+                        <td>Rango inicio</td>
+                        <td>Rango fin</td>
                         <td>Estado</td> 
-                        <td>Numero final</td>
+                        <td>Numero</td>
                         <td>Fecha</td>
                     </tr>
                     {% for anulado in anulados %}
                         <tr>
                             <td>{{ anulado.tipo.nombre }}</td>
+                            <td>{{ anulado.lote.rangoInicio }}</td>
+                            <td>{{ anulado.lote.rangoFin }}</td>
                             <td>{{ anulado.estado}}</td>
                             <td>{{ anulado.numero}}</td>
                             <td>{{ anulado.fecha | date('Y-m-d') }}</td>

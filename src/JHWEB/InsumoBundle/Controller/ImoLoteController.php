@@ -392,6 +392,8 @@ class ImoLoteController extends Controller
         
         $sustratosActa = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findByNumeroActaEntrega($numeroActa);
 
+        
+
         $insumosActa = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getByNumeroActa(
             $numeroActa
         );
