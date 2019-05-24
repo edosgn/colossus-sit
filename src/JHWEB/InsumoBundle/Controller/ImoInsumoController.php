@@ -558,9 +558,9 @@ class ImoInsumoController extends Controller
         $fechaFin = new \Datetime($params->fechaFin);
          
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-            $params->idOrganismoTransito
+            $params->idOrganismoTransito 
         );
-
+ 
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango(
             $fechaInicio,
             $fechaFin,
@@ -607,6 +607,10 @@ class ImoInsumoController extends Controller
                 }
             }
 
+            // var_dump($tipo->getId());
+            
+
+
             foreach ($anulados as $key => $anulado) {
                 if ($tipo->getId() == $anulado->getTipo()->getId()) {
                     $anuladosTipo[] = $anulado;
@@ -618,7 +622,7 @@ class ImoInsumoController extends Controller
                     $asignadosTipo[] = $asignado;
                 }
             }
-
+       
             $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
                 array('tipo'=>$tipo->getId(), 'activo'=>true) 
             );
@@ -650,6 +654,9 @@ class ImoInsumoController extends Controller
             $asignadosTipo = array();*/
         }
 
+        // die();
+
+
         $totalSede = 0;
         $valorSede = 0;
         $valorTotalSede = 0;
@@ -665,12 +672,11 @@ class ImoInsumoController extends Controller
             );
 
             $totalSede = $totalSede + COUNT($insumosOrganismos);
-
             foreach ($insumosOrganismos as $key => $insumoOrganismo) {
                 $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
                     array('tipo'=>$insumoOrganismo->getTipo()->getId(), 'activo'=>true) 
                 );
-    
+                
                 if ($valorTipo) {
                    $valorInsumo = $valorTipo->getValor();
                 }else {

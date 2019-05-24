@@ -17,7 +17,7 @@
                         <td>Disponilbes</td>
                         <td>Anulados</td>
                         <td>Valor unitario</td>
-                        <td>Asignados</td>
+                        <td>Utilizado</td>
                         <td>SubTotal</td>
                     </tr>
                     {% for tipo in tiposArray %}
@@ -105,13 +105,13 @@
                     <td>Nombre</td>
                     <td>Cantidad Asignados</td> 
                     <td>Valor</td> 
-                </tr>
+                </tr> 
                 {% for totalOrganismo in totalOrganismos %}
                     {% if totalOrganismo.sustratosCantidad != 0 %}
                         <tr>
                             <td>{{ totalOrganismo.nombreOrganismo }}</td>
                             <td>{{ totalOrganismo.sustratosCantidad }}</td>
-                            <td>{{ totalOrganismo.valorSerde }}</td>
+                            <td>{{ totalOrganismo.valorSede }}</td>
                         </tr>
                     {% endif %} 
                 {% endfor %}
