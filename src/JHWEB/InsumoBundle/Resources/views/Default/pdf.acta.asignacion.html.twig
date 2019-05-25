@@ -9,7 +9,7 @@
         <br>      
     </h3>
 
-    <table >
+    <table>
         <tr>
             <td width="25%"><b>Divipo:</b> {{organismoTransito.divipo}}</td>
             <td width="75%"><b>Sede:</b> {{organismoTransito.nombre}}</td> 
@@ -22,7 +22,7 @@
     
     <h4>Sustratos</h4>
 
-    <table border="1">
+    <table border="1" cellpading="5">
         <tr>
             <td width="40%" >Nombre insumo</td>
             <td width="15%">Rango inicial</td> 
@@ -36,7 +36,7 @@
                 <td>{{ sustratoActa.rangoInicio}}</td>
                 <td>{{ sustratoActa.rangoFin}}</td>
                 <td>{{ sustratoActa.cantidad }}</td>
-                <td>{{ sustratoActa.numeroActaEntrega }}</td>
+                <td>{{ sustratoActa.referencia }}</td>
             </tr>
         {% endfor %}
     </table>
@@ -45,7 +45,7 @@
 
 {% if insumosActa %}
     <h4>Insumos</h4>
-    <table border="1">
+    <table border="1" cellpading="5">
         <tr>
             <td width="40%" >Nombre insumo</td>
             <td width="15%">Cantidad</td>
@@ -55,7 +55,7 @@
             <tr>
                 <td>{{ insumoActa.tipo.nombre }}</td>
                 <td>{{ insumoActa.numero }}</td>
-                <td>{{ insumoActa.actaEntrega }}</td>
+                <td>{{ insumoActa.tipo.referencia }}</td>
             </tr>
         {% endfor %}
     </table>

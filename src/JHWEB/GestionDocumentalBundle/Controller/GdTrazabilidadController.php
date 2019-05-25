@@ -350,7 +350,8 @@ class GdTrazabilidadController extends Controller
                     $extension = $file->guessExtension();
 
                     if ($extension == 'pdf') {
-                        $filename = md5(rand().time()).".".$extension;
+                        //$filename = md5(rand().time()).".".$extension;
+                        $filename = 'respuesta_'.$trazabilidad->getDocumento()->getNumeroRadicado().".".$extension;
                         $dir=__DIR__.'/../../../../web/docs';
 
                         $file->move($dir,$filename);

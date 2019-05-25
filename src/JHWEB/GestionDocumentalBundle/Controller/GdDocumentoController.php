@@ -452,7 +452,8 @@ class GdDocumentoController extends Controller
                
                 if ($file) {
                     $extension = $file->guessExtension();
-                    $filename = md5(rand().time()).".".$extension;
+                    //$filename = md5(rand().time()).".".$extension;
+                    $filename = 'radicado_'.$documento->getNumeroRadicado().".".$extension;
                     $dir=__DIR__.'/../../../../web/docs';
 
                     $file->move($dir,$filename);
