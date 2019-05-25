@@ -997,7 +997,7 @@ class SvIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $ipat = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneByConsecutivo($params->id);
+            $ipat = $em->getRepository('JHWEBSeguridadVialBundle:SvIpat')->findOneByConsecutivo($params->id);
 
             if ($ipat) {
                 $response = array(
