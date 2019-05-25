@@ -5,12 +5,12 @@ namespace JHWEB\SeguridadVialBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * SvRegistroIpat
+ * SvIpat
  *
- * @ORM\Table(name="sv_registro_ipat")
- * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvRegistroIpatRepository")
+ * @ORM\Table(name="sv_ipat")
+ * @ORM\Entity(repositoryClass="JHWEB\SeguridadVialBundle\Repository\SvIpatRepository")
  */
-class SvRegistroIpat
+class SvIpat
 {
     /**
      * @var int
@@ -230,11 +230,11 @@ class SvRegistroIpat
     private $otraVisualDisminuida;
 
     /**
-     * @var string
+     * @var bool
      *
-     * @ORM\Column(name="semaforo", type="string", nullable = true)
+     * @ORM\Column(name="hay_semaforo", type="boolean")
      */
-    private $semaforo;
+    private $haySemaforo;
 
     /**
      * @var string
@@ -319,20 +319,20 @@ class SvRegistroIpat
      * @ORM\Column(name="identificacion_propietario", type="integer", nullable = true)
      */
     private $identificacionPropietario;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="victima", type="boolean", nullable = true)
-     */
-    private $hayVictima;
-
+    
     /**
      * @var string
      *
      * @ORM\Column(name="observaciones", type="string", nullable = true)
      */
     private $observaciones;
+   
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="hay_testigo", type="boolean", nullable = true)
+     */
+    private $hayTestigo;
     
     /**
      * @var string
@@ -548,7 +548,7 @@ class SvRegistroIpat
      *
      * @param string $lugar
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setLugar($lugar)
     {
@@ -572,7 +572,7 @@ class SvRegistroIpat
      *
      * @param \DateTime $fechaAccidente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setFechaAccidente($fechaAccidente)
     {
@@ -596,7 +596,7 @@ class SvRegistroIpat
      *
      * @param string $diaAccidente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setDiaAccidente($diaAccidente)
     {
@@ -620,7 +620,7 @@ class SvRegistroIpat
      *
      * @param \DateTime $horaAccidente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setHoraAccidente($horaAccidente)
     {
@@ -644,7 +644,7 @@ class SvRegistroIpat
      *
      * @param \DateTime $fechaLevantamiento
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setFechaLevantamiento($fechaLevantamiento)
     {
@@ -668,7 +668,7 @@ class SvRegistroIpat
      *
      * @param \DateTime $horaLevantamiento
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setHoraLevantamiento($horaLevantamiento)
     {
@@ -692,7 +692,7 @@ class SvRegistroIpat
      *
      * @param string $otroClaseAccidente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setOtroClaseAccidente($otroClaseAccidente)
     {
@@ -716,7 +716,7 @@ class SvRegistroIpat
      *
      * @param string $otroObjetoFijo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setOtroObjetoFijo($otroObjetoFijo)
     {
@@ -740,7 +740,7 @@ class SvRegistroIpat
      *
      * @param array $estadoTiempo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setEstadoTiempo($estadoTiempo)
     {
@@ -764,7 +764,7 @@ class SvRegistroIpat
      *
      * @param string $otraVisualDisminuida
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setOtraVisualDisminuida($otraVisualDisminuida)
     {
@@ -784,27 +784,27 @@ class SvRegistroIpat
     }
 
     /**
-     * Set semaforo
+     * Set haySemaforo
      *
-     * @param string $semaforo
+     * @param boolean $haySemaforo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
-    public function setSemaforo($semaforo)
+    public function setHaySemaforo($haySemaforo)
     {
-        $this->semaforo = $semaforo;
+        $this->haySemaforo = $haySemaforo;
 
         return $this;
     }
 
     /**
-     * Get semaforo
+     * Get haySemaforo
      *
-     * @return string
+     * @return boolean
      */
-    public function getSemaforo()
+    public function getHaySemaforo()
     {
-        return $this->semaforo;
+        return $this->haySemaforo;
     }
 
     /**
@@ -812,7 +812,7 @@ class SvRegistroIpat
      *
      * @param array $senialVertical
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setSenialVertical($senialVertical)
     {
@@ -836,7 +836,7 @@ class SvRegistroIpat
      *
      * @param array $senialHorizontal
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setSenialHorizontal($senialHorizontal)
     {
@@ -860,7 +860,7 @@ class SvRegistroIpat
      *
      * @param array $reductorVelocidad
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setReductorVelocidad($reductorVelocidad)
     {
@@ -884,7 +884,7 @@ class SvRegistroIpat
      *
      * @param string $otroReductorVelocidad
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setOtroReductorVelocidad($otroReductorVelocidad)
     {
@@ -908,7 +908,7 @@ class SvRegistroIpat
      *
      * @param string $otroDelineadorPiso
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setOtroDelineadorPiso($otroDelineadorPiso)
     {
@@ -932,7 +932,7 @@ class SvRegistroIpat
      *
      * @param boolean $mismoConductor
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setMismoConductor($mismoConductor)
     {
@@ -956,7 +956,7 @@ class SvRegistroIpat
      *
      * @param string $nombresPropietario
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setNombresPropietario($nombresPropietario)
     {
@@ -980,7 +980,7 @@ class SvRegistroIpat
      *
      * @param string $apellidosPropietario
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setApellidosPropietario($apellidosPropietario)
     {
@@ -1004,7 +1004,7 @@ class SvRegistroIpat
      *
      * @param string $tipoIdentificacionPropietario
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTipoIdentificacionPropietario($tipoIdentificacionPropietario)
     {
@@ -1028,7 +1028,7 @@ class SvRegistroIpat
      *
      * @param integer $identificacionPropietario
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setIdentificacionPropietario($identificacionPropietario)
     {
@@ -1048,35 +1048,11 @@ class SvRegistroIpat
     }
 
     /**
-     * Set hayVictima
-     *
-     * @param boolean $hayVictima
-     *
-     * @return SvRegistroIpat
-     */
-    public function setHayVictima($hayVictima)
-    {
-        $this->hayVictima = $hayVictima;
-
-        return $this;
-    }
-
-    /**
-     * Get hayVictima
-     *
-     * @return boolean
-     */
-    public function getHayVictima()
-    {
-        return $this->hayVictima;
-    }
-
-    /**
      * Set observaciones
      *
      * @param string $observaciones
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setObservaciones($observaciones)
     {
@@ -1096,11 +1072,35 @@ class SvRegistroIpat
     }
 
     /**
+     * Set hayTestigo
+     *
+     * @param boolean $hayTestigo
+     *
+     * @return SvIpat
+     */
+    public function setHayTestigo($hayTestigo)
+    {
+        $this->hayTestigo = $hayTestigo;
+
+        return $this;
+    }
+
+    /**
+     * Get hayTestigo
+     *
+     * @return boolean
+     */
+    public function getHayTestigo()
+    {
+        return $this->hayTestigo;
+    }
+
+    /**
      * Set nombresTestigo
      *
      * @param string $nombresTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setNombresTestigo($nombresTestigo)
     {
@@ -1124,7 +1124,7 @@ class SvRegistroIpat
      *
      * @param string $apellidosTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setApellidosTestigo($apellidosTestigo)
     {
@@ -1148,7 +1148,7 @@ class SvRegistroIpat
      *
      * @param string $tipoIdentificacionTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTipoIdentificacionTestigo($tipoIdentificacionTestigo)
     {
@@ -1172,7 +1172,7 @@ class SvRegistroIpat
      *
      * @param string $identificacionTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setIdentificacionTestigo($identificacionTestigo)
     {
@@ -1196,7 +1196,7 @@ class SvRegistroIpat
      *
      * @param string $direccionResidenciaTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setDireccionResidenciaTestigo($direccionResidenciaTestigo)
     {
@@ -1220,7 +1220,7 @@ class SvRegistroIpat
      *
      * @param string $ciudadResidenciaTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setCiudadResidenciaTestigo($ciudadResidenciaTestigo)
     {
@@ -1244,7 +1244,7 @@ class SvRegistroIpat
      *
      * @param string $telefonoTestigo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTelefonoTestigo($telefonoTestigo)
     {
@@ -1268,7 +1268,7 @@ class SvRegistroIpat
      *
      * @param string $gradoAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setGradoAgente($gradoAgente)
     {
@@ -1292,7 +1292,7 @@ class SvRegistroIpat
      *
      * @param string $nombresAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setNombresAgente($nombresAgente)
     {
@@ -1316,7 +1316,7 @@ class SvRegistroIpat
      *
      * @param string $apellidosAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setApellidosAgente($apellidosAgente)
     {
@@ -1340,7 +1340,7 @@ class SvRegistroIpat
      *
      * @param string $tipoIdentificacionAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTipoIdentificacionAgente($tipoIdentificacionAgente)
     {
@@ -1364,7 +1364,7 @@ class SvRegistroIpat
      *
      * @param string $identificacionAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setIdentificacionAgente($identificacionAgente)
     {
@@ -1388,7 +1388,7 @@ class SvRegistroIpat
      *
      * @param string $placaAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setPlacaAgente($placaAgente)
     {
@@ -1412,7 +1412,7 @@ class SvRegistroIpat
      *
      * @param string $entidadAgente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setEntidadAgente($entidadAgente)
     {
@@ -1436,7 +1436,7 @@ class SvRegistroIpat
      *
      * @param string $totalPeaton
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTotalPeaton($totalPeaton)
     {
@@ -1460,7 +1460,7 @@ class SvRegistroIpat
      *
      * @param string $totalAcompaniante
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTotalAcompaniante($totalAcompaniante)
     {
@@ -1484,7 +1484,7 @@ class SvRegistroIpat
      *
      * @param string $totalPasajero
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTotalPasajero($totalPasajero)
     {
@@ -1508,7 +1508,7 @@ class SvRegistroIpat
      *
      * @param string $totalConductor
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTotalConductor($totalConductor)
     {
@@ -1532,7 +1532,7 @@ class SvRegistroIpat
      *
      * @param string $totalHerido
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTotalHerido($totalHerido)
     {
@@ -1556,7 +1556,7 @@ class SvRegistroIpat
      *
      * @param string $totalMuerto
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setTotalMuerto($totalMuerto)
     {
@@ -1580,7 +1580,7 @@ class SvRegistroIpat
      *
      * @param integer $anioCorrespondio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setAnioCorrespondio($anioCorrespondio)
     {
@@ -1604,7 +1604,7 @@ class SvRegistroIpat
      *
      * @param integer $consecutivoCorrespondio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setConsecutivoCorrespondio($consecutivoCorrespondio)
     {
@@ -1628,7 +1628,7 @@ class SvRegistroIpat
      *
      * @param string $correspondio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setCorrespondio($correspondio)
     {
@@ -1652,7 +1652,7 @@ class SvRegistroIpat
      *
      * @param boolean $activo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setActivo($activo)
     {
@@ -1676,7 +1676,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setConsecutivo(\JHWEB\SeguridadVialBundle\Entity\SvIpatConsecutivo $consecutivo = null)
     {
@@ -1700,7 +1700,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadAccidente $gravedadAccidente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setGravedadAccidente(\JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadAccidente $gravedadAccidente = null)
     {
@@ -1724,7 +1724,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente $claseAccidente
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setClaseAccidente(\JHWEB\SeguridadVialBundle\Entity\SvCfgClaseAccidente $claseAccidente = null)
     {
@@ -1748,7 +1748,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgClaseChoque $claseChoque
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setClaseChoque(\JHWEB\SeguridadVialBundle\Entity\SvCfgClaseChoque $claseChoque = null)
     {
@@ -1772,7 +1772,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgObjetoFijo $objetoFijo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setObjetoFijo(\JHWEB\SeguridadVialBundle\Entity\SvCfgObjetoFijo $objetoFijo = null)
     {
@@ -1796,7 +1796,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgArea $area
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setArea(\JHWEB\SeguridadVialBundle\Entity\SvCfgArea $area = null)
     {
@@ -1820,7 +1820,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgSector $sector
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setSector(\JHWEB\SeguridadVialBundle\Entity\SvCfgSector $sector = null)
     {
@@ -1844,7 +1844,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgZona $zona
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setZona(\JHWEB\SeguridadVialBundle\Entity\SvCfgZona $zona = null)
     {
@@ -1868,7 +1868,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgDisenio $disenio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setDisenio(\JHWEB\SeguridadVialBundle\Entity\SvCfgDisenio $disenio = null)
     {
@@ -1892,7 +1892,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGeometria $geometria
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setGeometria(\JHWEB\SeguridadVialBundle\Entity\SvCfgGeometria $geometria = null)
     {
@@ -1916,7 +1916,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgUtilizacion $utilizacion
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setUtilizacion(\JHWEB\SeguridadVialBundle\Entity\SvCfgUtilizacion $utilizacion = null)
     {
@@ -1940,7 +1940,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgCalzadaCarril $calzada
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setCalzada(\JHWEB\SeguridadVialBundle\Entity\SvCfgCalzadaCarril $calzada = null)
     {
@@ -1964,7 +1964,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgCalzadaCarril $carril
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setCarril(\JHWEB\SeguridadVialBundle\Entity\SvCfgCalzadaCarril $carril = null)
     {
@@ -1988,7 +1988,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgMaterial $material
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setMaterial(\JHWEB\SeguridadVialBundle\Entity\SvCfgMaterial $material = null)
     {
@@ -2012,7 +2012,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoVia $estadoVia
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setEstadoVia(\JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoVia $estadoVia = null)
     {
@@ -2036,7 +2036,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgCondicionVia $condicionVia
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setCondicionVia(\JHWEB\SeguridadVialBundle\Entity\SvCfgCondicionVia $condicionVia = null)
     {
@@ -2060,7 +2060,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgIluminacion $iluminacion
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setIluminacion(\JHWEB\SeguridadVialBundle\Entity\SvCfgIluminacion $iluminacion = null)
     {
@@ -2084,7 +2084,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoIluminacion $estadoIluminacion
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setEstadoIluminacion(\JHWEB\SeguridadVialBundle\Entity\SvCfgEstadoIluminacion $estadoIluminacion = null)
     {
@@ -2108,7 +2108,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgVisual $visual
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setVisual(\JHWEB\SeguridadVialBundle\Entity\SvCfgVisual $visual = null)
     {
@@ -2132,7 +2132,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgVisualDisminuida $visualDisminuida
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setVisualDisminuida(\JHWEB\SeguridadVialBundle\Entity\SvCfgVisualDisminuida $visualDisminuida = null)
     {
@@ -2156,7 +2156,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $estadoSemaforo
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setEstadoSemaforo(\JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $estadoSemaforo = null)
     {
@@ -2180,7 +2180,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $delineadorPiso
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setDelineadorPiso(\JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia $delineadorPiso = null)
     {
@@ -2204,7 +2204,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis $hipotesis
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setHipotesis(\JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis $hipotesis = null)
     {
@@ -2228,7 +2228,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioCorrespondio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setMunicipioCorrespondio(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioCorrespondio = null)
     {
@@ -2252,7 +2252,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente $entidadCorrespondio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setEntidadCorrespondio(\JHWEB\SeguridadVialBundle\Entity\SvCfgEntidadAccidente $entidadCorrespondio = null)
     {
@@ -2276,7 +2276,7 @@ class SvRegistroIpat
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora $unidadCorrespondio
      *
-     * @return SvRegistroIpat
+     * @return SvIpat
      */
     public function setUnidadCorrespondio(\JHWEB\SeguridadVialBundle\Entity\SvCfgUnidadReceptora $unidadCorrespondio = null)
     {

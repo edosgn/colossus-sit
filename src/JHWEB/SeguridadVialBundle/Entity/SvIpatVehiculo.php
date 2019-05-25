@@ -45,9 +45,9 @@ class SvIpatVehiculo
     /**
      * @var string
      *
-     * @ORM\Column(name="nacionalidad_vehiculo", type="string", nullable = true)
+     * @ORM\Column(name="nacionalidad", type="string", nullable = true)
      */
-    private $nacionalidadVehiculo;
+    private $nacionalidad;
 
     /**
      * @var string
@@ -411,27 +411,27 @@ class SvIpatVehiculo
     }
 
     /**
-     * Set nacionalidadVehiculo
+     * Set nacionalidad
      *
-     * @param string $nacionalidadVehiculo
+     * @param string $nacionalidad
      *
      * @return SvIpatVehiculo
      */
-    public function setNacionalidadVehiculo($nacionalidadVehiculo)
+    public function setNacionalidad($nacionalidad)
     {
-        $this->nacionalidadVehiculo = $nacionalidadVehiculo;
+        $this->nacionalidad = $nacionalidad;
 
         return $this;
     }
 
     /**
-     * Get nacionalidadVehiculo
+     * Get nacionalidad
      *
      * @return string
      */
-    public function getNacionalidadVehiculo()
+    public function getNacionalidad()
     {
-        return $this->nacionalidadVehiculo;
+        return $this->nacionalidad;
     }
 
     /**

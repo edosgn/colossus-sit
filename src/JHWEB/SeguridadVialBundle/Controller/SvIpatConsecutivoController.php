@@ -227,7 +227,7 @@ class SvIpatConsecutivoController extends Controller
             $consecutivos = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConsecutivo')->findBy(
                 array(
                     'talonario' => $talonario->getId(),
-                    'estado' => "ASIGNADO",
+                    /* 'estado' => "ASIGNADO", */
                     'activo' => 1,
                 )
             );
