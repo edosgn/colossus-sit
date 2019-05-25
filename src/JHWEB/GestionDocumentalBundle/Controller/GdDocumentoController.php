@@ -343,7 +343,7 @@ class GdDocumentoController extends Controller
     }
 
     /**
-     * Asigna el documento a un fiuncionario para que genere un respuesta.
+     * Asigna el documento a un funcionario para que genere un respuesta.
      *
      * @Route("/update", name="gddocumento_update")
      * @Method({"GET", "POST"})
@@ -580,10 +580,10 @@ class GdDocumentoController extends Controller
             );
             
             if ($documento) {
-                $sedeOperativa = $em->getRepository('AppBundle:SedeOperativa')->find(
-                    $params->idSedeOperativa
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $params->idOrganismoTransito
                 );
-                $documento->setSedeOperativa($sedeOperativa);
+                $documento->setOrganismoTransito($organismoTransito);
 
                 $medioCorrespondenciaEnvio = $em->getRepository('JHWEBGestionDocumentalBundle:GdCfgMedioCorrespondencia')->find(
                     $params->idMedioCorrespondenciaEnvio
