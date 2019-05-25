@@ -254,7 +254,6 @@ class ImoInsumoController extends Controller
             $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find($id);
 
             $insumo->setEstado('ANULADO');
-            $em = $this->getDoctrine()->getManager();
             $em->persist($insumo);
             $em->flush();
             $response = array(
@@ -558,9 +557,14 @@ class ImoInsumoController extends Controller
         $fechaFin = new \Datetime($params->fechaFin);
          
         $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-            $params->idOrganismoTransito
+            $params->idOrganismoTransito 
         );
 
+        
+
+        // var_dump($loteArray);
+        // die();
+ 
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango(
             $fechaInicio,
             $fechaFin,
@@ -583,6 +587,59 @@ class ImoInsumoController extends Controller
                     $asignados[] = $insumo;
                     break;
             }
+        }
+
+        $lotesOrganismo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBySedeOperativa(
+            $params->idOrganismoTransito 
+        );
+
+        $loteArray=[];
+        $disponiblesLote=[];
+        $anuladosLote=[];
+        $asignadosLote=[];
+
+        $disponiblesLoteTotal=0;
+        $anuladosLoteTotal=0;
+        $asignadosLoteTotal=0;
+        
+        foreach ($lotesOrganismo as $key => $loteOrganismo) {
+            foreach ($insumos as $key => $insumo) {
+                switch ($insumo->getEstado()) {
+                    case 'DISPONIBLE':
+                        if($loteOrganismo->getId() == $insumo->getLote()->getId()){
+                            $disponiblesLote[] = $insumo;
+                        }
+                        break;
+                    case 'ANULADO':
+                        if($loteOrganismo->getId() == $insumo->getLote()->getId()){
+                            $anuladosLote[] = $insumo;
+                        }
+                        break;
+                    case 'ASIGNADO':
+                        if($loteOrganismo->getId() == $insumo->getLote()->getId()){
+                            $asignadosLote[] = $insumo;
+                        }
+                        break;
+                }
+            }
+            $disponiblesLoteTotal=$disponiblesLoteTotal + COUNT($disponiblesLote);
+            $anuladosLoteTotal=$anuladosLoteTotal + COUNT($anuladosLote);
+            $asignadosLoteTotal=$asignadosLoteTotal + COUNT($asignadosLote);
+
+            if($loteOrganismo->getTipo() == 'SUSTRATO'){
+                $loteArray[] = array(
+                    'id'=>$loteOrganismo->getRangoInicio(),
+                    'rangoInicio'=>$loteOrganismo->getRangoInicio(),
+                    'rangoFIn'=>$loteOrganismo->getRangoFIn(),
+                    'disponiblesLote'=>COUNT($disponiblesLote),
+                    'anuladosLote'=>COUNT($anuladosLote),
+                    'asignadosLote'=>COUNT($asignadosLote),
+                );
+            }
+            $disponiblesLote=[];
+            $anuladosLote=[];
+            $asignadosLote=[];
+
         }
 
         $tipos = $em->getRepository('JHWEBInsumoBundle:ImoCfgTipo')->findBy(
@@ -618,7 +675,7 @@ class ImoInsumoController extends Controller
                     $asignadosTipo[] = $asignado;
                 }
             }
-
+       
             $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
                 array('tipo'=>$tipo->getId(), 'activo'=>true) 
             );
@@ -645,10 +702,8 @@ class ImoInsumoController extends Controller
                 'subTotal' => $subTotal,
             );
 
-            /*$disponiblesTipo = array();
-            $anuladosTipo = array();
-            $asignadosTipo = array();*/
         }
+
 
         $totalSede = 0;
         $valorSede = 0;
@@ -665,12 +720,11 @@ class ImoInsumoController extends Controller
             );
 
             $totalSede = $totalSede + COUNT($insumosOrganismos);
-
             foreach ($insumosOrganismos as $key => $insumoOrganismo) {
                 $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
                     array('tipo'=>$insumoOrganismo->getTipo()->getId(), 'activo'=>true) 
                 );
-    
+                
                 if ($valorTipo) {
                    $valorInsumo = $valorTipo->getValor();
                 }else {
@@ -694,6 +748,7 @@ class ImoInsumoController extends Controller
         $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.insumo.html.twig', array(
             'organismoTransito' => $organismoTransito, 
             'tiposArray' => $tiposArray, 
+            'loteArray' => $loteArray, 
             'disponibles' => $disponibles,
             'total' => $total,
             'anulados' => $anulados,
@@ -707,6 +762,9 @@ class ImoInsumoController extends Controller
             'totalSede' => $totalSede, 
             'valorTotalSede' => $valorTotalSede, 
             'totalConsignar' => $totalConsignar, 
+            'disponiblesLoteTotal'=>$disponiblesLoteTotal,
+            'anuladosLoteTotal'=>$anuladosLoteTotal,
+            'asignadosLoteTotal'=>$asignadosLoteTotal,
         )); 
 
         return new Response(

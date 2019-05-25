@@ -73,7 +73,7 @@ class ImoInsumoRepository extends \Doctrine\ORM\EntityRepository
             'numeroActa' => $numeroActa,
         ));
 
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
 
     public function getTotalesTipoActa($actaEntrega)
