@@ -2,7 +2,7 @@
 
 namespace JHWEB\SeguridadVialBundle\Controller;
 
-use JHWEB\SeguridadVialBundle\Entity\SvRegistroIpat;
+use JHWEB\SeguridadVialBundle\Entity\SvIpat;
 use JHWEB\SeguridadVialBundle\Entity\SvIpatConductor;
 use JHWEB\SeguridadVialBundle\Entity\SvIpatVictima;
 use JHWEB\SeguridadVialBundle\Entity\SvIpatVehiculo;
@@ -12,29 +12,29 @@ use Repository\UsuarioBundle\Entity\Usuario;
 use JHWEB\VehiculoBundle\Entity\VhloVehiculo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Svregistroipat controller.
+ * Svipat controller.
  *
- * @Route("svregistroipat")
+ * @Route("svipat")
  */
-class SvRegistroIpatController extends Controller
+class SvIpatController extends Controller
 {
     /**
-     * Lists all svRegistroIpat entities.
+     * Lists all svIpat entities.
      *
-     * @Route("/", name="svregistroipat_index")
+     * @Route("/", name="svipat_index")
      * @Method("GET")
      */
     public function indexAction()
     {
         $helpers = $this->get("app.helpers");
         $em = $this->getDoctrine()->getManager();
-        $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findBy(
+        $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvIpat')->findBy(
             array('activo' => true)
         );
 
@@ -49,13 +49,12 @@ class SvRegistroIpatController extends Controller
             );
         }
         return $helpers->json($response);
-
     }
 
     /**
-     * Creates a new svRegistroIpat entity.
+     * Creates a new svIpat entity.
      *
-     * @Route("/new", name="svregistroipat_new")
+     * @Route("/new", name="svipat_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -63,14 +62,14 @@ class SvRegistroIpatController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        $response = null;
+
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
 
-            $ipat = new SvRegistroIpat();
+            $ipat = new SvIpat();
 
             if ($params->idOrganismoTransito) {
                 $idOrganismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
@@ -291,7 +290,7 @@ class SvRegistroIpatController extends Controller
             }
 
             $ipat->setOtraVisualDisminuida($params->otraVisualDisminuida);
-            $ipat->setSemaforo($params->semaforo);
+            $ipat->setHaySemaforo($params->haySemaforo);
 
             if ($params->idEstadoSemaforo) {
                 $estadoSemaforo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
@@ -324,7 +323,9 @@ class SvRegistroIpatController extends Controller
                 $ipat->setTipoIdentificacionPropietario($tipoIdentificacionPropietario->getNombre());
             }
             $ipat->setIdentificacionPropietario($params->identificacionPropietario);
-
+            
+            $ipat->setHayTestigo($params->hayTestigo);
+            
             $idTipoIdentificacionTestigo = (isset($params->tipoIdentificacionTestigo)) ? $params->tipoIdentificacionTestigo : null;
 
             if ($idTipoIdentificacionTestigo){
@@ -440,16 +441,16 @@ class SvRegistroIpatController extends Controller
     }
 
     /**
-     * Finds and displays a svRegistroIpat entity.
+     * Finds and displays a svIpat entity.
      *
-     * @Route("/{id}/show", name="svregistroipat_show")
+     * @Route("/{id}", name="svipat_show")
      * @Method("GET")
      */
-    public function showAction(SvRegistroIpat $svRegistroIpat)
+    public function showAction(SvIpat $svIpat)
     {
 
-        return $this->render('svregistroipat/show.html.twig', array(
-            'svRegistroIpat' => $svRegistroIpat,
+        return $this->render('svipat/show.html.twig', array(
+            'svIpat' => $svIpat,
         ));
     }
 
@@ -517,7 +518,7 @@ class SvRegistroIpatController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "vehiculo encontrado",
+                    'message' => "Vehiculo encontrado",
                     'data' => $vehiculo,
                 );
             } else {
@@ -981,7 +982,7 @@ class SvRegistroIpatController extends Controller
     /**
      * Search Ipat by Consecutivo.
      *
-     * @Route("/ipat/by/consecutivo", name="ipat_by_consecutivo")
+     * @Route("/ipat/by/consecutivo", name="SVipat_by_consecutivo")
      * @Method({"GET", "POST"})
      */
     public function buscarIpatByConsecutivoAction(Request $request)
@@ -996,18 +997,14 @@ class SvRegistroIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $ipat = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->findOneBy(
-                array(
-                    'consecutivo' => $params->id
-                )
-            );
+            $ipat = $em->getRepository('JHWEBSeguridadVialBundle:SvIpat')->findOneByConsecutivo($params->id);
 
             if ($ipat) {
                 $response = array(
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro encontrado",
+                    'message' => 'Registro encontrado',
                     'data' => $ipat,
                 );
             } else {
@@ -1015,14 +1012,14 @@ class SvRegistroIpatController extends Controller
                     'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No tiene ipat asignado",
+                    'message' => 'No tiene ipat asignado',
                 );
             }
         } else {
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no válida",
+                'message' => 'Autorización no válida',
             );
         }
         return $helpers->json($response);

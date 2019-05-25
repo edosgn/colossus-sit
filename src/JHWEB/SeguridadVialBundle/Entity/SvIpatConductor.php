@@ -24,121 +24,121 @@ class SvIpatConductor
     /**
      * @var string
      *
-     * @ORM\Column(name="nombres_conductor", type="string", nullable = true)
+     * @ORM\Column(name="nombres", type="string", nullable = true)
      */
-    private $nombresConductor;
+    private $nombres;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="apellidos_conductor", type="string", nullable = true)
+     * @ORM\Column(name="apellidos", type="string", nullable = true)
      */
-    private $apellidosConductor;
+    private $apellidos;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo_identificacion_conductor", type="string", nullable = true)
+     * @ORM\Column(name="tipo_identificacion", type="string", nullable = true)
      */
-    private $tipoIdentificacionConductor;
+    private $tipoIdentificacion;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="identificacion_conductor", type="integer", nullable = true)
+     * @ORM\Column(name="identificacion", type="integer", nullable = true)
      */
-    private $identificacionConductor;
+    private $identificacion;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nacionalidad_conductor", type="string", nullable = true)
+     * @ORM\Column(name="nacionalidad", type="string", nullable = true)
      */
-    private $nacionalidadConductor;
+    private $nacionalidad;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_nacimiento_conductor", type="date", nullable = true)
+     * @ORM\Column(name="fecha_nacimiento", type="date", nullable = true)
      */
-    private $fechaNacimientoConductor;
+    private $fechaNacimiento;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="edad_conductor", type="integer", nullable = true)
+     * @ORM\Column(name="edad", type="integer", nullable = true)
      */
-    private $edadConductor;
+    private $edad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="sexo_conductor", type="string", nullable = true)
+     * @ORM\Column(name="sexo", type="string", nullable = true)
      */
-    private $sexoConductor;
+    private $sexo;
 
     /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima", inversedBy="gravedades")
      */
-    private $gravedadConductor;
+    private $gravedad;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="direccion_residencia_conductor", type="string", nullable = true)
+     * @ORM\Column(name="direccion_residencia", type="string", nullable = true)
      */
-    private $direccionResidenciaConductor;
+    private $direccionResidencia;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ciudad_residencia_conductor", type="string", nullable = true)
+     * @ORM\Column(name="ciudad_residencia", type="string", nullable = true)
      */
-    private $ciudadResidenciaConductor;
+    private $ciudadResidencia;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="telefono_conductor", type="string", nullable = true)
+     * @ORM\Column(name="telefono", type="string", nullable = true)
      */
-    private $telefonoConductor;
+    private $telefono;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="practico_examen_conductor", type="boolean", nullable = true)
+     * @ORM\Column(name="practico_examen", type="boolean", nullable = true)
      */
-    private $practicoExamenConductor;
+    private $practicoExamen;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="autorizo_onductor", type="boolean", nullable = true)
      */
-    private $autorizoConductor;
+    private $autorizo;
     
     /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgResultadoExamen", inversedBy="resultadosexamen")
      */
-    private $resultadoExamenConductor;
+    private $resultadoExamen;
 
     /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgGradoExamen", inversedBy="gradosexamen")
      */
-    private $gradoExamenConductor;
+    private $gradoExamen;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="sustancias_psicoactivas_conductor", type="boolean", nullable = true)
+     * @ORM\Column(name="sustancias_psicoactivas", type="boolean", nullable = true)
      */
-    private $sustanciasPsicoactivasConductor;
+    private $sustanciasPsicoactivas;
 
     /**
      * @var bool
@@ -164,9 +164,9 @@ class SvIpatConductor
     /**
      * @var string
      *
-     * @ORM\Column(name="restriccion_conductor", type="string", nullable = true)
+     * @ORM\Column(name="restriccion_licencia", type="string", nullable = true)
      */
-    private $restriccionConductor;
+    private $restriccionLicencia;
 
     /**
      * @var \DateTime
@@ -192,44 +192,44 @@ class SvIpatConductor
     /**
      * @var bool
      *
-     * @ORM\Column(name="chaleco_conductor", type="boolean", nullable = true)
+     * @ORM\Column(name="chaleco", type="boolean", nullable = true)
      */
-    private $chalecoConductor;
+    private $chaleco;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="casco_conductor", type="boolean", nullable = true)
+     * @ORM\Column(name="casco", type="boolean", nullable = true)
      */
-    private $cascoConductor;
+    private $casco;
 
     /**
      * @var bool
      *
-     * @ORM\Column(name="cinturon_conductor", type="boolean", nullable = true)
+     * @ORM\Column(name="cinturon", type="boolean", nullable = true)
      */
-    private $cinturonConductor;
+    private $cinturon;
 
     /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgHospital", inversedBy="hospitales")
      */
-    private $hospitalConductor;
+    private $hospital;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="placa_vehiculo_conductor", type="string", nullable = true)
+     * @ORM\Column(name="placa_vehiculo", type="string", nullable = true)
      */
-    private $placaVehiculoConductor;
+    private $placaVehiculo;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="descripcion_lesion_conductor", type="string", nullable = true)
+     * @ORM\Column(name="descripcion_lesion", type="string", nullable = true)
      */
-    private $descripcionLesionConductor;
+    private $descripcionLesion;
 
     /**
      * @var string
@@ -256,339 +256,339 @@ class SvIpatConductor
     }
 
     /**
-     * Set nombresConductor
+     * Set nombres
      *
-     * @param string $nombresConductor
+     * @param string $nombres
      *
      * @return SvIpatConductor
      */
-    public function setNombresConductor($nombresConductor)
+    public function setNombres($nombres)
     {
-        $this->nombresConductor = $nombresConductor;
+        $this->nombres = $nombres;
 
         return $this;
     }
 
     /**
-     * Get nombresConductor
+     * Get nombres
      *
      * @return string
      */
-    public function getNombresConductor()
+    public function getNombres()
     {
-        return $this->nombresConductor;
+        return $this->nombres;
     }
 
     /**
-     * Set apellidosConductor
+     * Set apellidos
      *
-     * @param string $apellidosConductor
+     * @param string $apellidos
      *
      * @return SvIpatConductor
      */
-    public function setApellidosConductor($apellidosConductor)
+    public function setApellidos($apellidos)
     {
-        $this->apellidosConductor = $apellidosConductor;
+        $this->apellidos = $apellidos;
 
         return $this;
     }
 
     /**
-     * Get apellidosConductor
+     * Get apellidos
      *
      * @return string
      */
-    public function getApellidosConductor()
+    public function getApellidos()
     {
-        return $this->apellidosConductor;
+        return $this->apellidos;
     }
 
     /**
-     * Set tipoIdentificacionConductor
+     * Set tipoIdentificacion
      *
-     * @param string $tipoIdentificacionConductor
+     * @param string $tipoIdentificacion
      *
      * @return SvIpatConductor
      */
-    public function setTipoIdentificacionConductor($tipoIdentificacionConductor)
+    public function setTipoIdentificacion($tipoIdentificacion)
     {
-        $this->tipoIdentificacionConductor = $tipoIdentificacionConductor;
+        $this->tipoIdentificacion = $tipoIdentificacion;
 
         return $this;
     }
 
     /**
-     * Get tipoIdentificacionConductor
+     * Get tipoIdentificacion
      *
      * @return string
      */
-    public function getTipoIdentificacionConductor()
+    public function getTipoIdentificacion()
     {
-        return $this->tipoIdentificacionConductor;
+        return $this->tipoIdentificacion;
     }
 
     /**
-     * Set identificacionConductor
+     * Set identificacion
      *
-     * @param integer $identificacionConductor
+     * @param integer $identificacion
      *
      * @return SvIpatConductor
      */
-    public function setIdentificacionConductor($identificacionConductor)
+    public function setIdentificacion($identificacion)
     {
-        $this->identificacionConductor = $identificacionConductor;
+        $this->identificacion = $identificacion;
 
         return $this;
     }
 
     /**
-     * Get identificacionConductor
+     * Get identificacion
      *
      * @return integer
      */
-    public function getIdentificacionConductor()
+    public function getIdentificacion()
     {
-        return $this->identificacionConductor;
+        return $this->identificacion;
     }
 
     /**
-     * Set nacionalidadConductor
+     * Set nacionalidad
      *
-     * @param string $nacionalidadConductor
+     * @param string $nacionalidad
      *
      * @return SvIpatConductor
      */
-    public function setNacionalidadConductor($nacionalidadConductor)
+    public function setNacionalidad($nacionalidad)
     {
-        $this->nacionalidadConductor = $nacionalidadConductor;
+        $this->nacionalidad = $nacionalidad;
 
         return $this;
     }
 
     /**
-     * Get nacionalidadConductor
+     * Get nacionalidad
      *
      * @return string
      */
-    public function getNacionalidadConductor()
+    public function getNacionalidad()
     {
-        return $this->nacionalidadConductor;
+        return $this->nacionalidad;
     }
 
     /**
-     * Set fechaNacimientoConductor
+     * Set fechaNacimiento
      *
-     * @param \DateTime $fechaNacimientoConductor
+     * @param \DateTime $fechaNacimiento
      *
      * @return SvIpatConductor
      */
-    public function setFechaNacimientoConductor($fechaNacimientoConductor)
+    public function setFechaNacimiento($fechaNacimiento)
     {
-        $this->fechaNacimientoConductor = $fechaNacimientoConductor;
+        $this->fechaNacimiento = $fechaNacimiento;
 
         return $this;
     }
 
     /**
-     * Get fechaNacimientoConductor
+     * Get fechaNacimiento
      *
      * @return \DateTime
      */
-    public function getFechaNacimientoConductor()
+    public function getFechaNacimiento()
     {
-        return $this->fechaNacimientoConductor;
+        return $this->fechaNacimiento;
     }
 
     /**
-     * Set edadConductor
+     * Set edad
      *
-     * @param integer $edadConductor
+     * @param integer $edad
      *
      * @return SvIpatConductor
      */
-    public function setEdadConductor($edadConductor)
+    public function setEdad($edad)
     {
-        $this->edadConductor = $edadConductor;
+        $this->edad = $edad;
 
         return $this;
     }
 
     /**
-     * Get edadConductor
+     * Get edad
      *
      * @return integer
      */
-    public function getEdadConductor()
+    public function getEdad()
     {
-        return $this->edadConductor;
+        return $this->edad;
     }
 
     /**
-     * Set sexoConductor
+     * Set sexo
      *
-     * @param string $sexoConductor
+     * @param string $sexo
      *
      * @return SvIpatConductor
      */
-    public function setSexoConductor($sexoConductor)
+    public function setSexo($sexo)
     {
-        $this->sexoConductor = $sexoConductor;
+        $this->sexo = $sexo;
 
         return $this;
     }
 
     /**
-     * Get sexoConductor
+     * Get sexo
      *
      * @return string
      */
-    public function getSexoConductor()
+    public function getSexo()
     {
-        return $this->sexoConductor;
+        return $this->sexo;
     }
 
     /**
-     * Set direccionResidenciaConductor
+     * Set direccionResidencia
      *
-     * @param string $direccionResidenciaConductor
+     * @param string $direccionResidencia
      *
      * @return SvIpatConductor
      */
-    public function setDireccionResidenciaConductor($direccionResidenciaConductor)
+    public function setDireccionResidencia($direccionResidencia)
     {
-        $this->direccionResidenciaConductor = $direccionResidenciaConductor;
+        $this->direccionResidencia = $direccionResidencia;
 
         return $this;
     }
 
     /**
-     * Get direccionResidenciaConductor
+     * Get direccionResidencia
      *
      * @return string
      */
-    public function getDireccionResidenciaConductor()
+    public function getDireccionResidencia()
     {
-        return $this->direccionResidenciaConductor;
+        return $this->direccionResidencia;
     }
 
     /**
-     * Set ciudadResidenciaConductor
+     * Set ciudadResidencia
      *
-     * @param string $ciudadResidenciaConductor
+     * @param string $ciudadResidencia
      *
      * @return SvIpatConductor
      */
-    public function setCiudadResidenciaConductor($ciudadResidenciaConductor)
+    public function setCiudadResidencia($ciudadResidencia)
     {
-        $this->ciudadResidenciaConductor = $ciudadResidenciaConductor;
+        $this->ciudadResidencia = $ciudadResidencia;
 
         return $this;
     }
 
     /**
-     * Get ciudadResidenciaConductor
+     * Get ciudadResidencia
      *
      * @return string
      */
-    public function getCiudadResidenciaConductor()
+    public function getCiudadResidencia()
     {
-        return $this->ciudadResidenciaConductor;
+        return $this->ciudadResidencia;
     }
 
     /**
-     * Set telefonoConductor
+     * Set telefono
      *
-     * @param string $telefonoConductor
+     * @param string $telefono
      *
      * @return SvIpatConductor
      */
-    public function setTelefonoConductor($telefonoConductor)
+    public function setTelefono($telefono)
     {
-        $this->telefonoConductor = $telefonoConductor;
+        $this->telefono = $telefono;
 
         return $this;
     }
 
     /**
-     * Get telefonoConductor
+     * Get telefono
      *
      * @return string
      */
-    public function getTelefonoConductor()
+    public function getTelefono()
     {
-        return $this->telefonoConductor;
+        return $this->telefono;
     }
 
     /**
-     * Set practicoExamenConductor
+     * Set practicoExamen
      *
-     * @param boolean $practicoExamenConductor
+     * @param boolean $practicoExamen
      *
      * @return SvIpatConductor
      */
-    public function setPracticoExamenConductor($practicoExamenConductor)
+    public function setPracticoExamen($practicoExamen)
     {
-        $this->practicoExamenConductor = $practicoExamenConductor;
+        $this->practicoExamen = $practicoExamen;
 
         return $this;
     }
 
     /**
-     * Get practicoExamenConductor
+     * Get practicoExamen
      *
      * @return boolean
      */
-    public function getPracticoExamenConductor()
+    public function getPracticoExamen()
     {
-        return $this->practicoExamenConductor;
+        return $this->practicoExamen;
     }
 
     /**
-     * Set autorizoConductor
+     * Set autorizo
      *
-     * @param boolean $autorizoConductor
+     * @param boolean $autorizo
      *
      * @return SvIpatConductor
      */
-    public function setAutorizoConductor($autorizoConductor)
+    public function setAutorizo($autorizo)
     {
-        $this->autorizoConductor = $autorizoConductor;
+        $this->autorizo = $autorizo;
 
         return $this;
     }
 
     /**
-     * Get autorizoConductor
+     * Get autorizo
      *
      * @return boolean
      */
-    public function getAutorizoConductor()
+    public function getAutorizo()
     {
-        return $this->autorizoConductor;
+        return $this->autorizo;
     }
 
     /**
-     * Set sustanciasPsicoactivasConductor
+     * Set sustanciasPsicoactivas
      *
-     * @param boolean $sustanciasPsicoactivasConductor
+     * @param boolean $sustanciasPsicoactivas
      *
      * @return SvIpatConductor
      */
-    public function setSustanciasPsicoactivasConductor($sustanciasPsicoactivasConductor)
+    public function setSustanciasPsicoactivas($sustanciasPsicoactivas)
     {
-        $this->sustanciasPsicoactivasConductor = $sustanciasPsicoactivasConductor;
+        $this->sustanciasPsicoactivas = $sustanciasPsicoactivas;
 
         return $this;
     }
 
     /**
-     * Get sustanciasPsicoactivasConductor
+     * Get sustanciasPsicoactivas
      *
      * @return boolean
      */
-    public function getSustanciasPsicoactivasConductor()
+    public function getSustanciasPsicoactivas()
     {
-        return $this->sustanciasPsicoactivasConductor;
+        return $this->sustanciasPsicoactivas;
     }
 
     /**
@@ -664,27 +664,27 @@ class SvIpatConductor
     }
 
     /**
-     * Set restriccionConductor
+     * Set restriccionLicencia
      *
-     * @param string $restriccionConductor
+     * @param string $restriccionLicencia
      *
      * @return SvIpatConductor
      */
-    public function setRestriccionConductor($restriccionConductor)
+    public function setRestriccionLicencia($restriccionLicencia)
     {
-        $this->restriccionConductor = $restriccionConductor;
+        $this->restriccionLicencia = $restriccionLicencia;
 
         return $this;
     }
 
     /**
-     * Get restriccionConductor
+     * Get restriccionLicencia
      *
      * @return string
      */
-    public function getRestriccionConductor()
+    public function getRestriccionLicencia()
     {
-        return $this->restriccionConductor;
+        return $this->restriccionLicencia;
     }
 
     /**
@@ -760,123 +760,123 @@ class SvIpatConductor
     }
 
     /**
-     * Set chalecoConductor
+     * Set chaleco
      *
-     * @param boolean $chalecoConductor
+     * @param boolean $chaleco
      *
      * @return SvIpatConductor
      */
-    public function setChalecoConductor($chalecoConductor)
+    public function setChaleco($chaleco)
     {
-        $this->chalecoConductor = $chalecoConductor;
+        $this->chaleco = $chaleco;
 
         return $this;
     }
 
     /**
-     * Get chalecoConductor
+     * Get chaleco
      *
      * @return boolean
      */
-    public function getChalecoConductor()
+    public function getChaleco()
     {
-        return $this->chalecoConductor;
+        return $this->chaleco;
     }
 
     /**
-     * Set cascoConductor
+     * Set casco
      *
-     * @param boolean $cascoConductor
+     * @param boolean $casco
      *
      * @return SvIpatConductor
      */
-    public function setCascoConductor($cascoConductor)
+    public function setCasco($casco)
     {
-        $this->cascoConductor = $cascoConductor;
+        $this->casco = $casco;
 
         return $this;
     }
 
     /**
-     * Get cascoConductor
+     * Get casco
      *
      * @return boolean
      */
-    public function getCascoConductor()
+    public function getCasco()
     {
-        return $this->cascoConductor;
+        return $this->casco;
     }
 
     /**
-     * Set cinturonConductor
+     * Set cinturon
      *
-     * @param boolean $cinturonConductor
+     * @param boolean $cinturon
      *
      * @return SvIpatConductor
      */
-    public function setCinturonConductor($cinturonConductor)
+    public function setCinturon($cinturon)
     {
-        $this->cinturonConductor = $cinturonConductor;
+        $this->cinturon = $cinturon;
 
         return $this;
     }
 
     /**
-     * Get cinturonConductor
+     * Get cinturon
      *
      * @return boolean
      */
-    public function getCinturonConductor()
+    public function getCinturon()
     {
-        return $this->cinturonConductor;
+        return $this->cinturon;
     }
 
     /**
-     * Set placaVehiculoConductor
+     * Set placaVehiculo
      *
-     * @param string $placaVehiculoConductor
+     * @param string $placaVehiculo
      *
      * @return SvIpatConductor
      */
-    public function setPlacaVehiculoConductor($placaVehiculoConductor)
+    public function setPlacaVehiculo($placaVehiculo)
     {
-        $this->placaVehiculoConductor = $placaVehiculoConductor;
+        $this->placaVehiculo = $placaVehiculo;
 
         return $this;
     }
 
     /**
-     * Get placaVehiculoConductor
+     * Get placaVehiculo
      *
      * @return string
      */
-    public function getPlacaVehiculoConductor()
+    public function getPlacaVehiculo()
     {
-        return $this->placaVehiculoConductor;
+        return $this->placaVehiculo;
     }
 
     /**
-     * Set descripcionLesionConductor
+     * Set descripcionLesion
      *
-     * @param string $descripcionLesionConductor
+     * @param string $descripcionLesion
      *
      * @return SvIpatConductor
      */
-    public function setDescripcionLesionConductor($descripcionLesionConductor)
+    public function setDescripcionLesion($descripcionLesion)
     {
-        $this->descripcionLesionConductor = $descripcionLesionConductor;
+        $this->descripcionLesion = $descripcionLesion;
 
         return $this;
     }
 
     /**
-     * Get descripcionLesionConductor
+     * Get descripcionLesion
      *
      * @return string
      */
-    public function getDescripcionLesionConductor()
+    public function getDescripcionLesion()
     {
-        return $this->descripcionLesionConductor;
+        return $this->descripcionLesion;
     }
 
     /**
@@ -904,99 +904,99 @@ class SvIpatConductor
     }
 
     /**
-     * Set gravedadConductor
+     * Set gravedad
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima $gravedadConductor
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima $gravedad
      *
      * @return SvIpatConductor
      */
-    public function setGravedadConductor(\JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima $gravedadConductor = null)
+    public function setGravedad(\JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima $gravedad = null)
     {
-        $this->gravedadConductor = $gravedadConductor;
+        $this->gravedad = $gravedad;
 
         return $this;
     }
 
     /**
-     * Get gravedadConductor
+     * Get gravedad
      *
      * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgGravedadVictima
      */
-    public function getGravedadConductor()
+    public function getGravedad()
     {
-        return $this->gravedadConductor;
+        return $this->gravedad;
     }
 
     /**
-     * Set resultadoExamenConductor
+     * Set resultadoExamen
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgResultadoExamen $resultadoExamenConductor
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgResultadoExamen $resultadoExamen
      *
      * @return SvIpatConductor
      */
-    public function setResultadoExamenConductor(\JHWEB\SeguridadVialBundle\Entity\SvCfgResultadoExamen $resultadoExamenConductor = null)
+    public function setResultadoExamen(\JHWEB\SeguridadVialBundle\Entity\SvCfgResultadoExamen $resultadoExamen = null)
     {
-        $this->resultadoExamenConductor = $resultadoExamenConductor;
+        $this->resultadoExamen = $resultadoExamen;
 
         return $this;
     }
 
     /**
-     * Get resultadoExamenConductor
+     * Get resultadoExamen
      *
      * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgResultadoExamen
      */
-    public function getResultadoExamenConductor()
+    public function getResultadoExamen()
     {
-        return $this->resultadoExamenConductor;
+        return $this->resultadoExamen;
     }
 
     /**
-     * Set gradoExamenConductor
+     * Set gradoExamen
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGradoExamen $gradoExamenConductor
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGradoExamen $gradoExamen
      *
      * @return SvIpatConductor
      */
-    public function setGradoExamenConductor(\JHWEB\SeguridadVialBundle\Entity\SvCfgGradoExamen $gradoExamenConductor = null)
+    public function setGradoExamen(\JHWEB\SeguridadVialBundle\Entity\SvCfgGradoExamen $gradoExamen = null)
     {
-        $this->gradoExamenConductor = $gradoExamenConductor;
+        $this->gradoExamen = $gradoExamen;
 
         return $this;
     }
 
     /**
-     * Get gradoExamenConductor
+     * Get gradoExamen
      *
      * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgGradoExamen
      */
-    public function getGradoExamenConductor()
+    public function getGradoExamen()
     {
-        return $this->gradoExamenConductor;
+        return $this->gradoExamen;
     }
 
     /**
-     * Set hospitalConductor
+     * Set hospital
      *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgHospital $hospitalConductor
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgHospital $hospital
      *
      * @return SvIpatConductor
      */
-    public function setHospitalConductor(\JHWEB\SeguridadVialBundle\Entity\SvCfgHospital $hospitalConductor = null)
+    public function setHospital(\JHWEB\SeguridadVialBundle\Entity\SvCfgHospital $hospital = null)
     {
-        $this->hospitalConductor = $hospitalConductor;
+        $this->hospital = $hospital;
 
         return $this;
     }
 
     /**
-     * Get hospitalConductor
+     * Get hospital
      *
      * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgHospital
      */
-    public function getHospitalConductor()
+    public function getHospital()
     {
-        return $this->hospitalConductor;
+        return $this->hospital;
     }
 
     /**
