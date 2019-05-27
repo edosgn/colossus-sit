@@ -224,17 +224,28 @@ class VhloLimitacionController extends Controller
                 $params->id
             );
 
-            $limitacion->activo(false);
-
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Levantar limitación registrada con exito",
-            );
+            if ($limitacion) {
+                $limitacion->setActivo(false);
+    
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Levantar limitación registrada con exito.",
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos.",
+                );
+            }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",

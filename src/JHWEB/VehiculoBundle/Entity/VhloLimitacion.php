@@ -48,6 +48,7 @@ class VhloLimitacion
      * @ORM\Column(name="observaciones", type="string", length=255)
      */
     private $observaciones;
+    
     /**
      * @var bool
      *
