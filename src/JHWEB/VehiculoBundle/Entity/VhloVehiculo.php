@@ -168,6 +168,34 @@ class VhloVehiculo
      */
     private $activo;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="identificacion_radicado", type="string", length=255, nullable= true)
+     */
+    private $identificacionRadicado;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_registro_radicado", type="datetime", nullable= true)
+     */
+    private $fechaRegistroRadicado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_guia_radicado", type="string", length=255, nullable= true)
+     */
+    private $numeroGuiaRadicado;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="empresa_envio_radicado", type="string", length=255, nullable= true)
+     */
+    private $empresaEnvioRadicado;
+
     /** @ORM\ManyToOne(targetEntity="VhloCfgLinea", inversedBy="vehiculos") */
     private $linea;
 
@@ -209,6 +237,12 @@ class VhloVehiculo
 
     /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="vehiculos") */
     private $empresa;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="vehiculos") */
+    private $organismoTransitoRadicado;
+
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="vehiculos") */
+    private $tipoIdentificacionRadicado;
 
 
     /**
@@ -1065,5 +1099,149 @@ class VhloVehiculo
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set identificacionRadicado
+     *
+     * @param string $identificacionRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setIdentificacionRadicado($identificacionRadicado)
+    {
+        $this->identificacionRadicado = $identificacionRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacionRadicado
+     *
+     * @return string
+     */
+    public function getIdentificacionRadicado()
+    {
+        return $this->identificacionRadicado;
+    }
+
+    /**
+     * Set fechaRegistroRadicado
+     *
+     * @param \DateTime $fechaRegistroRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setFechaRegistroRadicado($fechaRegistroRadicado)
+    {
+        $this->fechaRegistroRadicado = $fechaRegistroRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRegistroRadicado
+     *
+     * @return \DateTime
+     */
+    public function getFechaRegistroRadicado()
+    {
+        return $this->fechaRegistroRadicado;
+    }
+
+    /**
+     * Set numeroGuiaRadicado
+     *
+     * @param string $numeroGuiaRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setNumeroGuiaRadicado($numeroGuiaRadicado)
+    {
+        $this->numeroGuiaRadicado = $numeroGuiaRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroGuiaRadicado
+     *
+     * @return string
+     */
+    public function getNumeroGuiaRadicado()
+    {
+        return $this->numeroGuiaRadicado;
+    }
+
+    /**
+     * Set empresaEnvioRadicado
+     *
+     * @param string $empresaEnvioRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setEmpresaEnvioRadicado($empresaEnvioRadicado)
+    {
+        $this->empresaEnvioRadicado = $empresaEnvioRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaEnvioRadicado
+     *
+     * @return string
+     */
+    public function getEmpresaEnvioRadicado()
+    {
+        return $this->empresaEnvioRadicado;
+    }
+
+    /**
+     * Set organismoTransitoRadicado
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setOrganismoTransitoRadicado(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoRadicado = null)
+    {
+        $this->organismoTransitoRadicado = $organismoTransitoRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransitoRadicado
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransitoRadicado()
+    {
+        return $this->organismoTransitoRadicado;
+    }
+
+    /**
+     * Set tipoIdentificacionRadicado
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacionRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setTipoIdentificacionRadicado(\JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $tipoIdentificacionRadicado = null)
+    {
+        $this->tipoIdentificacionRadicado = $tipoIdentificacionRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoIdentificacionRadicado
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion
+     */
+    public function getTipoIdentificacionRadicado()
+    {
+        return $this->tipoIdentificacionRadicado;
     }
 }

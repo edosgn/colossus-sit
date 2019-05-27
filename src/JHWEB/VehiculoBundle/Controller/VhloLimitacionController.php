@@ -95,12 +95,12 @@ class VhloLimitacionController extends Controller
                     $params->limitacion->idEntidadJudicial
                 );
                 
-                foreach ($params->vehiculos as $key => $vehiculoArray) {
+                foreach ($params->vehiculos as $key => $idVehiculo) {
                     foreach ($params->demandantes as $key => $demandanteArray) {
                         $limitacion = new VhloLimitacion();
                         
                         $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
-                            $vehiculoArray->id
+                            $idVehiculo
                         );
                         $limitacion->setVehiculo($vehiculo);
                         
@@ -287,43 +287,34 @@ class VhloLimitacionController extends Controller
             );
 
             if ($placa) {
-                if ($placa->getTipoVehiculo()->getModulo()->getId() == $params->idModulo) {
-                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                    array(
+                        'placa' => $placa->getId()
+                    )
+                );
+
+                if ($vehiculo) {
+                    $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                         array(
-                            'placa' => $placa->getId()
+                            'vehiculo' => $vehiculo->getId(),
+                            'activo' => true,
                         )
                     );
-    
-                    if ($vehiculo) {
-                        $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
-                            array(
-                                'vehiculo' => $vehiculo->getId(),
-                                'activo' => true,
-                            )
+
+                    if ($limitaciones) {
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => count($limitaciones).' limitaciones encontradas.',
+                            'data' => $limitaciones,
                         );
-    
-                        if (!$limitaciones) {
-                            $response = array(
-                                'title' => 'Perfecto!',
-                                'status' => 'success',
-                                'code' => 200,
-                                'message' => 'El vehiculo no tiene limitaciones a la propiedad.',
-                            );
-                        }else{
-                            $response = array(
-                                'title' => 'Atención!',
-                                'status' => 'warning',
-                                'code' => 400,
-                                'message' => count($limitaciones).' limitaciones encontradas.',
-                                'data' => $limitaciones,
-                            );
-                        }
                     }else{
                         $response = array(
-                            'title' => 'Error!',
-                            'status' => 'error',
+                            'title' => 'Atención!',
+                            'status' => 'warning',
                             'code' => 400,
-                            'message' => 'No se encuentra ningún vehiculo con el número de placa digitada.',
+                            'message' => 'Ningún registro encontrado.',
                         );
                     }
                 }else{
@@ -331,7 +322,7 @@ class VhloLimitacionController extends Controller
                         'title' => 'Error!',
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'El número de placa digitado no pertenece a un vehiculo de tipo RNA.',
+                        'message' => 'No se encuentra ningún vehiculo con el número de placa digitada.',
                     );
                 }
             }else{

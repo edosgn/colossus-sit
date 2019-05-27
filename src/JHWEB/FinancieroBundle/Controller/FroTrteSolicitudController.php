@@ -483,8 +483,13 @@ class FroTrteSolicitudController extends Controller
                                 $placa->setNumero(
                                     strtoupper($params->nuevaPlaca)
                                 );
+
+                                if ($vehiculo->getPlaca()) {
+                                    $placa->setTipoVehiculo($vehiculo->getPlaca()->getTipoVehiculo());
+                                }elseif ($vehiculo->getClase()) {
+                                    $placa->setTipoVehiculo($vehiculo->getClase()->getTipoVehiculo());
+                                }
                                 $placa->setEstado('ASIGNADA');
-                                $placa->setTipoVehiculo($vehiculo->getTipoVehiculo());
                                 $placa->setOrganismoTransito($vehiculo->getOrganismoTransito());
     
                                 $em->persist($placa);
@@ -535,6 +540,10 @@ class FroTrteSolicitudController extends Controller
     
                         case 'repotenciacion':
                             $vehiculo->setModelo($params->modelo);
+                            break;
+
+                        case 'radicado':
+                            $vehiculo->setActivo(true);
                             break;
     
                         case 'registrarPignorado':

@@ -165,6 +165,37 @@ class VhloVehiculoController extends Controller
                     $vehiculo->setEmpresa($empresa);
                 }
 
+                /* DATOS DE RADICADO DE CUENTA */
+                if ($params->tipoMatricula == 'RADICADO') {
+                    if ($params->radicado->numeroDocumento) {
+                        $vehiculo->setIdentificacionRadicado($params->radicado->numeroDocumento);
+                    }
+
+                    if ($params->radicado->fechaIngreso) {
+                        $vehiculo->setFechaRegistroRadicado(
+                            new \Datetime($params->radicado->fechaIngreso)
+                        );
+                    }
+
+                    if ($params->radicado->guiaLlegada) {
+                        $vehiculo->setNumeroGuiaRadicado($params->radicado->guiaLlegada);
+                    }
+
+                    if ($params->radicado->empresaEnvio) {
+                        $vehiculo->setEmpresaEnvioRadicado(mb_strtoupper($params->radicado->empresaEnvio, 'utf-8'));
+                    }
+
+                    if ($params->radicado->idOrganismoTransito) {
+                        $organismoTransitoRadicado = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->radicado->idOrganismoTransito);
+                        $vehiculo->setOrganismoTransitoRadicado($organismoTransitoRadicado);
+                    }
+    
+                    if ($params->radicado->idTipoIdentificacion) {
+                        $tipoIdentificacionRadicado = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->radicado->idTipoIdentificacion);
+                        $vehiculo->setTipoIdentificacionRadicado($tipoIdentificacionRadicado);
+                    }
+                }
+
                 $vehiculo->setActivo(true);
 
                 $em->persist($vehiculo);

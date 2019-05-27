@@ -16,10 +16,8 @@ class UserCiudadanoRepository extends \Doctrine\ORM\EntityRepository
         switch ($params->tipoFiltro) {
             case 1:
                 $dql = "SELECT c
-                FROM JHWEBUsuarioBundle:UserCiudadano c,
-                UsuarioBundle:Usuario u
+                FROM JHWEBUsuarioBundle:UserCiudadano c
                 WHERE c.identificacion = :identificacion
-                AND c.usuario = u.id
                 ORDER BY c.primerNombre, c.primerApellido ASC";
 
                 $consulta = $em->createQuery($dql);
@@ -30,10 +28,8 @@ class UserCiudadanoRepository extends \Doctrine\ORM\EntityRepository
 
             case 2:
                 $dql = "SELECT c
-                FROM JHWEBUsuarioBundle:UserCiudadano c,
-                UsuarioBundle:Usuario u
-                WHERE c.usuario = u.id
-                AND (c.primerNombre LIKE :nombres OR c.segundoNombre LIKE :nombres
+                FROM JHWEBUsuarioBundle:UserCiudadano c
+                WHERE (c.primerNombre LIKE :nombres OR c.segundoNombre LIKE :nombres
                 OR c.primerApellido LIKE :apellidos OR c.segundoApellido LIKE :apellidos)
                 ORDER BY c.primerNombre, c.primerApellido ASC";
 
