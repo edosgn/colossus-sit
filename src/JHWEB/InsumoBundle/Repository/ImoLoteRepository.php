@@ -35,19 +35,24 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    public function getTotalesTipo()
+    public function getTotalesTipo($idOrganismoTransito)
     { 
         $em = $this->getEntityManager();
+
         $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre
                 FROM JHWEBInsumoBundle:ImoLote il,
                 JHWEBInsumoBundle:ImoCfgTipo it
                 WHERE il.tipoInsumo = it.id
                 AND il.tipo = :tipo
+                AND il.sedeOperativa = :idOrganismoTransito
                 GROUP BY il.tipoInsumo";
+
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameters(array(
                     'tipo' => 'INSUMO',
+                    'idOrganismoTransito' => 'idOrganismoTransito',
                 ));
+
                 return $consulta->getResult();
     }
 
