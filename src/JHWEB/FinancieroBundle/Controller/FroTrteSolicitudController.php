@@ -259,7 +259,7 @@ class FroTrteSolicitudController extends Controller
                             $params->insumoEntregado->idInsumo
                         );
                         $facturaInsumo->setInsumo($insumo);
-                        $insumo->setEstado('ENTREGADO');
+                        $insumo->setEstado('ASIGNADO');
                     }
 
                     $em->persist($facturaInsumo);
