@@ -234,8 +234,8 @@ class SvIpatVehiculoController extends Controller
 
                 $vehiculo->setDescripcionDanios($params->descripcionDanios);
 
-                $vehiculo->setFalla($params->arrayFallas);
-                $vehiculo->setLugarImpacto($params->arrayLugaresImpacto);
+                $vehiculo->setFallas(implode(",", $params->arrayFallas));
+                $vehiculo->setLugaresImpacto(implode(",", $params->arrayLugaresImpacto));
 
                 $vehiculo->setActivo(true);
                 $em->persist($vehiculo);

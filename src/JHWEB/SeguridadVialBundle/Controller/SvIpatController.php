@@ -1043,7 +1043,7 @@ class SvIpatController extends Controller
                     'nacionalidad' => $conductor->getNacionalidad(),
                     'fechaNacimiento' => $conductor->getFechaNacimiento()->format('Y-m-d'),
                     'sexo' => $conductor->getSexo(),
-                    'gravedad' => $conductor->getGravedad(),
+                    'gravedad' => $conductor->getGravedad()->getNombre(),
                     'direccionDomicilio' => $conductor->getDireccionResidencia(),
                     /* 'departamentoDomicilio' => $conductor->getDepartameto(), */
                     'ciudadDomicilio' => $conductor->getCiudadResidencia(),
@@ -1052,7 +1052,7 @@ class SvIpatController extends Controller
                     'chaleco' => $conductor->getChaleco(),
                     'cinturon' => $conductor->getCinturon(),
                     'descripcionLesiones' => $conductor->getDescripcionLesion(),
-                    'hospital' => $conductor->getHospital(),
+                    'hospital' => $conductor->getHospital()->getNombre(),
                     'practicoExamen' => $conductor->getPracticoExamen(),
                     'resultadoExamen' => $conductor->getResultadoExamen(),
                     'gradoExamen' => $conductor->getGradoExamen(),
@@ -1068,8 +1068,6 @@ class SvIpatController extends Controller
             }
 
             $conductoresString = implode(",", $arrayConductores);
-            /* var_dump($conductoresString);
-            die(); */
             //============================= fin conductores =====================================================//
             
             //============================= inico vehiculos =====================================================//
@@ -1158,8 +1156,8 @@ class SvIpatController extends Controller
                     'hospital' => $victima->getHospital()->getNombre(),
                     'placaVehiculo' => $victima->getPlacaVehiculo(),
                     'practicoExamen' => $victima->getPracticoExamen(),
-                    'resultadoExamen' => $victima->getResultadoExamen(),
-                    'gradoExamen' => $victima->getGradoExamen(),
+                    'resultadoExamen' => $victima->getResultadoExamen()->getNombre(),
+                    'gradoExamen' => $victima->getGradoExamen()->getNombre(),
                     'autorizoExamen' => $victima->getAutorizoExamen(),
                     'sustanciasPsicoactivas' => $victima->getSustanciasPsicoactivas(),
                 );

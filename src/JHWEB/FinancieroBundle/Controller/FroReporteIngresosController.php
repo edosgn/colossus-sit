@@ -87,7 +87,6 @@ class FroReporteIngresosController extends Controller
             
             $reporteMensual = false;
             
-            /* if($fechaInicioDatetime ==  $fechaFinDatetime) { */
             if(intval($params->tipoArchivoTramite) == 1) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesDiario($fechaInicioDatetime, $organismoTransito->getId());
 
@@ -245,7 +244,6 @@ class FroReporteIngresosController extends Controller
                         'message' => 'No se encontraron registros.',
                     );
                 }
-            /* } else if ($fechaInicioDatetime < $fechaFinDatetime) { */
             } else if ($params->tipoArchivoTramite == 0) {
                 $arrayReporteMensual = [];
                 $totalReporteMensual = 0;
@@ -321,13 +319,7 @@ class FroReporteIngresosController extends Controller
                         'message' => "No existen registros aún para la fecha estipulada.",
                     );
                 }
-            } /* else {
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "No existen registros para la generación de reportes en el rango de las fechas estipuladas.",
-                );
-            } */
+            }
         } else {
             $response = array(
                 'status' => 'error',

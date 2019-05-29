@@ -149,7 +149,7 @@ class SvIpatConductorController extends Controller
                 }
 
                 $conductor->setPracticoExamen($params->practicoExamen);
-                $conductor->setAutorizo($params->autorizo);
+                $conductor->setAutorizoExamen($params->autorizo);
 
                 if ($params->idResultadoExamen) {
                     $resultadoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find(
