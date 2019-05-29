@@ -560,11 +560,6 @@ class ImoInsumoController extends Controller
             $params->idOrganismoTransito 
         );
 
-        
-
-        // var_dump($loteArray);
-        // die();
- 
         $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->getInsumoRango(
             $fechaInicio,
             $fechaFin,

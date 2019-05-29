@@ -329,6 +329,7 @@ class ImoLoteController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) { 
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -373,6 +374,7 @@ class ImoLoteController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         }
+
         return $helpers->json($response);
     }
 
@@ -414,5 +416,62 @@ class ImoLoteController extends Controller
         )); 
  
         $this->get('app.pdf')->templateAsignacion($html, $numeroActa); 
+    }
+
+    /**
+     * Busca todos los lotes pro organismo de transito.
+     *
+     * @Route("/search/organismotransito", name="imolote_search_organismotransito")
+     * @Method("POST")
+     */
+    public function searchByOrganismoTransitoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck== true) { 
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+        
+            $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
+                array(
+                    'tipo'=>'INSUMO',
+                    'sedeOperativa'=> $params->idOrganismoTransito
+                )
+            );
+            $loteSustratos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
+                array(
+                    'tipo'=>'SUSTRATO',
+                    'sedeOperativa'=> $params->idOrganismoTransito
+                )
+            );
+
+            $totalesTipo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalesTipo($params->idOrganismoTransito);
+            
+            $data = array(
+                'loteInsumos' =>  $loteInsumos, 
+                'loteSustratos' =>  $loteSustratos, 
+                'totalesTipo' =>  $totalesTipo, 
+            );
+            
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($loteInsumos)+count($loteSustratos)." registros encontrados", 
+                'data'=> $data,
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }       
+
+        return $helpers->json($response);
     }
 } 
