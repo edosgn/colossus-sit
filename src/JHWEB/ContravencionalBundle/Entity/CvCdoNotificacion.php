@@ -42,10 +42,10 @@ class CvCdoNotificacion
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgComparendoEstado", inversedBy="notificaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado", inversedBy="notificaciones") */
     private $estado;
 
-    /** @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgCargo", inversedBy="notificaciones") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalCfgCargo", inversedBy="notificaciones") */
     private $cargo;
 
 
@@ -137,11 +137,11 @@ class CvCdoNotificacion
     /**
      * Set estado
      *
-     * @param \AppBundle\Entity\CfgComparendoEstado $estado
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado $estado
      *
      * @return CvCdoNotificacion
      */
-    public function setEstado(\AppBundle\Entity\CfgComparendoEstado $estado = null)
+    public function setEstado(\JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado $estado = null)
     {
         $this->estado = $estado;
 
@@ -151,7 +151,7 @@ class CvCdoNotificacion
     /**
      * Get estado
      *
-     * @return \AppBundle\Entity\CfgComparendoEstado
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado
      */
     public function getEstado()
     {
@@ -161,11 +161,11 @@ class CvCdoNotificacion
     /**
      * Set cargo
      *
-     * @param \AppBundle\Entity\CfgCargo $cargo
+     * @param \JHWEB\PersonalBundle\Entity\PnalCfgCargo $cargo
      *
      * @return CvCdoNotificacion
      */
-    public function setCargo(\AppBundle\Entity\CfgCargo $cargo = null)
+    public function setCargo(\JHWEB\PersonalBundle\Entity\PnalCfgCargo $cargo = null)
     {
         $this->cargo = $cargo;
 
@@ -175,7 +175,7 @@ class CvCdoNotificacion
     /**
      * Get cargo
      *
-     * @return \AppBundle\Entity\CfgCargo
+     * @return \JHWEB\PersonalBundle\Entity\PnalCfgCargo
      */
     public function getCargo()
     {

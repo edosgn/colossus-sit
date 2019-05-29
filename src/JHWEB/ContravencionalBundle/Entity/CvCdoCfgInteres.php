@@ -43,7 +43,7 @@ class CvCdoCfgInteres
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CfgComparendoEstado", inversedBy="trazabilidades")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado", inversedBy="trazabilidades")
      **/
     protected $estado;
 
@@ -133,11 +133,11 @@ class CvCdoCfgInteres
     /**
      * Set estado
      *
-     * @param \AppBundle\Entity\CfgComparendoEstado $estado
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado $estado
      *
      * @return CvCdoCfgInteres
      */
-    public function setEstado(\AppBundle\Entity\CfgComparendoEstado $estado = null)
+    public function setEstado(\JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado $estado = null)
     {
         $this->estado = $estado;
 
@@ -147,7 +147,7 @@ class CvCdoCfgInteres
     /**
      * Get estado
      *
-     * @return \AppBundle\Entity\CfgComparendoEstado
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoCfgEstado
      */
     public function getEstado()
     {

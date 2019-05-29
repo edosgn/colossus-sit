@@ -62,7 +62,7 @@ class VhloLimitacion
     protected $entidadJudicial;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="limitacioness")
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="limitaciones")
      **/
     protected $municipio;
 

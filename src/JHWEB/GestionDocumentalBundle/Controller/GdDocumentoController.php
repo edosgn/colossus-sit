@@ -683,7 +683,6 @@ class GdDocumentoController extends Controller
      */
     public function pdfAction(Request $request, GdDocumento $gdDocumento)
     {
-        
         $html = $this->renderView('@JHWEBGestionDocumental/gddocumento/pdf.template.html.twig', array(
             'gdDocumento'=>$gdDocumento,
         ));

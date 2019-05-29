@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usermedidacautelar</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ userMedidaCautelar.id }}</td>
+            </tr>
+            <tr>
+                <th>Numerooficio</th>
+                <td>{{ userMedidaCautelar.numeroOficio }}</td>
+            </tr>
+            <tr>
+                <th>Numeroradicado</th>
+                <td>{{ userMedidaCautelar.numeroRadicado }}</td>
+            </tr>
+            <tr>
+                <th>Observaciones</th>
+                <td>{{ userMedidaCautelar.observaciones }}</td>
+            </tr>
+            <tr>
+                <th>Fecharegistro</th>
+                <td>{% if userMedidaCautelar.fechaRegistro %}{{ userMedidaCautelar.fechaRegistro|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechainicio</th>
+                <td>{% if userMedidaCautelar.fechaInicio %}{{ userMedidaCautelar.fechaInicio|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechaexpiracion</th>
+                <td>{% if userMedidaCautelar.fechaExpiracion %}{{ userMedidaCautelar.fechaExpiracion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if userMedidaCautelar.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usermedidacautelar_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('usermedidacautelar_edit', { 'id': userMedidaCautelar.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

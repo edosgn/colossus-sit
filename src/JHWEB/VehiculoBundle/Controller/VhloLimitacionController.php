@@ -66,7 +66,7 @@ class VhloLimitacionController extends Controller
 
             $limitacionesOld = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                 array(
-                    'numeroOrdenJudicial' => $params->limitacion->numeroOrdenJudicial,
+                    'numeroOrdenJudicial' => $params->numeroOrdenJudicial,
                 )
             );
 
@@ -76,23 +76,23 @@ class VhloLimitacionController extends Controller
                 );
 
                 $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                    $params->limitacion->idMunicipio
+                    $params->idMunicipio
                 );
 
                 $tipo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipo')->find(
-                    $params->limitacion->idTipoLimitacion
+                    $params->idTipoLimitacion
                 );
 
                 $tipoProceso = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionTipoProceso')->find(
-                    $params->limitacion->idTipoProcesoLimitacion
+                    $params->idTipoProcesoLimitacion
                 );
 
                 $causal = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->find(
-                    $params->limitacion->idCausalLimitacion
+                    $params->idCausalLimitacion
                 );
 
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                    $params->limitacion->idEntidadJudicial
+                    $params->idEntidadJudicial
                 );
                 
                 foreach ($params->vehiculos as $key => $idVehiculo) {
@@ -115,10 +115,10 @@ class VhloLimitacionController extends Controller
                         $limitacion->setTipoProceso($tipoProceso);
                         $limitacion->setCausal($causal);
                         $limitacion->setEntidadJudicial($entidadJudicial);
-                        $limitacion->setFechaRadicacion(new \Datetime($params->limitacion->fechaRadicacion));
-                        $limitacion->setFechaExpedicion(new \Datetime($params->limitacion->fechaExpedicion));
-                        $limitacion->setNumeroOrdenJudicial($params->limitacion->numeroOrdenJudicial);
-                        $limitacion->setObservaciones($params->limitacion->observaciones);
+                        $limitacion->setFechaRadicacion(new \Datetime($params->fechaRadicacion));
+                        $limitacion->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+                        $limitacion->setNumeroOrdenJudicial($params->numeroOrdenJudicial);
+                        $limitacion->setObservaciones($params->observaciones);
                         $limitacion->setActivo(true);
             
                         $em->persist($limitacion);
@@ -128,7 +128,7 @@ class VhloLimitacionController extends Controller
     
                 $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                     array(
-                        'numeroOrdenJudicial' => $params->limitacion->numeroOrdenJudicial,
+                        'numeroOrdenJudicial' => $params->numeroOrdenJudicial,
                         'activo' => true
                     )
                 );
@@ -145,7 +145,7 @@ class VhloLimitacionController extends Controller
                     'title' => 'Atención!',
                     'status' => 'warning',
                     'code' => 400,
-                    'message' => "Las limitaciones asociadas al número de orden judicial ".$params->limitacion->numeroOrdenJudicial." ya se encuentras registradas en el sistema.",
+                    'message' => "Las limitaciones asociadas al número de orden judicial ".$params->numeroOrdenJudicial." ya se encuentras registradas en el sistema.",
                     'data' => $limitacionesOld
                 );
             }
@@ -233,7 +233,7 @@ class VhloLimitacionController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Levantar limitación registrada con exito.",
+                    'message' => "Registro eliminado con exito.",
                 );
             }else{
                 $response = array(

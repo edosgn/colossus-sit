@@ -236,6 +236,11 @@ class FroFacTramiteController extends Controller
                             $sustrato = true;
                         }
 
+                        //Valida si alguno de los trámites facturados requiere sustrato
+                        if ($tramiteFactura->getPrecio()->getTramite()->getSustrato()) {
+                            $sustrato = true;
+                        }
+
                         $tramitesFacturaArray[$key] = array(
                             'value' => $tramiteFactura->getId(),
                             'label' => $tramiteFactura->getPrecio()->getNombre(),
@@ -251,6 +256,7 @@ class FroFacTramiteController extends Controller
                                 'tramitesFactura' => $tramitesFacturaArray,
                                 'propietarios' => null,
                                 'sustrato' => $sustrato,
+                                'numeroRunt' => $numeroRunt,
                             )
                         );
                     }else{

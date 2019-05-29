@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Usermedidacautelars list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Numerooficio</th>
+                <th>Numeroradicado</th>
+                <th>Observaciones</th>
+                <th>Fecharegistro</th>
+                <th>Fechainicio</th>
+                <th>Fechaexpiracion</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for userMedidaCautelar in userMedidaCautelars %}
+            <tr>
+                <td><a href="{{ path('usermedidacautelar_show', { 'id': userMedidaCautelar.id }) }}">{{ userMedidaCautelar.id }}</a></td>
+                <td>{{ userMedidaCautelar.numeroOficio }}</td>
+                <td>{{ userMedidaCautelar.numeroRadicado }}</td>
+                <td>{{ userMedidaCautelar.observaciones }}</td>
+                <td>{% if userMedidaCautelar.fechaRegistro %}{{ userMedidaCautelar.fechaRegistro|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if userMedidaCautelar.fechaInicio %}{{ userMedidaCautelar.fechaInicio|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if userMedidaCautelar.fechaExpiracion %}{{ userMedidaCautelar.fechaExpiracion|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if userMedidaCautelar.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('usermedidacautelar_show', { 'id': userMedidaCautelar.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('usermedidacautelar_edit', { 'id': userMedidaCautelar.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('usermedidacautelar_new') }}">Create a new userMedidaCautelar</a>
+        </li>
+    </ul>
+{% endblock %}
