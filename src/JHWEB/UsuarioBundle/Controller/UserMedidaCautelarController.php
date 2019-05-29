@@ -244,4 +244,73 @@ class UserMedidaCautelarController extends Controller
             ->getForm()
         ;
     }
+
+    /* ============================================== */
+
+    /**
+     * Busca las medidas cautelares activas por numero de identificacion.
+     *
+     * @Route("/search/identificacion", name="vhlolimitacion_search_identificacion")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByIdentificacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->numero
+                )
+            );
+
+            if ($ciudadano) {
+                $medidasCautelares = $em->getRepository('JHWEBUsuarioBundle:UserMedidaCautelar')->findBy(
+                    array(
+                        'ciudadano' => $ciudadano->getId(),
+                        'activo' => true,
+                    )
+                );
+
+                if ($medidasCautelares) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($medidasCautelares).' medidas cautelares encontradas.',
+                        'data' => $medidasCautelares,
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'Ningún registro encontrado.',
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No existe ningún registro en la base de datos.',
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }

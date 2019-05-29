@@ -442,10 +442,10 @@ class ImoLoteController extends Controller
                     'sedeOperativa'=> $params->idOrganismoTransito
                 )
             );
+            
             $loteSustratos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
                 array(
-                    'tipo'=>'SUSTRATO',
-                    'sedeOperativa'=> $params->idOrganismoTransito
+                    'tipo'=>'SUSTRATO'
                 )
             );
 
