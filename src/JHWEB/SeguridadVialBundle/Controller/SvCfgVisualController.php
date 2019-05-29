@@ -245,7 +245,7 @@ class SvCfgVisualController extends Controller
 
         foreach ($visuales as $key => $visual) {
             $response[$key] = array(
-                'value' => $visual->getNombre(),
+                'value' => $visual->getId(),
                 'label' => $visual->getNombre(),
             );
         }

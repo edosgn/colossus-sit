@@ -247,7 +247,7 @@ class SvCfgVisualDisminuidaController extends Controller
 
         foreach ($visualesDisminuidas as $key => $visualDisminuida) {
             $response[$key] = array(
-                'value' => $visualDisminuida->getNombre(),
+                'value' => $visualDisminuida->getId(),
                 'label' => $visualDisminuida->getNombre(),
             );
         }

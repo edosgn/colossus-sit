@@ -84,21 +84,21 @@ class SvIpatController extends Controller
             $ipat->setLugar($params->lugar);
 
             $fechaAccidenteDatetime = new \Datetime($params->fechaAccidente);
-            $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d');
+            /* $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d'); */
 
             $horaAccidenteDatetime = new \Datetime($params->horaAccidente);
-            $horaAccidente = $horaAccidenteDatetime->format('H:i:s');
+            /* $horaAccidente = $horaAccidenteDatetime->format('H:i:s'); */
 
             $fechaLevantamientoDatetime = new \Datetime($params->fechaLevantamiento);
-            $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d');
+            /* $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d'); */
 
             $horaLevantamientoDatetime = new \Datetime($params->horaLevantamiento);
-            $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s');
+            /* $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s'); */
 
             $fechaActualDatetime = new \Datetime();
-            $fechaActual = $fechaActualDatetime->format('Y-m-d');
+            /* $fechaActual = $fechaActualDatetime->format('Y-m-d'); */
 
-            if ($fechaLevantamiento <= $fechaActual && $fechaLevantamiento > $fechaAccidente) {
+            if ($fechaLevantamientoDatetime <= $fechaActualDatetime && $fechaLevantamientoDatetime > $fechaAccidenteDatetime) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -109,8 +109,8 @@ class SvIpatController extends Controller
                 $ipat->setHoraAccidente($horaAccidenteDatetime);
                 $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
 
-            } elseif ($fechaLevantamiento == $fechaAccidente) {
-                if ($horaLevantamiento > $horaAccidente) {
+            } elseif ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
+                if ($horaLevantamientoDatetime > $horaAccidenteDatetime) {
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
@@ -135,8 +135,7 @@ class SvIpatController extends Controller
                 );
             }
 
-            $dia = new \Datetime($params->fechaAccidente);
-            $diaSemana = $dia->format('l');
+            $diaSemana = $fechaAccidenteDatetime->format('l');
             switch ($diaSemana) {
                 case 'Monday':
                     $ipat->setDiaAccidente('LUNES');
@@ -300,14 +299,14 @@ class SvIpatController extends Controller
                 );
                 $ipat->setVisual($visual);
             }
-
+            
             if ($params->idVisualDisminuida) {
                 $visualDisminuida = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgVisualDisminuida')->find(
                     $params->idVisualDisminuida
                 );
                 $ipat->setVisualDisminuida($visualDisminuida);
             }
-
+            
             $ipat->setOtraVisualDisminuida($params->otraVisualDisminuida);
             $ipat->setHaySemaforo($params->haySemaforo);
 
@@ -329,8 +328,16 @@ class SvIpatController extends Controller
                 );
                 $ipat->setDelineadorPiso($delineadorPiso);
             }
-
+            
             $ipat->setOtroDelineadorPiso($params->otroDelineadorPiso);
+            
+            if ($params->idHipotesis) {
+                $hipotesis = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHipotesis')->find(
+                    $params->idHipotesis
+                );
+                $ipat->setHipotesis($hipotesis);
+            }
+
             $ipat->setMismoConductor($params->mismoConductor);
             $ipat->setNombresPropietario($params->nombresPropietario);
             $ipat->setApellidosPropietario($params->apellidosPropietario);

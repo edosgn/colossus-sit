@@ -219,7 +219,7 @@ class SvCfgMaterialController extends Controller
 
         foreach ($materiales as $key => $material) {
             $response[$key] = array(
-                'value' => $material->getNombre(),
+                'value' => $material->getId(),
                 'label' => $material->getNombre(),
             );
         }
