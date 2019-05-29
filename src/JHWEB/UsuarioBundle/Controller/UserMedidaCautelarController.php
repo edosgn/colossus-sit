@@ -300,7 +300,7 @@ class UserMedidaCautelarController extends Controller
                     'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'No existe ningún registro con el número de placa digitado.',
+                    'message' => 'No existe ningún registro en la base de datos.',
                 );
             }
         } else {
