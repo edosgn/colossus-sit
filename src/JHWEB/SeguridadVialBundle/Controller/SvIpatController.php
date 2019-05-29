@@ -227,7 +227,7 @@ class SvIpatController extends Controller
             }
 
             if($params->arrayEstadosTiempo) {
-                $ipat->setEstadoTiempo($params->arrayEstadosTiempo);
+                $ipat->setEstadoTiempo(implode(",", $params->arrayEstadosTiempo));
             }
 
             if ($params->idGeometria) {
@@ -318,9 +318,9 @@ class SvIpatController extends Controller
                 $ipat->setEstadoSemaforo($estadoSemaforo);
             }
 
-            $ipat->setSenialVertical($params->arraySenialesVerticales);
-            $ipat->setSenialHorizontal($params->arraySenialesHorizontales);
-            $ipat->setReductorVelocidad($params->arrayReductoresVelocidad);
+            $ipat->setSenialVertical(implode(",", $params->arraySenialesVerticales));
+            $ipat->setSenialHorizontal(implode(",", $params->arraySenialesHorizontales));
+            $ipat->setReductorVelocidad(implode(",", $params->arrayReductoresVelocidad));
             $ipat->setOtroReductorVelocidad($params->otroReductorVelocidad);
 
             if ($params->idDelineadorPiso) {
@@ -1137,13 +1137,13 @@ class SvIpatController extends Controller
                 );
                 
             foreach ($victimas as $key => $victima) {
-                $arrayVehiculos = array(
+                $arrayVictimas = array(
                     'tipoIdentificacion' => $victima->getTipoIdentificacion(),
                     'identificacion' => $victima->getIdentificacion(),
                     'apellidos' => $victima->getApellidos(),
                     'nombres' => $victima->getNombres(),
                     /* 'pais' => $victima->getPais(), */
-                    'fechaNacimiento' => $victima->getFechaNacimiento(),
+                    'fechaNacimiento' => $victima->getFechaNacimiento()->format('Y-m-d'),
                     'genero' => $victima->getSexo(),
                     'direccionResidencia' => $victima->getDireccionResidencia(),
                     /* 'departamentoResidencia' => $victima->getMunicipioResidencia()->getDepartamentoResidentcia()->getNombre(), */
@@ -1153,9 +1153,9 @@ class SvIpatController extends Controller
                     'chaleco' => $victima->getChaleco(),
                     'cinturon' => $victima->getCinturon(),
                     /* 'condicion' => $victima->getCondicion(), */
-                    'gravedad' => $victima->getGravedad(),
+                    'gravedad' => $victima->getGravedad()->getNombre(),
                     'descripcionLesion' => $victima->getDescripcionLesion(),
-                    'hospital' => $victima->getHospital(),
+                    'hospital' => $victima->getHospital()->getNombre(),
                     'placaVehiculo' => $victima->getPlacaVehiculo(),
                     'practicoExamen' => $victima->getPracticoExamen(),
                     'resultadoExamen' => $victima->getResultadoExamen(),
