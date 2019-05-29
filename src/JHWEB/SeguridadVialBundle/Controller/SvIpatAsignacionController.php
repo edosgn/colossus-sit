@@ -241,6 +241,98 @@ class SvIpatAsignacionController extends Controller
     }
 
     /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/search/funcionario/agente", name="svipatasignacion_search_funcionario_agente")
+     * @Method({"GET", "POST"})
+     */
+    public function searchFuncionarioAgenteAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        $funcionarios['data'] = array();
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $funcionarios = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatAsignacion')->getFuncionariosByTipoContrato(
+                $params, 3
+            );
+                
+            if ($funcionarios) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado", 
+                    'data'=> $funcionarios,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Lists all mpersonalFuncionario entities.
+     *
+     * @Route("/record/funcionario", name="svipatasignacion_record_funcionario")
+     * @Method({"GET", "POST"})
+     */
+    public function recordFuncionarioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $asignaciones = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatAsignacion')->findByFuncionario(
+                $params->id
+            );
+                
+            if ($asignaciones) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($asignaciones)." Registros encontrados",  
+                    'data'=> $asignaciones,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
      * Genera el acta de entrega de impresos.
      *
      * @Route("/acta/{id}/pdf", name="svipatasignacion_acta_pdf")

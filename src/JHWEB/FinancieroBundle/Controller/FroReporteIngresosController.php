@@ -160,19 +160,19 @@ class FroReporteIngresosController extends Controller
                                         case 'SUSTRATO':
                                             $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getSustratosByName($tramite->getTramiteFactura()->getFactura()->getId()); 
     
-                                            $imoValor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
+                                            $valor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
                                                 array(
-                                                    'imoCfgTipo' => $sustrato->getInsumo()->getTipo(),
+                                                    'tipo' => $sustrato->getInsumo()->getTipo(),
                                                 )
                                             );
     
-                                            $total3 = intval(implode($cantSustratos)) * $imoValor->getValor();
-                                            $totalSustratos += intval(implode($cantSustratos)) * $imoValor->getValor();
+                                            $total3 = intval(implode($cantSustratos)) * $valor->getValor();
+                                            $totalSustratos += intval(implode($cantSustratos)) * $valor->getValor();
     
                                             $arraySustratos[] = array(
                                                 'nombre' => $sustrato->getInsumo()->getTipo()->getNombre(),
                                                 'cantidad' => intval(implode($cantSustratos)),
-                                                'valor' => $imoValor->getValor(),
+                                                'valor' => $valor->getValor(),
                                                 'total' => $total3,
                                             );
                                             break;

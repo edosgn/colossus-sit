@@ -60,7 +60,7 @@ class SvIpatVictimaController extends Controller
             //===========================================0 
             $victima = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVictima')->findOneBy(
                 array(
-                    'identificacionVictima' => $params->identificacionVictima,
+                    'identificacion' => $params->identificacion,
                     'consecutivo' => $consecutivo,
                     'activo' => true,
                 )
@@ -95,89 +95,89 @@ class SvIpatVictimaController extends Controller
                     $victima->setTipoVictima($tipoVictima);
                 }
             
-                $idGravedadVictima = (isset($params->idGravedadVictima)) ? $params->idGravedadVictima : null;
-                if ($idGravedadVictima) {
-                    $gravedadVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find(
-                        $params->idGravedadVictima
+                $idGravedad = (isset($params->idGravedad)) ? $params->idGravedad : null;
+                if ($idGravedad) {
+                    $gravedad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find(
+                        $params->idGravedad
                     );
-                    $victima->setGravedadVictima($gravedadVictima);
+                    $victima->setGravedad($gravedad);
                 }
 
-                $idTipoIdentificacionVictima = (isset($params->tipoIdentificacionVictima)) ? $params->tipoIdentificacionVictima : null;
-                if($idTipoIdentificacionVictima) {
-                    $tipoIdentificacionVictima = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionVictima);
-                    $victima->setTipoIdentificacionVictima($tipoIdentificacionVictima->getNombre());
+                $idTipoIdentificacion = (isset($params->tipoIdentificacion)) ? $params->tipoIdentificacion : null;
+                if($idTipoIdentificacion) {
+                    $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacion);
+                    $victima->setTipoIdentificacion($tipoIdentificacion->getNombre());
                 }
 
-                $identificacionVictima = (isset($params->identificacionVictima)) ? $params->identificacionVictima : null;
-                $victima->setIdentificacionVictima($identificacionVictima);
+                $identificacion = (isset($params->identificacion)) ? $params->identificacion : null;
+                $victima->setIdentificacion($identificacion);
 
-                $victima->setNombresVictima($params->nombresVictima);
-                $victima->setApellidosVictima($params->apellidosVictima);
+                $victima->setNombres($params->nombres);
+                $victima->setApellidos($params->apellidos);
 
-                $idNacionalidadVictima = (isset($params->nacionalidadVictima)) ? $params->nacionalidadVictima : null;
-                if($idNacionalidadVictima) {
-                    $nacionalidadVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->nacionalidadVictima);
-                    $victima->setNacionalidadVictima($nacionalidadVictima->getNombre());
+                $idNacionalidad = (isset($params->nacionalidad)) ? $params->nacionalidad : null;
+                if($idNacionalidad) {
+                    $nacionalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->nacionalidad);
+                    $victima->setNacionalidad($nacionalidad->getNombre());
                 }
 
-                $victima->setFechaNacimientoVictima(new \Datetime($params->fechaNacimientoVictima));
+                $victima->setFechaNacimiento(new \Datetime($params->fechaNacimiento));
                 
-                $edadVictima = $this->get("app.helpers")->calculateAge($params->fechaNacimientoVictima);
-                $victima->setEdadVictima($edadVictima);
+                $edad = $this->get("app.helpers")->calculateAge($params->fechaNacimiento);
+                $victima->setEdad($edad);
 
-                $idSexoVictima = (isset($params->sexoVictima)) ? $params->sexoVictima : null;
-                if($idSexoVictima){
-                    $sexoVictima = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($idSexoVictima);
-                    $victima->setSexoVictima($sexoVictima->getSigla());
+                $idSexo = (isset($params->sexo)) ? $params->sexo : null;
+                if($idSexo){
+                    $sexo = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($idSexo);
+                    $victima->setSexo($sexo->getSigla());
                 }
                 
-                $victima->setDireccionResidenciaVictima($params->direccionResidenciaVictima);
+                $victima->setDireccionResidencia($params->direccionResidencia);
 
-                $idCiudadResidenciaVictima = (isset($params->ciudadResidenciaVictima)) ? $params->ciudadResidenciaVictima : null;
-                if($idCiudadResidenciaVictima) {
-                    $ciudadResidenciaVictima = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidenciaVictima);
-                    $victima->setCiudadResidenciaVictima($ciudadResidenciaVictima->getNombre());
+                $idCiudadResidencia = (isset($params->ciudadResidencia)) ? $params->ciudadResidencia : null;
+                if($idCiudadResidencia) {
+                    $ciudadResidencia = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->ciudadResidencia);
+                    $victima->setCiudadResidencia($ciudadResidencia->getNombre());
                 }
 
-                $victima->setTelefonoVictima($params->telefonoVictima);
+                $victima->setTelefono($params->telefono);
 
-                $placaVehiculoVictima = (isset($params->placaVehiculoVictima)) ? $params->placaVehiculoVictima : null;
-                if($placaVehiculoVictima){
-                    $vehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->find($placaVehiculoVictima);
-                    $victima->setPlacaVehiculoVictima($vehiculo->getPlaca());
+                $placaVehiculo = (isset($params->placaVehiculo)) ? $params->placaVehiculo : null;
+                if($placaVehiculo){
+                    $vehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->find($placaVehiculo);
+                    $victima->setPlacaVehiculo($vehiculo->getPlaca());
                 }
 
-                if ($params->idHospitalVictima) {
-                    $hospitalVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find(
-                        $params->idHospitalVictima
+                if ($params->idHospital) {
+                    $hospital = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find(
+                        $params->idHospital
                     );
-                    $victima->setHospitalVictima($hospitalVictima);
+                    $victima->setHospital($hospital);
                 }
                 
-                $victima->setPracticoExamenVictima($params->practicoExamenVictima);
-                $victima->setAutorizoVictima($params->autorizoVictima);
+                $victima->setPracticoExamen($params->practicoExamen);
+                $victima->setAutorizo($params->autorizo);
                 
-                if ($params->idResultadoExamenVictima) {
-                    $resultadoExamenVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find(
-                        $params->idResultadoExamenVictima
+                if ($params->idResultadoExamen) {
+                    $resultadoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find(
+                        $params->idResultadoExamen
                     );
-                    $victima->setResultadoExamenVictima($resultadoExamenVictima);
+                    $victima->setResultadoExamen($resultadoExamen);
                 }
                 
-                if ($params->idGradoExamenVictima) {
-                    $gradoExamenVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->find(
-                        $params->idGradoExamenVictima
+                if ($params->idGradoExamen) {
+                    $gradoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->find(
+                        $params->idGradoExamen
                     );
-                    $victima->setGradoExamenVictima($gradoExamenVictima);
+                    $victima->setGradoExamen($gradoExamen);
                 }
                 
-                $victima->setSustanciasPsicoactivasVictima($params->sustanciasPsicoactivasVictima);
-                $victima->setChalecoVictima($params->chalecoVictima);
-                $victima->setCascoVictima($params->cascoVictima);
-                $victima->setCinturonVictima($params->cinturonVictima);
+                $victima->setSustanciasPsicoactivas($params->sustanciasPsicoactivas);
+                $victima->setChaleco($params->chaleco);
+                $victima->setCasco($params->casco);
+                $victima->setCinturon($params->cinturon);
                 
-                $victima->setDescripcionLesionVictima($params->descripcionLesionVictima);
+                $victima->setDescripcionLesion($params->descripcionLesion);
                 $victima->setActivo(true);
                 $em->persist($victima);
                 $em->flush();
@@ -185,7 +185,7 @@ class SvIpatVictimaController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                        'message' => "Los datos han sido registrados exitosamente.",
+                    'message' => "Los datos han sido registrados exitosamente.",
                     );
                 }
             } else {

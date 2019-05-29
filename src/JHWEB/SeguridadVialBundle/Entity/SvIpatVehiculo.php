@@ -128,14 +128,14 @@ class SvIpatVehiculo
     /**
      * @var string
      *
-     * @ORM\Column(name="empresa", type="string", nullable = true)
+     * @ORM\Column(name="nombre_empresa", type="string", nullable = true)
      */
-    private $empresa;
+    private $nombreEmpresa;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nitEmpresa", type="string", nullable = true)
+     * @ORM\Column(name="nit_empresa", type="string", nullable = true)
      */
     private $nitEmpresa;
 
@@ -301,18 +301,25 @@ class SvIpatVehiculo
     private $descripcionDanios;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="falla", type="array", nullable=true)
+     * @ORM\Column(name="fallas", type="string", nullable=true)
      */
-    private $falla;
+    private $fallas;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otra_falla", type="string", nullable=true)
+     */
+    private $otraFalla;
     
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="lugar_impacto", type="array", nullable=true)
+     * @ORM\Column(name="lugares_impacto", type="string", nullable=true)
      */
-    private $lugarImpacto;
+    private $lugaresImpacto;
 
     /**
      * @var string
@@ -699,27 +706,27 @@ class SvIpatVehiculo
     }
 
     /**
-     * Set empresa
+     * Set nombreEmpresa
      *
-     * @param string $empresa
+     * @param string $nombreEmpresa
      *
      * @return SvIpatVehiculo
      */
-    public function setEmpresa($empresa)
+    public function setNombreEmpresa($nombreEmpresa)
     {
-        $this->empresa = $empresa;
+        $this->nombreEmpresa = $nombreEmpresa;
 
         return $this;
     }
 
     /**
-     * Get empresa
+     * Get nombreEmpresa
      *
      * @return string
      */
-    public function getEmpresa()
+    public function getNombreEmpresa()
     {
-        return $this->empresa;
+        return $this->nombreEmpresa;
     }
 
     /**
@@ -1299,51 +1306,75 @@ class SvIpatVehiculo
     }
 
     /**
-     * Set falla
+     * Set fallas
      *
-     * @param array $falla
+     * @param string $fallas
      *
      * @return SvIpatVehiculo
      */
-    public function setFalla($falla)
+    public function setFallas($fallas)
     {
-        $this->falla = $falla;
+        $this->fallas = $fallas;
 
         return $this;
     }
 
     /**
-     * Get falla
+     * Get fallas
      *
-     * @return array
+     * @return string
      */
-    public function getFalla()
+    public function getFallas()
     {
-        return $this->falla;
+        return $this->fallas;
     }
 
     /**
-     * Set lugarImpacto
+     * Set otraFalla
      *
-     * @param array $lugarImpacto
+     * @param string $otraFalla
      *
      * @return SvIpatVehiculo
      */
-    public function setLugarImpacto($lugarImpacto)
+    public function setOtraFalla($otraFalla)
     {
-        $this->lugarImpacto = $lugarImpacto;
+        $this->otraFalla = $otraFalla;
 
         return $this;
     }
 
     /**
-     * Get lugarImpacto
+     * Get otraFalla
      *
-     * @return array
+     * @return string
      */
-    public function getLugarImpacto()
+    public function getOtraFalla()
     {
-        return $this->lugarImpacto;
+        return $this->otraFalla;
+    }
+
+    /**
+     * Set lugaresImpacto
+     *
+     * @param string $lugaresImpacto
+     *
+     * @return SvIpatVehiculo
+     */
+    public function setLugaresImpacto($lugaresImpacto)
+    {
+        $this->lugaresImpacto = $lugaresImpacto;
+
+        return $this;
+    }
+
+    /**
+     * Get lugaresImpacto
+     *
+     * @return string
+     */
+    public function getLugaresImpacto()
+    {
+        return $this->lugaresImpacto;
     }
 
     /**

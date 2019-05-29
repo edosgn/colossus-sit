@@ -187,6 +187,24 @@ class SvIpatController extends Controller
                 );
                 $ipat->setArea($area);
             }
+            if ($params->idTipoArea) {
+                $tipoArea = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoArea')->find(
+                    $params->idTipoArea
+                );
+                $ipat->setTipoArea($tipoArea);
+            }
+            if ($params->idTipoVia) {
+                $tipoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVia')->find(
+                    $params->idTipoVia
+                );
+                $ipat->setTipoVia($tipoVia);
+            }
+            if ($params->idCardinalidad) {
+                $cardinalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCardinalidad')->find(
+                    $params->idCardinalidad
+                );
+                $ipat->setCardinalidad($cardinalidad);
+            }
             if ($params->idSector) {
                 $sector = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgSector')->find(
                     $params->idSector
@@ -246,6 +264,7 @@ class SvIpatController extends Controller
                 );
                 $ipat->setMaterial($material);
             }
+            $ipat->setOtroMaterial($params->otroMaterial);
 
             if ($params->idEstadoVia) {
                 $estadoVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgEstadoVia')->find(
@@ -334,6 +353,8 @@ class SvIpatController extends Controller
             }
             
             $ipat->setIdentificacionTestigo($params->identificacionTestigo);
+            $ipat->setNombresTestigo($params->nombresTestigo);
+            $ipat->setApellidosTestigo($params->apellidosTestigo);
             
             $ipat->setDireccionResidenciaTestigo($params->direccionTestigo);
             
@@ -469,7 +490,9 @@ class SvIpatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
+
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(array('identificacion' => $params->identificacion));
             if ($ciudadano) {
                 $response = array(
@@ -997,16 +1020,166 @@ class SvIpatController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
+            $arrayConductores = [];
+            $arrayVehiculos = [];
+            $arrayVictimas = [];
+
             $ipat = $em->getRepository('JHWEBSeguridadVialBundle:SvIpat')->findOneByConsecutivo($params->id);
 
+            //============================= inicio conductores =====================================================//
+
+            $conductores = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConductor')->findBy(
+                array(
+                    'consecutivo' => $params->id
+                )
+            );
+
+            foreach ($conductores as $key => $conductor) {
+                $arrayConductores = array(
+                    'tipoDocumento' => $conductor->getTipoIdentificacion(),
+                    'identificacion' => $conductor->getIdentificacion(),
+                    'apellidos' => $conductor->getApellidos(),
+                    'nombres' => $conductor->getNombres(),
+                    'nacionalidad' => $conductor->getNacionalidad(),
+                    'fechaNacimiento' => $conductor->getFechaNacimiento()->format('Y-m-d'),
+                    'sexo' => $conductor->getSexo(),
+                    'gravedad' => $conductor->getGravedad(),
+                    'direccionDomicilio' => $conductor->getDireccionResidencia(),
+                    /* 'departamentoDomicilio' => $conductor->getDepartameto(), */
+                    'ciudadDomicilio' => $conductor->getCiudadResidencia(),
+                    'telefono' => $conductor->getTelefono (),
+                    'casco' => $conductor->getCasco(),
+                    'chaleco' => $conductor->getChaleco(),
+                    'cinturon' => $conductor->getCinturon(),
+                    'descripcionLesiones' => $conductor->getDescripcionLesion(),
+                    'hospital' => $conductor->getHospital(),
+                    'practicoExamen' => $conductor->getPracticoExamen(),
+                    'resultadoExamen' => $conductor->getResultadoExamen(),
+                    'gradoExamen' => $conductor->getGradoExamen(),
+                    'autorizoExamen' => $conductor->getAutorizoExamen(),
+                    'sustanciasPsicoactivas' => $conductor->getSustanciasPsicoactivas(),
+                    'portaLicencia' => $conductor->getPortaLicencia(),
+                    'numeroLicencia' => $conductor->getNumeroLicenciaConduccion(),
+                    'categoriaLicencia' => $conductor->getCategoriaLicenciaConduccion(),
+                    'resticcionLicencia' => $conductor->getRestriccionLicencia(),
+                    'fechaExpedicionLicencia' => $conductor->getFechaExpedicionLicenciaConduccion()->format('Y-m-d'),
+                    'fechaVencimientoLicencia' => $conductor->getFechaVencimientoLicenciaConduccion()->format('Y-m-d'),
+                );
+            }
+
+            $conductoresString = implode(",", $arrayConductores);
+            /* var_dump($conductoresString);
+            die(); */
+            //============================= fin conductores =====================================================//
+            
+            //============================= inico vehiculos =====================================================//
+            $vehiculos = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->findBy(
+                array(
+                    'consecutivo' => $params->id
+                    )
+                );
+            
+            foreach ($vehiculos as $key => $vehiculo) {
+                $arrayVehiculos = array(
+                    'portaPlaca' => $vehiculo->getPortaPlaca(),
+                    'placaRemolque' => $vehiculo->getPlacaRemolque(),
+                    'matriculadoEn' => $vehiculo->getMatriculadoEn(),
+                    'marca' => $vehiculo->getMarca(),
+                    'linea' => $vehiculo->getLinea(),
+                    'color' => $vehiculo->getColor(),
+                    'modelo' => $vehiculo->getModelo(),
+                    'carroceria' => $vehiculo->getCarroceria(),
+                    'capacidadCarga' => $vehiculo->getTon(),
+                    'cantPasajeros' => $vehiculo->getPasajeros(),
+                    'clase' => $vehiculo->getClase(),
+                    'servicio' => $vehiculo->getServicio(),
+                    'nitEmpresa' => $vehiculo->getNitEmpresa(),
+                    'nombreEmpresa' => $vehiculo->getNombreEmpresa(),
+                    'radioAccion' => $vehiculo->getRadioAccion(),
+                    'modalidadTransporte' => $vehiculo->getModalidadTransporte(),
+                    'rtm' => $vehiculo->getRevisionTecnomecanica(),
+                    'numeroRtm' => $vehiculo->getNumeroTecnomecanica(),
+                    'inmovilizado' => $vehiculo->getInmovilizado(),
+                    'inmovilizadoEn' => $vehiculo->getInmovilizadoEn(),
+                    'aDisposicionDe' => $vehiculo->getADisposicionDe(),
+                    'cantidadAcompaniantes' => $vehiculo->getCantidadAcompaniantes(),
+                    'descripcionDanios' => $vehiculo->getDescripcionDanios(),
+                    'fallas' => $vehiculo->getFallas(),
+                    'otraFalla' => $vehiculo->getOtraFalla(),
+                    'lugaresImpacto' => $vehiculo->getLugaresImpacto(),
+                    /* 'portaLicencia' => $vehiculo->getPortaLicencia(), */
+                    'tarjetaRegistro' => $vehiculo->getPortaTarjetaRegistro(),
+                    'tarjetaRegistro' => $vehiculo->getTarjetaRegistro(),
+                    'matriculadoEn' => $vehiculo->getMatriculadoEn(),
+                    'portaSoat' => $vehiculo->getPortaSoat(),
+                    'soat' => $vehiculo->getSoat(),
+                    'aseguradoraSoat' => $vehiculo->getAseguradoraSoat(),
+                    'fechaVencimientoSoat' => $vehiculo->getFechaVencimientoSoat()->format('Y-m-d'),
+                    'portaSeguroResponsabilidadCivil' => $vehiculo->getPortaSeguroResponsabilidadCivil(),
+                    'numeroSeguroResponsabilidaCvil' => $vehiculo->getNumeroSeguroResponsabilidadCivil(),
+                    'aseguradoraSeguroResponsabilidaCvil' => $vehiculo->getAseguradoraSeguroResponsabilidadCivil(),
+                    'fechaVencimientoSeguroResponsabilidaCvil' => $vehiculo->getFechaVencimientoSeguroResponsabilidadCivil()->format('Y-m-d'),
+                    'portaSeguroExtracontractual' => $vehiculo->getPortaSeguroExtracontractual(),
+                    'numeroSeguroExtracontractual' => $vehiculo->getNumeroSeguroExtracontractual(),
+                    'aseguradoraSeguroExtracontractual' => $vehiculo->getAseguradoraSeguroExtracontractual(),
+                    'fechaVencimientoSeguroExtracontractual' => $vehiculo->getFechaVencimientoSeguroExtracontractual()->format('Y-m-d'),
+                );
+            }
+
+            $vehiculosString = implode(",", $arrayVehiculos);
+            //============================= fin vehiculos =====================================================//
+            
+            //============================= inicio victimas =====================================================//
+            $victimas = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVictima')->findBy(
+                array(
+                    'consecutivo' => $params->id
+                    )
+                );
+                
+            foreach ($victimas as $key => $victima) {
+                $arrayVehiculos = array(
+                    'tipoIdentificacion' => $victima->getTipoIdentificacion(),
+                    'identificacion' => $victima->getIdentificacion(),
+                    'apellidos' => $victima->getApellidos(),
+                    'nombres' => $victima->getNombres(),
+                    /* 'pais' => $victima->getPais(), */
+                    'fechaNacimiento' => $victima->getFechaNacimiento(),
+                    'genero' => $victima->getSexo(),
+                    'direccionResidencia' => $victima->getDireccionResidencia(),
+                    /* 'departamentoResidencia' => $victima->getMunicipioResidencia()->getDepartamentoResidentcia()->getNombre(), */
+                    'ciudadResidencia' => $victima->getCiudadResidencia(),
+                    'telefono' => $victima->getTelefono(),
+                    'casco' => $victima->getCasco(),
+                    'chaleco' => $victima->getChaleco(),
+                    'cinturon' => $victima->getCinturon(),
+                    /* 'condicion' => $victima->getCondicion(), */
+                    'gravedad' => $victima->getGravedad(),
+                    'descripcionLesion' => $victima->getDescripcionLesion(),
+                    'hospital' => $victima->getHospital(),
+                    'placaVehiculo' => $victima->getPlacaVehiculo(),
+                    'practicoExamen' => $victima->getPracticoExamen(),
+                    'resultadoExamen' => $victima->getResultadoExamen(),
+                    'gradoExamen' => $victima->getGradoExamen(),
+                    'autorizoExamen' => $victima->getAutorizoExamen(),
+                    'sustanciasPsicoactivas' => $victima->getSustanciasPsicoactivas(),
+                );
+            }
+
+            $victimasString = implode(",", $arrayVictimas);
+            //============================= fin victimas =====================================================//
             if ($ipat) {
                 $response = array(
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Registro encontrado',
-                    'data' => $ipat,
-                );
+                    'data' => array(
+                        'ipat' => $ipat,
+                        'conductores' => $conductoresString,
+                        'vehiculos' => $vehiculosString,
+                        'victimas' => $victimasString,
+                        )
+                    );
             } else {
                 $response = array(
                     'title' => 'Error!',
