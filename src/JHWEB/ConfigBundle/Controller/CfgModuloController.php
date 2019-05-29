@@ -5,7 +5,8 @@ namespace JHWEB\ConfigBundle\Controller;
 use JHWEB\ConfigBundle\Entity\CfgModulo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cfgmodulo controller.
@@ -22,13 +23,26 @@ class CfgModuloController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $modulos = $em->getRepository('JHWEBConfigBundle:CfgModulo')->findBy(
+            array('activo' => true)
+        );
 
-        $cfgModulos = $em->getRepository('JHWEBConfigBundle:CfgModulo')->findAll();
+        $response['data'] = array();
 
-        return $this->render('cfgmodulo/index.html.twig', array(
-            'cfgModulos' => $cfgModulos,
-        ));
+        if ($modulos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($modulos)." registros encontrados", 
+                'data'=> $modulos,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +53,42 @@ class CfgModuloController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgModulo = new Cfgmodulo();
-        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgModuloType', $cfgModulo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgModulo);
+
+            $modulo = new CfgModulo();
+
+            $modulo->setNombre(strtoupper($params->nombre));
+            $modulo->setAbreviatura($params->abreviatura);
+            $modulo->setDescripcion($params->descripcion);
+            $modulo->setSiglaSustrato($params->siglaSustrato);
+            $modulo->setVehiculo($params->vehiculo);
+            $modulo->setActivo(true);
+
+            $em->persist($modulo);
             $em->flush();
 
-            return $this->redirectToRoute('cfgmodulo_show', array('id' => $cfgModulo->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cfgmodulo/new.html.twig', array(
-            'cfgModulo' => $cfgModulo,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**

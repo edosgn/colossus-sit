@@ -54,6 +54,14 @@ class ImoCfgTipo
      **/
     protected $modulo;
 
+    /**
+    * @ORM\OneToMany(targetEntity="ImoCfgValor", mappedBy="tipo", cascade={"remove"})
+    */
+    private $valores;
+
+    public function __construct() {
+        $this->valores = new \Doctrine\Common\Collections\ArrayCollection();
+    }    
 
     /**
      * Get id
@@ -183,5 +191,39 @@ class ImoCfgTipo
     public function getModulo()
     {
         return $this->modulo;
+    }
+
+    /**
+     * Add valore
+     *
+     * @param \JHWEB\InsumoBundle\Entity\ImoCfgValor $valore
+     *
+     * @return ImoCfgTipo
+     */
+    public function addValore(\JHWEB\InsumoBundle\Entity\ImoCfgValor $valore)
+    {
+        $this->valores[] = $valore;
+
+        return $this;
+    }
+
+    /**
+     * Remove valore
+     *
+     * @param \JHWEB\InsumoBundle\Entity\ImoCfgValor $valore
+     */
+    public function removeValore(\JHWEB\InsumoBundle\Entity\ImoCfgValor $valore)
+    {
+        $this->valores->removeElement($valore);
+    }
+
+    /**
+     * Get valores
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getValores()
+    {
+        return $this->valores;
     }
 }
