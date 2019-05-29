@@ -115,9 +115,9 @@ class SvIpatConductor
     /**
      * @var bool
      *
-     * @ORM\Column(name="autorizo_onductor", type="boolean", nullable = true)
+     * @ORM\Column(name="autorizo_examen", type="boolean", nullable = true)
      */
-    private $autorizo;
+    private $autorizoExamen;
     
     /**
      * @var string
@@ -544,27 +544,27 @@ class SvIpatConductor
     }
 
     /**
-     * Set autorizo
+     * Set autorizoExamen
      *
-     * @param boolean $autorizo
+     * @param boolean $autorizoExamen
      *
      * @return SvIpatConductor
      */
-    public function setAutorizo($autorizo)
+    public function setAutorizoExamen($autorizoExamen)
     {
-        $this->autorizo = $autorizo;
+        $this->autorizoExamen = $autorizoExamen;
 
         return $this;
     }
 
     /**
-     * Get autorizo
+     * Get autorizoExamen
      *
      * @return boolean
      */
-    public function getAutorizo()
+    public function getAutorizoExamen()
     {
-        return $this->autorizo;
+        return $this->autorizoExamen;
     }
 
     /**

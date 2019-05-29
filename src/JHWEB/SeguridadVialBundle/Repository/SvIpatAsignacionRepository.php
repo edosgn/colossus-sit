@@ -24,4 +24,24 @@ class SvIpatAsignacionRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene la lista de documentos por peticionario
+    public function getFuncionariosByTipoContrato($params, $cargo){   
+        $em = $this->getEntityManager();
+
+    	$dql = "SELECT f
+        FROM JHWEBPersonalBundle:PnalFuncionario f, JHWEBUsuarioBundle:UserCiudadano c
+        WHERE c.id = f.ciudadano
+        AND (c.primerNombre = :parametro OR c.segundoNombre = :parametro OR c.primerApellido = :parametro OR c.segundoApellido = :parametro OR f.numeroPlaca = :parametro)
+        AND f.cargo = :cargo";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'parametro' => $params->parametro,
+            'cargo' => $cargo,
+        ));
+
+
+        return $consulta->getResult();
+    }
 }

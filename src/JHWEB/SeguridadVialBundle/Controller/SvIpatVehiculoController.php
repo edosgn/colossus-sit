@@ -82,10 +82,10 @@ class SvIpatVehiculoController extends Controller
                 $vehiculo->setPlaca($params->placa);
                 $vehiculo->setPlacaRemolque($params->placaRemolque);
                 
-                $idNacionalidadVehiculo = (isset($params->nacionalidadVehiculo)) ? $params->nacionalidadVehiculo : null;
-                if ($idNacionalidadVehiculo) {
-                    $nacionalidadVehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($idNacionalidadVehiculo);
-                    $vehiculo->setNacionalidadVehiculo($nacionalidadVehiculo->getNombre());
+                $idNacionalidad = (isset($params->nacionalidad)) ? $params->nacionalidad : null;
+                if ($idNacionalidad) {
+                    $nacionalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($idNacionalidad);
+                    $vehiculo->setNacionalidad($nacionalidad->getNombre());
                 }
 
                 $idMarca = (isset($params->marca)) ? $params->marca : null;
@@ -213,8 +213,8 @@ class SvIpatVehiculoController extends Controller
 
                 $idClase = (isset($params->clase)) ? $params->clase : null;
                 if($idClase) {
-                    $claseVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->clase);
-                    $vehiculo->setClase($claseVehiculo->getNombre());
+                    $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->clase);
+                    $vehiculo->setClase($clase->getNombre());
                 }
 
                 $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->servicio);

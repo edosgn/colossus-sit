@@ -122,9 +122,9 @@ class SvIpatVictima
     /**
      * @var bool
      *
-     * @ORM\Column(name="autorizo", type="boolean", nullable = true)
+     * @ORM\Column(name="autorizo_examen", type="boolean", nullable = true)
      */
-    private $autorizo;
+    private $autorizoExamen;
     
     /**
      * @var string
@@ -526,27 +526,27 @@ class SvIpatVictima
     }
 
     /**
-     * Set autorizo
+     * Set autorizoExamen
      *
-     * @param boolean $autorizo
+     * @param boolean $autorizoExamen
      *
      * @return SvIpatVictima
      */
-    public function setAutorizo($autorizo)
+    public function setAutorizoExamen($autorizoExamen)
     {
-        $this->autorizo = $autorizo;
+        $this->autorizoExamen = $autorizoExamen;
 
         return $this;
     }
 
     /**
-     * Get autorizo
+     * Get autorizoExamen
      *
      * @return boolean
      */
-    public function getAutorizo()
+    public function getAutorizoExamen()
     {
-        return $this->autorizo;
+        return $this->autorizoExamen;
     }
 
     /**

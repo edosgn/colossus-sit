@@ -120,6 +120,27 @@ class SvIpat
     /**
      * @var string
      *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTipoArea", inversedBy="tiposareas")
+     */
+    private $tipoArea;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgTipoVia", inversedBy="tiposvias")
+     */
+    private $tipoVia;
+
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgCardinalidad", inversedBy="cardinalidades")
+     */
+    private $cardinalidad;
+
+    /**
+     * @var string
+     *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgSector", inversedBy="sectores")
      */
     private $sector;
@@ -139,9 +160,9 @@ class SvIpat
     private $disenio;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="estado_tiempo", type="array", nullable=true)
+     * @ORM\Column(name="estado_tiempo", type="string", nullable=true)
      */
     private $estadoTiempo;
 
@@ -179,6 +200,13 @@ class SvIpat
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgMaterial", inversedBy="materiales")
      */
     private $material;
+
+      /**
+     * @var string
+     *
+     * @ORM\Column(name="otro_material", type="string", nullable = true)
+     */
+    private $otroMaterial;
 
     /**
      * @var string
@@ -244,23 +272,23 @@ class SvIpat
     private $estadoSemaforo;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="senial_vertical", type="array", nullable=true)
+     * @ORM\Column(name="senial_vertical", type="string", nullable=true)
      */
     private $senialVertical;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="senial_horizontal", type="array", nullable=true)
+     * @ORM\Column(name="senial_horizontal", type="string", nullable=true)
      */
     private $senialHorizontal;
 
     /**
-     * @var array
+     * @var string
      *
-     * @ORM\Column(name="reductor_velocidad", type="array", nullable=true)
+     * @ORM\Column(name="reductor_velocidad", type="string", nullable=true)
      */
     private $reductorVelocidad;
 
@@ -272,7 +300,7 @@ class SvIpat
     private $otroReductorVelocidad;
 
     /**
-     * @var array
+     * @var string
      *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgControlVia", inversedBy="delineadores_piso")
      */
@@ -738,7 +766,7 @@ class SvIpat
     /**
      * Set estadoTiempo
      *
-     * @param array $estadoTiempo
+     * @param string $estadoTiempo
      *
      * @return SvIpat
      */
@@ -752,11 +780,35 @@ class SvIpat
     /**
      * Get estadoTiempo
      *
-     * @return array
+     * @return string
      */
     public function getEstadoTiempo()
     {
         return $this->estadoTiempo;
+    }
+
+    /**
+     * Set otroMaterial
+     *
+     * @param string $otroMaterial
+     *
+     * @return SvIpat
+     */
+    public function setOtroMaterial($otroMaterial)
+    {
+        $this->otroMaterial = $otroMaterial;
+
+        return $this;
+    }
+
+    /**
+     * Get otroMaterial
+     *
+     * @return string
+     */
+    public function getOtroMaterial()
+    {
+        return $this->otroMaterial;
     }
 
     /**
@@ -810,7 +862,7 @@ class SvIpat
     /**
      * Set senialVertical
      *
-     * @param array $senialVertical
+     * @param string $senialVertical
      *
      * @return SvIpat
      */
@@ -824,7 +876,7 @@ class SvIpat
     /**
      * Get senialVertical
      *
-     * @return array
+     * @return string
      */
     public function getSenialVertical()
     {
@@ -834,7 +886,7 @@ class SvIpat
     /**
      * Set senialHorizontal
      *
-     * @param array $senialHorizontal
+     * @param string $senialHorizontal
      *
      * @return SvIpat
      */
@@ -848,7 +900,7 @@ class SvIpat
     /**
      * Get senialHorizontal
      *
-     * @return array
+     * @return string
      */
     public function getSenialHorizontal()
     {
@@ -858,7 +910,7 @@ class SvIpat
     /**
      * Set reductorVelocidad
      *
-     * @param array $reductorVelocidad
+     * @param string $reductorVelocidad
      *
      * @return SvIpat
      */
@@ -872,7 +924,7 @@ class SvIpat
     /**
      * Get reductorVelocidad
      *
-     * @return array
+     * @return string
      */
     public function getReductorVelocidad()
     {
@@ -1813,6 +1865,78 @@ class SvIpat
     public function getArea()
     {
         return $this->area;
+    }
+
+    /**
+     * Set tipoArea
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgTipoArea $tipoArea
+     *
+     * @return SvIpat
+     */
+    public function setTipoArea(\JHWEB\SeguridadVialBundle\Entity\SvCfgTipoArea $tipoArea = null)
+    {
+        $this->tipoArea = $tipoArea;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoArea
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgTipoArea
+     */
+    public function getTipoArea()
+    {
+        return $this->tipoArea;
+    }
+
+    /**
+     * Set tipoVia
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgTipoVia $tipoVia
+     *
+     * @return SvIpat
+     */
+    public function setTipoVia(\JHWEB\SeguridadVialBundle\Entity\SvCfgTipoVia $tipoVia = null)
+    {
+        $this->tipoVia = $tipoVia;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoVia
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgTipoVia
+     */
+    public function getTipoVia()
+    {
+        return $this->tipoVia;
+    }
+
+    /**
+     * Set cardinalidad
+     *
+     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgCardinalidad $cardinalidad
+     *
+     * @return SvIpat
+     */
+    public function setCardinalidad(\JHWEB\SeguridadVialBundle\Entity\SvCfgCardinalidad $cardinalidad = null)
+    {
+        $this->cardinalidad = $cardinalidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cardinalidad
+     *
+     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgCardinalidad
+     */
+    public function getCardinalidad()
+    {
+        return $this->cardinalidad;
     }
 
     /**

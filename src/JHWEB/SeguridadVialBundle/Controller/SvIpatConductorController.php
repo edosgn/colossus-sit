@@ -59,7 +59,7 @@ class SvIpatConductorController extends Controller
                 
                 $conductor = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConductor')->findOneBy(
                     array(
-                    'identificacionConductor' => $params->identificacionConductor,
+                    'identificacion' => $params->identificacion,
                     'consecutivo' => $consecutivo,
                     'activo' => true,
                 )
@@ -84,86 +84,88 @@ class SvIpatConductorController extends Controller
                 $conductor->setConsecutivo($consecutivo);
                 //=======================================
                 
-                $conductor->setNombresConductor($params->nombresConductor);
-                $conductor->setApellidosConductor($params->apellidosConductor);
+                $conductor->setNombres($params->nombres);
+                $conductor->setApellidos($params->apellidos);
                 
-                $idSexoConductor = (isset($params->sexoConductor)) ? $params->sexoConductor : null;
-                if ($idSexoConductor) {
-                    $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoConductor);
-                    $conductor->setSexoConductor($sexoConductor->getSigla());
+                $idSexo = (isset($params->sexo)) ? $params->sexo : null;
+                if ($idSexo) {
+                    $sexo = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexo);
+                    $conductor->setSexo($sexo->getSigla());
                 }
                 //$idTipoIdentificacionTestigo = (isset($params->tipoIdentificacionConductor)) ? $params->tipoIdentificacionConductor : null;
-                $identificacionConductor = (isset($params->identificacionConductor)) ? $params->identificacionConductor : null;
-                $conductor->setIdentificacionConductor($identificacionConductor);
+                $identificacion = (isset($params->identificacion)) ? $params->identificacion : null;
+                $conductor->setIdentificacion($identificacion);
 
-                $idTipoIdentificacionConductor = (isset($params->tipoIdentificacionConductor)) ? $params->tipoIdentificacionConductor : null;
-                if($idTipoIdentificacionConductor) {
-                    $tipoIdentificacionConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacionConductor);
-                    $conductor->setTipoIdentificacionConductor($tipoIdentificacionConductor->getNombre());
+                $idTipoIdentificacion = (isset($params->tipoIdentificacion)) ? $params->tipoIdentificacion : null;
+                if($idTipoIdentificacion) {
+                    $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->tipoIdentificacion);
+                    $conductor->setTipoIdentificacion($tipoIdentificacion->getNombre());
                 }
                 
-                $idNacionalidadConductor = (isset($params->nacionalidadConductor)) ? $params->nacionalidadConductor : null;
-                if($idNacionalidadConductor) {
-                    $nacionalidadConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->nacionalidadConductor);
-                    $conductor->setNacionalidadConductor($nacionalidadConductor->getNombre());
+                $idNacionalidad = (isset($params->nacionalidad)) ? $params->nacionalidad : null;
+                if($idNacionalidad) {
+                    $nacionalidad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgNacionalidad')->find($params->nacionalidad);
+                    $conductor->setNacionalidad($nacionalidad->getNombre());
                 }
                 
-                $conductor->setFechaNacimientoConductor(new \Datetime($params->fechaNacimientoConductor));
+                var_dump($params->fechaNacimiento);
+
+                $conductor->setFechaNacimiento(new \Datetime($params->fechaNacimiento));
                 
-                $edadConductor = $this->get("app.helpers")->calculateAge($params->fechaNacimientoConductor);
-                $conductor->setEdadConductor($edadConductor);
+                $edad = $this->get("app.helpers")->calculateAge($params->fechaNacimiento);
+                $conductor->setEdad($edad);
 
                 
-                $idSexoConductor = (isset($params->sexoConductor)) ? $params->sexoConductor : null;
-                if ($idSexoConductor) {
-                    $sexoConductor = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexoConductor);
-                    $conductor->setSexoConductor($sexoConductor->getSigla());
+                $idSexo = (isset($params->sexo)) ? $params->sexo : null;
+                if ($idSexo) {
+                    $sexo = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($params->sexo);
+                    $conductor->setSexo($sexo->getSigla());
                 }
 
                 
-                $idGravedadConductor = (isset($params->idGravedadConductor)) ? $params->idGravedadConductor : null;
-                if ($idGravedadConductor) {
-                    $gravedadConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find(
-                        $params->idGravedadConductor
+                $idGravedad = (isset($params->idGravedad)) ? $params->idGravedad : null;
+                if ($idGravedad) {
+                    $gravedad = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGravedadVictima')->find(
+                        $params->idGravedad
                     );
-                    $conductor->setGravedadConductor($gravedadConductor);
+                    $conductor->setGravedad($gravedad);
                 }            
 
-                $conductor->setDireccionResidenciaConductor($params->direccionResidenciaConductor);
+                $conductor->setDireccionResidencia($params->direccionResidencia);
 
-                $idCiudadResidenciaConductor = (isset($params->ciudadResidenciaConductor)) ? $params->ciudadResidenciaConductor : null;
+                $idCiudadResidencia = (isset($params->ciudadResidencia)) ? $params->ciudadResidencia : null;
                 
-                if($idCiudadResidenciaConductor) {
-                    $ciudadResidenciaConductor = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idCiudadResidenciaConductor);
-                    $conductor->setCiudadResidenciaConductor($ciudadResidenciaConductor->getNombre());
+                if($idCiudadResidencia) {
+                    $ciudadResidencia = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idCiudadResidencia);
+                    $conductor->setCiudadResidencia($ciudadResidencia->getNombre());
                 }
 
-                $conductor->setTelefonoConductor($params->telefonoConductor);
+                $conductor->setTelefono($params->telefono);
 
-                $placaVehiculoConductor = (isset($params->placaVehiculoConductor)) ? $params->placaVehiculoConductor : null;
-                if($placaVehiculoConductor){
-                    $vehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->find($placaVehiculoConductor);
-                    $conductor->setPlacaVehiculoConductor($vehiculo->getPlaca());
+                $placaVehiculo = (isset($params->placaVehiculo)) ? $params->placaVehiculo : null;
+                if($placaVehiculo){
+                    $vehiculo = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVehiculo')->find($placaVehiculo);
+                    $conductor->setPlacaVehiculo($vehiculo->getPlaca());
                 }
 
-                $conductor->setPracticoExamenConductor($params->practicoExamenConductor);
-                $conductor->setAutorizoConductor($params->autorizoConductor);
+                $conductor->setPracticoExamen($params->practicoExamen);
+                $conductor->setAutorizo($params->autorizo);
 
-                if ($params->idResultadoExamenConductor) {
-                    $resultadoExamenConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find(
-                        $params->idResultadoExamenConductor
+                if ($params->idResultadoExamen) {
+                    $resultadoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgResultadoExamen')->find(
+                        $params->idResultadoExamen
                     );
-                    $conductor->setResultadoExamenConductor($resultadoExamenConductor);
+                    $conductor->setResultadoExamen($resultadoExamen);
                 }
 
-                if ($params->idGradoExamenConductor) {
-                    $gradoExamenConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->find(
-                        $params->idGradoExamenConductor
+                if ($params->idGradoExamen) {
+                    $gradoExamen = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGradoExamen')->find(
+                        $params->idGradoExamen
                     );
-                    $conductor->setGradoExamenConductor($gradoExamenConductor);
+                    $conductor->setGradoExamen($gradoExamen);
                 }
 
-                $conductor->setSustanciasPsicoactivasConductor($params->sustanciasPsicoactivasConductor);
+                $conductor->setSustanciasPsicoactivas($params->sustanciasPsicoactivas);
                 $conductor->setPortaLicencia($params->portaLicencia);
                 $conductor->setNumeroLicenciaConduccion($params->numeroLicenciaConduccion);
 
@@ -175,23 +177,23 @@ class SvIpatConductorController extends Controller
                 }
 
                 
-                $conductor->setRestriccionConductor($params->restriccionConductor);
+                $conductor->setRestriccionLicencia($params->restriccion);
                 $conductor->setFechaExpedicionLicenciaConduccion(new \Datetime($params->fechaExpedicionLicenciaConduccion));
                 $conductor->setFechaVencimientoLicenciaConduccion(new \Datetime($params->fechaVencimientoLicenciaConduccion));
                 $conductor->setOrganismoTransito($params->organismoTransito);
-                $conductor->setChalecoConductor($params->chalecoConductor);
-                $conductor->setCascoConductor($params->cascoConductor);
-                $conductor->setCinturonConductor($params->cinturonConductor);
+                $conductor->setChaleco($params->chaleco);
+                $conductor->setCasco($params->casco);
+                $conductor->setCinturon($params->cinturon);
 
-                $hospitalConductor = (isset($params->idHospitalConductor)) ? $params->idHospitalConductor : null;
-                if ($hospitalConductor) {
-                    $hospitalConductor = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find(
-                        $params->idHospitalConductor
+                $hospital = (isset($params->idHospital)) ? $params->idHospital : null;
+                if ($hospital) {
+                    $hospital = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHospital')->find(
+                        $params->idHospital
                     );
-                    $conductor->setHospitalConductor($hospitalConductor);
+                    $conductor->setHospital($hospital);
                 }
 
-                $conductor->setDescripcionLesionConductor($params->descripcionLesionConductor);
+                $conductor->setDescripcionLesion($params->descripcionLesion);
 
                 $conductor->setActivo(true);
                 $em->persist($conductor);

@@ -75,9 +75,12 @@ class FroFacturaController extends Controller
             $fechaActual = date('Y-m-d');
             $fechaCreacion = new \Datetime($fechaActual);
             $fechaVencimiento = new \Datetime(date("Y-m-d",strtotime($fechaActual."+ 1 days"))); 
+            /* $fechaPago = new \Datetime($params->factura->fechaPago);  */
 
             $factura->setFechaCreacion($fechaCreacion);
             $factura->setFechaVencimiento($fechaVencimiento);
+            //pendiente para validación con banco
+            /* $factura->setFechaPago($fechaPago); */
             $factura->setHora(new \Datetime(date('h:i:s A')));
             $factura->setValorBruto($params->factura->valor);
             $factura->setValorMora($params->factura->interes);
