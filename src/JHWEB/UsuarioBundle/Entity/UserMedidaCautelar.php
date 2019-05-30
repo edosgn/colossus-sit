@@ -70,6 +70,27 @@ class UserMedidaCautelar
      */
     private $activo;
 
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_levantamiento", type="date", nullable=true)
+     */
+    private $fechaLevantamiento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_oficio_levantamiento", type="string", length=100, nullable=true)
+     */
+    private $numeroOficioLevantamiento;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones_levantamiento", type="text")
+     */
+    private $observacionesLevantamiento;
+
     /** @ORM\ManyToOne(targetEntity="UserCiudadano", inversedBy="medidasCautelares") */
     private $ciudadano;
 
@@ -93,6 +114,15 @@ class UserMedidaCautelar
      **/
     protected $municipio;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgEntidadJudicial", inversedBy="medidasCautelares")
+     **/
+    protected $entidadJudicialLevantamiento;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="medidasCautelaress")
+     **/
+    protected $municipioLevantamiento;
 
 
     /**
@@ -266,11 +296,83 @@ class UserMedidaCautelar
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set fechaLevantamiento
+     *
+     * @param \DateTime $fechaLevantamiento
+     *
+     * @return UserMedidaCautelar
+     */
+    public function setFechaLevantamiento($fechaLevantamiento)
+    {
+        $this->fechaLevantamiento = $fechaLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaLevantamiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaLevantamiento()
+    {
+        return $this->fechaLevantamiento;
+    }
+
+    /**
+     * Set numeroOficioLevantamiento
+     *
+     * @param string $numeroOficioLevantamiento
+     *
+     * @return UserMedidaCautelar
+     */
+    public function setNumeroOficioLevantamiento($numeroOficioLevantamiento)
+    {
+        $this->numeroOficioLevantamiento = $numeroOficioLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroOficioLevantamiento
+     *
+     * @return string
+     */
+    public function getNumeroOficioLevantamiento()
+    {
+        return $this->numeroOficioLevantamiento;
+    }
+
+    /**
+     * Set observacionesLevantamiento
+     *
+     * @param string $observacionesLevantamiento
+     *
+     * @return UserMedidaCautelar
+     */
+    public function setObservacionesLevantamiento($observacionesLevantamiento)
+    {
+        $this->observacionesLevantamiento = $observacionesLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionesLevantamiento
+     *
+     * @return string
+     */
+    public function getObservacionesLevantamiento()
+    {
+        return $this->observacionesLevantamiento;
     }
 
     /**
@@ -391,5 +493,53 @@ class UserMedidaCautelar
     public function getMunicipio()
     {
         return $this->municipio;
+    }
+
+    /**
+     * Set entidadJudicialLevantamiento
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicialLevantamiento
+     *
+     * @return UserMedidaCautelar
+     */
+    public function setEntidadJudicialLevantamiento(\JHWEB\ConfigBundle\Entity\CfgEntidadJudicial $entidadJudicialLevantamiento = null)
+    {
+        $this->entidadJudicialLevantamiento = $entidadJudicialLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get entidadJudicialLevantamiento
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgEntidadJudicial
+     */
+    public function getEntidadJudicialLevantamiento()
+    {
+        return $this->entidadJudicialLevantamiento;
+    }
+
+    /**
+     * Set municipioLevantamiento
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioLevantamiento
+     *
+     * @return UserMedidaCautelar
+     */
+    public function setMunicipioLevantamiento(\JHWEB\ConfigBundle\Entity\CfgMunicipio $municipioLevantamiento = null)
+    {
+        $this->municipioLevantamiento = $municipioLevantamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get municipioLevantamiento
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgMunicipio
+     */
+    public function getMunicipioLevantamiento()
+    {
+        return $this->municipioLevantamiento;
     }
 }
