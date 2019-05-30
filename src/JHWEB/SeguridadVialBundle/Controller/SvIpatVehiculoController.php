@@ -130,7 +130,7 @@ class SvIpatVehiculoController extends Controller
 
                 $empresa = (isset($params->empresa)) ? $params->empresa : null;
                 if($empresa){
-                    $vehiculo->setEmpresa($params->empresa);
+                    $vehiculo->setNombreEmpresa($params->empresa);
                 }
 
                 $nitEmpresa = (isset($params->nitEmpresa)) ? $params->nitEmpresa : null;

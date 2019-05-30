@@ -167,7 +167,6 @@ class SvIpatController extends Controller
 
             $ipat->setOtroClaseAccidente($params->otroClaseAccidente);
 
-            
             if ($params->idClaseChoque) {
                 $claseChoque = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgClaseChoque')->find($params->idClaseChoque);
                 $ipat->setClaseChoque($claseChoque);
@@ -1061,8 +1060,8 @@ class SvIpatController extends Controller
                     'descripcionLesiones' => $conductor->getDescripcionLesion(),
                     'hospital' => $conductor->getHospital()->getNombre(),
                     'practicoExamen' => $conductor->getPracticoExamen(),
-                    'resultadoExamen' => $conductor->getResultadoExamen(),
-                    'gradoExamen' => $conductor->getGradoExamen(),
+                    'resultadoExamen' => $conductor->getResultadoExamen()->getNombre(),
+                    'gradoExamen' => $conductor->getGradoExamen()->getNombre(),
                     'autorizoExamen' => $conductor->getAutorizoExamen(),
                     'sustanciasPsicoactivas' => $conductor->getSustanciasPsicoactivas(),
                     'portaLicencia' => $conductor->getPortaLicencia(),
