@@ -424,7 +424,7 @@ class UserEmpresaController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        $json = $request->get("json", null);
+        $json = $request->get("data", null);
         $params = json_decode($json);
 
         $em = $this->getDoctrine()->getManager();
