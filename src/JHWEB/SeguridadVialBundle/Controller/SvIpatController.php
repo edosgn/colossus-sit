@@ -337,6 +337,8 @@ class SvIpatController extends Controller
                 $ipat->setHipotesis($hipotesis);
             }
 
+            $ipat->setOtraHipotesis($params->otraHipotesis);
+            
             $ipat->setMismoConductor($params->mismoConductor);
             $ipat->setNombresPropietario($params->nombresPropietario);
             $ipat->setApellidosPropietario($params->apellidosPropietario);

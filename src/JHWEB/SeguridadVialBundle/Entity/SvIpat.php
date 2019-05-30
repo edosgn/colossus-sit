@@ -461,13 +461,20 @@ class SvIpat
      * @ORM\Column(name="entidad_agente", type="string", nullable = true)
      */
     private $entidadAgente;
-
+    
     /**
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis", inversedBy="hipotesis")
      */
     private $hipotesis;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="otra_hipotesis", type="string", nullable = true)
+     */
+    private $otraHipotesis;
     
     /**
      * @var string
@@ -1481,6 +1488,30 @@ class SvIpat
     public function getEntidadAgente()
     {
         return $this->entidadAgente;
+    }
+
+    /**
+     * Set otraHipotesis
+     *
+     * @param string $otraHipotesis
+     *
+     * @return SvIpat
+     */
+    public function setOtraHipotesis($otraHipotesis)
+    {
+        $this->otraHipotesis = $otraHipotesis;
+
+        return $this;
+    }
+
+    /**
+     * Get otraHipotesis
+     *
+     * @return string
+     */
+    public function getOtraHipotesis()
+    {
+        return $this->otraHipotesis;
     }
 
     /**
