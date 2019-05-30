@@ -87,7 +87,7 @@ class UserMedidaCautelar
     /**
      * @var string
      *
-     * @ORM\Column(name="observaciones_levantamiento", type="text")
+     * @ORM\Column(name="observaciones_levantamiento", type="text", nullable=true)
      */
     private $observacionesLevantamiento;
 
