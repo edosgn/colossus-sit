@@ -195,10 +195,26 @@ class UserMedidaCautelarController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $medidaCautelar = $em->getRepository('JHWEBUsuarioBundle:UserMedidaCautelar')->find(
-                $params->id
+                $params->idMedidaCautelar
             );
 
             if ($medidaCautelar) {
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                    $params->idMunicipioLevantamiento
+                );
+                $medidaCautelar->setMunicipioLevantamiento($municipio);
+
+                $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                    $params->idEntidadJudicialLevantamiento
+                );
+                $medidaCautelar->setEntidadJudicialLevantamiento($entidadJudicial);
+
+                if($params->observacionesLevantamiento){
+                    $medidaCautelar->setObservacionesLevantamiento($params->observacionesLevantamiento);
+                }
+
+                $medidaCautelar->setFechaLevantamiento(new \Datetime($params->fechaLevantamiento));
+                $medidaCautelar->setNumeroOficioLevantamiento($params->numeroOficioLevantamiento);
                 $medidaCautelar->setActivo(false);
     
                 $em->flush();

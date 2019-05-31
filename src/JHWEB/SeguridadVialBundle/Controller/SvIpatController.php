@@ -108,7 +108,7 @@ class SvIpatController extends Controller
                 $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
                 $ipat->setHoraAccidente($horaAccidenteDatetime);
                 $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
-
+             
             } elseif ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
                 if ($horaLevantamientoDatetime > $horaAccidenteDatetime) {
                     $response = array(
@@ -316,9 +316,15 @@ class SvIpatController extends Controller
                 $ipat->setEstadoSemaforo($estadoSemaforo);
             }
 
-            $ipat->setSenialVertical(implode(",", $params->arraySenialesVerticales));
-            $ipat->setSenialHorizontal(implode(",", $params->arraySenialesHorizontales));
-            $ipat->setReductorVelocidad(implode(",", $params->arrayReductoresVelocidad));
+            if($params->arraySenialesVerticales) {
+                $ipat->setSenialVertical(implode(",", $params->arraySenialesVerticales));
+            }
+            if($params->arraySenialesHorizontales) {
+                $ipat->setSenialHorizontal(implode(",", $params->arraySenialesHorizontales));
+            }
+            if($params->arrayReductoresVelocidad) {
+                $ipat->setReductorVelocidad(implode(",", $params->arrayReductoresVelocidad));
+            }
             $ipat->setOtroReductorVelocidad($params->otroReductorVelocidad);
 
             if ($params->idDelineadorPiso) {
