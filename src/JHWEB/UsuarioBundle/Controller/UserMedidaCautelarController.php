@@ -200,12 +200,12 @@ class UserMedidaCautelarController extends Controller
 
             if ($medidaCautelar) {
                 $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                    $params->idMunicipio
+                    $params->idMunicipioLevantamiento
                 );
                 $medidaCautelar->setMunicipioLevantamiento($municipio);
 
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                    $params->idEntidadJudicial
+                    $params->idEntidadJudicialLevantamiento
                 );
                 $medidaCautelar->setEntidadJudicialLevantamiento($entidadJudicial);
 
