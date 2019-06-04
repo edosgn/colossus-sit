@@ -56,16 +56,16 @@ class CfgAdmFormatoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
+        if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
-           
+          
             $em = $this->getDoctrine()->getManager();
 
             $formato = new CfgAdmFormato();
 
-            $formato->setCodigo($params->codigo);
-            $formato->setNombre(strtoupper($params->nombre));
+            $formato->setCodigo(mb_strtoupper($params->codigo, 'utf-8'));
+            $formato->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $formato->setCuerpo($params->cuerpo);
             $formato->setActivo(true);
 
@@ -177,8 +177,8 @@ class CfgAdmFormatoController extends Controller
             );
 
             if ($formato) {
-                $formato->setCodigo($params->codigo);
-                $formato->setNombre(strtoupper($params->nombre));
+                $formato->setCodigo(mb_strtoupper($params->codigo, 'utf-8'));
+                $formato->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 $formato->setCuerpo($params->cuerpo);
 
                 if ($params->idTipo) {

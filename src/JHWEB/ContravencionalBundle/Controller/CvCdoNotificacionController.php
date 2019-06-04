@@ -378,10 +378,10 @@ class CvCdoNotificacionController extends Controller
                     }
                 }elseif($comparendo->getEstado()->getId() == 3){//Cobro coactivo
                     //Busca la trazabilidad de cobro coactivo
-                    $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                    $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
                         array(
                             'comparendo' => $comparendo->getId(),
-                            'estado' => 20
+                            'estado' => 3
                         )
                     );
 
@@ -390,7 +390,7 @@ class CvCdoNotificacionController extends Controller
                     );
 
                     //Busca si ya se creo una notificacion personal
-                    $notificacionPersonal = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                    $notificacionPersonal = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
                         array(
                             'comparendo' => $comparendo->getId(),
                             'estado' => 20
@@ -398,7 +398,7 @@ class CvCdoNotificacionController extends Controller
                     );
 
                     if (!$notificacionPersonal && $diasHabiles > 20) {
-                        //Cambia a estado a cobro coactivo
+                        //Crea la trazabilidad de notificacion personal
                         $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(20);
 
                         $this->generateTrazabilidad($comparendo, $estado);
@@ -408,7 +408,7 @@ class CvCdoNotificacionController extends Controller
                         );
 
                         //Busca si ya se creo una notificacion por aviso
-                        $notificacionAviso = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        $notificacionAviso = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
                             array(
                                 'comparendo' => $comparendo->getId(),
                                 'estado' => 21
@@ -416,7 +416,7 @@ class CvCdoNotificacionController extends Controller
                         );
 
                         if (!$notificacionAviso && $diasCalendario > 40) {
-                            //Cambia a estado a cobro coactivo
+                            //Crea la trazabilidad de notificacion por aviso
                             $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(21);
 
                             $this->generateTrazabilidad($comparendo, $estado);
@@ -426,7 +426,7 @@ class CvCdoNotificacionController extends Controller
                             );
 
                             //Busca si ya se creo una notificacion por pagina web
-                            $notificacionWeb = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                            $notificacionWeb = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
                                 array(
                                     'comparendo' => $comparendo->getId(),
                                     'estado' => 22
@@ -434,7 +434,7 @@ class CvCdoNotificacionController extends Controller
                             );
 
                             if (!$notificacionWeb && $diasCalendario > 20) {
-                                //Cambia a estado a cobro coactivo
+                                //Crea la trazabilidad de notificacion por pagina web
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(22);
 
                                 $this->generateTrazabilidad($comparendo, $estado);
@@ -444,7 +444,7 @@ class CvCdoNotificacionController extends Controller
                                 );
 
                                 //Busca si ya se creo una notificacion por pagina web
-                                $autoSeguirAdelante = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                                $autoSeguirAdelante = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
                                     array(
                                         'comparendo' => $comparendo->getId(),
                                         'estado' => 23
@@ -452,7 +452,7 @@ class CvCdoNotificacionController extends Controller
                                 );
 
                                 if (!$autoSeguirAdelante && $diasHabiles > 1) {
-                                    //Cambia a estado a cobro coactivo
+                                    //Genera la trazabilidad de auto de seguir adelante
                                     $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(23);
 
                                     $this->generateTrazabilidad($comparendo, $estado);

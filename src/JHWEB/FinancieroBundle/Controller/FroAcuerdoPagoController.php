@@ -81,12 +81,12 @@ class FroAcuerdoPagoController extends Controller
 
                 if ($params->acuerdoPago->comparendos) {
                     foreach ($params->acuerdoPago->comparendos as $key => $idComparendo) {
-                        $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                        $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                             $idComparendo
                         );
                         $comparendo->setAcuerdoPago($acuerdoPago);
 
-                        $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                             4
                         );
                         $comparendo->setEstado($estado);
@@ -130,7 +130,7 @@ class FroAcuerdoPagoController extends Controller
                 }
 
                 //Registra trazabilidad de acuerdo de pago
-                $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(4);
+                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(4);
                 $helpers->generateTrazabilidad($comparendo, $estado);
 
                 $amortizaciones = $em->getRepository('JHWEBFinancieroBundle:FroAmortizacion')->findByAcuerdoPago($acuerdoPago->getId());
@@ -300,7 +300,7 @@ class FroAcuerdoPagoController extends Controller
             $valorTotal = 0;
 
             foreach ($params->comparendos as $key => $idComparendo) {
-                $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                     $idComparendo
                 );
 

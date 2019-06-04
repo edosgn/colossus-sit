@@ -112,7 +112,7 @@ class FroFacturaController extends Controller
                 $factura->setTipoRecaudo($tipoRecaudo);
             }
 
-            if ($params->factura->idCiudadano) {
+            if (isset($params->factura->idCiudadano) && $params->factura->idCiudadano) {
                 $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
                     $params->factura->idCiudadano
                 );
@@ -666,6 +666,9 @@ class FroFacturaController extends Controller
             )
         );
 
+        $infractorNombres = $comparendos[0]->getComparendo()->getInfractorNombres().' '.$comparendos[0]->getComparendo()->getInfractorApellidos();
+        $infractorIdentificacion = $comparendos[0]->getComparendo()->getInfractorIdentificacion();
+
         //.$factura->getFechaVencimiento()->format('Ymd')
 
         $barcode = new BarcodeGenerator();
@@ -687,6 +690,10 @@ class FroFacturaController extends Controller
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
             'comparendos'=> $comparendos,
+            'infractor'=> array(
+                'nombres' => $infractorNombres,
+                'identificacion' => $infractorIdentificacion,
+            ),
             'imgBarcode' => $imgBarcode
         ));
 

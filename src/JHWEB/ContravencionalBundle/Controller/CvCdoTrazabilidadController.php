@@ -53,8 +53,8 @@ class CvCdoTrazabilidadController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $trazabilidadNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findByEstado(
-                    $params->idComparendoEstado
-                );
+                $params->idComparendoEstado
+            );
 
             if (!$trazabilidadNew) {
                 $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
@@ -73,14 +73,14 @@ class CvCdoTrazabilidadController extends Controller
                 }
 
                 if ($params->idComparendo) {
-                    $comparendo = $em->getRepository('AppBundle:Comparendo')->find(
+                    $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
                         $params->idComparendo
                     );
                 }
 
                 //Busca el estado que se solicita insertar
                 if ($params->idComparendoEstado) {
-                    $estado = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                    $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                         $params->idComparendoEstado
                     );
                 }
@@ -97,7 +97,7 @@ class CvCdoTrazabilidadController extends Controller
 
                     //Si no lo tiene lo genera automaticamente
                     if (!$trazabilidadOld) {
-                        $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(14);
+                        $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(14);
 
                         $audiencia = new CvAudiencia();
 
@@ -123,11 +123,19 @@ class CvCdoTrazabilidadController extends Controller
 
                     //Si no lo tiene lo genera automaticamente
                     if (!$trazabilidadOld) {
-                        $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                        $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                             15
                         );
                         $this->generateTrazabilidad($comparendo, $estadoNew);
                     }
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con exito",
+                    );
+
+                    return $helpers->json($response);
                 }elseif($estado->getId() == 3){
                     //Valida que tenga el estado de SANCIONADO
                     $trazabilidadOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
@@ -148,7 +156,7 @@ class CvCdoTrazabilidadController extends Controller
 
                         //Si no lo tiene lo genera automaticamente
                         if (!$trazabilidadOld) {
-                            $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                            $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                                 16
                             );
 
@@ -165,11 +173,19 @@ class CvCdoTrazabilidadController extends Controller
 
                         //Si no lo tiene lo genera automaticamente
                         if (!$trazabilidadOld) {
-                            $estadoNew = $em->getRepository('AppBundle:CfgComparendoEstado')->find(
+                            $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                                 18
                             );
                             $this->generateTrazabilidad($comparendo, $estadoNew);
                         }
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro creado con exito",
+                        );
+    
+                        return $helpers->json($response);
                     }else{
                         $response = array(
                             'status' => 'error',
@@ -197,28 +213,19 @@ class CvCdoTrazabilidadController extends Controller
                     return $helpers->json($response);
                 }elseif($estado->getId() == 15){
                     //No genera documento solo un pdf general de todas las notificaciones para el día siguiente al auto de no comparecencia
+                    $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                        15
+                    );
+                    $this->generateTrazabilidad($comparendo, $estadoNew);
+                    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con exito",
+                    );
+
+                    return $helpers->json($response);
                 }
-
-                $trazabilidad = new CvCdoTrazabilidad();
-
-                $trazabilidad->setFecha(new \Datetime($params->fecha));
-                $trazabilidad->setHora(new \Datetime($params->hora));
-                if ($params->observaciones) {
-                    $trazabilidad->setObservaciones($params->observaciones);
-                }
-                $trazabilidad->setActivo(true);
-                $trazabilidad->setComparendo($comparendo);
-                $comparendo->setEstado($estado);
-                $trazabilidad->setEstado($estado);
-
-                $em->persist($trazabilidad);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con exito",
-                );
             }else{
                 $response = array(
                     'status' => 'error',

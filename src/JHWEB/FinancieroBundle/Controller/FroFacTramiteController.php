@@ -300,7 +300,7 @@ class FroFacTramiteController extends Controller
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'Ningún trámite pendiente.', 
+                'message' => 'Ningún trámite facturado.', 
             );
         }
        

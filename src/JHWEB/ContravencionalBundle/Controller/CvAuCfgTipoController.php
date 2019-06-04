@@ -54,22 +54,48 @@ class CvAuCfgTipoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cvAuCfgTipo = new Cvaucfgtipo();
-        $form = $this->createForm('JHWEB\ContravencionalBundle\Form\CvAuCfgTipoType', $cvAuCfgTipo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $tipo = new CvAuCfgTipo();
+
+            if ($params->idFormato) {
+                $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                    $params->idFormato
+                );
+                $formato->setFormato($tipo);
+            }
+            
+            $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipo->setActivo(true);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cvAuCfgTipo);
+            
+            $em->persist($tipo);
             $em->flush();
+             
 
-            return $this->redirectToRoute('cvaucfgtipo_show', array('id' => $cvAuCfgTipo->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cvaucfgtipo/new.html.twig', array(
-            'cvAuCfgTipo' => $cvAuCfgTipo,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -91,26 +117,59 @@ class CvAuCfgTipoController extends Controller
     /**
      * Displays a form to edit an existing cvAuCfgTipo entity.
      *
-     * @Route("/{id}/edit", name="cvaucfgtipo_edit")
+     * @Route("/edit", name="cvaucfgtipo_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, CvAuCfgTipo $cvAuCfgTipo)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cvAuCfgTipo);
-        $editForm = $this->createForm('JHWEB\ContravencionalBundle\Form\CvAuCfgTipoType', $cvAuCfgTipo);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('cvaucfgtipo_edit', array('id' => $cvAuCfgTipo->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $tipo = $em->getRepository("JHWEBContravencionalBundle:CvAuCfgTipo")->find(
+                $params->id
+            );
+
+            if ($tipo) {
+                if ($params->idFormato) {
+                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                        $params->idFormato
+                    );
+                    $formato->setFormato($tipo);
+                }
+                
+                $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+                
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $atencion,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
         }
 
-        return $this->render('cvaucfgtipo/edit.html.twig', array(
-            'cvAuCfgTipo' => $cvAuCfgTipo,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**

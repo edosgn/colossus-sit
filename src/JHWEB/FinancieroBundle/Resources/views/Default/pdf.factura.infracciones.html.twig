@@ -28,12 +28,19 @@
                 </td>
             </tr>
         </table>
-        <p style="text-align:right"><b>{{ fechaActual }}</b></p>
-        <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:50%">
+        <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:60%">
             <tr>
                 <td><b>Ciudad:</b><br>  {{ factura.organismoTransito.municipio }}</td> 
                 <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
+                <td><b>Fec. Impresión:</b><br> {{ 'now'|date('d/m/Y') }}</td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <b>Infractor:</b>
+                    <br>
+                    {{ infractor.nombres }} - {{ infractor.identificacion }}
+                </td>
             </tr>
         </table>
         <br>
@@ -44,7 +51,6 @@
                     <td colspan="7" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
                 </tr>
                 <tr>
-                    <td style="border:1px solid #cccccc"><b>Infractor</b></td>
                     <td style="border:1px solid #cccccc"><b>Número</b></td>
                     <td style="border:1px solid #cccccc"><b>Fecha</b></td>
                     <td style="border:1px solid #cccccc"><b>Cod. Infracción</b></td>
@@ -57,7 +63,6 @@
                 {% for key, facturaComparendo in comparendos %}
                     {% set total = total + facturaComparendo.comparendo.valorPagar %}
                 <tr>
-                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infractorNombres }} {{ facturaComparendo.comparendo.infractorApellidos }}<br>{{ facturaComparendo.comparendo.infractorIdentificacion }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.consecutivo.numero }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.fecha }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infraccion.codigo }}</td>
