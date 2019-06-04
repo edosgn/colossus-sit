@@ -18,7 +18,7 @@ class FroTrteSolicitudReporteController extends Controller
     /**
      * Lists vhloVehiculoByPlaca.
      *
-     * @Route("/search/placa", name="vhlovehiculo_propietario_search_placa")
+     * @Route("/search/placa", name="vhlovehiculo_search_by_placa")
      * @Method({"GET", "POST"})
      */
     public function searchByPlacaAction(Request $request)
@@ -33,39 +33,50 @@ class FroTrteSolicitudReporteController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            /* $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
+            $fechaDesde = new \Datetime($params->fechaDesde);
+            $fechaHasta = new \Datetime($params->fechaHasta);
+            
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
                 array(
                     'numero' => $params->placa
                 )
             );
 
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findBy(
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
                 array(
                     'placa' => $placa
                 )
-            ); */
-
-            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo);
-
-            if ($tramitesSolicitud) {
+            );
+            
+            $tramitesSolicitud = null;
+            $propietariosActuales = null;
+            
+            if($params->tipoReporte == 1) {
+                $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+            }
+            else if($params->tipoReporte == 2){
+                $propietariosActuales = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getPropietariosActualesByPlaca($params->idOrganismoTransito, $params->idModulo, $vehiculo->getId());
+            }
+            if ($tramitesSolicitud || $propietariosActuales) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($tramitesSolicitud).' registros encontrados.', 
-                    'data'=> $tramitesSolicitud,
+                    'message' => 'Registros encontrados.', 
+                    'tramitesSolicitud'=> $tramitesSolicitud,
+                    'propietariosActuales'=> $propietariosActuales,
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'No existes tramites de matricula inicial.', 
+                    'message' => 'No registros para los filtros estipulados.', 
                 );
             }            
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'Autorizacion no valida para editar', 
+                'message' => 'Autorización no válida.', 
             );
         }
 
