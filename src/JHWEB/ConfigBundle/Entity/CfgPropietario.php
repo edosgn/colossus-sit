@@ -57,6 +57,13 @@ class CfgPropietario
     private $correo;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="conceptos", type="boolean")
+     */
+    private $conceptos;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="imagen_cabecera", type="string", length=255)
@@ -69,6 +76,13 @@ class CfgPropietario
      * @ORM\Column(name="imagen_pie", type="string", length=255)
      */
     private $imagenPie;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="imagen_logo", type="string", length=255)
+     */
+    private $imagenLogo;
 
 
     /**
@@ -202,6 +216,30 @@ class CfgPropietario
     }
 
     /**
+     * Set conceptos
+     *
+     * @param boolean $conceptos
+     *
+     * @return CfgPropietario
+     */
+    public function setConceptos($conceptos)
+    {
+        $this->conceptos = $conceptos;
+
+        return $this;
+    }
+
+    /**
+     * Get conceptos
+     *
+     * @return boolean
+     */
+    public function getConceptos()
+    {
+        return $this->conceptos;
+    }
+
+    /**
      * Set imagenCabecera
      *
      * @param string $imagenCabecera
@@ -248,5 +286,28 @@ class CfgPropietario
     {
         return $this->imagenPie;
     }
-}
 
+    /**
+     * Set imagenLogo
+     *
+     * @param string $imagenLogo
+     *
+     * @return CfgPropietario
+     */
+    public function setImagenLogo($imagenLogo)
+    {
+        $this->imagenLogo = $imagenLogo;
+
+        return $this;
+    }
+
+    /**
+     * Get imagenLogo
+     *
+     * @return string
+     */
+    public function getImagenLogo()
+    {
+        return $this->imagenLogo;
+    }
+}

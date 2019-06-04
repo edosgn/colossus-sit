@@ -773,7 +773,6 @@ class CvCdoComparendoController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-
         if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -785,11 +784,20 @@ class CvCdoComparendoController extends Controller
             );
 
             if ($comparendos) {
+                $infractor = $comparendos[0]->getInfractorNombres().' '.$comparendos[0]->getInfractorApellidos();
+                $infractorIdentificacion = $comparendos[0]->getInfractorIdentificacion();
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($comparendos)." Comparendos encontrados", 
-                    'data' => $comparendos,
+                    'data' => array(
+                        'infractor' => array(
+                            'nombres' => $infractor,
+                            'identificacion' => $infractorIdentificacion,
+                        ),
+                        'comparendos' => $comparendos,
+                    )
             );
             }else{
                  $response = array(
@@ -1033,7 +1041,7 @@ class CvCdoComparendoController extends Controller
                     'comparendo' => $params->id
                 ),
                 array(
-                    'fecha' => 'ASC'
+                    'fecha' => 'DESC'
                 )
             );
 

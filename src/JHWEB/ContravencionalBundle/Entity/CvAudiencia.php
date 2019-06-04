@@ -73,9 +73,6 @@ class CvAudiencia
     /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audiencias") */
     private $comparendo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo", inversedBy="trazabilidades") */
-    private $actoAdministrativo;
-
 
     /**
      * Get id
@@ -139,30 +136,6 @@ class CvAudiencia
             return $this->hora->format('h:i:s A');
         }
         return $this->hora;
-    }
-
-    /**
-     * Set borrador
-     *
-     * @param string $borrador
-     *
-     * @return CvAudiencia
-     */
-    public function setBorrador($borrador)
-    {
-        $this->borrador = $borrador;
-
-        return $this;
-    }
-
-    /**
-     * Get borrador
-     *
-     * @return string
-     */
-    public function getBorrador()
-    {
-        return $this->borrador;
     }
 
     /**
@@ -307,29 +280,5 @@ class CvAudiencia
     public function getEstado()
     {
         return $this->estado;
-    }
-
-    /**
-     * Set actoAdministrativo
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo
-     *
-     * @return CvAudiencia
-     */
-    public function setActoAdministrativo(\JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo $actoAdministrativo = null)
-    {
-        $this->actoAdministrativo = $actoAdministrativo;
-
-        return $this;
-    }
-
-    /**
-     * Get actoAdministrativo
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo
-     */
-    public function getActoAdministrativo()
-    {
-        return $this->actoAdministrativo;
     }
 }

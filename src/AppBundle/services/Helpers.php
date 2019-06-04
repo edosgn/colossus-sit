@@ -446,7 +446,7 @@ class Helpers
                 $comparendo->getEstado()->getFormato()
             );
 
-            $template = $this->generateTemplate($comparendo);
+            $template = $this->generateTemplate($comparendo, $estado->getFormato()->getCuerpo());
             $documento->setCuerpo($template);
 
             $em->persist($documento);

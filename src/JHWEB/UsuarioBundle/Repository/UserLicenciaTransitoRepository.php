@@ -10,4 +10,26 @@ namespace JHWEB\UsuarioBundle\Repository;
  */
 class UserLicenciaTransitoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la lista de MENUS disponibles para asignar a un USUARIO
+    public function getAssignedByUsuario($idCiudadano, $idVehiculo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT l
+            FROM JHWEBUsuarioBundle:UserLicenciaTransito l,
+            JHWEBUsuarioBundle:UserCiudadano c
+            WHERE l.ciudadano = c.id
+            AND l.activo = true
+            AND um.activo = true
+            AND l.ciudadano = :idCiudadano
+            AND l.vehiculo = :idVehiculo
+            LIMIT 1";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+	        'idCiudadano' => $idCiudadano,
+	        'idVehiculo' => $idVehiculo,
+	    ));
+
+        return $consulta->getOneOrNullResult();
+    }
 }

@@ -45,7 +45,7 @@ class FroAcuerdoPagoRepository extends \Doctrine\ORM\EntityRepository
             case 1:
                 $dql = "SELECT ap
                     FROM JHWEBFinancieroBundle:FroAcuerdoPago ap,
-                    AppBundle:Comparendo c
+                    JHWEBContravencionalBundle:CvCdoComparendo c
                     WHERE c.acuerdoPago = ap.id
                     AND ap.numero = :numero";
                 $consulta = $em->createQuery($dql);
@@ -55,7 +55,7 @@ class FroAcuerdoPagoRepository extends \Doctrine\ORM\EntityRepository
             case 2:
                 $dql = "SELECT ap
                     FROM JHWEBFinancieroBundle:FroAcuerdoPago ap,
-                    AppBundle:Comparendo c
+                    JHWEBContravencionalBundle:CvCdoComparendo c
                     WHERE c.acuerdoPago = ap.id
                     AND c.infractorIdentificacion = :identificacion";
                 $consulta = $em->createQuery($dql);
@@ -65,11 +65,11 @@ class FroAcuerdoPagoRepository extends \Doctrine\ORM\EntityRepository
             case 3:
                 $dql = "SELECT ap
                     FROM JHWEBFinancieroBundle:FroAcuerdoPago ap,
-                    AppBundle:Comparendo c,
-                    AppBundle:MpersonalComparendo pc,
+                    JHWEBContravencionalBundle:CvCdoComparendo c,
+                    JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
                     WHERE c.acuerdoPago = ap.id
                     AND c.consecutivo = pc.id
-                    AND pc.consecutivo = :numero";
+                    AND pc.numero = :numero";
                 $consulta = $em->createQuery($dql);
                 $consulta->setParameter('numero', $params->filtro);
                 break;

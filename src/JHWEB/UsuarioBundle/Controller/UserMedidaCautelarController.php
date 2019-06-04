@@ -223,7 +223,7 @@ class UserMedidaCautelarController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro eliminado con exito.",
+                    'message' => "Levatamiento exitoso.",
                 );
             }else{
                 $response = array(

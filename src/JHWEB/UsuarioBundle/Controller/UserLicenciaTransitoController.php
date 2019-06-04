@@ -154,11 +154,8 @@ class UserLicenciaTransitoController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
-            $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
-                array(
-                    'propietario' => $params->idPropietario,
-                    'activo' => true,
-                )
+            $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->getByCiudadanoAndVehiculo(
+                $params->idCiudadano, $params->idVehiculo
             );
 
             $response = array(

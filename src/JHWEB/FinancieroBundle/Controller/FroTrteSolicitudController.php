@@ -150,11 +150,11 @@ class FroTrteSolicitudController extends Controller
         
                                         $tramiteSolicitud->setVehiculo($vehiculo);
         
-                                        if (isset($params->idPropietario) && $params->idPropietario) {
-                                            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
-                                                $params->idPropietario
+                                        if (isset($params->idCiudadano) && $params->idCiudadano) {
+                                            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                                $params->idCiudadano
                                             );
-                                            $tramiteSolicitud->setPropietario($propietario);
+                                            $tramiteSolicitud->setCiudadano($ciudadano);
                                         }
         
                                         if (isset($params->idSolicitante) && $params->idSolicitante) {
@@ -287,13 +287,22 @@ class FroTrteSolicitudController extends Controller
                                 //Si el tipo de insumo es Licencia de Transito
                                 $licenciaTransito = new UserLicenciaTransito();
 
-                                $licenciaTransito->setPropietario($propietario);
-                                $licenciaTransito->setFecha(new \Datetime(date('Y-m-d h:i:s')));
-                                $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
-                                $licenciaTransito->setActivo(true);
-                                
-                                $em->persist($licenciaTransito);
-                                $em->flush();
+                                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                                    array(
+                                        'ciudadano' => $ciudadano->getId(),
+                                        'vehiculo' => $vehiculo->getId(),
+                                    )
+                                );
+
+                                if ($propietario) {
+                                    $licenciaTransito->setPropietario($propietario);
+                                    $licenciaTransito->setFecha(new \Datetime(date('Y-m-d h:i:s')));
+                                    $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
+                                    $licenciaTransito->setActivo(true);
+                                    
+                                    $em->persist($licenciaTransito);
+                                    $em->flush();
+                                }
                             }
                         }
                     }
@@ -545,6 +554,10 @@ class FroTrteSolicitudController extends Controller
                         case 'radicado':
                             $vehiculo->setActivo(true);
                             break;
+
+                        case 'matriculaInicial':
+                            $this->vehiculoPropietarioRegisterAction($params);
+                            break;
     
                         case 'registrarPignorado':
                             $this->vehiculoAcreedorRegisterAction($params);
@@ -569,6 +582,86 @@ class FroTrteSolicitudController extends Controller
         }
        
 
+        return $helpers->json($response);
+    }
+
+    public function vehiculoPropietarioRegisterAction($params)
+    {        
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();  
+
+        if ($params->idVehiculo) {
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                $params->idVehiculo
+            );
+        }
+
+        if ($vehiculo) {
+            foreach ($params->propietarios as $key => $propietarioArray) {
+                $propietario = new VhloPropietario();
+
+                if ($propietarioArray->tipo == 'Empresa') {
+                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                        array(
+                            'id' => $propietarioArray->id,
+                            'activo' => true,
+                        )
+                    );
+
+                    $propietario->setEmpresa($empresa);
+                }elseif ($propietarioArray->tipo == 'Ciudadano') {
+                    $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                        array(
+                            'id' => $propietarioArray->id,
+                            'activo' => true,
+                        )
+                    );
+
+                    $propietario->setCiudadano($ciudadano);
+                }
+
+                if ($propietarioArray->idApoderado) {
+                    $apoderado = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                        array(
+                            'id' => $propietarioArray->idApoderado,
+                            'activo' => true,
+                        )
+                    );
+
+                    $propietario->setApoderado($apoderado);
+                }
+
+                $propietario->setPermiso($propietarioArray->permiso);
+                $propietario->setFechaInicial(new \Datetime(date('Y-m-d')));
+
+                if ($params->tipoPropiedad == 1) {
+                    $propietario->setLeasing(true);
+                }else{
+                    $propietario->setLeasing(false);
+                }
+
+                $propietario->setActivo(true);
+
+                $propietario->setVehiculo($vehiculo);
+
+                $em->persist($propietario);
+                $em->flush();
+            }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Propietario creado con exito.', 
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Vehiculo no encontrado.', 
+            );
+        }                    
+       
         return $helpers->json($response);
     }
 

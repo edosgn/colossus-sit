@@ -43,6 +43,27 @@ class CvCdoCfgDescuento
     private $fechaFinal;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_resolucion", type="string", length=255)
+     */
+    private $numeroResolucion;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_resolucion", type="date")
+     */
+    private $fechaResolucion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_amnistia", type="string", length=255)
+     */
+    private $tipoAmnistia;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -155,5 +176,76 @@ class CvCdoCfgDescuento
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set numeroResolucion
+     *
+     * @param string $numeroResolucion
+     *
+     * @return CvCdoCfgDescuento
+     */
+    public function setNumeroResolucion($numeroResolucion)
+    {
+        $this->numeroResolucion = $numeroResolucion;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroResolucion
+     *
+     * @return string
+     */
+    public function getNumeroResolucion()
+    {
+        return $this->numeroResolucion;
+    }
+
+    /**
+     * Set fechaResolucion
+     *
+     * @param \DateTime $fechaResolucion
+     *
+     * @return CvCdoCfgDescuento
+     */
+    public function setFechaResolucion($fechaResolucion)
+    {
+        $this->fechaResolucion = $fechaResolucion;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaResolucion
+     *
+     * @return \DateTime
+     */
+    public function getFechaResolucion()
+    {
+        return $this->fechaResolucion;
+    }
+
+    /**
+     * Set tipoAmnistia
+     *
+     * @param string $tipoAmnistia
+     *
+     * @return CvCdoCfgDescuento
+     */
+    public function setTipoAmnistia($tipoAmnistia)
+    {
+        $this->tipoAmnistia = $tipoAmnistia;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoAmnistia
+     *
+     * @return string
+     */
+    public function getTipoAmnistia()
+    {
+        return $this->tipoAmnistia;
+    }
+}

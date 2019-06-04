@@ -62,9 +62,9 @@ class FroTrteSolicitud
     protected $tramiteFactura;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloPropietario", inversedBy="tramitesSolicitud")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="tramitesSolicitud")
      **/
-    protected $propietario;
+    protected $ciudadano;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCiudadano", inversedBy="tramitesSolicitud")
@@ -85,7 +85,6 @@ class FroTrteSolicitud
      * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="tramitesSolicitud")
      **/
     protected $funcionario;
-
 
     /**
      * Get id
@@ -242,27 +241,27 @@ class FroTrteSolicitud
     }
 
     /**
-     * Set propietario
+     * Set ciudadano
      *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario
+     * @param \JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano
      *
      * @return FroTrteSolicitud
      */
-    public function setPropietario(\JHWEB\VehiculoBundle\Entity\VhloPropietario $propietario = null)
+    public function setCiudadano(\JHWEB\UsuarioBundle\Entity\UserCiudadano $ciudadano = null)
     {
-        $this->propietario = $propietario;
+        $this->ciudadano = $ciudadano;
 
         return $this;
     }
 
     /**
-     * Get propietario
+     * Get ciudadano
      *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloPropietario
+     * @return \JHWEB\UsuarioBundle\Entity\UserCiudadano
      */
-    public function getPropietario()
+    public function getCiudadano()
     {
-        return $this->propietario;
+        return $this->ciudadano;
     }
 
     /**
