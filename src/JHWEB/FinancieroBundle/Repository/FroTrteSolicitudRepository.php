@@ -209,4 +209,27 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     } 
+
+    //Obtiene trámites solicitud según el filtro de búsqueda
+    public function getByPlaca($idOrganismoTransito, $idModulo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
+            JHWEBFinancieroBundle:FroTramite ft
+            WHERE  fts.organismoTransito = :idOrganismoTransito
+            AND fts.tramiteFactura = fft.id
+            AND fft.precio = ftp.id
+            AND ftp.modulo = :idModulo
+            AND ftp.tramite = 1";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idModulo' => $idModulo,
+        ));
+        
+        return $consulta->getResult();
+    }
 }
