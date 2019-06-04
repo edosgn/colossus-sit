@@ -623,7 +623,7 @@ class ImoInsumoController extends Controller
 
             if($loteOrganismo->getTipo() == 'SUSTRATO'){
                 $loteArray[] = array(
-                    'id'=>$loteOrganismo->getRangoInicio(),
+                    'id'=>$loteOrganismo->getTipoInsumo()->getNombre(), 
                     'rangoInicio'=>$loteOrganismo->getRangoInicio(),
                     'rangoFIn'=>$loteOrganismo->getRangoFIn(),
                     'disponiblesLote'=>COUNT($disponiblesLote),

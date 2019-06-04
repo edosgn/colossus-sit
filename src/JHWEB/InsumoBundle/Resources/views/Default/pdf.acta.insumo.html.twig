@@ -13,7 +13,7 @@
                 <h3>Lotes</h3>
                 <table border="1">
                     <tr>
-                        <td>ID</td>
+                        <td>Tipo</td>
                         <td>Rango inicio</td>
                         <td>Rango fin</td>
                         <td>Asignados</td>
@@ -22,7 +22,7 @@
                     </tr>
                     {% for lote in loteArray %}
                         <tr>
-                            <td>{{ lote.id }}</td>
+                            <td>{{ lote.id }}</td> 
                             <td>{{ lote.rangoInicio }}</td>
                             <td>{{ lote.rangoFIn }}</td>
                             <td>{{ lote.asignadosLote }}</td>

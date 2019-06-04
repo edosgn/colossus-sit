@@ -108,8 +108,6 @@ class SvIpatConductorController extends Controller
                     $conductor->setNacionalidad($nacionalidad->getNombre());
                 }
                 
-                var_dump($params->fechaNacimiento);
-
                 $conductor->setFechaNacimiento(new \Datetime($params->fechaNacimiento));
                 
                 $edad = $this->get("app.helpers")->calculateAge($params->fechaNacimiento);
