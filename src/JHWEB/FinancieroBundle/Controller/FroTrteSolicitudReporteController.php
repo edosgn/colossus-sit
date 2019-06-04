@@ -5,6 +5,7 @@ namespace JHWEB\FinancieroBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * FroTrteSolicitudReporteController controller.
@@ -31,12 +32,6 @@ class FroTrteSolicitudReporteController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
-
-            var_dump($params);
-            die();
-
-            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
-            $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
             
             /* $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
                 array(
@@ -50,7 +45,7 @@ class FroTrteSolicitudReporteController extends Controller
                 )
             ); */
 
-            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($organismoTransito->getId(), $modulo->id());
+            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo);
 
             if ($tramitesSolicitud) {
                 $response = array(
