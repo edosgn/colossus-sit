@@ -211,7 +211,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
     } 
 
     //Obtiene trámites solicitud según el filtro de búsqueda
-    public function getByPlaca($idOrganismoTransito, $idModulo)
+    public function getByPlaca($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
     {
         $em = $this->getEntityManager();
         $dql = "SELECT fts
@@ -219,6 +219,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
             JHWEBFinancieroBundle:FroTramite ft
             WHERE  fts.organismoTransito = :idOrganismoTransito
+            AND fts.fecha BETWEEN :fechaDesde AND :fechaHasta
             AND fts.tramiteFactura = fft.id
             AND fft.precio = ftp.id
             AND ftp.modulo = :idModulo
@@ -228,6 +229,33 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito,
             'idModulo' => $idModulo,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta
+        ));
+        
+        return $consulta->getResult();
+    }
+
+    //Obtiene trámites solicitud según el filtro de búsqueda
+    public function getPropietariosActualesByPlaca($idOrganismoTransito, $idModulo, $idVehiculo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT vp
+            FROM JHWEBVehiculoBundle:VhloPropietario vp, JHWEBVehiculoBundle:VhloVehiculo vv,
+            JHWEBVehiculoBundle:VhloCfgClase vcc, JHWEBVehiculoBundle:VhloCfgTipoVehiculo vctv,
+            JHWEBConfigBundle:CfgModulo m
+            WHERE  vp.vehiculo = :idVehiculo
+            AND vv.organismoTransito = :idOrganismoTransito
+            AND vv.clase = vcc.id
+            AND vcc.tipoVehiculo = vctv.id
+            AND vctv.modulo = :idModulo
+            AND vp.activo = 1";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idModulo' => $idModulo,
+            'idVehiculo' => $idVehiculo
         ));
         
         return $consulta->getResult();

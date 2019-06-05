@@ -1080,7 +1080,7 @@ class SvIpatController extends Controller
                     'fechaVencimientoLicencia' => $conductor->getFechaVencimientoLicenciaConduccion()->format('Y-m-d'),
                 );
             }
-
+            
             $conductoresString = implode(",", $arrayConductores);
             //============================= fin conductores =====================================================//
             
