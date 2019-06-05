@@ -226,6 +226,11 @@ class FroFacTramiteController extends Controller
                     $matriculaInicial = false;
 
                     foreach ($tramitesFactura as $key => $tramiteFactura) {
+                        //Valida si alguno de los trámites facturados requiere numero RUNT
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() != 30) {
+                            $numeroRunt = true;
+                        }
+                        
                         //Valida si esta facturado el trámite matricula inicial
                         if ($tramiteFactura->getPrecio()->getTramite()->getId() == 1) {
                             $matriculaInicial = true;

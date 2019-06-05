@@ -7,6 +7,7 @@ use JHWEB\FinancieroBundle\Entity\FroFacInsumo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
+use JHWEB\VehiculoBundle\Entity\VhloPropietario;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion;
@@ -678,8 +679,12 @@ class FroTrteSolicitudController extends Controller
         }
 
         if ($vehiculo) {
-            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->find(
-                $params->idPropietario
+            $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                array(
+                    'ciudadano' => $params->idSolicitante,
+                    'vehiculo' => $vehiculo->getId(),
+                    'activo' => true,
+                )
             );
 
             if ($propietario->getCiudadano()) {
@@ -896,7 +901,7 @@ class FroTrteSolicitudController extends Controller
         
                         if ($ciudadano->getFechaExpedicionDocumento()) {
                             $ciudadanoNew->setFechaExpedicionDocumento(
-                                $ciudadano->getFechaExpedicionDocumento()
+                                new \Datetime($params->fechaExpedicion)
                             );
                         }
         
