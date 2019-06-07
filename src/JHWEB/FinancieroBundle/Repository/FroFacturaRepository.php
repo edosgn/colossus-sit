@@ -24,4 +24,193 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+
+    //=======================================para reportes de ingresos=======================================//
+    ////Obtiene trámites solicitud según el filtro de búsqueda diario
+    public function findTramitesDiario($fecha, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft
+            WHERE fts.organismoTransito = :idOrganismoTransito 
+            AND fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND ff.fechaPago = :fecha";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fecha' => $fecha,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    //Obtiene trámites solicitud según el filtro de búsqueda mensual
+    public function findTramitesMensual($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
+            JHWEBFinancieroBundle:FroFactura ff,
+            JHWEBFinancieroBundle:FroFacTramite fft
+            WHERE fts.organismoTransito = :idOrganismoTransito 
+            AND fts.tramiteFactura = fft.id
+            AND fft.factura = ff.id
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    public function getByName($idConcepto, $idPrecio) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ftc.id)
+            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc
+            WHERE ftc.concepto = :idConcepto
+            AND ftc.precio = :idPrecio";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idConcepto' => $idConcepto, 
+            'idPrecio' => $idPrecio, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getTramiteByName($idTramite) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ftp.id)
+            FROM JHWEBFinancieroBundle:FroTrtePrecio ftp
+            WHERE ftp.tramite = :idTramite";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idTramite' => $idTramite, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+    public function getSustratosByName($idFactura) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ii.tipo)
+            FROM JHWEBInsumoBundle:ImoInsumo ii, JHWEBFinancieroBundle:FroFacInsumo ffi
+            WHERE ii.id = ffi.factura
+            AND ffi.factura = :idFactura";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idFactura' => $idFactura, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+    /*  =============== para infracciones ================= */
+
+    public function getInfraccionesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ccc
+            FROM JHWEBContravencionalBundle:CvCdoComparendo ccc
+            WHERE ccc.organismoTransito = :idOrganismoTransito 
+            AND ccc.fecha BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    /*  =============== para acuerdos de pago ================= */
+
+    public function getAcuerdosPagoByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ccc
+            FROM JHWEBContravencionalBundle:CvCdoComparendo ccc, JHWEBFinancieroBundle:FroAcuerdoPago fap
+            WHERE ccc.organismoTransito = :idOrganismoTransito 
+            AND ccc.acuerdoPago = fap.id
+            AND fap.fecha BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    /*  =============== para parqueadero ================= */
+
+    public function getInmovilizacionesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ffp
+            FROM JHWEBParqueaderoBundle:PqoInmovilizacion pqi, JHWEBContravencionalBundle:CvCdoComparendo ccc, 
+            JHWEBFinancieroBundle:FroFactura ff, JHWEBFinancieroBundle:FroFacParqueadero ffp
+            WHERE  ffp.factura = ff.id
+            AND ff.organismoTransito = :idOrganismoTransito 
+            AND ffp.inmovilizacion = pqi.id
+            AND pqi.fechaSalida BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
+        ));
+
+        return $consulta->getResult();
+    }
+
+    /*  =============== para retefuente ================= */
+
+    public function getRetefuentesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT ffr
+            FROM JHWEBFinancieroBundle:FroFacRetefuente ffr, JHWEBFinancieroBundle:FroFactura ff 
+            WHERE  ffr.factura = ff.id
+            AND ff.organismoTransito = :idOrganismoTransito 
+            AND ffr.fecha BETWEEN :fechaInicio AND :fechaFin";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito, 
+            'fechaInicio' => $fechaInicioDatetime,
+            'fechaFin' => $fechaFinDatetime,
+        ));
+
+        return $consulta->getResult();
+    }
+
 }

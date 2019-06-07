@@ -319,7 +319,61 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             AND fft.precio = ftp.id
             AND ftp.modulo = :idModulo
             AND ftp.tramite = ft.id
-            AND ft.codigo = 14";
+            AND ft.codigo = 13";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idModulo' => $idModulo,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta
+        ));
+        
+        return $consulta->getResult();
+    }
+
+        //Obtiene trámites solicitud según el filtro de búsqueda
+    public function getByPrendas($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
+            JHWEBFinancieroBundle:FroTramite ft
+            WHERE  fts.organismoTransito = :idOrganismoTransito
+            AND fts.fecha BETWEEN :fechaDesde AND :fechaHasta
+            AND fts.tramiteFactura = fft.id
+            AND fft.precio = ftp.id
+            AND ftp.modulo = :idModulo
+            AND ftp.tramite = ft.id
+            AND ft.codigo = 11";
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameters(array(
+            'idOrganismoTransito' => $idOrganismoTransito,
+            'idModulo' => $idModulo,
+            'fechaDesde' => $fechaDesde,
+            'fechaHasta' => $fechaHasta
+        ));
+        
+        return $consulta->getResult();
+    }
+
+        //Obtiene trámites solicitud según el filtro de búsqueda
+    public function getByRadicadosCuenta($idOrganismoTransito, $idModulo, $fechaDesde, $fechaHasta)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT fts
+            FROM JHWEBFinancieroBundle:FroTrteSolicitud fts, JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, JHWEBConfigBundle:CfgModulo m,
+            JHWEBFinancieroBundle:FroTramite ft
+            WHERE  fts.organismoTransito = :idOrganismoTransito
+            AND fts.fecha BETWEEN :fechaDesde AND :fechaHasta
+            AND fts.tramiteFactura = fft.id
+            AND fft.precio = ftp.id
+            AND ftp.modulo = :idModulo
+            AND ftp.tramite = ft.id
+            AND ft.codigo = 4";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
