@@ -64,7 +64,7 @@ class BpInsumoController extends Controller
 
             $insumo = new BpInsumo();
 
-            $insumo->setNombre(strtoupper($params->nombre));
+            $insumo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $insumo->setUnidadMedida($params->unidadMedida);
             $insumo->setCantidad($params->cantidad);
             $insumo->setValorUnitario($params->valorUnitario);
@@ -83,7 +83,6 @@ class BpInsumoController extends Controller
 
             $em->persist($insumo);
             $em->flush();
-
 
             //Actualiza costo total de actividad
             $insumos = $em->getRepository('JHWEBBancoProyectoBundle:BpInsumo')->getCostoTotalByActividad(
@@ -111,6 +110,8 @@ class BpInsumoController extends Controller
                 $cuenta->setCostoTotal(0);
             }
 
+            $em->flush();
+
             //Actualiza costo total de proyecto
             $proyecto = $cuenta->getProyecto();
 
@@ -130,6 +131,7 @@ class BpInsumoController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
+                'data' => $insumo
             );
         }else{
             $response = array(

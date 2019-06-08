@@ -361,12 +361,22 @@ class FroTrtePrecioController extends Controller
             $params->idModulo
         );
 
-        $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
-            array(
-                'modulo' => $modulo->getId(),
-                'activo' => true
-            )
-        );
+        if ($modulo->getid() == 1) {
+            $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
+                array(
+                    'modulo' => $modulo->getId(),
+                    'activo' => true
+                )
+            );
+        }elseif (isset($params->idTipoVehiculo)) {
+            $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
+                array(
+                    'modulo' => $modulo->getId(),
+                    'tipoVehiculo' => $params->idTipoVehiculo,
+                    'activo' => true
+                )
+            );
+        }
 
         $response = null;
 

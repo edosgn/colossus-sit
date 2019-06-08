@@ -218,7 +218,7 @@ class UserCiudadanoController extends Controller
      * Finds and displays a userCiudadano entity.
      *
      * @Route("/show", name="userciudadano_show")
-     * @Method("GET")
+     * @Method({"GET", "POST"})
      */
     public function showAction(Request $request)
     {

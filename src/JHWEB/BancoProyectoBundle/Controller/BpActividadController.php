@@ -64,7 +64,7 @@ class BpActividadController extends Controller
 
             $actividad = new BpActividad();
 
-            $actividad->setNombre($params->nombre);
+            $actividad->setNombre(mb_strtoupper($params->nombre, 'uft-8'));
             $actividad->setCostoTotal(0);
             $actividad->setActivo(true);
 
@@ -116,14 +116,14 @@ class BpActividadController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Registro encontrado", 
+                    'message' => "Registro encontrado", 
                     'data'=> $actividad,
             );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -144,12 +144,11 @@ class BpActividadController extends Controller
         if ($authCheck==true) {
             $json = $request->get("json",null);
             $params = json_decode($json);
-
             
             $bpActividad = $em->getRepository("JHWEBBancoProyectoBundle:BpActividad")->find($params->id);
 
-            if ($bpActividad!=null) {
-                $bpActividad->setNombre($params->nombre);
+            if ($bpActividad) {
+                $actividad->setNombre(mb_strtoupper($params->nombre, 'uft-8'));
                 $bpActividad->setUnidadMedida($params->unidadMedida);
                 $bpActividad->setCantidad($params->cantidad);
                 $bpActividad->setCostoUnitario($params->costoUnitario);
@@ -165,20 +164,20 @@ class BpActividadController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "BpActividad editado con exito", 
+                    'message' => "BpActividad editado con exito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "El bpActividad no se encuentra en la base de datos", 
+                    'message' => "El bpActividad no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'message' => "Autorizacion no valida para editar banco", 
                 );
         }
 

@@ -225,26 +225,87 @@ class UserLcCfgCategoriaController extends Controller
     }
 
     /**
-     * datos para select 2
+     * Listado de todas las categorias para selección con búsqueda
      *
      * @Route("/select", name="userlccfgcategoria_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $categorias = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->findBy(
-        array('activo' => true)
-    );
-    $response = null;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        $categorias = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->findBy(
+            array('activo' => true)
+        );
+        $response = null;
 
-      foreach ($categorias as $key => $categoria) {
-        $response[$key] = array(
-            'value' => $categoria->getId(),
-            'label' => $categoria->getNombre(),
+        foreach ($categorias as $key => $categoria) {
+            $response[$key] = array(
+                'value' => $categoria->getId(),
+                'label' => $categoria->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Listado de todas las categorias según el tipo de vehiculo para selección con búsqueda
+     *
+     * @Route("/select/tipovehiculo", name="userlccfgcategoria_select_tipovehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectByTipoVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $categorias = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->findBy(
+                array('activo' => true)
+            );
+
+            $tipoVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTipoVehiculo')->find(
+                $params->idTipoVehiculo
+            );
+            
+            $response = null;
+
+            if ($categorias) {
+                foreach ($categorias as $key => $categoria) {
+                    /*if ($tipoVehiculo->getId() == 1 && $categoria->getId() == 1) {
+                        # code...
+                    }*/
+                    $response[$key] = array(
+                        'value' => $categoria->getId(),
+                        'label' => $categoria->getNombre(),
+                    );
+                }
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Categorias encontradas.',
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'No existen categorias activas en el sistema.',
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no valida",
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }
