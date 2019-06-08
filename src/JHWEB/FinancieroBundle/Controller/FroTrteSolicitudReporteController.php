@@ -50,20 +50,73 @@ class FroTrteSolicitudReporteController extends Controller
             
             $tramitesSolicitud = null;
             $propietariosActuales = null;
+            $tramites = null;
+            $medidasCautelares = null;
+            $cancelacionesMatricula = null;
+            $vehiculosPlaca = [];
+            $arrayMedidaCautelar = [];
+            $prendas = null;
+            $radicadosCuenta = null;
             
+
             if($params->tipoReporte == 1) {
                 $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
             }
             else if($params->tipoReporte == 2){
                 $propietariosActuales = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getPropietariosActualesByPlaca($params->idOrganismoTransito, $params->idModulo, $vehiculo->getId());
             }
-            if ($tramitesSolicitud || $propietariosActuales) {
+            else if($params->tipoReporte == 3) {
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+            }
+            else if($params->tipoReporte == 4) {
+                $medidasCautelares = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByMedidasCautelares($fechaDesde, $fechaHasta);
+
+                foreach ($medidasCautelares as $key => $medidaCautelar) {
+                    $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                        array(
+                            'ciudadano' => $medidaCautelar->getCiudadano(),
+                            'activo' => 1
+                        )
+                    );
+                    foreach ($propietarios as $key => $propietario) {                        
+                        array_push($vehiculosPlaca, $propietario->getVehiculo()->getPlaca()->getNumero());
+                        $placas = implode(",", array_unique($vehiculosPlaca));                    
+                    }
+                    $arrayMedidaCautelar = array(
+                        'placa' => $placas,
+                        'tipo' => 'medida cautelar',
+                        'ente' => $medidaCautelar->getEntidadJudicial()->getNombre(),
+                        'numeroOficio' => $medidaCautelar->getNumeroOficio(),
+                        'fechaExpedicion' => $medidaCautelar->getFechaRegistro(),
+                        'activo' => $medidaCautelar->getActivo(),
+                        'numeroLevantamiento' => $medidaCautelar->getNumeroRadicado(),
+                        'observaciones' => $medidaCautelar->getObservacionesLevantamiento()
+
+                    );
+                }
+            }
+            else if($params->tipoReporte == 5) {
+                $cancelacionesMatricula = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByCancelacionMatricula($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+            }
+            else if($params->tipoReporte == 6) {
+                $prendas = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPrendas($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+            }
+            else if($params->tipoReporte == 7) {
+                $radicadosCuenta = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByRadicadosCuenta($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+            }
+    
+            if ($tramitesSolicitud || $propietariosActuales || $tramites || $medidasCautelares || $cancelacionesMatricula || $prendas || $radicadosCuenta) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
                     'message' => 'Registros encontrados.', 
                     'tramitesSolicitud'=> $tramitesSolicitud,
                     'propietariosActuales'=> $propietariosActuales,
+                    'tramites'=> $tramites,
+                    'medidasCautelares' => $medidasCautelares,
+                    'cancelacionesMatricula' => $cancelacionesMatricula,
+                    'prendas' => $prendas,
+                    'radicadosCuenta' => $radicadosCuenta,
                 );
             }else{
                 $response = array(

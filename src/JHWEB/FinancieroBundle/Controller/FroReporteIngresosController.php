@@ -88,7 +88,7 @@ class FroReporteIngresosController extends Controller
             $reporteMensual = false;
             
             if(intval($params->tipoArchivoTramite) == 1) {
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesDiario($fechaInicioDatetime, $organismoTransito->getId());
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesDiario($fechaInicioDatetime, $organismoTransito->getId());
 
                 $pagadas = [];
                 $finalizadas = [];
@@ -123,7 +123,7 @@ class FroReporteIngresosController extends Controller
                                 $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
                                 
                                 //=================================================
-                                $cantTramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getTramiteByName($tramite->getTramiteFactura()->getPrecio()->getTramite()->getId());
+                                $cantTramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getTramiteByName($tramite->getTramiteFactura()->getPrecio()->getTramite()->getId());
                                 $total2 = intval(implode($cantTramites)) * $tramite->getTramiteFactura()->getPrecio()->getValor();
                                 $totalTramites += intval(implode($cantTramites)) * $tramite->getTramiteFactura()->getPrecio()->getValor();
                                 $arrayTramites[] = array(
@@ -157,7 +157,7 @@ class FroReporteIngresosController extends Controller
                                 foreach ($sustratos as $key => $sustrato) {
                                     switch ($sustrato->getInsumo()->getTipo()->getCategoria()) {
                                         case 'SUSTRATO':
-                                            $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getSustratosByName($tramite->getTramiteFactura()->getFactura()->getId()); 
+                                            $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratosByName($tramite->getTramiteFactura()->getFactura()->getId()); 
     
                                             $valor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
                                                 array(
@@ -191,7 +191,7 @@ class FroReporteIngresosController extends Controller
                         }     
                     }
                     foreach ($conceptos as $key => $concepto) {
-                        $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
+                        $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
                         $total = intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
                         $totalConceptos += intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
                         $arrayConceptos[] = array(
@@ -248,7 +248,7 @@ class FroReporteIngresosController extends Controller
                 $arrayReporteMensual = [];
                 $totalReporteMensual = 0;
                 
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->findTramitesMensual($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesMensual($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
                 if($tramites){
                     $reporteMensual = true;
                     foreach ($tramites as $key => $tramite) {
@@ -373,7 +373,7 @@ class FroReporteIngresosController extends Controller
             $arrayInfracciones = []; 
             $totalInfracciones = 0;
 
-            $infracciones = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getInfraccionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+            $infracciones = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getInfraccionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
             if($infracciones){
                 foreach ($infracciones as $key => $infraccion) {
@@ -457,7 +457,7 @@ class FroReporteIngresosController extends Controller
             $arrayAcuerdosPago = []; 
             $totalAcuerdosPago = 0;
 
-            $acuerdosPago = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getAcuerdosPagoByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+            $acuerdosPago = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getAcuerdosPagoByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
             if($acuerdosPago){
                 foreach ($acuerdosPago as $key => $acuerdoPago) {
@@ -541,7 +541,7 @@ class FroReporteIngresosController extends Controller
             $arrayInmovilizaciones = []; 
             $totalInmovilizaciones = 0;
 
-            $inmovilizaciones = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getInmovilizacionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+            $inmovilizaciones = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getInmovilizacionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
             if($inmovilizaciones){
                 foreach ($inmovilizaciones as $key => $inmovilizacion) {
@@ -630,7 +630,7 @@ class FroReporteIngresosController extends Controller
             $totalRetefuentesExogena = 0;
             $totalRetefuentesTesoreria = 0;
 
-            $retefuentes = $em->getRepository('JHWEBFinancieroBundle:FroReporteIngresos')->getRetefuentesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+            $retefuentes = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getRetefuentesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
             if($retefuentes){
                 foreach ($retefuentes as $key => $retefuente) {
