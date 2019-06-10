@@ -296,15 +296,15 @@ class CvCdoNotificacionController extends Controller
                                 $fecha = new \Datetime(date('Y-m-d'));
                                 $hora = new \Datetime(date('h:i:s'));
 
-                                $validarAudiencia = $helpers->getDateAudienciaAutomatica(
+                                /*$validarAudiencia = $helpers->getDateAudienciaAutomatica(
                                     $fecha, 
                                     $hora
                                 );
-                                /*$audiencia->setFecha($validarAudiencia['fecha']);
+                                $audiencia->setFecha($validarAudiencia['fecha']);
                                 $audiencia->setHora($validarAudiencia['hora']);*/
-                                $audiencia->setFecha(new \Datetime(date('Y-m-d')));
-                                $audiencia->setHora(new \Datetime(date('h:i:s')));
-                                $audiencia->setTipo('AUTOMATICA');
+                                $audiencia->setFecha($fecha);
+                                $audiencia->setHora($hora);
+                                $audiencia->setEstado('AUTOMATICA');
                                 $audiencia->setActivo(true);
 
                                 $audiencia->setComparendo($comparendo);

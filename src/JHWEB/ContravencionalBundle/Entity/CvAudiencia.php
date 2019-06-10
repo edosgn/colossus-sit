@@ -45,16 +45,16 @@ class CvAudiencia
     /**
      * @var string
      *
-     * @ORM\Column(name="tipo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="estado", type="string", length=255, nullable=true)
      */
-    private $tipo;
+    private $estado;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="estado", type="string", length=50, nullable=true)
+     * @ORM\Column(name="cuerpo", type="text", nullable=true)
      */
-    private $estado;
+    private $cuerpo;
 
     /**
      * @var bool
@@ -72,6 +72,9 @@ class CvAudiencia
 
     /** @ORM\ManyToOne(targetEntity="CvCdoComparendo", inversedBy="audiencias") */
     private $comparendo;
+
+    /** @ORM\ManyToOne(targetEntity="CvAuCfgTipo", inversedBy="audiencias") */
+    private $tipo;
 
 
     /**
@@ -105,9 +108,6 @@ class CvAudiencia
      */
     public function getFecha()
     {
-        if ($this->fecha) {
-            return $this->fecha->format('d/m/Y');
-        }
         return $this->fecha;
     }
 
@@ -132,34 +132,79 @@ class CvAudiencia
      */
     public function getHora()
     {
-        if ($this->hora) {
-            return $this->hora->format('h:i:s A');
-        }
         return $this->hora;
     }
 
     /**
-     * Set tipo
+     * Set acta
      *
-     * @param string $tipo
+     * @param string $acta
      *
      * @return CvAudiencia
      */
-    public function setTipo($tipo)
+    public function setActa($acta)
     {
-        $this->tipo = $tipo;
+        $this->acta = $acta;
 
         return $this;
     }
 
     /**
-     * Get tipo
+     * Get acta
      *
      * @return string
      */
-    public function getTipo()
+    public function getActa()
     {
-        return $this->tipo;
+        return $this->acta;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return CvAudiencia
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * Set cuerpo
+     *
+     * @param string $cuerpo
+     *
+     * @return CvAudiencia
+     */
+    public function setCuerpo($cuerpo)
+    {
+        $this->cuerpo = $cuerpo;
+
+        return $this;
+    }
+
+    /**
+     * Get cuerpo
+     *
+     * @return string
+     */
+    public function getCuerpo()
+    {
+        return $this->cuerpo;
     }
 
     /**
@@ -235,50 +280,26 @@ class CvAudiencia
     }
 
     /**
-     * Set acta
+     * Set tipo
      *
-     * @param string $acta
+     * @param \JHWEB\ContravencionalBundle\Entity\CvAuCfgTipo $tipo
      *
      * @return CvAudiencia
      */
-    public function setActa($acta)
+    public function setTipo(\JHWEB\ContravencionalBundle\Entity\CvAuCfgTipo $tipo = null)
     {
-        $this->acta = $acta;
+        $this->tipo = $tipo;
 
         return $this;
     }
 
     /**
-     * Get acta
+     * Get tipo
      *
-     * @return string
+     * @return \JHWEB\ContravencionalBundle\Entity\CvAuCfgTipo
      */
-    public function getActa()
+    public function getTipo()
     {
-        return $this->acta;
-    }
-
-    /**
-     * Set estado
-     *
-     * @param string $estado
-     *
-     * @return CvAudiencia
-     */
-    public function setEstado($estado)
-    {
-        $this->estado = $estado;
-
-        return $this;
-    }
-
-    /**
-     * Get estado
-     *
-     * @return string
-     */
-    public function getEstado()
-    {
-        return $this->estado;
+        return $this->tipo;
     }
 }

@@ -89,6 +89,13 @@ class CvAudienciaController extends Controller
                 $comparendo->setAudiencia(true);
             }
 
+            if ($params->idTipo) {
+                $tipo = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->find(
+                    $params->idTipo
+                );
+                $audiencia->setTipo($tipo);
+            }
+
             if ($comparendo) {
                 //Busca si existe una audiencia previa programada para este comprendo
                 $audienciaOld = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->findOneBy(
@@ -102,9 +109,9 @@ class CvAudienciaController extends Controller
                     $audienciaOld->setActivo(false);
                     $em->flush();
 
-                    $audiencia->setTipo('REPROGRAMADA');
+                    $audiencia->setEstado('REPROGRAMADA');
                 }else{
-                    $audiencia->setTipo('MANUAL');
+                    $audiencia->setEstado('MANUAL');
                 }
             }
 
@@ -541,10 +548,10 @@ class CvAudienciaController extends Controller
     /**
      * Displays a form to edit an existing cvAudiencium entity.
      *
-     * @Route("/update/borrador", name="cvaudiencia_update_borrador")
+     * @Route("/update/cuerpo", name="cvaudiencia_update_cuerpo")
      * @Method({"GET", "POST"})
      */
-    public function updateBorradorAction(Request $request)
+    public function updateCuerpoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -561,7 +568,7 @@ class CvAudienciaController extends Controller
             );
 
             if ($audiencia) {
-                $audiencia->setBorrador($params->borrador);
+                $audiencia->setCuerpo($params->cuerpo);
 
                 $em->flush();
 
@@ -587,5 +594,30 @@ class CvAudienciaController extends Controller
         }
 
         return $helpers->json($response);
+    }
+
+    /**
+     * Crea PDF con el cuerpo de audiencia.
+     *
+     * @Route("/{id}/pdf", name="cvaudiencia_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $audiencia = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->find(
+            $audienciaLast
+        );
+
+        $html = $this->renderView('@JHWEBContravencional/Default/pdf.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'audiencia'=>$audiencia,
+        ));
+
+        $this->get('app.pdf')->templatePreview($html, 'AUDIENCIA '.$audiencia->getTipo()->getNombre());
     }
 }
