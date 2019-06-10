@@ -62,19 +62,20 @@ class CvAuCfgTipoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
+            $em = $this->getDoctrine()->getManager();
+
             $tipo = new CvAuCfgTipo();
 
             if ($params->idFormato) {
-                $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
                     $params->idFormato
                 );
-                $formato->setFormato($tipo);
+                $tipo->setFormato($formato);
             }
             
             $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $tipo->setActivo(true);
 
-            $em = $this->getDoctrine()->getManager();
             
             $em->persist($tipo);
             $em->flush();
@@ -101,17 +102,72 @@ class CvAuCfgTipoController extends Controller
     /**
      * Finds and displays a cvAuCfgTipo entity.
      *
-     * @Route("/{id}", name="cvaucfgtipo_show")
-     * @Method("GET")
+     * @Route("/show", name="cvaucfgtipo_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(CvAuCfgTipo $cvAuCfgTipo)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cvAuCfgTipo);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cvaucfgtipo/show.html.twig', array(
-            'cvAuCfgTipo' => $cvAuCfgTipo,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tipo = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->find(
+                $params->id
+            );
+
+            if ($tipo) {
+                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                    $params->idComparendo
+                );
+    
+                $template = $helpers->generateTemplate(
+                    $comparendo,
+                    $tipo->getFormato()->getCuerpo()
+                );
+    
+                if ($template) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Plantilla encontrada.", 
+                        'data'=> array(
+                            'tipo' => $tipo,
+                            'template' => $template,
+                        )
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'La plantilla no pudo ser generada.',
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'El tipo de audiencia no se encuentra en la base de datos.',
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida', 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -175,8 +231,8 @@ class CvAuCfgTipoController extends Controller
     /**
      * Deletes a cvAuCfgTipo entity.
      *
-     * @Route("/{id}", name="cvaucfgtipo_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cvaucfgtipo_delete")
+     * @Method("POST")
      */
     public function deleteAction(Request $request, CvAuCfgTipo $cvAuCfgTipo)
     {
@@ -206,5 +262,34 @@ class CvAuCfgTipoController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* =================================================== */
+
+    /**
+     * Listado de tipos de audiencia para seleccion con busqueda
+     *
+     * @Route("/select", name="cvaucfgtipo_select")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAction()
+    {
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+
+        $tipos = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($tipos as $key => $tipo) {
+            $response[$key] = array(
+                'value' => $tipo->getId(),
+                'label' => $tipo->getNombre(),
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

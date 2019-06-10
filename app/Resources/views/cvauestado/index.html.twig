@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Cvauestados list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Cuerpo</th>
+                <th>Fecha</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cvAuEstado in cvAuEstados %}
+            <tr>
+                <td><a href="{{ path('cvauestado_show', { 'id': cvAuEstado.id }) }}">{{ cvAuEstado.id }}</a></td>
+                <td>{{ cvAuEstado.nombre }}</td>
+                <td>{{ cvAuEstado.cuerpo }}</td>
+                <td>{% if cvAuEstado.fecha %}{{ cvAuEstado.fecha|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if cvAuEstado.activo %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('cvauestado_show', { 'id': cvAuEstado.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('cvauestado_edit', { 'id': cvAuEstado.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('cvauestado_new') }}">Create a new cvAuEstado</a>
+        </li>
+    </ul>
+{% endblock %}

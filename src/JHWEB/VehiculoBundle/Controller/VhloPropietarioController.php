@@ -380,6 +380,88 @@ class VhloPropietarioController extends Controller
     }
 
     /**
+     * Busca los propietarios de un vehiculo según su placa.
+     *
+     * @Route("/search/placa", name="vhlovehiculo_search_placa")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByPlacaAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
+                array(
+                    'numero' => $params->numero
+                )
+            );
+
+            if ($placa) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                    array(
+                        'placa' => $placa->getId()
+                    )
+                );
+
+                if ($vehiculo) {
+                    $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                        array(
+                            'vehiculo' => $vehiculo->getId(),
+                            'activo' => true
+                        )
+                    );
+        
+                    if ($propietarios) {
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => count($propietarios).' registros encontrados.', 
+                            'data'=> $propietarios
+                        );
+                    }else{
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => 'Este vehiculo no tiene propietarios registrados, debe realizar una matricula inicial.', 
+                        );
+                    } 
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'No existe ningún véhiculo con la placa encontrada asignada.', 
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'No existe ninguna placa registrada en sistema con ese número.', 
+                );
+            }  
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Busca un propietario por ciudadano o empresa según el vehiculo.
      *
      * @Route("/search/ciudadano/empresa/vehiculo", name="vhlovehiculo_search_ciudadano_empresa_vehiculo")

@@ -52,6 +52,9 @@ class CvAuEstado
     /** @ORM\ManyToOne(targetEntity="CvAuCfgTipo", inversedBy="estados") */
     private $tipo;
 
+    /** @ORM\ManyToOne(targetEntity="CvAudiencia", inversedBy="estados") */
+    private $audiencia;
+
 
     /**
      * Get id
@@ -181,5 +184,29 @@ class CvAuEstado
     public function getTipo()
     {
         return $this->tipo;
+    }
+
+    /**
+     * Set audiencia
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvAudiencia $audiencia
+     *
+     * @return CvAuEstado
+     */
+    public function setAudiencia(\JHWEB\ContravencionalBundle\Entity\CvAudiencia $audiencia = null)
+    {
+        $this->audiencia = $audiencia;
+
+        return $this;
+    }
+
+    /**
+     * Get audiencia
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvAudiencia
+     */
+    public function getAudiencia()
+    {
+        return $this->audiencia;
     }
 }
