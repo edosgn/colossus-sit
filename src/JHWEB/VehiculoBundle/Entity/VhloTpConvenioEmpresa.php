@@ -22,7 +22,7 @@ class VhloTpConvenioEmpresa
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      */
     private $empresa;
 

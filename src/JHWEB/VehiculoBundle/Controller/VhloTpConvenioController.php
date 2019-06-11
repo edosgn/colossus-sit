@@ -23,31 +23,34 @@ class VhloTpConvenioController extends Controller
      */
     public function getConveniosPorEmpresaAction($id)
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $convenios = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findBy(
-        array(
-            'empresa' => $id,
-            'activo' => 1
-        )
-    );
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
 
-    if ($convenios!=null) {
-        $response = array(
-        'status' => 'success',
-        'code' => 200,
-        'msj' => "Registros encontrados con exito", 
-        'data'=> $convenios,
+        $convenios = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findBy(
+            array(
+                'empresa' => $id,
+                'activo' => 1
+            )
         );
-    }else{
-        $response = array(
-            'status' => 'error',
-            'code' => 400,
-            'msj' => "No se han encontrado convenios en la base de datos", 
-        );
-    }
-    
-       return $helpers->json($response);
+
+        if ($convenios != null) {
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registros encontrados con exito", 
+                'data'=> $convenios,
+            );
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "No se han encontrado convenios en la base de datos", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -57,22 +60,24 @@ class VhloTpConvenioController extends Controller
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
-    {
-        $response = [];
-        $em = $this->getDoctrine()->getManager();
-
+    {        
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-
+        
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
-            $vhloTpConvenio = new Vhlotpconvenio();
+            
+            $em = $this->getDoctrine()->getManager();
+
             $fechaConvenio = new \DateTime($params->fechaConvenio);
             $fechaActaInicio = new \DateTime($params->fechaActaInicio);
             $fechaActaFin = new \DateTime($params->fechaActaFin);
-            $empresa = $em->getRepository('AppBundle:Empresa')->find($params->empresa);
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresa);
+            
+            $vhloTpConvenio = new VhloTpConvenio();
+            
             $vhloTpConvenio->setNumeroConvenio($params->numeroConvenio);
             $vhloTpConvenio->setFechaConvenio($fechaConvenio);
             $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
@@ -80,23 +85,32 @@ class VhloTpConvenioController extends Controller
             $vhloTpConvenio->setEmpresa($empresa);
             $vhloTpConvenio->setObservacion($params->observacion);
             $vhloTpConvenio->setActivo(1);
+
             $em->persist($vhloTpConvenio);
-            $em->flush();
+
             foreach ($params->empresas as $key => $empresa) {
-                $vhloTpConvenioEmpresa = new VhlotpconvenioEmpresa();
-                $empresaConvenio = $em->getRepository('AppBundle:Empresa')->find($empresa);
+                $empresaConvenio = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresa);
+                
+                $vhloTpConvenioEmpresa = new VhloTpConvenioEmpresa();
+                
                 $vhloTpConvenioEmpresa->setEmpresa($empresaConvenio);
                 $vhloTpConvenioEmpresa->setVhloTpConvenio($vhloTpConvenio);
+
                 $em->persist($vhloTpConvenioEmpresa);
                 $em->flush();
             }
+            
+            $response = [];
+
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
-                'message' => "Registro creado con exito",
+                'message' => "Registro creado con éxito",
             );
-        }else{
+        } else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 

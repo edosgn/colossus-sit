@@ -24,35 +24,35 @@ class VhloTpConvenio
     /**
      * @var int
      *
-     * @ORM\Column(name="numeroConvenio", type="integer")
+     * @ORM\Column(name="numero_convenio", type="integer")
      */
     private $numeroConvenio;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaConvenio", type="date")
+     * @ORM\Column(name="fecha_convenio", type="date", nullable=true)
      */
     private $fechaConvenio;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fechaActaInicio", type="date")
+     * @ORM\Column(name="fecha_acta_inicio", type="date", nullable=true)
      */
     private $fechaActaInicio;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="fechaActaFin", type="date", length=255)
+     * @ORM\Column(name="fecha_acta_fin", type="date", length=255, nullable=true)
      */
     private $fechaActaFin;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="observacion", type="string", length=255)
+     * @ORM\Column(name="observacion", type="string", length=255, nullable=true)
      */
     private $observacion;
 
@@ -123,9 +123,6 @@ class VhloTpConvenio
      */
     public function getFechaConvenio()
     {
-        if ($this->fechaConvenio) {
-            return $this->fechaConvenio->format('d/m/Y');
-        }
         return $this->fechaConvenio;
     }
 
@@ -150,9 +147,6 @@ class VhloTpConvenio
      */
     public function getFechaActaInicio()
     {
-        if ($this->fechaActaInicio) {
-            return $this->fechaActaInicio->format('d/m/Y');
-        }
         return $this->fechaActaInicio;
     }
 
@@ -177,9 +171,6 @@ class VhloTpConvenio
      */
     public function getFechaActaFin()
     {
-        if ($this->fechaActaFin) {
-            return $this->fechaActaFin->format('d/m/Y');
-        }
         return $this->fechaActaFin;
     }
 
