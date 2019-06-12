@@ -10,4 +10,21 @@ namespace JHWEB\ContravencionalBundle\Repository;
  */
 class CvCdoTrazabilidadRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getByComparendo($idComparendo){
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT t
+        FROM JHWEBContravencionalBundle:CvCdoTrazabilidad t,
+        JHWEBContravencionalBundle:CvCdoComparendo c
+        WHERE t.comparendo = c.id
+        AND t.comparendo = :idComparendo
+        ORDER BY t.fecha DESC, t.hora DESC";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'idComparendo' => $idComparendo,
+        ));
+
+        return $consulta->getResult();
+    }
 }

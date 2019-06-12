@@ -35,28 +35,7 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
 
-    public function getTotalesTipo($idOrganismoTransito)
-    { 
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre
-                FROM JHWEBInsumoBundle:ImoLote il,
-                JHWEBInsumoBundle:ImoCfgTipo it
-                WHERE il.tipoInsumo = it.id
-                AND il.tipo = :tipo
-                AND il.sedeOperativa = :idOrganismoTransito
-                GROUP BY il.tipoInsumo";
-
-                $consulta = $em->createQuery($dql);
-                $consulta->setParameters(array(
-                    'tipo' => 'INSUMO',
-                    'idOrganismoTransito' => 'idOrganismoTransito',
-                ));
-
-                return $consulta->getResult();
-    }
-
-    public function getTotalTipo($estado,$tipoInsumo)
+    public function getTotalTipo($estado, $tipoInsumo)
     {  
         $em = $this->getEntityManager();
         $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre, il.id AS idLote, it.id AS idTipoInsumo
@@ -73,6 +52,46 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
                 return $consulta->getOneOrNullResult();
     }
 
+    public function getByFechasAndTipo($fechaInicial, $fechaFinal, $tipo)
+    {  
+        $em = $this->getEntityManager();
+        $dql = "SELECT l
+            FROM JHWEBInsumoBundle:ImoLote l,
+            JHWEBInsumoBundle:ImoCfgTipo t
+            WHERE l.tipoInsumo = :tipo
+            AND l.tipoInsumo = t.id
+            AND l.fecha BETWEEN :fechaInicial AND :fechaFinal";
 
+            $consulta = $em->createQuery($dql);
+            $consulta->setParameters(array(
+                'tipo' => $tipo,
+                'fechaInicial' => $fechaInicial,
+                'fechaFinal' => $fechaFinal,
+            ));
+
+            return $consulta->getResult();
+    }
+
+    public function getTotalesByTipo($fechaInicial, $fechaFinal, $tipo)
+    { 
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(il.cantidad) AS cantidad, it.nombre
+        FROM JHWEBInsumoBundle:ImoLote il,
+        JHWEBInsumoBundle:ImoCfgTipo it
+        WHERE il.tipoInsumo = it.id
+        AND il.tipo = :tipo
+        AND il.fecha BETWEEN :fechaInicial AND :fechaFinal
+        GROUP BY il.tipoInsumo";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+            'tipo' => $tipo,
+            'fechaInicial' => $fechaInicial,
+            'fechaFinal' => $fechaFinal,
+        ));
+
+        return $consulta->getResult();
+    }
 }
  

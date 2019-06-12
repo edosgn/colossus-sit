@@ -421,10 +421,10 @@ class ImoLoteController extends Controller
     /**
      * Busca todos los lotes pro organismo de transito.
      *
-     * @Route("/search/organismotransito", name="imolote_search_organismotransito")
+     * @Route("/search/fechas", name="imolote_search_fechas")
      * @Method("POST")
      */
-    public function searchByOrganismoTransitoAction(Request $request)
+    public function searchByFechas(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -435,33 +435,38 @@ class ImoLoteController extends Controller
             $params = json_decode($json);
 
             $em = $this->getDoctrine()->getManager();
+
+            $fechaInicial = new \Datetime($params->fechaInicial);
+            $fechaFinal = new \Datetime($params->fechaFinal);
         
-            $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                array(
-                    'tipo'=>'INSUMO',
-                    'sedeOperativa'=> $params->idOrganismoTransito
-                )
+            $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByFechasAndTipo(
+                $fechaInicial,
+                $fechaFinal,
+                'INSUMO'
             );
             
-            $loteSustratos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                array(
-                    'tipo'=>'SUSTRATO'
-                )
+            $loteSustratos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getByFechasAndTipo(
+                $fechaInicial,
+                $fechaFinal,
+                'SUSTRATO'
             );
 
-            $totalesTipo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalesTipo($params->idOrganismoTransito);
-            
-            $data = array(
-                'loteInsumos' =>  $loteInsumos, 
-                'loteSustratos' =>  $loteSustratos, 
-                'totalesTipo' =>  $totalesTipo, 
+            $totalesTipo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->getTotalesByTipo(
+                $fechaInicial,
+                $fechaFinal,
+                'INSUMO'
             );
             
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => count($loteInsumos)+count($loteSustratos)." registros encontrados", 
-                'data'=> $data,
+                'data'=> array(
+                    'loteInsumos' =>  $loteInsumos, 
+                    'loteSustratos' =>  $loteSustratos, 
+                    'totalesTipo' =>  $totalesTipo, 
+                )
             );
         }else{
             $response = array(

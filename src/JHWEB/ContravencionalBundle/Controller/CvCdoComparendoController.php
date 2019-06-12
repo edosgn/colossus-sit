@@ -1036,13 +1036,8 @@ class CvCdoComparendoController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
-                array(
-                    'comparendo' => $params->id
-                ),
-                array(
-                    'fecha' => 'DESC'
-                )
+            $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->getByComparendo(
+                $params->id
             );
 
             $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find($params->id);

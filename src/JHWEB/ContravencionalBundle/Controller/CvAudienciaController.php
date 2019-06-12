@@ -610,7 +610,7 @@ class CvAudienciaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $audiencia = $em->getRepository('JHWEBContravencionalBundle:CvAudiencia')->find(
-            $audienciaLast
+            $id
         );
 
         $html = $this->renderView('@JHWEBContravencional/Default/pdf.html.twig', array(
