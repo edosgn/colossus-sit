@@ -95,16 +95,16 @@ class UserEmpresaController extends Controller
             $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
             $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
             
-            $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte)) ? $params->empresa->idModalidadTransporte : null;
-            if($idModalidadTransporte){
-                $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
-                $empresa->setModalidadTransporte($modalidadTransporte);
-            }
             
             $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
             
             $empresa = new UserEmpresa();
             
+            $idModalidadTransporte = (isset($params->empresa->idModalidadTransporte)) ? $params->empresa->idModalidadTransporte : null;
+            if($idModalidadTransporte){
+                $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->empresa->idModalidadTransporte);
+                $empresa->setModalidadTransporte($modalidadTransporte);
+            }
             $empresa->setNombre($params->empresa->nombre);
             $empresa->setSigla($params->empresa->sigla);
             $empresa->setNit($params->empresa->nit);

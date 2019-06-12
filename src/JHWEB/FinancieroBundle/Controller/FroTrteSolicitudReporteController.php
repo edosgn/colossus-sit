@@ -54,11 +54,11 @@ class FroTrteSolicitudReporteController extends Controller
             $medidasCautelares = null;
             $cancelacionesMatricula = null;
             $vehiculosPlaca = [];
-            $arrayMedidaCautelar = [];
+            $arrayMedidaCautelar = null;
             $prendas = null;
             $radicadosCuenta = null;
+            $arrayTramites = null;
             
-
             if($params->tipoReporte == 1) {
                 $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
             }
@@ -67,6 +67,29 @@ class FroTrteSolicitudReporteController extends Controller
             }
             else if($params->tipoReporte == 3) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+
+                foreach ($tramites as $key => $tramite) {
+                    $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                        array(
+                            'vehiculo' => $tramite->getVehiculo()->getId()
+                        )
+                    );    
+
+                    $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
+                        array(
+                            'propietario' => $propietario->getId()
+                        )
+                    );
+
+                    $arrayTramites [] = array(
+                        'tipoTramite' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(),
+                        'placa' => $tramite->getVehiculo()->getPlaca()->getNumero(),
+                        'fecha' => $tramite->getFecha(),
+                        'organismoTransito' => $tramite->getOrganismoTransito()->getDivipo(),
+                        'licenciaTransito' => $licenciaTransito->getNumero(),
+                        'numeroPago' => 'numero de Pago'
+                    );
+                }
             }
             else if($params->tipoReporte == 4) {
                 $medidasCautelares = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByMedidasCautelares($fechaDesde, $fechaHasta);
@@ -80,9 +103,9 @@ class FroTrteSolicitudReporteController extends Controller
                     );
                     foreach ($propietarios as $key => $propietario) {                        
                         array_push($vehiculosPlaca, $propietario->getVehiculo()->getPlaca()->getNumero());
-                        $placas = implode(",", array_unique($vehiculosPlaca));                    
+                        $placas = implode(", ", array_unique($vehiculosPlaca));                    
                     }
-                    $arrayMedidaCautelar = array(
+                    $arrayMedidaCautelar [] = array(
                         'placa' => $placas,
                         'tipo' => 'medida cautelar',
                         'ente' => $medidaCautelar->getEntidadJudicial()->getNombre(),
@@ -112,8 +135,8 @@ class FroTrteSolicitudReporteController extends Controller
                     'message' => 'Registros encontrados.', 
                     'tramitesSolicitud'=> $tramitesSolicitud,
                     'propietariosActuales'=> $propietariosActuales,
-                    'tramites'=> $tramites,
-                    'medidasCautelares' => $medidasCautelares,
+                    'tramites'=> $arrayTramites,
+                    'medidasCautelares' => $arrayMedidaCautelar,
                     'cancelacionesMatricula' => $cancelacionesMatricula,
                     'prendas' => $prendas,
                     'radicadosCuenta' => $radicadosCuenta,
