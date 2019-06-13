@@ -204,7 +204,7 @@ class FroTrtePrecioController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck == true) {
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
             $froTrtePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find($params->id);
@@ -213,17 +213,17 @@ class FroTrtePrecioController extends Controller
 
                 $froTrtePrecio->setNombre(strtoupper($params->nombre));
                 $froTrtePrecio->setValor($params->valor);
-                $froTrtePrecio->setFechaInicio(new \Datetime($params->fechaInicio));
+                $froTrtePrecio->setFechaInicial(new \Datetime($params->fechaInicial));
                 $froTrtePrecio->setValorConcepto($params->valorConcepto);
                 $froTrtePrecio->setValorTotal($params->valorTotal);
 
                 $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find($params->idTramite);
                 $froTrtePrecio->setTramite($tramite);
 
-                $clase = $em->getRepository("JHWEBVehiculoBundle:VhloCfgClase")->find($params->idClase);
-                $froTrtePrecio->setClase($clase);
+                $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find($params->idTipoVehiculo);
+                $froTrtePrecio->setTipoVehiculo($tipoVehiculo);
 
-                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($idModulo);
+                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
                 $froTrtePrecio->setModulo($modulo);
 
                 $froTrtePrecio->setEstado(true);

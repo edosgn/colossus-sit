@@ -27,7 +27,7 @@ class VhloTpConvenioEmpresa
     private $empresa;
 
     /**
-     * @ORM\OneToOne(targetEntity="VhloTpConvenio")
+     * @ORM\ManyToOne(targetEntity="VhloTpConvenio")
      */
     private $vhloTpConvenio;
 

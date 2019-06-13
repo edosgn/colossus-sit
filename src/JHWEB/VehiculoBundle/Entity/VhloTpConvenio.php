@@ -63,10 +63,11 @@ class VhloTpConvenio
      */
     private $activo;
 
+    
     /**
-     * @ORM\OneToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa")
      */
-    private $empresa;
+    private $alcaldia;
 
     /**
      * Get id

@@ -46,7 +46,7 @@ class VhloTpConvenioController extends Controller
                 'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => "No se han encontrado convenios en la base de datos", 
+                'message' => "No se han encontrado convenios para la empresa en la base de datos", 
             );
         }
         

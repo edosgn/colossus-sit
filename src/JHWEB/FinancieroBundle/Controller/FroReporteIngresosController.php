@@ -112,6 +112,7 @@ class FroReporteIngresosController extends Controller
                 $arrayConceptos = [];
                 $arrayTramites = [];
                 $arraySustratos = [];
+                $numerosAnulados[] = null;
                 
                 if($tramites){
                     foreach ($tramites as $key => $tramite) {
@@ -182,7 +183,11 @@ class FroReporteIngresosController extends Controller
                                 break;
                             case 'ANULADA':
                                 $anuladas[] = $tramite;
-                                $numerosAnulados[] = $tramite->getTramiteFactura()->getFactura()->getNumero();
+                                $numerosAnulados[] = array(
+                                    $tramite->getTramiteFactura()->getFactura()->getNumero()
+                                );
+                                /* var_dump($numerosAnulados);
+                                die(); */
                                 $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
                                 if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
                                     $traspasos[] = $tramite;
