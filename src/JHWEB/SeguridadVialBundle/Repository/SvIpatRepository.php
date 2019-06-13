@@ -16,47 +16,43 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
 
         $condicion = null; 
 
-        $horaInicioDatetime = $params->datos->horaInicio;
-        $horaFinDatetime = $params->datos->horaFin;
-        $fechaInicioDatetime = $params->datos->fechaInicio;
-        $fechaFinDatetime = $params->datos->fechaFin;
+        $horaInicio = $params->datos->horaInicio;
+        $horaFin = $params->datos->horaFin;
+        $fechaInicio = $params->datos->fechaInicio;
+        $fechaFin = $params->datos->fechaFin;
         
-        $dql = "SELECT ri
-            FROM JHWEBSeguridadVialBundle:SvRegistroIpat ri, JHWEBSeguridadVialBundle:SvIpatVictima iv, JHWEBSeguridadVialBundle:SvIpatConductor ic, JHWEBSeguridadVialBundle:SvIpatVehiculo ive
-            WHERE ri.activo = 1";
+        $dql = "SELECT i
+            FROM JHWEBSeguridadVialBundle:SvIpat i, JHWEBSeguridadVialBundle:SvIpatVictima iv,
+            JHWEBSeguridadVialBundle:SvIpatConductor ic, JHWEBSeguridadVialBundle:SvIpatVehiculo ive
+            WHERE i.activo = 1";
 
         if($params->datos->arrayGravedadAccidente){
             foreach ($params->datos->arrayGravedadAccidente as $keyGravedad => $idGravedad) {
                 if($keyGravedad == 0){
-                    $condicion .= " AND ri.gravedadAccidente = '" . $idGravedad . "'";
+                    $condicion .= " AND i.gravedadAccidente = '" . $idGravedad . "'";
                 } else {
-                    $condicion .= " OR ri.gravedadAccidente = '" . $idGravedad . "'";
+                    $condicion .= " OR i.gravedadAccidente = '" . $idGravedad . "'";
                 }
             }
         }
 
         if($params->datos->arrayTipoVictima){
-            foreach ($params->datos->arrayTipoVictima as $keyTipoVictima => $idTipoVictima) {
-                $tipoVictima = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgTipoVictima')->findOneBy(
-                    array(
-                        'nombre' => $idTipoVictima,
-                        'activo' => true,
-                    )
-                );            
+            foreach ($params->datos->arrayTipoVictima as $keyTipoVictima => $idTipoVictima) {          
                 if($keyTipoVictima == 0) {
-                    $condicion .= " AND iv.tipoVictima = '" . $tipoVictima->getId() . "'";
+                    $condicion .= " AND iv.tipoVictima = '" . $idTipoVictima . "'";
                 }
                 else {
-                    $condicion .= " OR iv.tipoVictima = '" . $tipoVictima->getId() . "'";
+                    $condicion .= " OR iv.tipoVictima = '" . $idTipoVictima . "'";
                 }
             }
         }
-        if($horaInicioDatetime && $horaFinDatetime){
-            $condicion .= " AND ri.horaAccidente BETWEEN " . $horaInicioDatetime . " AND $horaFinDatetime";
-        }
+        /* if($horaInicio && $horaFin){
+            
+            $condicion .= " AND i.horaAccidente BETWEEN " . $horaInicio . " AND $horaFin";
+        } */
 
-        if($fechaInicioDatetime && $fechaFinDatetime){
-            $condicion .= " AND ri.fechaAccidente BETWEEN " . $fechaInicioDatetime . " AND $fechaFinDatetime";
+        if($fechaInicio && $fechaFin){
+            $condicion .= " AND i.fechaAccidente BETWEEN " . $fechaInicio . " AND $fechaFin";
         }
 
         if ($params->datos->arrayGrupoEdad) {
@@ -66,11 +62,11 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
                 $edadFin = $edadInicio + 4;
 
                 if($keyGrupoEdad == 0) {
-                    $condicion .= " AND iv.edadVictima BETWEEN " . $edadInicio . " AND $edadFin";
-                    $condicion .= " AND ic.edadConductor BETWEEN " . $edadInicio . " AND $edadFin";
+                    $condicion .= " AND iv.edad BETWEEN " . $edadInicio . " AND $edadFin";
+                    $condicion .= " AND ic.edad BETWEEN " . $edadInicio . " AND $edadFin";
                 } else {
-                    $condicion .= " OR iv.edadVictima BETWEEN " . $edadInicio . " AND $edadFin";
-                    $condicion .= " OR ic.edadConductor BETWEEN " . $edadInicio . " AND $edadFin";
+                    $condicion .= " OR iv.edad BETWEEN " . $edadInicio . " AND $edadFin";
+                    $condicion .= " OR ic.edad BETWEEN " . $edadInicio . " AND $edadFin";
                 }
             }
         }
@@ -81,12 +77,12 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
                 $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($idMunicipio);
 
                 if($keyMunicipio == 0) {
-                    $condicion .= " AND ic.ciudadResidenciaConductor = '" . $municipio->getNombre() . "'";
-                    $condicion .= " AND iv.ciudadResidenciaVictima = '" . $municipio->getNombre() . "'";
+                    $condicion .= " AND ic.ciudadResidencia = '" . $municipio->getNombre() . "'";
+                    $condicion .= " AND iv.ciudadResidencia = '" . $municipio->getNombre() . "'";
                 }
                 else {
-                    $condicion .= " OR ic.ciudadResidenciaConductor = '" . $municipio->getNombre() . "'";
-                    $condicion .= " OR iv.ciudadResidenciaVictima = '" . $municipio->getNombre() . "'";
+                    $condicion .= " OR ic.ciudadResidencia = '" . $municipio->getNombre() . "'";
+                    $condicion .= " OR iv.ciudadResidencia = '" . $municipio->getNombre() . "'";
                 }
             }
         }
@@ -95,10 +91,10 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
             foreach ($params->datos->arrayDiaSemana as $keyDiaSemana => $diaSemana) {
                 # code...
                 if($keyDiaSemana == 0) {
-                    $condicion .= " AND ri.diaAccidente = '" . $diaSemana . "'";
+                    $condicion .= " AND i.diaAccidente = '" . $diaSemana . "'";
                 }
                 else {
-                    $condicion .= " OR ri.diaAccidente = '" . $diaSemana . "'";
+                    $condicion .= " OR i.diaAccidente = '" . $diaSemana . "'";
                 }
             }
         } 
@@ -109,12 +105,12 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
                 $genero = $em->getRepository('JHWEBUsuarioBundle:UserCfgGenero')->find($idGenero);
 
                 if($keyGenero == 0) {
-                    $condicion .= " AND ic.sexoConductor = '" . $genero->getSigla() . "'";
-                    $condicion .= " AND iv.sexoVictima = '" . $genero->getSigla() . "'";
+                    $condicion .= " AND ic.sexo = '" . $genero->getSigla() . "'";
+                    $condicion .= " AND iv.sexo = '" . $genero->getSigla() . "'";
                 }
                 else {
-                    $condicion .= " OR ic.sexoConductor = '" . $genero->getSigla() . "'";
-                    $condicion .= " OR iv.sexoVictima = '" . $genero->getSigla() . "'";
+                    $condicion .= " OR ic.sexo = '" . $genero->getSigla() . "'";
+                    $condicion .= " OR iv.sexo = '" . $genero->getSigla() . "'";
                 }
             }
         }
@@ -136,10 +132,10 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
             foreach ($params->datos->arrayClaseAccidente as $keyClaseAccidente => $idClaseAccidente) {
                 # code...
                 if($keyClaseAccidente == 0) {
-                    $condicion .= " AND ri.claseAccidente = '" . $idClaseAccidente . "'";
+                    $condicion .= " AND i.claseAccidente = '" . $idClaseAccidente . "'";
                 }
                 else {
-                    $condicion .= " OR ri.claseAccidente = '" . $idClaseAccidente . "'";
+                    $condicion .= " OR i.claseAccidente = '" . $idClaseAccidente . "'";
                 }
             }
         }
@@ -148,10 +144,10 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
             foreach ($params->datos->arrayClaseChoque as $keyClaseChoque => $idClaseChoque) {
                 # code...
                 if($keyClaseChoque == 0) {
-                    $condicion .= " AND ri.claseChoque = '" . $idClaseChoque . "'";
+                    $condicion .= " AND i.claseChoque = '" . $idClaseChoque . "'";
                 }
                 else {
-                    $condicion .= " OR ri.claseChoque = '" . $idClaseChoque . "'";
+                    $condicion .= " OR i.claseChoque = '" . $idClaseChoque . "'";
                 }
             } 
         }
@@ -160,10 +156,10 @@ class SvIpatRepository extends \Doctrine\ORM\EntityRepository
             foreach ($params->datos->arrayObjetoFijo as $keyObjetoFijo => $idObjetoFijo) {
                 # code...
                 if($keyObjetoFijo == 0) {
-                    $condicion .= " AND ri.objetoFijo = '" . $idObjetoFijo . "'";
+                    $condicion .= " AND i.objetoFijo = '" . $idObjetoFijo . "'";
                 }
                 else {
-                    $condicion .= " OR ri.objetoFijo = '" . $idObjetoFijo . "'";
+                    $condicion .= " OR i.objetoFijo = '" . $idObjetoFijo . "'";
                 }
             }
         }
