@@ -103,17 +103,48 @@ class CvCdoCfgEstadoController extends Controller
     /**
      * Finds and displays a cvCdoCfgEstado entity.
      *
-     * @Route("/{id}/show", name="cvcdocfgestado_show")
-     * @Method("GET")
+     * @Route("/show", name="cvcdocfgestado_show")
+     * @Method("POST")
      */
-    public function showAction(CvCdoCfgEstado $cvCdoCfgEstado)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($cvCdoCfgEstado);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('cvcdocfgestado/show.html.twig', array(
-            'cvCdoCfgEstado' => $cvCdoCfgEstado,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                $params->id
+            );
+
+            if ($estado) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Estado encontrado.", 
+                    'data'=> $estado
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**

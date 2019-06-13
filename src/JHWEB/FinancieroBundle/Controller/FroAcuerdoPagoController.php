@@ -54,9 +54,11 @@ class FroAcuerdoPagoController extends Controller
                 $acuerdoPago->setValorMora($params->acuerdoPago->valorMora);
                 $acuerdoPago->setValorNeto($params->acuerdoPago->valorNeto);
                 $acuerdoPago->setDiasMoraTotal($params->acuerdoPago->diasMoraTotal);
-                $acuerdoPago->setFechaFinal(
+                $fechaFinal = $helpers->convertDateTime($params->acuerdoPago->fechaFinal);
+                $acuerdoPago->setFechaFinal($fechaFinal);
+                /*$acuerdoPago->setFechaFinal(
                     new \Datetime($params->acuerdoPago->fechaFinal)
-                );
+                );*/
                 
                 if ($params->acuerdoPago->porcentajeInicial) {
                     $acuerdoPago->setPorcentajeInicial(
@@ -411,7 +413,6 @@ class FroAcuerdoPagoController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $fecha = strtotime(date('Y-m-d'));
-
 
             $subtotal = $params->valorNeto - $params->valorCuotaInicial;
             $subtotalMora = $subtotal * (25 / 100);

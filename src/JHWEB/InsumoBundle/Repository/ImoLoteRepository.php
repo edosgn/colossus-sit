@@ -58,7 +58,7 @@ class ImoLoteRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT l
             FROM JHWEBInsumoBundle:ImoLote l,
             JHWEBInsumoBundle:ImoCfgTipo t
-            WHERE l.tipoInsumo = :tipo
+            WHERE l.tipo = :tipo
             AND l.tipoInsumo = t.id
             AND l.fecha BETWEEN :fechaInicial AND :fechaFinal";
 

@@ -263,7 +263,7 @@ class CvCdoNotificacionController extends Controller
                 if ($comparendo->getEstado()->getId() == 1) {
                     if (!$comparendo->getAudiencia()) {
                         //Valida si han pasado mas de 5 días
-                        if ($diasHabiles > 5) {
+                        if ($diasHabiles > 5 && $diasHabiles <= 30) {
                             //Busca si ya se creo un auto de no comparecencia
                             $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                                 array(
