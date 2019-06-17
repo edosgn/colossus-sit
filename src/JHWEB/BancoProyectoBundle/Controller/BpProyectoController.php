@@ -253,57 +253,6 @@ class BpProyectoController extends Controller
     /* =========================================== */
 
     /**
-     * Busca las cuentas asociadas a un proyecto.
-     *
-     * @Route("/search/cuentas", name="bpProyecto_search_cuentas")
-     * @Method({"GET", "POST"})
-     */
-    public function searchCuentasAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-
-        if ($authCheck == true) {
-            $json = $request->get("data",null);
-            $params = json_decode($json);
-
-            $em = $this->getDoctrine()->getManager();
-
-            $cuentas = $em->getRepository('JHWEBBancoProyectoBundle:BpCuenta')->findBy(
-                array(
-                    'proyecto' => $params->idProyecto,
-                    'activo' => true
-                )
-            );
-
-            if ($cuentas) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => count($cuentas)." registros encontrados.",
-                    'data'=> $cuentas,
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Ninguna cuenta registrada aún.",
-                    'data' => array(),
-                );
-            }
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorizacion no valida", 
-            );
-        }
-        
-        return $helpers->json($response);
-    }
-
-    /**
      * Buscar un proyecto por filtro (1-Numero, 2-Fecha)
      *
      * @Route("/search/filter", name="bpProyecto_search_filter")
