@@ -14,4 +14,33 @@ class DefaultController extends Controller
     {
         return $this->render('JHWEBFinancieroBundle:Default:index.html.twig');
     }
+
+    /**
+     * @Route("/soap/response")
+     */
+    public function responseAction()
+    {
+        $soapServer = new \SoapServer('http://localhost/GitHub/colossus-sit/web/consultar_recaudos.wsdl');
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/xml; charset=ISO-8859-1');
+
+        ob_start();
+        $soapServer->handle();
+        $response->setContent(ob_get_clean());
+
+        return $response;
+    }
+
+    /**
+     * @Route("/soap/call")
+     */
+    public function callAction()
+    {
+        $client = new \Soapclient('http://localhost/GitHub/colossus-sit/web/consultar_recaudos?wsdl', true);
+
+        $result = $client->call('hello', array('name' => 'Scott'));
+
+        var_dump($result);
+    }
 }

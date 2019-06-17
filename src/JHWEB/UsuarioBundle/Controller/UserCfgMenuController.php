@@ -420,7 +420,6 @@ class UserCfgMenuController extends Controller
             );
         }
 
-
         return $helpers->json($response);
     }
 

@@ -10,4 +10,25 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroTrteCfgConceptoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la lista de MENUS disponibles para asignar a un USUARIO
+    public function getAvailablesByTramitePrecio($idTramitePrecio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT c
+            FROM JHWEBFinancieroBundle:FroTrteCfgConcepto c
+            WHERE c.activo = true
+            AND c.id NOT IN
+            (SELECT IDENTITY(tc.concepto)
+            FROM JHWEBFinancieroBundle:FroTrteConcepto tc
+            JOIN tc.precio p
+            WHERE tc.activo = true 
+            AND p.id = :idTramitePrecio)";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+	        'idTramitePrecio' => $idTramitePrecio,
+	    ));
+
+        return $consulta->getResult();
+    }
 }

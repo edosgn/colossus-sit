@@ -145,9 +145,6 @@ class FroTrtePrecio
      */
     public function getFechaInicial()
     {
-        if($this->fechaInicial){
-            return $this->fechaInicial->format('d/m/Y');
-        }
         return $this->fechaInicial;
     }
 
@@ -172,9 +169,6 @@ class FroTrtePrecio
      */
     public function getFechaFinal()
     {
-        if($this->fechaFinal){
-            return $this->fechaFinal->format('d/m/Y');
-        }
         return $this->fechaFinal;
     }
 
