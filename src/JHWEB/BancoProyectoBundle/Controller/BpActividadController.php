@@ -64,7 +64,7 @@ class BpActividadController extends Controller
 
             $actividad = new BpActividad();
 
-            $actividad->setNombre(mb_strtoupper($params->nombre, 'uft-8'));
+            $actividad->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $actividad->setCostoTotal(0);
             $actividad->setActivo(true);
 
