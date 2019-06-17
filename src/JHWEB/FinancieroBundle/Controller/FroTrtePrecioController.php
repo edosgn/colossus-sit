@@ -361,7 +361,7 @@ class FroTrtePrecioController extends Controller
             $params->idModulo
         );
 
-        if ($modulo->getid() == 1) {
+        if ($modulo->getId() == 1) {
             $tramitesPrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->findBy(
                 array(
                     'modulo' => $modulo->getId(),
