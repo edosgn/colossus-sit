@@ -179,27 +179,35 @@ class FroTrteCfgConceptoController extends Controller
     /**
      * Deletes a Concepto entity.
      *
-     * @Route("/{id}/delete", name="frotrtecfgconcepto_delete")
+     * @Route("/delete", name="frotrtecfgconcepto_delete")
      * @Method("POST")
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();
-            $concepto = $em->getRepository('AppBundle:Concepto')->find($id);
 
-            $concepto->setEstado(0);
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-                $em->persist($concepto);
-                $em->flush();
+
+            $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find(
+                $$params->id
+            );
+
+            $concepto->setActivo(false);
+
+            $em->persist($concepto);
+            $em->flush();
+
             $response = array(
-                    'status' => 'success',
-                        'code' => 200,
-                        'message' => "concepto eliminado con exito", 
-                );
+                'status' => 'success',
+                'code' => 200,
+                'message' => "concepto eliminado con exito", 
+            );
         }else{
             $response = array(
                     'status' => 'error',
@@ -231,7 +239,7 @@ class FroTrteCfgConceptoController extends Controller
     /**
      * Listado de tipos de recaudo para select con búsqueda
      *
-     * @Route("/select", name="frotrteconcepto_select")
+     * @Route("/select", name="frotrtecfgconcepto_select")
      * @Method({"GET", "POST"})
      */
     public function selectAction()
@@ -253,6 +261,155 @@ class FroTrteCfgConceptoController extends Controller
             );
         }
         
+        return $helpers->json($response);
+    }
+
+    /**
+     * Listado de conceptos habilitados para selección con buscador.
+     *
+     * @Route("/select/availables", name="frotrtecfgconcepto_select_availables")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAvailablesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->getAvailablesByTramitePrecio(
+                $params->idTramitePrecio
+            );
+
+            $response = null;
+
+            foreach ($conceptos as $key => $concepto) {
+                $response[] = array(
+                    'value' => $concepto->getId(),
+                    'label' => $concepto->getNombre()
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca todos los conceptos registrados por tramite precio.
+     *
+     * @Route("/search/tramiteprecio", name="frotrtecfgconcepto_search_tramiteprecio")
+     * @Method("POST")
+     */
+    public function searchByTramitePrecioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramitesConcepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
+                array(
+                    'precio' => $params->idTramitePrecio,
+                    'activo' => true
+                )
+            );
+
+            if ($tramitesConcepto) {    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($tramitesConcepto).' registros encontrados.',
+                    'data' => $tramitesConcepto,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'ningún registro encontrado.',
+                );
+            }
+
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca todos los conceptos registrados por tramite precio.
+     *
+     * @Route("/delete/tramiteprecio", name="frotrtecfgconcepto_delete_tramiteprecio")
+     * @Method("POST")
+     */
+    public function deleteByTramitePrecioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $tramiteConcepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->find(
+                $params->id
+            );
+
+            if ($tramiteConcepto) {
+                $tramiteConcepto->setActivo(false);
+    
+                $em->persist($tramiteConcepto);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "concepto eliminado con exito", 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Registro eliminado con exito", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
         return $helpers->json($response);
     }
 }

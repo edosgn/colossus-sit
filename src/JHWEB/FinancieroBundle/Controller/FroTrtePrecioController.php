@@ -206,46 +206,105 @@ class FroTrtePrecioController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $froTrtePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find($params->id);
 
-            if ($froTrtePrecio != null) {
+            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+                $params->id
+            );
 
-                $froTrtePrecio->setNombre(strtoupper($params->nombre));
-                $froTrtePrecio->setValor($params->valor);
-                $froTrtePrecio->setFechaInicial(new \Datetime($params->fechaInicial));
-                $froTrtePrecio->setValorConcepto($params->valorConcepto);
-                $froTrtePrecio->setValorTotal($params->valorTotal);
+            if ($tramitePrecio) {
+                $tramitePrecio->setNombre(strtoupper($params->nombre));
+                $tramitePrecio->setValor($params->valor);
+                $tramitePrecio->setFechaInicial(new \Datetime($params->fechaInicial));
+                $tramitePrecio->setValorConcepto($params->valorConcepto);
+                $tramitePrecio->setValorTotal($params->valorTotal);
 
                 $tramite = $em->getRepository("JHWEBFinancieroBundle:FroTramite")->find($params->idTramite);
-                $froTrtePrecio->setTramite($tramite);
+                $tramitePrecio->setTramite($tramite);
 
                 $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find($params->idTipoVehiculo);
-                $froTrtePrecio->setTipoVehiculo($tipoVehiculo);
+                $tramitePrecio->setTipoVehiculo($tipoVehiculo);
 
                 $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
-                $froTrtePrecio->setModulo($modulo);
+                $tramitePrecio->setModulo($modulo);
 
-                $froTrtePrecio->setEstado(true);
-
-                $em->persist($froTrtePrecio);
+                $tramitePrecio->setEstado(true);
 
                 $em->flush();
+
+                $tramitesConceptoOld = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
+                    array(
+                        'precio' => $tramitePrecio->getId(),
+                        'activo' => true
+                    )
+                );
+
+                foreach ($tramitesConceptoOld as $key => $tramiteConceptoOld) {
+                    $tramiteConceptoOld->setActivo(false);
+                }
+
+                if ($params->conceptos) {
+                    $totalConceptos = 0;
+                    foreach ($params->conceptos as $key => $idConcepto) {
+                        $tramiteConcepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findOneBy(
+                            array(
+                                'precio' => $tramitePrecio->getId(),
+                                'concepto' => $idConcepto
+                            )
+                        );
+
+                        if ($tramiteConcepto) {
+                            $tramiteConcepto->setActivo(true);
+
+                            $totalConceptos += $tramiteConcepto->getConcepto()->getValor();
+
+                            $em->flush();
+                        }else{
+                            $tramiteConcepto = new FroTrteConcepto();
+        
+                            $concepto = $em->getRepository('JHWEBFinancieroBundle:FroTrteCfgConcepto')->find(
+                                $idConcepto
+                            );
+                            $tramiteConcepto->setConcepto($concepto);
+        
+                            $tramiteConcepto->setPrecio($tramitePrecio);
+        
+                            $tramiteConcepto->setActivo(true);
+        
+                            $em->persist($tramiteConcepto);
+                            $em->flush();
+        
+                            $totalConceptos += $concepto->getValor();
+                        }
+                    }
+                }
+    
+                $tramitePrecio->setValorConcepto($totalConceptos);
+                $tramitePrecio->setValorTotal(
+                    $totalConceptos + $tramitePrecio->getValor()
+                );
+
+                $em->flush();
+
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro actualizado con éxito",
-                    'data' => $froTrtePrecio,
+                    'message' => "Registro actualizado con éxito.",
+                    'data' => $tramitePrecio,
                 );
             } else {
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
                     'message' => "El registro no se encuentra en la base de datos",
                 );
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida para editar",

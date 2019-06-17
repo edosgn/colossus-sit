@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<consultar-recaudos-output>
+	<tipo_registro>405</tipo_registro>
+	<error_codigo>0</error_codigo>
+	<error_descripcion>Operacion Exitosa</error_descripcion>
+	<recaudo>
+		<tipo>0</tipo>
+		<detalle>Predial: Cra 85 # 45 - 54</detalle>
+		<codigo_iac>7707567890123<codigo_iac>
+		<referencia1>999999999</referencia1>
+		<referencia2>8888888</referencia2>
+		<fecha_vcmto>2009-11-31</fecha_vcmto>
+		<total_transaccion>5000000</total_transaccion>
+	</recaudo>
+	<recaudo>
+		<tipo>1</tipo>
+		<detalle>Predial: Cra 85 # 45 - 54</detalle>
+		<codigo_iac>7707567890123<codigo_iac>
+		<referencia1>989898989</referencia1>
+		<referencia2>8888888</referencia2>
+		<fecha_vcmto>2009-11-31</fecha_vcmto>
+		<total_transaccion>1000000</total_transaccion>
+	</recaudo>
+</consultar-recaudos-output>
