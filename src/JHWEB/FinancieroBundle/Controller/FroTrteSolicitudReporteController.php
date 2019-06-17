@@ -97,7 +97,7 @@ class FroTrteSolicitudReporteController extends Controller
                         'fechaMatricula' => $vehiculo->getFecha(),
                         'numeroLicenciaTransito' => $licenciaTransito->getNumero(),
                         'numeroFactura' => 'N',
-                        'combustible' => $vehiculo->getVehiculo()->getCombustible()->getNombre(),
+                        'combustible' => $vehiculo->getVehiculo()->getCombustible()->getCodigo(),
                         'estado' => $vehiculo->getVehiculo()->getActivo(),
                     );
                 }
