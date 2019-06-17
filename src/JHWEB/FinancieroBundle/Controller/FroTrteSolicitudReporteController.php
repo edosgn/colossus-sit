@@ -147,7 +147,7 @@ class FroTrteSolicitudReporteController extends Controller
                     }
                     $arrayMedidaCautelar [] = array(
                         'placa' => $placas,
-                        'tipo' => 'medida cautelar',
+                        'tipoMedida' => $medidaCautelar->getTipoMedida()->getCodigo(),
                         'ente' => $medidaCautelar->getEntidadJudicial()->getNombre(),
                         'numeroOficio' => $medidaCautelar->getNumeroOficio(),
                         'fechaExpedicion' => $medidaCautelar->getFechaRegistro(),

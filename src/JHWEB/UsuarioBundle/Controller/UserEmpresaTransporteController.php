@@ -54,6 +54,75 @@ class UserEmpresaTransporteController extends Controller
     }
 
     /**
+     * Create a userEmpresaTransporte entity.
+     *
+     * @Route("/new", name="userempresatransporte_new")
+     * @Method({"GET", "POST"})
+     */
+    public function newAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $empresa  = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->idEmpresa);
+            $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
+            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+            
+            if($params->idCarroceria){
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
+                $empresaTransporte->setCarroceria($carroceria);
+            }
+
+            $empresaTransporte  = new UserEmpresaTransporte();
+
+            $empresaTransporte->setEmpresa($empresa);
+            $empresaTransporte->setRadioAccion($radioAccion);
+            $empresaTransporte->setModalidadTransporte($modalidadTransporte);
+            $empresaTransporte->setServicio($servicio);
+            $empresaTransporte->setClase($clase);
+            $empresaTransporte->setNumeroActo($params->numeroActo);
+            $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
+            $empresaTransporte->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
+            $empresaTransporte->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
+            $empresaTransporte->setColores(implode(',', $params->arrayColores));
+            $empresaTransporte->setMunicipios(implode(',', $params->arrayMunicipios));
+            $empresaTransporte->setCapacidad($params->capacidad);
+            $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
+            $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
+            $empresaTransporte->setActivo(true);
+            
+            $em->persist($empresaTransporte);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con éxito",
+            );
+        
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }   
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Finds and displays a userEmpresaTransporte entity.
      *
      * @Route("/{id}", name="userempresatransporte_show")

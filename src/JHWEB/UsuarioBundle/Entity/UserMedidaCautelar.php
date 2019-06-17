@@ -100,6 +100,11 @@ class UserMedidaCautelar
     protected $causal;
 
     /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoMedidaCautelar", inversedBy="medidasCautelares")
+     **/
+    protected $tipoMedida;
+
+    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgLimitacionTipoProceso", inversedBy="medidasCautelares")
      **/
     protected $tipoProceso;
@@ -421,6 +426,30 @@ class UserMedidaCautelar
     public function getCausal()
     {
         return $this->causal;
+    }
+
+    /**
+     * Set tipoMedida
+     *
+     * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoMedidaCautelar $tipoMedida
+     *
+     * @return UserMedidaCautelar
+     */
+    public function setTipoMedida(\JHWEB\UsuarioBundle\Entity\UserCfgTipoMedidaCautelar $tipoMedida = null)
+    {
+        $this->tipoMedida = $tipoMedida;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoMedida
+     *
+     * @return \JHWEB\UsuarioBundle\Entity\UserCfgTipoMedidaCautelar
+     */
+    public function getTipoMedida()
+    {
+        return $this->tipoMedida;
     }
 
     /**

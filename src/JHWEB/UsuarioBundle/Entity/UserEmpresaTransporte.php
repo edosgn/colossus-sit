@@ -42,23 +42,65 @@ class UserEmpresaTransporte
      * @ORM\Column(name="numero_acto", type="bigint")
      */
     private $numeroActo;
-
+    
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_expedicion", type="date")
      */
-    private $fechaExpedicion;
+    private $fechaExpedicionActo;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_ejecutoria_acto", type="bigint")
+     */
+    private $numeroEjecutoriaActo;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_ejecutoria", type="date")
+     * @ORM\Column(name="fecha_ejecutoria_acto", type="date")
      */
-    private $fechaEjecutoria;
+    private $fechaEjecutoriaActo;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="colores", type="string")
+     */
+    private $colores;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="municipios", type="string")
+     */
+    private $municipios;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgColor", inversedBy="empresaTransporte") */
-    private $color;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria", inversedBy="empresaTransporte") */
+    private $carroceria;
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="capacidad", type="bigint", nullable=true)
+     */
+    private $capacidad;
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="capacidad_minima", type="bigint", nullable=true)
+     */
+    private $capacidadMinima;
+    
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="capacidad_maxima", type="bigint", nullable=true)
+     */
+    private $capacidadMaxima;
 
     /**
      * @var bool
@@ -102,51 +144,195 @@ class UserEmpresaTransporte
     }
 
     /**
-     * Set fechaExpedicion
+     * Set fechaExpedicionActo
      *
-     * @param \DateTime $fechaExpedicion
+     * @param \DateTime $fechaExpedicionActo
      *
      * @return UserEmpresaTransporte
      */
-    public function setFechaExpedicion($fechaExpedicion)
+    public function setFechaExpedicionActo($fechaExpedicionActo)
     {
-        $this->fechaExpedicion = $fechaExpedicion;
+        $this->fechaExpedicionActo = $fechaExpedicionActo;
 
         return $this;
     }
 
     /**
-     * Get fechaExpedicion
+     * Get fechaExpedicionActo
      *
      * @return \DateTime
      */
-    public function getFechaExpedicion()
+    public function getFechaExpedicionActo()
     {
-        return $this->fechaExpedicion;
+        return $this->fechaExpedicionActo;
     }
 
     /**
-     * Set fechaEjecutoria
+     * Set numeroEjecutoriaActo
      *
-     * @param \DateTime $fechaEjecutoria
+     * @param integer $numeroEjecutoriaActo
      *
      * @return UserEmpresaTransporte
      */
-    public function setFechaEjecutoria($fechaEjecutoria)
+    public function setNumeroEjecutoriaActo($numeroEjecutoriaActo)
     {
-        $this->fechaEjecutoria = $fechaEjecutoria;
+        $this->numeroEjecutoriaActo = $numeroEjecutoriaActo;
 
         return $this;
     }
 
     /**
-     * Get fechaEjecutoria
+     * Get numeroEjecutoriaActo
+     *
+     * @return integer
+     */
+    public function getNumeroEjecutoriaActo()
+    {
+        return $this->numeroEjecutoriaActo;
+    }
+
+    /**
+     * Set fechaEjecutoriaActo
+     *
+     * @param \DateTime $fechaEjecutoriaActo
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setFechaEjecutoriaActo($fechaEjecutoriaActo)
+    {
+        $this->fechaEjecutoriaActo = $fechaEjecutoriaActo;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaEjecutoriaActo
      *
      * @return \DateTime
      */
-    public function getFechaEjecutoria()
+    public function getFechaEjecutoriaActo()
     {
-        return $this->fechaEjecutoria;
+        return $this->fechaEjecutoriaActo;
+    }
+
+    /**
+     * Set colores
+     *
+     * @param string $colores
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setColores($colores)
+    {
+        $this->colores = $colores;
+
+        return $this;
+    }
+
+    /**
+     * Get colores
+     *
+     * @return string
+     */
+    public function getColores()
+    {
+        return $this->colores;
+    }
+
+    /**
+     * Set municipios
+     *
+     * @param string $municipios
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setMunicipios($municipios)
+    {
+        $this->municipios = $municipios;
+
+        return $this;
+    }
+
+    /**
+     * Get municipios
+     *
+     * @return string
+     */
+    public function getMunicipios()
+    {
+        return $this->municipios;
+    }
+
+    /**
+     * Set capacidad
+     *
+     * @param integer $capacidad
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setCapacidad($capacidad)
+    {
+        $this->capacidad = $capacidad;
+
+        return $this;
+    }
+
+    /**
+     * Get capacidad
+     *
+     * @return integer
+     */
+    public function getCapacidad()
+    {
+        return $this->capacidad;
+    }
+
+    /**
+     * Set capacidadMinima
+     *
+     * @param integer $capacidadMinima
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setCapacidadMinima($capacidadMinima)
+    {
+        $this->capacidadMinima = $capacidadMinima;
+
+        return $this;
+    }
+
+    /**
+     * Get capacidadMinima
+     *
+     * @return integer
+     */
+    public function getCapacidadMinima()
+    {
+        return $this->capacidadMinima;
+    }
+
+    /**
+     * Set capacidadMaxima
+     *
+     * @param integer $capacidadMaxima
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setCapacidadMaxima($capacidadMaxima)
+    {
+        $this->capacidadMaxima = $capacidadMaxima;
+
+        return $this;
+    }
+
+    /**
+     * Get capacidadMaxima
+     *
+     * @return integer
+     */
+    public function getCapacidadMaxima()
+    {
+        return $this->capacidadMaxima;
     }
 
     /**
@@ -294,26 +480,26 @@ class UserEmpresaTransporte
     }
 
     /**
-     * Set color
+     * Set carroceria
      *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgColor $color
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria $carroceria
      *
      * @return UserEmpresaTransporte
      */
-    public function setColor(\JHWEB\VehiculoBundle\Entity\VhloCfgColor $color = null)
+    public function setCarroceria(\JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria $carroceria = null)
     {
-        $this->color = $color;
+        $this->carroceria = $carroceria;
 
         return $this;
     }
 
     /**
-     * Get color
+     * Get carroceria
      *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgColor
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgCarroceria
      */
-    public function getColor()
+    public function getCarroceria()
     {
-        return $this->color;
+        return $this->carroceria;
     }
 }
