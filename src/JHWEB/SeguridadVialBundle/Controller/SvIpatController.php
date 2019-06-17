@@ -768,7 +768,7 @@ class SvIpatController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             //====================busqueda de ipat por parametros
-            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvRegistroIpat')->getIpatByRango($params);
+            $ipats = $em->getRepository('JHWEBSeguridadVialBundle:SvIpat')->getIpatByRango($params);
             
             foreach ($ipats as $key => $ipat) {
                 $conductores = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatConductor')->findBy(
