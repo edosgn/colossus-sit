@@ -1,3 +1,7 @@
+jhweb_vehiculo_vhlo_tp_cupo:
+    resource: "@JHWEBVehiculoBundle/Controller/VhloTpCupoController.php"
+    type:     annotation
+
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
