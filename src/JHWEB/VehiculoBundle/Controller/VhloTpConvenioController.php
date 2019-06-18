@@ -28,7 +28,7 @@ class VhloTpConvenioController extends Controller
 
         $convenios = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findBy(
             array(
-                'empresa' => $id,
+                'alcaldia' => $id,
                 'activo' => 1
             )
         );

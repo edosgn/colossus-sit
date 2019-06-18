@@ -55,7 +55,7 @@ class FroTrteSolicitudReporteController extends Controller
             $cancelacionesMatricula = null;
             $vehiculosPlaca = [];
             $arrayMedidaCautelar = null;
-            $prendas = null;
+            $arrayPrendas = null;
             $radicadosCuenta = null;
             $arrayTramites = null;
             
@@ -163,12 +163,46 @@ class FroTrteSolicitudReporteController extends Controller
             }
             else if($params->tipoReporte == 6) {
                 $prendas = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPrendas($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
+
+                foreach ($prendas as $key => $prenda) {
+                    $vehiculoAcreedor = $em->getRepository('JHWEBVehiculoBundle:VhloAcreedor')->findOneBy(
+                        array(
+                            'vehiculo' => $prenda->getVehiculo()->getId(),
+                            'activo' => true
+                        )
+                    );
+
+                    $arrayPrendas [] = array(
+                        'organismoTransito' => $prenda->getOrganismoTransito()->getDivipo(),
+                        'placa' => $prenda->getVehiculo()->getPlaca()->getNumero(),
+                        /* 'tipoIdentificacion' => $prenda->getCiudadano()->getTipoIdentificacion()->getSigla(),
+                        'identificacion' => $prenda->getCiudadano()->getIdentificacion(), */
+                        'ciudadano' => !empty($vehiculoAcreedor->getCiudadano()) ? $vehiculoAcreedor->getCiudadano(): null,
+                        'empresa' => !empty($vehiculoAcreedor->getEmpresa()) ? $vehiculoAcreedor->getEmpresa(): null,
+                        /* 'primerNombre' => $prenda->getCiudadano()->getPrimerNombre(),
+                        'segundoNombre' => $prenda->getCiudadano()->getSegundoNombre(),
+                        'primerApellido' => $prenda->getCiudadano()->getPrimerApellido(),
+                        'segundoApellido' => $prenda->getCiudadano()->getSegundoApellido(),
+                        'direccionPersonal' => $prenda->getCiudadano()->getDireccionPersonal(),
+                        'municipioResidencia' => $prenda->getCiudadano()->getMunicipioResidencia()->getCodigoDane(),
+                        'telefonoCelular' => $prenda->getCiudadano()->getTelefonoCelular(), */
+                        'gradoAlerta' => $vehiculoAcreedor->getGradoAlerta(),
+                        'fecha' => $prenda->getFecha(),
+                        'estadoPrenda' => $vehiculoAcreedor->getActivo(),
+                        'tipoAlerta' => $vehiculoAcreedor->getTipoAlerta()->getId()
+                    );
+
+                    /* if($vehiculoAcreedor->getEmpresa()) {
+                        array_push($arrayPrendas, ['nit'] = $vehiculoAcreedor->getEmpresa()->getNit());
+                        array_push($arrayPrendas, $vehiculoAcreedor->getEmpresa()->getNit());
+                    } */
+                }
             }
             else if($params->tipoReporte == 7) {
                 $radicadosCuenta = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByRadicadosCuenta($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
             }
     
-            if ($arrayVehiculos || $propietariosActuales || $tramites || $medidasCautelares || $cancelacionesMatricula || $prendas || $radicadosCuenta) {
+            if ($arrayVehiculos || $propietariosActuales || $tramites || $medidasCautelares || $cancelacionesMatricula || $arrayPrendas || $radicadosCuenta) {
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -178,7 +212,7 @@ class FroTrteSolicitudReporteController extends Controller
                     'tramites'=> $arrayTramites,
                     'medidasCautelares' => $arrayMedidaCautelar,
                     'cancelacionesMatricula' => $cancelacionesMatricula,
-                    'prendas' => $prendas,
+                    'prendas' => $arrayPrendas,
                     'radicadosCuenta' => $radicadosCuenta,
                 );
             }else{

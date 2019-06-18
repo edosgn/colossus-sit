@@ -224,26 +224,26 @@ class VhloTpConvenio
     }
 
     /**
-     * Set empresa
+     * Set alcaldia
      *
-     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $alcaldia
      *
      * @return VhloTpConvenio
      */
-    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    public function setAlcaldia(\JHWEB\UsuarioBundle\Entity\UserEmpresa $alcaldia = null)
     {
-        $this->empresa = $empresa;
+        $this->alcaldia = $alcaldia;
 
         return $this;
     }
 
     /**
-     * Get empresa
+     * Get alcaldia
      *
      * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
      */
-    public function getEmpresa()
+    public function getAlcaldia()
     {
-        return $this->empresa;
+        return $this->alcaldia;
     }
 }

@@ -3,6 +3,7 @@
 namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte;
+use JHWEB\VehiculoBundle\Entity\VhloTpCupo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -176,6 +177,141 @@ class UserEmpresaTransporteController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Empresa no encontrada",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca empresas por NIT, modadlidadTransporte y clase.
+     *
+     * @Route("/search/modalidad/clase", name="userempresa_transporte_search_modalidad_clase")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByModalidadAndClaseAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                array(
+                    'nit' => $params->nit,
+                    'activo' => true
+                )
+            );
+            if($empresa){
+                $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                    array(
+                        'empresa' => $empresa,
+                        'modalidadTransporte' => $params->idModalidadTransporte,
+                        'clase' => $params->idClase,
+                        'activo' => true
+                    )
+                ); 
+
+                $response = array(
+                    'tittle' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Empresa encontrada",
+                    'data' => $empresa,
+                );
+            } else {
+                $response = array(
+                    'tittle' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Empresa no encontrada",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Registra rangos de cupos para una empresa de transporte público.
+     *
+     * @Route("/new/rango/cupos", name="userempresa_transporte_new_rango_cupos")
+     * @Method({"GET", "POST"})
+     */
+    public function newRangoCuposAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                array(
+                    'nit' => $params->nit,
+                    'activo' => true
+                )
+            );
+            
+            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                array(
+                    'empresa' => $empresa->getId(),
+                    'activo' => true
+                )
+            );
+            if($empresa) {
+                $empresaTransporte->setRangoInicio($params->rangoInicio);
+                $empresaTransporte->setRangoFin($params->rangoFin);
+                $empresaTransporte->setNumeroResolucionCupo($params->numeroResolucion);
+                $empresaTransporte->setFechaResolucionCupo(new \Datetime($params->fechaResolucion));
+                $empresaTransporte->setObservaciones($params->observaciones);
+                $em->persist($empresaTransporte);
+                $em->flush();
+
+                for ($i=$params->rangoInicio; $i <= $params->rangoFin ; $i++) { 
+                    $cupo = new VhloTpCupo();
+                    
+                    $cupo->setEmpresa($empresa);
+                    $cupo->setNumero($i);
+                    $cupo->setEstado('DISPONIBLE');
+                    $cupo->setActivo(true);
+
+                    $em->persist($cupo);
+                    $em->flush();
+                }
+
+                $response = array(
+                    'tittle' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Cupos creados con éxito",
+                );
+            } else {
+                $response = array(
+                    'tittle' => 'Error!',
+                    'status' => 'error',
+                    'code' => 200,
+                    'message' => "No se encontró la empresa",
                 );
             }
         } else {

@@ -70,6 +70,10 @@ class UserMedidaCautelarController extends Controller
                 $causal = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLimitacionCausal')->find(
                     $params->idCausalLimitacion
                 );
+                
+                $tipoMedidaCautelar = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoMedidaCautelar')->find(
+                    $params->idTipoMedidaCautelar
+                );
 
                 $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
                     $params->idEntidadJudicial
@@ -87,6 +91,7 @@ class UserMedidaCautelarController extends Controller
                     $medidaCautelar->setMunicipio($municipio);                        
                     $medidaCautelar->setTipoProceso($tipoProceso);
                     $medidaCautelar->setCausal($causal);
+                    $medidaCautelar->setTipoMedida($tipoMedidaCautelar);
                     $medidaCautelar->setEntidadJudicial($entidadJudicial);
                     $medidaCautelar->setActivo(true);
                     
