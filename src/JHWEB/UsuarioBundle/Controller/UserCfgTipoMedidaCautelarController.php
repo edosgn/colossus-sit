@@ -28,7 +28,9 @@ class UserCfgTipoMedidaCautelarController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $tiposMedidaCautelar = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoMedidaCautelar')->findBy(
-            array('activo'=>true)
+            array(
+                'activo'=>true
+            )
         );
 
         $response['data'] = array();
@@ -202,18 +204,20 @@ class UserCfgTipoMedidaCautelarController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoMedidaCautelar = $em->getRepository('JJHWEBUsuarioBundle:UserCfgTipoMedidaCautelar')->find($params->id);
+            $tipoMedidaCautelar = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoMedidaCautelar')->find($params->id);
             $tipoMedidaCautelar->setActivo(false);
 
             $em->flush();
 
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro eliminado con éxito", 
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito", 
             );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida", 
@@ -244,7 +248,7 @@ class UserCfgTipoMedidaCautelarController extends Controller
         foreach ($tiposMedidaCautelar as $key => $tipoMedidaCautelar) {
             $response[$key] = array(
                 'value' => $tipoMedidaCautelar->getId(),
-                'label' => $tipoMedidaCautelar->getSigla(),
+                'label' => $tipoMedidaCautelar->getNombre(),
             );
         }
 
