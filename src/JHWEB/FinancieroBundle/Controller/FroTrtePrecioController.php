@@ -327,23 +327,36 @@ class FroTrtePrecioController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $froTrtePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find($params->id);
-
-            $froTrtePrecio->setActivo(false);
-
-            $em->persist($froTrtePrecio);
-            $em->flush();
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro eliminado con éxito.",
+            $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
+                $params->id
             );
+
+            if ($tramitePrecio) {
+                $tramitePrecio->setActivo(false);
+    
+                $em->persist($tramitePrecio);
+                $em->flush();
+    
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro eliminado con éxito.',
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'El registro no fue encontrado en la base de datos.',
+                );
+            }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no válida",
@@ -610,8 +623,8 @@ class FroTrtePrecioController extends Controller
 
                         $tramitePrecio = new FroTrtePrecio();
 
-                        $tramitePrecio->setFechaInicio(
-                            $helpers->convertDateTime($tramitePrecioNew->fechaInicio)
+                        $tramitePrecio->setFechaInicial(
+                            $helpers->convertDateTime($tramitePrecioNew->fechaInicial)
                         );
                         $tramitePrecio->setValor($tramitePrecioNew->valor);
                         $tramitePrecio->setValorTotal(0);
