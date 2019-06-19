@@ -21,8 +21,11 @@ class VhloTpCupo
      */
     private $id;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="representanteEmpresa") */
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="cupos") */
     private $empresa;
+   
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="cupos") */
+    private $claseVehiculo;
 
     /**
      * @var string
@@ -150,5 +153,29 @@ class VhloTpCupo
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * Set claseVehiculo
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $claseVehiculo
+     *
+     * @return VhloTpCupo
+     */
+    public function setClaseVehiculo(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $claseVehiculo = null)
+    {
+        $this->claseVehiculo = $claseVehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get claseVehiculo
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
+     */
+    public function getClaseVehiculo()
+    {
+        return $this->claseVehiculo;
     }
 }

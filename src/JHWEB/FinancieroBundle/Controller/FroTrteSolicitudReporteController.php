@@ -175,27 +175,13 @@ class FroTrteSolicitudReporteController extends Controller
                     $arrayPrendas [] = array(
                         'organismoTransito' => $prenda->getOrganismoTransito()->getDivipo(),
                         'placa' => $prenda->getVehiculo()->getPlaca()->getNumero(),
-                        /* 'tipoIdentificacion' => $prenda->getCiudadano()->getTipoIdentificacion()->getSigla(),
-                        'identificacion' => $prenda->getCiudadano()->getIdentificacion(), */
                         'ciudadano' => !empty($vehiculoAcreedor->getCiudadano()) ? $vehiculoAcreedor->getCiudadano(): null,
                         'empresa' => !empty($vehiculoAcreedor->getEmpresa()) ? $vehiculoAcreedor->getEmpresa(): null,
-                        /* 'primerNombre' => $prenda->getCiudadano()->getPrimerNombre(),
-                        'segundoNombre' => $prenda->getCiudadano()->getSegundoNombre(),
-                        'primerApellido' => $prenda->getCiudadano()->getPrimerApellido(),
-                        'segundoApellido' => $prenda->getCiudadano()->getSegundoApellido(),
-                        'direccionPersonal' => $prenda->getCiudadano()->getDireccionPersonal(),
-                        'municipioResidencia' => $prenda->getCiudadano()->getMunicipioResidencia()->getCodigoDane(),
-                        'telefonoCelular' => $prenda->getCiudadano()->getTelefonoCelular(), */
                         'gradoAlerta' => $vehiculoAcreedor->getGradoAlerta(),
                         'fecha' => $prenda->getFecha(),
                         'estadoPrenda' => $vehiculoAcreedor->getActivo(),
                         'tipoAlerta' => $vehiculoAcreedor->getTipoAlerta()->getId()
                     );
-
-                    /* if($vehiculoAcreedor->getEmpresa()) {
-                        array_push($arrayPrendas, ['nit'] = $vehiculoAcreedor->getEmpresa()->getNit());
-                        array_push($arrayPrendas, $vehiculoAcreedor->getEmpresa()->getNit());
-                    } */
                 }
             }
             else if($params->tipoReporte == 7) {
