@@ -121,12 +121,18 @@ class FroTrteSolicitudReporteController extends Controller
                         )
                     );
 
+                    if ($licenciaTransito) {
+                        $licenciaTransitoNumero = $licenciaTransito->getNumero();
+                    }else{
+                        $licenciaTransitoNumero = 'No aplica';
+                    }
+
                     $arrayTramites [] = array(
                         'tipoTramite' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(),
                         'placa' => $tramite->getVehiculo()->getPlaca()->getNumero(),
                         'fecha' => $tramite->getFecha(),
                         'organismoTransito' => $tramite->getOrganismoTransito()->getDivipo(),
-                        'licenciaTransito' => $licenciaTransito->getNumero(),
+                        'licenciaTransito' => $licenciaTransitoNumero,
                         'numeroPago' => 'N'
                     );
                 }
