@@ -37,7 +37,7 @@ class UserEmpresaTransporteController extends Controller
 
         if ($empresas) {
             $response = array(
-                'tittle' => 'Perfecto!',
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => count($empresas) . "empresas encontradas",
@@ -45,7 +45,7 @@ class UserEmpresaTransporteController extends Controller
             );
         } else {
             $response = array(
-                'tittle' => 'Error!',
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "No se encontraron registros",
@@ -165,7 +165,7 @@ class UserEmpresaTransporteController extends Controller
 
             if ($empresa) {
                 $response = array(
-                    'tittle' => 'Perfecto!',
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Empresa encontrada",
@@ -173,7 +173,7 @@ class UserEmpresaTransporteController extends Controller
                 );
             } else {
                 $response = array(
-                    'tittle' => 'Error!',
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Empresa no encontrada",
@@ -181,6 +181,7 @@ class UserEmpresaTransporteController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
@@ -213,26 +214,27 @@ class UserEmpresaTransporteController extends Controller
                     'activo' => true
                 )
             );
-            if($empresa){
-                $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
-                    array(
-                        'empresa' => $empresa,
-                        'modalidadTransporte' => $params->idModalidadTransporte,
-                        'clase' => $params->idClase,
-                        'activo' => true
-                    )
-                ); 
+            
+            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                array(
+                    'empresa' => $empresa,
+                    'modalidadTransporte' => $params->idModalidadTransporte,
+                    'clase' => $params->idClase,
+                    'activo' => true
+                )
+            );
 
+            if($empresaTransporte){
                 $response = array(
-                    'tittle' => 'Perfecto!',
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Empresa encontrada",
-                    'data' => $empresa,
+                    'data' => $empresaTransporte->getEmpresa(),
                 );
             } else {
                 $response = array(
-                    'tittle' => 'Error!',
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Empresa no encontrada",
@@ -240,6 +242,7 @@ class UserEmpresaTransporteController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
@@ -273,6 +276,8 @@ class UserEmpresaTransporteController extends Controller
                 )
             );
             
+            $clase= $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+
             $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
                 array(
                     'empresa' => $empresa->getId(),
@@ -292,6 +297,7 @@ class UserEmpresaTransporteController extends Controller
                     $cupo = new VhloTpCupo();
                     
                     $cupo->setEmpresa($empresa);
+                    $cupo->setClaseVehiculo($clase);
                     $cupo->setNumero($i);
                     $cupo->setEstado('DISPONIBLE');
                     $cupo->setActivo(true);
@@ -301,14 +307,14 @@ class UserEmpresaTransporteController extends Controller
                 }
 
                 $response = array(
-                    'tittle' => 'Perfecto!',
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Cupos creados con éxito",
                 );
             } else {
                 $response = array(
-                    'tittle' => 'Error!',
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 200,
                     'message' => "No se encontró la empresa",
@@ -316,6 +322,7 @@ class UserEmpresaTransporteController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
