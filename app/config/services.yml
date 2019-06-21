@@ -32,3 +32,7 @@ services:
         class: Repository\UsuarioBundle\services
         autowire: false
         arguments: ['@mailer', '@templating', '@session', '@doctrine.orm.entity_manager']
+
+    app_soap:
+        class: AppBundle\services\RecaudoService
+        arguments: []

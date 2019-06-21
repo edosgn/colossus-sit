@@ -1,0 +1,141 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://presentacion.ws.recaudos.v2/" name="NotificacionRecaudoWebServiceService" targetNamespace="http://presentacion.ws.recaudos.v2/">
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:soap11-enc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="http://presentacion.ws.recaudos.v2/" elementFormDefault="qualified">
+            <element name="confirmarRecaudo" type="tns:confirmarRecaudo"/>
+            <complexType name="confirmarRecaudo">
+                <sequence>
+                    <element name="confirmacionInputXML" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="confirmarRecaudoResponse" type="tns:confirmarRecaudoResponse"/>
+            <complexType name="confirmarRecaudoResponse">
+                <sequence>
+                    <element name="return" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="consultarRecaudo" type="tns:consultarRecaudo"/>
+            <complexType name="consultarRecaudo">
+                <sequence>
+                    <element name="consultaInputXML" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="consultarRecaudoResponse" type="tns:consultarRecaudoResponse"/>
+            <complexType name="consultarRecaudoResponse">
+                <sequence>
+                    <element name="return" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="referenciarRecaudo" type="tns:referenciarRecaudo"/>
+            <complexType name="referenciarRecaudo">
+                <sequence>
+                    <element name="referenciacionInputXML" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="referenciarRecaudoResponse" type="tns:referenciarRecaudoResponse"/>
+            <complexType name="referenciarRecaudoResponse">
+                <sequence>
+                    <element name="return" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="reversarRecaudo" type="tns:reversarRecaudo"/>
+            <complexType name="reversarRecaudo">
+                <sequence>
+                    <element name="reversoInputXML" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+            <element name="reversarRecaudoResponse" type="tns:reversarRecaudoResponse"/>
+            <complexType name="reversarRecaudoResponse">
+                <sequence>
+                    <element name="return" type="string" nillable="true"/>
+                </sequence>
+            </complexType>
+        </schema>
+    </types>
+    <message name="NotificacionRecaudoWebService_confirmarRecaudo">
+        <part name="parameters" element="tns:confirmarRecaudo"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_confirmarRecaudoResponse">
+        <part name="parameters" element="tns:confirmarRecaudoResponse"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_consultarRecaudo">
+        <part name="parameters" element="tns:consultarRecaudo"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_consultarRecaudoResponse">
+        <part name="parameters" element="tns:consultarRecaudoResponse"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_referenciarRecaudo">
+        <part name="parameters" element="tns:referenciarRecaudo"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_referenciarRecaudoResponse">
+        <part name="parameters" element="tns:referenciarRecaudoResponse"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_reversarRecaudo">
+        <part name="parameters" element="tns:reversarRecaudo"/>
+    </message>
+    <message name="NotificacionRecaudoWebService_reversarRecaudoResponse">
+        <part name="parameters" element="tns:reversarRecaudoResponse"/>
+    </message>
+    <portType name="NotificacionRecaudo">
+        <operation name="confirmarRecaudo">
+            <input message="tns:NotificacionRecaudoWebService_confirmarRecaudo"/>
+            <output message="tns:NotificacionRecaudoWebService_confirmarRecaudoResponse"/>
+        </operation>
+        <operation name="consultarRecaudo">
+            <input message="tns:NotificacionRecaudoWebService_consultarRecaudo"/>
+            <output message="tns:NotificacionRecaudoWebService_consultarRecaudoResponse"/>
+        </operation>
+        <operation name="referenciarRecaudo">
+            <input message="tns:NotificacionRecaudoWebService_referenciarRecaudo"/>
+            <output message="tns:NotificacionRecaudoWebService_referenciarRecaudoResponse"/>
+        </operation>
+        <operation name="reversarRecaudo">
+            <input message="tns:NotificacionRecaudoWebService_reversarRecaudo"/>
+            <output message="tns:NotificacionRecaudoWebService_reversarRecaudoResponse"/>
+        </operation>
+    </portType>
+    <binding name="NotificacionRecaudoWebServiceSoapHttp" type="tns:NotificacionRecaudo">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="confirmarRecaudo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="consultarRecaudo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="referenciarRecaudo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+        <operation name="reversarRecaudo">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="NotificacionRecaudoWebServiceService">
+        <port name="NotificacionRecaudo" binding="tns:NotificacionRecaudoWebServiceSoapHttp">
+            <soap:address location="http://xstabog15-143/ws.recaudos.generico.v2/NotificacionRecaudo"/>
+        </port>
+    </service>
+</definitions>
