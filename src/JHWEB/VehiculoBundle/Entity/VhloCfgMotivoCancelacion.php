@@ -22,6 +22,13 @@ class VhloCfgMotivoCancelacion
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer", length=3)
+     */
+    private $codigo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
@@ -51,6 +58,31 @@ class VhloCfgMotivoCancelacion
     public function getId()
     {
         return $this->id;
+    }
+
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return VhloCfgMotivoCancelacion
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**
@@ -94,7 +126,7 @@ class VhloCfgMotivoCancelacion
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
@@ -118,11 +150,10 @@ class VhloCfgMotivoCancelacion
     /**
      * Get gestionable
      *
-     * @return bool
+     * @return boolean
      */
     public function getGestionable()
     {
         return $this->gestionable;
     }
 }
-

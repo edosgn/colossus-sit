@@ -22,13 +22,26 @@ class VhloCfgMotivoCancelacionController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $motivosCancelacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMotivoCancelacion')->findBy(
+            array('activo' => true)
+        );
 
-        $vhloCfgMotivoCancelacions = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMotivoCancelacion')->findAll();
+        $response['data'] = array();
 
-        return $this->render('vhlocfgmotivocancelacion/index.html.twig', array(
-            'vhloCfgMotivoCancelacions' => $vhloCfgMotivoCancelacions,
-        ));
+        if ($motivosCancelacion) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($motivosCancelacion)." registros encontrados", 
+                'data'=> $motivosCancelacion,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,98 +52,215 @@ class VhloCfgMotivoCancelacionController extends Controller
      */
     public function newAction(Request $request)
     {
-        $vhloCfgMotivoCancelacion = new Vhlocfgmotivocancelacion();
-        $form = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgMotivoCancelacionType', $vhloCfgMotivoCancelacion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
-            $em->persist($vhloCfgMotivoCancelacion);
+
+            $motivoCancelacion = new VhloCfgMotivoCancelacion();
+
+            $motivoCancelacion->setNombre($params->nombre);
+            $motivoCancelacion->setCodigo($params->codigo);
+            $motivoCancelacion->setActivo(true);
+            $motivoCancelacion->setGestionable(false);
+
+            $em->persist($motivoCancelacion);
             $em->flush();
 
-            return $this->redirectToRoute('vhlocfgmotivocancelacion_show', array('id' => $vhloCfgMotivoCancelacion->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('vhlocfgmotivocancelacion/new.html.twig', array(
-            'vhloCfgMotivoCancelacion' => $vhloCfgMotivoCancelacion,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
      * Finds and displays a vhloCfgMotivoCancelacion entity.
      *
-     * @Route("/{id}", name="vhlocfgmotivocancelacion_show")
+     * @Route("/show", name="vhlocfgmotivocancelacion_show")
      * @Method("GET")
      */
-    public function showAction(VhloCfgMotivoCancelacion $vhloCfgMotivoCancelacion)
+    public function showAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgMotivoCancelacion);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlocfgmotivocancelacion/show.html.twig', array(
-            'vhloCfgMotivoCancelacion' => $vhloCfgMotivoCancelacion,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $motivoCancelacion = $em->getRepository("JHWEBVehiculoBundle:VhloCfgMotivoCancelacion")->find($params->id);
+
+            if ($motivoCancelacion) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con exito", 
+                    'data'=> $motivoCancelacion,
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida para editar", 
+                );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
      * Displays a form to edit an existing vhloCfgMotivoCancelacion entity.
      *
-     * @Route("/{id}/edit", name="vhlocfgmotivocancelacion_edit")
+     * @Route("/edit", name="vhlocfgmotivocancelacion_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloCfgMotivoCancelacion $vhloCfgMotivoCancelacion)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloCfgMotivoCancelacion);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloCfgMotivoCancelacionType', $vhloCfgMotivoCancelacion);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
 
-            return $this->redirectToRoute('vhlocfgmotivocancelacion_edit', array('id' => $vhloCfgMotivoCancelacion->getId()));
+            $em = $this->getDoctrine()->getManager();
+
+            $motivoCancelacion = $em->getRepository("JHWEBVehiculoBundle:VhloCfgMotivoCancelacion")->find($params->id);
+
+            if ($motivoCancelacion) {
+                $motivoCancelacion->setCodigo($params->codigo);
+                $motivoCancelacion->setNombre($params->nombre);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro actualizado con exito", 
+                    'data'=> $motivoCancelacion,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
         }
-
-        return $this->render('vhlocfgmotivocancelacion/edit.html.twig', array(
-            'vhloCfgMotivoCancelacion' => $vhloCfgMotivoCancelacion,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloCfgMotivoCancelacion entity.
      *
-     * @Route("/{id}", name="vhlocfgmotivocancelacion_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlocfgmotivocancelacion_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, VhloCfgMotivoCancelacion $vhloCfgMotivoCancelacion)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloCfgMotivoCancelacion);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloCfgMotivoCancelacion);
-            $em->flush();
+
+            $motivoCancelacion = $em->getRepository("JHWEBVehiculoBundle:VhloCfgMotivoCancelacion")->find($params->id);
+
+            if ($motivoCancelacion) {
+                $motivoCancelacion->setActivo(false);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con exito", 
+                    'data'=> $motivoCancelacion,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos", 
+                );
+            }
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorización no válida", 
+                );
         }
 
-        return $this->redirectToRoute('vhlocfgmotivocancelacion_index');
+        return $helpers->json($response);
     }
 
     /**
-     * Creates a form to delete a vhloCfgMotivoCancelacion entity.
+     * datos para select 2
      *
-     * @param VhloCfgMotivoCancelacion $vhloCfgMotivoCancelacion The vhloCfgMotivoCancelacion entity
-     *
-     * @return \Symfony\Component\Form\Form The form
+     * @Route("/select", name="vhlocfgmotivocancelacion_select")
+     * @Method({"GET", "POST"})
      */
-    private function createDeleteForm(VhloCfgMotivoCancelacion $vhloCfgMotivoCancelacion)
+    public function selectAction()
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('vhlocfgmotivocancelacion_delete', array('id' => $vhloCfgMotivoCancelacion->getId())))
-            ->setMethod('DELETE')
-            ->getForm()
-        ;
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $motivosCancelacion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMotivoCancelacion')->findBy(
+            array('activo' => true)
+        );
+
+        $response = null;
+
+        foreach ($motivosCancelacion as $key => $motivoCancelacion) {
+            $response[$key] = array(
+                'value' => $motivoCancelacion->getId(),
+                'label' => $motivoCancelacion->getNombre()
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }

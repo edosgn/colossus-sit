@@ -224,7 +224,7 @@ class FroTrteSolicitudRepository extends \Doctrine\ORM\EntityRepository
             AND fft.precio = ftp.id
             AND ftp.modulo = :idModulo
             AND ftp.tramite = ft.id
-            AND ft.codigo = 1";
+            AND ft.codigo = 1 OR ft.codigo = 4 OR ft.codigo = 22 OR ft.codigo = 23";
         $consulta = $em->createQuery($dql);
 
         $consulta->setParameters(array(
