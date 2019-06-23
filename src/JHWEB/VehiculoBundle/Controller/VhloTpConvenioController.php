@@ -76,38 +76,55 @@ class VhloTpConvenioController extends Controller
             $fechaActaFin = new \DateTime($params->fechaActaFin);
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresa);
             
-            $vhloTpConvenio = new VhloTpConvenio();
-            
-            $vhloTpConvenio->setNumeroConvenio($params->numeroConvenio);
-            $vhloTpConvenio->setFechaConvenio($fechaConvenio);
-            $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
-            $vhloTpConvenio->setFechaActaFin($fechaActaFin);
-            $vhloTpConvenio->setEmpresa($empresa);
-            $vhloTpConvenio->setObservacion($params->observacion);
-            $vhloTpConvenio->setActivo(1);
-
-            $em->persist($vhloTpConvenio);
-
-            foreach ($params->empresas as $key => $empresa) {
-                $empresaConvenio = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresa);
-                
-                $vhloTpConvenioEmpresa = new VhloTpConvenioEmpresa();
-                
-                $vhloTpConvenioEmpresa->setEmpresa($empresaConvenio);
-                $vhloTpConvenioEmpresa->setVhloTpConvenio($vhloTpConvenio);
-
-                $em->persist($vhloTpConvenioEmpresa);
-                $em->flush();
-            }
-            
-            $response = [];
-
-            $response = array(
-                'title' => 'Perfecto!',
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Registro creado con éxito",
+            $convenio = $em->getRespository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
+                array (
+                    'numeroConvenio' => $params->numeroConvenio,
+                    'activo' => true
+                )
             );
+
+            if($convenio) {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El número de convenio ya fue asignado", 
+                );
+            }
+            else {
+                $vhloTpConvenio = new VhloTpConvenio();
+                
+                $vhloTpConvenio->setNumeroConvenio($params->numeroConvenio);
+                $vhloTpConvenio->setFechaConvenio($fechaConvenio);
+                $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
+                $vhloTpConvenio->setFechaActaFin($fechaActaFin);
+                $vhloTpConvenio->setAlcaldia($empresa);
+                $vhloTpConvenio->setObservacion($params->observacion);
+                $vhloTpConvenio->setActivo(1);
+
+                $em->persist($vhloTpConvenio);
+
+                foreach ($params->empresas as $key => $empresa) {
+                    $empresaConvenio = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresa);
+                    
+                    $vhloTpConvenioEmpresa = new VhloTpConvenioEmpresa();
+                    
+                    $vhloTpConvenioEmpresa->setEmpresa($empresaConvenio);
+                    $vhloTpConvenioEmpresa->setVhloTpConvenio($vhloTpConvenio);
+
+                    $em->persist($vhloTpConvenioEmpresa);
+                    $em->flush();
+                }
+                
+                $response = [];
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito",
+                );
+            }
         } else{
             $response = array(
                 'title' => 'Error!',

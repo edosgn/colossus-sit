@@ -47,7 +47,7 @@ class FroTrteSolicitudReporteController extends Controller
                     'placa' => $placa
                 )
             );
-            
+
             $arrayVehiculos = null;
             $propietariosActuales = null;
             $tramites = null;
@@ -95,7 +95,7 @@ class FroTrteSolicitudReporteController extends Controller
                         'capacidadCarga' => $vehiculo->getVehiculo()->getCapacidadCarga(),
                         'numeroPasajeros' => $vehiculo->getVehiculo()->getNumeroPasajeros(),
                         'fechaMatricula' => $vehiculo->getFecha(),
-                        'numeroLicenciaTransito' => $licenciaTransito->getNumero(),
+                        'licenciaTransito' => !empty($licenciaTransito) ? $licenciaTransito: null,
                         'numeroFactura' => 'N',
                         'combustible' => $vehiculo->getVehiculo()->getCombustible()->getCodigo(),
                         'estado' => $vehiculo->getVehiculo()->getActivo(),
@@ -103,7 +103,17 @@ class FroTrteSolicitudReporteController extends Controller
                 }
             }
             else if($params->tipoReporte == 2){
-                $propietariosActuales = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getPropietariosActualesByPlaca($params->idOrganismoTransito, $params->idModulo, $vehiculo->getId());
+                if(!$vehiculo){
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El vehículo no se encuentra registrado en la base de datos.', 
+                );
+                return $helpers->json($response);
+                } else {
+                    $propietariosActuales = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getPropietariosActualesByPlaca($params->idOrganismoTransito, $params->idModulo, $vehiculo->getId());
+                }
             }
             else if($params->tipoReporte == 3) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
@@ -121,18 +131,12 @@ class FroTrteSolicitudReporteController extends Controller
                         )
                     );
 
-                    if ($licenciaTransito) {
-                        $licenciaTransitoNumero = $licenciaTransito->getNumero();
-                    }else{
-                        $licenciaTransitoNumero = 'No aplica';
-                    }
-
                     $arrayTramites [] = array(
                         'tipoTramite' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getCodigo(),
                         'placa' => $tramite->getVehiculo()->getPlaca()->getNumero(),
                         'fecha' => $tramite->getFecha(),
                         'organismoTransito' => $tramite->getOrganismoTransito()->getDivipo(),
-                        'licenciaTransito' => $licenciaTransitoNumero,
+                        'licenciaTransito' => !empty($licenciaTransito) ? $licenciaTransito: null,
                         'numeroPago' => 'N'
                     );
                 }
@@ -211,7 +215,7 @@ class FroTrteSolicitudReporteController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'No registros para los filtros estipulados.', 
+                    'message' => 'No hay registros para los filtros estipulados.', 
                 );
             }            
         }else{
