@@ -226,10 +226,7 @@ class FroTrtePrecioController extends Controller
                 $tipoVehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloCfgTipoVehiculo")->find($params->idTipoVehiculo);
                 $tramitePrecio->setTipoVehiculo($tipoVehiculo);
 
-                $modulo = $em->getRepository('JHWEBConfigBundle:CfgModulo')->find($params->idModulo);
-                $tramitePrecio->setModulo($modulo);
-
-                $tramitePrecio->setEstado(true);
+                $tramitePrecio->setActivo(true);
 
                 $em->flush();
 
