@@ -70,7 +70,6 @@ class CvCdoCfgEstado
      */
     private $activo;
 
-
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="estados")
      **/
