@@ -63,6 +63,8 @@ class FroTrteSolicitudReporteController extends Controller
                 $vehiculos = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
                 
                 foreach ($vehiculos as $key => $vehiculo) {
+                    var_dump($vehiculo->getFecha());
+                    die();
                     $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                         array(
                             'vehiculo' => $vehiculo->getVehiculo()->getId(),
@@ -117,13 +119,12 @@ class FroTrteSolicitudReporteController extends Controller
             }
             else if($params->tipoReporte == 3) {
                 $tramites = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByTramites($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
-
                 foreach ($tramites as $key => $tramite) {
                     $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                         array(
                             'vehiculo' => $tramite->getVehiculo()->getId()
-                        )
-                    );    
+                            )
+                        );    
 
                     $licenciaTransito = $em->getRepository('JHWEBUsuarioBundle:UserLicenciaTransito')->findOneBy(
                         array(
