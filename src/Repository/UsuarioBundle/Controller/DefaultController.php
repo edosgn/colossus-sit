@@ -23,18 +23,15 @@ class DefaultController extends Controller
     /**
      * Creates a new Usuario entity.
      *
-     * @Route("/login", name="Default_login")
+     * @Route("/login", name="default_login")
      * @Method({"GET", "POST"})
      */
     public function loginAction(Request $request)
-
     {
-        
         $jwt_auth = $this->get("app.jwt_auth");
         $helpers = $this->get("app.helpers");
-        //recivir json  por post
-        $json = $request->get("json" , null);
-        
+        //recibir json por post
+        $json = $request->get("data" , null);
 
         if ($json != null) {
             $params = json_decode($json);
@@ -55,7 +52,6 @@ class DefaultController extends Controller
                     $singup = $jwt_auth->singUp($email,$pwd);
                 }else{
                     $singup = $jwt_auth->singUp($email,$pwd, true);
-                    
                 }
 
                 return new \Symfony\Component\HttpFoundation\JsonResponse($singup);
@@ -66,7 +62,59 @@ class DefaultController extends Controller
         }else{
             return $helpers->json(array("status" => "error", "data" => "enviar json"));
         }
-        
+    }
 
+    /**
+     * Logout
+     *
+     * @Route("/logout", name="default_logout")
+     * @Method({"GET", "POST"})
+     */
+    public function logoutAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
+
+            $usuario = $em->getRepository('UsuarioBundle:Usuario')->find(
+                $params->id
+            );
+
+            if ($usuario) {
+                $usuario->setLogueado(false);
+    
+                $em->flush();
+    
+                $response = array(
+                    'tile' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Cierre de sesión realizado correctamente.", 
+                );
+            }else{
+                $response = array(
+                    'tile' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Usuario no encontrado.", 
+                );
+            }
+
+        }else{
+            $response = array(
+                'tile' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+
+        return $helpers->json($response); 
     }
 }

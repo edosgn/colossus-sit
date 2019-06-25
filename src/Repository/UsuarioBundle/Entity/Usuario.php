@@ -44,6 +44,13 @@ class Usuario
     private $activo;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="logueado", type="boolean")
+     */
+    private $logueado;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="role", type="string", length=50, nullable=false)
@@ -277,5 +284,29 @@ class Usuario
     public function getCiudadano()
     {
         return $this->ciudadano;
+    }
+
+    /**
+     * Set logueado
+     *
+     * @param boolean $logueado
+     *
+     * @return Usuario
+     */
+    public function setLogueado($logueado)
+    {
+        $this->logueado = $logueado;
+
+        return $this;
+    }
+
+    /**
+     * Get logueado
+     *
+     * @return boolean
+     */
+    public function getLogueado()
+    {
+        return $this->logueado;
     }
 }
