@@ -118,7 +118,6 @@ class FroReporteIngresosController extends Controller
                     foreach ($tramites as $key => $tramite) {
                         $numeros[] = $tramite->getTramiteFactura()->getFactura()->getNumero();
                         switch ($tramite->getTramiteFactura()->getFactura()->getEstado() ) {
-                            case 'PAGADA':
                             case 'FINALIZADA':
                                 $pagadas[] = $tramite;
                                 $valorTramitesPagados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
@@ -181,13 +180,12 @@ class FroReporteIngresosController extends Controller
                                 //==================================================================================================================================================
 
                                 break;
-                            case 'ANULADA':
+                            case 'DEVOLUCION':
                                 $anuladas[] = $tramite;
                                 $numerosAnulados[] = array(
                                     $tramite->getTramiteFactura()->getFactura()->getNumero()
                                 );
-                                /* var_dump($numerosAnulados);
-                                die(); */
+                                
                                 $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
                                 if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
                                     $traspasos[] = $tramite;

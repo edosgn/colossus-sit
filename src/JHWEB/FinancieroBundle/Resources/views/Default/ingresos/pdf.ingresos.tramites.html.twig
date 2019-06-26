@@ -64,11 +64,33 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b>RBO CAJA ANULADO</b></td>
+                    <td><b> Sustratos CDA </b></td>
+                    <td><b> Cantidad </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Total </b></td>
+                </tr>
+                {% for sustrato in arraySustratos %}
+                    <tr>
+                        <td>{{ sustrato.nombre }}</td>
+                        <td>{{ sustrato.cantidad }}</td>
+                        <td>{{ sustrato.valor }}</td>
+                        <td>{{ sustrato.total }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
+                    <td>{{ totalSustratos }}</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table border="1" style="text-align:center;">
+                <tr>
+                    <td><b>DEVOLUCIÓN</b></td>
                     <td>{{ cantAnuladas }}</td>
                 </tr>
                 <tr>
-                    <td><b>RBO RETEFUENTE ANULADO</b></td>
+                    <td><b>DEVOLUCIÓN RETEFUENTE</b></td>
                     <td>{{ cantTraspasos }}</td>
                 </tr>
             </table>
@@ -90,28 +112,6 @@
                     <td>{{ minAnulados }}</td>
                     <td>{{ maxAnulados }}</td>
                 </tr> #}
-            </table>
-            <br>
-            <br>
-            <table border="1" style="text-align:center;">
-                <tr>
-                    <td><b> Sustratos CDA </b></td>
-                    <td><b> Cantidad </b></td>
-                    <td><b> Valor </b></td>
-                    <td><b> Total </b></td>
-                </tr>
-                {% for sustrato in arraySustratos %}
-                    <tr>
-                        <td>{{ sustrato.nombre }}</td>
-                        <td>{{ sustrato.cantidad }}</td>
-                        <td>{{ sustrato.valor }}</td>
-                        <td>{{ sustrato.total }}</td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
-                    <td>{{ totalSustratos }}</td>
-                </tr>
             </table>
         {% endif %}
         {# fin tramites diarios #}
