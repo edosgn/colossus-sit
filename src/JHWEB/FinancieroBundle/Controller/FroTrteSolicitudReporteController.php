@@ -63,8 +63,6 @@ class FroTrteSolicitudReporteController extends Controller
                 $vehiculos = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getByPlaca($params->idOrganismoTransito, $params->idModulo, $fechaDesde, $fechaHasta);
                 
                 foreach ($vehiculos as $key => $vehiculo) {
-                    var_dump($vehiculo->getFecha());
-                    die();
                     $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
                         array(
                             'vehiculo' => $vehiculo->getVehiculo()->getId(),

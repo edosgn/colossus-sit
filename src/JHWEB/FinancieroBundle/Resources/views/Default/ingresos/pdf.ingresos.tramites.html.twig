@@ -36,6 +36,28 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
+                    <td><b> Sustratos CDA </b></td>
+                    <td><b> Cantidad </b></td>
+                    <td><b> Valor </b></td>
+                    <td><b> Total </b></td>
+                </tr>
+                {% for sustrato in arraySustratos %}
+                    <tr>
+                        <td>{{ sustrato.nombre }}</td>
+                        <td>{{ sustrato.cantidad }}</td>
+                        <td>{{ sustrato.valor }}</td>
+                        <td>{{ sustrato.total }}</td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
+                    <td>{{ totalSustratos }}</td>
+                </tr>
+            </table>
+            <br>
+            <br>
+            <table border="1" style="text-align:center;">
+                <tr>
                     <td><b>Id</b></td>
                     <td><b>Nombre Concepto</b></td>
                     <td><b>Cantidad</b></td>
@@ -64,28 +86,6 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b> Sustratos CDA </b></td>
-                    <td><b> Cantidad </b></td>
-                    <td><b> Valor </b></td>
-                    <td><b> Total </b></td>
-                </tr>
-                {% for sustrato in arraySustratos %}
-                    <tr>
-                        <td>{{ sustrato.nombre }}</td>
-                        <td>{{ sustrato.cantidad }}</td>
-                        <td>{{ sustrato.valor }}</td>
-                        <td>{{ sustrato.total }}</td>
-                    </tr>
-                {% endfor %}
-                <tr>
-                    <td colspan="3"><b>TOTAL SUSTRATOS</b></td>
-                    <td>{{ totalSustratos }}</td>
-                </tr>
-            </table>
-            <br>
-            <br>
-            <table border="1" style="text-align:center;">
-                <tr>
                     <td><b>DEVOLUCIÓN</b></td>
                     <td>{{ cantAnuladas }}</td>
                 </tr>
@@ -98,20 +98,17 @@
             <br>
             <table border="1" style="text-align:center;">
                 <tr>
-                    <td><b>Relación No. de recibos</b></td>
-                    <td><b>Desde</b></td>
-                    <td><b>Hasta</b></td>
+                    <td><b>TOTAL FACTURAS PAGADAS</b></td>
+                    <td>{{ totalFacturasPagadas }}</td>
                 </tr>
                 <tr>
-                    <td>Recibos de trámites</td>
-                    <td>{{ min }}</td>
-                    <td>{{ max }}</td>
+                    <td><b>TOTAL FACTURAS VENCIDAS</b></td>
+                    <td>{{ totalFacturasVencidas }}</td>
                 </tr>
-                {# <tr>
-                    <td>Recibos de rte. fte.</td>
-                    <td>{{ minAnulados }}</td>
-                    <td>{{ maxAnulados }}</td>
-                </tr> #}
+                <tr>
+                    <td><b>TOTAL FACTURAS GENERADAS</b></td>
+                    <td>{{ totalFacturas }}</td>
+                </tr>
             </table>
         {% endif %}
         {# fin tramites diarios #}
@@ -134,7 +131,7 @@
                     <td><b> Clasificaciones </b></td>
                     <td><b> Trámite </b></td>
                     <td><b> Valor Pagado </b></td>
-                    <td><b> Observaciones </b></td>
+                    <td><b> Número Solicitud Runt </b></td>
                 </tr>
                 {% for tramite in arrayReporteMensual %}
                     <tr>
@@ -145,7 +142,7 @@
                         <td>{{ tramite.moduloSustrato }}</td>
                         <td>{{ tramite.nombre }}</td>
                         <td>{{ tramite.valorPagado }}</td>
-                        <td>observaciones</td>
+                        <td>{{ tramite.numeroRunt }}</td>
                     </tr>
                 {% endfor %}
                  <tr>
