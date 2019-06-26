@@ -106,7 +106,6 @@ class ImoLote
      **/
     protected $tipoInsumo;   
 
-    
 
     /**
      * Get id

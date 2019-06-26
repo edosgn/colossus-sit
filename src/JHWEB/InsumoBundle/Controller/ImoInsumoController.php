@@ -140,14 +140,7 @@ class ImoInsumoController extends Controller
                     
                 }else{
                     $insumo = new ImoInsumo();
-
-                    $lotesInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                        array(
-                            'estado' => 'REGISTRADO',
-                            'tipo' => 'INSUMO'
-                        )
-                    );
-
+                    
                     $insumo->setLote($loteInsumo);
                     $insumo->setNumero($lote->cantidad);
                     $insumo->setTipo($tipoInsumo);
@@ -155,25 +148,36 @@ class ImoInsumoController extends Controller
                     $insumo->setEstado('DISPONIBLE');
                     $insumo->setFecha($fecha);
                     $insumo->setActaEntrega($numeroActa);
-
+                    
                     $em->persist($insumo);
                     $em->flush();
+                    
+                    $lotesInsumo = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
+                        array(
+                            'estado' => 'REGISTRADO',
+                            'tipo' => 'INSUMO',
+                            'tipoInsumo' => $tipoInsumo->getId()
+                        )
+                    );
 
                     foreach ($lotesInsumo as $key => $loteInsumo){
-                        if ($loteInsumo->getCantidad() <= $lote->cantidad) {
-                            $cantidad =  $lote->cantidad - $loteInsumo->getCantidad();
-                            $lote->cantidad = $cantidad;
-                            $loteInsumo->setCantidad(0);
-                            $loteInsumo->setEstado('ASIGNADO');
-
-                            $em->flush(); 
-                        }else {
-                            if ($lote->cantidad > 0) {
-                                $cantidad =  $loteInsumo->getCantidad() - $lote->cantidad;
+                        if ($lote->cantidad > 0) {
+                            if ($loteInsumo->getCantidad() <= $lote->cantidad) {
+                                $cantidad =  $lote->cantidad - $loteInsumo->getCantidad();
+                                $lote->cantidad = $cantidad;
+                                $loteInsumo->setCantidad(0);
+                                $loteInsumo->setEstado('ASIGNADO');
+    
+                                $em->flush(); 
+                            }else {
+                                
+                                $cantidad = $loteInsumo->getCantidad() - $lote->cantidad;
                                 $loteInsumo->setCantidad($cantidad);
                                 $loteInsumo->setEstado('REGISTRADO');
+                                
                                 $lote->cantidad = 0;
-                                $em->flush(); 
+                                
+                                $em->flush();
                             }
                         }
                     }

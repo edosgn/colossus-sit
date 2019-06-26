@@ -1166,7 +1166,7 @@ class FroTrteSolicitudController extends Controller
             'observaciones' => $observaciones,
         ));
 
-        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo);
+        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo, 'normal');
     }
 
     /**

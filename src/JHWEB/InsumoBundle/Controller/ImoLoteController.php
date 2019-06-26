@@ -62,6 +62,7 @@ class ImoLoteController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
@@ -89,6 +90,7 @@ class ImoLoteController extends Controller
                             'code' => 400,
                             'message' => "El rango ya se encuentra registrado", 
                         );
+                        
                         return $helpers->json($response);
                     }
                 }

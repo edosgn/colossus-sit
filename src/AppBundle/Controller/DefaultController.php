@@ -32,43 +32,46 @@ class DefaultController extends Controller
             1
         ); */
         
-        $vehiculo = $em->getRepository('AppBundle:Vehiculo')->findOneByPlaca(
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneByPlaca(
             $placaId 
         );
 
         if ($vehiculo) {
-            $propietariosVehiculo = $em->getRepository('AppBundle:PropietarioVehiculo')->findByVehiculo(
+            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
                 $vehiculo->getId()
             );
 
-            $tramitesSolicitud = $em->getRepository('AppBundle:TramiteSolicitud')->findByVehiculo($vehiculo->getId());
+            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
+                $vehiculo->getId()
+            );
         }        
-
 
         $tramitesSolicitudArray = false;
         
         $data = null;
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
 
-            foreach ((array)$tramiteSolicitud->getResumen() as $key => $value) {
+            /*foreach ((array)$tramiteSolicitud->getResumen() as $key => $value) {
                 $data[] = $key.":".$value;
-            }  
+            }  */
 
             $tramitesSolicitudArray[]= array(
                 'fecha' => $tramiteSolicitud->getFecha(),
-                'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getTramitePrecio()->getTramite()->getNombre(),
-                'datos' => $data
+                'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                'datos' => $tramiteSolicitud->getResumen()
             );
         }
         
         $html = $this->renderView('@App/default/pdfCertificadoTradicion.html.twig', array(
             'vehiculo'=>$vehiculo,
-            'propietariosVehiculo' => $propietariosVehiculo,
+            'propietarios' => $propietarios,
             'fechaActual' => $fechaActual,
             'tramitesSolicitudArray'=>$tramitesSolicitudArray
         ));
 
-        $pdf = $this->container->get("white_october.tcpdf")->create(
+        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo, 'oficial');
+
+        /*$pdf = $this->container->get("white_october.tcpdf")->create(
             'PORTRAIT',
             PDF_UNIT,
             PDF_PAGE_FORMAT,
@@ -108,6 +111,6 @@ class DefaultController extends Controller
         );
 
         $pdf->Output("example.pdf", 'I');
-        die();
+        die();*/
     }
 }

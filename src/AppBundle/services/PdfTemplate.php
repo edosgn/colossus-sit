@@ -424,7 +424,7 @@ class PdfTemplate extends TCPDF{
         $pdf->Output('example_065.pdf', 'I');
     }
 
-    public function templateCertificadoTradicion($html, $vehiculo){
+    public function templateCertificadoTradicion($html, $vehiculo, $tipo){
         // create new PDF document
         $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -470,6 +470,11 @@ class PdfTemplate extends TCPDF{
         // Add a page
         // This method has several options, check the source code documentation for more information.
         $pdf->AddPage();
+
+        if($tipo == 'oficial'){
+            $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
+            $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0);
+        }
 
         // Print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
