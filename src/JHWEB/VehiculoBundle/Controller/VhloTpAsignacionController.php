@@ -48,7 +48,7 @@ class VhloTpAsignacionController extends Controller
     /**
      * Register a vhloTpAsignacion entity.
      *
-     * @Route("/new", name="vhlotpasignacion_new")
+     * @Route("/new2", name="vhlotpasignacion_new2")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -63,12 +63,13 @@ class VhloTpAsignacionController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
+            var_dump($params);
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
             $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->idEmpresa);
             $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($params->idCupo);
-
+            
             $asignacion = new VhloTpAsignacion();
-
+    
             $asignacion->setEmpresaTransporte($empresaTransporte);
             $asignacion->setVehiculo($vehiculo);
             $asignacion->setCupo($cupo);
@@ -78,16 +79,15 @@ class VhloTpAsignacionController extends Controller
             //para cambiar el estado del cupo
             $cupo->setEstado('UTILIZADO');
             $em->persist($cupo);
-
+    
             $em->flush();
-
+            
             $response = array(
                 'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Los datos han sido registrados exitosamente.",
             );
-
         } else {
             $response = array(
                 'title' => 'Error!',
@@ -96,21 +96,42 @@ class VhloTpAsignacionController extends Controller
                 'message' => "Autorización no válida",
             );
         }
-        return $helpers->json($response);
+        return $helpers->json($response); 
     }
 
     /**
      * Finds and displays a vhloTpAsignacion entity.
      *
-     * @Route("/{id}", name="vhlotpasignacion_show")
-     * @Method("GET")
+     * @Route("/show", name="vhlotpasignacion_show")
+     * @Method({"GET", "POST"})
      */
-    public function showAction(VhloTpAsignacion $vhloTpAsignacion)
+    public function showAction(Request $request)
     {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        return $this->render('vhlotpasignacion/show.html.twig', array(
-            'vhloTpAsignacion' => $vhloTpAsignacion,
-        ));
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->find($params->id);
+            $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'msj' => "Registro Encontrado", 
+                    'data'=> $asignacion,
+            );
+        }else{
+            $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'msj' => "Autorizacion no valida", 
+                );
+        }
+        return $helpers->json($response);
     }
 
     /**

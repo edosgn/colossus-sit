@@ -79,16 +79,18 @@ class FroReporteIngresosController extends Controller
                     )
                 );
                 
-                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
-                    array(
-                        'ciudadano' => $ciudadano,
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
                 )
             );
             
             $reporteMensual = false;
             
             if(intval($params->tipoArchivoTramite) == 1) {
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesDiario($fechaInicioDatetime, $organismoTransito->getId());
+                $tramites = null;
+
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
 
                 $pagadas = [];
                 $finalizadas = [];
@@ -141,16 +143,9 @@ class FroReporteIngresosController extends Controller
                                     );
 
                                 //================================================================para sustratos ====================================================================
-                                /* $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
-                                    array(
-                                        'factura' => $tramite->getTramiteFactura()->getFactura(),
-                                        'categoria' => 'SUSTRATO'
-                                    )
-                                ); */
                                 $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFacInsumo')->findBy(
                                     array(
                                         'factura' => $tramite->getTramiteFactura()->getFactura(),
-                                        /* 'categoria' => 'SUSTRATO' */
                                     )
                                 );
 
@@ -206,6 +201,23 @@ class FroReporteIngresosController extends Controller
                         );    
                     }
 
+                    //=========================================total de facturas por estado==========================================
+                    $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(
+                        array(
+                            'estado' => 'PAGADA' 
+                        )
+                    );
+
+                    $facturasVencidas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(
+                        array(
+                            'estado' => 'VENCIDA' 
+                        )
+                    );
+                        
+                    $facturas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findAll();
+                    
+                    //===============================================================================================================
+
                     $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.tramites.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'pagadas' => $pagadas, 
@@ -224,11 +236,14 @@ class FroReporteIngresosController extends Controller
                         'totalTramites' => $totalTramites,
                         'traspasosAnulados' => $traspasos,
                         'cantTraspasos' => count($traspasos),
-                        'min' =>min($numeros),
-                        'max' =>max($numeros),
+                        'totalFacturasPagadas' => count($facturasPagadas),
+                        'totalFacturasVencidas' => count($facturasVencidas),
+                        'totalFacturas' => count($facturas),
+                        /* 'min' =>min($numeros),
+                        'max' =>max($numeros), */
                         'reporteMensual' =>$reporteMensual,
-                        'minAnulados' =>min($numerosAnulados),
-                        'maxAnulados' =>max($numerosAnulados),
+                        /* 'minAnulados' =>min($numerosAnulados),
+                        'maxAnulados' =>max($numerosAnulados), */
                     )); 
         
                     return new Response(
@@ -251,7 +266,7 @@ class FroReporteIngresosController extends Controller
                 $arrayReporteMensual = [];
                 $totalReporteMensual = 0;
                 
-                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramitesMensual($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
+                $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findTramites($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
                 if($tramites){
                     $reporteMensual = true;
                     foreach ($tramites as $key => $tramite) {
@@ -287,6 +302,7 @@ class FroReporteIngresosController extends Controller
                             'moduloSustrato' => $moduloSustrato,
                             'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
                             'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
+                            'numeroRunt' => $tramite->getTramiteFactura()->getFactura()->getNumeroRunt()
                         );
                     }
                     

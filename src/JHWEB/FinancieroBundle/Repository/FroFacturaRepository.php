@@ -27,7 +27,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
     //=======================================para reportes de ingresos=======================================//
     ////Obtiene trámites solicitud según el filtro de búsqueda diario
-    public function findTramitesDiario($fecha, $idOrganismoTransito) {
+    /* public function findTramitesGeneral($fecha, $idOrganismoTransito) {
         $em = $this->getEntityManager();
 
         $dql = "SELECT fts
@@ -40,17 +40,17 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND ff.fechaPago = :fecha";
 
         $consulta = $em->createQuery($dql);
-        
+
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito, 
             'fecha' => $fecha,
         ));
-
+        
         return $consulta->getResult();
-    }
+    } */
 
     //Obtiene trámites solicitud según el filtro de búsqueda mensual
-    public function findTramitesMensual($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+    public function findTramites($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
         $em = $this->getEntityManager();
 
         $dql = "SELECT fts

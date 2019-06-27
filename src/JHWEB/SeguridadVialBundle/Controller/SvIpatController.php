@@ -1144,7 +1144,7 @@ class SvIpatController extends Controller
             //============================= inicio victimas =====================================================//
             $victimas = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatVictima')->findBy(
                 array(
-                    'consecutivo' => $params->id
+                    'consecutivo' => intval($params->id)
                     )
                 );
                 
@@ -1178,6 +1178,12 @@ class SvIpatController extends Controller
             }
 
             $victimasString = implode(",", $arrayVictimas);
+            /* $resultadoVictimas = null; 
+            foreach ($arrayVictimas as $key => $victimas) {
+                $resultadoVictimas = $resultadoVictimas . '|' . $victimasString; 
+            }
+            var_dump($resultadoVictimas);
+            die(); */
             //============================= fin victimas =====================================================//
             if ($ipat) {
                 $response = array(
