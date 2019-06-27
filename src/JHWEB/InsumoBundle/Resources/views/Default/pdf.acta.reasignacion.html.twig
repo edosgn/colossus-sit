@@ -1,0 +1,52 @@
+
+ <html>
+  <header>
+  </header>
+  <body>
+
+    <h3 style="text-align:center;">
+        <b>REASIGNACION SUSTRATOS</b>  
+    </h3>
+
+    <table>
+        <tr>
+            <td width="50%"><b>Sede origen:</b><br> {{ reasignaciones[0].insumo.lote.sedeOperativa.nombre }}</td>
+            <td width="50%"><b>Sede destino:</b><br> {{ trazabilidad.organismoTransito.nombre }}</td> 
+        </tr> 
+    </table>
+    <!--
+    <h4>No.Acta </h4>
+    -->
+
+    <br>   <br>  <br>   <br>   
+    {% if reasignaciones %}
+        <table border="1" cellpadding="5">
+            <tr>
+                <td width="50%">Nombre</td>
+                <td width="25%">Número</td> 
+                <td width="25%">Estado</td>
+            </tr>
+            {% for reasignacion in reasignaciones %} 
+                <tr>
+                    <td>{{ reasignacion.insumo.tipo.nombre }}</td>
+                    <td>{{ reasignacion.insumo.numero }}</td>
+                    <td>{{ reasignacion.insumo.estado }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    <br>
+    <br> 
+    <p> 
+        <b>Fecha reasignacion: {{ trazabilidad.fecha|date('d/m/Y') }}</b>
+        <br>      
+        <br>      
+        <b>Entrega: ____________________________ </b>
+        <br>      
+        <br>      
+        <b>Recibe: ____________________________ </b>
+        <br>      
+    </p>
+
+  </body>
+</html>

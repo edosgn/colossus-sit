@@ -53,7 +53,6 @@ class ImoTrazabilidad
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="trazabilidades")
      **/
     protected $organismoTransito;
-    
 
     /**
      * Get id

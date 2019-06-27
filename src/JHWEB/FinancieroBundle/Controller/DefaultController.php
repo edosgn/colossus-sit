@@ -7,7 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
-
 class DefaultController extends Controller
 {
     /**
@@ -27,7 +26,8 @@ class DefaultController extends Controller
 
         $recaudo = $this->get('app_soap');
 
-        $soapServer = new \SoapServer('https://subdetra.xn--nario-rta.gov.co/colossus-sit/web/soap/test.wsdl');
+        //$soapServer = new \SoapServer('https://subdetra.xn--nario-rta.gov.co/colossus-sit/web/soap/test.wsdl');
+        $soapServer = new \SoapServer('http://localhost/GitHub/colossus-sit/web/soap/test.wsdl');
         $soapServer->setObject($recaudo);
 
         $response = new Response();
@@ -41,16 +41,25 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/soap/recaudos/transito/departamental/confirmar")
+     * @Route("/soap/recaudos/transito/departamental/confirmar", defaults={"_format"="xml"})
      */
     public function confirmAction(Request $request)
     {       
-        var_dump($request->request);
+        $client = new \SoapClient('http://localhost/GitHub/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl');
+
+        var_dump($client->__getFunctions());
         die();
+    }
 
-        $client = new \Soapclient('https://subdetra.xn--nario-rta.gov.co/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl', true);
+    /**
+     * @Route("/soap/recaudos/transito/departamental/consultar", defaults={"_format"="xml"})
+     */
+    public function consultAction(Request $request)
+    {       
+        //$client = new \Soapclient('http://localhost/GitHub/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl');
+        $client = new \Soapclient('http://localhost/GitHub/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl');
+        $result = $client->__getFunctions();
 
-
-        $result = $client->call('confirmarRecaudo', array('request' => $request));
+        $result = $client->call('confirmarRecaudo', ['name' => 'Scott']);
     }
 }

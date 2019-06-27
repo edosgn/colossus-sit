@@ -26,18 +26,18 @@ class ImoTrazabilidadController extends Controller
         
         $em = $this->getDoctrine()->getManager();
 
-        $imoTrazabilidads = $em->getRepository('JHWEBInsumoBundle:ImoTrazabilidad')->findBy(
+        $trazabilidades = $em->getRepository('JHWEBInsumoBundle:ImoTrazabilidad')->findBy(
             array('estado' => 'REASIGNACION')
         );
 
         $response['data'] = array();
 
-        if ($imoTrazabilidads) {
+        if ($trazabilidades) {
             $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'msj' => 'listado placas',
-                        'data' => $imoTrazabilidads,
+                'status' => 'success',
+                'code' => 200,
+                'msj' => 'listado placas',
+                'data' => $trazabilidades,
             );
         }
         return $helpers->json($response);

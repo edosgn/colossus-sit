@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Imoasignacion controller.
@@ -44,6 +45,7 @@ class ImoAsignacionController extends Controller
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck == true) {
             $imoAsignacion = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findBy(
                 array('imoTrazabilidad' => $trazabilidadId)
@@ -171,5 +173,73 @@ class ImoAsignacionController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ============================================ */
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/pdf/acta/reasignacion", name="imoasignacion_pdf_acta_reasignacion")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            setlocale(LC_ALL,"es_ES");
+            $fechaActual = strftime("%d de %B del %Y");
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $trazabilidad = $em->getRepository('JHWEBInsumoBundle:ImoTrazabilidad')->find(
+                $params->idTrazabilidad
+            );
+            
+            $reasignaciones = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findBy(
+                array(
+                    'imoTrazabilidad' => $trazabilidad->getId()
+                )
+            );
+
+            if ($reasignaciones) {
+                $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.reasignacion.html.twig', array(
+                    'reasignaciones' => $reasignaciones,
+                    'trazabilidad' => $trazabilidad,
+                )); 
+    
+                return new Response(
+                    $this->get('app.pdf')->templatePreview($html, 'Acta reasignacion'),
+                    200,
+                    array(
+                        'Content-Type'        => 'application/pdf',
+                        'Content-Disposition' => 'attachment; filename="acta_reasignacion.pdf"'
+                    )
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'No existen reasignaciones.', 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
+            );
+        }
+
+        return $helpers->json($response);
     }
 }

@@ -8,4 +8,9 @@ class RecaudoService
     {
         return true;
     }
+
+    public function consultarRecaudo($array)
+    {
+        return $array['usuario'];
+    }
 }
