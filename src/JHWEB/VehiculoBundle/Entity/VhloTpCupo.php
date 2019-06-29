@@ -21,11 +21,8 @@ class VhloTpCupo
      */
     private $id;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresa", inversedBy="cupos") */
-    private $empresa;
-   
-    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="cupos") */
-    private $claseVehiculo;
+    /** @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte", inversedBy="cupos") */
+    private $empresaTransporte;
 
     /**
      * @var string
@@ -132,50 +129,26 @@ class VhloTpCupo
     }
 
     /**
-     * Set empresa
+     * Set empresaTransporte
      *
-     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa
+     * @param \JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte $empresaTransporte
      *
      * @return VhloTpCupo
      */
-    public function setEmpresa(\JHWEB\UsuarioBundle\Entity\UserEmpresa $empresa = null)
+    public function setEmpresaTransporte(\JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte $empresaTransporte = null)
     {
-        $this->empresa = $empresa;
+        $this->empresaTransporte = $empresaTransporte;
 
         return $this;
     }
 
     /**
-     * Get empresa
+     * Get empresaTransporte
      *
-     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresa
+     * @return \JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte
      */
-    public function getEmpresa()
+    public function getEmpresaTransporte()
     {
-        return $this->empresa;
-    }
-
-    /**
-     * Set claseVehiculo
-     *
-     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $claseVehiculo
-     *
-     * @return VhloTpCupo
-     */
-    public function setClaseVehiculo(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $claseVehiculo = null)
-    {
-        $this->claseVehiculo = $claseVehiculo;
-
-        return $this;
-    }
-
-    /**
-     * Get claseVehiculo
-     *
-     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
-     */
-    public function getClaseVehiculo()
-    {
-        return $this->claseVehiculo;
+        return $this->empresaTransporte;
     }
 }

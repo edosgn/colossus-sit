@@ -3,7 +3,6 @@
 namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte;
-use JHWEB\VehiculoBundle\Entity\VhloTpCupo;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -102,8 +101,8 @@ class UserEmpresaTransporteController extends Controller
                 $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
                 $empresaTransporte->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
                 $empresaTransporte->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
-                $empresaTransporte->setColores(implode(',', $params->arrayColores));
-                $empresaTransporte->setMunicipios(implode(',', $params->arrayMunicipios));
+                $empresaTransporte->setColores($params->arrayColores);
+                $empresaTransporte->setMunicipios($params->arrayMunicipios);
                 $empresaTransporte->setCapacidad($params->capacidad);
                 $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
                 $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
@@ -145,6 +144,123 @@ class UserEmpresaTransporteController extends Controller
         ));
     }
 
+    /**
+     * Edit a userEmpresaTransporte entity.
+     *
+     * @Route("/edit", name="userempresatransporte_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->id);
+
+            $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
+            $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+            
+            $idCarroceria = (isset($params->idCarroceria)) ? $params->idCarroceria : null;
+            if($idCarroceria){
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
+                $empresaTransporte->setCarroceria($carroceria);
+            }
+
+            if($params->capacidadMinima > $params->capacidadMaxima) {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "La capacidad miníma debe ser menor a la capacidad máxima",
+                );
+            } else {
+                $empresaTransporte->setRadioAccion($radioAccion);
+                $empresaTransporte->setModalidadTransporte($modalidadTransporte);
+                $empresaTransporte->setServicio($servicio);
+                $empresaTransporte->setClase($clase);
+                $empresaTransporte->setNumeroActo($params->numeroActo);
+                $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
+                $empresaTransporte->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
+                $empresaTransporte->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
+                $empresaTransporte->setColores($params->arrayColores);
+                $empresaTransporte->setMunicipios($params->arrayMunicipios);
+                $empresaTransporte->setCapacidad($params->capacidad);
+                $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
+                $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
+                
+                $em->flush();
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro editado con éxito",
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }   
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Delete a userEmpresaTransporte entity.
+     *
+     * @Route("/delete", name="userempresatransporte_delete")
+     * @Method({"GET", "POST"})
+     */
+    public function deleteAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->id);
+
+            $empresaTransporte->setActivo(false);
+
+            $em->persist($empresaTransporte);
+            $em->flush();
+
+            $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro eliminado con éxito",
+                );
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }   
+
+        return $helpers->json($response);
+    }
+    
     /**
      * Busca empresas por NIT.
      *
@@ -199,12 +315,12 @@ class UserEmpresaTransporteController extends Controller
     }
 
     /**
-     * Busca empresas por NIT, modadlidadTransporte y clase.
+     * Busca habilitaciones de una empresa de transporte.
      *
-     * @Route("/search/modalidad/clase", name="userempresa_transporte_search_modalidad_clase")
+     * @Route("/search/habilitaciones", name="userempresa_transporte_search_habilitacion")
      * @Method({"GET", "POST"})
      */
-    public function searchByModalidadAndClaseAction(Request $request)
+    public function searchHabilitacionesByEmpresaAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -215,117 +331,28 @@ class UserEmpresaTransporteController extends Controller
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
-            
-            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
-                array(
-                    'nit' => $params->nit,
-                    'activo' => true
-                )
-            );
-            
-            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
-                array(
-                    'empresa' => $empresa,
-                    'modalidadTransporte' => $params->idModalidadTransporte,
-                    'clase' => $params->idClase,
-                    'activo' => true
-                )
-            );
 
-            if($empresaTransporte){
+            $habilitaciones = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findBy(
+                array(
+                    'empresa' => $params->idEmpresa,
+                    'activo' => true
+                )
+            ); 
+
+            if ($habilitaciones) {
                 $response = array(
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Empresa encontrada",
-                    'data' => $empresaTransporte->getEmpresa(),
+                    'message' => count($habilitaciones) . " habilitaciones encontradas",
+                    'data' => $habilitaciones,
                 );
             } else {
                 $response = array(
                     'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "Empresa no encontrada",
-                );
-            }
-        } else {
-            $response = array(
-                'title' => 'Error!',
-                'status' => 'error',
-                'code' => 400,
-                'message' => "Autorización no válida",
-            );
-        }
-        return $helpers->json($response);
-    }
-
-    /**
-     * Registra rangos de cupos para una empresa de transporte público.
-     *
-     * @Route("/new/rango/cupos", name="userempresa_transporte_new_rango_cupos")
-     * @Method({"GET", "POST"})
-     */
-    public function newRangoCuposAction(Request $request)
-    {
-        $helpers = $this->get("app.helpers");
-        $hash = $request->get("authorization", null);
-        $authCheck = $helpers->authCheck($hash);
-        
-        if ($authCheck == true) {
-            $json = $request->get("data", null);
-            $params = json_decode($json);
-            
-            $em = $this->getDoctrine()->getManager();
-            
-            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
-                array(
-                    'nit' => $params->nit,
-                    'activo' => true
-                )
-            );
-            
-            $clase= $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
-
-            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
-                array(
-                    'empresa' => $empresa->getId(),
-                    'activo' => true
-                )
-            );
-            if($empresa) {
-                $empresaTransporte->setRangoInicio($params->rangoInicio);
-                $empresaTransporte->setRangoFin($params->rangoFin);
-                $empresaTransporte->setNumeroResolucionCupo($params->numeroResolucion);
-                $empresaTransporte->setFechaResolucionCupo(new \Datetime($params->fechaResolucion));
-                $empresaTransporte->setObservaciones($params->observaciones);
-                $em->persist($empresaTransporte);
-                $em->flush();
-
-                for ($i=$params->rangoInicio; $i <= $params->rangoFin ; $i++) { 
-                    $cupo = new VhloTpCupo();
-                    
-                    $cupo->setEmpresa($empresa);
-                    $cupo->setClaseVehiculo($clase);
-                    $cupo->setNumero($i);
-                    $cupo->setEstado('DISPONIBLE');
-                    $cupo->setActivo(true);
-
-                    $em->persist($cupo);
-                    $em->flush();
-                }
-
-                $response = array(
-                    'title' => 'Perfecto!',
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Cupos creados con éxito",
-                );
-            } else {
-                $response = array(
-                    'title' => 'Error!',
-                    'status' => 'error',
-                    'code' => 200,
-                    'message' => "No se encontró la empresa",
+                    'message' => "No se encontraron habilitaciones para la empresa",
                 );
             }
         } else {

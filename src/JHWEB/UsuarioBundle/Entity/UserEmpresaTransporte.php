@@ -65,16 +65,16 @@ class UserEmpresaTransporte
     private $fechaEjecutoriaActo;
     
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="colores", type="string")
+     * @ORM\Column(name="colores", type="array")
      */
     private $colores;
     
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="municipios", type="string")
+     * @ORM\Column(name="municipios", type="array")
      */
     private $municipios;
 
@@ -102,41 +102,13 @@ class UserEmpresaTransporte
      */
     private $capacidadMaxima;
     
-    
     /**
-     * @var int
+     * @var bool
      *
-     * @ORM\Column(name="rango_inicio", type="bigint", nullable=true)
+     * @ORM\Column(name="dobe_cabina", type="boolean", nullable=true)
      */
-    private $rangoInicio;
-    
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="rango_fin", type="bigint", nullable=true)
-     */
-    private $rangoFin;
-    
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="numero_resolucion_cupo", type="bigint", nullable=true)
-     */
-    private $numeroResolucionCupo;
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fecha_resolucion_cupo", type="date", nullable=true)
-     */
-    private $fechaResolucionCupo;
-    
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="observaciones", type="string", nullable=true)
-     */
-    private $observaciones;
 
+    private $dobleCabina;
     /**
      * @var bool
      *
@@ -253,7 +225,7 @@ class UserEmpresaTransporte
     /**
      * Set colores
      *
-     * @param string $colores
+     * @param array $colores
      *
      * @return UserEmpresaTransporte
      */
@@ -267,7 +239,7 @@ class UserEmpresaTransporte
     /**
      * Get colores
      *
-     * @return string
+     * @return array
      */
     public function getColores()
     {
@@ -277,7 +249,7 @@ class UserEmpresaTransporte
     /**
      * Set municipios
      *
-     * @param string $municipios
+     * @param array $municipios
      *
      * @return UserEmpresaTransporte
      */
@@ -291,7 +263,7 @@ class UserEmpresaTransporte
     /**
      * Get municipios
      *
-     * @return string
+     * @return array
      */
     public function getMunicipios()
     {
@@ -371,123 +343,27 @@ class UserEmpresaTransporte
     }
 
     /**
-     * Set rangoInicio
+     * Set dobleCabina
      *
-     * @param integer $rangoInicio
+     * @param boolean $dobleCabina
      *
      * @return UserEmpresaTransporte
      */
-    public function setRangoInicio($rangoInicio)
+    public function setDobleCabina($dobleCabina)
     {
-        $this->rangoInicio = $rangoInicio;
+        $this->dobleCabina = $dobleCabina;
 
         return $this;
     }
 
     /**
-     * Get rangoInicio
+     * Get dobleCabina
      *
-     * @return integer
+     * @return boolean
      */
-    public function getRangoInicio()
+    public function getDobleCabina()
     {
-        return $this->rangoInicio;
-    }
-
-    /**
-     * Set rangoFin
-     *
-     * @param integer $rangoFin
-     *
-     * @return UserEmpresaTransporte
-     */
-    public function setRangoFin($rangoFin)
-    {
-        $this->rangoFin = $rangoFin;
-
-        return $this;
-    }
-
-    /**
-     * Get rangoFin
-     *
-     * @return integer
-     */
-    public function getRangoFin()
-    {
-        return $this->rangoFin;
-    }
-
-    /**
-     * Set numeroResolucionCupo
-     *
-     * @param integer $numeroResolucionCupo
-     *
-     * @return UserEmpresaTransporte
-     */
-    public function setNumeroResolucionCupo($numeroResolucionCupo)
-    {
-        $this->numeroResolucionCupo = $numeroResolucionCupo;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroResolucionCupo
-     *
-     * @return integer
-     */
-    public function getNumeroResolucionCupo()
-    {
-        return $this->numeroResolucionCupo;
-    }
-
-    /**
-     * Set fechaResolucionCupo
-     *
-     * @param \DateTime $fechaResolucionCupo
-     *
-     * @return UserEmpresaTransporte
-     */
-    public function setFechaResolucionCupo($fechaResolucionCupo)
-    {
-        $this->fechaResolucionCupo = $fechaResolucionCupo;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaResolucionCupo
-     *
-     * @return \DateTime
-     */
-    public function getFechaResolucionCupo()
-    {
-        return $this->fechaResolucionCupo;
-    }
-
-    /**
-     * Set observaciones
-     *
-     * @param string $observaciones
-     *
-     * @return UserEmpresaTransporte
-     */
-    public function setObservaciones($observaciones)
-    {
-        $this->observaciones = $observaciones;
-
-        return $this;
-    }
-
-    /**
-     * Get observaciones
-     *
-     * @return string
-     */
-    public function getObservaciones()
-    {
-        return $this->observaciones;
+        return $this->dobleCabina;
     }
 
     /**
