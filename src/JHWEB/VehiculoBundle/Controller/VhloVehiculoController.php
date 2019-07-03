@@ -4,6 +4,7 @@ namespace JHWEB\VehiculoBundle\Controller;
 
 use JHWEB\VehiculoBundle\Entity\VhloVehiculo;
 use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
+use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -167,10 +168,6 @@ class VhloVehiculoController extends Controller
 
                 /* DATOS DE RADICADO DE CUENTA */
                 if ($params->tipoMatricula == 'RADICADO') {
-                    if ($params->radicado->numeroDocumento) {
-                        $vehiculo->setIdentificacionRadicado($params->radicado->numeroDocumento);
-                    }
-
                     if ($params->radicado->fechaIngreso) {
                         $vehiculo->setFechaRegistroRadicado(
                             new \Datetime($params->radicado->fechaIngreso)
@@ -200,6 +197,29 @@ class VhloVehiculoController extends Controller
 
                 $em->persist($vehiculo);
                 $em->flush();
+
+                /*if ($vehiculo->getTipoMatricula()) {
+                    if ($params->radicado->numeroLicencia) {
+                        $licenciaTransito = new UserLicenciaTransito();
+
+                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                            array(
+                                'ciudadano' => $ciudadano->getId(),
+                                'vehiculo' => $vehiculo->getId(),
+                            )
+                        );
+
+                        if ($propietario) {
+                            $licenciaTransito->setPropietario($propietario);
+                            $licenciaTransito->setFecha(new \Datetime(date('Y-m-d h:i:s')));
+                            $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
+                            $licenciaTransito->setActivo(true);
+                            
+                            $em->persist($licenciaTransito);
+                            $em->flush();
+                        }
+                    }
+                }*/
                 
                 $response = array(
                     'status' => 'success',
@@ -948,9 +968,6 @@ class VhloVehiculoController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $placa = $params->placa;
-            $sedeOperativaId = $params->sedeOperativaId;
-
             $em = $this->getDoctrine()->getManager();
 
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
@@ -976,26 +993,31 @@ class VhloVehiculoController extends Controller
                     $em->flush();
     
                     $response = array(
+                        'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Placa asignada con exito.",
+                        'data' => $vehiculo,
                     );
                 }else{
                     $response = array(
-                        'status' => 'error',
+                        'title' => 'Atención!',
+                        'status' => 'warning',
                         'code' => 400,
                         'message' => "El vehiculo ya tiene una placa asignada.",
                     );
                 }
             } else {
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
                     'message' => "El vehiculo no se encuentra en la base de datos.",
                 );
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida para editar vehiculo",
@@ -1051,6 +1073,47 @@ class VhloVehiculoController extends Controller
             );
         }        
 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new Cuenta entity.
+     *
+     * @Route("/{idFuncionario}/{id}/pdf/preasignacion/placa", name="imoasignacion_pdf_preasignacion_placa")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $idFuncionario, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+            $idFuncionario
+        );
+        
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+            $id
+        );
+        
+        if ($vehiculo) {
+            $html = $this->renderView('@JHWEBVehiculo/Default/pdf.preasignacion.placa.html.twig', array(
+                'fechaActual' => $fechaActual,
+                'funcionario'=> $funcionario,
+                'vehiculo'=> $vehiculo,
+            ));
+    
+            $this->get('app.pdf')->templatePreview($html, 'Preasignacion_'.$vehiculo->getPlaca()->getNumero());
+        }else{
+            $response = array(
+                'title' => 'Atención!!',
+                'status' => 'warning',
+                'code' => 400,
+                'message' => 'Vehiculo no encontrado.', 
+            );
+        }
+        
         return $helpers->json($response);
     }
 }

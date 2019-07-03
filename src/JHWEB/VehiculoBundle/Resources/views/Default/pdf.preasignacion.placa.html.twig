@@ -1,0 +1,64 @@
+<html>
+  <header>
+    <style type="text/css">
+        .separator{
+            border-top: 1px dashed #cccccc;
+        }
+
+        .table td{
+            max-height: 15px;
+            padding: 2px;
+        }
+    </style>
+  </header>
+  <body style="font-size:12px">
+    <p style="text-align:center;">
+        <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>
+        <br>
+        <br>
+        <br>
+        <b>CERTIFICA QUE:</b>
+        <br>
+        <br>
+        <br>
+        En la Sede: {{ vehiculo.organismoTransito.nombre }} el {{ fechaActual}}
+    </p>
+    <p style="text-align:justify;">
+El vehículo con las siguientes características.
+<br>
+<br>
+<b>Número motor:</b> {{ vehiculo.motor }}
+<br>
+<b>Numero chasis:</b> {{ vehiculo.chasis }}
+<br>
+<b>Numero Serie:</b> {{ vehiculo.serie }}
+<br>
+<b>Numero VIN:</b> {{ vehiculo.vin }}
+<br>
+<b>Clase:</b> {{ vehiculo.clase.nombre }}
+<br>
+<b>Marca:</b> {{ vehiculo.linea.marca.nombre }} 
+<br>
+<b>Línea:</b> {{ vehiculo.linea.nombre }}
+<br>
+<b>Modelo:</b> {{ vehiculo.modelo }}
+<br>
+<b>Color:</b> {{ vehiculo.color.nombre }}
+<br>
+<br>
+Se le preasignó la placa <b>{{ vehiculo.placa.numero }}</b> con una vigencia de 60 días a partir de la fecha de expedición de este documento, cumplida la vigencia de la preasignación y no se haya realizado el trámite Matricula Inicial, se liberará la placa.
+<br>
+<br>
+<br>
+<br>
+</p>
+<p style="text-align:center;">  
+        <b>____________________________ </b>
+        <br>
+        <b>{{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}</b>
+        <br>      
+        {{ funcionario.cargo.nombre }}
+        <br>      
+    </p>
+  </body>
+</html>
