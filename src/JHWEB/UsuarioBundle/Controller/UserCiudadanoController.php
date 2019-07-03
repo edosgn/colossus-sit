@@ -188,6 +188,8 @@ class UserCiudadanoController extends Controller
                 $em->persist($ciudadano);
                 $usuario->setCiudadano($ciudadano);
 
+                $usuario->setLogueado(false);
+
                 $em->flush();
 
                 $response = array(

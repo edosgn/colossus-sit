@@ -506,7 +506,8 @@ class VhloPropietarioController extends Controller
                 );
             }else{
                 $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
                     'message' => 'El ciudadano o empresa no es propietario del vehiculo.', 
                 );
