@@ -408,6 +408,7 @@ class FroReporteIngresosController extends Controller
                         'numeroConsecutivo' => $infraccion->getConsecutivo()->getNumero(),
                         'numeroFactura' => $factura->getFactura()->getNumero(),
                         'infractorIdentificacion' => $infraccion->getInfractorIdentificacion(),
+                        'porcentajeDescuento' => $infraccion->getPorcentajeDescuento(),
                         'total' => $factura->getFactura()->getValorNeto(),
                     );
                 }
@@ -491,6 +492,9 @@ class FroReporteIngresosController extends Controller
                     $arrayAcuerdosPago[] = array(
                         'numeroAcuerdoPago' => $acuerdoPago->getAcuerdoPago()->getNumero(),
                         'numeroComparendo' => $acuerdoPago->getConsecutivo()->getNumero(),
+                        'identificacionInfractor' => $acuerdoPago->getAcuerdoPago()->getCiudadano()->getIdentificacion(),
+                        'nombreCompletoInfractor' => $acuerdoPago->getAcuerdoPago()->getCiudadano()->getPrimerNombre() . ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getSegundoNombre(). ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getPrimerApellido(). ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getSegundoApellido(),
+                        'codigoInfraccion' => $acuerdoPago->getInfraccion()->getCodigo(),
                         'numeroFactura' => $factura->getFactura()->getNumero(),
                         'total' => $factura->getFactura()->getValorNeto(),
                     );
@@ -575,9 +579,11 @@ class FroReporteIngresosController extends Controller
                     $arrayInmovilizaciones[] = array(
                         'numeroRecibo' => $inmovilizacion->getInmovilizacion()->getNumeroRecibo(),
                         'placa' => $inmovilizacion->getPlaca(),
-                        'fechaIngreso' => $inmovilizacion->getInmovilizacion()->getfechaIngreso(),
-                        'fechaSalida' => $inmovilizacion->getInmovilizacion()->getfechaSalida(),
+                        'fechaIngreso' => $inmovilizacion->getInmovilizacion()->getFechaIngreso(),
+                        'fechaSalida' => $inmovilizacion->getInmovilizacion()->getFechaSalida(),
+                        'horaSalida' => $inmovilizacion->getInmovilizacion()->getHoraSalida(),
                         'horas' => $inmovilizacion->getHoras(),
+                        'valorHora' => $inmovilizacion->getValorHora(),
                         'costoGrua' => $inmovilizacion->getInmovilizacion()->getCostoGrua(),
                         'valor' => $factura->getFactura()->getValorNeto(),
                     );
@@ -657,17 +663,8 @@ class FroReporteIngresosController extends Controller
                     $totalRetefuentesTesoreria += $retefuente->getRetencion();
 
                     $arrayRetefuentesExogena[] = array(
-                        'tipoDocumento' => $retefuente->getPropietario()->getCiudadano()->getTipoIdentificacion()->getId(),
-                        'identificacion' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
-                        'primerApellido' => $retefuente->getPropietario()->getCiudadano()->getPrimerApellido(),
-                        'segundoApellido' => $retefuente->getPropietario()->getCiudadano()->getSegundoApellido(),
-                        'primerNombre' => $retefuente->getPropietario()->getCiudadano()->getPrimerNombre(),
-                        'segundoNombre' => $retefuente->getPropietario()->getCiudadano()->getSegundoNombre(),
-                        'razonSocial' => $retefuente->getPropietario()->getEmpresa()->getNombre(),
-                        'direccion' => $retefuente->getPropietario()->getCiudadano()->getDireccionPersonal(),
-                        'departamento' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getCodigoDane(),
-                        'municipio' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getCodigoDane(),
-                        'pais' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getDepartamento()->getPais()->getCodigo(),
+                        'ciudadano' => !empty($retefuente->getPropietario()->getCiudadano()) ? $retefuente->getPropietario()->getCiudadano(): null,
+                        'empresa' => !empty($retefuente->getPropietario()->getEmpresa()) ? $retefuente->getPropietario()->getEmpresa(): null,
                         'valorVehiculo' => $retefuente->getValorVehiculo()->getValor(),
                         'retencion' => $retefuente->getRetencion()
                     );
@@ -680,14 +677,8 @@ class FroReporteIngresosController extends Controller
                         'marca' => $retefuente->getVehiculo()->getLinea()->getMarca()->getNombre(),
                         'clase' => $retefuente->getVehiculo()->getClase()->getNombre(),
                         'modelo' => $retefuente->getVehiculo()->getModelo(),
-                        'primerApellido' => $retefuente->getPropietario()->getCiudadano()->getPrimerApellido(),
-                        'segundoApellido' => $retefuente->getPropietario()->getCiudadano()->getSegundoApellido(),
-                        'primerNombre' => $retefuente->getPropietario()->getCiudadano()->getPrimerNombre(),
-                        'segundoNombre' => $retefuente->getPropietario()->getCiudadano()->getSegundoNombre(),
-                        'identificacion' => $retefuente->getPropietario()->getCiudadano()->getIdentificacion(),
-                        'direccion' => $retefuente->getPropietario()->getCiudadano()->getDireccionPersonal(),
-                        'municipio' => $retefuente->getPropietario()->getCiudadano()->getMunicipioResidencia()->getNombre(),
-                        'telefono' => $retefuente->getPropietario()->getCiudadano()->getTelefonoCelular(),
+                        'ciudadano' => !empty($retefuente->getPropietario()->getCiudadano()) ? $retefuente->getPropietario()->getCiudadano(): null,
+                        'empresa' => !empty($retefuente->getPropietario()->getEmpresa()) ? $retefuente->getPropietario()->getEmpresa(): null,
                         'valorVehiculo' => $retefuente->getValorVehiculo()->getValor(),
                         'retencion' => $retefuente->getRetencion(),
                     );

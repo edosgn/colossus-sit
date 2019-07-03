@@ -15,6 +15,15 @@
                     <b>Nro. Comparendo</b>
                 </td>
                 <td>
+                    <b>Identificación Infractor</b>
+                </td>
+                <td>
+                    <b>Nombre completo Infractor</b>
+                </td>
+                <td>
+                    <b>Cod. Infracción</b>
+                </td>
+                <td>
                     <b>Nro. Factura</b>
                 </td>
                 <td>
@@ -25,12 +34,15 @@
                 <tr>
                     <td>{{ infraccion.numeroAcuerdoPago }}</td>
                     <td>{{ infraccion.numeroComparendo }}</td>
+                    <td>{{ infraccion.identificacionInfractor }}</td>
+                    <td>{{ infraccion.nombreCompletoInfractor }}</td>
+                    <td>{{ infraccion.codigoInfraccion }}</td>
                     <td>{{ infraccion.numeroFactura }}</td>
                     <td>{{ infraccion.total }}</td>
                 </tr>
             {% endfor %}
             <tr>
-                <td colspan="3">
+                <td colspan="6">
                     <b>TOTAL</b>
                 </td>
                 <td>{{ totalAcuerdosPago }}</td>
