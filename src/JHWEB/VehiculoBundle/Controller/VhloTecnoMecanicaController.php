@@ -280,14 +280,56 @@ class VhloTecnoMecanicaController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-            $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));
+            $em = $this->getDoctrine()->getManager();
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Fecha de vencimiento calculada con exito",
-                'data' => $fechaVencimiento->format('Y-m-d')
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                array(
+                    'id' => $params->idVehiculo,
+                    'tipoMatricula' => 'MATRICULA',
+                    'activo' => true
+                )
             );
+
+            if($vehiculo){
+                $vehiculoEncontrado = $em->getRepository('JHWEBVehiculoBundle:VhloTecnoMecanica')->findOneBy(
+                    array(
+                        'vehiculo' => $vehiculo->getId()
+                    )
+                );
+                
+                
+                if(!$vehiculoEncontrado){
+                    if($vehiculoEncontrado->getVehiculo()->getServicio()->getNombre() == 'PARTICULAR'){ 
+                        $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+6 year', strtotime($params->fechaExpedicion))));
+                    } else if($vehiculoEncontrado->getVehiculo()->getServicio()->getNombre() == 'PÚBLICO') {
+                        $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+2 year', strtotime($params->fechaExpedicion))));
+                    } else if($vehiculoEncontrado->getVehiculo()->getClase()->getNombre() == 'MOTOCICLETA' || $vehiculo->getClase()->getNombre() == 'MOTOCARRO' || $vehiculo->getClase()->getNombre() == 'MOTOTRICICLO'|| $vehiculo->getClase()->getNombre() == 'CUATRIMOTO'){
+                        $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+2 year', strtotime($params->fechaExpedicion))));
+                    }
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Fecha de vencimiento calculada con exito",
+                        'data' => $fechaVencimiento->format('Y-m-d')
+                    );
+                } else {
+                    $fechaVencimiento = new \Datetime(date('Y-m-d', strtotime('+1 year', strtotime($params->fechaExpedicion))));
+
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Fecha de vencimiento calculada con exito",
+                        'data' => $fechaVencimiento->format('Y-m-d')
+                    );
+                }
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "el vehiculo no pertence a matricula, importacion o radicado", 
+                );
+            }
         }else{
             $response = array(
                 'status' => 'error',
