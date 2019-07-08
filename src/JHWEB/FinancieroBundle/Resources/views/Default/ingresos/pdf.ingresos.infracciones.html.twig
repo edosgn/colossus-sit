@@ -11,6 +11,8 @@
                 <td><b>Nro. Factura</b></td>
                 <td><b>Nro. Comparendo</b></td>
                 <td><b>Indentificacion Infractor</b></td>
+                <td><b>Porcentaje descuento</b></td>
+                <td><b>Valor descuento</b></td>
                 <td><b>Total</b></td>
             </tr>
             {% for infraccion in arrayInfracciones %}
@@ -18,11 +20,13 @@
                     <td>{{ infraccion.numeroFactura }}</td>
                     <td>{{ infraccion.numeroConsecutivo }}</td>
                     <td>{{ infraccion.infractorIdentificacion }}</td>
+                    <td>{{ infraccion.porcentajeDescuento }}</td>
+                    <td>--</td>
                     <td>{{ infraccion.total }}</td>
                 </tr>
             {% endfor %}
             <tr>
-                <td colspan="3"><b>TOTAL</b></td>
+                <td colspan="5"><b>TOTAL</b></td>
                 <td>{{ totalInfracciones }}</td>
             </tr>
         </table>
