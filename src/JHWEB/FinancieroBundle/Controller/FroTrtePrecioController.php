@@ -446,16 +446,34 @@ class FroTrtePrecioController extends Controller
                 )
             );
         }
-
+        
         $response = null;
 
-        foreach ($tramitesPrecio as $key => $tramitePrecio) {
-            $response[$key] = array(
-                'value' => $tramitePrecio->getId(),
-                'label' => $tramitePrecio->getNombre(),
+        if ($tramitesPrecio) {
+            foreach ($tramitesPrecio as $key => $tramitePrecio) {
+                $response[$key] = array(
+                    'value' => $tramitePrecio->getId(),
+                    'label' => $tramitePrecio->getNombre(),
+                );
+            }
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($tramitesPrecio) . ' registros encontrados.',
+                'data' => $response
+            );
+        }else{
+            $response = array(
+                'title' => 'Atención!',
+                'status' => 'warning',
+                'code' => 400,
+                'message' => 'No existen tramites configurados para este tipo de vehiculo.',
+                'data' => $response
             );
         }
-       
+
         return $helpers->json($response);
     }
 

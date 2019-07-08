@@ -204,11 +204,24 @@ class CvCdoTrazabilidadController extends Controller
                         )
                     );
 
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "No puede registrar un acuerdo de pago sin estar sancionado el comparendo.",
-                    );
+                    if ($trazabilidadOld) {
+                        $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                            4
+                        );
+                        $helpers->generateTrazabilidad($comparendo, $estadoNew);
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Registro creado con exito",
+                        );
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "No puede registrar un acuerdo de pago sin estar sancionado el comparendo.",
+                        );
+                    }
 
                     return $helpers->json($response);
                 }elseif($estado->getId() == 15){
@@ -217,6 +230,16 @@ class CvCdoTrazabilidadController extends Controller
                         15
                     );
                     $this->generateTrazabilidad($comparendo, $estadoNew);
+                    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con exito",
+                    );
+
+                    return $helpers->json($response);
+                }else{
+                    $helpers->generateTrazabilidad($comparendo, $estado);
                     
                     $response = array(
                         'status' => 'success',

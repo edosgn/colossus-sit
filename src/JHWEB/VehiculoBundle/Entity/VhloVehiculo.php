@@ -300,9 +300,6 @@ class VhloVehiculo
      */
     public function getFechaFactura()
     {
-        if($this->fechaFactura){
-            return $this->fechaFactura->format('d/m/Y');
-        }
         return $this->fechaFactura;
     }
 
@@ -375,9 +372,6 @@ class VhloVehiculo
      */
     public function getFechaManifiesto()
     {
-        if($this->fechaManifiesto){
-            return $this->fechaManifiesto->format('d/m/Y');
-        }
         return $this->fechaManifiesto;
     }
 

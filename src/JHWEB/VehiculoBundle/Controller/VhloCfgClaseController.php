@@ -224,19 +224,23 @@ class VhloCfgClaseController extends Controller
      */
     public function selectAction()
     {
-    $helpers = $this->get("app.helpers");
-    $em = $this->getDoctrine()->getManager();
-    $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findBy(
-        array('activo' => 1)
-    );
-    $response= null;
-      foreach ($clases as $key => $clase) {
-        $response[$key] = array(
-            'value' => $clase->getId(),
-            'label' => $clase->getCodigo()."_".$clase->getNombre(),
+        $helpers = $this->get("app.helpers");
+        $em = $this->getDoctrine()->getManager();
+        
+        $clases = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findBy(
+            array('activo' => 1)
+        );
+
+        $response= null;
+
+        foreach ($clases as $key => $clase) {
+            $response[$key] = array(
+                'value' => $clase->getId(),
+                'label' => $clase->getCodigo()."_".$clase->getNombre(),
             );
-      }
-       return $helpers->json($response);
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
