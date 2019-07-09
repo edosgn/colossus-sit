@@ -217,22 +217,30 @@ class SvIpatController extends Controller
                 $ipat->setZona($zona);
             }
 
-            if ($params->idDisenio) {
+            /* if ($params->idDisenio) {
                 $disenio = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgDisenio')->find(
                     $params->idDisenio
                 );
                 $ipat->setDisenio($disenio);
+            } */
+
+            if($params->arrayDisenios) {
+                $ipat->setDisenios($params->arrayDisenios);
             }
 
             if($params->arrayEstadosTiempo) {
                 $ipat->setEstadoTiempo(implode(",", $params->arrayEstadosTiempo));
             }
 
-            if ($params->idGeometria) {
+            /* if ($params->idGeometria) {
                 $geometria = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgGeometria')->find(
                     $params->idGeometria
                 );
                 $ipat->setGeometria($geometria);
+            } */
+
+            if($params->arrayGeometrias) {
+                $ipat->setGeometrias($params->arrayGeometrias);
             }
 
             if ($params->idUtilizacion) {
@@ -271,11 +279,15 @@ class SvIpatController extends Controller
                 $ipat->setEstadoVia($estadoVia);
             }
 
-            if ($params->idCondicionVia) {
+            /* if ($params->idCondicionVia) {
                 $condicionVia = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgCondicionVia')->find(
                     $params->idCondicionVia
                 );
                 $ipat->setCondicionVia($condicionVia);
+            } */
+
+            if($params->arrayCondicionesVia) {
+                $ipat->setCondicionesVia($params->arrayCondicionesVia);
             }
 
             if ($params->idIluminacion) {
@@ -307,7 +319,7 @@ class SvIpatController extends Controller
             }
             
             $ipat->setOtraVisualDisminuida($params->otraVisualDisminuida);
-            $ipat->setHaySemaforo($params->haySemaforo);
+            $ipat->setHayAgenteTransito($params->hayAgenteTransito);
 
             if ($params->idEstadoSemaforo) {
                 $estadoSemaforo = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgControlVia')->find(
@@ -336,13 +348,14 @@ class SvIpatController extends Controller
             
             $ipat->setOtroDelineadorPiso($params->otroDelineadorPiso);
             
-            if ($params->idHipotesis) {
+            /* if ($params->idHipotesis) {
                 $hipotesis = $em->getRepository('JHWEBSeguridadVialBundle:SvCfgHipotesis')->find(
                     $params->idHipotesis
                 );
                 $ipat->setHipotesis($hipotesis);
-            }
+            } */
 
+            $ipat->setHipotesis($params->arrayHipotesis);
             $ipat->setOtraHipotesis($params->otraHipotesis);
             
             $ipat->setMismoConductor($params->mismoConductor);
@@ -1124,7 +1137,7 @@ class SvIpatController extends Controller
                     'tarjetaRegistro' => $vehiculo->getTarjetaRegistro(),
                     'matriculadoEn' => $vehiculo->getMatriculadoEn(),
                     'portaSoat' => $vehiculo->getPortaSoat(),
-                    'soat' => $vehiculo->getSoat(),
+                    'soat' => $vehiculo->getNumeroPoliza(),
                     'aseguradoraSoat' => $vehiculo->getAseguradoraSoat(),
                     'fechaVencimientoSoat' => $vehiculo->getFechaVencimientoSoat()->format('Y-m-d'),
                     'portaSeguroResponsabilidadCivil' => $vehiculo->getPortaSeguroResponsabilidadCivil(),

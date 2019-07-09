@@ -153,11 +153,11 @@ class SvIpat
     private $zona;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgDisenio", inversedBy="disenios")
+     * @ORM\Column(name="disenios", type="array")
      */
-    private $disenio;
+    private $disenios;
 
     /**
      * @var string
@@ -167,11 +167,11 @@ class SvIpat
     private $estadoTiempo;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgGeometria", inversedBy="geometrias")
+     * @ORM\Column(name="geometrias", type="array")
      */
-    private $geometria;
+    private $geometrias;
 
     /**
      * @var string
@@ -216,11 +216,11 @@ class SvIpat
     private $estadoVia;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgCondicionVia", inversedBy="condicionesvia")
+     * @ORM\Column(name="condiciones_via", type="array")
      */
-    private $condicionVia;
+    private $condicionesVia;
 
     /**
      * @var string
@@ -260,9 +260,9 @@ class SvIpat
     /**
      * @var bool
      *
-     * @ORM\Column(name="hay_semaforo", type="boolean")
+     * @ORM\Column(name="hay_agente_transito", type="boolean")
      */
-    private $haySemaforo;
+    private $hayAgenteTransito;
 
     /**
      * @var string
@@ -463,9 +463,9 @@ class SvIpat
     private $entidadAgente;
     
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\ManyToOne(targetEntity="JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis", inversedBy="hipotesis")
+     * @ORM\Column(name="hipotesis", type="array")
      */
     private $hipotesis;
     
@@ -771,6 +771,30 @@ class SvIpat
     }
 
     /**
+     * Set disenios
+     *
+     * @param array $disenios
+     *
+     * @return SvIpat
+     */
+    public function setDisenios($disenios)
+    {
+        $this->disenios = $disenios;
+
+        return $this;
+    }
+
+    /**
+     * Get disenios
+     *
+     * @return array
+     */
+    public function getDisenios()
+    {
+        return $this->disenios;
+    }
+
+    /**
      * Set estadoTiempo
      *
      * @param string $estadoTiempo
@@ -792,6 +816,30 @@ class SvIpat
     public function getEstadoTiempo()
     {
         return $this->estadoTiempo;
+    }
+
+    /**
+     * Set geometrias
+     *
+     * @param array $geometrias
+     *
+     * @return SvIpat
+     */
+    public function setGeometrias($geometrias)
+    {
+        $this->geometrias = $geometrias;
+
+        return $this;
+    }
+
+    /**
+     * Get geometrias
+     *
+     * @return array
+     */
+    public function getGeometrias()
+    {
+        return $this->geometrias;
     }
 
     /**
@@ -819,6 +867,30 @@ class SvIpat
     }
 
     /**
+     * Set condicionesVia
+     *
+     * @param array $condicionesVia
+     *
+     * @return SvIpat
+     */
+    public function setCondicionesVia($condicionesVia)
+    {
+        $this->condicionesVia = $condicionesVia;
+
+        return $this;
+    }
+
+    /**
+     * Get condicionesVia
+     *
+     * @return array
+     */
+    public function getCondicionesVia()
+    {
+        return $this->condicionesVia;
+    }
+
+    /**
      * Set otraVisualDisminuida
      *
      * @param string $otraVisualDisminuida
@@ -843,27 +915,27 @@ class SvIpat
     }
 
     /**
-     * Set haySemaforo
+     * Set hayAgenteTransito
      *
-     * @param boolean $haySemaforo
+     * @param boolean $hayAgenteTransito
      *
      * @return SvIpat
      */
-    public function setHaySemaforo($haySemaforo)
+    public function setHayAgenteTransito($hayAgenteTransito)
     {
-        $this->haySemaforo = $haySemaforo;
+        $this->hayAgenteTransito = $hayAgenteTransito;
 
         return $this;
     }
 
     /**
-     * Get haySemaforo
+     * Get hayAgenteTransito
      *
      * @return boolean
      */
-    public function getHaySemaforo()
+    public function getHayAgenteTransito()
     {
-        return $this->haySemaforo;
+        return $this->hayAgenteTransito;
     }
 
     /**
@@ -1491,6 +1563,30 @@ class SvIpat
     }
 
     /**
+     * Set hipotesis
+     *
+     * @param array $hipotesis
+     *
+     * @return SvIpat
+     */
+    public function setHipotesis($hipotesis)
+    {
+        $this->hipotesis = $hipotesis;
+
+        return $this;
+    }
+
+    /**
+     * Get hipotesis
+     *
+     * @return array
+     */
+    public function getHipotesis()
+    {
+        return $this->hipotesis;
+    }
+
+    /**
      * Set otraHipotesis
      *
      * @param string $otraHipotesis
@@ -2019,54 +2115,6 @@ class SvIpat
     }
 
     /**
-     * Set disenio
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgDisenio $disenio
-     *
-     * @return SvIpat
-     */
-    public function setDisenio(\JHWEB\SeguridadVialBundle\Entity\SvCfgDisenio $disenio = null)
-    {
-        $this->disenio = $disenio;
-
-        return $this;
-    }
-
-    /**
-     * Get disenio
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgDisenio
-     */
-    public function getDisenio()
-    {
-        return $this->disenio;
-    }
-
-    /**
-     * Set geometria
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgGeometria $geometria
-     *
-     * @return SvIpat
-     */
-    public function setGeometria(\JHWEB\SeguridadVialBundle\Entity\SvCfgGeometria $geometria = null)
-    {
-        $this->geometria = $geometria;
-
-        return $this;
-    }
-
-    /**
-     * Get geometria
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgGeometria
-     */
-    public function getGeometria()
-    {
-        return $this->geometria;
-    }
-
-    /**
      * Set utilizacion
      *
      * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgUtilizacion $utilizacion
@@ -2184,30 +2232,6 @@ class SvIpat
     public function getEstadoVia()
     {
         return $this->estadoVia;
-    }
-
-    /**
-     * Set condicionVia
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgCondicionVia $condicionVia
-     *
-     * @return SvIpat
-     */
-    public function setCondicionVia(\JHWEB\SeguridadVialBundle\Entity\SvCfgCondicionVia $condicionVia = null)
-    {
-        $this->condicionVia = $condicionVia;
-
-        return $this;
-    }
-
-    /**
-     * Get condicionVia
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgCondicionVia
-     */
-    public function getCondicionVia()
-    {
-        return $this->condicionVia;
     }
 
     /**
@@ -2352,30 +2376,6 @@ class SvIpat
     public function getDelineadorPiso()
     {
         return $this->delineadorPiso;
-    }
-
-    /**
-     * Set hipotesis
-     *
-     * @param \JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis $hipotesis
-     *
-     * @return SvIpat
-     */
-    public function setHipotesis(\JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis $hipotesis = null)
-    {
-        $this->hipotesis = $hipotesis;
-
-        return $this;
-    }
-
-    /**
-     * Get hipotesis
-     *
-     * @return \JHWEB\SeguridadVialBundle\Entity\SvCfgHipotesis
-     */
-    public function getHipotesis()
-    {
-        return $this->hipotesis;
     }
 
     /**
