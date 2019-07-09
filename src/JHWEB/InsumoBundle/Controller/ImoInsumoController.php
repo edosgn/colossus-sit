@@ -86,7 +86,7 @@ class ImoInsumoController extends Controller
 
             $imoTrazabilidad = new ImoTrazabilidad();
 
-            $imoTrazabilidad->setOrganismoTransito($sedeOperativa);
+            $imoTrazabilidad->setOrganismoTransitoDestino($sedeOperativa);
             $imoTrazabilidad->setFecha($fecha);
             $imoTrazabilidad->setEstado('asignacion');
             $imoTrazabilidad->setActivo(true);
@@ -408,14 +408,16 @@ class ImoInsumoController extends Controller
      
         $fecha = new \DateTime('now');
 
-        $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeOperativaDestino);
+        $organismoTransitoDestino = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeOperativaDestino);
 
         $lote = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($params->lote->id);
-        $lote->setSedeOperativa($organismoTransito); 
+        $organismoTransitoOrigen = $lote->getSedeOperativa();
+        $lote->setSedeOperativa($organismoTransitoDestino); 
 
         $imoTrazabilidad = new ImoTrazabilidad();
 
-        $imoTrazabilidad->setOrganismoTransito($organismoTransito);
+        $imoTrazabilidad->setOrganismoTransitoOrigen($organismoTransitoOrigen);
+        $imoTrazabilidad->setOrganismoTransitoDestino($organismoTransitoDestino);
         $imoTrazabilidad->setFecha($fecha);
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);

@@ -591,7 +591,8 @@ class UserCfgMenuController extends Controller
             $roleMenu = $em->getRepository('JHWEBUsuarioBundle:UserUsuarioMenu')->findBy(
                 array(
                     'menu' => $menu->getId(),
-                    'usuario' => $usuario->getId()
+                    'usuario' => $usuario->getId(),
+                    'activo' => true
                 )
             );
 

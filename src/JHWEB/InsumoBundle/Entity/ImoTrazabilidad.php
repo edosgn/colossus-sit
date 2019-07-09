@@ -52,7 +52,12 @@ class ImoTrazabilidad
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="trazabilidades")
      **/
-    protected $organismoTransito;
+    protected $organismoTransitoOrigen;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="trazabilidades")
+     **/
+    protected $organismoTransitoDestino;
 
     /**
      * Get id
@@ -161,26 +166,50 @@ class ImoTrazabilidad
     }
 
     /**
-     * Set organismoTransito
+     * Set organismoTransitoOrigen
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoOrigen
      *
      * @return ImoTrazabilidad
      */
-    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
+    public function setOrganismoTransitoOrigen(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoOrigen = null)
     {
-        $this->organismoTransito = $organismoTransito;
+        $this->organismoTransitoOrigen = $organismoTransitoOrigen;
 
         return $this;
     }
 
     /**
-     * Get organismoTransito
+     * Get organismoTransitoOrigen
      *
      * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
      */
-    public function getOrganismoTransito()
+    public function getOrganismoTransitoOrigen()
     {
-        return $this->organismoTransito;
+        return $this->organismoTransitoOrigen;
+    }
+
+    /**
+     * Set organismoTransitoDestino
+     *
+     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoDestino
+     *
+     * @return ImoTrazabilidad
+     */
+    public function setOrganismoTransitoDestino(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransitoDestino = null)
+    {
+        $this->organismoTransitoDestino = $organismoTransitoDestino;
+
+        return $this;
+    }
+
+    /**
+     * Get organismoTransitoDestino
+     *
+     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
+     */
+    public function getOrganismoTransitoDestino()
+    {
+        return $this->organismoTransitoDestino;
     }
 }

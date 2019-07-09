@@ -22,7 +22,7 @@ class DefaultController extends Controller
      */
     public function responseAction()
     {
-        ini_set("soap.wsdl_cache_enabled", "0");
+        //ini_set("soap.wsdl_cache_enabled", "0");
 
         $recaudo = $this->get('app_soap');
 
@@ -56,10 +56,13 @@ class DefaultController extends Controller
      */
     public function consultAction(Request $request)
     {       
-        //$client = new \Soapclient('http://localhost/GitHub/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl');
-        $client = new \Soapclient('http://localhost/GitHub/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl');
-        $result = $client->__getFunctions();
+        $client = new \SoapClient('http://localhost/GitHub/colossus-sit/web/financiero/soap/recaudos/transito/departamental?wsdl');
 
-        $result = $client->call('confirmarRecaudo', ['name' => 'Scott']);
+        var_dump($client->__getFunctions());
+        die();
+        
+        /*$result = $client->__getFunctions();
+
+        $result = $client->call('confirmarRecaudo', ['name' => 'Scott']);*/
     }
 }
