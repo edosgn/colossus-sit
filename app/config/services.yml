@@ -14,6 +14,11 @@ services:
     app.helpers:
         class: AppBundle\services\Helpers
         arguments: ["@app.jwt_auth", '@doctrine.orm.entity_manager']
+    
+    app.mailer:
+        class: AppBundle\services\Mailer
+        autowire: false
+        arguments: ['@mailer', '@templating', '@session', '@doctrine.orm.entity_manager']
 
     app.gestion.documental:
         class: AppBundle\services\GestionDocumental
@@ -27,11 +32,6 @@ services:
     app.pdf.factura:
         class: AppBundle\services\PdfTemplateFactura
         arguments: ["null"]
-
-    app.mailer:
-        class: Repository\UsuarioBundle\services
-        autowire: false
-        arguments: ['@mailer', '@templating', '@session', '@doctrine.orm.entity_manager']
 
     app_soap:
         class: AppBundle\services\RecaudoService

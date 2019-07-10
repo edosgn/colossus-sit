@@ -339,11 +339,16 @@ class ImoLoteController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $idOrganismoTransito = (isset($params->idOrganismoTransito)) ? $params->idOrganismoTransito : null;
-            $tipo = (isset($params->tipo)) ? $params->tipo : null;
+            $tipo = (isset($params->tipoInsumo)) ? $params->tipoInsumo : null;
 
             $loteInsumos = $em->getRepository('JHWEBInsumoBundle:ImoLote')->findBy(
-                array('estado' => 'ASIGNADO','sedeOperativa'=> $idOrganismoTransito,'tipoInsumo'=>$params->tipoInsumo)
+                array(
+                    'estado' => 'ASIGNADO',
+                    'sedeOperativa'=> $idOrganismoTransito,
+                    'tipoInsumo'=> $tipo
+                )
             );
+
             $lotesDisponibles = null;
 
             foreach ($loteInsumos as $key => $lote) {
@@ -355,7 +360,7 @@ class ImoLoteController extends Controller
                 }
             }
 
-            if ($lotesDisponibles!=null) { 
+            if ($lotesDisponibles != null) { 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,

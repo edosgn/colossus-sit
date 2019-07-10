@@ -273,7 +273,7 @@ class CvCdoNotificacionController extends Controller
                             );
 
                             if ($auto) {
-                                //Busca si ya se creo un auto de comparecencia
+                                //Busca si ya se creo la notificación por estado
                                 $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                                     array(
                                         'comparendo' => $comparendo->getId(),
@@ -288,8 +288,10 @@ class CvCdoNotificacionController extends Controller
                                     $this->generateTrazabilidad($comparendo, $estado);
                                 }
                             }else{
-                                //Registra trazabilidad de notificación
+                                //Registra trazabilidad de auto de comparecencia
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(14);
+                                $this->generateTrazabilidad($comparendo, $estado);
+                                
                                 //Crea una audiencia automatica
                                 $audiencia = new CvAudiencia();
 
@@ -315,8 +317,6 @@ class CvCdoNotificacionController extends Controller
         
                                 $em->persist($audiencia);
                                 $em->flush();
-
-                                $this->generateTrazabilidad($comparendo, $estado);
                             }                            
                         }elseif ($diasCalendario > 30 && $diasCalendario <= 912) {//Valida si han pasado mas de 30 días
                             //Busca si ya se creo una sancion

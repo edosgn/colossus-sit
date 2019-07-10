@@ -8,10 +8,9 @@
           <h3>Divipo: {{organismoTransito.divipo}}</h3> 
         
           <br>
-
             {% if loteArray %}
                 <h3>Lotes</h3>
-                <table border="1">
+                <table border="1" cellpadding="5">
                     <tr>
                         <td>Tipo</td>
                         <td>Rango inicio</td>
@@ -32,16 +31,16 @@
                     {% endfor %}
                     <tr>
                         <td colspan="3">Total</td>
-                        <td>{{asignadosLoteTotal}}</td>
-                        <td>{{anuladosLoteTotal}}</td>
-                        <td>{{disponiblesLoteTotal}}</td>
+                        <td>{{ asignadosLoteTotal }}</td>
+                        <td>{{ anuladosLoteTotal }}</td>
+                        <td>{{ disponiblesLoteTotal }}</td>
                     </tr>
                 </table>
             {% endif %}     
         
             {% if tiposArray %}
                 <h3>Totales</h3>
-                <table border="1">
+                <table border="1" cellpadding="5">
                     <tr>
                         <td>Tipo de licencia</td>
                         <td>Disponilbes</td>
@@ -70,7 +69,7 @@
         
             {% if ifDisponibles  and disponibles %}
                 <h3>Disponibles</h3>
-                <table border="1">
+                <table border="1" cellpadding="5">
                     <tr>
                         <td>Nombre</td>
                         <td>Estado</td> 
@@ -90,7 +89,7 @@
         
             {% if ifAsignado and asignados%}
                 <h3>Asignados</h3>
-                <table border="1">
+                <table border="1" cellpadding="5">
                     <tr>
                         <td>Nombre</td>
                         <td>Estado</td> 
@@ -110,7 +109,7 @@
         
             {% if ifAnulados and anulados%}
                 <h3>Anulados</h3>
-                <table border="1">
+                <table border="1" cellpadding="5">
                     <tr>
                         <td>Nombre</td>
                         <td>Rango inicio</td>
@@ -132,9 +131,10 @@
                 </table>
             {% endif %}    
         {% endif %} 
+
         {% if tipoActa == 'totales' %}
         <h3>Organismos transito</h3>
-            <table border="1">
+            <table border="1" cellpadding="5">
                 <tr>
                     <td>Nombre</td>
                     <td>Cantidad Asignados</td> 
@@ -151,8 +151,8 @@
                 {% endfor %}
                 <tr>
                     <td colspan="1">Total</td>
-                    <td>{{totalSede }}</td>
-                    <td>{{valorTotalSede }}</td>
+                    <td>{{ totalSede }}</td>
+                    <td>{{ valorTotalSede }}</td>
                 </tr>    
                 <tr>
                     <td colspan="2">Total consignar</td>

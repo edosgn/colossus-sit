@@ -399,7 +399,7 @@ class Helpers
 		return $this->newDate;
 	}
 
-	public function generateTrazabilidad($comparendo, $estado){
+	public function generateTrazabilidad($comparendo, $estado, $template = null){
         $em = $this->em;
 
         if ($estado->getActualiza()) {
@@ -446,8 +446,12 @@ class Helpers
                 $comparendo->getEstado()->getFormato()
             );
 
-            $template = $this->generateTemplate($comparendo, $estado->getFormato()->getCuerpo());
-            $documento->setCuerpo($template);
+			if ($template) {
+				$documento->setCuerpo($template);
+			}else{
+				$template = $this->generateTemplate($comparendo, $estado->getFormato()->getCuerpo());
+				$documento->setCuerpo($template);
+			}
 
             $em->persist($documento);
             $em->flush();

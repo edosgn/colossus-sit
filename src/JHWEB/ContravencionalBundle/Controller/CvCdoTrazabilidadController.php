@@ -110,7 +110,7 @@ class CvCdoTrazabilidadController extends Controller
                         $em->persist($audiencia);
                         $em->flush();
 
-                        $this->generateTrazabilidad($comparendo, $estadoNew);
+                        $helpers->generateTrazabilidad($comparendo, $estadoNew);
                     }
 
                     //Valida que tenga notificacion
@@ -126,7 +126,7 @@ class CvCdoTrazabilidadController extends Controller
                         $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                             15
                         );
-                        $this->generateTrazabilidad($comparendo, $estadoNew);
+                        $helpers->generateTrazabilidad($comparendo, $estadoNew);
                     }
 
                     $response = array(
@@ -160,7 +160,7 @@ class CvCdoTrazabilidadController extends Controller
                                 16
                             );
 
-                            $this->generateTrazabilidad($comparendo, $estadoNew);
+                            $helpers->generateTrazabilidad($comparendo, $estadoNew);
                         }
 
                         //Valida que tenga mandamiento de pago
@@ -229,7 +229,7 @@ class CvCdoTrazabilidadController extends Controller
                     $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                         15
                     );
-                    $this->generateTrazabilidad($comparendo, $estadoNew);
+                    $helpers->generateTrazabilidad($comparendo, $estadoNew);
                     
                     $response = array(
                         'status' => 'success',

@@ -565,42 +565,47 @@ class ImoInsumoController extends Controller
         /* ================= */
         if ($params->tipoActa == "totales") {
             $totalSede = 0;
-            $valorSede = 0;
             $valorTotalSede = 0;
             
-            $organismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findByActivo(true);
+            $organismosTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->findBySede(1);
+            
+            foreach ($organismosTransito as $key => $organismoTransito) {
+                $valorSede = 0;
 
-            foreach ($organismosTransito as $key => $organismoTransitoTotal) {
-                $insumosOrganismos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
+                $insumos = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->findBy(
                     array(
-                    'organismoTransito' =>  $organismoTransitoTotal->getId(),
-                    'estado' => 'ASIGNADO'
+                        'organismoTransito' =>  $organismoTransito->getId(),
+                        'estado' => 'ASIGNADO'
                     )
                 );
 
-                $totalSede = $totalSede + COUNT($insumosOrganismos);
-                foreach ($insumosOrganismos as $key => $insumoOrganismo) {
-                    $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
-                        array('tipo'=>$insumoOrganismo->getTipo()->getId(), 'activo'=>true) 
-                    );
-                    
-                    if ($valorTipo) {
-                    $valorInsumo = $valorTipo->getValor();
-                    }else {
-                        $valorInsumo = 0;
+                $totalSede = $totalSede + COUNT($insumos);
+
+                if ($insumos) {
+                    foreach ($insumos as $key => $insumo) {
+                        $valorTipo = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
+                            array(
+                                'tipo' => $insumo->getTipo()->getId(),
+                                'activo' => true
+                            ) 
+                        );
+                        
+                        if ($valorTipo) {
+                            $valorSede += $valorTipo->getValor();
+                        }else {
+                            $valorSede += 0;
+                        }
                     }
-                    $valorSede = $valorSede + $valorInsumo;
                 }
 
-                $valorTotalSede =  $valorTotalSede +$valorSede;
+                $valorTotalSede += $valorSede;
 
                 $totalOrganismos[] = array(
-                    'nombreOrganismo' => $organismoTransitoTotal->getNombre(),
-                    'sustratosCantidad' => COUNT($insumosOrganismos),
-                    'valorSede' => $valorSede, 
-
+                    'nombreOrganismo' => $organismoTransito->getNombre(),
+                    'sustratosCantidad' => COUNT($insumos),
+                    'valorSede' => $valorTotalSede, 
                 );
-                $valorSede=0;
+
             }
 
             $totalConsignar = $valorTotalSede * $totalSede;
@@ -610,10 +615,7 @@ class ImoInsumoController extends Controller
                 'totalOrganismos' => $totalOrganismos, 
                 'totalSede' => $totalSede, 
                 'valorTotalSede' => $valorTotalSede, 
-                'totalConsignar' => $totalConsignar, 
-                'disponiblesLoteTotal'=>$disponiblesLoteTotal,
-                'anuladosLoteTotal'=>$anuladosLoteTotal,
-                'asignadosLoteTotal'=>$asignadosLoteTotal,
+                'totalConsignar' => $totalConsignar,
             )); 
         }else{
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
@@ -772,6 +774,9 @@ class ImoInsumoController extends Controller
                 'totalValor' => $totalValor,
                 'ifAsignado' => $params->asignado, 
                 'tipoActa' => $params->tipoActa,
+                'disponiblesLoteTotal'=>$disponiblesLoteTotal,
+                'anuladosLoteTotal'=>$anuladosLoteTotal,
+                'asignadosLoteTotal'=>$asignadosLoteTotal,
             )); 
         }
         /* ================= */
