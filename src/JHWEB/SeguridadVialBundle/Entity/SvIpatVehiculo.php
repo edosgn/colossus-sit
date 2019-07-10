@@ -212,13 +212,6 @@ class SvIpatVehiculo
     /**
      * @var int
      *
-     * @ORM\Column(name="soat", type="integer", nullable = true)
-     */
-    private $soat;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="numeroPoliza", type="integer", nullable = true)
      */
     private $numeroPoliza;
@@ -991,30 +984,6 @@ class SvIpatVehiculo
     public function getPortaSoat()
     {
         return $this->portaSoat;
-    }
-
-    /**
-     * Set soat
-     *
-     * @param integer $soat
-     *
-     * @return SvIpatVehiculo
-     */
-    public function setSoat($soat)
-    {
-        $this->soat = $soat;
-
-        return $this;
-    }
-
-    /**
-     * Get soat
-     *
-     * @return integer
-     */
-    public function getSoat()
-    {
-        return $this->soat;
     }
 
     /**

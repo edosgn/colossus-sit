@@ -198,7 +198,7 @@ class SvIpatVehiculoController extends Controller
                 }
 
                 $vehiculo->setPortaSoat($params->portaSoat);
-                $vehiculo->setSoat($params->soat);
+                /* $vehiculo->setSoat($params->soat); */
                 $vehiculo->setNumeroPoliza($params->numeroPoliza);
                 $vehiculo->setAseguradoraSoat($params->aseguradoraSoat);
                 $vehiculo->setFechaVencimientoSoat(new \Datetime($params->fechaVencimientoSoat));
