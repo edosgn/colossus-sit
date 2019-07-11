@@ -578,6 +578,9 @@ class ImoInsumoController extends Controller
 
         $fechaInicio = new \Datetime($params->fechaInicio);
         $fechaFin = new \Datetime($params->fechaFin);
+        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+            $params->idFuncionario
+        );
 
         /* ================= */
         if ($params->tipoActa == "totales") {
@@ -633,6 +636,7 @@ class ImoInsumoController extends Controller
                 'totalSede' => $totalSede, 
                 'valorTotalSede' => $valorTotalSede, 
                 'totalConsignar' => $totalConsignar,
+                'funcionario' => $funcionario,
             )); 
         }else{
             $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
@@ -794,6 +798,7 @@ class ImoInsumoController extends Controller
                 'disponiblesLoteTotal'=>$disponiblesLoteTotal,
                 'anuladosLoteTotal'=>$anuladosLoteTotal,
                 'asignadosLoteTotal'=>$asignadosLoteTotal,
+                'funcionario'=>$funcionario,
             )); 
         }
         /* ================= */
