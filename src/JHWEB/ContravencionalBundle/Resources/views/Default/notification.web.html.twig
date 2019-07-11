@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom:10px;">
+  <a class="navbar-brand" href="http://localhost/GitHub/colossus-sit/web/app_dev.php/contravencional/cvcdotrazabilidad/notification/web">
+    <img src="{{ asset('img/logo.png') }}">
+  </a>
+</nav>
+
+
+<div class="container">
+    <p class="text-center"><b>LA GOBERNACIÓN DE NARIÑO Y LA SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL</b></p>
+    <p class="text-justify">De conformidad a lo dispuesto por ley 1066 de 2006, su decreto reglamentario 
+    número 4473 de diciembre 15 del 2006, ley 769 del 2002, modificado por la ley 1383 del 2010, 
+    articulo 826 del estatuto Tributario Nacional, el Decreto Ley 019 del 2012, y demás Normas 
+    concordantes y reglamentarias, con uso de las facultades legales conferidas por la Ley y la 
+    Constitución Nacional de Colombia, dentro del proceso administrativo ejecutivo de Cobro coactivo y 
+    dando cumplimiento en lo que se refiere a notificaciones y no siendo posible establecer la dirección 
+    del contraventor por medio de verificación directa, o habiéndose establecido con respecto a ella, 
+    su no existencia (NE), el cerrado definitivo (CE), el cambio de domicilio (CD), 
+    una dirección incompleta (DI), el destinatario desconocido (DD), el rehusar recibir (RH), 
+    no reporte (NO); reporte errado (RE), y similares, se permite notificar el mandamiento ejecutivo de 
+    pago en virtud a los actos administrativos sancionatorios por la comisión de infracciones de tránsito 
+    de las siguientes personas:
+    </p>
+    <div class="card">
+        <div class="card-header text-white bg-primary mb-3">
+            Notificación por pagina web
+        </div>
+        <div class="card-body">
+            <div class="row"><!-- .row -->
+                <div class="col-lg-4">
+                    <form action="{{path('cvcdotrazabilidad_notification_web')}}" method="POST" id="form-report">
+                        <div class="form-group form-group-sm">
+                            <div class="col-lg-12">
+                                <label class="control-label">No. Identificación: <span class="text-danger">(*)</span></label>
+                                <div class="input-group">
+                                    <input type='numeric' class="form-control" name="inputIdentificacion" required />
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-info">
+                                            <i class="fa fa-search"></i> Buscar
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div><!-- /.row -->
+
+            {% if notificaciones is defined and notificaciones|length > 0 %}
+                <div class="row"><!-- .row -->
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nombre infractor</th>
+                                <th>Identificación infractor</th>
+                                <th>Cod. infraccion</th>
+                                <th>Mandamiento de pago</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for notificacion in notificaciones %}
+                            <td>{{ notificacion.infractor }}</td>
+                            <td>{{ notificacion.identificacion }}</td>
+                            <td>{{ notificacion.infraccion }}</td>
+                            <td>
+                                <a href="{{ path('cfgadmactoadministrativo_pdf', {'id': notificacion.idMandamientoPago }) }}" target="_blank">
+                                    Documento PDF
+                                </a>
+                            </td>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div><!-- /.row -->
+            {% else %}
+
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+      /*$('#btn-report').click(function(e){
+        e.preventDefault();
+
+        if($("#form-report")[0].checkValidity()){
+          $('#form-report').submit();
+        }else {
+          $(":[required]").parent().show();
+        }
+      });*/
+
+    });
+
+</script>
+{% endblock %}

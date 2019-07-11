@@ -245,21 +245,33 @@ class ImoInsumoController extends Controller
      /**
      * Deletes a insumo entity.
      *
-     * @Route("/{id}/delete", name="imoinsumo_delete")
+     * @Route("/delete", name="imoinsumo_delete")
      * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request,$id)
+    public function deleteAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
-        if ($authCheck==true) {
-            $em = $this->getDoctrine()->getManager();
-            $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find($id);
 
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
+                $params->id
+            );
+
+            $insumo->setMotivoAnulacion(
+                $params->motivo
+            );
             $insumo->setEstado('ANULADO');
+
             $em->persist($insumo);
             $em->flush();
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
@@ -392,7 +404,7 @@ class ImoInsumoController extends Controller
     /**
      * Lists all insumo entities.
      *
-     * @Route("/reasignacionSustrato", name="imoinsumo_reasignacionSustrato")
+     * @Route("/reasignacion/sustrato", name="imoinsumo_reasignacion_sustrato")
      * @Method({"GET", "POST"})
      */
     public function reasignacionByTypeSustratoAction(Request $request)
@@ -408,9 +420,14 @@ class ImoInsumoController extends Controller
      
         $fecha = new \DateTime('now');
 
-        $organismoTransitoDestino = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->sedeOperativaDestino);
+        $organismoTransitoDestino = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+            $params->sedeOperativaDestino
+        );
 
-        $lote = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find($params->lote->id);
+        $lote = $em->getRepository('JHWEBInsumoBundle:ImoLote')->find(
+            $params->lote->id
+        );
+
         $organismoTransitoOrigen = $lote->getSedeOperativa();
         $lote->setSedeOperativa($organismoTransitoDestino); 
 
@@ -418,6 +435,7 @@ class ImoInsumoController extends Controller
 
         $imoTrazabilidad->setOrganismoTransitoOrigen($organismoTransitoOrigen);
         $imoTrazabilidad->setOrganismoTransitoDestino($organismoTransitoDestino);
+        $imoTrazabilidad->setLote($lote);
         $imoTrazabilidad->setFecha($fecha);
         $imoTrazabilidad->setEstado('REASIGNACION');
         $imoTrazabilidad->setActivo(true);
@@ -427,7 +445,6 @@ class ImoInsumoController extends Controller
         $em->flush();
 
         foreach ($sustratos as $key => $sustrato) {
-        
             $imoAsignacionOld = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findOneByInsumo($sustrato->getId());
             if ($imoAsignacionOld) {
                 $imoAsignacionOld->setActivo(false);
@@ -440,7 +457,7 @@ class ImoInsumoController extends Controller
             $imoAsignacion->setInsumo($sustrato);
             $imoAsignacion->setActivo(true);
 
-            $sustrato->setOrganismoTransito($organismoTransito);
+            $sustrato->setOrganismoTransito($organismoTransitoDestino);
 
             $em->persist($sustrato);
             $em->persist($imoAsignacion);

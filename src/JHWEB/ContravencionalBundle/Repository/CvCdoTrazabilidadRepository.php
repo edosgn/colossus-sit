@@ -27,4 +27,27 @@ class CvCdoTrazabilidadRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
+
+    public function getNotificationWeb($type, $value){
+        $em = $this->getEntityManager();
+
+        switch ($type) {
+            case 'identificacion':
+                $dql = "SELECT t
+                FROM JHWEBContravencionalBundle:CvCdoTrazabilidad t,
+                JHWEBContravencionalBundle:CvCdoComparendo c
+                WHERE t.comparendo = c.id
+                AND t.estado = 22
+                AND c.infractorIdentificacion = :identificacion";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'identificacion' => $value,
+                ));
+
+                break;
+        }
+
+        return $consulta->getResult();
+    }
 }

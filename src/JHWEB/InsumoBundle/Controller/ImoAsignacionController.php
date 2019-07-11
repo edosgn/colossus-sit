@@ -203,16 +203,21 @@ class ImoAsignacionController extends Controller
                 $params->idTrazabilidad
             );
             
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
+            );
+
             $reasignaciones = $em->getRepository('JHWEBInsumoBundle:ImoAsignacion')->findBy(
                 array(
                     'imoTrazabilidad' => $trazabilidad->getId()
                 )
             );
 
-            if ($reasignaciones) {
+            if ($trazabilidad) {
                 $html = $this->renderView('@JHWEBInsumo/Default/pdf.acta.reasignacion.html.twig', array(
                     'reasignaciones' => $reasignaciones,
                     'trazabilidad' => $trazabilidad,
+                    'funcionario' => $funcionario,
                 )); 
     
                 return new Response(
