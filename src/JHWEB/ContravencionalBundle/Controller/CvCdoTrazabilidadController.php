@@ -504,4 +504,52 @@ class CvCdoTrazabilidadController extends Controller
 
         return $template;
     }
+
+    /**
+     * Notificaciones por pagina web.
+     *
+     * @Route("/notification/web", name="cvcdotrazabilidad_notification_web")
+     * @Method({"GET", "POST"})
+     */
+    public function notificationWebAction(Request $request)
+    {
+        if ($request->getMethod() == 'POST') {
+            $em = $this->getDoctrine()->getManager();
+    
+            /*$notificaciones = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->getNotificationWeb(
+                'identificacion', 
+                $request->request->get('inputIdentificacion')
+            );*/
+
+            $notificaciones = null;
+
+            $trazabilidades = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findByEstado(
+                22
+            );
+
+            if ($trazabilidades) {
+                foreach ($trazabilidades as $key => $trazabilidad) {
+                    $mandamientoPago = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findOneBy(
+                        array(
+                            'estado' => 18,
+                            'comparendo' => $trazabilidad->getComparendo()->getId()
+                        )
+                    );
+
+                    $notificaciones[] = array(
+                        'infractor' => $trazabilidad->getComparendo()->getInfractorNombres().' '.$trazabilidad->getComparendo()->getInfractorApellidos(),
+                        'identificacion' => $trazabilidad->getComparendo()->getInfractorIdentificacion(),
+                        'infraccion' => $trazabilidad->getComparendo()->getInfraccion()->getCodigo(),
+                        'idMandamientoPago' => $mandamientoPago->getId(),
+                    );
+                }
+            }
+
+            return $this->render('@JHWEBContravencional/Default/notification.web.html.twig', array(
+                'notificaciones' => $notificaciones,
+            ));
+        }
+          
+        return $this->render('@JHWEBContravencional/Default/notification.web.html.twig');
+    }
 }

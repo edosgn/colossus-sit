@@ -52,9 +52,19 @@ class CvCcNotificacion
     /**
      * @var bool
      *
+     * @ORM\Column(name="recibio", type="boolean")
+     */
+    private $recibio;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /** @ORM\ManyToOne(targetEntity="CvCdoTrazabilidad", inversedBy="notificaciones") */
+    private $trazabilidad;
 
 
     /**
@@ -164,6 +174,30 @@ class CvCcNotificacion
     }
 
     /**
+     * Set recibio
+     *
+     * @param boolean $recibio
+     *
+     * @return CvCcNotificacion
+     */
+    public function setRecibio($recibio)
+    {
+        $this->recibio = $recibio;
+
+        return $this;
+    }
+
+    /**
+     * Get recibio
+     *
+     * @return boolean
+     */
+    public function getRecibio()
+    {
+        return $this->recibio;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -180,11 +214,34 @@ class CvCcNotificacion
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {
         return $this->activo;
     }
-}
 
+    /**
+     * Set trazabilidad
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad $trazabilidad
+     *
+     * @return CvCcNotificacion
+     */
+    public function setTrazabilidad(\JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad $trazabilidad = null)
+    {
+        $this->trazabilidad = $trazabilidad;
+
+        return $this;
+    }
+
+    /**
+     * Get trazabilidad
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad
+     */
+    public function getTrazabilidad()
+    {
+        return $this->trazabilidad;
+    }
+}

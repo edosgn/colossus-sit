@@ -159,6 +159,16 @@
                     <td>{{ totalConsignar }}</td>
                 </tr>    
             </table>
-        {% endif %} 
+        {% endif %}
+
+        <p style="text-align: center;">
+            Generó
+            <br>
+            {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}
+            <br>
+            {{ funcionario.cargo.nombre }}
+            <br>
+            {{ funcionario.organismoTransito.nombre }}
+        </p>
     </body>
 </html>

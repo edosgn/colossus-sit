@@ -59,6 +59,9 @@ class ImoTrazabilidad
      **/
     protected $organismoTransitoDestino;
 
+    /** @ORM\ManyToOne(targetEntity="ImoLote", inversedBy="trazabilidades") */
+    private $lote;
+
     /**
      * Get id
      *
@@ -211,5 +214,29 @@ class ImoTrazabilidad
     public function getOrganismoTransitoDestino()
     {
         return $this->organismoTransitoDestino;
+    }
+
+    /**
+     * Set lote
+     *
+     * @param \JHWEB\InsumoBundle\Entity\ImoLote $lote
+     *
+     * @return ImoTrazabilidad
+     */
+    public function setLote(\JHWEB\InsumoBundle\Entity\ImoLote $lote = null)
+    {
+        $this->lote = $lote;
+
+        return $this;
+    }
+
+    /**
+     * Get lote
+     *
+     * @return \JHWEB\InsumoBundle\Entity\ImoLote
+     */
+    public function getLote()
+    {
+        return $this->lote;
     }
 }

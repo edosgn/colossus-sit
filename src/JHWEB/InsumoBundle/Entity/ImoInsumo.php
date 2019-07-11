@@ -50,6 +50,13 @@ class ImoInsumo
     private $actaEntrega;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="motivo_anulacion", type="text", nullable=true)
+     */
+    private $motivoAnulacion;
+
+    /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito")
      **/
     protected $organismoTransito;
@@ -168,6 +175,30 @@ class ImoInsumo
     public function getActaEntrega()
     {
         return $this->actaEntrega;
+    }
+
+    /**
+     * Set motivoAnulacion
+     *
+     * @param string $motivoAnulacion
+     *
+     * @return ImoInsumo
+     */
+    public function setMotivoAnulacion($motivoAnulacion)
+    {
+        $this->motivoAnulacion = $motivoAnulacion;
+
+        return $this;
+    }
+
+    /**
+     * Get motivoAnulacion
+     *
+     * @return string
+     */
+    public function getMotivoAnulacion()
+    {
+        return $this->motivoAnulacion;
     }
 
     /**
