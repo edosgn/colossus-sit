@@ -67,7 +67,11 @@ class VhloTpAsignacionController extends Controller
             $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->idEmpresa);
             $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($params->idCupo);
 
-            $vehiculoCupo= $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($vehiculo->getId());
+            $vehiculoCupo= $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $vehiculo->getId()
+                )
+            );
             
             if($vehiculoCupo){
                 $response = array(
@@ -129,17 +133,17 @@ class VhloTpAsignacionController extends Controller
 
             $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->find($params->id);
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Registro Encontrado", 
-                    'data'=> $asignacion,
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro Encontrado", 
+                'data'=> $asignacion,
             );
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }
@@ -242,7 +246,7 @@ class VhloTpAsignacionController extends Controller
     /**
      * Search vehiculo entity.
      *
-     * @Route("/search/vehiculo", name="search_vehiculo")
+     * @Route("/search/vehiculo", name="vhlotpasignacion_search_vehiculo")
      * @Method({"GET", "POST"})
      */
     public function searchVehiculoAction(Request $request)
@@ -263,35 +267,42 @@ class VhloTpAsignacionController extends Controller
                 )
             );
             
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
-                array(
-                    'placa' => $placa,
-                    'servicio' => 2
-                )
-            );
-
-            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
-                array(
-                    'vehiculo' => $vehiculo->getId(),
-                    'activo' => true
-                )
-            );
-
-            if ($vehiculo) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Vehiculo encontrado",
-                    'data' => array(
-                        'vehiculo' => $vehiculo,
-                        'propietarios' => $propietarios
+            if($placa){
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+                    array(
+                        'placa' => $placa,
+                        'servicio' => 2
                     )
                 );
+
+                if ($vehiculo) {
+                    $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
+                        array(
+                            'vehiculo' => $vehiculo->getId(),
+                            'activo' => true
+                        )
+                    );
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Vehiculo encontrado",
+                        'data' => array(
+                            'vehiculo' => $vehiculo,
+                            'propietarios' => $propietarios
+                        )
+                    );
+                } else { 
+                    $response = array(
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El vehiculo no existe o no es de transporte público.",
+                    );
+                }
             } else {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El vehiculo no se encuentra en la Base de Datos",
+                    'message' => "No se encuentra la placa en la Base de Datos ",
                 );
             }
         } else {
@@ -307,7 +318,7 @@ class VhloTpAsignacionController extends Controller
     /**
      * Busca empresas de transporte habilitadas por NIT.
      *
-     * @Route("/search/empresaTransporte", name="vhlotpasignacion_search_nit")
+     * @Route("/search/empresaTransporte", name="vhlotpasignacion_search_nit2")
      * @Method({"GET", "POST"})
      */
     public function searchEmpresaTransporteByNitAction(Request $request)

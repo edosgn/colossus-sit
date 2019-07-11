@@ -189,7 +189,7 @@ class VhloTpTarjetaOperacionController extends Controller
                     'message' => "El vehiculo no se encuentra registrado en la base de datos.",
                 );
             } else {
-                if($vehiculo->getServicio()->getNombre() != 'PÚBLICO') {
+                if($vehiculo->getServicio()->getNombre() != 'Público') {
                     $response = array(
                         'title' => 'Error!',
                         'status' => 'error',

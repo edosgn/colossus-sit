@@ -76,7 +76,7 @@ class VhloTpConvenioController extends Controller
             $fechaActaFin = new \DateTime($params->fechaActaFin);
             $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresa);
             
-            $convenio = $em->getRespository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
+            $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
                 array (
                     'numeroConvenio' => $params->numeroConvenio,
                     'activo' => true
