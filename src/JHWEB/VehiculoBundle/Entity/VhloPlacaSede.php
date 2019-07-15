@@ -24,23 +24,16 @@ class VhloPlacaSede
     /**
      * @var string
      *
-     * @ORM\Column(name="letras_placa", type="string", length=255)
+     * @ORM\Column(name="rango_inicial", type="string", length=10)
      */
-    private $letrasPlaca;
+    private $rangoInicial;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_inicial", type="string", length=10)
+     * @ORM\Column(name="rango_final", type="string", length=10)
      */
-    private $numeroInicial;
-
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="numero_final", type="string", length=255)
-     */
-    private $numeroFinal;
+    private $rangoFinal;
 
     /**
      * @var boolean
@@ -71,75 +64,75 @@ class VhloPlacaSede
     }
 
     /**
-     * Set letrasPlaca
+     * Set rangoInicial
      *
-     * @param string $letrasPlaca
+     * @param string $rangoInicial
      *
      * @return VhloPlacaSede
      */
-    public function setLetrasPlaca($letrasPlaca)
+    public function setRangoInicial($rangoInicial)
     {
-        $this->letrasPlaca = $letrasPlaca;
+        $this->rangoInicial = $rangoInicial;
 
         return $this;
     }
 
     /**
-     * Get letrasPlaca
+     * Get rangoInicial
      *
      * @return string
      */
-    public function getLetrasPlaca()
+    public function getRangoInicial()
     {
-        return $this->letrasPlaca;
+        return $this->rangoInicial;
     }
 
     /**
-     * Set numeroInicial
+     * Set rangoFinal
      *
-     * @param string $numeroInicial
+     * @param string $rangoFinal
      *
      * @return VhloPlacaSede
      */
-    public function setNumeroInicial($numeroInicial)
+    public function setRangoFinal($rangoFinal)
     {
-        $this->numeroInicial = $numeroInicial;
+        $this->rangoFinal = $rangoFinal;
 
         return $this;
     }
 
     /**
-     * Get numeroInicial
+     * Get rangoFinal
      *
      * @return string
      */
-    public function getNumeroInicial()
+    public function getRangoFinal()
     {
-        return $this->numeroInicial;
+        return $this->rangoFinal;
     }
 
     /**
-     * Set numeroFinal
+     * Set letraFinal
      *
-     * @param string $numeroFinal
+     * @param string $letraFinal
      *
      * @return VhloPlacaSede
      */
-    public function setNumeroFinal($numeroFinal)
+    public function setLetraFinal($letraFinal)
     {
-        $this->numeroFinal = $numeroFinal;
+        $this->letraFinal = $letraFinal;
 
         return $this;
     }
 
     /**
-     * Get numeroFinal
+     * Get letraFinal
      *
      * @return string
      */
-    public function getNumeroFinal()
+    public function getLetraFinal()
     {
-        return $this->numeroFinal;
+        return $this->letraFinal;
     }
 
     /**

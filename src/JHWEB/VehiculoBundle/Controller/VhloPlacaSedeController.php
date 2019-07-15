@@ -72,17 +72,18 @@ class VhloPlacaSedeController extends Controller
                 $params->idTipoVehiculo
             );
 
-            $letrasPlaca = mb_strtoupper($params->letrasPlaca, 'utf-8');
+            $rangoInicial = mb_strtoupper($params->rangoInicial, 'utf-8');
+            $rangoFinal = mb_strtoupper($params->rangoFinal, 'utf-8');
             
-            $asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->findAll();
+            //$asignaciones = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->findAll();
 
             $validaAsignacion = true;
 
-            foreach ($asignaciones as $key => $asignacion) {
-                if ($asignacion->getLetrasPlaca() == $letrasPlaca && ((intval($params->numeroInicial) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroInicial) <= intval($asignacion->getNumeroFinal())) || (intval($params->numeroFinal) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroFinal) <= intval($asignacion->getNumeroFinal())))) {
+            /*foreach ($asignaciones as $key => $asignacion) {
+                if ($asignacion->getLetrasPlaca() == $letrasInicio && ((intval($params->numeroInicial) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroInicial) <= intval($asignacion->getNumeroFinal())) || (intval($params->numeroFinal) >= intval($asignacion->getNumeroInicial()) && intval($params->numeroFinal) <= intval($asignacion->getNumeroFinal())))) {
                     $validaAsignacion = false;
                 }
-            }
+            }*/
 
             if(!$validaAsignacion){
                 $response = array(
@@ -93,22 +94,21 @@ class VhloPlacaSedeController extends Controller
                 
                 return $helpers->json($response);
             }else{
-                $validate = $this->validateTipoVehiculo(
-                    $params->numeroInicial,
-                    $params->numeroFinal,
-                    $letrasPlaca,
+                $validate = $this->validateByTipoVehiculo(
+                    $rangoInicial,
                     $tipoVehiculo->getNombre()
                 );
     
                 $contadorPlacas = 0;
     
                 if ($validate) {
-                    for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
+                    /*for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
                         $em = $this->getDoctrine()->getManager();
     
                         //Genera el nuevo numero de placa según el tipo de vehiculo
                         $numero = $this->generateNumberPlaca(
-                            $letrasPlaca, 
+                            $letrasInicio, 
+                            $letrasFinal,
                             $params->letraFinal, 
                             $tipoVehiculo->getNombre(),
                             $contadorPlacas,
@@ -130,28 +130,44 @@ class VhloPlacaSedeController extends Controller
     
                         $contadorPlacas += 1;
     
-                    }
-    
-                    $asignacion = new VhloPlacaSede();
-    
-                    $asignacion->setOrganismoTransito($organismoTransito);
-                    $asignacion->setTipoVehiculo($tipoVehiculo);
-                    $asignacion->setLetrasPlaca($letrasPlaca);
-                    $asignacion->setNumeroInicial($params->numeroInicial);
-                    $asignacion->setNumeroFinal($params->numeroFinal);
-                    $asignacion->setActivo(true);
-    
-                    $em->persist($asignacion);
-                    $em->flush();
-    
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Asignación realizada, ".$contadorPlacas." placas creadas con éxito.",
-                    );
-    
+                    }*/
+
+                    if ($rangoInicial > $rangoFinal) {
+                        $response = array(
+                            'title' => 'Error!',
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "El rango incial no puede ser mayor al rango final.",
+                        );
+                    }else{
+                        $numeroPlacas = $this->generatePlacas(
+                            $rangoInicial, 
+                            $rangoFinal, 
+                            $tipoVehiculo, 
+                            $organismoTransito
+                        );
+
+                        $asignacion = new VhloPlacaSede();
+        
+                        $asignacion->setOrganismoTransito($organismoTransito);
+                        $asignacion->setTipoVehiculo($tipoVehiculo);
+                        $asignacion->setRangoInicial($rangoInicial);
+                        $asignacion->setRangoFinal($rangoFinal);
+                        $asignacion->setActivo(true);
+        
+                        $em->persist($asignacion);
+                        $em->flush();
+
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Asignación de ".$numeroPlacas." placas realizada con éxito.",
+                        );
+                    }    
                 }else {
                     $response = array(
+                        'title' => 'Error!',
                         'status' => 'error',
                         'code' => 400,
                         'message' => "No se pudieron asignar las placas. Error en el formato de placas",
@@ -285,8 +301,7 @@ class VhloPlacaSedeController extends Controller
                 'message' => 'La placa ya existe', 
             );
         }
-        
-        
+    
         return $helpers->json($response);
     }
 
@@ -317,125 +332,156 @@ class VhloPlacaSedeController extends Controller
         return $helpers->json($response);
     }
 
-    public function generateNumberPlaca($letrasPlaca, $letraFinal, $tipoVehiculo, $contadorPlacas, $i){
+    public function generatePlacas($rangoInicial, $rangoFinal, $tipoVehiculo, $organismoTransito){
         $helpers = $this->get("app.helpers");
 
-        switch ($tipoVehiculo) {
+        $contador = 0;
+
+        switch ($tipoVehiculo->getNombre()) {
             case 'MOTOCICLETA':
-                $numero = $letrasPlaca.$i.strtoupper($letraFinal);
-                if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
-                    $cadena = "0" . $i;
-                    $numero = $letrasPlaca.$cadena.strtoupper($letraFinal);
-                }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Número generado.',
-                    'data' => $numero
-                );
-
+                $ceros = 2;
+                $limite = 99;
+                $letraInicial = substr($rangoInicial, 0, 3);
+                $letraFinal = substr($rangoFinal, 0, 3);
+                $numeroInicial = substr($rangoInicial, 3, 2);
+                $numeroFinal = substr($rangoFinal, 3, 2);
                 break;
             case 'MOTOCARRO':
-                $numero = $i. $letrasPlaca;
-
-                if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
-                    $cadena = "00" . $i;
-                    $numero = $cadena.$letrasPlaca;
-                }elseif ($i >= 10 && $i < 100 && $contadorPlacas != 0) {
-                    $cadena = "0" . $i;
-                    $numero = $cadena.$letrasPlaca;
-                }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Número generado.',
-                    'data' => $numero
-                );
+                $ceros = 3;
+                $limite = 999;
+                $letraInicial = substr($rangoInicial, 0, 3);
+                $letraFinal = substr($rangoFinal, 0, 3);
+                $numeroInicial = substr($rangoInicial, 3, 3);
+                $numeroFinal = substr($rangoFinal, 3, 3);
                 break;
             case 'REMOLQUE Y SEMIREMOLQUE':
-                $numero = $letrasPlaca . $i;
-
-                if ($letrasPlaca == 'R' || $letrasPlaca == 'S') {
-                    if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
-                        $cadena = "0000" . $i;
-                        $numero = $letrasPlaca . $cadena;
-                    } elseif ($i >= 10 && $i < 100 && $contadorPlacas != 0) {
-                        $cadena = "000" . $i;
-                        $numero = $letrasPlaca . $cadena;
-                    } elseif ($i >= 100 && $i < 999 && $contadorPlacas != 0) {
-                        $cadena = "00" . $i;
-                        $numero = $letrasPlaca . $cadena;
-                    } elseif ($i >= 1000 && $i < 10000 && $contadorPlacas != 0) {
-                        $cadena = "0" . $i;
-                        $numero = $letrasPlaca . $cadena;
-                    }
-
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => 'Número generado.',
-                        'data' => $numero
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "Error en el formato de placas para REMOLQUE Y SEMIREMOLQUE",
-                    );
-                }
+                $ceros = 5;
+                $limite = 99999;
+                $letraInicial = substr($rangoInicial, 5, 1);
+                $letraFinal = substr($rangoFinal, 5, 1);
+                $numeroInicial = substr($rangoInicial, 0, 4);
+                $numeroFinal = substr($rangoFinal, 0, 4);
                 break;
             default:
-                $numero = $letrasPlaca . $i;
-
-                if ($i >= 0 && $i < 10 && $contadorPlacas != 0) {
-                    $cadena = "00" . $i;
-                    $numero = $letrasPlaca . $cadena;
-                }elseif ($i >= 10 && $i < 100 && $contadorPlacas != 0) {
-                    $cadena = "0" . $i;
-                    $numero = $letrasPlaca . $cadena;
-                }
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Número generado.',
-                    'data' => $numero
-                );
-
+                $ceros = 3;
+                $limite = 999;
+                $letraInicial = substr($rangoInicial, 0, 3);
+                $letraFinal = substr($rangoFinal, 0, 3);
+                $numeroInicial = substr($rangoInicial, 3, 3);
+                $numeroFinal = substr($rangoFinal, 3, 3);
                 break;
         }
 
-        return $response;
+        while ($rangoInicial <= $rangoFinal) {
+            if($letraInicial < $letraFinal){
+                for ($i=$numeroInicial; $i <= $limite; $i++) {
+                    $i = str_pad($i, $ceros, '0', STR_PAD_LEFT);
+                    $next = $i;
+                    $contador++;
+                    
+                    $this->newPlacaAction(
+                        $rangoInicial, 
+                        $tipoVehiculo, 
+                        $organismoTransito
+                    );
+
+                    $rangoInicial = $letraInicial.$next;
+                }
+                
+                if ($next == $limite) {
+                    $numeroInicial = 0;
+                    $this->newPlacaAction(
+                        $rangoInicial, 
+                        $tipoVehiculo, 
+                        $organismoTransito
+                    );
+                    $letraInicial = $helpers->nextLetter($letraInicial);
+                    $numeroInicial = str_pad($numeroInicial, $ceros, '0', STR_PAD_LEFT);
+                    $rangoInicial = $letraInicial.$numeroInicial;
+                }
+            }elseif($letraInicial == $letraFinal){
+                for ($i=$numeroInicial; $i <= $numeroFinal; $i++) {
+                    $i = str_pad($i, $ceros, '0', STR_PAD_LEFT);
+                    $next = $i;
+                    $contador++;
+
+                    $this->newPlacaAction(
+                        $rangoInicial, 
+                        $tipoVehiculo, 
+                        $organismoTransito
+                    );
+
+                    $rangoInicial = $letraInicial.$next;
+                }
+            }
+
+            if ($rangoInicial == $rangoFinal) {
+                $this->newPlacaAction(
+                    $rangoInicial, 
+                    $tipoVehiculo, 
+                    $organismoTransito
+                );
+
+                break;
+            }
+        }
+
+        return $contador;
     }
 
-    public function validateTipoVehiculo($numeroInicial, $numeroFinal, $letrasPlaca, $tipoVehiculo)
+    public function validateByTipoVehiculo($rangoInicial, $tipoVehiculo)
     {
+        $longitud = strlen($rangoInicial);
+
         switch ($tipoVehiculo) {
             case 'AUTOMOTOR':
-                $nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasPlaca, 3, 3);
+                if ($longitud == 6) {
+                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
+                    $nomenclaturaValida = true;
+                }else{
+                    $nomenclaturaValida = false;
+                }
                 break;
             case 'MOTOCICLETA':
-                $nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasPlaca, 3, 2);
+                if ($longitud == 6 || $longitud == 5) {
+                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 2);
+                    $nomenclaturaValida = true;
+                }else{
+                    $nomenclaturaValida = false;
+                }
                 break;
             case 'MOTOCARRO':
-                $nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasPlaca, 3, 3);
+                if ($longitud == 6 || $longitud == 5) {
+                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
+                    $nomenclaturaValida = true;
+                }else{
+                    $nomenclaturaValida = false;
+                }
                 break;
             case 'REMOLQUE Y SEMIREMOLQUE':
-                $nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasPlaca, 1, 5);
+                if ($longitud == 6) {
+                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 1, 5);
+                    $nomenclaturaValida = true;
+                }else{
+                    $nomenclaturaValida = false;
+                }
                 break;
             case 'MAQUINARIA AGRICOLA':
-                $nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasPlaca, 3, 3);
+                if ($longitud == 6) {
+                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
+                    $nomenclaturaValida = true;
+                }else{
+                    $nomenclaturaValida = false;
+                }
                 break;
         }
 
         return $nomenclaturaValida;
     }
 
-    public function validateNomenclatura($numeroInicial, $numeroFinal, $letrasPlaca, $cantidadLetras, $cantidadNumeros)
+    public function validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, $cantidadLetras, $cantidadNumeros)
     {
-        if (preg_match('/^[a-zA-Z]+$/', $letrasPlaca) && strlen($numeroInicial) == $cantidadNumeros && strlen($numeroFinal) == $cantidadNumeros && intval($numeroInicial) < intval($numeroFinal)) {
+        if (preg_match('/^[a-zA-Z]+$/', $letrasInicio) && strlen($numeroInicial) == $cantidadNumeros && strlen($numeroFinal) == $cantidadNumeros) {
             return true;
         } else {
             return false;
