@@ -36,7 +36,7 @@ class CvCfgModulo
     private $activo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="funcionarios")
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="modulos")
      **/
     protected $funcionario;
 

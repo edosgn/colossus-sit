@@ -92,6 +92,13 @@ class PqoInmovilizacion
     private $horaSalida;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones_salida", type="text", nullable=true)
+     */
+    private $observacionesSalida;
+
+    /**
      * @var int
      *
      * @ORM\Column(name="numero_salida", type="integer", nullable=true)
@@ -154,6 +161,11 @@ class PqoInmovilizacion
 
     /** @ORM\ManyToOne(targetEntity="PqoCfgPatio", inversedBy="inmovilizaciones") */
     private $patio;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="inmovilizaciones")
+     **/
+    protected $funcionario;
 
 
     /**
@@ -404,6 +416,30 @@ class PqoInmovilizacion
     public function getHoraSalida()
     {
         return $this->horaSalida;
+    }
+
+    /**
+     * Set observacionesSalida
+     *
+     * @param string $observacionesSalida
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setObservacionesSalida($observacionesSalida)
+    {
+        $this->observacionesSalida = $observacionesSalida;
+
+        return $this;
+    }
+
+    /**
+     * Get observacionesSalida
+     *
+     * @return string
+     */
+    public function getObservacionesSalida()
+    {
+        return $this->observacionesSalida;
     }
 
     /**
@@ -692,5 +728,29 @@ class PqoInmovilizacion
     public function getPatio()
     {
         return $this->patio;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }
