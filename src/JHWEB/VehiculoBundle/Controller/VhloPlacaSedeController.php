@@ -229,21 +229,45 @@ class VhloPlacaSedeController extends Controller
     /**
      * Deletes a vhloPlacaSede entity.
      *
-     * @Route("/{id}/delete", name="vhloplacasede_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhloplacasede_delete")
+     * @Method("POST")
      */
-    public function deleteAction(Request $request, VhloPlacaSede $vhloPlacaSede)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloPlacaSede);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloPlacaSede);
-            $em->flush();
-        }
 
-        return $this->redirectToRoute('vhloplacasede_index');
+            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloPlacaSede')->find(
+                $params->id
+            );
+
+            $asignacion->setActivo(false);
+
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con exito"
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -531,7 +555,7 @@ class VhloPlacaSedeController extends Controller
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
 

@@ -112,30 +112,6 @@ class VhloPlacaSede
     }
 
     /**
-     * Set letraFinal
-     *
-     * @param string $letraFinal
-     *
-     * @return VhloPlacaSede
-     */
-    public function setLetraFinal($letraFinal)
-    {
-        $this->letraFinal = $letraFinal;
-
-        return $this;
-    }
-
-    /**
-     * Get letraFinal
-     *
-     * @return string
-     */
-    public function getLetraFinal()
-    {
-        return $this->letraFinal;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo

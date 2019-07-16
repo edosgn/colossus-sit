@@ -72,14 +72,23 @@ class CvAuCfgTipoController extends Controller
                 );
                 $tipo->setFormato($formato);
             }
-            
+        
+            if ($params->finaliza) {
+                $tiposOld = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->findByFinaliza(
+                    true
+                );
+
+                foreach ($tiposOld as $key => $tipoOld) {
+                    $tipo->setFinaliza(false);
+                    $em->flush();
+                }
+            }
+            $tipo->setFinaliza($params->finaliza);
             $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $tipo->setActivo(true);
 
-            
             $em->persist($tipo);
             $em->flush();
-             
 
             $response = array(
                 'title' => 'Perfecto!',
@@ -200,6 +209,17 @@ class CvAuCfgTipoController extends Controller
                     $formato->setFormato($tipo);
                 }
                 
+                if ($params->finaliza) {
+                    $tiposOld = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->findByFinaliza(
+                        true
+                    );
+    
+                    foreach ($tiposOld as $key => $tipoOld) {
+                        $tipo->setFinaliza(false);
+                        $em->flush();
+                    }
+                }
+                $tipo->setFinaliza($params->finaliza);
                 $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 
                 $em->flush();

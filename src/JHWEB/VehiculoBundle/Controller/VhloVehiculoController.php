@@ -9,6 +9,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 
 /**
  * Vhlovehiculo controller.
@@ -1110,5 +1112,44 @@ class VhloVehiculoController extends Controller
         }
         
         return $helpers->json($response);
+    }
+
+    /**
+     * Deletes a comparendo entity.
+     *
+     * @Route("/certificado/tradicion/file", name="vhlovehiculo_certificado_tradicion_file")
+     * @Method("POST")
+     */
+    public function certificadoTradicionByFileAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $helpers = $this->get("app.helpers");
+        $json = $request->get("data", null);
+        
+        $params = json_decode($json);
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+            $params->idFuncionario
+        );
+
+        $html = $this->renderView('@JHWEBVehiculo/Default/pdfCertificadoTradicion.html.twig', array(
+            'identificaciones'=>$params->identificaciones,
+            'funcionario'=>$funcionario,
+            'fechaActual' => $fechaActual,
+        ));
+
+        return new Response(
+            $this->get('app.pdf')->templatePreview($html, 'Certificado tradición uso oficial'),
+            200,
+            array(
+                'Content-Type'        => 'application/pdf',
+                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+            )
+        );
     }
 }

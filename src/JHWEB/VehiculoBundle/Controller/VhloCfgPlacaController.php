@@ -234,14 +234,14 @@ class VhloCfgPlacaController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Placa eliminada con éxto",
+                    'message' => "Placa eliminada con éxto",
             );
 
         }else{
             $reponse = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorización no válida",
+                    'message' => "Autorización no válida",
             );
         }
         return $helpers->json($response);
@@ -268,6 +268,57 @@ class VhloCfgPlacaController extends Controller
     /**
      * Libera una placa seleccionado.
      *
+     * @Route("/search/numero", name="vhlocfgplaca_search_numero")
+     * @Method("POST")
+     */
+    public function searchByNumeroAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $em = $this->getDoctrine()->getManager();
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $placas = $em->getRepository('JHWEBVehiculo:VhloCfgPlaca')->findBy(
+                array(
+                    'numero' => $params->numero,
+                    'estado' => 'ASIGNADA'
+                )
+            );
+
+            if($placas){
+                $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'data' => $placas,
+                        'message' => count($placas).' registros encontrados.',
+                );
+            }else{
+                $reponse = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningún registro encontrado.",
+                );
+            }
+        }else{
+            $reponse = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Libera una placa seleccionado.
+     *
      * @Route("/liberate", name="vhlocfgplaca_liberate")
      * @Method("POST")
      */
@@ -279,26 +330,39 @@ class VhloCfgPlacaController extends Controller
 
         if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $json = $request->get("json", null);
+            $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $cfgPlaca = $em->getRepository('AppBundle:CfgPlaca')->find($params);
-
-            $cfgPlaca->setEstado('Fabricada');
-            $em = $this->getDoctrine()->getManager();
-                $em->persist($cfgPlaca);
-                $em->flush();
-            $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Placa eliminada con éxto",
+            $placa = $em->getRepository('JHWEBVehiculo:VhloCfgPlaca')->find(
+                $params->id
             );
 
+            if($placa){
+                $placa->setEstado('FABRICADA');
+    
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+    
+                $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Placa liberada con éxito.",
+                );
+            }else{
+                $reponse = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "La placa no fue encontrada.",
+                );
+            }
         }else{
             $reponse = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'msj' => "Autorización no válida",
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
             );
         }
         return $helpers->json($response);
