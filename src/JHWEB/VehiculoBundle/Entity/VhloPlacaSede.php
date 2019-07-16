@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="vhlo_placa_sede")
  * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloPlacaSedeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class VhloPlacaSede
 {
@@ -42,6 +43,24 @@ class VhloPlacaSede
      */
     private $activo;
 
+    /** 
+    * created Time/Date 
+    * 
+    * @var \DateTime 
+    * 
+    * @ORM\Column(name="created_at", type="datetime") 
+    */  
+    protected $createdAt;  
+  
+    /** 
+     * updated Time/Date 
+     * 
+     * @var \DateTime 
+     * 
+     * @ORM\Column(name="updated_at", type="datetime") 
+     */  
+    protected $updatedAt;
+
     /**
      * @ORM\ManyToOne(targetEntity="VhloCfgTipoVehiculo", inversedBy="placas")
      **/
@@ -52,6 +71,18 @@ class VhloPlacaSede
      **/
     protected $organismoTransito;
 
+    /** @ORM\PrePersist */
+    public function setCreatedAt()
+    {
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+    }
+
+    /** @ORM\PreUpdate */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime('now');
+    }
 
     /**
      * Get id
@@ -133,6 +164,26 @@ class VhloPlacaSede
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**

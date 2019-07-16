@@ -333,7 +333,7 @@ class VhloCfgPlacaController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $placa = $em->getRepository('JHWEBVehiculo:VhloCfgPlaca')->find(
+            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->find(
                 $params->id
             );
 
