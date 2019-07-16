@@ -1,0 +1,68 @@
+<html>
+  <header>
+  </header>
+  <body>
+
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>Subsecretaria de transito y transporte departamental de nariño</b>
+        <br>      
+    </p>
+
+    <p style="text-align:center;">
+        <b>Propietarios</b>   
+    </p>
+
+    {% if identificaciones|length > 0 %}
+    <table border="1" cellpadding="3" style="font-size:11px;">
+        <tr>
+            <td  width="15%">Identificacion</td>
+            <td width="30%">Nombres</td>
+            <td width="30%">Apellidos</td>
+            <td width="25%">Direccion</td>
+        </tr>
+        {% for identificacion in identificaciones %}
+            <tr>
+                <td>{{ identificacion[0] }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <br>
+            
+            <p style="text-align:center;"> 
+                <b>Tramites</b>
+                <br>      
+            </p>
+
+            <table border="1" cellpadding="3" style="font-size:11px;">
+                <tr>
+                    <td>Fecha</td>
+                    <td>Nombre Tramite</td>
+                    <td>datos</td>
+                </tr>
+            </table>
+        {% endfor %}
+    </table>
+    {% endif %}
+
+    <br>
+    <br>
+    <br>
+    <p style="text-align: center;">
+        Generó
+        <br>
+        <b>{{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}</b>
+        <br>
+        {{ funcionario.cargo.nombre }}
+        <br>
+        {{ funcionario.organismoTransito.nombre }}
+    </p>
+  </body>
+</html>

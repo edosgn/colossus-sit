@@ -359,6 +359,7 @@ class VhloPlacaSedeController extends Controller
     public function generatePlacas($rangoInicial, $rangoFinal, $tipoVehiculo, $organismoTransito){
         $helpers = $this->get("app.helpers");
 
+        $longitud = strlen($rangoInicial);
         $contador = 0;
 
         switch ($tipoVehiculo->getNombre()) {
@@ -369,6 +370,10 @@ class VhloPlacaSedeController extends Controller
                 $letraFinal = substr($rangoFinal, 0, 3);
                 $numeroInicial = substr($rangoInicial, 3, 2);
                 $numeroFinal = substr($rangoFinal, 3, 2);
+
+                if ($longitud == 6) {
+                    $letra = substr($rangoFinal, 5,1);
+                }
                 break;
             case 'MOTOCARRO':
                 $ceros = 3;

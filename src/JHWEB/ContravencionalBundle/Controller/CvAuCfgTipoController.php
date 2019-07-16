@@ -79,7 +79,7 @@ class CvAuCfgTipoController extends Controller
                 );
 
                 foreach ($tiposOld as $key => $tipoOld) {
-                    $tipo->setFinaliza(false);
+                    $tipoOld->setFinaliza(false);
                     $em->flush();
                 }
             }
@@ -202,11 +202,11 @@ class CvAuCfgTipoController extends Controller
             );
 
             if ($tipo) {
-                if ($params->idFormato) {
-                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
-                        $params->idFormato
+                if ($params->formato) {
+                    $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                        $params->formato
                     );
-                    $formato->setFormato($tipo);
+                    $tipo->setFormato($formato);
                 }
                 
                 if ($params->finaliza) {
@@ -215,7 +215,7 @@ class CvAuCfgTipoController extends Controller
                     );
     
                     foreach ($tiposOld as $key => $tipoOld) {
-                        $tipo->setFinaliza(false);
+                        $tipoOld->setFinaliza(false);
                         $em->flush();
                     }
                 }
@@ -228,7 +228,7 @@ class CvAuCfgTipoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $atencion,
+                    'data'=> $tipo,
                 );
             }else{
                 $response = array(

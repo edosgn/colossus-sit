@@ -117,14 +117,19 @@ class CvAudienciaController extends Controller
 
             $audiencia->setActivo(true);
 
-            /*if ($params->objetivo) {
-                $audiencia->setObjetivo($params->objetivo);
-            }*/
+            //Registra trazabilidad de audiencia
+            $trazabilidad = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                array(
+                    'comparendo' => $comparendo->getId(),
+                    'estado' => 19,
+                    'activo' => true,
+                )
+            );
 
-            //Registra trazabilidad de notificación
-            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(19);
-
-            $this->generateTrazabilidad($comparendo, $estado);
+            if (!$trazabilidad) {
+                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(19);
+                $helpers->generateTrazabilidad($comparendo, $estado);
+            }
             
             $em->persist($audiencia);
             $em->flush();
@@ -417,39 +422,6 @@ class CvAudienciaController extends Controller
 
         $em->persist($trazabilidad);
         $em->flush();
-    }
-
-    //Migrar a servicio
-    public function generateTemplate($comparendo){
-        $helpers = $this->get("app.helpers");
-
-        setlocale(LC_ALL,"es_ES");
-        $fechaActual = strftime("%d de %B del %Y");
-
-        
-        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
-        $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
-        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getNumero()); 
-        $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
-
-        if ($comparendo->getInfraccion()) {
-            $replaces[] = (object)array('id' => 'DCI', 'value' => $comparendo->getInfraccion()->getDescripcion());
-            $replaces[] = (object)array('id' => 'CIC', 'value' => $comparendo->getInfraccion()->getCodigo());
-        }
-
-        if ($comparendo->getPlaca()) {
-            $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
-        }
-
-
-        $template = $helpers->createTemplate(
-          $comparendo->getEstado()->getFormato()->getCuerpo(),
-          $replaces
-        );
-
-        $template = str_replace("<br>", "<br/>", $template);
-
-        return $template;
     }
 
     /**

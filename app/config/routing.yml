@@ -1,7 +1,3 @@
-jhweb_contravencional_cv_cfg_modulo:
-    resource: "@JHWEBContravencionalBundle/Controller/CvCfgModuloController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation
