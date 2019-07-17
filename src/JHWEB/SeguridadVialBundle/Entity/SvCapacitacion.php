@@ -203,7 +203,6 @@ class SvCapacitacion
         return $this->id;
     }
 
-
     /**
      * Set fechaHoraRegistro
      *
@@ -225,9 +224,7 @@ class SvCapacitacion
      */
     public function getFechaHoraRegistro()
     {
-        if ($this->fechaHoraRegistro) {
-            return $this->fechaHoraRegistro->format('d/m/Y H:m a');
-        }
+        return $this->fechaHoraRegistro;
     }
 
     /**
@@ -251,9 +248,7 @@ class SvCapacitacion
      */
     public function getFechaActividad()
     {
-        if ($this->fechaActividad) {
-            return $this->fechaActividad->format('d/m/Y');
-        }
+        return $this->fechaActividad;
     }
 
     /**
@@ -373,9 +368,7 @@ class SvCapacitacion
      */
     public function getFechaNacimientoActorVial()
     {
-        if ($this->fechaNacimientoActorVial) {
-            return $this->fechaNacimientoActorVial->format('d/m/Y');
-        }
+        return $this->fechaNacimientoActorVial;
     }
 
     /**

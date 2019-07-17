@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Vhlocfgnivelservicio</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vhloCfgNivelServicio.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ vhloCfgNivelServicio.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Gestionable</th>
+                <td>{% if vhloCfgNivelServicio.gestionable %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if vhloCfgNivelServicio.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('vhlocfgnivelservicio_index') }}">Back to the list</a>
+        </li>
+    </ul>
+{% endblock %}

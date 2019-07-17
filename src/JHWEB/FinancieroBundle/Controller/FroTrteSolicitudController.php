@@ -8,6 +8,7 @@ use JHWEB\VehiculoBundle\Entity\VhloCfgPlaca;
 use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
 use JHWEB\VehiculoBundle\Entity\VhloPropietario;
+use JHWEB\VehiculoBundle\Entity\VhloTpTarjetaOperacion;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion;
@@ -118,17 +119,17 @@ class FroTrteSolicitudController extends Controller
                         $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
                             $tramiteRealizado->idTramiteFactura
                         );
-        
+                        
                         if ($tramiteFactura) {    
                             if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
                                 $certificadoTradicion = true;
                             }
-
+                            
                             if (!$tramiteFactura->getRealizado()) {
                                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
                                     $params->idFuncionario
                                 );
-    
+                                
                                 if (isset($params->idVehiculo) && $params->idVehiculo) {
                                     $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas);
 
@@ -578,6 +579,10 @@ class FroTrteSolicitudController extends Controller
 
                         case 'traspasoIndeterminada':
                             $this->vehiculoIndeterminadaUpdateAction($params);
+                            break;
+
+                        case 'duplicadoTarjetaOperacion':
+                            $this->vehiculoDuplicadoTarjetaOperacionAction($params);
                             break;
                     }
                 }
@@ -1133,6 +1138,53 @@ class FroTrteSolicitudController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'El solicitante no es propietario del vehiculo.', 
+            );
+        }            
+       
+        return $helpers->json($response);
+    }
+
+    //Actualiza el propietario a persona indeterminada
+    public function vehiculoDuplicadoTarjetaOperacionAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'id' => $params->idTarjetaOperacion,
+                'activo' => true,
+            )
+        );
+
+        
+        if($tarjetaOperacion) {
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+            $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+            $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+            $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->nuevoNumeroTarjetaOperacion);
+            $tarjetaOperacionNew->setVehiculo($vehiculo);
+            $tarjetaOperacionNew->setActivo(true);
+            
+            $tarjetaOperacion->setActivo(false);
+
+            $em->persist($tarjetaOperacion);
+            $em->persist($tarjetaOperacionNew);
+            $em->flush();
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Tarjeta de Operación actualizado con exito.',
+                'data' => $tarjetaOperacionNew
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'No se encontró la tarjeta de operación actual del vehiculo.', 
             );
         }            
        

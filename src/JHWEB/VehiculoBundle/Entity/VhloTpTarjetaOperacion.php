@@ -24,6 +24,9 @@ class VhloTpTarjetaOperacion
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloTpAsignacion", inversedBy="tarjetas") */
     private $asignacion;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloVehiculo", inversedBy="tarjetas") */
+    private $vehiculo;
+
     /**
      * @var \DateTime
      *
@@ -150,5 +153,29 @@ class VhloTpTarjetaOperacion
     public function getAsignacion()
     {
         return $this->asignacion;
+    }
+
+    /**
+     * Set vehiculo
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo
+     *
+     * @return VhloTpTarjetaOperacion
+     */
+    public function setVehiculo(\JHWEB\VehiculoBundle\Entity\VhloVehiculo $vehiculo = null)
+    {
+        $this->vehiculo = $vehiculo;
+
+        return $this;
+    }
+
+    /**
+     * Get vehiculo
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloVehiculo
+     */
+    public function getVehiculo()
+    {
+        return $this->vehiculo;
     }
 }

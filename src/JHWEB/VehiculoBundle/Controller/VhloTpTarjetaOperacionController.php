@@ -189,7 +189,7 @@ class VhloTpTarjetaOperacionController extends Controller
                     'message' => "El vehiculo no se encuentra registrado en la base de datos.",
                 );
             } else {
-                if($vehiculo->getServicio()->getNombre() != 'Público') {
+                if($vehiculo->getServicio()->getId() != 2) {
                     $response = array(
                         'title' => 'Error!',
                         'status' => 'error',
@@ -358,6 +358,67 @@ class VhloTpTarjetaOperacionController extends Controller
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No se encontraron tarjetas de operación asignadas para la empresa",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca tarjetas de operación por vehiculo.
+     *
+     * @Route("/search/tarjetaOperacion/vehiculo", name="vhlotptarjetaoperacion_by_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchTarjetasOperacionByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true
+                )
+            );
+
+            $arrayTarjetas = null;
+
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'asignacion' => $asignacion->getId(),
+                    'activo' => true
+                )
+            );  
+
+            if ($tarjetaOperacion) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado",
+                    'data' => $tarjetaOperacion,
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron tarjetas de operación asignadas para el vehiculo",
                 );
             }
         } else {

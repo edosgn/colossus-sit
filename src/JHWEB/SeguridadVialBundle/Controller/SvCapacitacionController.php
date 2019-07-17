@@ -553,12 +553,14 @@ class SvCapacitacionController extends Controller
             $params = json_decode($json);
             $em = $this->getDoctrine()->getManager();
 
-            $fechaActividad = $helpers->convertDateTime($params->fechaActividad);
-            //$fechaActividad = new \Datetime($params->fechaActividad);
+            /* var_dump($params->fechaActividad);
+            die(); */
+            /* $fechaActividad = $helpers->convertDateTime($params->fechaActividad); */
+            /* $fechaActividad = new \Datetime($params->fechaActividad); */
 
             $capacitados = $em->getRepository('JHWEBSeguridadVialBundle:SvCapacitacion')->findBy(
                 array(
-                    'fechaActividad' => $fechaActividad,
+                    /* 'fechaActividad' => $params->fechaActividad, */
                     'municipio' => $params->municipio->id,
                     'funcion' => $params->funcion->id,
                     'funcionCriterio' => $params->funcionCriterio->id,
