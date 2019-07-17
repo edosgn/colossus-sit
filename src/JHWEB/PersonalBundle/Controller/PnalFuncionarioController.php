@@ -418,7 +418,7 @@ class PnalFuncionarioController extends Controller
         $funcionarios = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findBy(
             array(
                 'activo' => true,
-                'cargo' => 1,
+                'cargo' => array(1, 3),
             )
         );
 
