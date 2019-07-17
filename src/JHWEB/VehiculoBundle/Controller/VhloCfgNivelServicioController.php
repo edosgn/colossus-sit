@@ -6,6 +6,7 @@ use JHWEB\VehiculoBundle\Entity\VhloCfgNivelServicio;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Vhlocfgnivelservicio controller.
@@ -22,13 +23,26 @@ class VhloCfgNivelServicioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $nivelesServicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->findBy(
+            array('activo' => true)
+        );
 
-        $vhloCfgNivelServicios = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->findAll();
+        $response['data'] = array();
 
-        return $this->render('vhlocfgnivelservicio/index.html.twig', array(
-            'vhloCfgNivelServicios' => $vhloCfgNivelServicios,
-        ));
+        if ($nivelesServicio) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($nivelesServicio)." registros encontrados", 
+                'data'=> $nivelesServicio,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
