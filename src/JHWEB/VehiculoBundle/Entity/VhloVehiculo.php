@@ -196,6 +196,13 @@ class VhloVehiculo
      */
     private $empresaEnvioRadicado;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="numero_licencia_radicado", type="string", length=255, nullable= true)
+     */
+    private $numeroLicenciaRadicado;
+
     /** @ORM\ManyToOne(targetEntity="VhloCfgLinea", inversedBy="vehiculos") */
     private $linea;
 
@@ -1189,6 +1196,30 @@ class VhloVehiculo
     public function getEmpresaEnvioRadicado()
     {
         return $this->empresaEnvioRadicado;
+    }
+
+    /**
+     * Set numeroLicenciaRadicado
+     *
+     * @param string $numeroLicenciaRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setNumeroLicenciaRadicado($numeroLicenciaRadicado)
+    {
+        $this->numeroLicenciaRadicado = $numeroLicenciaRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLicenciaRadicado
+     *
+     * @return string
+     */
+    public function getNumeroLicenciaRadicado()
+    {
+        return $this->numeroLicenciaRadicado;
     }
 
     /**

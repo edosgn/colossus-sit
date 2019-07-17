@@ -72,14 +72,23 @@ class CvAuCfgTipoController extends Controller
                 );
                 $tipo->setFormato($formato);
             }
-            
+        
+            if ($params->finaliza) {
+                $tiposOld = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->findByFinaliza(
+                    true
+                );
+
+                foreach ($tiposOld as $key => $tipoOld) {
+                    $tipoOld->setFinaliza(false);
+                    $em->flush();
+                }
+            }
+            $tipo->setFinaliza($params->finaliza);
             $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $tipo->setActivo(true);
 
-            
             $em->persist($tipo);
             $em->flush();
-             
 
             $response = array(
                 'title' => 'Perfecto!',
@@ -193,13 +202,24 @@ class CvAuCfgTipoController extends Controller
             );
 
             if ($tipo) {
-                if ($params->idFormato) {
-                    $tipo = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
-                        $params->idFormato
+                if ($params->formato) {
+                    $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
+                        $params->formato
                     );
-                    $formato->setFormato($tipo);
+                    $tipo->setFormato($formato);
                 }
                 
+                if ($params->finaliza) {
+                    $tiposOld = $em->getRepository('JHWEBContravencionalBundle:CvAuCfgTipo')->findByFinaliza(
+                        true
+                    );
+    
+                    foreach ($tiposOld as $key => $tipoOld) {
+                        $tipoOld->setFinaliza(false);
+                        $em->flush();
+                    }
+                }
+                $tipo->setFinaliza($params->finaliza);
                 $tipo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 
                 $em->flush();
@@ -208,7 +228,7 @@ class CvAuCfgTipoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con exito", 
-                    'data'=> $atencion,
+                    'data'=> $tipo,
                 );
             }else{
                 $response = array(

@@ -529,4 +529,16 @@ class Helpers
 
 		return $fechaVencimiento; 
 	}
+
+	public function nextLetter($letter){
+		$next = null;
+
+		for($x = $letter; $x < 'ZZZ'; $x++){
+			$x++;
+			$next = $x;
+			break;
+		}
+
+		return $next;
+	}
 }

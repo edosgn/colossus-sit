@@ -66,23 +66,23 @@ class SvIpatImpresoAsignacionController extends Controller
                 $params->idOrganismoTransito
             );
 
-            if ($rangoDisponible) {
-                $cantidadDisponibleBodega = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoBodega')->getTotalDisponible();
-                $cantidadDisponibleBodega = (empty($cantidadDisponibleBodega['cantidad']) ? 0 : $cantidadDisponibleBodega['cantidad']);
+            $cantidadDisponibleBodega = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoBodega')->getTotalDisponible();
+            $cantidadDisponibleBodega = (empty($cantidadDisponibleBodega['cantidad']) ? 0 : $cantidadDisponibleBodega['cantidad']);
     
-                if ($cantidadDisponibleBodega > 0) {
-                    if ($params->cantidad <= $cantidadDisponibleBodega) {
+            if ($cantidadDisponibleBodega > 0) {
+                if ($params->cantidad <= $cantidadDisponibleBodega) {
+                    if ($rangoDisponible) {
+                        $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
+                        $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
+
                         $cantidadDisponible = $em->getRepository('JHWEBSeguridadVialBundle:SvIpatImpresoAsignacion')->getCantidadDisponibleByOrganismoTransito(
                             $params->idOrganismoTransito
                         );
                         $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
-
-                        $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
-                        $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
-
+                    
                         if ($cantidadDisponible > $cantidadValidar) {
                             $registro = $this->register($params);
-
+    
                             if($registro){
                                 $response = array(
                                     'status' => 'success',
@@ -104,35 +104,37 @@ class SvIpatImpresoAsignacionController extends Controller
                             );
                         }
                     }else{
-                        $response = array(
-                            'status' => 'error',
-                            'code' => 400,
-                            'message' => 'La cantidad solicitada supera los '.$cantidadDisponibleBodega.' impresos disponibles en bodega.', 
-                        );
+                        $registro = $this->register($params);
+
+                        if($registro){
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => "El registro se ha realizado con exito",
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => "No se asignaron los impresos.", 
+                            );
+                        }
                     }
+
+                    
                 }else{
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'No tiene impresos disponibles en bodega.', 
+                        'message' => 'La cantidad solicitada supera los '.$cantidadDisponibleBodega.' impresos disponibles en bodega.', 
                     );
                 }
             }else{
-                $registro = $this->register($params);
-
-                if($registro){
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "El registro se ha realizado con exito",
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "No se asignaron los impresos.", 
-                    );
-                }
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No tiene impresos disponibles en bodega.', 
+                );
             }
         }else{
             $response = array(

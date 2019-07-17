@@ -5,12 +5,12 @@ namespace JHWEB\ContravencionalBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * CvAuCfgTipo
+ * CvCfgModulo
  *
- * @ORM\Table(name="cv_au_cfg_tipo")
- * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvAuCfgTipoRepository")
+ * @ORM\Table(name="cv_cfg_modulo")
+ * @ORM\Entity(repositoryClass="JHWEB\ContravencionalBundle\Repository\CvCfgModuloRepository")
  */
-class CvAuCfgTipo
+class CvCfgModulo
 {
     /**
      * @var int
@@ -31,19 +31,14 @@ class CvAuCfgTipo
     /**
      * @var bool
      *
-     * @ORM\Column(name="finaliza", type="boolean")
-     */
-    private $finaliza;
-
-    /**
-     * @var bool
-     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
 
-    /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgAdmFormato", inversedBy="actosAdministrativos") */
-    private $formato;
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="modulos")
+     **/
+    protected $funcionario;
 
 
     /**
@@ -61,7 +56,7 @@ class CvAuCfgTipo
      *
      * @param string $nombre
      *
-     * @return CvAuCfgTipo
+     * @return CvCfgModulo
      */
     public function setNombre($nombre)
     {
@@ -81,35 +76,11 @@ class CvAuCfgTipo
     }
 
     /**
-     * Set finaliza
-     *
-     * @param boolean $finaliza
-     *
-     * @return CvAuCfgTipo
-     */
-    public function setFinaliza($finaliza)
-    {
-        $this->finaliza = $finaliza;
-
-        return $this;
-    }
-
-    /**
-     * Get finaliza
-     *
-     * @return boolean
-     */
-    public function getFinaliza()
-    {
-        return $this->finaliza;
-    }
-
-    /**
      * Set activo
      *
      * @param boolean $activo
      *
-     * @return CvAuCfgTipo
+     * @return CvCfgModulo
      */
     public function setActivo($activo)
     {
@@ -121,7 +92,7 @@ class CvAuCfgTipo
     /**
      * Get activo
      *
-     * @return boolean
+     * @return bool
      */
     public function getActivo()
     {
@@ -129,26 +100,26 @@ class CvAuCfgTipo
     }
 
     /**
-     * Set formato
+     * Set funcionario
      *
-     * @param \JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
      *
-     * @return CvAuCfgTipo
+     * @return CvCfgModulo
      */
-    public function setFormato(\JHWEB\ConfigBundle\Entity\CfgAdmFormato $formato = null)
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
     {
-        $this->formato = $formato;
+        $this->funcionario = $funcionario;
 
         return $this;
     }
 
     /**
-     * Get formato
+     * Get funcionario
      *
-     * @return \JHWEB\ConfigBundle\Entity\CfgAdmFormato
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
      */
-    public function getFormato()
+    public function getFuncionario()
     {
-        return $this->formato;
+        return $this->funcionario;
     }
 }

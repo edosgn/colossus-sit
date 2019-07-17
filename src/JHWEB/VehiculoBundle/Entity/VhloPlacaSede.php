@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="vhlo_placa_sede")
  * @ORM\Entity(repositoryClass="JHWEB\VehiculoBundle\Repository\VhloPlacaSedeRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class VhloPlacaSede
 {
@@ -24,23 +25,16 @@ class VhloPlacaSede
     /**
      * @var string
      *
-     * @ORM\Column(name="letras_placa", type="string", length=255)
+     * @ORM\Column(name="rango_inicial", type="string", length=10)
      */
-    private $letrasPlaca;
+    private $rangoInicial;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="numero_inicial", type="string", length=10)
+     * @ORM\Column(name="rango_final", type="string", length=10)
      */
-    private $numeroInicial;
-
-     /**
-     * @var string
-     *
-     * @ORM\Column(name="numero_final", type="string", length=255)
-     */
-    private $numeroFinal;
+    private $rangoFinal;
 
     /**
      * @var boolean
@@ -48,6 +42,24 @@ class VhloPlacaSede
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /** 
+    * created Time/Date 
+    * 
+    * @var \DateTime 
+    * 
+    * @ORM\Column(name="created_at", type="datetime") 
+    */  
+    protected $createdAt;  
+  
+    /** 
+     * updated Time/Date 
+     * 
+     * @var \DateTime 
+     * 
+     * @ORM\Column(name="updated_at", type="datetime") 
+     */  
+    protected $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="VhloCfgTipoVehiculo", inversedBy="placas")
@@ -59,6 +71,18 @@ class VhloPlacaSede
      **/
     protected $organismoTransito;
 
+    /** @ORM\PrePersist */
+    public function setCreatedAt()
+    {
+        $this->createdAt = new \DateTime('now');
+        $this->updatedAt = new \DateTime('now');
+    }
+
+    /** @ORM\PreUpdate */
+    public function setUpdatedAt()
+    {
+        $this->updatedAt = new \DateTime('now');
+    }
 
     /**
      * Get id
@@ -71,75 +95,51 @@ class VhloPlacaSede
     }
 
     /**
-     * Set letrasPlaca
+     * Set rangoInicial
      *
-     * @param string $letrasPlaca
+     * @param string $rangoInicial
      *
      * @return VhloPlacaSede
      */
-    public function setLetrasPlaca($letrasPlaca)
+    public function setRangoInicial($rangoInicial)
     {
-        $this->letrasPlaca = $letrasPlaca;
+        $this->rangoInicial = $rangoInicial;
 
         return $this;
     }
 
     /**
-     * Get letrasPlaca
+     * Get rangoInicial
      *
      * @return string
      */
-    public function getLetrasPlaca()
+    public function getRangoInicial()
     {
-        return $this->letrasPlaca;
+        return $this->rangoInicial;
     }
 
     /**
-     * Set numeroInicial
+     * Set rangoFinal
      *
-     * @param string $numeroInicial
+     * @param string $rangoFinal
      *
      * @return VhloPlacaSede
      */
-    public function setNumeroInicial($numeroInicial)
+    public function setRangoFinal($rangoFinal)
     {
-        $this->numeroInicial = $numeroInicial;
+        $this->rangoFinal = $rangoFinal;
 
         return $this;
     }
 
     /**
-     * Get numeroInicial
+     * Get rangoFinal
      *
      * @return string
      */
-    public function getNumeroInicial()
+    public function getRangoFinal()
     {
-        return $this->numeroInicial;
-    }
-
-    /**
-     * Set numeroFinal
-     *
-     * @param string $numeroFinal
-     *
-     * @return VhloPlacaSede
-     */
-    public function setNumeroFinal($numeroFinal)
-    {
-        $this->numeroFinal = $numeroFinal;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroFinal
-     *
-     * @return string
-     */
-    public function getNumeroFinal()
-    {
-        return $this->numeroFinal;
+        return $this->rangoFinal;
     }
 
     /**
@@ -164,6 +164,26 @@ class VhloPlacaSede
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**

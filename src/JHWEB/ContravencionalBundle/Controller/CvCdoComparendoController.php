@@ -515,7 +515,9 @@ class CvCdoComparendoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
         $json = $request->get("data", null);
+        
         $params = json_decode($json);
+
         foreach ($params as $key => $comparendo) {
             $comparendoNew = new CvCdoComparendo();
 

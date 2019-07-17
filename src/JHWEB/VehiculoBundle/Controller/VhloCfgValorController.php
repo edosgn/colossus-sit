@@ -137,8 +137,8 @@ class VhloCfgValorController extends Controller
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->claseId);
             $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->lineaId);
             $cfgValorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->find($params->id);
+            
             if ($cfgValorVehiculo!=null) {
-
                 $cfgValorVehiculo->setClase($clase);
                 $cfgValorVehiculo->setLinea($linea);
                 $cfgValorVehiculo->setCilindraje($params->cilindraje);
@@ -225,62 +225,153 @@ class VhloCfgValorController extends Controller
     /**
      * Creates a new vhloCfgValor entity.
      *
-     * @Route("/new/upload", name="vhlocfgvalor_new_upload")
+     * @Route("/upload", name="vhlocfgvalor_upload")
      * @Method({"GET", "POST"})
      */
-    public function newUploadAction(Request $request)
+    public function uploadAction(Request $request)
     { 
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
+
         if ($authCheck== true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
 
-            foreach ($params as $key => $valor) {
+            $file = $request->files->get('file');
 
-                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneByNombre($valor[0]);
-                $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->findOneByNombre($valor[1]);
-                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findOneByNombre($valor[2]);
-                $cilindraje = $valor[3];
-                $tonelaje = $valor[4];
-                $pesaje = $valor[5];
-                $vhloValor = $valor[6];
-                $anio = $valor[7];
-                if ($linea ) {
-                    $vhloCfgValor = new VhloCfgValor();
+            $documentoName = md5(uniqid()).$file->guessExtension();
+            $file->move(
+                $this->getParameter('data_upload'),
+                $documentoName
+            );
+
+            $valores = fopen($this->getParameter('data_upload').$documentoName , "r" );//leo el archivo que contiene los datos de los valores
+
+            $batchSize = 500;
+            $valoresArray = null;
+            $rows = 0;
+
+            $datos = fgetcsv($valores,0,";");
+            $cols = count($datos);
+            $cols = $cols - 6;
+            $j = 5;
+
+            for ($i=0; $i < $cols; $i++) {
+                $anios[]=array(
+                    'anio'=>$datos[$j],
+                );
+
+                $j++;
+            }
+
+
+            if ($valores) {
+                $j = 5;
+                $headers = true;
+                //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
+                while (($datos = fgetcsv($valores,0,";")) !== FALSE )
+                {
+                    $datos = array_map("utf8_encode", $datos);
+
+                    if (!$headers) {
+                        $valoresArray[]=array(
+                            'nameClase'=>$datos[0],
+                            'nameMarca'=>$datos[1],
+                            'nameLinea'=>$datos[2],
+                            'cilindraje'=>$datos[3],
+                            'tonelaje'=>$datos[4],
+                            'pesaje'=>$datos[5],
+                        );
     
-                    $vhloCfgValor->setClase($clase);
-                    $vhloCfgValor->setMarca($marca);
-                    $vhloCfgValor->setLinea($linea);
-                    $vhloCfgValor->setCilindraje($cilindraje);
-                    $vhloCfgValor->setTonelaje($tonelaje);
-                    $vhloCfgValor->setPesaje($pesaje);
-                    $vhloCfgValor->setValor($vhloValor);
-                    $vhloCfgValor->setAnio($anio);
-                    $vhloCfgValor->setActivo(true);
-     
-                    $em->persist($vhloCfgValor);
+                        for ($i=0; $i < $cols; $i++) {
+                            $valoresArray[]=array(
+                                'valor'=>$datos[$j],
+                            );
+            
+                            $j++;
+                        }
+    
+                        if ((count($valoresArray) % $batchSize) == 0 && $valoresArray != null) {
+                            $rowsBatch =  $this->insertBatch($anios, $valoresArray);
+                            $rows += $rowsBatch;
+                            $valoresArray = null;
+                        }
+
+                        $headers = false;
+                   }
+                }
+
+                if ($valoresArray) {
+                    $rowsBatch = $this->insertBatch($anios, $valoresArray);
+                    $rows += $rowsBatch;
+                }
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Se han procesado '.$rows.' líneas.', 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No se pudo leer el archivo.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+
+        return $helpers->json($response);
+    }
+
+    public function insertBatch($anios, $valoresArray){
+        $em = $this->getDoctrine()->getManager();
+
+        $rows = 0;
+        $j = 5;
+
+        foreach ($valoresArray as $key => $row) {
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneByNombre($row["nameClase"]);
+            $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->findOneByNombre($row["nameMarca"]);
+            $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findOneByNombre($row["nameLinea"]);
+        
+            if ($linea) {
+                foreach ($anios as $key => $anio) {
+                    $valor = new VhloCfgValor();
+                    
+                    $valor->setClase($clase);
+                    $valor->setMarca($marca);
+                    $valor->setLinea($linea);
+                    $valor->setCilindraje($row["cilindraje"]);
+                    $valor->setTonelaje($row["tonelaje"]);
+                    $valor->setPesaje($row["pesaje"]);
+                    $valor->setValor($row[$key + 5]["valor"]);
+                    $valor->setAnio($anio['anio']);
+                    $valor->setActivo(true);
+                    
+                    $em->persist($valor);
                     $em->flush();
                 }
 
+                $rows++;
             }
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Tipo Producto creado con exito", 
-                );
+        }
 
-            //}
-        }else{
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'msj' => "Autorizacion no valida", 
-            );
-            } 
-        return $helpers->json($response);
+        $em->flush();
+        $em->clear();
+
+        return $rows;
     }
 
     /**

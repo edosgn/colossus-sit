@@ -235,6 +235,64 @@ class PqoInmovilizacionController extends Controller
     /**
      * Displays a form to edit an existing pqoCfgGrua entity.
      *
+     * @Route("/authorization", name="pqoinmovilizacion_authorization")
+     * @Method({"GET", "POST"})
+     */
+    public function authorizationAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
+                $params->idInmovilizacion
+            );
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
+            );
+
+            if ($inmovilizacion) {
+                $inmovilizacion->setSalida(true);
+                $inmovilizacion->setEstado('AUTORIZADO');
+                $inmovilizacion->setObservacionesSalida($params->observaciones);
+                $inmovilizacion->setFuncionario($funcionario);
+
+                $em->flush();
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Salida registrada con éxito",
+                    'data' => $inmovilizacion,
+                );
+            } else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing pqoCfgGrua entity.
+     *
      * @Route("/exit", name="pqoinmovilizacion_exit")
      * @Method({"GET", "POST"})
      */
@@ -251,19 +309,25 @@ class PqoInmovilizacionController extends Controller
             $em = $this->getDoctrine()->getManager();
             
             $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
-                $params->id
+                $params->idInmovilizacion
+            );
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
             );
 
             if ($inmovilizacion) {
                 $inmovilizacion->setSalida(true);
                 $inmovilizacion->setEstado('AUTORIZADO');
+                $inmovilizacion->setObservacionesSalida($params->observaciones);
+                $inmovilizacion->setFuncionario($funcionario);
 
                 $em->flush();
 
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Registro actualizado con éxito",
+                    'message' => "Salida registrada con éxito",
                     'data' => $inmovilizacion,
                 );
             } else {
@@ -275,6 +339,58 @@ class PqoInmovilizacionController extends Controller
             }
         } else {
             $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida para editar",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Displays a form to edit an existing pqoCfgGrua entity.
+     *
+     * @Route("/search/filter", name="pqoinmovilizacion_search_filter")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByFilterAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $inmovilizaciones = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->findBy(
+                array(
+                    'placa' => $params->filtro
+                )
+            );
+
+            if ($inmovilizaciones) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registros encontrados con éxito",
+                    'data' => $inmovilizaciones,
+                );
+            } else {
+                $response = array(
+                    'title' => 'Atenticón!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida para editar",

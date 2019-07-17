@@ -72,6 +72,7 @@ class CvCdoCfgEstadoController extends Controller
             $estado->setHabiles($params->habiles);
             $estado->setSimit($params->simit);
             $estado->setActualiza($params->actualiza);
+            $estado->setFinaliza($params->finaliza);
             $estado->setActivo(true);
 
             if ($params->idFormato) {
@@ -176,6 +177,7 @@ class CvCdoCfgEstadoController extends Controller
                 $estado->setHabiles($params->habiles);
                 $estado->setSimit($params->simit);
                 $estado->setActualiza($params->actualiza);
+                $estado->setFinaliza($params->finaliza);
 
                 if ($params->idFormato) {
                     $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(

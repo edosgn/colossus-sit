@@ -334,7 +334,7 @@ class PqoCfgPatioController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => 'El ciudadano seleccionado tiene una asignación en el patio '.$patio->getNombre(), 
+                        'message' => 'El ciudadano seleccionado ya tiene una asignación en el patio '.$patio->getNombre(), 
                     );
                 }else{
                     $patioCiudadano = new PqoPatioCiudadano();

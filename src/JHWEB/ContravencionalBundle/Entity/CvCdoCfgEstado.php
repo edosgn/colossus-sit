@@ -62,6 +62,13 @@ class CvCdoCfgEstado
      * @ORM\Column(name="actualiza", type="boolean")
      */
     private $actualiza;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="finaliza", type="boolean")
+     */
+    private $finaliza;
     
     /**
      * @var bool
@@ -228,6 +235,30 @@ class CvCdoCfgEstado
     public function getActualiza()
     {
         return $this->actualiza;
+    }
+
+    /**
+     * Set finaliza
+     *
+     * @param boolean $finaliza
+     *
+     * @return CvCdoCfgEstado
+     */
+    public function setFinaliza($finaliza)
+    {
+        $this->finaliza = $finaliza;
+
+        return $this;
+    }
+
+    /**
+     * Get finaliza
+     *
+     * @return boolean
+     */
+    public function getFinaliza()
+    {
+        return $this->finaliza;
     }
 
     /**
