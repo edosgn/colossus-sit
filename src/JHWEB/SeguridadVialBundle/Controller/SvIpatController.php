@@ -656,9 +656,47 @@ class SvIpatController extends Controller
         if ($authCheck == true) {
             $json = $request->get("data", null);
             $params = json_decode($json);
+            
             $em = $this->getDoctrine()->getManager();
-            $agente = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(array('identificacion' => $params->identificacionAgente));
-            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(array('ciudadano' => $agente));
+
+            $usuario = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacionUsuario
+                )
+            );
+
+            $funcionarioLogin = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $usuario
+                )
+            );
+            
+            if($params->identificacionAgente) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findBy(
+                    array(
+                        'identificacion' => $params->identificacionAgente
+                    )
+                );
+
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                    array(
+                        'ciudadano' => $ciudadano,
+                        'organismoTransito' => $funcionarioLogin->getOrganismoTransito()->getId(),
+                        'activo' => true
+                    )
+                );
+            }
+
+            if($params->placaAgente) {
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                    array(
+                        'numeroPlaca' => $params->placaAgente,
+                        'organismoTransito' => $funcionarioLogin->getOrganismoTransito()->getId(),
+                        'activo' => true
+                    )
+                );
+            }
+
             if ($funcionario) {
                 $response = array(
                     'status' => 'success',
@@ -670,7 +708,7 @@ class SvIpatController extends Controller
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "El agente no se encuentra en la Base de Datos",
+                    'message' => "El agente no se encuentra registrado o no pertence a la sede " . $funcionarioLogin->getOrganismoTransito()->getNombre(),
                 );
             }
         } else {
