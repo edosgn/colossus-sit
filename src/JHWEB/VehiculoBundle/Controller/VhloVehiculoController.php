@@ -311,7 +311,9 @@ class VhloVehiculoController extends Controller
             if ($vehiculo) {
                 $cfgPlaca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(array('numero' => $params->placa));
 
-                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find($params->idOrganismoTransito);
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    $vehiculo->getOrganismoTransito()->getId()
+                );
                 
                 if ($params->idClase) {
                     $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
@@ -428,6 +430,10 @@ class VhloVehiculoController extends Controller
 
                     if ($params->radicado->empresaEnvio) {
                         $vehiculo->setEmpresaEnvioRadicado(mb_strtoupper($params->radicado->empresaEnvio, 'utf-8'));
+                    }
+
+                    if ($params->radicado->numeroLicencia) {
+                        $vehiculo->setNumeroLicenciaRadicado(mb_strtoupper($params->radicado->numeroLicencia, 'utf-8'));
                     }
 
                     if ($params->radicado->idOrganismoTransito) {
