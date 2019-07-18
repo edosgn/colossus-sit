@@ -1,7 +1,3 @@
-jhweb_vehiculo_vhlo_restriccion:
-    resource: "@JHWEBVehiculoBundle/Controller/VhloRestriccionController.php"
-    type:     annotation
-
 jhweb_banco_proyecto:
     resource: "@JHWEBBancoProyectoBundle/Controller/"
     type:     annotation

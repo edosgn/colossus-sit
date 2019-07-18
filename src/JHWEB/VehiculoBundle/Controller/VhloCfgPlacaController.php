@@ -243,7 +243,7 @@ class VhloCfgPlacaController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => "Placa eliminada con éxto",
+                    'message' => "Placa eliminada con éxito",
             );
 
         }else{
