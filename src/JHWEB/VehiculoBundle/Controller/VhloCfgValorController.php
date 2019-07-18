@@ -250,7 +250,7 @@ class VhloCfgValorController extends Controller
 
             $valores = fopen($this->getParameter('data_upload').$documentoName , "r" );//leo el archivo que contiene los datos de los valores
 
-            $batchSize = 500;
+            $batchSize = 100;
             $valoresArray = null;
             $rows = 0;
 
@@ -260,52 +260,45 @@ class VhloCfgValorController extends Controller
             $j = 6;
 
             for ($i=0; $i < $cols; $i++) {
-                $anios[]=array(
-                    'anio'=>$datos[$j],
-                );
+                $anios[] = $datos[$j];
 
                 $j++;
             }
 
             if ($valores) {
-                $j = 6;
-                $headers = true;
+                $count = 0;
                 //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
                 while (($datos = fgetcsv($valores,0,";")) !== FALSE )
                 {
+                    $j = 6;
                     $datos = array_map("utf8_encode", $datos);
 
-                    if (!$headers) {
-                        $valoresArray[]=array(
-                            'nameClase'=>$datos[0],
-                            'nameMarca'=>$datos[1],
-                            'nameLinea'=>$datos[2],
-                            'cilindraje'=>$datos[3],
-                            'tonelaje'=>$datos[4],
-                            'pesaje'=>$datos[5],
-                        );
-    
-                        for ($i=0; $i < $cols; $i++) {
-                            $valoresArray[]=array(
-                                'valor'=>$datos[$j],
-                            );
-            
-                            $j++;
-                        }
-    
-                        if ((count($valoresArray) % $batchSize) == 0 && $valoresArray != null) {
-                            $rowsBatch =  $this->insertBatch($anios, $valoresArray);
-                            $rows += $rowsBatch;
-                            $valoresArray = null;
-                        }
+                    $valoresArray[$count]=array(
+                        'nameClase'=>$datos[0],
+                        'nameMarca'=>$datos[1],
+                        'nameLinea'=>$datos[2],
+                        'cilindraje'=>$datos[3],
+                        'tonelaje'=>$datos[4],
+                        'pesaje'=>$datos[5],
+                        'valores' => []
+                    );
 
-                        $headers = false;
-                   }
+                    for ($i=0; $i < $cols; $i++) {
+                        array_push($valoresArray[$count]['valores'], array($anios[$i] => $datos[$j]));
+        
+                        $j++;
+                    }
+
+                    if ((count($valoresArray) % $batchSize) == 0 && $valoresArray != null) {
+                        $rowsBatch =  $this->insertBatch($anios, $valoresArray);
+                        $rows += $rowsBatch;
+                        $valoresArray = null;
+                    }
+
+                    $count++;
                 }
 
-                var_dump($headers);
-                var_dump($valoresArray);
-                die();
+                //return $helpers->json($valoresArray);
 
                 if ($valoresArray) {
                     $rowsBatch = $this->insertBatch($anios, $valoresArray);
@@ -342,11 +335,9 @@ class VhloCfgValorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $rows = 0;
-        $j = 5;
 
         foreach ($valoresArray as $key => $row) {
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->findOneByNombre($row["nameClase"]);
-            $marca = $em->getRepository('JHWEBVehiculoBundle:VhloCfgMarca')->findOneByNombre($row["nameMarca"]);
             $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->findOneByNombre($row["nameLinea"]);
         
             if ($linea) {
@@ -354,18 +345,19 @@ class VhloCfgValorController extends Controller
                     $valor = new VhloCfgValor();
                     
                     $valor->setClase($clase);
-                    $valor->setMarca($marca);
+                    $valor->setMarca($linea->getMarca());
                     $valor->setLinea($linea);
                     $valor->setCilindraje($row["cilindraje"]);
                     $valor->setTonelaje($row["tonelaje"]);
                     $valor->setPesaje($row["pesaje"]);
-                    $valor->setValor($row[$key + 5]["valor"]);
-                    $valor->setAnio($anio['anio']);
+                    $valor->setValor($row['valores'][$key][$anio]);
+                    $valor->setAnio($anio);
                     $valor->setActivo(true);
                     
                     $em->persist($valor);
-                    $em->flush();
                 }
+
+                $em->flush();
 
                 $rows++;
             }

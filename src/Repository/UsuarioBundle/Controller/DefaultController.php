@@ -76,7 +76,7 @@ class DefaultController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
+        if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
            
@@ -105,7 +105,6 @@ class DefaultController extends Controller
                     'message' => "Usuario no encontrado.", 
                 );
             }
-
         }else{
             $response = array(
                 'tile' => 'Error!',
