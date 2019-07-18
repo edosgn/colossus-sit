@@ -313,11 +313,11 @@ class FroFacturaController extends Controller
 
             if ($froFactura) {
                 if ($froFactura->getEstado() != 'FINALIZADA') {
-                    if ($froFactura->getEstado() == 'PAGADA' || $froFactura->getEstado() == 'PENDIENTE DOCUMENTACION') {
+                    if ($froFactura->getEstado() == 'PAGADA' || $froFactura->getEstado() == 'PENDIENTE DOCUMENTACION'  || $froFactura->getEstado() == 'COMPLETAR TRAMITES') {
                         $response = array(
                             'status' => 'success',
                             'code' => 200,
-                            'message' => 'Factura pagada.', 
+                            'message' => 'Factura aprobada.', 
                             'data'=> $froFactura
                         );
                     }else{
@@ -579,7 +579,6 @@ class FroFacturaController extends Controller
                     $retefuente->setRetencion($params->retencion);
                     $retefuente->setActivo(true);
 
-
                     $em->persist($retefuente);
 
                     $em->flush();
@@ -621,6 +620,12 @@ class FroFacturaController extends Controller
 
         $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
 
+        $retenciones = $em->getRepository('JHWEBFinancieroBundle:FroFacRetefuente')->getTotalByFactura(
+            $factura->getId()
+        );
+
+        $retenciones = (empty($retenciones['total']) ? 0 : $retenciones['total']);
+
         $tramites = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->findBy(
             array(
                 'factura' => $factura->getId()
@@ -646,6 +651,7 @@ class FroFacturaController extends Controller
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
             'tramites'=> $tramites,
+            'retenciones'=> $retenciones,
             'imgBarcode' => $imgBarcode
         ));
 

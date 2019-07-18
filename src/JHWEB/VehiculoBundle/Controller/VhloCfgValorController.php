@@ -257,7 +257,7 @@ class VhloCfgValorController extends Controller
             $datos = fgetcsv($valores,0,";");
             $cols = count($datos);
             $cols = $cols - 6;
-            $j = 5;
+            $j = 6;
 
             for ($i=0; $i < $cols; $i++) {
                 $anios[]=array(
@@ -267,9 +267,8 @@ class VhloCfgValorController extends Controller
                 $j++;
             }
 
-
             if ($valores) {
-                $j = 5;
+                $j = 6;
                 $headers = true;
                 //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
                 while (($datos = fgetcsv($valores,0,";")) !== FALSE )
@@ -303,6 +302,10 @@ class VhloCfgValorController extends Controller
                         $headers = false;
                    }
                 }
+
+                var_dump($headers);
+                var_dump($valoresArray);
+                die();
 
                 if ($valoresArray) {
                     $rowsBatch = $this->insertBatch($anios, $valoresArray);

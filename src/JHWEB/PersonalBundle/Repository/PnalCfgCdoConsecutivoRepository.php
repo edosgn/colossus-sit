@@ -42,11 +42,13 @@ class PnalCfgCdoConsecutivoRepository extends \Doctrine\ORM\EntityRepository
         WHERE pc.funcionario = f.id
         AND u.id = c.usuario
         AND c.id = f.ciudadano
+        AND f.activo = true
         AND (c.primerNombre = :parametro 
         OR c.segundoNombre = :parametro 
         OR c.primerApellido = :parametro 
         OR c.segundoApellido = :parametro 
-        OR f.numeroPlaca = :parametro)";
+        OR f.numeroPlaca = :parametro
+        OR c.identificacion = :parametro)";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(

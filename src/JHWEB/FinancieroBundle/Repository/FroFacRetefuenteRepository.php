@@ -10,4 +10,20 @@ namespace JHWEB\FinancieroBundle\Repository;
  */
 class FroFacRetefuenteRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la suma de total de retenciones por factura
+    public function getTotalByFactura($idFactura)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT SUM(r.retencion) AS total
+            FROM JHWEBFinancieroBundle:FroFacRetefuente r
+            WHERE r.factura = :idFactura
+            AND r.activo = true";
+            
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameter('idFactura', $idFactura);
+        
+        return $consulta->getOneOrNullResult();
+    }
 }

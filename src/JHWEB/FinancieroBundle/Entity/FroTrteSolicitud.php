@@ -50,6 +50,34 @@ class FroTrteSolicitud
     private $resumen;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_folios", type="integer", nullable=true)
+     */
+    private $numeroFolios;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_archivador", type="integer", nullable=true)
+     */
+    private $numeroArchivador;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="bandeja", type="integer", nullable=true)
+     */
+    private $bandeja;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_caja", type="integer", nullable=true)
+     */
+    private $numeroCaja;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -190,6 +218,102 @@ class FroTrteSolicitud
     public function getResumen()
     {
         return $this->resumen;
+    }
+
+    /**
+     * Set numeroFolios
+     *
+     * @param integer $numeroFolios
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setNumeroFolios($numeroFolios)
+    {
+        $this->numeroFolios = $numeroFolios;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroFolios
+     *
+     * @return integer
+     */
+    public function getNumeroFolios()
+    {
+        return $this->numeroFolios;
+    }
+
+    /**
+     * Set numeroArchivador
+     *
+     * @param integer $numeroArchivador
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setNumeroArchivador($numeroArchivador)
+    {
+        $this->numeroArchivador = $numeroArchivador;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroArchivador
+     *
+     * @return integer
+     */
+    public function getNumeroArchivador()
+    {
+        return $this->numeroArchivador;
+    }
+
+    /**
+     * Set bandeja
+     *
+     * @param integer $bandeja
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setBandeja($bandeja)
+    {
+        $this->bandeja = $bandeja;
+
+        return $this;
+    }
+
+    /**
+     * Get bandeja
+     *
+     * @return integer
+     */
+    public function getBandeja()
+    {
+        return $this->bandeja;
+    }
+
+    /**
+     * Set numeroCaja
+     *
+     * @param integer $numeroCaja
+     *
+     * @return FroTrteSolicitud
+     */
+    public function setNumeroCaja($numeroCaja)
+    {
+        $this->numeroCaja = $numeroCaja;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCaja
+     *
+     * @return integer
+     */
+    public function getNumeroCaja()
+    {
+        return $this->numeroCaja;
     }
 
     /**

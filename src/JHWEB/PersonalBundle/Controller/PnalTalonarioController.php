@@ -78,10 +78,9 @@ class PnalTalonarioController extends Controller
 
                 $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
 
-                $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
-                $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
+                $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 20) / 100;
 
-                if ($cantidadDisponible > $cantidadValidar) {
+                if ($cantidadDisponible < $cantidadValidar) {
                     $registro = $this->register($params);
 
                     if($registro){

@@ -344,19 +344,36 @@ class PnalCfgCdoConsecutivoController extends Controller
                 array(
                     'funcionario' => $params->idFuncionario,
                     'numero' => $params->numero,
-                    'estado' => 'ASIGNADO',
                 )
             );
                  
             if ($consecutivo) {
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro encontrado con exito.",  
-                    'data'=> $consecutivo,
-                );
+                if ($consecutivo->getEstado() == 'UTILIZADO') {
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'El consecutivo se ecnuetra en estado '.$consecutivo->getEstado().' por lo tanto no se puede diligenciar.',
+                    );
+                }elseif ($consecutivo->getEstado() == 'ASIGNADO') {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro encontrado con exito.",  
+                        'data'=> $consecutivo,
+                    );
+                }else{
+                    $response = array(
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'El consecutivo se encuenra en estado '.$consecutivo->getEstado().' para poder utilizarlo debe estar ASIGNADO.',
+                    );
+                }
             }else{
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "Ningún registro encontrado.",

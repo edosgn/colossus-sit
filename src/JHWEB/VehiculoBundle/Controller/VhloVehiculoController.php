@@ -102,10 +102,10 @@ class VhloVehiculoController extends Controller
                 $vehiculo->setfechaFactura($fechaFactura);
                 $vehiculo->setValor($params->valor);
 
-                $vehiculo->setSerie($params->serie);
-                $vehiculo->setVin($params->vin);
-                $vehiculo->setChasis($params->chasis);
-                $vehiculo->setMotor($params->motor);
+                $vehiculo->setSerie(mb_strtoupper($params->serie, 'utf-8'));
+                $vehiculo->setVin(mb_strtoupper($params->vin, 'utf-8'));
+                $vehiculo->setChasis(mb_strtoupper($params->chasis, 'utf-8'));
+                $vehiculo->setMotor(mb_strtoupper($params->motor, 'utf-8'));
                 $vehiculo->setCilindraje($params->cilindraje);
                 $vehiculo->setModelo($params->modelo);
                 $vehiculo->setTipoMatricula($params->tipoMatricula);
@@ -1046,7 +1046,69 @@ class VhloVehiculoController extends Controller
 
         if ($authCheck) {
             $json = $request->get("data",null);
-            $params = json_decode($json);    
+            $params = json_decode($json);
+            
+            $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroTrteFactura')->find(
+                $params->idTramiteFactura
+            );
+
+            if($tramiteFactura){
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                    $params->id
+                );
+
+                if($tramiteFactura){
+                    switch ($tramiteFactura->getPrecio()->getTramite()->getId()) {
+                        case '18':
+                            //Busca el último tramite de cancelación de vehiculo
+                            $tramiteCancelacion = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getOneByVehiculoAndTramite(
+                                $vehiculo->getId(), 18
+                            );
+
+                            $foraneas = (object)$tramiteCancelacion->getForaneas();
+
+                            if ($foraneas->idMotivoCancelacion == 1 || $foraneas->idMotivoCancelacion == 7 || $foraneas->idMotivoCancelacion == 8) {
+                                $response = array(
+                                    'title' => 'Perfecto!',
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => 'Trámite autorizado.',
+                                );
+                            }else{
+                                $response = array(
+                                    'title' => 'Error',
+                                    'status' => 'error',
+                                    'code' => 400,
+                                    'message' => 'Este trámite no se pude realizar porque el motivo de la cancelación no es HURTO, DESAPARICIÓN DOCUMENTAL o PERDIDA DEFINITIVA.',
+                                );
+                            }
+                            break;
+                        
+                        default:
+                            $response = array(
+                                'title' => 'Perfecto!',
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'No se realizaron validaciones.',
+                            );
+                            break;
+                    }
+                }else{
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'No se encuentra el vehiculo.',
+                        'code' => 400,
+                        'message' => 'Trámite autorizado.',
+                    );
+                }
+            }else{
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'No se encuentra el tramite de la factura.',
+                    'code' => 400,
+                    'message' => 'Trámite autorizado.',
+                );
+            }
             
             $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                 array(
@@ -1055,7 +1117,7 @@ class VhloVehiculoController extends Controller
                 )
             );
 
-            if ($limitaciones) {
+            /*if ($limitaciones) {
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
@@ -1067,9 +1129,10 @@ class VhloVehiculoController extends Controller
                     'code' => 200,
                     'message' => 'Trámite autorizado.',
                 );
-            }
+            }*/
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorización no válida.',

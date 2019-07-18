@@ -88,7 +88,7 @@ class ImoInsumoController extends Controller
 
             $imoTrazabilidad->setOrganismoTransitoDestino($sedeOperativa);
             $imoTrazabilidad->setFecha($fecha);
-            $imoTrazabilidad->setEstado('asignacion');
+            $imoTrazabilidad->setEstado('ASIGNACION');
             $imoTrazabilidad->setActivo(true);
 
             $em->persist($imoTrazabilidad);
