@@ -129,12 +129,21 @@ class VhloCfgPlacaController extends Controller
                 $params->id
             );
 
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Registro encontrado con exito.',
-                'data' => $placa
-            );
+            if($placa){
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado con exito.',
+                    'data' => $placa
+                );
+            }else{
+                $response = array(
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'Registro no encontrado.',
+                    'data' => $placa
+                );
+            }            
         }else{
             $response = array(
                 'status' => 'error',
@@ -395,7 +404,7 @@ class VhloCfgPlacaController extends Controller
 
         foreach ($placas as $key => $placa) {
             $response[$key] = array(
-                'value' => $placa->getNumero(),
+                'value' => $placa->getId(),
                 'label' => $placa->getNumero(),
             );
         }

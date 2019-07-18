@@ -109,226 +109,246 @@ class FroTrteSolicitudController extends Controller
                 );
             }else{
                 if (isset($params->numeroRunt)) {
-                    $factura->setNumeroRunt($params->numeroRunt);
+                    $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findByNumeroRunt(
+                        $tramiteRealizado->idTramiteFactura
+                    );
 
-                    $em->flush();
-                }
-
-                foreach ($params->tramitesRealizados as $key => $tramiteRealizado) {
-                    if ($tramiteRealizado->idTramiteFactura) {
-                        $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
-                            $tramiteRealizado->idTramiteFactura
+                    if ($numeroRuntOld) {
+                        $response = array(
+                            'title' => 'Atención!',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => 'El número RUNT que digito ya fue asignado.'
                         );
-                        
-                        if ($tramiteFactura) {    
-                            if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
-                                $certificadoTradicion = true;
-                            }
-                            
-                            if (!$tramiteFactura->getRealizado()) {
-                                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                                    $params->idFuncionario
-                                );
-                                
-                                if (isset($params->idVehiculo) && $params->idVehiculo) {
-                                    $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas);
-
-                                    if ($vehiculoUpdate) {
-                                        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-        
-                                        $tramiteSolicitud = new FroTrteSolicitud();
-        
-                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-        
-                                        $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
-                                        $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
-        
-                                        $tramiteSolicitud->setForaneas(
-                                            (array)$tramiteRealizado->foraneas
-                                        );
-                                        
-                                        $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
-                                        $tramiteSolicitud->setActivo(true);
-        
-                                        $tramiteSolicitud->setVehiculo($vehiculo);
-        
-                                        if (isset($params->idCiudadano) && $params->idCiudadano) {
-                                            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                                                $params->idCiudadano
-                                            );
-                                            $tramiteSolicitud->setCiudadano($ciudadano);
-                                        }
-        
-                                        if (isset($params->idSolicitante) && $params->idSolicitante) {
-                                            $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                                                $params->idSolicitante
-                                            );
-                                            $tramiteSolicitud->setSolicitante($solicitante);
-                                        }
-        
-                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-                                        $tramiteSolicitud->setFuncionario($funcionario);
-                                        $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
-        
-                                        $tramiteFactura->setRealizado(true);
-        
-                                        $em->persist($tramiteSolicitud);
-                                        $em->flush();
-        
-                                        if(isset($params->numeroActa)){
-                                            $vhloActaTraspaso = new VhloActaTraspaso();
-        
-                                            $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
-        
-                                            $vhloActaTraspaso->setNumero($params->numeroActa);
-                                            $vhloActaTraspaso->setFecha(
-                                                new \DateTime($params->fechaActa)
-                                            );
-        
-                                            $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
-                                                $params->idEntidadJudicial
-                                            );
-                                            $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
-        
-                                            $em->persist($vhloActaTraspaso);
-                                            $em->flush();
-                                        }
-                                    }
-                                }else{
-                                    $usuarioUpdate = $this->usuarioUpdateAction($tramiteRealizado->foraneas);
-
-                                    if ($usuarioUpdate) {
-                                        $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
-        
-                                        $tramiteSolicitud = new FroTrteSolicitud();
-        
-                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-        
-                                        $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
-                                        $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
-        
-                                        $tramiteSolicitud->setForaneas(
-                                            (array)$tramiteRealizado->foraneas
-                                        );
-                                        
-                                        $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
-                                        $tramiteSolicitud->setActivo(true);
-        
-                                        if (isset($params->idSolicitante) && $params->idSolicitante) {
-                                            $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                                                $params->idSolicitante
-                                            );
-                                            $tramiteSolicitud->setSolicitante($solicitante);
-                                        }
-        
-                                        $tramiteSolicitud->setTramiteFactura($tramiteFactura);
-                                        $tramiteSolicitud->setFuncionario($funcionario);
-                                        $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
-        
-                                        $tramiteFactura->setRealizado(true);
-        
-                                        $em->persist($tramiteSolicitud);
-                                        $em->flush();
-                                    }
-                                }                      
-                            }
-                        }
-                    }
-                }
-
-                $factura->setEstado('FINALIZADA');
-                
-                $em->flush();
-                
-                if ($params->insumoEntregado) {
-                    $facturaInsumo = new FroFacInsumo();
+                    }else{
+                        $factura->setNumeroRunt($params->numeroRunt);
     
-                    $facturaInsumo->setFactura($factura);
+                        $em->flush();
 
-                    $facturaInsumo->setFecha(new \DateTime(date('Y-m-d')));
-                    $facturaInsumo->setdescripcion($params->insumoEntregado->descripcion);
-                    $facturaInsumo->setEntregado(true);
-
-                    if ($params->insumoEntregado->idCiudadano) {
-                        $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
-                            $params->insumoEntregado->idCiudadano
-                        );
-                        $facturaInsumo->setCiudadano($ciudadano);
-                    }
-
-                    if ($params->insumoEntregado->idInsumo) {
-                        $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
-                            $params->insumoEntregado->idInsumo
-                        );
-                        $facturaInsumo->setInsumo($insumo);
-                        $insumo->setEstado('ASIGNADO');
-                    }
-
-                    $em->persist($facturaInsumo);
-                    $em->flush();
-
-                    //Insertar licencia de conducción o tránsito
-                    if ($insumo) {
-                        if ($insumo->getTipo()->getNombre() == 'SUSTRATO') {
-                            if ($insumo->getTipo()->getId() == 1) {
-                                //Si el tipo de insumo es Licencia de Conducción
-                                $licenciaConduccion = new UserLicenciaConduccion();
-                                
-                                $licenciaConduccion->setFechaExpedicion(new \Datetime(date('Y-m-d')));
-                                $licenciaConduccion->setFechavencimiento(new \Datetime(date('Y-m-d')));
-                                $licenciaConduccion->setNumero($params->insumoEntregado->licenciaConduccion);
-                                $licenciaConduccion->setEstado('ACTIVA');
-                                $licenciaConduccion->setActivo(true);
-
-                                $licenciaConduccion->setFuncionario($funcionario->getOrganismoTransito());
-                                $licenciaConduccion->setCiudadano($solicitante);
-
-                                $em->persist($licenciaConduccion);
-                                $em->flush();
-                            }elseif ($insumo->getTipo()->getId() == 2) {
-                                //Si el tipo de insumo es Licencia de Transito
-                                $licenciaTransito = new UserLicenciaTransito();
-
-                                $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
-                                    array(
-                                        'ciudadano' => $ciudadano->getId(),
-                                        'vehiculo' => $vehiculo->getId(),
-                                    )
+                        foreach ($params->tramitesRealizados as $key => $tramiteRealizado) {
+                            if ($tramiteRealizado->idTramiteFactura) {
+                                $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                                    $tramiteRealizado->idTramiteFactura
                                 );
-
-                                if ($propietario) {
-                                    $licenciaTransito->setPropietario($propietario);
-                                    $licenciaTransito->setFecha(new \Datetime(date('Y-m-d h:i:s')));
-                                    $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
-                                    $licenciaTransito->setActivo(true);
+                                
+                                if ($tramiteFactura) {    
+                                    if ($tramiteFactura->getPrecio()->getTramite()->getId() == 30) {
+                                        $certificadoTradicion = true;
+                                    }
                                     
-                                    $em->persist($licenciaTransito);
-                                    $em->flush();
+                                    if (!$tramiteFactura->getRealizado()) {
+                                        $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                                            $params->idFuncionario
+                                        );
+                                        
+                                        if (isset($params->idVehiculo) && $params->idVehiculo) {
+                                            $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas);
+        
+                                            if ($vehiculoUpdate) {
+                                                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+                
+                                                $tramiteSolicitud = new FroTrteSolicitud();
+                
+                                                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                
+                                                $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
+                                                $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
+                
+                                                $tramiteSolicitud->setForaneas(
+                                                    (array)$tramiteRealizado->foraneas
+                                                );
+                                                
+                                                $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
+                                                $tramiteSolicitud->setActivo(true);
+                
+                                                $tramiteSolicitud->setVehiculo($vehiculo);
+                
+                                                if (isset($params->idCiudadano) && $params->idCiudadano) {
+                                                    $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                                        $params->idCiudadano
+                                                    );
+                                                    $tramiteSolicitud->setCiudadano($ciudadano);
+                                                }
+                
+                                                if (isset($params->idSolicitante) && $params->idSolicitante) {
+                                                    $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                                        $params->idSolicitante
+                                                    );
+                                                    $tramiteSolicitud->setSolicitante($solicitante);
+                                                }
+                
+                                                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                                                $tramiteSolicitud->setFuncionario($funcionario);
+                                                $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
+                
+                                                $tramiteFactura->setRealizado(true);
+                
+                                                $em->persist($tramiteSolicitud);
+                                                $em->flush();
+                
+                                                if(isset($params->numeroActa)){
+                                                    $vhloActaTraspaso = new VhloActaTraspaso();
+                
+                                                    $vhloActaTraspaso->setTramiteSolicitud($tramiteSolicitud);
+                
+                                                    $vhloActaTraspaso->setNumero($params->numeroActa);
+                                                    $vhloActaTraspaso->setFecha(
+                                                        new \DateTime($params->fechaActa)
+                                                    );
+                
+                                                    $entidadJudicial = $em->getRepository('JHWEBConfigBundle:CfgEntidadJudicial')->find(
+                                                        $params->idEntidadJudicial
+                                                    );
+                                                    $vhloActaTraspaso->setEntidadJudicial($entidadJudicial);
+                
+                                                    $em->persist($vhloActaTraspaso);
+                                                    $em->flush();
+                                                }
+                                            }
+                                        }else{
+                                            $usuarioUpdate = $this->usuarioUpdateAction($tramiteRealizado->foraneas);
+        
+                                            if ($usuarioUpdate) {
+                                                $tramiteFactura->setDocumentacion($tramiteRealizado->documentacion);
+                
+                                                $tramiteSolicitud = new FroTrteSolicitud();
+                
+                                                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                
+                                                $tramiteSolicitud->setFecha(new \DateTime(date('Y-m-d')));
+                                                $tramiteSolicitud->setHora(new \DateTime(date('h:i:s')));
+                
+                                                $tramiteSolicitud->setForaneas(
+                                                    (array)$tramiteRealizado->foraneas
+                                                );
+                                                
+                                                $tramiteSolicitud->setResumen($tramiteRealizado->resumen);
+                                                $tramiteSolicitud->setActivo(true);
+                
+                                                if (isset($params->idSolicitante) && $params->idSolicitante) {
+                                                    $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                                        $params->idSolicitante
+                                                    );
+                                                    $tramiteSolicitud->setSolicitante($solicitante);
+                                                }
+                
+                                                $tramiteSolicitud->setTramiteFactura($tramiteFactura);
+                                                $tramiteSolicitud->setFuncionario($funcionario);
+                                                $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
+                
+                                                $tramiteFactura->setRealizado(true);
+                
+                                                $em->persist($tramiteSolicitud);
+                                                $em->flush();
+                                            }
+                                        }                      
+                                    }
                                 }
                             }
                         }
+        
+                        $factura->setEstado('FINALIZADA');
+                        
+                        $em->flush();
+                        
+                        if ($params->insumoEntregado) {
+                            $facturaInsumo = new FroFacInsumo();
+            
+                            $facturaInsumo->setFactura($factura);
+        
+                            $facturaInsumo->setFecha(new \DateTime(date('Y-m-d')));
+                            $facturaInsumo->setdescripcion($params->insumoEntregado->descripcion);
+                            $facturaInsumo->setEntregado(true);
+        
+                            if ($params->insumoEntregado->idCiudadano) {
+                                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                                    $params->insumoEntregado->idCiudadano
+                                );
+                                $facturaInsumo->setCiudadano($ciudadano);
+                            }
+        
+                            if ($params->insumoEntregado->idInsumo) {
+                                $insumo = $em->getRepository('JHWEBInsumoBundle:ImoInsumo')->find(
+                                    $params->insumoEntregado->idInsumo
+                                );
+                                $facturaInsumo->setInsumo($insumo);
+                                $insumo->setEstado('ASIGNADO');
+                            }
+        
+                            $em->persist($facturaInsumo);
+                            $em->flush();
+        
+                            //Insertar licencia de conducción o tránsito
+                            if ($insumo) {
+                                if ($insumo->getTipo()->getNombre() == 'SUSTRATO') {
+                                    if ($insumo->getTipo()->getId() == 1) {
+                                        //Si el tipo de insumo es Licencia de Conducción
+                                        $licenciaConduccion = new UserLicenciaConduccion();
+                                        
+                                        $licenciaConduccion->setFechaExpedicion(new \Datetime(date('Y-m-d')));
+                                        $licenciaConduccion->setFechavencimiento(new \Datetime(date('Y-m-d')));
+                                        $licenciaConduccion->setNumero($params->insumoEntregado->licenciaConduccion);
+                                        $licenciaConduccion->setEstado('ACTIVA');
+                                        $licenciaConduccion->setActivo(true);
+        
+                                        $licenciaConduccion->setFuncionario($funcionario->getOrganismoTransito());
+                                        $licenciaConduccion->setCiudadano($solicitante);
+        
+                                        $em->persist($licenciaConduccion);
+                                        $em->flush();
+                                    }elseif ($insumo->getTipo()->getId() == 2) {
+                                        //Si el tipo de insumo es Licencia de Transito
+                                        $licenciaTransito = new UserLicenciaTransito();
+        
+                                        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+                                            array(
+                                                'ciudadano' => $ciudadano->getId(),
+                                                'vehiculo' => $vehiculo->getId(),
+                                            )
+                                        );
+        
+                                        if ($propietario) {
+                                            $licenciaTransito->setPropietario($propietario);
+                                            $licenciaTransito->setFecha(new \Datetime(date('Y-m-d h:i:s')));
+                                            $licenciaTransito->setNumero($params->insumoEntregado->licenciaTransito);
+                                            $licenciaTransito->setActivo(true);
+                                            
+                                            $em->persist($licenciaTransito);
+                                            $em->flush();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+        
+                        if ($certificadoTradicion) {
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Todos los trámites de la factura fueron registrados con exito, recuerde imprimir el certificado de tradición.',
+                                'data' => array(
+                                    'factura' => $factura,
+                                    'certificadoTradicion' => $certificadoTradicion,
+                                    'idVehiculo' => $vehiculo->getId(),
+                                )
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Todos los trámites de la factura fueron registrados con exito.',
+                                'data' => array(
+                                    'factura' => $factura
+                                )
+                            );
+                        }
                     }
-                }
-
-                if ($certificadoTradicion) {
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => 'Todos los trámites de la factura fueron registrados con exito, recuerde imprimir el certificado de tradición.',
-                        'data' => array(
-                            'factura' => $factura,
-                            'certificadoTradicion' => $certificadoTradicion,
-                            'idVehiculo' => $vehiculo->getId(),
-                        )
-                    );
                 }else{
                     $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => 'Todos los trámites de la factura fueron registrados con exito.',
-                        'data' => array(
-                            'factura' => $factura
-                        )
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 400,
+                        'message' => 'No se puede terminar el registro porque no ha digitado el número RUNT.',
                     );
                 }
             }

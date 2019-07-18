@@ -52,7 +52,7 @@ class PnalAsignacionRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getLastByFechaAndOrganismoTransito($idOrganismoTransito){ 
+    public function getLastByLastFechaAndOrganismoTransito($idOrganismoTransito){ 
         $em = $this->getEntityManager();
         
         $dql = "SELECT pa

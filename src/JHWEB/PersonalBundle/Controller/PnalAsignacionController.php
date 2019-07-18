@@ -55,7 +55,7 @@ class PnalAsignacionController extends Controller
         $hash = $request->get("authorization", null);
         $authCheck = $helpers->authCheck($hash);
 
-        if ($authCheck== true) {
+        if ($authCheck == true) {
             $json = $request->get("data",null);
             $params = json_decode($json);
 
@@ -67,68 +67,106 @@ class PnalAsignacionController extends Controller
                 $params->idOrganismoTransito
             );
 
-            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByFechaAndOrganismoTransito($organismoTransito->getId());
+            //Validación de cantidades a nivel general por sede operativa
+            $cantidadDisponibleGeneral = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getCantidadDisponibleByOrganismoTransito(
+                $organismoTransito->getId()
+            );
+            $cantidadDisponibleGeneral = (empty($cantidadDisponibleGeneral['total']) ? 0 : $cantidadDisponibleGeneral['total']);
+            
+            if ($cantidadDisponibleGeneral > 0) {
+                //Validación de cantidades asignación por sede operativa
+                $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getCantidadDisponibleByOrganismoTransito(
+                    $organismoTransito->getId()
+                );
+                $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
+                $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getLastByLastFechaAndOrganismoTransito(
+                    $organismoTransito->getId()
+                );
 
-            if ($rangoDisponible) {
-                if ($rangoDisponible->getHasta() > $params->hasta) {
-                    $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalAsignacion')->getCantidadDisponibleByOrganismoTransito(
-                        $params->idOrganismoTransito
-                    );
-        
-                    $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
-        
-                    $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 80) / 100;
-                    $cantidadValidar = $rangoDisponible->getCantidadRecibida() - $cantidadValidar;
-        
-                    if ($cantidadDisponible > $cantidadValidar) {
-                        $registro = $this->register($params);
+                if ($rangoDisponible) {
+                    $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 20) / 100;
     
-                        if($registro){
-                            $response = array(
-                                'status' => 'success',
-                                'code' => 200,
-                                'message' => "El registro se ha realizado con exito",
-                            );
+                    if ($cantidadDisponible > $cantidadValidar) {
+                        $response = array(
+                            'title' => 'Atención',
+                            'status' => 'warning',
+                            'code' => 400,
+                            'message' => 'No se pueden asignar nuevos rangos porque la sede '.$organismoTransito->getNombre().' aún tiene existencias vigentes.', 
+                        );
+                    }else{
+                        if ($cantidadDisponibleGeneral > $params->cantidadRecibida) {
+                            $registro = $this->register($params);
+        
+                            if($registro){
+                                $response = array(
+                                    'title' => 'Perfecto!',
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => "El registro se ha realizado con exito",
+                                );
+        
+                                $rangoDisponibleGeneral = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByLastFechaAndOrganismoTransito(
+                                    $organismoTransito->getId()
+                                );
+                                $cantidadValidarGeneral = ($rangoDisponibleGeneral->getCantidadRecibida() * 20) / 100;
+        
+                                if ($cantidadDisponibleGeneral <= $cantidadValidarGeneral) {
+                                    $response = array(
+                                        'title' => 'Atención',
+                                        'status' => 'warning',
+                                        'code' => 200,
+                                        'message' => 'El registro se ha realizado con exito. Recuerde que usted ya ha consumido más del 80% de consecutivos, por favor realice la solicitud de más rangos de comparendos.',
+                                    );
+                                }
+
+                                //Restar del principal
+                            }else{
+                                $response = array(
+                                    'title' => 'Atención',
+                                    'status' => 'warning',
+                                    'code' => 400,
+                                    'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                                );
+                            }
                         }else{
                             $response = array(
-                                'status' => 'error',
+                                'title' => 'Atención',
+                                'status' => 'warning',
                                 'code' => 400,
-                                'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                                'message' => "La cantidad que desea asignar supera la cantidad disponible para la sede operativa ".$organismoTransito->getNombre(), 
                             );
                         }
+                    }
+                }else{
+                    $registro = $this->register($params);
+                        
+                    if($registro){
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "El registro se ha realizado con exito",
+                        );
+
+                        //Restar del principal
                     }else{
                         $response = array(
                             'status' => 'error',
                             'code' => 400,
-                            'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
+                            'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
                         );
                     }
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El rango que desea asignar supera el maximo de rangos para la sede operativa.", 
-                    );
-                }
+                }  
             }else{
-                $registro = $this->register($params);
-
-                if($registro){
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "El registro se ha realizado con exito",
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
-                    );
-                }
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'Actualmente la sede operativa '.$organismoTransito->getNombre().' no cuenta con ningún consecutivo disponible.', 
+                );
             }
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.', 
@@ -284,6 +322,7 @@ class PnalAsignacionController extends Controller
         }
 
         $response = array(
+            'title' => 'Perfecto!',
             'status' => 'success',
             'code' => 200,
             'message' => 'Registro creado con exito.',  
