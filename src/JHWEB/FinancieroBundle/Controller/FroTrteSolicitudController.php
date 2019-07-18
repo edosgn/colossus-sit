@@ -108,9 +108,10 @@ class FroTrteSolicitudController extends Controller
                     )
                 );
             }else{
-                if (isset($params->numeroRunt)) {
-                    $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findByNumeroRunt(
-                        $tramiteRealizado->idTramiteFactura
+                //if (isset($params->numeroRunt)) {
+                    /* Inicio validación numero RUNT
+                    $numeroRuntOld = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findOneByNumeroRunt(
+                        $params->numeroRunt
                     );
 
                     if ($numeroRuntOld) {
@@ -120,10 +121,12 @@ class FroTrteSolicitudController extends Controller
                             'code' => 400,
                             'message' => 'El número RUNT que digito ya fue asignado.'
                         );
-                    }else{
-                        $factura->setNumeroRunt($params->numeroRunt);
-    
-                        $em->flush();
+                    }else{*/
+                        if (isset($params->numeroRunt)) {
+                            $factura->setNumeroRunt($params->numeroRunt);
+        
+                            $em->flush();
+                        }
 
                         foreach ($params->tramitesRealizados as $key => $tramiteRealizado) {
                             if ($tramiteRealizado->idTramiteFactura) {
@@ -142,11 +145,12 @@ class FroTrteSolicitudController extends Controller
                                         );
                                         
                                         if (isset($params->idVehiculo) && $params->idVehiculo) {
-                                            $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas);
+                                            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                                                $params->idVehiculo
+                                            );
+                                            $vehiculoUpdate = $this->vehiculoUpdateAction($tramiteRealizado->foraneas, $params->idVehiculo);
         
                                             if ($vehiculoUpdate) {
-                                                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-                
                                                 $tramiteSolicitud = new FroTrteSolicitud();
                 
                                                 $tramiteSolicitud->setTramiteFactura($tramiteFactura);
@@ -181,8 +185,13 @@ class FroTrteSolicitudController extends Controller
                                                 $tramiteSolicitud->setFuncionario($funcionario);
                                                 $tramiteSolicitud->setOrganismoTransito($funcionario->getOrganismoTransito());
                 
+                                                $tramiteSolicitud->setNumeroFolios($params->numeroFolios);
+                                                $tramiteSolicitud->setNumeroArchivador($params->numeroArchivador);
+                                                $tramiteSolicitud->setBandeja($params->bandeja);
+                                                $tramiteSolicitud->setNumeroCaja($params->numeroCaja);
+                                                
                                                 $tramiteFactura->setRealizado(true);
-                
+
                                                 $em->persist($tramiteSolicitud);
                                                 $em->flush();
                 
@@ -342,15 +351,16 @@ class FroTrteSolicitudController extends Controller
                                 )
                             );
                         }
-                    }
-                }else{
+                    /*}
+                    Cierre validación numero RUNT*/
+                /*}else{
                     $response = array(
                         'title' => 'Atención!',
                         'status' => 'warning',
                         'code' => 400,
                         'message' => 'No se puede terminar el registro porque no ha digitado el número RUNT.',
                     );
-                }
+                }*/
             }
         }else{
             $response = array(
@@ -442,14 +452,14 @@ class FroTrteSolicitudController extends Controller
 
     /* ================================================ */
 
-    public function vehiculoUpdateAction($params)
+    public function vehiculoUpdateAction($params, $idVehiculo)
     {    
         $helpers = $this->get("app.helpers");
                
         $em = $this->getDoctrine()->getManager();
 
         $vehiculo = $em->getRepository("JHWEBVehiculoBundle:VhloVehiculo")->find(
-            $params->idVehiculo
+            $idVehiculo
         );
 
         if ($vehiculo) {

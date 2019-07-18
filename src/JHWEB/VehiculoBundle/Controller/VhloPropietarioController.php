@@ -347,9 +347,6 @@ class VhloPropietarioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            var_dump($params);
-            die();
-
             $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findBy(
                 array(
                     'vehiculo' => $params->idVehiculo,

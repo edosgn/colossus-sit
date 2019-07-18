@@ -45,9 +45,16 @@ class VhloRestriccion
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="date")
+     * @ORM\Column(name="fecha_registro", type="date")
      */
-    private $fecha;
+    private $fechaRegistro;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_vencimiento", type="date", nullable=true)
+     */
+    private $fechaVencimiento;
 
     /**
      * @var bool
@@ -144,27 +151,51 @@ class VhloRestriccion
     }
 
     /**
-     * Set fecha
+     * Set fechaRegistro
      *
-     * @param \DateTime $fecha
+     * @param \DateTime $fechaRegistro
      *
      * @return VhloRestriccion
      */
-    public function setFecha($fecha)
+    public function setFechaRegistro($fechaRegistro)
     {
-        $this->fecha = $fecha;
+        $this->fechaRegistro = $fechaRegistro;
 
         return $this;
     }
 
     /**
-     * Get fecha
+     * Get fechaRegistro
      *
      * @return \DateTime
      */
-    public function getFecha()
+    public function getFechaRegistro()
     {
-        return $this->fecha;
+        return $this->fechaRegistro;
+    }
+
+    /**
+     * Set fechaVencimiento
+     *
+     * @param \DateTime $fechaVencimiento
+     *
+     * @return VhloRestriccion
+     */
+    public function setFechaVencimiento($fechaVencimiento)
+    {
+        $this->fechaVencimiento = $fechaVencimiento;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaVencimiento
+     *
+     * @return \DateTime
+     */
+    public function getFechaVencimiento()
+    {
+        return $this->fechaVencimiento;
     }
 
     /**
@@ -184,7 +215,7 @@ class VhloRestriccion
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {

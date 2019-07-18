@@ -87,7 +87,6 @@ class VhloSoatController extends Controller
                 array(
                     'numeroPoliza' => $params->numeroPoliza,
                     'empresa' => $params->idEmpresa,
-                    'estado' => 'UTILIZADO',
                     'activo' => true,
                 )
             );
@@ -197,60 +196,36 @@ class VhloSoatController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
-            /* $numeroPoliza = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->findOneBy(
-                array(
-                    'numeroPoliza' => $params->numeroPoliza,
-                    'empresa' => $params->idEmpresa,
-                    'estado' => 'UTILIZADO',
-                    'activo' => true,
-                )
-            ); */
-
             $soat = $em->getRepository('JHWEBVehiculoBundle:VhloSoat')->find($params->id);
 
-            /* if($numeroPoliza){
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'El número de póliza ya se encuentra registrados en la base de datos.',
+            if ($params->idMunicipio) {
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
+                    $params->idMunicipio
                 );
-            } else {  */
-                if ($params->idMunicipio) {
-                    $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find(
-                        $params->idMunicipio
-                    );
-                    $soat->setMunicipio($municipio);
-                }
+                $soat->setMunicipio($municipio);
+            }
 
-                /* if ($params->idVehiculo) {
-                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
-                        $params->idVehiculo
-                    );
-                    $soat->setVehiculo($vehiculo);
-                } */
-
-                if ($params->idEmpresa) {
-                    $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
-                        $params->idEmpresa
-                    );
-                    $soat->setEmpresa($empresa);
-                }
-
-                $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
-                $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
-                $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
-                $soat->setEstado($params->estado);
-                $soat->setActivo(true);
-
-                $em->persist($soat);
-                $em->flush();
-
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Los datos han sido registrados exitosamente.",
+            if ($params->idEmpresa) {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                    $params->idEmpresa
                 );
-            /* } */
+                $soat->setEmpresa($empresa);
+            }
+
+            $soat->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+            $soat->setFechaVigencia(new \Datetime($params->fechaVigencia));
+            $soat->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+            $soat->setEstado($params->estado);
+            $soat->setActivo(true);
+
+            $em->persist($soat);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Los datos han sido registrados exitosamente.",
+            );
         } else {
             $response = array(
                 'status' => 'error',

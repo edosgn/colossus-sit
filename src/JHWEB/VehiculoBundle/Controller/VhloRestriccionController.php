@@ -154,49 +154,32 @@ class VhloRestriccionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneBy(
-                array(
-                    'numero' => $params->numero
-                )
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find(
+                $params->idVehiculo
             );
 
-            if ($placa) {
-                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
+            if ($vehiculo) {
+                $restricciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
                     array(
-                        'placa' => $placa->getId()
+                        'vehiculo' => $vehiculo->getId(),
+                        'activo' => true,
                     )
                 );
 
-                if ($vehiculo) {
-                    $restricciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
-                        array(
-                            'vehiculo' => $vehiculo->getId(),
-                            'activo' => true,
-                        )
+                if ($restricciones) {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => count($restricciones).' restricciones encontradas.',
+                        'data' => $restricciones,
                     );
-
-                    if ($restricciones) {
-                        $response = array(
-                            'title' => 'Perfecto!',
-                            'status' => 'success',
-                            'code' => 200,
-                            'message' => count($restricciones).' restricciones encontradas.',
-                            'data' => $restricciones,
-                        );
-                    }else{
-                        $response = array(
-                            'title' => 'Atención!',
-                            'status' => 'warning',
-                            'code' => 401,
-                            'message' => 'Ningún registro encontrado.',
-                        );
-                    }
                 }else{
                     $response = array(
-                        'title' => 'Error!',
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => 'No se encuentra ningún vehiculo con el número de placa digitada.',
+                        'title' => 'Atención!',
+                        'status' => 'warning',
+                        'code' => 401,
+                        'message' => 'El vehiculo no presenta restricciones vigentes.',
                     );
                 }
             }else{
@@ -204,7 +187,7 @@ class VhloRestriccionController extends Controller
                     'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => 'No existe ningún registro con el número de placa digitado.',
+                    'message' => 'No se encuentra ningún vehiculo con el número de placa digitada.',
                 );
             }
         } else {

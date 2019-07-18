@@ -23,20 +23,18 @@
                 </td>
             </tr>
         </table>
-        <p style="text-align:right"><b>{{ fechaActual }}</b></p>
-        <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:50%">
+        <table style="padding:2px;margin-bottom:10px;border:1px solid #cccccc;width:100%">
             <tr>
                 <td><b>Ciudad:</b><br>  {{ factura.organismoTransito.municipio }}</td> 
                 <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
-            </tr>
-            <tr>
-                <td colspan="2"><b>Solicitante:</b><br>  {{ factura.solicitante.primerNombre }} {{ factura.solicitante.primerApellido }}</td> 
+                <td><b>Solicitante:</b><br>  {{ factura.solicitante.primerNombre }} {{ factura.solicitante.primerApellido }}</td> 
                 <td><b>Identificación:</b><br> {{ factura.solicitante.identificacion }}</td>
             </tr>
         </table>
         <br>
         <br>
+        {% set total = factura.valorNeto %}
         {% if tramites %}
             <table style="background-color:#e7e7e7;width:100%">
                 <tr>
@@ -52,9 +50,16 @@
                     <td style="border:1px solid #cccccc">$ {{ facturaTramite.precio.valorTotal|number_format(0, ',', '.') }}</td>
                 </tr>
                 {% endfor %}
+                {% if retenciones and retenciones > 0 %}
+                    <tr>
+                        <td style="border:1px solid #cccccc">RETENCIONES</td>
+                        <td style="border:1px solid #cccccc">$ {{ retenciones|number_format(0, ',', '.') }}</td>
+                    </tr>
+                    {% set total = total + retenciones %}
+                {% endif %}
                 <tr style="background-color:#ffffff">
                     <td style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR</b></td>
-                    <td style="border:1px solid #cccccc">$ {{ factura.valorNeto|number_format(0, ',', '.') }}</td>
+                    <td style="border:1px solid #cccccc">$ {{ total|number_format(0, ',', '.') }}</td>
                 </tr>
             </table>
         {% endif %}

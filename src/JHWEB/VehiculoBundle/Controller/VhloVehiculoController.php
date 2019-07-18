@@ -102,10 +102,10 @@ class VhloVehiculoController extends Controller
                 $vehiculo->setfechaFactura($fechaFactura);
                 $vehiculo->setValor($params->valor);
 
-                $vehiculo->setSerie($params->serie);
-                $vehiculo->setVin($params->vin);
-                $vehiculo->setChasis($params->chasis);
-                $vehiculo->setMotor($params->motor);
+                $vehiculo->setSerie(mb_strtoupper($params->serie, 'utf-8'));
+                $vehiculo->setVin(mb_strtoupper($params->vin, 'utf-8'));
+                $vehiculo->setChasis(mb_strtoupper($params->chasis, 'utf-8'));
+                $vehiculo->setMotor(mb_strtoupper($params->motor, 'utf-8'));
                 $vehiculo->setCilindraje($params->cilindraje);
                 $vehiculo->setModelo($params->modelo);
                 $vehiculo->setTipoMatricula($params->tipoMatricula);

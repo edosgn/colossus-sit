@@ -4,6 +4,7 @@ namespace JHWEB\VehiculoBundle\Controller;
 
 use JHWEB\VehiculoBundle\Entity\VhloLimitacion;
 use JHWEB\VehiculoBundle\Entity\VhloCfgLimitacion;
+use JHWEB\VehiculoBundle\Entity\VhloRestriccion;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -122,6 +123,22 @@ class VhloLimitacionController extends Controller
                         $limitacion->setActivo(true);
             
                         $em->persist($limitacion);
+                        $em->flush();
+
+                        $restriccion = new VhloRestriccion();
+
+                        $fechaRegistro = new \Datetime(date('Y-m-d'));
+                        $fechaVencimiento = $helpers->getFechaVencimiento($fechaRegistro, 1);
+                        
+                        $restriccion->setTipo('LIMITACION');
+                        $restriccion->setForanea($limitacion->getId());
+                        $restriccion->setFechaRegistro($fechaRegistro);
+                        $restriccion->setFechaRegistro($fechaVencimiento);
+                        $restriccion->setActivo(true);
+
+                        $restriccion->setVehiculo($vehiculo);
+
+                        $em->persist($restriccion);
                         $em->flush();
                     }
                 }

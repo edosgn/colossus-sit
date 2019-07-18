@@ -45,7 +45,7 @@ class ImoInsumo
     /**
      * @var int
      *
-     * @ORM\Column(name="actaEntrega", type="integer")
+     * @ORM\Column(name="acta_entrega", type="integer")
      */
     private $actaEntrega;
 
