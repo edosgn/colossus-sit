@@ -65,7 +65,7 @@ class JwtAuth
 					$jwt=JWT::encode($token , $key , 'HS256');
 					$decoded = JWT::decode($jwt, $key, array('HS256'));
 
-					$user->setLogueado(true);
+					//$user->setLogueado(true);
 
 					$this->manager->flush();
 		
@@ -95,6 +95,13 @@ class JwtAuth
 					);
 				}
 			}
+		}else{
+			return array(
+				"title" => 'Error!',
+				"code" => 400, 
+				"status" => "error" , 
+				"message" =>"Usuario o contraseña incorrecta."
+			);
 		}
 	}
 
