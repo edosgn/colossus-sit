@@ -1070,7 +1070,7 @@ class SvIpatController extends Controller
     /**
      * Search Ipat by Consecutivo.
      *
-     * @Route("/ipat/by/consecutivo", name="SVipat_by_consecutivo")
+     * @Route("/ipat/by/consecutivo", name="svipat_search_by_consecutivo")
      * @Method({"GET", "POST"})
      */
     public function buscarIpatByConsecutivoAction(Request $request)

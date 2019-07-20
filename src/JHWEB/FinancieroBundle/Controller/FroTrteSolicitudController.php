@@ -9,6 +9,7 @@ use JHWEB\VehiculoBundle\Entity\VhloActaTraspaso;
 use JHWEB\VehiculoBundle\Entity\VhloAcreedor;
 use JHWEB\VehiculoBundle\Entity\VhloPropietario;
 use JHWEB\VehiculoBundle\Entity\VhloTpTarjetaOperacion;
+use JHWEB\VehiculoBundle\Entity\VhloTpAsignacion;
 use JHWEB\UsuarioBundle\Entity\UserCiudadano;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaTransito;
 use JHWEB\UsuarioBundle\Entity\UserLicenciaConduccion;
@@ -611,8 +612,19 @@ class FroTrteSolicitudController extends Controller
                             $this->vehiculoIndeterminadaUpdateAction($params);
                             break;
 
+                        case 'expedicionTarjetaOperacion':
+                            $this->vehiculoExpedicionTarjetaOperacionAction($params);
+                            break;
+
                         case 'duplicadoTarjetaOperacion':
                             $this->vehiculoDuplicadoTarjetaOperacionAction($params);
+                            break;
+
+                        case 'cambioNivelServicio':
+                            $this->vehiculoCambioNivelServicioAction($params);
+                            break;
+                        case 'renovacionTarjetaOperacion':
+                            $this->vehiculoRenovacionTarjetaOperacionAction($params);
                             break;
                     }
                 }
@@ -1174,8 +1186,187 @@ class FroTrteSolicitudController extends Controller
         return $helpers->json($response);
     }
 
+    //expedición de la tarjeta de operacion a un vehiculo de servicio público
+    public function vehiculoExpedicionTarjetaOperacionAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true,
+            )
+        );
+
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true,
+            )
+        );
+
+        if($cupo) {
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+            $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+            $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+            $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->numeroTarjetaOperacion);
+            $tarjetaOperacionNew->setVehiculo($vehiculo);
+            $tarjetaOperacionNew->setActivo(true);
+
+            $tarjetaOperacion->setActivo(false);
+            
+            $em->persist($tarjetaOperacion);
+            $em->persist($tarjetaOperacionNew);
+            $em->flush();
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Tarjeta de Operación expedida con éxito.',
+                'data' => $tarjetaOperacionNew
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'No encontró un cupo asignado al vehiculo, por favor asigne un cupo para el vehículo.', 
+            );
+        }        
+        return $helpers->json($response);
+    }
+
     //Actualiza el propietario a persona indeterminada
     public function vehiculoDuplicadoTarjetaOperacionAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'id' => $params->idTarjetaOperacion,
+                'activo' => true,
+            )
+        );
+
+        
+        if($tarjetaOperacion) {
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+            $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+            $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+            $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->nuevoNumeroTarjetaOperacion);
+            $tarjetaOperacionNew->setVehiculo($vehiculo);
+            $tarjetaOperacionNew->setActivo(true);
+            
+            $tarjetaOperacion->setActivo(false);
+
+            $em->persist($tarjetaOperacion);
+            $em->persist($tarjetaOperacionNew);
+            $em->flush();
+        
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Tarjeta de Operación actualizado con exito.',
+                'data' => $tarjetaOperacionNew
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'No se encontró la tarjeta de operación actual del vehiculo.', 
+            );
+        }            
+       
+        return $helpers->json($response);
+    }
+
+    //Actualiza el propietario a persona indeterminada
+    public function vehiculoCambioNivelServicioAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true,
+            )
+        );
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+        
+        if($cupo) {
+            $nivelServicioNew = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->findOneBy(
+                array(
+                    'id' => $params->idNivelServicioNuevo,
+                    'activo' => true,
+                )
+            );    
+
+            $cupo->setActivo(false);
+
+            $cupoNew = new VhloTpAsignacion();
+
+            $cupoNew->setEmpresaTransporte($cupo->getEmpresaTransporte());
+            $cupoNew->setVehiculo($cupo->getVehiculo());
+            $cupoNew->setCupo($cupo->getCupo());
+            $cupoNew->setNivelServicio($nivelServicioNew);
+            $cupoNew->setActivo(true);
+
+            $em->persist($cupo);
+            $em->persist($cupoNew);
+
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true,
+                )
+            );
+
+            if($tarjetaOperacion) {
+
+                $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+                $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVigencia));
+                $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->nuevoNumeroTarjetaOperacion);
+                $tarjetaOperacionNew->setVehiculo($vehiculo);
+                $tarjetaOperacionNew->setActivo(true);
+                
+                $tarjetaOperacion->setActivo(false);
+
+                $em->persist($tarjetaOperacion);
+                $em->persist($tarjetaOperacionNew);
+                $em->flush();
+            
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Tarjeta de Operación actualizada con exito.',
+                );
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No se encontró la tarjeta de operación actual del vehiculo.', 
+                );
+            }     
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'No se encontró cupo actual para el vehiculo.', 
+            );
+        }       
+        return $helpers->json($response);
+    }
+
+    //Actualiza el propietario a persona indeterminada
+    public function vehiculoRenovacionTarjetaOperacionAction($params)
     {
         $helpers = $this->get("app.helpers");
 
