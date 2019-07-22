@@ -5,7 +5,8 @@ namespace JHWEB\PersonalBundle\Controller;
 use JHWEB\PersonalBundle\Entity\PnalCfgTipoNombramiento;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Pnalcfgtiponombramiento controller.
@@ -64,13 +65,13 @@ class PnalCfgTipoNombramientoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $tipoContrato = new PnalCfgTipoContrato();
+            $tipoNombramiento = new PnalCfgTipoNombramiento();
 
-            $tipoContrato->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
-            $tipoContrato->setGestionable($params->gestionable);
-            $tipoContrato->setActivo(true);
+            $tipoNombramiento->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $tipoNombramiento->setGestionable($params->gestionable);
+            $tipoNombramiento->setActivo(true);
             
-            $em->persist($tipoContrato);
+            $em->persist($tipoNombramiento);
             
             $em->flush();
 

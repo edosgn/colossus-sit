@@ -36,10 +36,15 @@
                 <td><b>Fec. Impresión:</b><br> {{ 'now'|date('d/m/Y') }}</td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="3">
                     <b>Infractor:</b>
                     <br>
                     {{ infractor.nombres }} - {{ infractor.identificacion }}
+                </td>
+                <td>
+                    <b>Placa:</b>
+                    <br>
+                    {{ comparendos[0].placa }}
                 </td>
             </tr>
         </table>

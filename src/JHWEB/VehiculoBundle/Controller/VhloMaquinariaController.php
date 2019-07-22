@@ -77,7 +77,7 @@ class VhloMaquinariaController extends Controller
                 $placa->setOrganismoTransito($organismoTransito);
                 $placa->setEstado('ASIGNADA');
                 $em->persist($placa);
-                $em->flush();
+                
 
                 $numeroFactura = $params->vehiculo->numeroFactura;
                 $valor = $params->vehiculo->valor;
@@ -101,20 +101,22 @@ class VhloMaquinariaController extends Controller
                 $vehiculo->setMotor($params->motor);
                 $vehiculo->setModelo($params->modelo);
                 
-                $color = $em->getRepository('AppBundle:Color')->find(
+                $color = $em->getRepository('JHWEBVehiculoBundle:VhloCfgColor')->find(
                     $params->idColor
                 );
                 $vehiculo->setColor($color);
 
-                $linea = $em->getRepository('AppBundle:Linea')->find(
-                    $params->idLinea
-                );
-                $vehiculo->setLinea($linea);
+                if ($params->idLinea) {
+                    $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find(
+                        $params->idLinea
+                    );
+                    $vehiculo->setLinea($linea);
+                }
 
-                $carroceria = $em->getRepository('AppBundle:Carroceria')->find($params->idCarroceria);
+                $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
                 $vehiculo->setCarroceria($carroceria);
 
-                $combustible = $em->getRepository('AppBundle:Combustible')->find($params->idCombustible);
+                $combustible = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCombustible')->find($params->idCombustible);
                 $vehiculo->setCombustible($combustible);
 
                 $vehiculo->setActivo(true);
