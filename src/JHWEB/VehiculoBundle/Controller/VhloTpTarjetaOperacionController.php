@@ -389,18 +389,9 @@ class VhloTpTarjetaOperacionController extends Controller
             
             $em = $this->getDoctrine()->getManager();
 
-            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
-                array(
-                    'vehiculo' => $params->idVehiculo,
-                    'activo' => true
-                )
-            );
-
-            $arrayTarjetas = null;
-
             $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
                 array(
-                    'asignacion' => $asignacion->getId(),
+                    'vehiculo' => $params->idVehiculo,
                     'activo' => true
                 )
             );  

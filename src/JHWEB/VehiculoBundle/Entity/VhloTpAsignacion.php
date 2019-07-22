@@ -30,6 +30,9 @@ class VhloTpAsignacion
     /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloTpCupo", inversedBy="asignaciones") */
     private $cupo;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgNivelServicio", inversedBy="asignaciones") */
+    private $nivelServicio;
+
     /**
      * @var bool
      *
@@ -141,5 +144,29 @@ class VhloTpAsignacion
     public function getCupo()
     {
         return $this->cupo;
+    }
+
+    /**
+     * Set nivelServicio
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgNivelServicio $nivelServicio
+     *
+     * @return VhloTpAsignacion
+     */
+    public function setNivelServicio(\JHWEB\VehiculoBundle\Entity\VhloCfgNivelServicio $nivelServicio = null)
+    {
+        $this->nivelServicio = $nivelServicio;
+
+        return $this;
+    }
+
+    /**
+     * Get nivelServicio
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgNivelServicio
+     */
+    public function getNivelServicio()
+    {
+        return $this->nivelServicio;
     }
 }

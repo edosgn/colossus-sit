@@ -436,4 +436,56 @@ class VhloTpAsignacionController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca cupos por vehiculo.
+     *
+     * @Route("/search/cupo/vehiculo", name="vhlotpasignacion_by_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchCuposByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true
+                )
+            );
+
+            if ($cupo) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado",
+                    'data' => $cupo,
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontraron cupos para el vehiculo",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
 }
