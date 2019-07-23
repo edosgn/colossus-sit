@@ -24,9 +24,16 @@ class FroRecaudo
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha", type="datetime")
+     * @ORM\Column(name="fecha_pago", type="date")
      */
-    private $fecha;
+    private $fechaPago;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora_pago", type="time")
+     */
+    private $horaPago;
 
     /**
      * @var float
@@ -58,129 +65,5 @@ class FroRecaudo
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fecha
-     *
-     * @param \DateTime $fecha
-     *
-     * @return FroRecaudo
-     */
-    public function setFecha($fecha)
-    {
-        $this->fecha = $fecha;
-
-        return $this;
-    }
-
-    /**
-     * Get fecha
-     *
-     * @return \DateTime
-     */
-    public function getFecha()
-    {
-        if ($this->fecha) {
-            return $this->fecha->format('Y-m-d');
-        }else{
-            return $this->fecha;
-        }
-    }
-
-    /**
-     * Set valor
-     *
-     * @param float $valor
-     *
-     * @return FroRecaudo
-     */
-    public function setValor($valor)
-    {
-        $this->valor = $valor;
-
-        return $this;
-    }
-
-    /**
-     * Get valor
-     *
-     * @return float
-     */
-    public function getValor()
-    {
-        return $this->valor;
-    }
-
-    /**
-     * Set activo
-     *
-     * @param boolean $activo
-     *
-     * @return FroRecaudo
-     */
-    public function setActivo($activo)
-    {
-        $this->activo = $activo;
-
-        return $this;
-    }
-
-    /**
-     * Get activo
-     *
-     * @return boolean
-     */
-    public function getActivo()
-    {
-        return $this->activo;
-    }
-
-    /**
-     * Set froFactura
-     *
-     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $froFactura
-     *
-     * @return FroRecaudo
-     */
-    public function setFroFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $froFactura = null)
-    {
-        $this->froFactura = $froFactura;
-
-        return $this;
-    }
-
-    /**
-     * Get froFactura
-     *
-     * @return \JHWEB\FinancieroBundle\Entity\FroFactura
-     */
-    public function getFroFactura()
-    {
-        return $this->froFactura;
-    }
-
-    /**
-     * Set organismoTransito
-     *
-     * @param \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito
-     *
-     * @return FroRecaudo
-     */
-    public function setOrganismoTransito(\JHWEB\ConfigBundle\Entity\CfgOrganismoTransito $organismoTransito = null)
-    {
-        $this->organismoTransito = $organismoTransito;
-
-        return $this;
-    }
-
-    /**
-     * Get organismoTransito
-     *
-     * @return \JHWEB\ConfigBundle\Entity\CfgOrganismoTransito
-     */
-    public function getOrganismoTransito()
-    {
-        return $this->organismoTransito;
     }
 }

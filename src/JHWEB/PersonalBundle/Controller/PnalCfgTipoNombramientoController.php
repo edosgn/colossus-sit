@@ -69,6 +69,8 @@ class PnalCfgTipoNombramientoController extends Controller
 
             $tipoNombramiento->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $tipoNombramiento->setGestionable($params->gestionable);
+            $tipoNombramiento->setHorarios($params->horarios);
+            $tipoNombramiento->setProrroga($params->prorroga);
             $tipoNombramiento->setActivo(true);
             
             $em->persist($tipoNombramiento);
@@ -155,6 +157,8 @@ class PnalCfgTipoNombramientoController extends Controller
                     mb_strtoupper($params->nombre, 'utf-8')
                 );
                 $tipoNombramiento->setGestionable($params->gestionable);
+                $tipoNombramiento->setHorarios($params->horarios);
+                $tipoNombramiento->setProrroga($params->prorroga);
                 
                 $em->flush();
 

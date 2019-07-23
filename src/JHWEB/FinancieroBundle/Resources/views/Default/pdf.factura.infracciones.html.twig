@@ -34,18 +34,8 @@
                 <td><b>Fec. Creación:</b><br> {{ factura.fechaCreacion|date('d/m/Y') }}</td>
                 <td><b>Fec. Vencimiento:</b><br> {{ factura.fechaVencimiento|date('d/m/Y') }}</td>
                 <td><b>Fec. Impresión:</b><br> {{ 'now'|date('d/m/Y') }}</td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <b>Infractor:</b>
-                    <br>
-                    {{ infractor.nombres }} - {{ infractor.identificacion }}
-                </td>
-                <td>
-                    <b>Placa:</b>
-                    <br>
-                    {{ comparendos[0].placa }}
-                </td>
+                <td><b>Infractor:</b><br>{{ infractor.nombres }} - {{ infractor.identificacion }}</td>
+                <td><b>Placa:</b><br>{{ factura.placa }}</td>
             </tr>
         </table>
         <br>
@@ -53,7 +43,7 @@
         {% if comparendos %}
             <table style="background-color:#e7e7e7;width:100%">
                 <tr>
-                    <td colspan="7" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
+                    <td colspan="6" style="background-color:#ffffff;border:1px solid #cccccc;text-align:center;">COMPARENDOS</td>
                 </tr>
                 <tr>
                     <td style="border:1px solid #cccccc"><b>Número</b></td>
@@ -62,7 +52,6 @@
                     <td style="border:1px solid #cccccc"><b>Valor</b></td>
                     <td style="border:1px solid #cccccc"><b>Interes</b></td>
                     <td style="border:1px solid #cccccc"><b>Descto.</b></td>
-                    <td style="border:1px solid #cccccc"><b>Placa</b></td>
                 </tr>
                 {% set total = 0 %}
                 {% for key, facturaComparendo in comparendos %}
@@ -74,11 +63,10 @@
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.valorInfraccion|number_format(0, ',', '.') }}</td>
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.interesMora|number_format(0, ',', '.') }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.porcentajeDescuento }} %</td>
-                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.placa }}</td>
                 </tr>
                 {% endfor %}
                 <tr style="background-color:#ffffff">
-                    <td colspan="6" style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR</b></td>
+                    <td colspan="5" style="border:1px solid #cccccc;text-align:right;"><b>TOTAL A PAGAR</b></td>
                     <td style="border:1px solid #cccccc">$ {{ total|number_format(0, ',', '.') }}</td>
                 </tr>
             </table>

@@ -33,6 +33,10 @@ services:
         class: AppBundle\services\PdfTemplateFactura
         arguments: ["null"]
 
+    app.excel:
+        class: AppBundle\services\ExcelTemplate
+        arguments: ['@doctrine.orm.entity_manager']
+
     app_soap:
         class: AppBundle\services\RecaudoService
         arguments: []

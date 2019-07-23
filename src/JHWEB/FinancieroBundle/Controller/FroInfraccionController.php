@@ -172,9 +172,15 @@ class FroInfraccionController extends Controller
                 $infraccion->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
                 $infraccion->setCodigo($params->codigo);
                 $infraccion->setDescripcion($params->descripcion);
+                $infraccion->setRetiene($params->retiene);
+                $infraccion->setInmoviliza($params->inmoviliza);
+
+                if ($params->inmoviliza && $params->dias) {
+                    $infraccion->setDias($params->dias);
+                }
 
                 $categoria = $em->getRepository('JHWEBFinancieroBundle:FroInfrCfgCategoria')->find(
-                    $params->idInfraccionCategoria
+                    $params->categoria->id
                 );
                 $infraccion->setCategoria($categoria);
                 
