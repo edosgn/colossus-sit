@@ -416,9 +416,14 @@ class FroReporteIngresosController extends Controller
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'registros encontrados"',
+                        'data' => array( 
+                            'organismoTransito' => $organismoTransito,
+                            'arrayInfracciones' => $arrayInfracciones,
+                            'totalInfracciones' => $totalInfracciones
+                        )
                     );
                     
-                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.infracciones.html.twig', array(
+                    /* $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.infracciones.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'arrayInfracciones' => $arrayInfracciones,
                         'totalInfracciones' => $totalInfracciones,
@@ -431,7 +436,7 @@ class FroReporteIngresosController extends Controller
                             'Content-Type'        => 'application/pdf',
                             'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
-                    );
+                    ); */
                 } else {
                     $response = array(
                         'status' => 'error',
@@ -503,9 +508,14 @@ class FroReporteIngresosController extends Controller
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'registros encontrados"',
+                        'data' => array(
+                            'organismoTransito' => $organismoTransito,
+                            'arrayAcuerdosPago' => $arrayAcuerdosPago,
+                            'totalAcuerdosPago' => $totalAcuerdosPago,
+                        )
                     );
                     
-                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.acuerdosPago.html.twig', array(
+                    /* $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.acuerdosPago.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'arrayAcuerdosPago' => $arrayAcuerdosPago,
                         'totalAcuerdosPago' => $totalAcuerdosPago,
@@ -518,7 +528,7 @@ class FroReporteIngresosController extends Controller
                             'Content-Type'        => 'application/pdf',
                             'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
-                    );
+                    ); */
                 } else {
                     $response = array(
                         'status' => 'error',
@@ -592,9 +602,14 @@ class FroReporteIngresosController extends Controller
                         'status' => 'success',
                         'code' => 200,
                         'message' => 'registros encontrados"',
+                        'data' => array(
+                            'organismoTransito' => $organismoTransito,
+                            'arrayInmovilizaciones' => $arrayInmovilizaciones,
+                            'totalInmovilizaciones' => $totalInmovilizaciones,
+                        )
                     );
                     
-                    $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.parqueadero.html.twig', array(
+                    /* $html = $this->renderView('@JHWEBFinanciero/Default/ingresos/pdf.ingresos.parqueadero.html.twig', array(
                         'organismoTransito' => $organismoTransito, 
                         'arrayInmovilizaciones' => $arrayInmovilizaciones,
                         'totalInmovilizaciones' => $totalInmovilizaciones,
@@ -607,7 +622,7 @@ class FroReporteIngresosController extends Controller
                             'Content-Type'        => 'application/pdf',
                             'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                         )
-                    );
+                    ); */
                 } else {
                     $response = array(
                         'status' => 'error',

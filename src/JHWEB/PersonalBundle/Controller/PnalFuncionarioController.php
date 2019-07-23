@@ -819,4 +819,61 @@ class PnalFuncionarioController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Finds a pnalFuncionario by identificacion.
+     *
+     * @Route("/search/funcionario/identificacion", name="pnalfuncionario_by_identificacion")
+     * @Method("POST")
+     */
+    public function searchByIdentificacionAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneBy(
+                array(
+                    'identificacion' => $params->identificacion,
+                    )
+                );
+                
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
+                array(
+                    'ciudadano' => $ciudadano->getId(),
+                )
+            );
+
+            if($funcionario) {
+               $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Registro encontrado.', 
+                    'data' => $funcionario
+                ); 
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'Autorizacion no valida.', 
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+        return $helpers->json($response);
+    }
 }

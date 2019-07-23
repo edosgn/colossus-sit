@@ -76,7 +76,7 @@ class MsvCaracterizacionController extends Controller
             $caracterizacion->setCedula($params->identificacion);
             //$caracterizacion->setLugarExpedicion($params->lugarExpedicion);
             if($params->clc){
-                $clc = $em->getRepository('AppBundle:CfgLicenciaConduccionCategoria')->find($params->clc);
+                $clc = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find($params->clc);
                 $caracterizacion->setClc($clc->getNombre());
             }
             $caracterizacion->setFechaVigencia(new \Datetime($params->fechaVigencia));
