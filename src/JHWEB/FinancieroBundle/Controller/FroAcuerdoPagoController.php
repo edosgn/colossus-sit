@@ -433,6 +433,7 @@ class FroAcuerdoPagoController extends Controller
                 );
 
                 $totalPagar += $cuotaMora + $cuotaBruto;
+                
                 $cuotas[] = array(
                     'valorMora' => number_format(round($cuotaMora), 0, ',', '.'),
                     'valorBruto' => number_format(round($cuotaBruto), 0, ',', '.'),

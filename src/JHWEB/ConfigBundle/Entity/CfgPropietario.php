@@ -84,6 +84,13 @@ class CfgPropietario
      */
     private $imagenLogo;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
 
     /**
      * Get id
@@ -309,5 +316,29 @@ class CfgPropietario
     public function getImagenLogo()
     {
         return $this->imagenLogo;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return CfgPropietario
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 }

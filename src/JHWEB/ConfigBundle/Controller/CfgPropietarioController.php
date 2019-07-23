@@ -22,13 +22,34 @@ class CfgPropietarioController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $propietario = $em->getRepository('JHWEBConfigBundle:CfgPropietario')->findOneBy(
+            array('activo' => true)
+        );
 
-        $cfgPropietarios = $em->getRepository('JHWEBConfigBundle:CfgPropietario')->findAll();
+        $response['data'] = array();
 
-        return $this->render('cfgpropietario/index.html.twig', array(
-            'cfgPropietarios' => $cfgPropietarios,
-        ));
+        if ($propietario) {
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Datos del propietario del sistema registrados.", 
+                'data'=> $propietario,
+            );
+        }else{
+            $response = array(
+                'title' => 'Atención!',
+                'status' => 'warning',
+                'code' => 400,
+                'message' => "No existen datos regsitrados, por favor diligencie la información del propietario del sistema..", 
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +60,79 @@ class CfgPropietarioController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cfgPropietario = new Cfgpropietario();
-        $form = $this->createForm('JHWEB\ConfigBundle\Form\CfgPropietarioType', $cfgPropietario);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cfgPropietario);
+
+            $propietario = new Cfgpropietario();
+
+            $propietario->setNombre(strtoupper($params->nombre));
+            $propietario->setNit($params->nit);
+            $propietario->setCorreo($params->correo);
+            $propietario->setTelefono($params->telefono);
+            $propietario->setCorreo($params->correo);
+            $propietario->setConceptos($params->conceptos);
+            $propietario->setActivo(true);
+
+            //Carga de imagen de cabecera de página
+            $fileHeader = $request->files->get('fileHeader');
+               
+            if ($fileHeader) {
+                $extension = $fileHeader->guessExtension();
+                $filename = "header.".$extension;
+                $dir=__DIR__.'/../../../../web/img';
+
+                $fileHeader->move($dir,$filename);
+                $propietario->setImagenCabecera($filename);
+            }
+
+            //Carga de imagen de pie de página
+            $fileFooter = $request->files->get('fileFooter');
+               
+            if ($fileFooter) {
+                $extension = $fileFooter->guessExtension();
+                $filename = "footer.".$extension;
+                $dir=__DIR__.'/../../../../web/img';
+
+                $fileFooter->move($dir,$filename);
+                $propietario->setImagenPie($filename);
+            }
+
+            //Carga de imagen de logo de sistema
+            $fileLogo = $request->files->get('fileLogo');
+               
+            if ($fileLogo) {
+                $extension = $fileLogo->guessExtension();
+                $filename = "logo.".$extension;
+                $dir=__DIR__.'/../../../../web/img';
+
+                $fileLogo->move($dir,$filename);
+                $propietario->setImagenLogo($filename);
+            }
+
+            $em->persist($propietario);
             $em->flush();
 
-            return $this->redirectToRoute('cfgpropietario_show', array('id' => $cfgPropietario->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cfgpropietario/new.html.twig', array(
-            'cfgPropietario' => $cfgPropietario,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**

@@ -468,6 +468,8 @@ class FroFacturaController extends Controller
             $interes = 0;
 
             if ($comparendo) {
+                $factura->setPlaca($comparendo->getPlaca());
+
                 //Actualiza el estado del curso
                 if ($comparendoSelect->curso) {
                     $comparendo->setCurso(true);
@@ -534,6 +536,15 @@ class FroFacturaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        if ($params->factura->idVehiculo) {
+            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find( 
+                $params->factura->idVehiculo
+            );
+
+            $factura->setPlaca($vehiculo->getPlaca()->getNumero());
+            $em->flush();
+        }
+
         foreach ($params->factura->tramites as $key => $tramitePrecioSelect) {
             $tramitePrecio = $em->getRepository('JHWEBFinancieroBundle:FroTrtePrecio')->find(
                 $tramitePrecioSelect->id
@@ -553,10 +564,6 @@ class FroFacturaController extends Controller
             if($tramitePrecio->getTramite()->getId() == 2){   
                 foreach ($params->propietarios as $key => $idPropietarioRetefuente) {
                     $retefuente = new FroFacRetefuente();
-
-                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find( 
-                        $params->factura->idVehiculo
-                    );
                
                     $retefuente->setVehiculo($vehiculo);
 

@@ -106,11 +106,25 @@ class FroFactura
     private $numeroRunt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="placa", type="string", length=10, nullable=true)
+     */
+    private $placa;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
+
+    /**
+     * @var \stdClass
+     *
+     * @ORM\Column(name="detalles_recaudo", type="object", nullable=true)
+     */
+    private $detallesRecaudo;
 
     /**
      * @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgOrganismoTransito", inversedBy="facturas")
@@ -427,6 +441,30 @@ class FroFactura
     }
 
     /**
+     * Set placa
+     *
+     * @param string $placa
+     *
+     * @return FroFactura
+     */
+    public function setPlaca($placa)
+    {
+        $this->placa = $placa;
+
+        return $this;
+    }
+
+    /**
+     * Get placa
+     *
+     * @return string
+     */
+    public function getPlaca()
+    {
+        return $this->placa;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -448,6 +486,30 @@ class FroFactura
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set detallesRecaudo
+     *
+     * @param \stdClass $detallesRecaudo
+     *
+     * @return FroFactura
+     */
+    public function setDetallesRecaudo($detallesRecaudo)
+    {
+        $this->detallesRecaudo = $detallesRecaudo;
+
+        return $this;
+    }
+
+    /**
+     * Get detallesRecaudo
+     *
+     * @return \stdClass
+     */
+    public function getDetallesRecaudo()
+    {
+        return $this->detallesRecaudo;
     }
 
     /**
