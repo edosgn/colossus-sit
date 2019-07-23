@@ -163,7 +163,8 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
 
             case 4:
                 $dql = "SELECT c
-                FROM JHWEBContravencionalBundle:CvCdoComparendo c, JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
+                FROM JHWEBContravencionalBundle:CvCdoComparendo c, 
+                JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
                 WHERE pc.numero = :numero
                 AND c.consecutivo = pc.id
                 AND (c.estado = 1 OR c.estado = 2 OR c.estado = 3)";
