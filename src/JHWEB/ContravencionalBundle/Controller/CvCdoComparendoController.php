@@ -769,7 +769,7 @@ class CvCdoComparendoController extends Controller
      * @Route("/search/filtros/factura", name="cvcdocomparendo_search_filtros_factura")
      * @Method({"GET","POST"})
      */
-    public function searchByFiltrosFactura(Request $request)
+    public function searchByFiltrosForFactura(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
