@@ -213,4 +213,52 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    public function getByFilters($params){
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT f
+                FROM JHWEBFinancieroBundle:FroFactura f
+                WHERE f.numero = :filtro";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'filtro' => $params->filtro,
+                ));
+                break;
+
+            case 2:
+                $dql = "SELECT f
+                FROM JHWEBFinancieroBundle:FroFactura f,
+                JHWEBConfigBundle:CfgOrganismoTransito o
+                WHERE f.organismoTransito = o.id
+                AND o.id = :filtro
+                AND f.fechaCreacion BETWEEN :fechaInicial AND :fechaFinal";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'filtro' => $params->filtro,
+                    'fechaInicial' => $params->fechaInicial,
+                    'fechaFinal' => $params->fechaFinal,
+                ));
+                break;
+
+            case 3:
+                $dql = "SELECT f
+                FROM JHWEBFinancieroBundle:FroFactura f
+                WHERE f.valorNeto = :filtro
+                AND f.fechaCreacion BETWEEN :fechaInicial AND :fechaFinal";
+
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameters(array(
+                    'filtro' => $params->filtro,
+                    'fechaInicial' => $params->fechaInicial,
+                    'fechaFinal' => $params->fechaFinal,
+                ));
+                break;
+        }
+
+        return $consulta->getResult();
+    }
 }

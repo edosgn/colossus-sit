@@ -287,7 +287,7 @@ class FroFacturaController extends Controller
     /* =================================== */
 
     /**
-     * busca vehiculos por id.
+     * Busca factura por numero.
      *
      * @Route("/search/numero", name="frofactura_search_numero")
      * @Method({"GET", "POST"})
@@ -350,6 +350,56 @@ class FroFacturaController extends Controller
                 'message' => "Autorizacion no valida", 
             );
         } 
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca comparendos por parametros (nombres, identificacion, placa o numero).
+     *
+     * @Route("/search/filters", name="frofactura_search_filters")
+     * @Method({"GET","POST"})
+     */
+    public function searchByFilters(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $facturas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getByFilters(
+                $params
+            );
+
+            if ($facturas) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($facturas)." facturas encontradas.", 
+                    'data' => $facturas,
+            );
+            }else{
+                 $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No existen facturas para los filtros de búsqueda.", 
+                );
+            }            
+        }else{
+            $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Autorizacion no valida", 
+                );
+        }
         return $helpers->json($response);
     }
 
