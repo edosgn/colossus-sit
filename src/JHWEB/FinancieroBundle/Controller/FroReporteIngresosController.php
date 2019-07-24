@@ -239,21 +239,53 @@ class FroReporteIngresosController extends Controller
                         'totalFacturasPagadas' => count($facturasPagadas),
                         'totalFacturasVencidas' => count($facturasVencidas),
                         'totalFacturas' => count($facturas),
-                        /* 'min' =>min($numeros),
-                        'max' =>max($numeros), */
                         'reporteMensual' =>$reporteMensual,
-                        /* 'minAnulados' =>min($numerosAnulados),
-                        'maxAnulados' =>max($numerosAnulados), */
                     )); 
+
+                    $data = array(
+                        'organismoTransito' => $organismoTransito, 
+                        'pagadas' => $pagadas, 
+                        'anuladas' => $anuladas, 
+                        'cantPagadas' => count($pagadas), 
+                        'cantAnuladas' => count($anuladas), 
+                        'valorTramitesPagados' => $valorTramitesPagados, 
+                        'valorTramitesAnulados' => $valorTramitesAnulados, 
+                        'conceptos' => $conceptos,
+                        'arraySustratos' => $arraySustratos,
+                        'cantConceptos' => $cantConceptos,
+                        'arrayConceptos' => $arrayConceptos,
+                        'arrayTramites' => $arrayTramites,
+                        'totalConceptos' => $totalConceptos,
+                        'totalSustratos' => $totalSustratos,
+                        'totalTramites' => $totalTramites,
+                        'traspasosAnulados' => $traspasos,
+                        'cantTraspasos' => count($traspasos),
+                        'totalFacturasPagadas' => count($facturasPagadas),
+                        'totalFacturasVencidas' => count($facturasVencidas),
+                        'totalFacturas' => count($facturas),
+                        'reporteMensual' =>$reporteMensual,
+                    ); 
         
-                    return new Response(
-                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
-                        200,
-                        array(
-                            'Content-Type'        => 'application/pdf',
-                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
-                        )
-                    );
+                    if($params->exportarEn == 1) {
+                        return new Response(
+                            $this->get('app.excel')->templateExcelByTramites($data),
+                            200,
+                            array(
+                                'Content-Type'        => 'application/pdf',
+                                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                            )
+                        );
+                        
+                    }else if($params->exportarEn == 2){
+                        return new Response(
+                            $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                            200,
+                            array(
+                                'Content-Type'        => 'application/pdf',
+                                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                            )
+                        );
+                    }
                 } else {
                     $response = array(
                         'title' => 'Error!',
@@ -298,8 +330,8 @@ class FroReporteIngresosController extends Controller
                             'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
                             'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
                             'placaCedula' => $placaCedula,
-                            'numeroSustrato' => $numeroSustrato,
-                            'moduloSustrato' => $moduloSustrato,
+                            //'numeroSustrato' => $numeroSustrato,
+                            //'moduloSustrato' => $moduloSustrato,
                             'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
                             'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
                             'numeroRunt' => $tramite->getTramiteFactura()->getFactura()->getNumeroRunt()

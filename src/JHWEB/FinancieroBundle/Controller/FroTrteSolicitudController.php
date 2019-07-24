@@ -626,6 +626,9 @@ class FroTrteSolicitudController extends Controller
                         case 'renovacionTarjetaOperacion':
                             $this->vehiculoRenovacionTarjetaOperacionAction($params);
                             break;
+                        case 'desvinculacionCambioServicio':
+                            $this->vehiculoDesvinculacionCambioServicioAction($params);
+                            break;
                     }
                 }
     
@@ -1409,6 +1412,56 @@ class FroTrteSolicitudController extends Controller
             );
         }            
        
+        return $helpers->json($response);
+    }
+
+    //desvincula un vehiculo de transporte público
+    public function vehiculoDesvinculacionCambioServicioAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+        $servicioNew = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicioNuevo);
+
+        $vehiculo->setServicio($servicioNew);
+
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion->setActivo(false);
+
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
+        $cupo->setEstado('DISPONIBLE');
+        
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+
+        $tarjetaOperacion->setActivo(false);
+
+        $em->persist($vehiculo);
+        $em->persist($asignacion);
+        $em->persist($cupo);
+        $em->persist($tarjetaOperacion);
+        $em->flush();
+    
+        $response = 
+            array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Se cambio el servicio del vehiculo con éxito.',
+            );
+                    
         return $helpers->json($response);
     }
 

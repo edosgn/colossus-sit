@@ -105,7 +105,7 @@ class ExcelTemplate {
       $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $this->objPHPExcel->setActiveSheetIndex($this->index)
                   ->setCellValue('A1', 'CONSOLIDADO GENERAL')
-                  ->setCellValue('A2', $params->fechaInicial->format('d/m/Y').' - '.$params->fechaFinal->format('d/m/Y'))
+                  //->setCellValue('A2', $params->fechaInicial->format('d/m/Y').' - '.$params->fechaFinal->format('d/m/Y'))
                   ->setCellValue('A3', 'NUMERO DE RADICACIÓN DE LA QUEJA')
                   ->setCellValue('B3', 'IDENTIFICACION QUEJOSO')
                   ->setCellValue('C3', 'NOMBRE DEL QUEJOSO')
@@ -163,7 +163,7 @@ class ExcelTemplate {
 
         $this->getMembretesTramites($params);
 
-        if ($params->data) {
+        if ($params) {
           $this->index = $pages;
           $this->row = 4;
           $this->col = 'A';
@@ -176,7 +176,7 @@ class ExcelTemplate {
           //Asigna titulo a la pestaña
           $this->objPHPExcel->getActiveSheet()->setTitle('CONSOLIDADO');
 
-          foreach ($params->data as $key => $solicitud) {
+          /* foreach ($params->data as $key => $solicitud) {
             //Imprime los datos
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
               'A'.$this->row, $solicitud->getNumeroRadicado()
@@ -259,7 +259,7 @@ class ExcelTemplate {
             );
 
             $this->row++;
-          }
+          } */
           //Otorga estilos
           $this->getStyleTramites();
         }else{
