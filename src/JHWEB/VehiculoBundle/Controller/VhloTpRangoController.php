@@ -58,6 +58,9 @@ class VhloTpRangoController extends Controller
                 )
             );
 
+            var_dump($params);
+            die();
+
             $rango = new VhloTpRango();
             
             $rango->setHabilitacion($empresaTransporte);
