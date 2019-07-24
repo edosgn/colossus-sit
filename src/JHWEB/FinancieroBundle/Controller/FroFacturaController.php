@@ -713,7 +713,7 @@ class FroFacturaController extends Controller
         $this->get('app.pdf')->templateFactura($html, $factura);
     }
 
-    protected function generatePdfAmortizacion($idFactura){
+    protected function generatePdfAmortizacion($id){
         $em = $this->getDoctrine()->getManager();
 
         setlocale(LC_ALL,"es_ES");
@@ -748,13 +748,13 @@ class FroFacturaController extends Controller
         //$imgBarcode = \base64_decode($code);
         $imgBarcode = $code;
 
-        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.amortizacion.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
-            'comparendos'=>$comparendos,
+            'amortizacion'=>$amortizacion,
             'imgBarcode' => $imgBarcode
         ));
 
-        $this->get('app.pdf.factura')->templateFactura($html, $factura);
+        $this->get('app.pdf')->templateFactura($html, $factura);
     }
 }

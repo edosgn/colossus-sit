@@ -127,9 +127,6 @@ class FroAmortizacion
      */
     public function getFechaLimite()
     {
-        if ($this->fechaLimite) {
-            return $this->fechaLimite->format('d/m/Y');
-        }
         return $this->fechaLimite;
     }
 

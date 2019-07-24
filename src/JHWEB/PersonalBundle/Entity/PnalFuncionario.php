@@ -94,6 +94,13 @@ class PnalFuncionario
     /**
      * @var bool
      *
+     * @ORM\Column(name="excel", type="boolean")
+     */
+    private $excel;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -366,6 +373,30 @@ class PnalFuncionario
     public function getModificatorio()
     {
         return $this->modificatorio;
+    }
+
+    /**
+     * Set excel
+     *
+     * @param boolean $excel
+     *
+     * @return PnalFuncionario
+     */
+    public function setExcel($excel)
+    {
+        $this->excel = $excel;
+
+        return $this;
+    }
+
+    /**
+     * Get excel
+     *
+     * @return boolean
+     */
+    public function getExcel()
+    {
+        return $this->excel;
     }
 
     /**

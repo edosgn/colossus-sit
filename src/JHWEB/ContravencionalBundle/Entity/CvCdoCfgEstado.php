@@ -69,6 +69,13 @@ class CvCdoCfgEstado
      * @ORM\Column(name="finaliza", type="boolean")
      */
     private $finaliza;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="reparto", type="boolean")
+     */
+    private $reparto;
     
     /**
      * @var bool
@@ -259,6 +266,30 @@ class CvCdoCfgEstado
     public function getFinaliza()
     {
         return $this->finaliza;
+    }
+
+    /**
+     * Set reparto
+     *
+     * @param boolean $reparto
+     *
+     * @return CvCdoCfgEstado
+     */
+    public function setReparto($reparto)
+    {
+        $this->reparto = $reparto;
+
+        return $this;
+    }
+
+    /**
+     * Get reparto
+     *
+     * @return boolean
+     */
+    public function getReparto()
+    {
+        return $this->reparto;
     }
 
     /**

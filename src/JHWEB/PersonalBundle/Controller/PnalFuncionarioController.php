@@ -143,6 +143,7 @@ class PnalFuncionarioController extends Controller
                         $funcionario->setNovedad($params->novedad);
                     }
 
+                    $funcionario->setExcel($params->excel);
                     $funcionario->setModificatorio(false);
 
                     $em->persist($funcionario);
