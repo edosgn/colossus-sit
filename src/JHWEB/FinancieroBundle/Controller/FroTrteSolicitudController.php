@@ -626,6 +626,9 @@ class FroTrteSolicitudController extends Controller
                         case 'renovacionTarjetaOperacion':
                             $this->vehiculoRenovacionTarjetaOperacionAction($params);
                             break;
+                        case 'cambioEmpresa':
+                            $this->vehiculoCambioEmpresaAction($params);
+                            break;
                         case 'desvinculacionCambioServicio':
                             $this->vehiculoDesvinculacionCambioServicioAction($params);
                             break;
@@ -1465,6 +1468,97 @@ class FroTrteSolicitudController extends Controller
         return $helpers->json($response);
     }
 
+    //cambia un vehiculo de empresa de transporte público
+    public function vehiculoCambioEmpresaAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion->setActivo(false);
+
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
+        $cupo->setEstado('DISPONIBLE');
+        
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $tarjetaOperacion->setActivo(false);
+
+        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+            array(
+                'id' => $params->idEmpresaNueva,
+                'activo' => true
+            )
+        );
+
+        $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+            array(
+                'empresa' => $empresa->getId(),
+                'activo' => true
+            )
+        );
+
+        $cupoNew = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->findOneBy(
+            array(
+                'id' => $params->idCupoNuevo,
+                'activo' => true
+            )
+        );
+
+        $nivelServicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->findOneBy(
+            array(
+                'id' => $params->idNivelServicioAnterior,
+                'activo' => true
+            )
+        );
+
+
+        $em->persist($asignacion);
+        $em->persist($cupo);
+        $em->persist($tarjetaOperacion);
+
+        $asignacionNew = new VhloTpAsignacion();
+        $asignacionNew->setEmpresaTransporte($empresaTransporte);
+        $asignacionNew->setVehiculo($vehiculo);
+        $asignacionNew->setCupo($cupoNew);
+        $asignacionNew->setNivelServicio($nivelServicio);
+        $asignacionNew->setActivo(true);
+
+        $em->persist($asignacionNew);
+
+        $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+        $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVigencia));
+        $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->numeroTarjetaOperacionNuevo);
+        $tarjetaOperacionNew->setVehiculo($vehiculo);
+        $tarjetaOperacionNew->setActivo(true);
+
+        $em->persist($tarjetaOperacionNew);
+        $em->flush();
+    
+        $response = 
+            array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'El trámite de cambio de servicio se realizó con éxito',
+            );
+                    
+        return $helpers->json($response);
+    }
+
     public function usuarioUpdateAction($params)
     {    
         $helpers = $this->get("app.helpers");
@@ -1938,5 +2032,45 @@ class FroTrteSolicitudController extends Controller
         }
 
         return $helpers->json($response);
+    }
+
+    
+    /**
+     * Genera pdf resolucion del cambio de servicio.
+     *
+     * @Route("/{idVehiculo}/{numeroResolucion}/resolucion/cambioServicio/pdf", name="resolucion_cambio_servicio_pdf")
+     * @Method({"GET","POST"})
+     */
+    public function pdfResolucionCambioServicioAction(Request $request, $idVehiculo, $numeroResolucion)
+    {        
+        $em = $this->getDoctrine()->getManager();
+        
+        setlocale(LC_ALL, "es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($idVehiculo);
+
+        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+            )
+        );
+        
+        $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.resolucion.desvinculacionCambioServicio.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'vehiculo' => $vehiculo,
+            'propietario' => $propietario,
+            'numeroResolucion' => $numeroResolucion,
+            'empresaTransporte' => $asignacion->getEmpresaTransporte(),
+        ));
+
+        $this->get('app.pdf')->templateResoluciones($html);
     }
 }

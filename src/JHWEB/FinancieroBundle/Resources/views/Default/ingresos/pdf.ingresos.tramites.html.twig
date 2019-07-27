@@ -113,10 +113,10 @@
         {% endif %}
         {# fin tramites diarios #}
         {% if reporteMensual %}
-            <h2 style="text-align:center;">INFORME INGRESO MES DE {{ mesReporte }} SEGÚN RECIBOS DE CAJA</h2>
+            <h2 style="text-align:center;">INFORME INGRESO MES DE {{ mesReporteDesde }} - {{ mesReporteHasta }} SEGÚN RECIBOS DE CAJA</h2>
             <h5 style="text-align:center;">Detallado</h5>
             <br>
-            <b>Fecha de informe: </b> {{ mesReporte }}<br>
+            <b>Fecha de informe: </b> {{ mesReporteDesde }}<br>
             <b>Organismo tránsito: </b> {{ funcionario.organismoTransito.nombre }}<br>
             <b>Nombre del inspector: </b> {{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}<br>
             <b>Fecha de expedición del informe: </b>  {{ fechaActual }}

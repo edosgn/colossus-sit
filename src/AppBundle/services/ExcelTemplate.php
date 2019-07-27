@@ -104,23 +104,11 @@ class ExcelTemplate {
       $this->objPHPExcel->getActiveSheet()->mergeCells('A2:L2');
       $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
       $this->objPHPExcel->setActiveSheetIndex($this->index)
-                  ->setCellValue('A1', 'CONSOLIDADO GENERAL')
-                  //->setCellValue('A2', $params->fechaInicial->format('d/m/Y').' - '.$params->fechaFinal->format('d/m/Y'))
-                  ->setCellValue('A3', 'NUMERO DE RADICACIÓN DE LA QUEJA')
-                  ->setCellValue('B3', 'IDENTIFICACION QUEJOSO')
-                  ->setCellValue('C3', 'NOMBRE DEL QUEJOSO')
-                  ->setCellValue('D3', 'IDENTIFICACIÓN PACIENTE')
-                  ->setCellValue('E3', 'NOMBRE DEL PACIENTE')
-                  ->setCellValue('F3', 'EPS')
-                  ->setCellValue('G3', 'LUGAR DONDE SE ORIGINA LA QUEJA')
-                  ->setCellValue('H3', 'RESPONSABLE')
-                  ->setCellValue('I3', 'TIPO DE SOLICITUD')
-                  ->setCellValue('J3', 'ESTADO DE SOLICITUD')
-                  ->setCellValue('K3', 'MOTIVO DE LA QUEJA')
-                  ->setCellValue('L3', 'FECHA APERTURA')
-                  ->setCellValue('M3', 'FECHA VENCIMIENTO')
-                  ->setCellValue('N3', 'FECHA RESPUESTA')
-                  ->setCellValue('O3', 'TIEMPO RESPUESTA');
+                  ->setCellValue('A1', 'CÓDIGO')
+                  ->setCellValue('B1', 'TRAMITES')
+                  ->setCellValue('C1', 'CANTIDAD')
+                  ->setCellValue('D1', 'VALOR')
+                  ->setCellValue('E1', 'NOMBRE DEL QUEJOSO');
     }
 
     public function getStyleTramites(){
@@ -157,9 +145,12 @@ class ExcelTemplate {
   //==============================//START TEMPLATES//==============================//
 
     /* ==================== EXCEL BY TRAMITES ===================*/
-    public function templateExcelByTramites($params){
+    public function templateExcelByTramites($data){
         $em = $this->em;
         $pages = 0;
+
+        var_dump($data[0]->cantPagadas);
+        die();
 
         $this->getMembretesTramites($params);
 
@@ -174,9 +165,9 @@ class ExcelTemplate {
           $this->getMembretesTramites($params);
 
           //Asigna titulo a la pestaña
-          $this->objPHPExcel->getActiveSheet()->setTitle('CONSOLIDADO');
+          $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES');
 
-          /* foreach ($params->data as $key => $solicitud) {
+          foreach ($params->data as $key => $solicitud) {
             //Imprime los datos
             $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
               'A'.$this->row, $solicitud->getNumeroRadicado()
@@ -259,7 +250,7 @@ class ExcelTemplate {
             );
 
             $this->row++;
-          } */
+          }
           //Otorga estilos
           $this->getStyleTramites();
         }else{
