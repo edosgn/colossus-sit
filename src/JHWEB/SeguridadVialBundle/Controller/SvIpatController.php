@@ -84,20 +84,21 @@ class SvIpatController extends Controller
             $ipat->setLugar($params->lugar);
 
             $fechaAccidenteDatetime = new \Datetime($params->fechaAccidente);
-            /* $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d'); */
+            $fechaAccidente = $fechaAccidenteDatetime->format('Y-m-d');
 
             $horaAccidenteDatetime = new \Datetime($params->horaAccidente);
-            /* $horaAccidente = $horaAccidenteDatetime->format('H:i:s'); */
+            $horaAccidente = $horaAccidenteDatetime->format('H:i:s');
 
             $fechaLevantamientoDatetime = new \Datetime($params->fechaLevantamiento);
-            /* $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d'); */
+            $fechaLevantamiento = $fechaLevantamientoDatetime->format('Y-m-d');
 
             $horaLevantamientoDatetime = new \Datetime($params->horaLevantamiento);
-            /* $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s'); */
+            $horaLevantamiento = $horaLevantamientoDatetime->format('H:i:s');
 
             $fechaActualDatetime = new \Datetime();
-            /* $fechaActual = $fechaActualDatetime->format('Y-m-d'); */
+            $fechaActual = $fechaActualDatetime->format('Y-m-d');
 
+            
             if ($fechaLevantamientoDatetime <= $fechaActualDatetime && $fechaLevantamientoDatetime > $fechaAccidenteDatetime) {
                 $response = array(
                     'status' => 'success',
@@ -108,8 +109,7 @@ class SvIpatController extends Controller
                 $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
                 $ipat->setHoraAccidente($horaAccidenteDatetime);
                 $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
-             
-            } elseif ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
+            } else if ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
                 if ($horaLevantamientoDatetime > $horaAccidenteDatetime) {
                     $response = array(
                         'status' => 'success',
@@ -133,6 +133,7 @@ class SvIpatController extends Controller
                     'code' => 400,
                     'message' => "La fecha de levantamiento debe ser menor o igual a la fecha del sistema y mayor o igual a la fecha del accidente.",
                 );
+                return $helpers->json($response);
             }
 
             $diaSemana = $fechaAccidenteDatetime->format('l');

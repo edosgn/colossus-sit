@@ -365,4 +365,69 @@ class UserEmpresaTransporteController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Busca empresas por NIT.
+     *
+     * @Route("/search/empresa/vehiculo", name="userempresa_transporte_search_nit_vehiculo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByVehiculoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true
+                )
+            ); 
+
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true
+                )
+            ); 
+
+            if ($asignacion) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Asignación encontrada",
+                    'data' => array(
+                        'empresaTransporte' => $asignacion->getEmpresaTransporte(),
+                        'cupo' => $asignacion->getCupo(),
+                        'nivelServicio' => $asignacion->getNivelServicio(),
+                        'tarjetaOperacion' => $tarjetaOperacion
+                    )
+                );
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontro un cupo para el vehiculo",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
 }

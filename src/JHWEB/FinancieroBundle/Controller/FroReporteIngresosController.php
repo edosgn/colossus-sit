@@ -84,7 +84,7 @@ class FroReporteIngresosController extends Controller
                     'ciudadano' => $ciudadano->getId(),
                 )
             );
-            
+
             $reporteMensual = false;
             
             if(intval($params->tipoArchivoTramite) == 1) {
@@ -271,8 +271,8 @@ class FroReporteIngresosController extends Controller
                             $this->get('app.excel')->templateExcelByTramites($data),
                             200,
                             array(
-                                'Content-Type'        => 'application/pdf',
-                                'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                                'Content-Type'        => 'application/xlsx',
+                                'Content-Disposition' => 'attachment; filename="tramites.xlsx"'
                             )
                         );
                         
@@ -330,8 +330,8 @@ class FroReporteIngresosController extends Controller
                             'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
                             'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
                             'placaCedula' => $placaCedula,
-                            //'numeroSustrato' => $numeroSustrato,
-                            //'moduloSustrato' => $moduloSustrato,
+                            'numeroSustrato' => $numeroSustrato,
+                            'moduloSustrato' => $moduloSustrato,
                             'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
                             'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
                             'numeroRunt' => $tramite->getTramiteFactura()->getFactura()->getNumeroRunt()
@@ -349,10 +349,11 @@ class FroReporteIngresosController extends Controller
                     'arrayReporteMensual' => $arrayReporteMensual,
                     'reporteMensual' => $reporteMensual,
                     'funcionario' => $funcionario,
-                    'mesReporte' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
+                    'mesReporteDesde' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
+                    'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
                     'fechaActual' => $fechaActual,
                     'totalReporteMensual' => $totalReporteMensual,
-                    /* 'totalSustratos' => $totalSustratos, */
+                    'totalSustratos' => $totalSustratos,
                 )); 
                     
                 return new Response(
