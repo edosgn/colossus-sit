@@ -275,4 +275,98 @@ class CvCdoCfgEstadoController extends Controller
         }
         return $helpers->json($response);
     }
+
+    /**
+     * Listado de estados habilitados para selección con buscador.
+     *
+     * @Route("/select/availables/modulo", name="cvcdocfgestado_select_availables_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function selectAvailablesByModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $estados = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->getAvailablesByModulo(
+                $params->idModulo
+            );
+
+            $response = null;
+
+            foreach ($estados as $key => $estado) {
+                $response[] = array(
+                    'value' => $estado->getId(),
+                    'label' => $estado->getNombre()
+                );
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Creates a new cvCdoCfgEstado entity.
+     *
+     * @Route("/search/modulo", name="cvcdocfgestado_search_modulo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByModuloAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $estados = $em->getRepository('JHWEBContravencionalBundle:CvCfgReparto')->findBy(
+                array(
+                    'modulo' => $params->idModulo,
+                    'activo' => true
+                )
+            );
+
+            if ($estados) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($estados)." registros encontrados.",
+                    'data' => $estados,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'Ningún estado asignado.',
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'Autorizacion no valida.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }

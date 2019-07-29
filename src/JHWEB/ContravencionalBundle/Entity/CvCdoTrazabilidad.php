@@ -60,6 +60,11 @@ class CvCdoTrazabilidad
      **/
     protected $estado;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\PersonalBundle\Entity\PnalFuncionario", inversedBy="trazabilidades")
+     **/
+    protected $funcionario;
+
 
     /**
      * Get id
@@ -240,5 +245,29 @@ class CvCdoTrazabilidad
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set funcionario
+     *
+     * @param \JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario
+     *
+     * @return CvCdoTrazabilidad
+     */
+    public function setFuncionario(\JHWEB\PersonalBundle\Entity\PnalFuncionario $funcionario = null)
+    {
+        $this->funcionario = $funcionario;
+
+        return $this;
+    }
+
+    /**
+     * Get funcionario
+     *
+     * @return \JHWEB\PersonalBundle\Entity\PnalFuncionario
+     */
+    public function getFuncionario()
+    {
+        return $this->funcionario;
     }
 }

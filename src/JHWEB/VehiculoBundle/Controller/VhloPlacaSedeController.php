@@ -96,42 +96,13 @@ class VhloPlacaSedeController extends Controller
             }else{
                 $validate = $this->validateByTipoVehiculo(
                     $rangoInicial,
+                    $rangoFinal,
                     $tipoVehiculo->getNombre()
                 );
     
                 $contadorPlacas = 0;
     
                 if ($validate) {
-                    /*for ($i = $params->numeroInicial; $i <= $params->numeroFinal; $i++) {
-                        $em = $this->getDoctrine()->getManager();
-    
-                        //Genera el nuevo numero de placa según el tipo de vehiculo
-                        $numero = $this->generateNumberPlaca(
-                            $letrasInicio, 
-                            $letrasFinal,
-                            $params->letraFinal, 
-                            $tipoVehiculo->getNombre(),
-                            $contadorPlacas,
-                            $i
-                        );
-    
-                        if ($numero['status'] == 'success') {
-                            $numero = $numero['data'];
-                        }elseif ($numero['status'] == 'error') {
-                            return $numero;
-                        }
-    
-                        //Inserta la nueva placa
-                        $this->newPlacaAction(
-                            $numero, 
-                            $tipoVehiculo, 
-                            $organismoTransito
-                        );
-    
-                        $contadorPlacas += 1;
-    
-                    }*/
-
                     if ($rangoInicial > $rangoFinal) {
                         $response = array(
                             'title' => 'Error!',
@@ -458,50 +429,112 @@ class VhloPlacaSedeController extends Controller
         return $contador;
     }
 
-    public function validateByTipoVehiculo($rangoInicial, $tipoVehiculo)
+    public function validateByTipoVehiculo($rangoInicial, $rangoFinal, $tipoVehiculo)
     {
         $longitud = strlen($rangoInicial);
 
         switch ($tipoVehiculo) {
             case 'AUTOMOTOR':
                 if ($longitud == 6) {
-                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
-                    $nomenclaturaValida = true;
+                    $letrasRangoInicial = substr($rangoInicial, 0, 3);
+                    $letrasRangoFinal = substr($rangoFinal, 0, 3);
+                    $numerosRangoInicial = substr($rangoInicial, 3, 3);
+                    $numerosRangoFinal = substr($rangoFinal, 3, 3);
+
+                    if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
+                        $nomenclaturaValida = false;
+                    } else {
+                        $nomenclaturaValida = true;
+                    };                    
                 }else{
                     $nomenclaturaValida = false;
                 }
+
                 break;
             case 'MOTOCICLETA':
                 if ($longitud == 6 || $longitud == 5) {
-                    //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 2);
-                    $nomenclaturaValida = true;
+                    $letrasRangoInicial = substr($rangoInicial, 0, 3);
+                    $letrasRangoFinal = substr($rangoFinal, 0, 3);
+                    $numerosRangoInicial = substr($rangoInicial, 3, 2);
+                    $numerosRangoFinal = substr($rangoFinal, 3, 2);
+
+                    if ($longitud == 5) {
+                        if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
+                            $nomenclaturaValida = false;
+                        } else {
+                            $nomenclaturaValida = true;
+                        };
+                    }else{
+                        $letraRangoInicial = substr($rangoInicial, 5, 1);
+                        $letraRangoFinal = substr($rangoFinal, 5, 1);
+
+                        if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal) && is_string($letraRangoInicial) && is_string($letraRangoFinal)) {
+                            $nomenclaturaValida = false;
+                        } else {
+                            $nomenclaturaValida = true;
+                        };
+                    }
                 }else{
                     $nomenclaturaValida = false;
                 }
+
                 break;
             case 'MOTOCARRO':
-                if ($longitud == 6 || $longitud == 5) {
+                if ($longitud == 6) {
                     //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
-                    $nomenclaturaValida = true;
+                    
+                    $letrasRangoInicial = substr($rangoInicial, 0, 3);
+                    $letrasRangoFinal = substr($rangoFinal, 0, 3);
+                    $numerosRangoInicial = substr($rangoInicial, 3, 3);
+                    $numerosRangoFinal = substr($rangoFinal, 3, 3);
+
+                    if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
+                        $nomenclaturaValida = false;
+                    } else {
+                        $nomenclaturaValida = true;
+                    };                    
                 }else{
                     $nomenclaturaValida = false;
                 }
+
                 break;
             case 'REMOLQUE Y SEMIREMOLQUE':
                 if ($longitud == 6) {
                     //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 1, 5);
-                    $nomenclaturaValida = true;
+
+                    $letrasRangoInicial = substr($rangoInicial, 0, 1);
+                    $letrasRangoFinal = substr($rangoFinal, 0, 1);
+                    $numerosRangoInicial = substr($rangoInicial, 1, 5);
+                    $numerosRangoFinal = substr($rangoFinal, 1, 5);
+
+                    if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
+                        $nomenclaturaValida = false;
+                    } else {
+                        $nomenclaturaValida = true;
+                    };
                 }else{
                     $nomenclaturaValida = false;
                 }
+                
                 break;
             case 'MAQUINARIA AGRICOLA':
                 if ($longitud == 6) {
                     //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
-                    $nomenclaturaValida = true;
+
+                    $letrasRangoInicial = substr($rangoInicial, 0, 3);
+                    $letrasRangoFinal = substr($rangoFinal, 0, 3);
+                    $numerosRangoInicial = substr($rangoInicial, 3, 3);
+                    $numerosRangoFinal = substr($rangoFinal, 3, 3);
+
+                    if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
+                        $nomenclaturaValida = false;
+                    } else {
+                        $nomenclaturaValida = true;
+                    };                    
                 }else{
                     $nomenclaturaValida = false;
                 }
+
                 break;
         }
 

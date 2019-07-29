@@ -10,4 +10,25 @@ namespace JHWEB\ContravencionalBundle\Repository;
  */
 class CvCdoCfgEstadoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene la lista de Estados disponibles para asignar a un modulo
+    public function getAvailablesByModulo($idModulo)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT e
+            FROM JHWEBContravencionalBundle:CvCdoCfgEstado e
+            WHERE e.activo = true
+            AND e.id NOT IN
+            (SELECT IDENTITY(r.estado)
+            FROM JHWEBContravencionalBundle:CvCfgReparto r
+            JOIN r.modulo m
+            WHERE r.activo = true 
+            AND m.id = :idModulo)";
+
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameters(array(
+	        'idModulo' => $idModulo,
+	    ));
+
+        return $consulta->getResult();
+    }
 }

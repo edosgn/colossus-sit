@@ -13,7 +13,7 @@ services:
 
     app.helpers:
         class: AppBundle\services\Helpers
-        arguments: ["@app.jwt_auth", '@doctrine.orm.entity_manager']
+        arguments: ["@app.jwt_auth", '@doctrine.orm.entity_manager', "@app.mailer"]
     
     app.mailer:
         class: AppBundle\services\Mailer

@@ -18,7 +18,7 @@ class DefaultController extends Controller
     /**
      * Creates a new Cuenta entity.
      *
-     * @Route("/pdf/certificadoTradicion/{placa}/{idFuncionario}/{tipo}", name="pdf")
+     * @Route("/pdf/certificado/tradicion/{placa}/{idFuncionario}/{tipo}", name="pdf")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request, $placa, $idFuncionario, $tipo)
@@ -47,15 +47,8 @@ class DefaultController extends Controller
         }        
 
         $tramitesSolicitudArray = false;
-        
-        $data = null;
 
         foreach ($tramitesSolicitud as $tramiteSolicitud) {
-
-            /*foreach ((array)$tramiteSolicitud->getResumen() as $key => $value) {
-                $data[] = $key.":".$value;
-            }  */
-
             $tramitesSolicitudArray[]= array(
                 'fecha' => $tramiteSolicitud->getFecha(),
                 'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),

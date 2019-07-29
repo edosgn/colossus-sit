@@ -285,12 +285,12 @@ class CvCdoNotificacionController extends Controller
                                     //Registra trazabilidad de notificacion por estado
                                     $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(15);
 
-                                    $this->generateTrazabilidad($comparendo, $estado);
+                                    $helpers->generateTrazabilidad($comparendo, $estado);
                                 }
                             }else{
                                 //Registra trazabilidad de auto de comparecencia
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(14);
-                                $this->generateTrazabilidad($comparendo, $estado);
+                                $helpers->generateTrazabilidad($comparendo, $estado);
                                 
                                 //Crea una audiencia automatica
                                 $audiencia = new CvAudiencia();
@@ -331,7 +331,7 @@ class CvCdoNotificacionController extends Controller
                                 //Cambia a estado sansonatorio
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(2);
 
-                                $this->generateTrazabilidad($comparendo, $estado);
+                                $helpers->generateTrazabilidad($comparendo, $estado);
                             }
                         }else{
                             $caduco = $helpers->checkRangeDates($comparendo->getFecha());
@@ -342,7 +342,7 @@ class CvCdoNotificacionController extends Controller
                                     7
                                 );
 
-                                $this->generateTrazabilidad($comparendo, $estado);
+                                $helpers->generateTrazabilidad($comparendo, $estado);
                             }
                         }
                     }
@@ -355,14 +355,14 @@ class CvCdoNotificacionController extends Controller
                                 16
                             );
 
-                            $this->generateTrazabilidad($comparendo, $estado);
+                            $helpers->generateTrazabilidad($comparendo, $estado);
 
                             //Mandamiento de pago
                             $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                                 18
                             );
 
-                            $this->generateTrazabilidad($comparendo, $estado);
+                            $helpers->generateTrazabilidad($comparendo, $estado);
 
                             //Busca si ya se creo un cobro coactivo
                             $cobroCoactivo = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
@@ -376,7 +376,7 @@ class CvCdoNotificacionController extends Controller
                                 //Cambia a estado a cobro coactivo
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(3);
 
-                                $this->generateTrazabilidad($comparendo, $estado);
+                                $helpers->generateTrazabilidad($comparendo, $estado);
                             }
                         }
                     }
@@ -405,7 +405,7 @@ class CvCdoNotificacionController extends Controller
                         //Crea la trazabilidad de notificacion personal
                         $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(20);
 
-                        $this->generateTrazabilidad($comparendo, $estado);
+                        $helpers->generateTrazabilidad($comparendo, $estado);
                     }else{
                         $diasCalendario = $helpers->getDiasCalendario(
                             $notificacionPersonal->getFecha()
@@ -423,7 +423,7 @@ class CvCdoNotificacionController extends Controller
                             //Crea la trazabilidad de notificacion por aviso
                             $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(21);
 
-                            $this->generateTrazabilidad($comparendo, $estado);
+                            $helpers->generateTrazabilidad($comparendo, $estado);
                         }else{
                             $diasCalendario = $helpers->getDiasCalendario(
                                 $notificacionAviso->getFecha()
@@ -441,7 +441,7 @@ class CvCdoNotificacionController extends Controller
                                 //Crea la trazabilidad de notificacion por pagina web
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(22);
 
-                                $this->generateTrazabilidad($comparendo, $estado);
+                                $helpers->generateTrazabilidad($comparendo, $estado);
                             }else{
                                 $diasHabiles = $helpers->getDiasHabiles(
                                     $notificacionWeb->getFecha()
@@ -459,7 +459,7 @@ class CvCdoNotificacionController extends Controller
                                     //Genera la trazabilidad de auto de seguir adelante
                                     $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(23);
 
-                                    $this->generateTrazabilidad($comparendo, $estado);
+                                    $helpers->generateTrazabilidad($comparendo, $estado);
                                 }
 
                             }
@@ -478,7 +478,7 @@ class CvCdoNotificacionController extends Controller
                     $fechaActual = new \Datetime(date('Y-m-d'));
                     $noPagadas = 0;
                     foreach ($amortizaciones as $key => $amortizacion) {
-                        $fechaLimite = $helpers->convertDateTime($amortizacion->getFechaLimite());
+                        $fechaLimite = $amortizacion->getFechaLimite();
                         if (!$amortizacion->getPagada() &&  $fechaLimite < $fechaActual) {
                             $noPagadas += 1;
                         }
@@ -488,7 +488,7 @@ class CvCdoNotificacionController extends Controller
                         //Cambia a estado acuerdo de pago incumplido
                         $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(5);
 
-                        $this->generateTrazabilidad($comparendo, $estado);
+                        $helpers->generateTrazabilidad($comparendo, $estado);
                     }
                 }else{
                     //Busca si existe la trazabilidad de pendiente
@@ -503,7 +503,7 @@ class CvCdoNotificacionController extends Controller
                         //Cambia a estado pendiente
                         $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(1);
 
-                        $this->generateTrazabilidad($comparendo, $estado);
+                        $helpers->generateTrazabilidad($comparendo, $estado);
                     }
                 }
             }

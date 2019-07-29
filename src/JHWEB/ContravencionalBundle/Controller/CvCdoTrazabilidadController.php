@@ -176,7 +176,7 @@ class CvCdoTrazabilidadController extends Controller
                             $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
                                 18
                             );
-                            $this->generateTrazabilidad($comparendo, $estadoNew);
+                            $helpers->generateTrazabilidad($comparendo, $estadoNew);
                         }
 
                         $response = array(

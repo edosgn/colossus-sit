@@ -93,11 +93,11 @@ swiftmailer:
     transport:              smtp
     encryption:             null
     auth_mode:              null
-    host:                   subdetra.nariño.gov.co
-    username:               no_responder@subdetra.nariño.gov.co
-    password:               Xo8tq_06
-    port:                   25
-    delivery_address:      edgargn87@gmail.com
+    host:                   mail.apps.hospitalsanpedro.org
+    username:               no-responder@apps.hospitalsanpedro.org
+    password:               Yxi06d6?
+    port:                   587
+    delivery_address:       edgargn87@gmail.com
 
 #white_october_tcpdf:
     #class: 'AppBundle\services\PdfTemplate'

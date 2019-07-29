@@ -13,10 +13,12 @@ class Helpers
 {
 	public $jwt_auth;
 	protected $em;
+	public $mailer;
 	protected $newDate = array('fecha' => null, 'hora' => null);
 	
-	public function __construct($jwt_auth, EntityManager $em) {
+	public function __construct($jwt_auth, EntityManager $em, $mailer) {
 		$this->jwt_auth = $jwt_auth;
+		$this->mailer = $mailer;
 		$this->em = $em;
 	}
 
@@ -460,7 +462,35 @@ class Helpers
         }
 
         $em->persist($trazabilidad);
-        $em->flush();
+		$em->flush();
+
+		$to = array();
+		array_push($to,'edgargn87@gmail.com');
+        /*foreach ($trazabilidad->getFuncionario()->getUsuario()->getCorreos() as $key => $correo) {
+          $correoValido = $this->is_valid_email($correo);
+
+          if ($correoValido) {
+            array_push($to,$correo);
+            $this->templateAssignment($trazabilidad, $to);
+          }else{
+            $correosInvalidos[] = $correo;
+          }
+        };*/
+		
+		if ($comparendo->getInfractorEmail()) {
+			$this->mailer->templateNotify($trazabilidad, $to);
+		}
+
+		if ($estado->getReparto()) {
+			$funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+				2
+			);
+
+			$trazabilidad->setFuncionario($funcionario);
+			$em->flush();
+
+			$this->mailer->templateAssignment($trazabilidad, $to);
+		}
     }
 
     public function generateTemplate($comparendo, $cuerpo){

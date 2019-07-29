@@ -1201,14 +1201,109 @@ class VhloVehiculoController extends Controller
         $fechaActual = strftime("%d de %B del %Y");
 
         $em = $this->getDoctrine()->getManager();
+
+        $file = $request->files->get('file');
+
+        $documentoName = md5(uniqid()).$file->guessExtension();
+        $file->move(
+            $this->getParameter('data_upload'),
+            $documentoName
+        );
         
         $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
             $params->idFuncionario
         );
 
+        $tramitesSolicitudArray = null;
+        $certificadosArray = null;
+
+        $count = 0;
+        while (($datos = fgetcsv($valores,0,";")) !== FALSE )
+        {
+            $datos = array_map("utf8_encode", $datos);
+
+            if ($params->tipo = 'PLACA') {
+                $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->find(
+                    $datos[0]
+                );
+
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneByPlaca(
+                    $placa->getId()
+                );
+
+                if ($vehiculo) {
+                    $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
+                        $vehiculo->getId()
+                    );
+        
+                    $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
+                        $vehiculo->getId()
+                    );
+
+                    foreach ($tramitesSolicitud as $tramiteSolicitud) {
+                        $tramitesSolicitudArray[]= array(
+                            'fecha' => $tramiteSolicitud->getFecha(),
+                            'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                            'datos' => $tramiteSolicitud->getResumen()
+                        );
+                    }
+
+                    if ($tramitesSolicitudArray) {
+                        $certificadosArray[] = array(
+                            'vehiculo' => $vehiculo,
+                            'propietarios' => $propietarios,
+                            'tramitesSolicitud' => $tramitesSolicitudArray,
+                        );
+                    }
+                } 
+            }elseif ($params->tipo = 'IDENTIFICACION') {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $datos[0]
+                );
+
+                if ($ciudadano) {
+                    $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByCiudadano(
+                        $ciudadano->getId()
+                    );
+
+                    foreach ($propietarios as $key => $propietario) {
+                        $vehiculo = $propietario->getVehiculo();
+
+                        if ($propietario->getVehiculo()) {
+                            $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
+                                $vehiculo->getId()
+                            );
+                
+                            $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
+                                $vehiculo->getId()
+                            );
+        
+                            foreach ($tramitesSolicitud as $tramiteSolicitud) {
+                                $tramitesSolicitudArray[]= array(
+                                    'fecha' => $tramiteSolicitud->getFecha(),
+                                    'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                                    'datos' => $tramiteSolicitud->getResumen()
+                                );
+                            }
+        
+                            if ($tramitesSolicitudArray) {
+                                $certificadosArray[] = array(
+                                    'vehiculo' => $vehiculo,
+                                    'propietarios' => $propietarios,
+                                    'tramitesSolicitud' => $tramitesSolicitudArray,
+                                );
+                            }
+                        } 
+                    }
+                }
+            }
+
+            $count++;
+        }
+
         $html = $this->renderView('@JHWEBVehiculo/Default/pdfCertificadoTradicion.html.twig', array(
-            'identificaciones'=>$params->identificaciones,
-            'funcionario'=>$funcionario,
+            'identificaciones'=> $valoresArray,
+            'funcionario'=> $funcionario,
             'fechaActual' => $fechaActual,
         ));
 

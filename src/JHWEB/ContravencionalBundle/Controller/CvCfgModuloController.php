@@ -3,9 +3,11 @@
 namespace JHWEB\ContravencionalBundle\Controller;
 
 use JHWEB\ContravencionalBundle\Entity\CvCfgModulo;
+use JHWEB\ContravencionalBundle\Entity\CvCfgReparto;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Cvcfgmodulo controller.
@@ -22,13 +24,28 @@ class CvCfgModuloController extends Controller
      */
     public function indexAction()
     {
+        $helpers = $this->get("app.helpers");
+
         $em = $this->getDoctrine()->getManager();
+        
+        $modulos = $em->getRepository('JHWEBContravencionalBundle:CvCfgModulo')->findBy(
+            array(
+                'activo' => true
+            )
+        );
 
-        $cvCfgModulos = $em->getRepository('JHWEBContravencionalBundle:CvCfgModulo')->findAll();
+        $response['data'] = array();
 
-        return $this->render('cvcfgmodulo/index.html.twig', array(
-            'cvCfgModulos' => $cvCfgModulos,
-        ));
+        if ($modulos) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($modulos)." registros encontrados", 
+                'data'=> $modulos,
+            );
+        }
+
+        return $helpers->json($response);
     }
 
     /**
@@ -39,22 +56,45 @@ class CvCfgModuloController extends Controller
      */
     public function newAction(Request $request)
     {
-        $cvCfgModulo = new Cvcfgmodulo();
-        $form = $this->createForm('JHWEB\ContravencionalBundle\Form\CvCfgModuloType', $cvCfgModulo);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
             $em = $this->getDoctrine()->getManager();
-            $em->persist($cvCfgModulo);
+           
+            $modulo = new CvCfgModulo();
+
+            $modulo->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
+            $modulo->setActivo(true);
+
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
+            );
+            $modulo->setFuncionario($funcionario);
+            
+            $em->persist($modulo);
             $em->flush();
 
-            return $this->redirectToRoute('cvcfgmodulo_show', array('id' => $cvCfgModulo->getId()));
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('cvcfgmodulo/new.html.twig', array(
-            'cvCfgModulo' => $cvCfgModulo,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**
@@ -132,5 +172,63 @@ class CvCfgModuloController extends Controller
             ->setMethod('DELETE')
             ->getForm()
         ;
+    }
+
+    /* ====================================================== */
+
+    /**
+     * Creates a new cvCfgModulo entity.
+     *
+     * @Route("/states", name="cvcfgmodulo_states")
+     * @Method({"GET", "POST"})
+     */
+    public function statesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+           
+            $modulo = $em->getRepository('JHWEBContravencionalBundle:CvCfgModulo')->find(
+                $params->idModulo
+            );
+            
+            foreach ($params->estados as $key => $idEstado) {
+                $reparto = new CvCfgReparto();
+                
+                $reparto->setActivo(true);
+                $reparto->setModulo($modulo);
+    
+                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                    $idEstado
+                );
+                $reparto->setEstado($estado);
+                
+                $em->persist($reparto);
+                $em->flush();
+            }
+            
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
     }
 }
