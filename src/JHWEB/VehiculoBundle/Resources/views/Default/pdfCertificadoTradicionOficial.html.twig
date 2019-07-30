@@ -1,0 +1,118 @@
+<html>
+  <header>
+  </header>
+  <body>
+    {% for key, certificado in certificadosArray %}
+        {% if key > 0 %}
+            <br pagebreak="true" />
+        {% endif %}
+    
+        <p class="text-justify">
+            San Juan de Pasto, {{ fechaActual }}.
+            <br>
+            <br>
+            <br>
+        </p>
+        <p style="text-align:center;">
+            <b>Subsecretaria de transito y transporte departamental de nariño</b>
+            <br>      
+        </p>
+
+        <p>
+            <table>
+                <tr>
+                    <td width="70%">El vehículo de placas: {{ certificado.vehiculo.placa.numero }} tiene las siguientes características </td>
+                </tr>
+            </table>       
+            <br>
+            <br> 
+        </p>
+
+        <table>
+            <tr>
+                <td  width="15%" style="font-weight:bold;">Clase</td>
+                {% if certificado.vehiculo.clase  %}
+                <td> {{certificado.vehiculo.clase.nombre}}</td>
+                {% endif  %}
+                <td style="font-weight:bold;">No.serie</td>
+                <td>{{certificado.vehiculo.serie}}</td>
+            </tr>
+            <tr>
+                <td  width="15%" style="font-weight:bold;">Marca</td>
+                <td> {{certificado.vehiculo.linea.marca.nombre}}</td>
+                <td style="font-weight:bold;">No.Chasis</td>
+                <td>{{certificado.vehiculo.chasis}}</td>
+            </tr>
+            <tr>
+                <td  width="15%" style="font-weight:bold;">Carrocería</td>
+                <td> {{certificado.vehiculo.carroceria.nombre}}</td>
+                <td style="font-weight:bold;">Cilindraje</td>
+                <td>{{certificado.vehiculo.cilindraje}}</td>
+            </tr>
+            <tr>
+                <td  width="15%" style="font-weight:bold;">linea</td>
+                <td> {{certificado.vehiculo.linea.nombre}}</td>
+                <td style="font-weight:bold;">Pasajeros</td>
+                <td>{{certificado.vehiculo.numeroPasajeros}}</td>
+            </tr>
+            <tr> 
+                <td  width="15%" style="font-weight:bold;">Color</td>
+                {% if certificado.vehiculo.color  %}
+                <td>{{certificado.vehiculo.color.nombre}}</td>
+                {% endif  %}
+                <td style="font-weight:bold;">Servicio</td>
+                {% if certificado.vehiculo.servicio  %}
+                <td>{{certificado.vehiculo.servicio.nombre}}</td>
+                {% endif  %}
+            </tr>
+            <tr>
+                <td  width="15%" style="font-weight:bold;">Modelo</td>
+                <td> {{certificado.vehiculo.modelo}}</td>
+                <td style="font-weight:bold;">No.motor</td>
+                <td>{{certificado.vehiculo.motor}}</td>
+            </tr>
+        </table>
+
+        {% if certificado.propietarios|length > 0 %}
+        <table border="1" cellpadding="3" style="font-size:11px;">
+            <tr>
+                <td  width="15%">Identificacion</td>
+                <td width="30%">Nombres</td>
+                <td width="30%">Apellidos</td>
+                <td width="25%">Direccion</td>
+            </tr>
+            {% for propietario in certificado.propietarios %}
+                {% if propietario.ciudadano %}
+                    <tr>
+                        <td>{{ propietario.ciudadano.identificacion }}</td>
+                        <td>{{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }}</td>
+                        <td>{{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}</td>
+                        <td>{{ propietario.ciudadano.direccionPersonal }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <p style="text-align:center;"> 
+            <b>tramites</b>
+            <br>      
+        </p>
+
+        <table border="1">
+            <tr>
+                <td>Fecha</td>
+                <td>Nombre Tramite</td>
+                <td>datos</td>
+            </tr>
+            {% for tramiteSolicitudArray in certificado.tramitesSolicitud %}
+                <tr>
+                    <td>{{ tramiteSolicitudArray['fecha']|date('d/m/Y') }}</td>
+                    <td>{{ tramiteSolicitudArray['tramiteNombre']}}</td>
+                    <td>{{ tramiteSolicitudArray['datos'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+  </body>
+</html>
