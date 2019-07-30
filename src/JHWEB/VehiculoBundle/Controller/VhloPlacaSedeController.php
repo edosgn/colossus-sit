@@ -343,7 +343,8 @@ class VhloPlacaSedeController extends Controller
                 $numeroFinal = substr($rangoFinal, 3, 2);
 
                 if ($longitud == 6) {
-                    $letra = substr($rangoFinal, 5,1);
+                    $ultimaLetraInicial = substr($rangoInicial, 5,1);
+                    $ultimaLetraFinal = substr($rangoFinal, 5,1);
                 }
                 break;
             case 'MOTOCARRO':
@@ -431,20 +432,21 @@ class VhloPlacaSedeController extends Controller
 
     public function validateByTipoVehiculo($rangoInicial, $rangoFinal, $tipoVehiculo)
     {
-        $longitud = strlen($rangoInicial);
+        $longitudRangoInicial = strlen($rangoInicial);
+        $longitudRangoFinal = strlen($rangoFinal);
 
         switch ($tipoVehiculo) {
             case 'AUTOMOTOR':
-                if ($longitud == 6) {
+                if ($longitudRangoInicial == 6 && $longitudRangoFinal == 6) {
                     $letrasRangoInicial = substr($rangoInicial, 0, 3);
                     $letrasRangoFinal = substr($rangoFinal, 0, 3);
                     $numerosRangoInicial = substr($rangoInicial, 3, 3);
                     $numerosRangoFinal = substr($rangoFinal, 3, 3);
 
                     if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
-                        $nomenclaturaValida = false;
-                    } else {
                         $nomenclaturaValida = true;
+                    } else {
+                        $nomenclaturaValida = false;
                     };                    
                 }else{
                     $nomenclaturaValida = false;
@@ -452,26 +454,26 @@ class VhloPlacaSedeController extends Controller
 
                 break;
             case 'MOTOCICLETA':
-                if ($longitud == 6 || $longitud == 5) {
+                if (($longitudRangoInicial == 6 && $longitudRangoFinal == 6) || ($longitudRangoInicial == 5 && $longitudRangoFinal == 5)) {
                     $letrasRangoInicial = substr($rangoInicial, 0, 3);
                     $letrasRangoFinal = substr($rangoFinal, 0, 3);
                     $numerosRangoInicial = substr($rangoInicial, 3, 2);
                     $numerosRangoFinal = substr($rangoFinal, 3, 2);
 
-                    if ($longitud == 5) {
+                    if ($longitudRangoInicial == 5 && $longitudRangoFinal == 5) {
                         if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
-                            $nomenclaturaValida = false;
-                        } else {
                             $nomenclaturaValida = true;
+                        } else {
+                            $nomenclaturaValida = false;
                         };
                     }else{
                         $letraRangoInicial = substr($rangoInicial, 5, 1);
                         $letraRangoFinal = substr($rangoFinal, 5, 1);
 
                         if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal) && is_string($letraRangoInicial) && is_string($letraRangoFinal)) {
-                            $nomenclaturaValida = false;
-                        } else {
                             $nomenclaturaValida = true;
+                        } else {
+                            $nomenclaturaValida = false;
                         };
                     }
                 }else{
@@ -480,7 +482,7 @@ class VhloPlacaSedeController extends Controller
 
                 break;
             case 'MOTOCARRO':
-                if ($longitud == 6) {
+                if ($longitudRangoInicial == 6 && $longitudRangoFinal == 6) {
                     //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
                     
                     $letrasRangoInicial = substr($rangoInicial, 0, 3);
@@ -489,9 +491,9 @@ class VhloPlacaSedeController extends Controller
                     $numerosRangoFinal = substr($rangoFinal, 3, 3);
 
                     if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
-                        $nomenclaturaValida = false;
-                    } else {
                         $nomenclaturaValida = true;
+                    } else {
+                        $nomenclaturaValida = false;
                     };                    
                 }else{
                     $nomenclaturaValida = false;
@@ -499,7 +501,7 @@ class VhloPlacaSedeController extends Controller
 
                 break;
             case 'REMOLQUE Y SEMIREMOLQUE':
-                if ($longitud == 6) {
+                if ($longitudRangoInicial == 6 && $longitudRangoFinal == 6) {
                     //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 1, 5);
 
                     $letrasRangoInicial = substr($rangoInicial, 0, 1);
@@ -508,9 +510,9 @@ class VhloPlacaSedeController extends Controller
                     $numerosRangoFinal = substr($rangoFinal, 1, 5);
 
                     if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
-                        $nomenclaturaValida = false;
-                    } else {
                         $nomenclaturaValida = true;
+                    } else {
+                        $nomenclaturaValida = false;
                     };
                 }else{
                     $nomenclaturaValida = false;
@@ -518,7 +520,7 @@ class VhloPlacaSedeController extends Controller
                 
                 break;
             case 'MAQUINARIA AGRICOLA':
-                if ($longitud == 6) {
+                if ($longitudRangoInicial == 6 && $longitudRangoFinal == 6) {
                     //$nomenclaturaValida = $this->validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, 3, 3);
 
                     $letrasRangoInicial = substr($rangoInicial, 0, 3);
@@ -527,9 +529,9 @@ class VhloPlacaSedeController extends Controller
                     $numerosRangoFinal = substr($rangoFinal, 3, 3);
 
                     if (is_string($letrasRangoInicial) && is_string($letrasRangoFinal) && is_numeric($numerosRangoInicial) && is_numeric($numerosRangoFinal)) {
-                        $nomenclaturaValida = false;
-                    } else {
                         $nomenclaturaValida = true;
+                    } else {
+                        $nomenclaturaValida = false;
                     };                    
                 }else{
                     $nomenclaturaValida = false;
@@ -540,16 +542,7 @@ class VhloPlacaSedeController extends Controller
 
         return $nomenclaturaValida;
     }
-
-    public function validateNomenclatura($numeroInicial, $numeroFinal, $letrasInicio, $cantidadLetras, $cantidadNumeros)
-    {
-        if (preg_match('/^[a-zA-Z]+$/', $letrasInicio) && strlen($numeroInicial) == $cantidadNumeros && strlen($numeroFinal) == $cantidadNumeros) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    
     /**
      * Busca asignaciones por parametros (identificacion, No. comparendo o fecha).
      *
