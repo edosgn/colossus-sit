@@ -1,0 +1,144 @@
+<html>
+    <header></header>
+    <body>
+
+        <p class="text-justify">
+            San Juan de Pasto,
+            {{ fechaActual }}
+        </p>
+        <br>
+        <br>
+        <br>
+        <p style="text-align:center;">
+            <b>RESOLUCIÓN {{ numeroResolucion }} DE 2019 </b>
+        <br>(                              )
+        <br>
+        <br>
+        <br>
+        <b>POR LA CUAL AUTORIZA LA DESVINCULACIÓN POR COMÚN ACUERDO AL VEHICULO  DE PLACAS
+        {{ vehiculo.placa.numero }}</b><br><br>
+La subsecretaria de Tránsito y Transporte Departamental de Nariño.<br>
+
+        En uso de sus facultades legales  y funcionales, particularmente  en el Decreto 1079 de 2015, y</p><br>
+        <p style="text-align:center;">
+            <b>CONSIDERANDO</b>
+        </p>
+        <br>
+        <p style="text-align:justify;">Que mediante escrito del 03 de septiembre de 2018, los señores
+            <b>{{ asignacion.empresaTransporte.empresa.empresaRepresentante.ciudadano.primerNombre }}
+            {{ asignacion.empresaTransporte.empresa.empresaRepresentante.ciudadano.segundoNombre }}
+            {{ asignacion.empresaTransporte.empresa.empresaRepresentante.ciudadano.primerApellido }}</b> ., en calidad de Gerente de la empresa 
+            <b>{{ asignacion.empresaTransporte.empresa.nombre }}</b>
+        , y  <b>{{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }} {{ propietario.ciudadano.primerApellido }} 
+        {{ propietario.ciudadano.segundoApellido }}</b>, identificado(a) con la C.C. <b>{{ propietario.ciudadano.identificacion }}</b> de "PASTO", en calidad de propietario(a)
+        , ha solicitidado a la Subsecretaria de Tránsito y Transporte Departamental de Nariño, autorización para hacer cambio de servicio de <b>PÚBLICO</b> a servicio <b>{{ vehiculo.servicio.nombre }}</b>
+        , al vehiculo de las siguientes caracteristicas: </p><br>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th> PLACA</th>
+                    <th> <b>{{ vehiculo.placa.numero }}</b></th>
+                    <th> MODELO</th>
+                    <th> <b>{{ vehiculo.modelo }}</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> CLASE VEHÍCULO</td>
+                    <td> <b>{{ vehiculo.clase.nombre }}</b></td>
+                    <td> No. MOTOR</td>
+                    <td> <b>{{ vehiculo.motor }}</b></td>
+                </tr>
+                <tr>
+                    <td> MARCA</td>
+                    <td> <b>{{ vehiculo.linea.marca.nombre }}</b></td>
+                    <td> No. CHASIS</td>
+                    <td> <b>{{ vehiculo.chasis }}</b></td>
+                </tr>
+                <tr>
+                    <td> SERVICIO</td>
+                    <td> <b>{{ vehiculo.servicio.nombre }}</b></td>
+                    <td> No. de ORDEN</td>
+                    <td> <b>{{ vehiculo.numeroFactura }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <p style="text-align:justify;">Que de acuerdo a la normatividad vigente aplicable para el caso. <br><br>
+        Que en acatamiento de las disposiciones normativas del Decreto 1079 de 2015. el(la) propietario(a) del vehiculo de placas
+        {{ vehiculo.placa.numero }} presentó los requisitos requeridos, entre elos el paz y salvo del {{ fechaActual }}, expedido por NOMBRE EMPRESA, para</p>
+        <span pagebreak = "true"></span>
+        <p style="text-align:justify;">Que a {{ fechaActual }}, una vez complementada la petición de los intesresados se procedió por la Subsecretaría
+         de Movilidad de este organismo de Tránsito a dar concepto positivo a la solicitud. 
+        <br>
+        <br>
+        En mérito de lo expuesto,</p> 
+        <p style="text-align:center;"><b>RESUELVE</b></p><br>
+        <p style="text-align:justify;"><i>ARTICULO PRIMERO.-</i> Autorizar el cambio de servicio <b>PÚBLICO</b> a <b>{{ vehiculo.servicio.nombre }}</b>, automotor que 
+        se detalla a continuación</p><br><br>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th> PLACA</th>
+                    <th> <b>{{ vehiculo.placa.numero }}</b></th>
+                    <th> MODELO</th>
+                    <th> <b>{{ vehiculo.modelo }}</b></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> CLASE VEHÍCULO</td>
+                    <td> <b>{{ vehiculo.clase.nombre }}</b></td>
+                    <td> No. MOTOR</td>
+                    <td> <b>{{ vehiculo.motor }}</b></td>
+                </tr>
+                <tr>
+                    <td> MARCA</td>
+                    <td> <b>{{ vehiculo.linea.marca.nombre }}</b></td>
+                    <td> No. CHASIS</td>
+                    <td> <b>{{ vehiculo.chasis }}</b></td>
+                </tr>
+                <tr>
+                    <td> SERVICIO</td>
+                    <td> <b>{{ vehiculo.servicio.nombre }}</b></td>
+                    <td> No. de ORDEN</td>
+                    <td> <b>{{ vehiculo.numeroFactura }}</b></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <p style="text-align:justify;"><i>ARTICULO SEGUNDO.-</i> El(la) propietario(a) del rodante inmediatamente caracterizado continuára con el trámite 
+        del cambio de servicio, gestionando el formulario pertinente, previo pago de los derechos por dicho concepto, ante la Subsecretaria de Registro 
+        de la Subsecretaría de Tránsito y Transporte Departamental de Nariño.<br><br>
+        <i>ARTICULO TERCERO.-</i> Comunicar el presente acto de trámite al(la) propietario(a) del rodante, haciéndole saber que contra el mismo no procede 
+        recurso alguno.<br><br>
+        <i>ARTICULO CUARTO.-</i> El presente acto rige a partir de la fecha de su expedición.</p>
+        <br>
+        <br>
+        <p style="text-align:center;">COMUNIQUESE Y CUMPLASE.</p>
+        <p style="text-align:justtfy;">Dada en San Juan de Pasto, el {{ fechaActual }}</p>
+        <br>
+        <br>
+        <p style="text-align:center;">YAMILE CALDERÓN DELGADO.<br>
+        Subsecretaría de Tránsito y Transporte Departamental de Nariño</p>
+        <br>
+        <br>
+        Revisó
+        <br>
+        <br>
+        <table style="text-align:left;">
+            <thead>
+                <tr>
+                    <th>NORMA ROCIO CHINGUAL VARGAS</th>
+                    <th>LUIS ARMANDO MARINO CHAMORRO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Asesoira Jurídica-STTM</td>
+                    <td>Subsecretario de Movilidad</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
