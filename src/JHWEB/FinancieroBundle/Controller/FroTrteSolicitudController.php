@@ -631,8 +631,14 @@ class FroTrteSolicitudController extends Controller
                         case 'cambioEmpresa':
                             $this->vehiculoCambioEmpresaAction($params);
                             break;
+                        case 'conceptoFavorable':
+                            $this->vehiculoConceptoFavorableAction($params);
+                            break;
                         case 'desvinculacionCambioServicio':
                             $this->vehiculoDesvinculacionCambioServicioAction($params);
+                            break;
+                        case 'desvinculacionComunAcuerdo':
+                            $this->vehiculoDesvinculacionComunAcuerdoAction($params);
                             break;
                     }
                 }
@@ -1472,6 +1478,51 @@ class FroTrteSolicitudController extends Controller
                     
         return $helpers->json($response);
     }
+    //desvincula un vehiculo de transporte público por cumón acuerdo
+    public function vehiculoDesvinculacionComunAcuerdoAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion->setActivo(false);
+
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
+        $cupo->setEstado('DISPONIBLE');
+        
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+
+        $tarjetaOperacion->setActivo(false);
+
+        $em->persist($vehiculo);
+        $em->persist($asignacion);
+        $em->persist($cupo);
+        $em->persist($tarjetaOperacion);
+        $em->flush();
+    
+        $response = 
+            array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Se desvinculó el vehiculo por común acuerdo.',
+            );
+                    
+        return $helpers->json($response);
+    }
 
     //cambia un vehiculo de empresa de transporte público
     public function vehiculoCambioEmpresaAction($params)
@@ -1524,6 +1575,8 @@ class FroTrteSolicitudController extends Controller
             )
         );
 
+        $cupoNew->setEstado('UTILIZADO');
+
         $nivelServicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->findOneBy(
             array(
                 'id' => $params->idNivelServicioAnterior,
@@ -1534,6 +1587,7 @@ class FroTrteSolicitudController extends Controller
 
         $em->persist($asignacion);
         $em->persist($cupo);
+        $em->persist($cupoNew);
         $em->persist($tarjetaOperacion);
 
         $asignacionNew = new VhloTpAsignacion();
@@ -1559,6 +1613,100 @@ class FroTrteSolicitudController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => 'El trámite de cambio de servicio se realizó con éxito',
+            );
+                    
+        return $helpers->json($response);
+    }
+
+    //cambia un vehiculo de empresa de transporte público por concepto Favorable
+    public function vehiculoConceptoFavorableAction($params)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion->setActivo(false);
+
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
+        $cupo->setEstado('DISPONIBLE');
+        
+        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+            array(
+                'vehiculo' => $params->idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $tarjetaOperacion->setActivo(false);
+
+        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+            array(
+                'id' => $params->idEmpresaNueva,
+                'activo' => true
+            )
+        );
+
+        $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+            array(
+                'empresa' => $empresa->getId(),
+                'activo' => true
+            )
+        );
+
+        $cupoNew = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->findOneBy(
+            array(
+                'id' => $params->idCupoNuevo,
+                'activo' => true
+            )
+        );
+
+        $cupoNew->setEstado('UTILIZADO');
+
+        $nivelServicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->findOneBy(
+            array(
+                'id' => $params->idNivelServicioAnterior,
+                'activo' => true
+            )
+        );
+
+
+        $em->persist($asignacion);
+        $em->persist($cupo);
+        $em->persist($cupoNew);
+        $em->persist($tarjetaOperacion);
+
+        $asignacionNew = new VhloTpAsignacion();
+        $asignacionNew->setEmpresaTransporte($empresaTransporte);
+        $asignacionNew->setVehiculo($vehiculo);
+        $asignacionNew->setCupo($cupoNew);
+        $asignacionNew->setNivelServicio($nivelServicio);
+        $asignacionNew->setActivo(true);
+
+        $em->persist($asignacionNew);
+
+        $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+        $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVigencia));
+        $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->numeroTarjetaOperacionNuevo);
+        $tarjetaOperacionNew->setVehiculo($vehiculo);
+        $tarjetaOperacionNew->setActivo(true);
+
+        $em->persist($tarjetaOperacionNew);
+        $em->flush();
+    
+        $response = 
+            array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'El trámite de cambio de servicio por concepto favorable se realizó con éxito',
             );
                     
         return $helpers->json($response);
@@ -2074,6 +2222,140 @@ class FroTrteSolicitudController extends Controller
             'propietario' => $propietario,
             'numeroResolucion' => $numeroResolucion,
             'empresaTransporte' => $asignacion->getEmpresaTransporte(),
+        ));
+
+        $this->get('app.pdf')->templateResoluciones($html);
+    }
+
+    /**
+     * Genera pdf resolucion del cambio de empresa.
+     *
+     * @Route("/{idVehiculo}/{idEmpresaActual}/{numeroResolucion}/resolucion/cambioEmpresa/pdf", name="resolucion_cambio_empresa_pdf")
+     * @Method({"GET","POST"})
+     */
+    public function pdfResolucionCambioEmpresaAction(Request $request, $idVehiculo, $idEmpresaActual, $numeroResolucion)
+    {        
+        $em = $this->getDoctrine()->getManager();
+        
+        setlocale(LC_ALL, "es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($idVehiculo);
+
+        $empresaActual = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+            array(
+                'id' => $idEmpresaActual,
+                'activo' => true
+            )
+        );
+
+        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+            )
+        );
+        
+        $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.resolucion.cambioEmpresa.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'vehiculo' => $vehiculo,
+            'propietario' => $propietario,
+            'numeroResolucion' => $numeroResolucion,
+            'asignacion' => $asignacion,
+            'empresaActual' => $empresaActual,
+        ));
+
+        $this->get('app.pdf')->templateResoluciones($html);
+    }
+
+    /**
+     * Genera pdf resolucion de desvinculacion por Común Acuerdo.
+     *
+     * @Route("/{idVehiculo}/{numeroResolucion}/resolucion/desvinculacionComunAcuerdo/pdf", name="resolucion_desvinculacion_comun_acuerdo_pdf")
+     * @Method({"GET","POST"})
+     */
+    public function pdfResolucionDesvinculacionComunAcuerdoAction(Request $request, $idVehiculo, $numeroResolucion)
+    {        
+        $em = $this->getDoctrine()->getManager();
+        
+        setlocale(LC_ALL, "es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($idVehiculo);
+
+        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+            )
+        );
+        
+        $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.resolucion.desvinculacionPorComunAcuerdo.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'vehiculo' => $vehiculo,
+            'propietario' => $propietario,
+            'numeroResolucion' => $numeroResolucion,
+            'asignacion' => $asignacion,
+        ));
+
+        $this->get('app.pdf')->templateResoluciones($html);
+    }
+
+    /**
+     * Genera pdf resolucion del cambio de empresa por concepto favorable.
+     *
+     * @Route("/{idVehiculo}/{idEmpresaActual}/{numeroConceptoFavorable}/{numeroResolucion}/resolucion/cambioEmpresaConceptoFavorable/pdf", name="resolucion_cambio_empresa_pdf")
+     * @Method({"GET","POST"})
+     */
+    public function pdfResolucionCambioEmpresaConceptoFavorableAction(Request $request, $idVehiculo, $idEmpresaActual, $numeroConceptoFavorable, $numeroResolucion)
+    {        
+        $em = $this->getDoctrine()->getManager();
+        
+        setlocale(LC_ALL, "es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($idVehiculo);
+
+        $empresaActual = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+            array(
+                'id' => $idEmpresaActual,
+                'activo' => true
+            )
+        );
+
+        $propietario = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+                'activo' => true
+            )
+        );
+        
+        $asignacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
+            array(
+                'vehiculo' => $idVehiculo,
+            )
+        );
+        
+        $html = $this->renderView('@JHWEBFinanciero/Default/resoluciones/pdf.resolucion.conceptoFavorable.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'vehiculo' => $vehiculo,
+            'propietario' => $propietario,
+            'numeroResolucion' => $numeroResolucion,
+            'numeroConceptoFavorable' => $numeroConceptoFavorable,
+            'asignacion' => $asignacion,
+            'empresaActual' => $empresaActual,
         ));
 
         $this->get('app.pdf')->templateResoluciones($html);
