@@ -64,6 +64,6 @@ class DefaultController extends Controller
             'tramitesSolicitudArray'=>$tramitesSolicitudArray
         ));
 
-        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo, 'oficial');
+        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo->getPlaca()->getNumero(), 'oficial');
     }
 }

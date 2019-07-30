@@ -162,6 +162,13 @@ class VhloVehiculo
     private $cancelado;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="estado",type="string", length=255, nullable= true)
+     */
+    private $estado;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -743,6 +750,30 @@ class VhloVehiculo
     }
 
     /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return VhloVehiculo
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
      * Set activo
      *
      * @param boolean $activo
@@ -764,6 +795,126 @@ class VhloVehiculo
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set identificacionRadicado
+     *
+     * @param string $identificacionRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setIdentificacionRadicado($identificacionRadicado)
+    {
+        $this->identificacionRadicado = $identificacionRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get identificacionRadicado
+     *
+     * @return string
+     */
+    public function getIdentificacionRadicado()
+    {
+        return $this->identificacionRadicado;
+    }
+
+    /**
+     * Set fechaRegistroRadicado
+     *
+     * @param \DateTime $fechaRegistroRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setFechaRegistroRadicado($fechaRegistroRadicado)
+    {
+        $this->fechaRegistroRadicado = $fechaRegistroRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get fechaRegistroRadicado
+     *
+     * @return \DateTime
+     */
+    public function getFechaRegistroRadicado()
+    {
+        return $this->fechaRegistroRadicado;
+    }
+
+    /**
+     * Set numeroGuiaRadicado
+     *
+     * @param string $numeroGuiaRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setNumeroGuiaRadicado($numeroGuiaRadicado)
+    {
+        $this->numeroGuiaRadicado = $numeroGuiaRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroGuiaRadicado
+     *
+     * @return string
+     */
+    public function getNumeroGuiaRadicado()
+    {
+        return $this->numeroGuiaRadicado;
+    }
+
+    /**
+     * Set empresaEnvioRadicado
+     *
+     * @param string $empresaEnvioRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setEmpresaEnvioRadicado($empresaEnvioRadicado)
+    {
+        $this->empresaEnvioRadicado = $empresaEnvioRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get empresaEnvioRadicado
+     *
+     * @return string
+     */
+    public function getEmpresaEnvioRadicado()
+    {
+        return $this->empresaEnvioRadicado;
+    }
+
+    /**
+     * Set numeroLicenciaRadicado
+     *
+     * @param string $numeroLicenciaRadicado
+     *
+     * @return VhloVehiculo
+     */
+    public function setNumeroLicenciaRadicado($numeroLicenciaRadicado)
+    {
+        $this->numeroLicenciaRadicado = $numeroLicenciaRadicado;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroLicenciaRadicado
+     *
+     * @return string
+     */
+    public function getNumeroLicenciaRadicado()
+    {
+        return $this->numeroLicenciaRadicado;
     }
 
     /**
@@ -1100,126 +1251,6 @@ class VhloVehiculo
     public function getEmpresa()
     {
         return $this->empresa;
-    }
-
-    /**
-     * Set identificacionRadicado
-     *
-     * @param string $identificacionRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setIdentificacionRadicado($identificacionRadicado)
-    {
-        $this->identificacionRadicado = $identificacionRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get identificacionRadicado
-     *
-     * @return string
-     */
-    public function getIdentificacionRadicado()
-    {
-        return $this->identificacionRadicado;
-    }
-
-    /**
-     * Set fechaRegistroRadicado
-     *
-     * @param \DateTime $fechaRegistroRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setFechaRegistroRadicado($fechaRegistroRadicado)
-    {
-        $this->fechaRegistroRadicado = $fechaRegistroRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get fechaRegistroRadicado
-     *
-     * @return \DateTime
-     */
-    public function getFechaRegistroRadicado()
-    {
-        return $this->fechaRegistroRadicado;
-    }
-
-    /**
-     * Set numeroGuiaRadicado
-     *
-     * @param string $numeroGuiaRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setNumeroGuiaRadicado($numeroGuiaRadicado)
-    {
-        $this->numeroGuiaRadicado = $numeroGuiaRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroGuiaRadicado
-     *
-     * @return string
-     */
-    public function getNumeroGuiaRadicado()
-    {
-        return $this->numeroGuiaRadicado;
-    }
-
-    /**
-     * Set empresaEnvioRadicado
-     *
-     * @param string $empresaEnvioRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setEmpresaEnvioRadicado($empresaEnvioRadicado)
-    {
-        $this->empresaEnvioRadicado = $empresaEnvioRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get empresaEnvioRadicado
-     *
-     * @return string
-     */
-    public function getEmpresaEnvioRadicado()
-    {
-        return $this->empresaEnvioRadicado;
-    }
-
-    /**
-     * Set numeroLicenciaRadicado
-     *
-     * @param string $numeroLicenciaRadicado
-     *
-     * @return VhloVehiculo
-     */
-    public function setNumeroLicenciaRadicado($numeroLicenciaRadicado)
-    {
-        $this->numeroLicenciaRadicado = $numeroLicenciaRadicado;
-
-        return $this;
-    }
-
-    /**
-     * Get numeroLicenciaRadicado
-     *
-     * @return string
-     */
-    public function getNumeroLicenciaRadicado()
-    {
-        return $this->numeroLicenciaRadicado;
     }
 
     /**

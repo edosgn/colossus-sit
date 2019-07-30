@@ -482,14 +482,14 @@ class PdfTemplate extends TCPDF{
         $pdf->Output('example_065.pdf', 'I');
     }
 
-    public function templateCertificadoTradicion($html, $vehiculo, $tipo){
+    public function templateCertificadoTradicion($html, $title, $tipo){
         // create new PDF document
         $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('JHWEB PASTO SAS');
-        $pdf->SetTitle('Cert. Tradición '.$vehiculo->getPlaca()->getNumero());
+        $pdf->SetTitle('Cert. Tradición '.$title);
         $pdf->SetSubject('Subsecretaría de transito deptal.');
         $pdf->SetKeywords('Certificado, Tradición');
 
@@ -531,7 +531,19 @@ class PdfTemplate extends TCPDF{
 
         if($tipo == 'oficial'){
             $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
+            
+            // get the current page break margin
+            $bMargin = $pdf->getBreakMargin();
+            // get current auto-page-break mode
+            $auto_page_break = $pdf->getAutoPageBreak();
+            // disable auto-page-break
+            $pdf->SetAutoPageBreak(false, 0);
+            // set bacground image
             $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0);
+            // restore auto-page-break status
+            $pdf->SetAutoPageBreak($auto_page_break, $bMargin);
+            // set the starting point for the page content
+            $pdf->setPageMark();
         }
 
         // Print text using writeHTMLCell()

@@ -2,70 +2,28 @@
   <header>
   </header>
   <body>
-
     <p class="text-justify">
-    	San Juan de Pasto, {{ fechaActual }}.
-    	<br>
-    	<br>
-    	<br>
+        San Juan de Pasto, {{ fechaActual }}.
+        <br>
+        <br>
+        <br>
     </p>
-    <p style="text-align:center;">
-        <b>Subsecretaria de transito y transporte departamental de nariño</b>
-        <br>      
-    </p>
+    <h2 style="text-align:center;">
+        <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>    
+    </h2>
 
-    <p>
-        <table>
-            <tr>
-                <td>El vehículo de placas: {{vehiculo.placa.numero}} tiene las siguientes características </td>
-            </tr>
-        </table>
+    <p style="font-size:11px;">Vehículo con número de placa: <b>{{ vehiculo.placa.numero }}, </b> {% if vehiculo.clase  %}<b>Clase: </b> {{ vehiculo.clase.nombre }}, {% endif  %}
+    <b>Marca: </b> {{ vehiculo.linea.marca.nombre }},
+    <b>Linea: </b>{{ vehiculo.linea.nombre }},
+    <b>No.serie: </b> {{ vehiculo.serie }},
+    <b>No.Chasis: </b> {{ vehiculo.chasis }},
+    <b>Carrocería: </b> {{ vehiculo.carroceria.nombre }}.
+    <b>Cilindraje: </b> {{ vehiculo.cilindraje }},
+    <b>Pasajeros: </b> {{ vehiculo.numeroPasajeros }},
+    {% if vehiculo.color  %}<b>Color: </b> {{ vehiculo.color.nombre }}, {% endif  %}            
+    {% if vehiculo.servicio  %}<b>Servicio: </b> {{ vehiculo.servicio.nombre }}, 
+    {% endif  %} <b>Modelo: <b> {{ vehiculo.modelo }}, <b>No.motor: <b> {{ vehiculo.motor }}
     </p>
-
-    <table cellpadding="3" style="font-size:11px;">
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Clase</td>
-            {% if vehiculo.clase  %}
-            <td> {{vehiculo.clase.nombre}}</td>
-            {% endif  %}
-            <td style="font-weight:bold;">No.serie</td>
-            <td>{{vehiculo.serie}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Marca</td>
-            <td> {{vehiculo.linea.marca.nombre}}</td>
-            <td style="font-weight:bold;">No.Chasis</td>
-            <td>{{vehiculo.chasis}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Carrocería</td>
-            <td> {{vehiculo.carroceria.nombre}}</td>
-            <td style="font-weight:bold;">Cilindraje</td>
-            <td>{{vehiculo.cilindraje}}</td>
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">linea</td>
-            <td> {{vehiculo.linea.nombre}}</td>
-            <td style="font-weight:bold;">Pasajeros</td>
-            <td>{{vehiculo.numeroPasajeros}}</td>
-        </tr>
-        <tr> 
-            <td  width="15%" style="font-weight:bold;">Color</td>
-            {% if vehiculo.color  %}
-            <td>{{vehiculo.color.nombre}}</td>
-            {% endif  %}
-            <td style="font-weight:bold;">Servicio</td>
-            {% if vehiculo.servicio  %}
-            <td>{{vehiculo.servicio.nombre}}</td>
-            {% endif  %}
-        </tr>
-        <tr>
-            <td  width="15%" style="font-weight:bold;">Modelo</td>
-            <td> {{vehiculo.modelo}}</td>
-            <td style="font-weight:bold;">No.motor</td>
-            <td>{{vehiculo.motor}}</td>
-        </tr>
-    </table>
 
     <p style="text-align:center;">
         <b>Propietarios</b>   

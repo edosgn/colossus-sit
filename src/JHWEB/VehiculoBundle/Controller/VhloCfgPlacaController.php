@@ -291,10 +291,9 @@ class VhloCfgPlacaController extends Controller
             $json = $request->get("data", null);
             $params = json_decode($json);
 
-            $placas = $em->getRepository('JHWEBVehiculo:VhloCfgPlaca')->findBy(
+            $placas = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findBy(
                 array(
                     'numero' => $params->numero,
-                    'estado' => 'ASIGNADA'
                 )
             );
 
@@ -326,12 +325,12 @@ class VhloCfgPlacaController extends Controller
     }
 
     /**
-     * Libera una placa seleccionado.
+     * Cambia el estado de una placa seleccionada.
      *
-     * @Route("/liberate", name="vhlocfgplaca_liberate")
+     * @Route("/state", name="vhlocfgplaca_state")
      * @Method("POST")
      */
-    public function liberateAction(Request $request)
+    public function stateAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -347,7 +346,14 @@ class VhloCfgPlacaController extends Controller
             );
 
             if($placa){
-                $placa->setEstado('FABRICADA');
+                if ($params->estado == 'DISPONIBLE') {
+                    $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneByPlaca(
+                        $placa->getId()
+                    );
+
+                    $vehiculo->setPlaca(null);
+                }
+                $placa->setEstado($params->estado);
     
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
@@ -356,7 +362,7 @@ class VhloCfgPlacaController extends Controller
                         'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
-                        'message' => "Placa liberada con éxito.",
+                        'message' => "Placa ha sido configurada en estado ".$params->estado." con éxito.",
                 );
             }else{
                 $reponse = array(
@@ -398,7 +404,7 @@ class VhloCfgPlacaController extends Controller
             array(
                 'organismoTransito' => $params->idOrganismoTransito,
                 'tipoVehiculo' => $params->idTipoVehiculo,
-                'estado' => 'FABRICADA'
+                'estado' => 'DISPONIBLE'
             )
         );
 

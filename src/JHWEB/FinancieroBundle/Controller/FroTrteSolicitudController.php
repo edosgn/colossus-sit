@@ -554,6 +554,8 @@ class FroTrteSolicitudController extends Controller
                             
                         case 'cancelacionmatricula':
                             $vehiculo->setCancelado(true);
+                            $placa = $vehiculo->getPlaca();
+                            $placa->setEstado('CANCELADA');
                             break;
     
                         case 'rematricula':
@@ -660,6 +662,9 @@ class FroTrteSolicitudController extends Controller
         }
 
         if ($vehiculo) {
+            $placa = $vehiculo->getPlaca();
+            $placa->setEstado('FABRICADA');
+            $em->flush();
             foreach ($params->propietarios as $key => $propietarioArray) {
                 $propietario = new VhloPropietario();
 
@@ -1863,7 +1868,7 @@ class FroTrteSolicitudController extends Controller
             'observaciones' => $observaciones,
         ));
 
-        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo, 'normal');
+        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo->getPlaca()->getNumero(), 'normal');
     }
 
     /**

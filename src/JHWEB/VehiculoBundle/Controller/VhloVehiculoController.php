@@ -990,7 +990,7 @@ class VhloVehiculoController extends Controller
                     $vehiculo->setPlaca($placa);
                     $vehiculo->setOrganismoTransito($organismoTransito);
     
-                    $placa->setEstado('ASIGNADA');
+                    $placa->setEstado('PREASIGNADA');
     
                     $em->persist($vehiculo);
                     $em->flush();
@@ -1221,12 +1221,12 @@ class VhloVehiculoController extends Controller
             $count = 0;
     
             $valores = fopen($this->getParameter('data_upload').$documentoName , "r" );
-    
+
             while (($datos = fgetcsv($valores,0,";")) !== FALSE )
             {
                 $datos = array_map("utf8_encode", $datos);
         
-                if ($params->tipo = 'PLACA') {
+                if ($params->tipo == 'PLACA') {
                     $placa = $em->getRepository('JHWEBVehiculoBundle:VhloCfgPlaca')->findOneByNumero(
                         $datos[0]
                     );
@@ -1240,12 +1240,25 @@ class VhloVehiculoController extends Controller
                             $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
                                 $vehiculo->getId()
                             );
+
+                            $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                                array(
+                                    'vehiculo' => $vehiculo->getId(),
+                                    'activo' => true
+                                )
+                            );
                 
                             $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
                                 $vehiculo->getId()
                             );
         
+                            $observaciones = null;
                             foreach ($tramitesSolicitud as $tramiteSolicitud) {
+                                if ($tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getId() == 30) {
+                                    $foraneas = (object)$tramiteSolicitud->getForaneas();
+                                    $observaciones = $foraneas->observaciones;
+                                }
+
                                 $tramitesSolicitudArray[]= array(
                                     'fecha' => $tramiteSolicitud->getFecha(),
                                     'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
@@ -1258,48 +1271,67 @@ class VhloVehiculoController extends Controller
                                     'vehiculo' => $vehiculo,
                                     'propietarios' => $propietarios,
                                     'tramitesSolicitud' => $tramitesSolicitudArray,
+                                    'limitaciones' => $limitaciones,
+                                    'observaciones' => $observaciones,
                                 );
                             }
                         } 
                     }
-                }elseif ($params->tipo = 'IDENTIFICACION') {
+                }elseif ($params->tipo == 'IDENTIFICACION') {                    
                     $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->findOneByIdentificacion(
                         $datos[0]
                     );
     
                     if ($ciudadano) {
-                        $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByCiudadano(
+                        $propiedades = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByCiudadano(
                             $ciudadano->getId()
                         );
-    
-                        foreach ($propietarios as $key => $propietario) {
-                            $vehiculo = $propietario->getVehiculo();
-    
-                            if ($propietario->getVehiculo()) {
-                                $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
-                                    $vehiculo->getId()
-                                );
-                    
-                                $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
-                                    $vehiculo->getId()
-                                );
-            
-                                foreach ($tramitesSolicitud as $tramiteSolicitud) {
-                                    $tramitesSolicitudArray[]= array(
-                                        'fecha' => $tramiteSolicitud->getFecha(),
-                                        'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
-                                        'datos' => $tramiteSolicitud->getResumen()
+
+                        if ($propiedades) {
+                            foreach ($propiedades as $key => $propietario) {
+                                $vehiculo = $propietario->getVehiculo();
+        
+                                if ($propietario->getVehiculo()) {
+                                    $propietarios = $em->getRepository('JHWEBVehiculoBundle:VhloPropietario')->findByVehiculo(
+                                        $vehiculo->getId()
                                     );
-                                }
-            
-                                if ($tramitesSolicitudArray) {
-                                    $certificadosArray[] = array(
-                                        'vehiculo' => $vehiculo,
-                                        'propietarios' => $propietarios,
-                                        'tramitesSolicitud' => $tramitesSolicitudArray,
+
+                                    $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                                        array(
+                                            'vehiculo' => $vehiculo->getId(),
+                                            'activo' => true
+                                        )
                                     );
-                                }
-                            } 
+                        
+                                    $tramitesSolicitud = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->findByVehiculo(
+                                        $vehiculo->getId()
+                                    );
+                                    
+                                    $observaciones = null;
+                                    foreach ($tramitesSolicitud as $tramiteSolicitud) {
+                                        if ($tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getId() == 30) {
+                                            $foraneas = (object)$tramiteSolicitud->getForaneas();
+                                            $observaciones = $foraneas->observaciones;
+                                        }
+
+                                        $tramitesSolicitudArray[]= array(
+                                            'fecha' => $tramiteSolicitud->getFecha(),
+                                            'tramiteNombre' => $tramiteSolicitud->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                                            'datos' => $tramiteSolicitud->getResumen()
+                                        );
+                                    }
+                
+                                    if ($tramitesSolicitudArray) {
+                                        $certificadosArray[] = array(
+                                            'vehiculo' => $vehiculo,
+                                            'propietarios' => $propietarios,
+                                            'tramitesSolicitud' => $tramitesSolicitudArray,
+                                            'limitaciones' => $limitaciones,
+                                            'observaciones' => $observaciones,
+                                        );
+                                    }
+                                } 
+                            }
                         }
                     }
                 }
@@ -1313,9 +1345,10 @@ class VhloVehiculoController extends Controller
                     'funcionario'=> $funcionario,
                     'fechaActual' => $fechaActual,
                 ));
+
     
                 return new Response(
-                    $this->get('app.pdf')->templatePreview($html, 'Certificado tradición uso oficial'),
+                    $this->get('app.pdf')->templateCertificadoTradicion($html, 'uso oficial', 'oficial'),
                     200,
                     array(
                         'Content-Type'        => 'application/pdf',

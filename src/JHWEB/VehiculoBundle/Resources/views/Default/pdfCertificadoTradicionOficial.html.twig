@@ -13,106 +13,133 @@
             <br>
             <br>
         </p>
-        <p style="text-align:center;">
-            <b>Subsecretaria de transito y transporte departamental de nariño</b>
-            <br>      
+        <h2 style="text-align:center;">
+            <b>SUBSECRETARIA DE TRANSITO Y TRANSPORTE DEPARTAMENTAL DE NARIÑO</b>    
+        </h2>
+
+        <p style="font-size:11px;">Vehículo con número de placa: <b>{{ certificado.vehiculo.placa.numero }}, </b> {% if certificado.vehiculo.clase  %}<b>Clase: </b> {{ certificado.vehiculo.clase.nombre }}, {% endif  %}
+        <b>Marca: </b> {{ certificado.vehiculo.linea.marca.nombre }},
+        <b>Linea: </b>{{ certificado.vehiculo.linea.nombre }},
+        <b>No.serie: </b> {{ certificado.vehiculo.serie }},
+        <b>No.Chasis: </b> {{ certificado.vehiculo.chasis }},
+        <b>Carrocería: </b> {{ certificado.vehiculo.carroceria.nombre }}.
+        <b>Cilindraje: </b> {{ certificado.vehiculo.cilindraje }},
+        <b>Pasajeros: </b> {{ certificado.vehiculo.numeroPasajeros }},
+        {% if certificado.vehiculo.color  %}<b>Color: </b> {{ certificado.vehiculo.color.nombre }}, {% endif  %}            
+        {% if certificado.vehiculo.servicio  %}<b>Servicio: </b> {{ certificado.vehiculo.servicio.nombre }}, 
+        {% endif  %} <b>Modelo: <b> {{ certificado.vehiculo.modelo }}, <b>No.motor: <b> {{ certificado.vehiculo.motor }}
         </p>
 
-        <p>
-            <table>
-                <tr>
-                    <td width="70%">El vehículo de placas: {{ certificado.vehiculo.placa.numero }} tiene las siguientes características </td>
-                </tr>
-            </table>       
-            <br>
-            <br> 
-        </p>
-
-        <table>
-            <tr>
-                <td  width="15%" style="font-weight:bold;">Clase</td>
-                {% if certificado.vehiculo.clase  %}
-                <td> {{certificado.vehiculo.clase.nombre}}</td>
-                {% endif  %}
-                <td style="font-weight:bold;">No.serie</td>
-                <td>{{certificado.vehiculo.serie}}</td>
-            </tr>
-            <tr>
-                <td  width="15%" style="font-weight:bold;">Marca</td>
-                <td> {{certificado.vehiculo.linea.marca.nombre}}</td>
-                <td style="font-weight:bold;">No.Chasis</td>
-                <td>{{certificado.vehiculo.chasis}}</td>
-            </tr>
-            <tr>
-                <td  width="15%" style="font-weight:bold;">Carrocería</td>
-                <td> {{certificado.vehiculo.carroceria.nombre}}</td>
-                <td style="font-weight:bold;">Cilindraje</td>
-                <td>{{certificado.vehiculo.cilindraje}}</td>
-            </tr>
-            <tr>
-                <td  width="15%" style="font-weight:bold;">linea</td>
-                <td> {{certificado.vehiculo.linea.nombre}}</td>
-                <td style="font-weight:bold;">Pasajeros</td>
-                <td>{{certificado.vehiculo.numeroPasajeros}}</td>
-            </tr>
-            <tr> 
-                <td  width="15%" style="font-weight:bold;">Color</td>
-                {% if certificado.vehiculo.color  %}
-                <td>{{certificado.vehiculo.color.nombre}}</td>
-                {% endif  %}
-                <td style="font-weight:bold;">Servicio</td>
-                {% if certificado.vehiculo.servicio  %}
-                <td>{{certificado.vehiculo.servicio.nombre}}</td>
-                {% endif  %}
-            </tr>
-            <tr>
-                <td  width="15%" style="font-weight:bold;">Modelo</td>
-                <td> {{certificado.vehiculo.modelo}}</td>
-                <td style="font-weight:bold;">No.motor</td>
-                <td>{{certificado.vehiculo.motor}}</td>
-            </tr>
-        </table>
-
-        {% if certificado.propietarios|length > 0 %}
+    
+        <div class="separator"></div>
+        {% if certificado.propietarios and certificado.propietarios|length > 0 %}
         <table border="1" cellpadding="3" style="font-size:11px;">
             <tr>
-                <td  width="15%">Identificacion</td>
-                <td width="30%">Nombres</td>
-                <td width="30%">Apellidos</td>
-                <td width="25%">Direccion</td>
+                <th colspan="3" align="center">
+                    <b>PROPIETARIOS</b>
+                </th>
+            </tr>
+            <tr align="center">
+                <td><b>Identificacion</b></td>
+                <td><b>Apellidos y apellidos</b></td>
+                <td><b>Direccion</b></td>
             </tr>
             {% for propietario in certificado.propietarios %}
                 {% if propietario.ciudadano %}
                     <tr>
                         <td>{{ propietario.ciudadano.identificacion }}</td>
-                        <td>{{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }}</td>
-                        <td>{{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}</td>
-                        <td>{{ propietario.ciudadano.direccionPersonal }}</td>
+                        <td>
+                            {{ propietario.ciudadano.primerNombre }} {{ propietario.ciudadano.segundoNombre }} {{ propietario.ciudadano.primerApellido }} {{ propietario.ciudadano.segundoApellido }}
+                        </td>
+                        <td>
+                            {{ propietario.ciudadano.direccionPersonal }}
+                        </td>
                     </tr>
                 {% endif %}
             {% endfor %}
         </table>
         {% endif %}
-
-        <p style="text-align:center;"> 
-            <b>tramites</b>
-            <br>      
-        </p>
-
-        <table border="1">
+        <div class="separator"></div>
+        <table border="1" cellpadding="3">
             <tr>
-                <td>Fecha</td>
-                <td>Nombre Tramite</td>
-                <td>datos</td>
+                <th colspan="3" align="center">
+                    <b>TRÁMITES</b>
+                </th>
             </tr>
-            {% for tramiteSolicitudArray in certificado.tramitesSolicitud %}
-                <tr>
-                    <td>{{ tramiteSolicitudArray['fecha']|date('d/m/Y') }}</td>
-                    <td>{{ tramiteSolicitudArray['tramiteNombre']}}</td>
-                    <td>{{ tramiteSolicitudArray['datos'] }}</td>
+            <tr align="center">
+                <td width="15%"><b>Fecha</b></td>
+                <td width="40%"><b>Nombre Tramite</b></td>
+                <td width="45%"><b>Datos</b></td>
+            </tr>
+            {% for key, tramiteSolicitud in certificado.tramitesSolicitud %}
+                <tr style="font-size:11px">
+                    <td>{{ tramiteSolicitud['fecha']|date('d/m/Y') }}</td>
+                    <td>{{ tramiteSolicitud['tramiteNombre']}}</td>
+                    <td>{{ tramiteSolicitud['datos'] }}</td>
                 </tr>
             {% endfor %}
         </table>
+
+        {% if certificado.observaciones %}
+        <p>
+            <h3>Observaciones</h3>
+            {{ certificado.observaciones }}
+        </p>
+        {% endif %}
+
+        {% if certificado.limitaciones and certificado.limitaciones|length > 0 %}
+        <table border="1" cellpadding="3" style="font-size: 10px;">
+            <tr>
+                <th colspan="5" align="center">
+                    <b>LIMITACIONES</b>
+                </th>
+            </tr>
+            <tr align="center">
+                <td><b>Entidad judicial</b></td>
+                <td><b>Municipio</b></td>
+                <td><b>Detalles</b></td>
+                <td><b>Demandante</b></td>
+                <td><b>Demandado</b></td>
+            </tr>
+            {% for limitacion in certificado.limitaciones %}
+                <tr>
+                    <td>
+                        {{ limitacion.entidadJudicial.nombre }}
+                    </td>
+                    <td>
+                        {{ limitacion.municipio.nombre }}
+                    </td>
+                    <td>
+                        <b>Tipo:</b> {{ limitacion.tipo.nombre }}, <b>Causal: </b> {{ limitacion.causal.nombre }}, <b>Tipo: </b> {{ limitacion.tipoProceso.nombre }}
+                    </td>
+                    <td>
+                        {{ limitacion.demandante.primerNombre }} {{ limitacion.demandante.segundoNombre }} {{ limitacion.demandante.primerApellido }} {{ limitacion.demandante.segundoApellido }}
+                        <br>
+                        {{ limitacion.demandante.identificacion }}
+                    </td>
+                    <td>
+                        {{ limitacion.demandado.primerNombre }} {{ limitacion.demandado.segundoNombre }} {{ limitacion.demandado.primerApellido }} {{ limitacion.demandado.segundoApellido }}
+                        <br>
+                        {{ limitacion.demandado.identificacion }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        <br>
+    <br>
+    <br>
+    <p style="text-align: center;">
+        Generó:
+        <br>
+        <b>{{ funcionario.ciudadano.primerNombre }} {{ funcionario.ciudadano.primerApellido }}</b>
+        <br>
+        {{ funcionario.cargo.nombre }}
+        <br>
+        {{ funcionario.organismoTransito.nombre }}
+        <br>
+    </p>
     {% endfor %}
   </body>
 </html>

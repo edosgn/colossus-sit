@@ -10,4 +10,39 @@ namespace JHWEB\ParqueaderoBundle\Repository;
  */
 class PqoInmovilizacionRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene las inmovilizaciones según el filtro de búsqueda
+    public function getByFilter($params)
+    {
+        $em = $this->getEntityManager();
+
+        switch ($params->tipoFiltro) {
+            case 1:
+                $dql = "SELECT i
+                    FROM JHWEBParqueaderoBundle:PqoInmovilizacion i
+                    WHERE i.placa = :filtro";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('filtro', $params->filtro);
+                break;
+
+            case 2:
+                $dql = "SELECT i
+                    FROM JHWEBParqueaderoBundle:PqoInmovilizacion i
+                    WHERE i.numeroComparendo = :filtro";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('filtro', $params->filtro);
+                break;
+
+            case 3:
+                $dql = "SELECT i
+                    FROM JHWEBParqueaderoBundle:PqoInmovilizacion i,
+                    JHWEBContravencionalBundle:CvCdoComparendo c,
+                    JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
+                    WHERE i.placa = :filtro";
+                $consulta = $em->createQuery($dql);
+                $consulta->setParameter('filtro', $params->filtro);
+                break;
+        }
+        
+        return $consulta->getResult();
+    }
 }

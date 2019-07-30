@@ -277,7 +277,7 @@ class VhloPlacaSedeController extends Controller
             $placa = new VhloCfgPlaca();
 
             $placa->setNumero(mb_strtoupper($numero, 'utf-8'));
-            $placa->setEstado('FABRICADA');
+            $placa->setEstado('DISPONIBLE');
             $placa->setTipoVehiculo($tipoVehiculo);
             $placa->setOrganismoTransito($organismoTransito);
 
@@ -358,10 +358,10 @@ class VhloPlacaSedeController extends Controller
             case 'REMOLQUE Y SEMIREMOLQUE':
                 $ceros = 5;
                 $limite = 99999;
-                $letraInicial = substr($rangoInicial, 5, 1);
-                $letraFinal = substr($rangoFinal, 5, 1);
-                $numeroInicial = substr($rangoInicial, 0, 4);
-                $numeroFinal = substr($rangoFinal, 0, 4);
+                $letraInicial = substr($rangoInicial, 0, 1);
+                $letraFinal = substr($rangoFinal, 0, 1);
+                $numeroInicial = substr($rangoInicial, 1, 5);
+                $numeroFinal = substr($rangoFinal, 1, 5);
                 break;
             default:
                 $ceros = 3;
@@ -386,7 +386,11 @@ class VhloPlacaSedeController extends Controller
                         $organismoTransito
                     );
 
-                    $rangoInicial = $letraInicial.$next;
+                    if ($tipoVehiculo->getNombre() == 'MOTOCICLETA' && $longitud == 6) {
+                        $rangoInicial = $letraInicial.$next.$ultimaLetraInicial;
+                    }else{
+                        $rangoInicial = $letraInicial.$next;
+                    }
                 }
                 
                 if ($next == $limite) {
@@ -412,7 +416,11 @@ class VhloPlacaSedeController extends Controller
                         $organismoTransito
                     );
 
-                    $rangoInicial = $letraInicial.$next;
+                    if ($tipoVehiculo->getNombre() == 'MOTOCICLETA' && $longitud == 6) {
+                        $rangoInicial = $letraInicial.$next.$ultimaLetraInicial;
+                    }else{
+                        $rangoInicial = $letraInicial.$next;
+                    }
                 }
             }
 
