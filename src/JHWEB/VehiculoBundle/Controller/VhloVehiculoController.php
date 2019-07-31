@@ -1143,9 +1143,9 @@ class VhloVehiculoController extends Controller
     }
 
     /**
-     * Creates a new Cuenta entity.
+     * Crea PDF con preasignación de placa .
      *
-     * @Route("/{idFuncionario}/{id}/pdf/preasignacion/placa", name="imoasignacion_pdf_preasignacion_placa")
+     * @Route("/{idFuncionario}/{id}/pdf/preasignacion/placa", name="vhlovehivulo_pdf_preasignacion_placa")
      * @Method({"GET", "POST"})
      */
     public function pdfAction(Request $request, $idFuncionario, $id)
