@@ -145,12 +145,9 @@ class ExcelTemplate {
   //==============================//START TEMPLATES//==============================//
 
     /* ==================== EXCEL BY TRAMITES ===================*/
-    public function templateExcelByTramites($data){
+    public function templateExcelByTramites($params){
         $em = $this->em;
         $pages = 0;
-
-        var_dump($data[0]->cantPagadas);
-        die();
 
         $this->getMembretesTramites($params);
 
@@ -167,95 +164,21 @@ class ExcelTemplate {
           //Asigna titulo a la pestaña
           $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES');
 
-          foreach ($params->data as $key => $solicitud) {
+          foreach ($params->arrayTramites as $key => $tramite) {
             //Imprime los datos
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'A'.$this->row, $solicitud->getNumeroRadicado()
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'B'.$this->row, $solicitud->getAcudiente()->getIdentificacion()
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'C'.$this->row, $solicitud->getAcudiente()->getNombres().' '.$solicitud->getAcudiente()->getApellidos()
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'D'.$this->row, $solicitud->getPaciente()->getIdentificacion()
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'E'.$this->row, $solicitud->getPaciente()->getNombres().' '.$solicitud->getPaciente()->getApellidos()
-            );
-            $eps = 'No aplica';
-            if ($solicitud->getPaciente()) {
-              $paciente = $em->getRepository('JHWEBUserBundle:Paciente')->findOneBy(
-                  array(
-                    'usuario' => $solicitud->getPaciente()->getId()
-                  )
-              );
-              if ($paciente) {
-                $eps = $paciente->getEps()->getNombre();
-              }
-            }
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'F'.$this->row, $eps
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'G'.$this->row, $solicitud->getCausa()->getNombre()
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'H'.$this->row, 'Lugar donde se origina'
-            );/////
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'I'.$this->row, $solicitud->getOrigen()->getNombre()
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'J'.$this->row, $solicitud->getTipo()->getNombre()
-            );
-            $estado = 'No Respuesta';
-            if (!$solicitud->getActivo() && $solicitud->getFechaRespuesta() <= $solicitud->getFechaVencimiento()) {
-              $estado = 'Oportuna';
-            }elseif(!$solicitud->getActivo() && $solicitud->getFechaRespuesta() > $solicitud->getFechaVencimiento()){
-              $estado = 'No Oportuna';
-            }
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'K'.$this->row, $estado
-            );
-            //Calcula dias de respuesta
-            $dias = 'No aplica';
-            if (!$solicitud->getActivo() && $solicitud->getFechaRespuesta()){
-              $dias = $solicitud->getFechaApertura()->diff($solicitud->getFechaRespuesta());
-              $dias = $dias->format('%a');
-            }
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'L'.$this->row, $dias
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'M'.$this->row, $solicitud->getFechaApertura()->format('d/m/Y')
-            );
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'N'.$this->row, $solicitud->getFechaVencimiento()->format('d/m/Y')
-            );
-            $fechaRespuesta = 'No aplica';
-            if ($solicitud->getFechaRespuesta()) {
-              $fechaRespuesta = $solicitud->getFechaRespuesta()->format('d/m/Y');
-            }
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'O'.$this->row, $fechaRespuesta
-            );
-            $vulneracionDerecho = 'No aplica';
-            if ($solicitud->getDerecho()) {
-              $vulneracionDerecho = $solicitud->getDerecho()->getDescripcion();
-            }
-            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-              'P'.$this->row, $vulneracionDerecho
-            );
-
+          }
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'A'.$this->row, $tramite->getNumeroFactura()
+          );
+          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+            'B'.$this->row, "asjdajsd"
+          );
+          
             $this->row++;
           }
           //Otorga estilos
           $this->getStyleTramites();
-        }else{
-          return false;
-        }
+
         
 
         $this->objPHPExcel->setActiveSheetIndex(0);
