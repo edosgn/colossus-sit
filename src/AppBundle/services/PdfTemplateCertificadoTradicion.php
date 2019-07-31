@@ -13,11 +13,11 @@ class PdfTemplateCertificadoTradicion extends TCPDF{
         //$this->Cell(0, 10, 'Pag. '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'L', 0, '', 0, false, 'T', 'M');
         $this->Cell(0, 20, '', 0, false, 'J', 0, '', 0, false, 'T', 'M');
         // Logo
-        $image_file = __DIR__.'/../../../web/img/footer.png';
+        $image_file = __DIR__.'/../../../web/img/header.png';
         $this->Image($image_file, 5, 0, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
 
-        $image_file_background = __DIR__.'/../../../web/img/footer.png';
-        $this->Image($image_file_background, 50, 0, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+        $image_file_background = __DIR__.'/../../../web/img/marcaAgua.png';
+        $this->Image($image_file_background, 50, 50, 100, '', '', '', '', false, 0);
     }
 
     // Page footer
@@ -32,7 +32,7 @@ class PdfTemplateCertificadoTradicion extends TCPDF{
 
     public function templatePreview($html, $titulo){
         // create new PDF document
-        $pdf = new PdfTemplate('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new PdfTemplateCertificadoTradicion('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
