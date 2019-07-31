@@ -142,6 +142,19 @@ class FroReporteIngresosController extends Controller
                                     )
                                 );
 
+                                foreach ($conceptos as $key => $concepto) {
+                                    $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
+                                    $total = intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
+                                    $totalConceptos += intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
+                                    $arrayConceptos[] = array(
+                                        'id' => $concepto->getConcepto()->getId(),
+                                        'nombre' => $concepto->getConcepto()->getNombre(),
+                                        'cantidad' => intval(implode($cantConceptos)),
+                                        'valor' => $concepto->getConcepto()->getValor(),
+                                        'total' => $total,
+                                    );    
+                                }
+
                                 //================================================================para sustratos ====================================================================
                                 $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFacInsumo')->findBy(
                                     array(
@@ -188,21 +201,6 @@ class FroReporteIngresosController extends Controller
                                 break;
                         }     
                     }
-
-                    foreach ($conceptos as $key => $concepto) {
-                        var_dump($concepto->getConcepto()->getValor());
-                        $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
-                        $total = intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
-                        $totalConceptos += intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
-                        $arrayConceptos[] = array(
-                            'id' => $concepto->getConcepto()->getId(),
-                            'nombre' => $concepto->getConcepto()->getNombre(),
-                            'cantidad' => intval(implode($cantConceptos)),
-                            'valor' => $concepto->getConcepto()->getValor(),
-                            'total' => $total,
-                        );    
-                    }
-                    die();
                     
                     //=========================================total de facturas por estado==========================================
                     $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(
@@ -269,7 +267,7 @@ class FroReporteIngresosController extends Controller
                         'reporteMensual' =>$reporteMensual,
                     ); 
         
-                    /* if($params->exportarEn == 1) {
+                    if($params->exportarEn == 1) {
                         return new Response(
                             $this->get('app.excel')->templateExcelByTramites($data),
                             200,
@@ -280,15 +278,23 @@ class FroReporteIngresosController extends Controller
                         );
                         
                     }else if($params->exportarEn == 2){
-                        return new Response(
+                        /* return new Response(
                             $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
                             200,
                             array(
                                 'Content-Type'        => 'application/pdf',
                                 'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                             )
+                        ); */
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 400,
+                            'message' => 'se encontraron registros.',
+                            'data' => $data
                         );
-                    } */
+                        return $helpers->json($response);
+                    }
                 } else {
                     $response = array(
                         'title' => 'Error!',
