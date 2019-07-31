@@ -900,6 +900,7 @@ class CvCdoComparendoController extends Controller
 
             if ($comparendo) {
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Comparendo encontrado satisfactoriamente.", 
@@ -907,17 +908,19 @@ class CvCdoComparendoController extends Controller
             );
             }else{
                  $response = array(
-                    'status' => 'error',
+                    'title' => 'Atención!',
+                    'status' => 'warning',
                     'code' => 400,
                     'message' => "No existe ningún comparendo con el número que desea buscar.", 
                 );
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }
@@ -961,7 +964,7 @@ class CvCdoComparendoController extends Controller
      * @Route("/{idUsuario}/pazysalvo/pdf", name="cvcdocomparendo_pdf")
      * @Method({"GET", "POST"})
      */
-    public function pdfAction(Request $request, $idUsuario)
+    public function pdfPazSalvoAction(Request $request, $idUsuario)
     {
         setlocale(LC_ALL,"es_ES");
         $fechaActual = strftime("%d de %B del %Y");
@@ -1019,6 +1022,31 @@ class CvCdoComparendoController extends Controller
 
         $pdf->Output("example.pdf", 'I');
         die();
+    }
+
+    /**
+     * Crea PDF con resumen de comparendo .
+     *
+     * @Route("/{id}/pdf", name="cvcdocomparendo_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfAction(Request $request, $id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+            $id
+        );
+        
+        $html = $this->renderView('@JHWEBContravencional/Default/pdf.comparendo.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'comparendo'=> $comparendo,
+        ));
+
+        $this->get('app.pdf')->templatePreview($html, 'Comparendo_'.$comparendo->getConsecutivo()->getNumero());
     }
 
     /**

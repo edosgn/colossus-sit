@@ -366,10 +366,8 @@ class PqoInmovilizacionController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             
-            $inmovilizaciones = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->findBy(
-                array(
-                    'placa' => $params->filtro
-                )
+            $inmovilizaciones = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->getByFilter(
+                $params
             );
 
             if ($inmovilizaciones) {

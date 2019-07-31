@@ -24,7 +24,7 @@ class PqoInmovilizacion
     /**
      * @var int
      *
-     * @ORM\Column(name="numero_comparendo", type="bigint")
+     * @ORM\Column(name="numero_comparendo", type="bigint", nullable=true)
      */
     private $numeroComparendo;
 
