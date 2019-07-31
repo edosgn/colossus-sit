@@ -435,7 +435,7 @@ class FroReporteIngresosController extends Controller
             $totalInfracciones = 0;
 
             $infracciones = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getInfraccionesByFecha($fechaInicioDatetime,$fechaFinDatetime, $organismoTransito->getId());
-
+            
             if($infracciones){
                 foreach ($infracciones as $key => $infraccion) {
                     $factura = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneBy(
@@ -443,6 +443,7 @@ class FroReporteIngresosController extends Controller
                             'comparendo' => $infraccion->getId(),
                         )
                     );
+
 
                     $totalInfracciones += $factura->getFactura()->getValorNeto();
 
