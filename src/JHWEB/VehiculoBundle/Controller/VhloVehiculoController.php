@@ -1348,7 +1348,7 @@ class VhloVehiculoController extends Controller
 
     
                 return new Response(
-                    $this->get('app.pdf')->templateCertificadoTradicion($html, 'uso oficial', 'oficial'),
+                    $this->get('app.pdf.certificado.tradicion')->templatePreview($html, 'Certificado de tradición para uso oficial'),
                     200,
                     array(
                         'Content-Type'        => 'application/pdf',

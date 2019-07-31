@@ -29,6 +29,10 @@ services:
         class: AppBundle\services\PdfTemplate
         arguments: ["null"]
 
+    app.pdf.certificado.tradicion:
+        class: AppBundle\services\PdfTemplateCertificadoTradicion
+        arguments: ["null"]
+
     app.pdf.factura:
         class: AppBundle\services\PdfTemplateFactura
         arguments: ["null"]
@@ -40,3 +44,4 @@ services:
     app_soap:
         class: AppBundle\services\RecaudoService
         arguments: []
+

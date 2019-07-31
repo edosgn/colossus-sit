@@ -15,6 +15,9 @@ class PdfTemplate extends TCPDF{
         // Logo
         $image_file = __DIR__.'/../../../web/img/header.png';
         $this->Image($image_file, 5, 0, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
+
+        /* $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
+        $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0); */
     }
 
     // Page footer
