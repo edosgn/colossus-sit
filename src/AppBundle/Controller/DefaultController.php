@@ -63,7 +63,10 @@ class DefaultController extends Controller
             'fechaActual' => $fechaActual,
             'tramitesSolicitudArray'=>$tramitesSolicitudArray
         ));
-
-        $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo->getPlaca()->getNumero(), 'oficial');
+        if($tipo == 'OFICIAL'){
+            $this->get('app.pdf.certificado.tradicion')->templatePreview($html, 'Certificado de tradición para uso oficial');
+        } else {
+            $this->get('app.pdf')->templateCertificadoTradicion($html, $vehiculo->getPlaca()->getNumero(), 'oficial');
+        }
     }
 }
