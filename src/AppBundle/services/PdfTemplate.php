@@ -15,9 +15,6 @@ class PdfTemplate extends TCPDF{
         // Logo
         $image_file = __DIR__.'/../../../web/img/header.png';
         $this->Image($image_file, 5, 0, 200, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-
-        /* $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
-        $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0); */
     }
 
     // Page footer
@@ -531,23 +528,6 @@ class PdfTemplate extends TCPDF{
         // Add a page
         // This method has several options, check the source code documentation for more information.
         $pdf->AddPage();
-
-        if($tipo == 'oficial'){
-            $image_file = __DIR__.'/../../../web/img/marcaAgua.png';
-            
-            // get the current page break margin
-            $bMargin = $pdf->getBreakMargin();
-            // get current auto-page-break mode
-            $auto_page_break = $pdf->getAutoPageBreak();
-            // disable auto-page-break
-            $pdf->SetAutoPageBreak(false, 0);
-            // set bacground image
-            $pdf->Image($image_file, 50, 50, 100, '', '', '', '', false, 0);
-            // restore auto-page-break status
-            $pdf->SetAutoPageBreak($auto_page_break, $bMargin);
-            // set the starting point for the page content
-            $pdf->setPageMark();
-        }
 
         // Print text using writeHTMLCell()
         $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);

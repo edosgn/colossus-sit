@@ -905,7 +905,7 @@ class CvCdoComparendoController extends Controller
                     'code' => 200,
                     'message' => "Comparendo encontrado satisfactoriamente.", 
                     'data' => $comparendo,
-            );
+                );
             }else{
                  $response = array(
                     'title' => 'Atención!',
@@ -961,7 +961,7 @@ class CvCdoComparendoController extends Controller
     /**
      * Busca peticionario por cedula o por nombre entidad y numero de oficio.
      *
-     * @Route("/{idUsuario}/pazysalvo/pdf", name="cvcdocomparendo_pdf")
+     * @Route("/{idUsuario}/pazysalvo/pdf", name="cvcdocomparendo_pazysalvo_pdf")
      * @Method({"GET", "POST"})
      */
     public function pdfPazSalvoAction(Request $request, $idUsuario)

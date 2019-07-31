@@ -185,7 +185,8 @@ class CvCdoComparendoRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT c
         FROM JHWEBContravencionalBundle:CvCdoComparendo c, JHWEBPersonalBundle:PnalCfgCdoConsecutivo pc
         WHERE pc.numero = :numero
-        AND c.consecutivo = pc.id";
+        AND c.consecutivo = pc.id
+        GROUP BY pc.numero";
 
         $consulta = $em->createQuery($dql);
         $consulta->setParameters(array(

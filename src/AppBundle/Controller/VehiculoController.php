@@ -72,11 +72,13 @@ class VehiculoController extends Controller
 
                 $paisRegistro = $em->getRepository('AppBundle:Pais')->find($params->vehiculo->paisRegistro);
 
-                $cfgPlaca = new CfgPlaca();
-                $cfgPlaca->setNumero(strtoupper($params->vehiculo->placa));
-                $cfgPlaca->setEstado('asignado');
-                $em->persist($cfgPlaca);
-                $em->flush();
+                if ($placa) {
+                    $cfgPlaca = new CfgPlaca();
+                    $cfgPlaca->setNumero(mb_strtoupper($params->vehiculo->placa, 'utf-8'));
+                    $cfgPlaca->setEstado('ASIGNADA');
+                    $em->persist($cfgPlaca);
+                    $em->flush();
+                }
                 
                 //nuevo vehiculo para tramite de importación temporal
                 $vehiculo = new Vehiculo();
