@@ -66,14 +66,14 @@ class CvCdoComparendo
     /*************************DATOS INFRACTOR***************************/
 
     /**
-     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="comparendos")
+     * @ORM\ManyToOne(targetEntity="JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion", inversedBy="comparendos", nullable=true)
      **/
     protected $infractorTipoIdentificacion;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="infractor_identificacion", type="bigint", length=20)
+     * @ORM\Column(name="infractor_identificacion", type="bigint", length=20, nullable=true)
      */
     private $infractorIdentificacion;
 
