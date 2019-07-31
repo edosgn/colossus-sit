@@ -53,13 +53,10 @@ class VhloTpRangoController extends Controller
             
             $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
                 array(
-                    'empresa' => $params->idEmpresaTransporte,
+                    'id' => $params->idEmpresaTransporte,
                     'activo' => true
                 )
             );
-
-            var_dump($params);
-            die();
 
             $rango = new VhloTpRango();
             

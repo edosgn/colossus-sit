@@ -111,6 +111,12 @@ class SvIpatController extends Controller
                 $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
             } else if ($fechaLevantamientoDatetime == $fechaAccidenteDatetime) {
                 if ($horaLevantamientoDatetime > $horaAccidenteDatetime) {
+                    
+                    $ipat->setFechaAccidente($fechaAccidenteDatetime);
+                    $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
+                    $ipat->setHoraAccidente($horaAccidenteDatetime);
+                    $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
+
                     $response = array(
                         'status' => 'success',
                         'code' => 200,
@@ -122,10 +128,6 @@ class SvIpatController extends Controller
                         'code' => 400,
                         'message' => "Hora de levantamiento o accidente incorrectas.",
                     );
-                    $ipat->setFechaAccidente($fechaAccidenteDatetime);
-                    $ipat->setFechaLevantamiento($fechaLevantamientoDatetime);
-                    $ipat->setHoraAccidente($horaAccidenteDatetime);
-                    $ipat->setHoraLevantamiento($horaLevantamientoDatetime);
                 }
             } else {
                 $response = array(
