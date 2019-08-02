@@ -490,7 +490,7 @@ class UserEmpresaTransporteController extends Controller
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Empresa encontrada",
-                        'data' => $empresa,
+                        'data' => $empresaTransporte,
                     );
                 } else {
                     $response = array(
