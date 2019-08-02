@@ -82,8 +82,8 @@ class FroReporteIngresosController extends Controller
             $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneBy(
                 array(
                     'ciudadano' => $ciudadano->getId(),
-                )
-            );
+                    )
+                );
 
             $reporteMensual = false;
             
@@ -243,7 +243,9 @@ class FroReporteIngresosController extends Controller
                         'reporteMensual' =>$reporteMensual,
                     )); 
 
-                    $data = array(
+                    $data = (object)
+                        array(
+                        'template' => 'templateExcelByTramites',
                         'organismoTransito' => $organismoTransito, 
                         'pagadas' => $pagadas, 
                         'anuladas' => $anuladas, 
@@ -268,32 +270,16 @@ class FroReporteIngresosController extends Controller
                     ); 
         
                     if($params->exportarEn == 1) {
-                        return new Response(
-                            $this->get('app.excel')->templateExcelByTramites($data),
-                            200,
-                            array(
-                                'Content-Type'        => 'application/xlsx',
-                                'Content-Disposition' => 'attachment; filename="tramites.xlsx"'
-                            )
-                        );
-                        
+                        return $this->get('app.excel')->newExcel($data);
                     }else if($params->exportarEn == 2){
-                        /* return new Response(
+                        return new Response(
                             $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
                             200,
                             array(
                                 'Content-Type'        => 'application/pdf',
                                 'Content-Disposition' => 'attachment; filename="fichero.pdf"'
                             )
-                        ); */
-                        $response = array(
-                            'title' => 'Perfecto!',
-                            'status' => 'success',
-                            'code' => 400,
-                            'message' => 'se encontraron registros.',
-                            'data' => $data
                         );
-                        return $helpers->json($response);
                     }
                 } else {
                     $response = array(
