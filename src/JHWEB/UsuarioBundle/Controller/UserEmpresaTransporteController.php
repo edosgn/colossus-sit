@@ -75,13 +75,13 @@ class UserEmpresaTransporteController extends Controller
             $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find($params->idRadioAccion);
             $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find($params->idModalidadTransporte);
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
-            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find($params->idServicio);
+            $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(2);
             
             if($params->idCarroceria){
                 $carroceria = $em->getRepository('JHWEBVehiculoBundle:VhloCfgCarroceria')->find($params->idCarroceria);
                 $empresaTransporte->setCarroceria($carroceria);
             }
-
+            
             if($params->capacidadMinima > $params->capacidadMaxima) {
                 $response = array(
                     'title' => 'Error!',
@@ -90,33 +90,51 @@ class UserEmpresaTransporteController extends Controller
                     'message' => "La capacidad miníma debe ser menor a la capacidad máxima",
                 );
             } else {
-                $empresaTransporte  = new UserEmpresaTransporte();
 
-                $empresaTransporte->setEmpresa($empresa);
-                $empresaTransporte->setRadioAccion($radioAccion);
-                $empresaTransporte->setModalidadTransporte($modalidadTransporte);
-                $empresaTransporte->setServicio($servicio);
-                $empresaTransporte->setClase($clase);
-                $empresaTransporte->setNumeroActo($params->numeroActo);
-                $empresaTransporte->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
-                $empresaTransporte->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
-                $empresaTransporte->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
-                $empresaTransporte->setColores($params->arrayColores);
-                $empresaTransporte->setMunicipios($params->arrayMunicipios);
-                $empresaTransporte->setCapacidad($params->capacidad);
-                $empresaTransporte->setCapacidadMinima($params->capacidadMinima);
-                $empresaTransporte->setCapacidadMaxima($params->capacidadMaxima);
-                $empresaTransporte->setActivo(true);
-                
-                $em->persist($empresaTransporte);
-                $em->flush();
-
-                $response = array(
-                    'title' => 'Perfecto!',
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con éxito",
+                $empresaTransporte  = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                    array(
+                        'numeroActo' => $params->numeroActo,
+                        'activo' => true
+                    )
                 );
+
+                if($empresaTransporte){
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El número de acto ya se encuentra registrado.",
+                    );
+                } else {
+                    $empresaTransporteNew  = new UserEmpresaTransporte();
+
+                    $empresaTransporteNew->setEmpresa($empresa);
+                    $empresaTransporteNew->setRadioAccion($radioAccion);
+                    $empresaTransporteNew->setModalidadTransporte($modalidadTransporte);
+                    $empresaTransporteNew->setServicio($servicio);
+                    $empresaTransporteNew->setClase($clase);
+                    $empresaTransporteNew->setNumeroActo($params->numeroActo);
+                    $empresaTransporteNew->setFechaExpedicionActo(new \Datetime($params->fechaExpedicionActo));
+                    $empresaTransporteNew->setFechaEjecutoriaActo(new \Datetime($params->fechaEjecutoriaActo));
+                    $empresaTransporteNew->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
+                    $empresaTransporteNew->setColores($params->arrayColores);
+                    $empresaTransporteNew->setMunicipios($params->arrayMunicipios);
+                    $empresaTransporteNew->setCapacidad($params->capacidad);
+                    $empresaTransporteNew->setCapacidadMinima($params->capacidadMinima);
+                    $empresaTransporteNew->setCapacidadMaxima($params->capacidadMaxima);
+                    $empresaTransporteNew->setDobleCabina($params->dobleCabina);
+                    $empresaTransporteNew->setActivo(true);
+                    
+                    $em->persist($empresaTransporteNew);
+                    $em->flush();
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                    );
+                }
             }
         }else{
             $response = array(
@@ -398,7 +416,7 @@ class UserEmpresaTransporteController extends Controller
                 )
             ); 
 
-            if ($asignacion) {
+            if ($asignacion && $tarjetaOperacion) {
                 $response = array(
                     'title' => 'Perfecto!',
                     'status' => 'success',
@@ -416,7 +434,78 @@ class UserEmpresaTransporteController extends Controller
                     'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
-                    'message' => "No se encontro un cupo para el vehiculo",
+                    'message' => "No se encontro un cupo ni tarjeta de operación para el vehiculo",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+        return $helpers->json($response);
+    }
+
+        
+    /**
+     * Busca empresas por NIT.
+     *
+     * @Route("/search/nit/numeroActo", name="userempresa_transporte_search_nit_numeroActo")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByNitAndNumeroActoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                array(
+                    'nit' => $params->nit,
+                    'tipoEmpresa' => 2,
+                    'activo' => true
+                )
+            ); 
+            
+            if ($empresa) {
+                $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
+                    array(
+                        'empresa' => $empresa,
+                        'numeroActo' => $params->numeroActo,
+                        'activo' => true
+                    )
+                ); 
+
+                if($empresaTransporte){
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Empresa encontrada",
+                        'data' => $empresa,
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "Empresa de transporte público no encontrada",
+                    );
+                }
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "Empresa no encontrada o no es de transporte público",
                 );
             }
         } else {

@@ -163,16 +163,24 @@ class ExcelTemplate {
 
           //Asigna titulo a la pestaña
           $this->objPHPExcel->getActiveSheet()->setTitle('TRAMITES');
-
-          foreach ($params->arrayTramites as $key => $tramite) {
+          
+          var_dump($params);
+          die();
+          foreach ($params as $key => $tramite) {
             //Imprime los datos
+            /* foreach ($tramites as $keyTramite => $tramite) {
+              # code...
+              var_dump($tramite[2]->getNombre());
+              die();
+            } */
+
+            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+              'A'.$this->row, "adsds"
+            );
+            $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
+              'B'.$this->row, "asjdajsd"
+            );
           }
-          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'A'.$this->row, $tramite->getNumeroFactura()
-          );
-          $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
-            'B'.$this->row, "asjdajsd"
-          );
           
             $this->row++;
           }

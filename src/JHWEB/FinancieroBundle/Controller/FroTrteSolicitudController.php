@@ -1210,47 +1210,58 @@ class FroTrteSolicitudController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        
         $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
             array(
                 'vehiculo' => $params->idVehiculo,
                 'activo' => true,
-            )
-        );
-
+                )
+            );
+        
         $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
             array(
                 'vehiculo' => $params->idVehiculo,
                 'activo' => true,
-            )
-        );
-
-        if($cupo) {
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-
-            $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
-            $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
-            $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->numeroTarjetaOperacion);
-            $tarjetaOperacionNew->setVehiculo($vehiculo);
-            $tarjetaOperacionNew->setActivo(true);
-
-            $tarjetaOperacion->setActivo(false);
-            
-            $em->persist($tarjetaOperacion);
-            $em->persist($tarjetaOperacionNew);
-            $em->flush();
-        
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Tarjeta de Operación expedida con éxito.',
-                'data' => $tarjetaOperacionNew
+                )
             );
-        }else{
+
+        if($tarjetaOperacion){
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => 'No encontró un cupo asignado al vehiculo, por favor asigne un cupo para el vehículo.', 
+                'message' => 'La tarjeta de operación para este vehículo ya fue expedida, puede realizar un duplicado.', 
             );
+        } else {
+            if($cupo) {
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+                    
+                $tarjetaOperacionNew = new VhloTpTarjetaOperacion();
+                $tarjetaOperacionNew->setFechaVencimiento(new \Datetime($params->fechaVencimiento));
+                $tarjetaOperacionNew->setNumeroTarjetaOperacion($params->numeroTarjetaOperacion);
+                $tarjetaOperacionNew->setVehiculo($vehiculo);
+                $tarjetaOperacionNew->setActivo(true);
+
+                /* $tarjetaOperacion->setActivo(false); */
+                
+                /* $em->persist($tarjetaOperacion); */
+                $em->persist($tarjetaOperacionNew);
+                $em->flush();
+            
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Tarjeta de Operación expedida con éxito.',
+                    'data' => $tarjetaOperacionNew
+                );
+            
+            }else{
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'No encontró un cupo asignado al vehiculo, por favor asigne un cupo para el vehículo.', 
+                );
+            }
         }        
         return $helpers->json($response);
     }

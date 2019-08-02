@@ -66,6 +66,7 @@ class VhloTpAsignacionController extends Controller
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
             $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->idEmpresa);
             $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($params->idCupo);
+            $nivelServicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->find($params->idNivelServicio);
 
             $vehiculoCupo= $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
                 array(
@@ -86,6 +87,7 @@ class VhloTpAsignacionController extends Controller
                 $asignacion->setEmpresaTransporte($empresaTransporte);
                 $asignacion->setVehiculo($vehiculo);
                 $asignacion->setCupo($cupo);
+                $asignacion->setNivelServicio($nivelServicio);
                 $asignacion->setActivo(true);
                 $em->persist($asignacion);
                 
