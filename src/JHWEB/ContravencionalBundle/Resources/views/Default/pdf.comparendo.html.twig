@@ -82,130 +82,188 @@
       <!-- row-4 -->
       <tr>
         <td colspan="2">
-          <b>6. Clase Servicio</b>
+          <b>CLASE</b>
+          <br>
+          {{ comparendo.clase }}
         </td>
 
         <td colspan="2">
-          <b>7. Tipo Vehículo</b>
+          <b>SERVICIO</b>
+          <br>
+          {{ comparendo.servicio }}
         </td>
         
         <td colspan="2">
-          <b>8. Radio Acción</b>
+          <b>RADIO ACCIÓN</b>
+          <br>
+          {{ comparendo.radioAccion }}
         </td>
       </tr>
       <!-- row-5 -->
       <tr>
         <td colspan="2">
-          <b>9. Modalidad Transporte</b>
+          <b>MODALIDAD TRASNPORTE</b>
+          <br>
+          {{ comparendo.modalidadTransporte }}
         </td>
 
         <td colspan="2">
           <b>9.1. Transporte Pasajeros</b>
+          <br>
+          {{ comparendo.transportePasajero }}
         </td>
 
         <td colspan="2">
           <b>9.2. Transporte Especial</b>
+          <br>
+          {{ comparendo.transporteEspecial }}
         </td>
       </tr>
         
       <tr>
         <td colspan="6" style="text-aling:center;">
-          <b>10. Datos de infractor</b>
+          <b>Datos de infractor</b>
         </td>
       </tr>
+      
       <tr>                       
         <td colspan="2">
           <b>No. Licencia conducción</b>
+          <br>
+          {{ comparendo.infractorNumeroLicenciaConduccion }}
         </td>
         <td colspan="2">
           <b>Categoria</b>
+          <br>
+          {{ comparendo.categoria }}
         </td>
         <td>
           <b>EXP</b>
+          <br>
+          {{ comparendo.fechaExpedicion }}
         </td>
         <td>
           <b>VEN</b>
+          <br>
+          {{ comparendo.fechaVencimiento }}
         </td>
       </tr>
 
       <tr>
         <td colspan="2">
-            b>Tipo Identificación<b>
+          <b>Tipo Identificación</b>
+          <br>
+          {{ comparendo.infractorTipoIdentificacion }}
         </td>
         <td colspan="2">
-            b>Número documento identidad<b>
+          <b>Número documento identidad</b>
+          {{ comparendo.infractorIdentificacion }}
         </td>
         <td colspan="2">
-            b>Nombres y apellidos completos<b>
+          <b>Nombres y apellidos completos</b>
+          <br>
+          {{ comparendo.infractorNombres }}
         </td>
       </tr>
 
       <tr>
         <td colspan="3">
-            <label>Dirección</label>
+            <b>Dirección</b>
+            <br>
+            {{ comparendo.infractorDireccion }}
         </td>
         <td>
-            <label>Edad</label>
+            <b>fecha nacimiento</b>
+            {{ comparendo.infractorFechaNacimiento }}
         </td>
         <td colspan="2">
-            <label>Telefono fijo/celular</label>
+            <b>Telefono fijo/celular</b>
+            <br>
+            {{ comparendo.infractorTelefono }}
         </td>
       </tr>
 
       <tr>
         <td colspan="3">
-            <label>Municipio</label>
+            <b>Municipio</b>
+            <br>
+            {{ comparendo.infractorMunicipioResidencia }}
         </td>
         <td colspan="3">
-            <label>Correo</label>
+            <b>Correo</b>
+            <br>
+            {{ comparendo.infractorEmail }}
         </td>
       </tr>
 
       <tr>
         <td colspan="2">
-          <b>11. Tipo de infractor</b>
+          <b>Tipo de infractor</b>
+          <br>
+          {{ comparendo.tipoInfractor.nombre }}
         </td>
         <td colspan="2">
             <b>Org.de T. Licencia de tránsito</b>
+            {{ comparendo.organismoTransitoLicencia.nombre }}
         </td>
         <td colspan="2">
             <b>No. del documento Licencia de tránsito</b>
+            <br>
+            {{ comparendo.numeroLicenciaTransito }}
         </td>
       </tr>
     
       <tr>
         <td colspan="2">
-          <label>Tipo Identificación</label>
+          <b>Tipo Identificación</b>
+          <br>
+          {{ comparendo.propietarioTipoIdentificacion.nombre }}
         </td>
         <td colspan="2">
-          <label>Número documento identidad</label>
+          <b>Número documento identidad</b>
+          <br>
+          {{ comparendo.propietarioIdentificacion }}
         </td>
         <td colspan="2">
-          <label>Nombres y apellidos completos</label>
+          <b>Nombres y apellidos completos</b>
+          <br>
+          {{ comparendo.propietarioNombre }}
         </td>
       </tr>
 
       <tr>
         <td colspan="2">
           <b>NIT</b>
+          <br>
+          {{ comparendo.empresaNit }}
         </td>
         <td colspan="2">
           <b>Nombre</b>
+          <br>
+          {{ comparendo.empresaNombre }}
         </td>
         <td colspan="2">
           <b>Tarjeta de operación</b>
+          <br>
+          {{ comparendo.tarjetaOperacion }}
         </td>
       </tr>
 
       <tr>
         <td colspan="2">
             <b>Apellidos y Nombres completos</b>
+            <br>
+            {{ comparendo.agenteTransito.ciudadano.primerNombre }} {{ comparendo.agenteTransito.ciudadano.primerApellido }}
         </td>
         <td colspan="2">
             <b>Placa</b>
+            <br>
+            {{ comparendo.agenteTransito.placa }}
         </td>
         <td colspan="2">
             <b>Entidad</b>
+            <br>
+            {{ comparendo.agenteTransito.organismoTransito.nombre }}
         </td>
       </tr>
 
@@ -220,7 +278,9 @@
 
       <tr>
         <td colspan="6">
-          <b>17. Observaciones del agente de tránsito</b>
+          <b>Observaciones del agente de tránsito</b>
+          <br>
+          {{ comparendo.observacionesAgente }}
         </td>
         <td colspan="6">
         </td>
@@ -229,42 +289,54 @@
       <tr>
         <td colspan="2">
           <b>Nombres y apellidos completos</b>
+          <br>
+          {{ comparendo.testigoNombres }}
         </td>
         <td colspan="2">
           <b>CC. No.</b>
+          <br>
+          {{ comparendo.testigoIdentificacion }}
         </td>
         <td>
           <b>Dirección</b>
+          <br>
+          {{ comparendo.testigoDireccion }}
         </td>
         <td>
           <b>Teléfono</b>
+          <br>
+          {{ comparendo.testigoTelefono }}
         </td>
       </tr>                    
 
       <tr>
-        <td>
+        <td colspan="2">
           <b>Accidente</b>
+          <br>
+          {{ comparendo.accidente }}
         </td>
         <td>
           <b>Fuga</b>
+          {{ comparendo.fuga }}
         </td>
-        <td>
+        <td colspan="2">
           <b>Retención de licencia</b>
+          {{ comparendo.retencionLicencia }}
         </td>
         <td>
           <b>Anulado</b>
+          
         </td>
       </tr>
 
       <tr>
         <td colspan="6">
-          <b>20. Observaciones del digitador</b>
+          <b>Observaciones del digitador</b>
         </td>
         <td colspan="6">
+          {{ comparendo.observacionesDigitador }}
         </td>
       </tr>
-      
-
     </table>
   </body>
 </html>
