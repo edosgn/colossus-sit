@@ -126,6 +126,12 @@ class FroFacturaController extends Controller
                 $this->registerComparendos($params->factura->comparendos, $factura);
             }elseif (isset($params->factura->tramites)) {
                 $this->registerTramites($params, $factura);
+            }elseif (isset($params->factura->idInmovilizacion)) {
+                $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
+                    $params->factura->idInmovilizacion
+                );
+                $inmovilizacion->setFactura($factura);
+                $em->flush();
             }
 
             $response = array(
@@ -664,7 +670,11 @@ class FroFacturaController extends Controller
                 break;
 
             case 3:
-                $this->generatePdfAmortizacion($id);
+                $this->generatePdfAcuerdoPago($id);
+                break;
+
+            case 4:
+                $this->generatePdfParqueadero($id);
                 break;
         }
     }
@@ -763,7 +773,7 @@ class FroFacturaController extends Controller
         $this->get('app.pdf')->templateFactura($html, $factura);
     }
 
-    protected function generatePdfAmortizacion($id){
+    protected function generatePdfAcuerdoPago($id){
         $em = $this->getDoctrine()->getManager();
 
         setlocale(LC_ALL,"es_ES");
@@ -802,6 +812,47 @@ class FroFacturaController extends Controller
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
             'amortizacion'=>$amortizacion,
+            'imgBarcode' => $imgBarcode
+        ));
+
+        $this->get('app.pdf')->templateFactura($html, $factura);
+    }
+
+    protected function generatePdfParqueadero($id){
+        $em = $this->getDoctrine()->getManager();
+
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
+
+        $inmovilizacion = $em->getRepository('JHWEBPqoInmovilizacionBundle:PqoInmovilizacion')->findOneBy(
+            array(
+                'factura' => $factura->getId()
+            )
+        );
+
+        //.$factura->getFechaVencimiento()->format('Ymd')
+
+        $barcode = new BarcodeGenerator();
+        $barcode->setText(
+            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'
+        );
+        $barcode->setNoLengthLimit(true);
+        $barcode->setAllowsUnknownIdentifier(true);
+        $barcode->setType(BarcodeGenerator::Gs1128);
+        $barcode->setScale(1);
+        $barcode->setThickness(25);
+        $barcode->setFontSize(7);
+        $code = $barcode->generate();
+
+        //$imgBarcode = \base64_decode($code);
+        $imgBarcode = $code;
+
+        $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.parqueadero.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'factura'=> $factura,
+            'inmovilizacion'=> $inmovilizacion,
             'imgBarcode' => $imgBarcode
         ));
 

@@ -94,6 +94,13 @@ class PqoCfgPatio
     /**
      * @var bool
      *
+     * @ORM\Column(name="interno", type="boolean")
+     */
+    private $interno;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="activo", type="boolean")
      */
     private $activo;
@@ -349,6 +356,30 @@ class PqoCfgPatio
     public function getFechaFinal()
     {
         return $this->fechaFinal;
+    }
+
+    /**
+     * Set interno
+     *
+     * @param boolean $interno
+     *
+     * @return PqoCfgPatio
+     */
+    public function setInterno($interno)
+    {
+        $this->interno = $interno;
+
+        return $this;
+    }
+
+    /**
+     * Get interno
+     *
+     * @return boolean
+     */
+    public function getInterno()
+    {
+        return $this->interno;
     }
 
     /**

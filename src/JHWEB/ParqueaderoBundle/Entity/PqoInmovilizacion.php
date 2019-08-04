@@ -167,6 +167,11 @@ class PqoInmovilizacion
      **/
     protected $funcionario;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="JHWEB\FinancieroBundle\Entity\FroFactura", inversedBy="inmovilizaciones")
+     **/
+    protected $factura;
+
 
     /**
      * Get id
@@ -752,5 +757,29 @@ class PqoInmovilizacion
     public function getFuncionario()
     {
         return $this->funcionario;
+    }
+
+    /**
+     * Set factura
+     *
+     * @param \JHWEB\FinancieroBundle\Entity\FroFactura $factura
+     *
+     * @return PqoInmovilizacion
+     */
+    public function setFactura(\JHWEB\FinancieroBundle\Entity\FroFactura $factura = null)
+    {
+        $this->factura = $factura;
+
+        return $this;
+    }
+
+    /**
+     * Get factura
+     *
+     * @return \JHWEB\FinancieroBundle\Entity\FroFactura
+     */
+    public function getFactura()
+    {
+        return $this->factura;
     }
 }

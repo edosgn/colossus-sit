@@ -140,12 +140,12 @@
         <td>
           <b>EXP</b>
           <br>
-          {{ comparendo.fechaExpedicion }}
+          {{ comparendo.fechaExpedicion|date('d/m/Y') }}
         </td>
         <td>
           <b>VEN</b>
           <br>
-          {{ comparendo.fechaVencimiento }}
+          {{ comparendo.fechaVencimiento|date('d/m/Y') }}
         </td>
       </tr>
 
@@ -153,7 +153,7 @@
         <td colspan="2">
           <b>Tipo Identificación</b>
           <br>
-          {{ comparendo.infractorTipoIdentificacion }}
+          {{ comparendo.infractorTipoIdentificacion.nombre }}
         </td>
         <td colspan="2">
           <b>Número documento identidad</b>
@@ -174,7 +174,7 @@
         </td>
         <td>
             <b>fecha nacimiento</b>
-            {{ comparendo.infractorFechaNacimiento }}
+            {{ comparendo.infractorFechaNacimiento|date('d/m/Y') }}
         </td>
         <td colspan="2">
             <b>Telefono fijo/celular</b>
@@ -258,7 +258,7 @@
         <td colspan="2">
             <b>Placa</b>
             <br>
-            {{ comparendo.agenteTransito.placa }}
+            {{ comparendo.agenteTransito.numeroPlaca }}
         </td>
         <td colspan="2">
             <b>Entidad</b>

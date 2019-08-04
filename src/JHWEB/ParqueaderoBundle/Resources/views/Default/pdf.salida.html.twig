@@ -1,0 +1,34 @@
+<html>
+  <header>
+  </header>
+  <body>
+
+    <p class="text-justify">
+    	San Juan de Pasto, {{ fechaActual }}.
+    	<br>
+    	<br>
+    	<br>
+    </p>
+    <p style="text-align:center;">
+        <b>LA SEDE OPERATIVA {{ inmovilizacion.funcionario.organismoTransito.nombre }}</b>
+        <br>
+        <b>AUTORIZA</b>      
+    </p>
+
+    <p>La salida del vehiculo de placas {{ inmovilizacion.placas }} con comparendo No. 
+    {{ inmovilizacion.numeroComparendo }} a partir del {{ inmovilizacion.fechaSalida|date('d/m/Y') }} a las
+    {{ inmovilizacion.fechaSalida|date('h:i:s A') }}, el cual presenta las siguientes novedades:
+    {{ inmovilizacion.observacionesSalida }}
+    </p>
+
+    <p style="text-align: center;">
+        Generó
+        <br>
+        {{ inmovilizacion.funcionario.ciudadano.primerNombre }}
+        {{ inmovilizacion.funcionario.ciudadano.primerApellido }}
+        <br>
+        {{ inmovilizacion.funcionario.cargo.nombre }}
+    </p>
+
+  </body>
+</html>

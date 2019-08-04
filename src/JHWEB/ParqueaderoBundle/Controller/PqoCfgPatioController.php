@@ -73,6 +73,7 @@ class PqoCfgPatioController extends Controller
             $patio->setNumeroResolucion($params->numeroResolucion);
             $patio->setFechaInicial(new \Datetime($params->fechaInicial));
             $patio->setFechaFinal(new \Datetime($params->fechaFinal));
+            $patio->setInterno($params->interno);
             $patio->setActivo(true);
 
             if ($params->administrador) {

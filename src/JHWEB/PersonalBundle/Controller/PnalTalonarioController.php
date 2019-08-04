@@ -63,26 +63,52 @@ class PnalTalonarioController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
-                $params->idOrganismoTransito
-            );
+            $cantidadDisponibleBodega = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoBodega')->getTotalDisponible();
+            $cantidadDisponibleBodega = (empty($cantidadDisponibleBodega['total']) ? 0 : $cantidadDisponibleBodega['total']);
 
-            $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByLastFechaAndOrganismoTransito(
-                $params->idOrganismoTransito
-            );
-
-            if ($rangoDisponible) {
-                $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getCantidadDisponibleByOrganismoTransito(
+            if ($cantidadDisponibleBodega > $params->cantidadRecibida) {
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                     $params->idOrganismoTransito
                 );
 
-                $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
+                $rangoDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByLastFechaAndOrganismoTransito(
+                    $params->idOrganismoTransito
+                );
 
-                $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 20) / 100;
+                if ($rangoDisponible) {
+                    $cantidadDisponible = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getCantidadDisponibleByOrganismoTransito(
+                        $params->idOrganismoTransito
+                    );
+                    $cantidadDisponible = (empty($cantidadDisponible['total']) ? 0 : $cantidadDisponible['total']);
 
-                if ($cantidadDisponible < $cantidadValidar) {
+                    $cantidadValidar = ($rangoDisponible->getCantidadRecibida() * 20) / 100;
+
+                    if ($cantidadDisponible < $cantidadValidar) {
+                        $registro = $this->register($params);
+
+                        if($registro){
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => "El registro se ha realizado con exito",
+                            );
+                        }else{
+                            $response = array(
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
+                            );
+                        }
+                    }else{
+                        $response = array(
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
+                        );
+                    }
+                }else{
                     $registro = $this->register($params);
-
+                        
                     if($registro){
                         $response = array(
                             'status' => 'success',
@@ -96,30 +122,15 @@ class PnalTalonarioController extends Controller
                             'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
                         );
                     }
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => 'No se pueden asignar nuevos rangos porque aún tiene existencias vigentes.',
-                    );
-                }
+                }  
             }else{
-                $registro = $this->register($params);
-                    
-                if($registro){
-                    $response = array(
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "El registro se ha realizado con exito",
-                    );
-                }else{
-                    $response = array(
-                        'status' => 'error',
-                        'code' => 400,
-                        'message' => "El rango ya se encuentra registrado para este organismo de tránsito.", 
-                    );
-                }
-            }            
+                $response = array(
+                    'title' => 'Atención',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'La cantidad solicitada supera los '.$cantidadDisponibleBodega.' impresos disponibles en bodega.',
+                );
+            }                     
         }else{
             $response = array(
                 'status' => 'error',
@@ -250,6 +261,8 @@ class PnalTalonarioController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+
+
         $ultimoRango = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getMaximoByOrganismoTransito(
             $params->idOrganismoTransito
         );
@@ -295,6 +308,31 @@ class PnalTalonarioController extends Controller
 
             $em->persist($consecutivo);
             $em->flush();
+        }
+
+        $bodegas = $em->getRepository('JHWEBPersonalBundle:PnalCfgCdoBodega')->findBy(
+            array(
+                'estado' => 'DISPONIBLE'
+            )
+        );
+
+        foreach ($bodegas as $key => $bodega){
+            if ($bodega->getCantidadDisponible() <= $params->cantidadRecibida) {
+                $cantidad =  $params->cantidadRecibida - $bodega->getCantidadDisponible();
+                $params->cantidadRecibida = $cantidad;
+                $bodega->setCantidadDisponible(0);
+                $bodega->setEstado('ASIGNADO');
+
+                $em->flush(); 
+            }else {
+                if ($params->cantidadRecibida > 0) {
+                    $cantidad =  $bodega->getCantidadDisponible() - $params->cantidadRecibida;
+                    $bodega->setCantidadDisponible($cantidad);
+                    $params->cantidad = 0;
+
+                    $em->flush(); 
+                }
+            }
         }
 
         return true;

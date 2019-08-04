@@ -317,7 +317,8 @@ class PqoInmovilizacionController extends Controller
             );
 
             if ($inmovilizacion) {
-                $inmovilizacion->setSalida(true);
+                $inmovilizacion->setFechaSalida(new \Datetime(date('Y-m-d')));
+                $inmovilizacion->setHoraSalida(new \Datetime(date('h:i:s A')));
                 $inmovilizacion->setEstado('AUTORIZADO');
                 $inmovilizacion->setObservacionesSalida($params->observaciones);
                 $inmovilizacion->setFuncionario($funcionario);
@@ -445,5 +446,30 @@ class PqoInmovilizacionController extends Controller
         }
 
         return $helpers->json($response);
+    }
+
+    /**
+     * Crea PDF con resumen de comparendo .
+     *
+     * @Route("/{id}/exit/pdf", name="pqoinmovilizacion_pdf")
+     * @Method({"GET", "POST"})
+     */
+    public function pdfExitAction(Request $request,$id)
+    {
+        setlocale(LC_ALL,"es_ES");
+        $fechaActual = strftime("%d de %B del %Y");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
+            $id
+        );
+        
+        $html = $this->renderView('@JHWEBParqueadero/Default/pdf.salida.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'inmovilizacion'=> $inmovilizacion,
+        ));
+
+        $this->get('app.pdf')->templatePreview($html, 'Salida_'.$inmovilizacion->getNumeroComparendo());
     }
 }
