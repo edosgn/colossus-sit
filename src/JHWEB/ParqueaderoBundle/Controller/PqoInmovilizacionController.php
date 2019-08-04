@@ -451,7 +451,7 @@ class PqoInmovilizacionController extends Controller
     /**
      * Crea PDF con resumen de comparendo .
      *
-     * @Route("/{id}/exit/pdf", name="pqoinmovilizacion_pdf")
+     * @Route("/{id}/exit/pdf", name="pqoinmovilizacion_exit_pdf")
      * @Method({"GET", "POST"})
      */
     public function pdfExitAction(Request $request,$id)
