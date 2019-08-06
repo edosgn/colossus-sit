@@ -350,7 +350,7 @@ class FroReporteIngresosController extends Controller
                     'totalReporteMensual' => $totalReporteMensual,
                     'totalSustratos' => $totalSustratos,
                 )); 
-                    
+
                 return new Response(
                     $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
                     200,
