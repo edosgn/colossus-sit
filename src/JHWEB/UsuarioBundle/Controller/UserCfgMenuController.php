@@ -237,7 +237,7 @@ class UserCfgMenuController extends Controller
                         );
                     }
                 }else{
-                    $menu->setTipo('PRIMER_NIVEL');
+                    //$menu->setTipo('PRIMER_NIVEL');
                     $response = array(
                         'status' => 'success',
                         'code' => 200,

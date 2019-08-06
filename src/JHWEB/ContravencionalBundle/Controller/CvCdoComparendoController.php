@@ -507,66 +507,159 @@ class CvCdoComparendoController extends Controller
     /**
      * Deletes a comparendo entity.
      *
-     * @Route("/{polca}/archivo", name="cvcdocomparendo_upload")
+     * @Route("/upload", name="cvcdocomparendo_upload")
      * @Method("POST")
      */
-    public function uploadFileAction(Request $request, $polca)
+    public function uploadAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
         $helpers = $this->get("app.helpers");
-        $json = $request->get("data", null);
-        
-        $params = json_decode($json);
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        foreach ($params as $key => $comparendo) {
-            $comparendoNew = new CvCdoComparendo();
-
-            $comparendoNew->setNumeroOrden($comparendo[5]);
-            $comparendoNew->setFechaDiligenciamiento(
-                new \DateTime($comparendo[6])
-            );
-            $comparendoNew->setLugarInfraccion($comparendo[7]);
-            $comparendoNew->setBarrioInfraccion($comparendo[8]);
-            $comparendoNew->setObservacionesAgente($comparendo[9]);
-            $comparendoNew->setTipoInfractor($comparendo[10]);
-            $comparendoNew->setTarjetaOperacionInfractor($comparendo[11]);
-            $comparendoNew->setFuga($comparendo[12]);
-            $comparendoNew->setAccidente($comparendo[13]);
-            $comparendoNew->setPolca($polca);
-            $comparendoNew->setFechaNotificacion(
-                new \DateTime($comparendo[14])
-            );
-            $comparendoNew->setGradoAlchoholemia($comparendo[15]);
-            $comparendoNew->setFotomulta($comparendo[16]);
-            $comparendoNew->setObservacionesDigitador($comparendo[17]);
-            $comparendoNew->setRetencionLicencia($comparendo[18]);
-            $comparendoNew->setEstado(true);
-
-            //Relación llaves foraneas
-            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->getOneByCodigoDian($comparendo[0]);
-            $comparendoNew->setMunicipio($municipio);
-
-            $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getOneByPlaca($comparendo[1]);
-            $comparendoNew->setVehiculo($vehiculo);
-
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->getOneByNumeroIdentificacion($comparendo[2]);
-            $comparendoNew->setCuidadano($ciudadano);
-
-            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneByPlaca($comparendo[3]);
-            $comparendoNew->setFuncionario($funcionario);
-
-            $seguimientoEntrega = $em->getRepository('JHWEBContravencionalBundle:CvCdoSeguimientoEntrega')->findOneByNumeroOficio($comparendo[4]);
-            $comparendoNew->setSeguimientoEntrega($seguimientoEntrega);
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
             
-            $em->persist($comparendoNew);
-            $em->flush();
-        }
+            $em = $this->getDoctrine()->getManager();
+            $file = $request->files->get('file');
 
-        $response = array(
-            'status' => 'success',
-            'code' => 200,
-            'message' => "Registro creado con exito",
-        );
+            $documentoName = md5(uniqid()).$file->guessExtension();
+            $file->move(
+                $this->getParameter('data_upload'),
+                $documentoName
+            );
+
+            $valores = fopen($this->getParameter('data_upload').$documentoName , "r" );
+
+            $batchSize = 100;
+            $valoresArray = null;
+            $rows = 0;
+            $cols = 0;
+
+            if ($params->tipoFuente == 1) {
+                $length = 59;
+            }elseif ($params->tipoFuente == 2) {
+                $length = 10;
+            }
+
+            if ($valores) {
+                //Leo cada linea del archivo hasta un maximo de caracteres (0 sin limite)
+                while (($datos = fgetcsv($valores,0,",")) !== FALSE )
+                {
+                    $cols = count($datos);
+
+                    var_dump($cols);
+                    die();
+
+                    if ($cols == $length) {
+                        $datos = array_map("utf8_encode", $datos);
+    
+                        $valoresArray[]=array(
+                            'fecha'=>$helpers->convertDateTime($datos[2]),
+                            'direccion'=>$datos[4],
+                            'localidad'=>$datos[6],
+                            'placa'=>$datos[7],
+                            'identificacion'=>$datos[14],
+                            'idIdentificacion'=>$datos[15],
+                            'nombres'=>$datos[16],
+                            'apellidos'=>$datos[17],
+                            'valor'=>$datos[50],
+                            'codigoInfraccion' => $datos[55]
+                        );
+    
+                        /*if ((count($valoresArray) % $batchSize) == 0 && $valoresArray != null) {
+                            $rowsBatch =  $this->insertBatch($anios, $valoresArray);
+                            $rows += $rowsBatch;
+                            $valoresArray = null;
+                        }*/
+                    }
+                    $rows++;
+                   
+                }
+
+                var_dump($valoresArray);
+                die();
+
+                //return $helpers->json($valoresArray);
+
+                /*if ($valoresArray) {
+                    $rowsBatch = $this->insertBatch($anios, $valoresArray);
+                    $rows += $rowsBatch;
+                }*/
+
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'Se han procesado '.$rows.' líneas.', 
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "No se pudo leer el archivo.", 
+                );
+            }
+
+            foreach ($params as $key => $comparendo) {
+                $comparendoNew = new CvCdoComparendo();
+
+                $comparendoNew->setNumeroOrden($comparendo[5]);
+                $comparendoNew->setFechaDiligenciamiento(
+                    new \DateTime($comparendo[6])
+                );
+                $comparendoNew->setLugarInfraccion($comparendo[7]);
+                $comparendoNew->setBarrioInfraccion($comparendo[8]);
+                $comparendoNew->setObservacionesAgente($comparendo[9]);
+                $comparendoNew->setTipoInfractor($comparendo[10]);
+                $comparendoNew->setTarjetaOperacionInfractor($comparendo[11]);
+                $comparendoNew->setFuga($comparendo[12]);
+                $comparendoNew->setAccidente($comparendo[13]);
+                $comparendoNew->setPolca($polca);
+                $comparendoNew->setFechaNotificacion(
+                    new \DateTime($comparendo[14])
+                );
+                $comparendoNew->setGradoAlchoholemia($comparendo[15]);
+                $comparendoNew->setFotomulta($comparendo[16]);
+                $comparendoNew->setObservacionesDigitador($comparendo[17]);
+                $comparendoNew->setRetencionLicencia($comparendo[18]);
+                $comparendoNew->setEstado(true);
+
+                //Relación llaves foraneas
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->getOneByCodigoDian($comparendo[0]);
+                $comparendoNew->setMunicipio($municipio);
+
+                $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->getOneByPlaca($comparendo[1]);
+                $comparendoNew->setVehiculo($vehiculo);
+
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->getOneByNumeroIdentificacion($comparendo[2]);
+                $comparendoNew->setCuidadano($ciudadano);
+
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->findOneByPlaca($comparendo[3]);
+                $comparendoNew->setFuncionario($funcionario);
+
+                $seguimientoEntrega = $em->getRepository('JHWEBContravencionalBundle:CvCdoSeguimientoEntrega')->findOneByNumeroOficio($comparendo[4]);
+                $comparendoNew->setSeguimientoEntrega($seguimientoEntrega);
+                
+                $em->persist($comparendoNew);
+                $em->flush();
+            }
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        } 
+        
         return $helpers->json($response);
     }
 

@@ -103,6 +103,7 @@ class PnalAsignacionController extends Controller
                                     'status' => 'success',
                                     'code' => 200,
                                     'message' => "El registro se ha realizado con exito",
+                                    'data' => $registro
                                 );
         
                                 $rangoDisponibleGeneral = $em->getRepository('JHWEBPersonalBundle:PnalTalonario')->getLastByLastFechaAndOrganismoTransito(
@@ -145,6 +146,7 @@ class PnalAsignacionController extends Controller
                             'status' => 'success',
                             'code' => 200,
                             'message' => "El registro se ha realizado con exito",
+                            'data' => $registro
                         );
 
                         //Restar del principal
@@ -321,14 +323,7 @@ class PnalAsignacionController extends Controller
             }
         }
 
-        $response = array(
-            'title' => 'Perfecto!',
-            'status' => 'success',
-            'code' => 200,
-            'message' => 'Registro creado con exito.',  
-        );
-
-        return true;
+        return $asignacion;
     }
 
     /**
