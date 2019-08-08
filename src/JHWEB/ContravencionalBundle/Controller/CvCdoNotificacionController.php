@@ -262,32 +262,60 @@ class CvCdoNotificacionController extends Controller
                 //Valida que el comparendo este Pendiente
                 if ($comparendo->getEstado()->getId() == 1) {
                     if (!$comparendo->getAudiencia()) {
-                        //Valida si han pasado mas de 5 días
-                        if ($diasHabiles > 5 && $diasHabiles <= 30) {
-                            //Busca si ya se creo un auto de no comparecencia
-                            $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                        //Busca si ya se creo un auto de no comparecencia
+                        $auto = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                            array(
+                                'comparendo' => $comparendo->getId(),
+                                'estado' => 14
+                            )
+                        );
+
+                        if ($auto) {
+                            //Busca si ya se creo la notificación por estado
+                            $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                                 array(
                                     'comparendo' => $comparendo->getId(),
-                                    'estado' => 14
+                                    'estado' => 15
                                 )
                             );
 
-                            if ($auto) {
-                                //Busca si ya se creo la notificación por estado
-                                $notificacion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                            if (!$notificacion) {
+                                //Registra trazabilidad de notificacion por estado
+                                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(15);
+
+                                $helpers->generateTrazabilidad($comparendo, $estado);
+                            }else{
+                                //Busca si ya se creo una sancion
+                                $sancion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
                                     array(
                                         'comparendo' => $comparendo->getId(),
-                                        'estado' => 15
+                                        'estado' => 2
                                     )
                                 );
 
-                                if (!$notificacion) {
-                                    //Registra trazabilidad de notificacion por estado
-                                    $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(15);
+                                if (!$sancion) {
+                                    if ($diasCalendario > 30 && $diasCalendario <= 912) {
+                                        //Cambia a estado sansonatorio
+                                        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(2);
 
-                                    $helpers->generateTrazabilidad($comparendo, $estado);
+                                        $helpers->generateTrazabilidad($comparendo, $estado);
+                                    }elseif($diasCalendario > 912){
+                                        $caduco = $helpers->checkRangeDates($comparendo->getFecha());
+
+                                        if ($caduco) {
+                                            //Caducidad
+                                            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                                                7
+                                            );
+
+                                            $helpers->generateTrazabilidad($comparendo, $estado);
+                                        }
+                                    }
                                 }
-                            }else{
+                            }
+                        }else{
+                            //Valida si han pasado mas de 5 días
+                            if ($diasHabiles > 5) {
                                 //Registra trazabilidad de auto de comparecencia
                                 $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(14);
                                 $helpers->generateTrazabilidad($comparendo, $estado);
@@ -317,32 +345,6 @@ class CvCdoNotificacionController extends Controller
         
                                 $em->persist($audiencia);
                                 $em->flush();
-                            }                            
-                        }elseif ($diasCalendario > 30 && $diasCalendario <= 912) {//Valida si han pasado mas de 30 días
-                            //Busca si ya se creo una sancion
-                            $sancion = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
-                                array(
-                                    'comparendo' => $comparendo->getId(),
-                                    'estado' => 2
-                                )
-                            );
-
-                            if (!$sancion) {
-                                //Cambia a estado sansonatorio
-                                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(2);
-
-                                $helpers->generateTrazabilidad($comparendo, $estado);
-                            }
-                        }else{
-                            $caduco = $helpers->checkRangeDates($comparendo->getFecha());
-
-                            if ($caduco) {
-                                //Caducidad
-                                $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
-                                    7
-                                );
-
-                                $helpers->generateTrazabilidad($comparendo, $estado);
                             }
                         }
                     }

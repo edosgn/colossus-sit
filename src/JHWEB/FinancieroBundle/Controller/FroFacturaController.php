@@ -5,6 +5,7 @@ namespace JHWEB\FinancieroBundle\Controller;
 use JHWEB\FinancieroBundle\Entity\FroFactura;
 use JHWEB\FinancieroBundle\Entity\FroFacComparendo;
 use JHWEB\FinancieroBundle\Entity\FroFacTramite;
+use JHWEB\FinancieroBundle\Entity\FroFacParqueadero;
 use JHWEB\FinancieroBundle\Entity\FroFacRetefuente;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -123,15 +124,11 @@ class FroFacturaController extends Controller
             $em->flush();
 
             if (isset($params->factura->comparendos)) {
-                $this->registerComparendos($params->factura->comparendos, $factura);
+                $this->registerFacturaComparendos($params->factura->comparendos, $factura);
             }elseif (isset($params->factura->tramites)) {
-                $this->registerTramites($params, $factura);
+                $this->registerFacturaTramites($params, $factura);
             }elseif (isset($params->factura->idInmovilizacion)) {
-                $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
-                    $params->factura->idInmovilizacion
-                );
-                $inmovilizacion->setFactura($factura);
-                $em->flush();
+                $this->registerFacturaParqueadero($params->factura, $factura);
             }
 
             $response = array(
@@ -498,7 +495,7 @@ class FroFacturaController extends Controller
     /**
      * Registra los comparendos según la factura y calcula el valor según los comparendos seleccionados y actualiza los valores.
      */
-    public function registerComparendos($params, $factura)
+    public function registerFacturaComparendos($params, $factura)
     {
         $helpers = $this->get("app.helpers");
 
@@ -586,7 +583,7 @@ class FroFacturaController extends Controller
     /**
      * Registra los trámites según la factura.
      */
-    public function registerTramites($params, $factura)
+    public function registerFacturaTramites($params, $factura)
     {
         $helpers = $this->get("app.helpers");
 
@@ -653,6 +650,45 @@ class FroFacturaController extends Controller
     }
 
     /**
+     * Registra los datos individuales para factura de parqueadero.
+     */
+    public function registerFacturaParqueadero($params, $factura)
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+
+        $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
+            $params->factura->idInmovilizacion
+        );
+        $inmovilizacion->setFactura($factura);
+
+        $em->flush();
+
+        var_dump($params->fechaSalida.' '.$params->horaSalida);
+        die();
+
+        $minutos = $helpers->calculateTimeBetweenDates(
+            new \Datetime(date($params->fechaSalida.' '.$params->horaSalida)), 
+            new \Datetime(date('Y-m-d h:i:s'))
+        );
+
+        $facturaParqueadero = new FroFacParqueadero();
+
+        $facturaParqueadero->setFactura($factura);
+        $facturaParqueadero->setInmovilizacion($inmovilizacion);
+        $facturaParqueadero->setValorGrua($params->valorGrua);
+        $facturaParqueadero->setValorParqueadero($params->valorParqueadero);
+        $facturaParqueadero->setValorTotal($params->valor);
+        $facturaParqueadero->setActivo(true);
+
+        $em->persist($facturaParqueadero);
+        $em->flush();
+
+        return true;
+    }
+
+    /**
      * Genera pdf de factura seleccionada.
      *
      * @Route("/{tipoRecaudo}/{id}/pdf", name="frofactura_pdf")
@@ -673,7 +709,7 @@ class FroFacturaController extends Controller
                 $this->generatePdfAcuerdoPago($id);
                 break;
 
-            case 4:
+            case 5:
                 $this->generatePdfParqueadero($id);
                 break;
         }
@@ -826,7 +862,7 @@ class FroFacturaController extends Controller
 
         $factura = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->find($id);
 
-        $inmovilizacion = $em->getRepository('JHWEBPqoInmovilizacionBundle:PqoInmovilizacion')->findOneBy(
+        $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->findOneBy(
             array(
                 'factura' => $factura->getId()
             )

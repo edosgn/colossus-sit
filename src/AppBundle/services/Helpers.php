@@ -60,6 +60,19 @@ class Helpers
 		return $response;
 	}
 
+
+
+	function calculateTimeBetweenDates($fechaInicial, $fechaFinal)
+	{
+		$diff = $fechaInicial->diff($fechaFinal);
+		// 38 minutes to go [number is variable]
+		$minutos = (($diff->days * 24) * 60) + ($diff->i);
+		// passed means if its negative and to go means if its positive
+		//echo ($diff->invert == 1 ) ? ' passed ' : ' to go ';
+		return $minutos;
+	}
+	
+
 	public function calculateAge($fechaNacimiento){
 		$fechaNacimiento = new \DateTime($fechaNacimiento);
 	    $fechaActual = new \DateTime();

@@ -24,16 +24,30 @@ class FroFacParqueadero
     /**
      * @var int
      *
-     * @ORM\Column(name="horas", type="integer")
+     * @ORM\Column(name="minutos", type="integer")
      */
-    private $horas;
+    private $minutos;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="valor_hora", type="integer")
+     * @ORM\Column(name="valor_grua", type="integer")
      */
-    private $valorHora;
+    private $valorGrua;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_parqueadero", type="integer")
+     */
+    private $valorParqueadero;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_total", type="integer")
+     */
+    private $valorTotal;
 
     /**
      * @var string
@@ -41,13 +55,6 @@ class FroFacParqueadero
      * @ORM\Column(name="observaciones", type="text")
      */
     private $observaciones;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="placa", type="string", length=10)
-     */
-    private $placa;
 
     /**
      * @var bool
@@ -78,51 +85,99 @@ class FroFacParqueadero
     }
 
     /**
-     * Set horas
+     * Set minutos
      *
-     * @param integer $horas
+     * @param integer $minutos
      *
      * @return FroFacParqueadero
      */
-    public function setHoras($horas)
+    public function setMinutos($minutos)
     {
-        $this->horas = $horas;
+        $this->minutos = $minutos;
 
         return $this;
     }
 
     /**
-     * Get horas
+     * Get minutos
      *
      * @return integer
      */
-    public function getHoras()
+    public function getMinutos()
     {
-        return $this->horas;
+        return $this->minutos;
     }
 
     /**
-     * Set valorHora
+     * Set valorGrua
      *
-     * @param integer $valorHora
+     * @param integer $valorGrua
      *
      * @return FroFacParqueadero
      */
-    public function setValorHora($valorHora)
+    public function setValorGrua($valorGrua)
     {
-        $this->valorHora = $valorHora;
+        $this->valorGrua = $valorGrua;
 
         return $this;
     }
 
     /**
-     * Get valorHora
+     * Get valorGrua
      *
      * @return integer
      */
-    public function getValorHora()
+    public function getValorGrua()
     {
-        return $this->valorHora;
+        return $this->valorGrua;
+    }
+
+    /**
+     * Set valorParqueadero
+     *
+     * @param integer $valorParqueadero
+     *
+     * @return FroFacParqueadero
+     */
+    public function setValorParqueadero($valorParqueadero)
+    {
+        $this->valorParqueadero = $valorParqueadero;
+
+        return $this;
+    }
+
+    /**
+     * Get valorParqueadero
+     *
+     * @return integer
+     */
+    public function getValorParqueadero()
+    {
+        return $this->valorParqueadero;
+    }
+
+    /**
+     * Set valorTotal
+     *
+     * @param integer $valorTotal
+     *
+     * @return FroFacParqueadero
+     */
+    public function setValorTotal($valorTotal)
+    {
+        $this->valorTotal = $valorTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get valorTotal
+     *
+     * @return integer
+     */
+    public function getValorTotal()
+    {
+        return $this->valorTotal;
     }
 
     /**
@@ -147,30 +202,6 @@ class FroFacParqueadero
     public function getObservaciones()
     {
         return $this->observaciones;
-    }
-
-    /**
-     * Set placa
-     *
-     * @param string $placa
-     *
-     * @return FroFacParqueadero
-     */
-    public function setPlaca($placa)
-    {
-        $this->placa = $placa;
-
-        return $this;
-    }
-
-    /**
-     * Get placa
-     *
-     * @return string
-     */
-    public function getPlaca()
-    {
-        return $this->placa;
     }
 
     /**

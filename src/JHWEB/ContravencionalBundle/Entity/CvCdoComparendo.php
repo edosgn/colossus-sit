@@ -390,14 +390,14 @@ class CvCdoComparendo
     /**
      * @var string
      *
-     * @ORM\Column(name="servicio", type="string", length=255)
+     * @ORM\Column(name="servicio", type="string", length=255, nullable=true)
      */
     protected $servicio;
     
     /**
      * @var string
      *
-     * @ORM\Column(name="clase", type="string", length=255)
+     * @ORM\Column(name="clase", type="string", length=255, nullable=true)
      */
     protected $clase;
     

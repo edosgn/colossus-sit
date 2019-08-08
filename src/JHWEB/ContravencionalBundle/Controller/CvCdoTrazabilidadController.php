@@ -5,6 +5,7 @@ namespace JHWEB\ContravencionalBundle\Controller;
 use JHWEB\ContravencionalBundle\Entity\CvCdoTrazabilidad;
 use JHWEB\ConfigBundle\Entity\CfgAdmActoAdministrativo;
 use JHWEB\ContravencionalBundle\Entity\CvAudiencia;
+use JHWEB\ContravencionalBundle\Entity\CvInvestigacionBien;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -411,100 +412,6 @@ class CvCdoTrazabilidadController extends Controller
         return $helpers->json($response);
     }
 
-    //Migrar a servicio
-    public function generateTrazabilidad($comparendo, $estado){
-        $em = $this->getDoctrine()->getManager();
-
-        if ($estado->getActualiza()) {
-            $comparendo->setEstado($estado);
-            $em->flush();
-        }
-
-        $trazabilidadesOld = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
-            array(
-                'comparendo' => $comparendo->getId(),
-                'activo' => true
-            )
-        );
-
-        if ($trazabilidadesOld) {
-            foreach ($trazabilidadesOld as $key => $trazabilidadOld) {
-                $trazabilidadOld->setActivo(false);
-                $em->flush();
-            }
-        }
-
-        $trazabilidad = new CvCdoTrazabilidad();
-
-        $trazabilidad->setFecha(
-            new \Datetime(date('Y-m-d'))
-        );
-        $trazabilidad->setHora(
-            new \Datetime(date('h:i:s A'))
-        );
-        $trazabilidad->setActivo(true);
-        $trazabilidad->setComparendo($comparendo);
-        $trazabilidad->setEstado($estado);
-
-        if ($estado->getFormato()) {
-            $documento = new CfgAdmActoAdministrativo();
-
-            $documento->setNumero(
-                $comparendo->getEstado()->getSigla().'-'.$comparendo->getConsecutivo()->getNumero()
-            );
-            $documento->setFecha(new \Datetime(date('Y-m-d')));
-            $documento->setActivo(true);
-
-            $documento->setFormato(
-                $comparendo->getEstado()->getFormato()
-            );
-
-            $template = $this->generateTemplate($comparendo);
-            $documento->setCuerpo($template);
-
-            $em->persist($documento);
-            $em->flush();
-
-            $trazabilidad->setActoAdministrativo($documento);
-        }
-
-        $em->persist($trazabilidad);
-        $em->flush();
-    }
-    
-    //Migrar a servicio
-    public function generateTemplate($comparendo){
-        $helpers = $this->get("app.helpers");
-
-        setlocale(LC_ALL,"es_ES");
-        $fechaActual = strftime("%d de %B del %Y");
-
-        
-        $replaces[] = (object)array('id' => 'NOM', 'value' => $comparendo->getInfractorNombres().' '.$comparendo->getInfractorApellidos()); 
-        $replaces[] = (object)array('id' => 'ID', 'value' => $comparendo->getInfractorIdentificacion());
-        $replaces[] = (object)array('id' => 'NOC', 'value' => $comparendo->getConsecutivo()->getNumero()); 
-        $replaces[] = (object)array('id' => 'FC1', 'value' => $fechaActual);
-
-        if ($comparendo->getInfraccion()) {
-            $replaces[] = (object)array('id' => 'DCI', 'value' => $comparendo->getInfraccion()->getDescripcion());
-            $replaces[] = (object)array('id' => 'CIC', 'value' => $comparendo->getInfraccion()->getCodigo());
-        }
-
-        if ($comparendo->getPlaca()) {
-            $replaces[] = (object)array('id' => 'PLACA', 'value' => $comparendo->getPlaca());
-        }
-
-
-        $template = $helpers->createTemplate(
-          $comparendo->getEstado()->getFormato()->getCuerpo(),
-          $replaces
-        );
-
-        $template = str_replace("<br>", "<br/>", $template);
-
-        return $template;
-    }
-
     /**
      * Notificaciones por pagina web.
      *
@@ -551,5 +458,109 @@ class CvCdoTrazabilidadController extends Controller
         }
           
         return $this->render('@JHWEBContravencional/Default/notification.web.html.twig');
+    }
+
+    /**
+     * Busca todos los bienes registrados y asociados a una trazabilidad.
+     *
+     * @Route("/search/bienes", name="cvcdotrazabilidad_search_bienes")
+     * @Method({"GET", "POST"})
+     */
+    public function searchBienesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $bienes = $em->getRepository("JHWEBContravencionalBundle:CvInvestigacionBien")->findBy(
+                array(
+                    'trazabilidad' => $params->idTrazabilidad,
+                )                
+            );
+
+            if ($bienes) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($bienes)." registros encontrados.", 
+                    'data'=> $trazabilidad,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningún bien resgistrado aún.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Registra un bien y los asocia a una trazabilidad.
+     *
+     * @Route("/register/bien", name="cvcdotrazabilidad_register_bien")
+     * @Method({"GET", "POST"})
+     */
+    public function registerBienAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $bien = new CvInvestigacionBien();
+
+            $bien->setNombre(mb_strtoupper($params->nombre));
+            $bien->setTipo($params->tipo);
+            $bien->setEmbargable($params->embargable);
+            $bien->setAvaluo($params->avaluo);
+            if($params->embargable){
+                $bien->setValor($params->valor);
+            }else{
+                $bien->setValor(0);
+            }
+
+            $em->persist($bien);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Bien registrado con éxito.", 
+                'data'=> $bien,
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+        return $helpers->json($response);
     }
 }
