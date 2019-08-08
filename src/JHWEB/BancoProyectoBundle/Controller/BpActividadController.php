@@ -267,20 +267,19 @@ class BpActividadController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->findBy(
-            array(
-                'proyecto' => $params->idProyecto,
-                'activo' => true
-            )
+        $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->getByProyecto(
+            $params->idProyecto
         );
 
         $response = null;
 
-        foreach ($actividades as $key => $actividad) {
-            $response[$key] = array(
-                'value' => $actividad->getId(),
-                'label' => $actividad->getNombre(),
-            );
+        if ($actividades) {
+            foreach ($actividades as $key => $actividad) {
+                $response[$key] = array(
+                    'value' => $actividad->getId(),
+                    'label' => $actividad->getNombre(),
+                );
+            }
         }
         
         return $helpers->json($response);

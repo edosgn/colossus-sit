@@ -26,4 +26,25 @@ class BpActividadRepository extends \Doctrine\ORM\EntityRepository
         
         return $consulta->getOneOrNullResult();
     }
+
+    //Obtiene la suma de los costos de actividades por proyecto
+    public function getByProyecto($idProyecto)
+    {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT a
+            FROM JHWEBBancoProyectoBundle:BpActividad a,
+            JHWEBBancoProyectoBundle:BpCuenta c,
+            JHWEBBancoProyectoBundle:BpProyecto p
+            WHERE a.cuenta = c.id
+            AND c.proyecto = p.id
+            AND p.id = :idProyecto
+            AND a.activo = true";
+            
+        $consulta = $em->createQuery($dql);
+
+        $consulta->setParameter('idProyecto', $idProyecto);
+        
+        return $consulta->getResult();
+    }
 }
