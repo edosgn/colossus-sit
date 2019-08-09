@@ -64,27 +64,36 @@ class BpCdpController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $cdp = new BpCdp();
-
-            $solicitudFecha = new \Datetime(date('Y-m-d'));
+            $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find(
+                $params->id
+            );
 
             $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->getMaximo(
                 $solicitudFecha->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            
             $cdp->setConsecutivo($consecutivo);
 
             $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$solicitudFecha->format('Y');
 
-            $cdp->setSolicitudNumero($numero);
             $cdp->setNumero($numero);
 
-            $cdp->setSolicitudFecha($solicitudFecha);
-            $cdp->setNumero($params->numero);
-            $cdp->setValor($params->valor);
-            $cdp->setActivo(true);
+            $cdp->setFechaRegistro(new \Datetime(date('Y-m-d')));
 
-            $em->persist($cdp);
+            $cdp->setFechaExpedición(new \Datetime($params->fechaExpedicion));
+            $cdp->setTerceroIdentificacion($params->terceroIdentificacion);
+            $cdp->setTerceroNombre($params->terceroNombre);
+            $cdp->setObservaciones($params->observaciones);
+            $cdp->setActivo(true);
+            
+            if ($params->idFuncionario) {
+                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                    $params->idFuncionario
+                );
+                $cdp->setExpide($funcionario);
+            }
+
             $em->flush();
 
             $response = array(
@@ -180,7 +189,8 @@ class BpCdpController extends Controller
         ;
     }
 
-    /* ========================= */
+    /* ======================================== */
+
     /**
      * Creates a request bpCdp entity.
      *
@@ -241,6 +251,57 @@ class BpCdpController extends Controller
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca la solicitud de CDP 
+     *
+     * @Route("/search/solicitud/numero", name="bpcdp_search_solicitud_numero")
+     * @Method({"GET", "POST"})
+     */
+    public function searchSolicitudByNumeroAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
+            $em = $this->getDoctrine()->getManager();
+
+            $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findBy(
+                array(
+                    'numeroSolicitud' => $params->numero
+                )
+            );
+
+            if ($solicitud) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro creado con éxito.",
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Solicitud no encontrada.", 
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida.", 
             );
         }
         
