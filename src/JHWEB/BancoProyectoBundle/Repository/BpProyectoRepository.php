@@ -26,10 +26,13 @@ class BpProyectoRepository extends \Doctrine\ORM\EntityRepository
                 $consulta->setParameters(array(
                     'filtro' => $params->filtro,
                 ));
+
+                return $consulta->getOneOrNullResult();
+
                 break;
 
             case 2:
-            $dql = "SELECT p
+                $dql = "SELECT p
                 FROM JHWEBBancoProyectoBundle:BpProyecto p
                 WHERE p.fecha = :filtro
                 ORDER BY p.fecha DESC";
@@ -39,9 +42,10 @@ class BpProyectoRepository extends \Doctrine\ORM\EntityRepository
                 $consulta->setParameters(array(
                     'filtro' => $params->filtro,
                 ));
+
+                return $consulta->getResult();
+
                 break;
         }
-
-        return $consulta->getResult();
     }
 }

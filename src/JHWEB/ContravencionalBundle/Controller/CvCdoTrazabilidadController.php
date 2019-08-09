@@ -53,8 +53,11 @@ class CvCdoTrazabilidadController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $trazabilidadNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findByEstado(
-                $params->idComparendoEstado
+            $trazabilidadNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoTrazabilidad')->findBy(
+                array(
+                    'estado' => $params->idComparendoEstado,
+                    'comparendo' => $audienciaparams->idComparendo
+                )
             );
 
             if (!$trazabilidadNew) {
@@ -490,7 +493,7 @@ class CvCdoTrazabilidadController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => count($bienes)." registros encontrados.", 
-                    'data'=> $trazabilidad,
+                    'data'=> $bienes,
                 );
             }else{
                 $response = array(
@@ -515,10 +518,10 @@ class CvCdoTrazabilidadController extends Controller
     /**
      * Registra un bien y los asocia a una trazabilidad.
      *
-     * @Route("/register/bien", name="cvcdotrazabilidad_register_bien")
+     * @Route("/new/bien", name="cvcdotrazabilidad_new_bien")
      * @Method({"GET", "POST"})
      */
-    public function registerBienAction(Request $request)
+    public function newBienAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -540,6 +543,13 @@ class CvCdoTrazabilidadController extends Controller
                 $bien->setValor($params->valor);
             }else{
                 $bien->setValor(0);
+            }
+
+            if($params->idTrazabilidad){
+                $trazabilidad = $em->getRepository("JHWEBContravencionalBundle:CvCdoTrazabilidad")->find(
+                    $params->idTrazabilidad
+                );
+                $bien->setTrazabilidad($trazabilidad);
             }
 
             $em->persist($bien);
