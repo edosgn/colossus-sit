@@ -308,10 +308,10 @@ class FroReporteIngresosController extends Controller
 
                         $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFacInsumo')->findBy(
                             array(
-                                'factura' => $tramite->getTramiteFactura()->getFactura(),
+                                'factura' => $tramite->getTramiteFactura()->getFactura()->getId(),
                             )
                         );
-
+                        
                         foreach ($sustratos as $key => $sustrato) {
                             switch ($sustrato->getInsumo()->getTipo()->getCategoria()) {
                                 case 'SUSTRATO':
@@ -348,17 +348,34 @@ class FroReporteIngresosController extends Controller
                     'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
                     'fechaActual' => $fechaActual,
                     'totalReporteMensual' => $totalReporteMensual,
-                    'totalSustratos' => $totalSustratos,
+                    /* 'totalSustratos' => $totalSustratos, */
                 )); 
 
-                return new Response(
-                    $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
-                    200,
-                    array(
-                        'Content-Type'        => 'application/pdf',
-                        'Content-Disposition' => 'attachment; filename="fichero.pdf"'
-                        )
-                    );
+                $data = (object) array(
+                    'template' => 'templateExcelByTramites',
+                    'organismoTransito' => $organismoTransito, 
+                    'arrayReporteMensual' => $arrayReporteMensual,
+                    'reporteMensual' => $reporteMensual,
+                    'funcionario' => $funcionario,
+                    'mesReporteDesde' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaDesde))),
+                    'mesReporteHasta' => strtoupper(strftime("%B del %Y", strtotime($params->filtros->fechaHasta))),
+                    'fechaActual' => $fechaActual,
+                    'totalReporteMensual' => $totalReporteMensual,
+                    /* 'totalSustratos' => $totalSustratos, */
+                ); 
+
+                if($params->exportarEn == 1) {
+                    return $this->get('app.excel')->newExcel($data);
+                } else if($params->exportarEn == 2) {
+                    return new Response(
+                        $this->get('app.pdf')->templateIngresos($html, $organismoTransito),
+                        200,
+                        array(
+                            'Content-Type'        => 'application/pdf',
+                            'Content-Disposition' => 'attachment; filename="fichero.pdf"'
+                            )
+                        );
+                    }
                 } else {
                     $response = array(
                         'status' => 'error',
