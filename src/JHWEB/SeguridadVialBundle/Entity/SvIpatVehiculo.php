@@ -163,6 +163,13 @@ class SvIpatVehiculo
     /**
      * @var string
      *
+     * @ORM\ManyToOne(targetEntity="JHWEB\ParqueaderoBundle\Entity\PqoCfgPatio", inversedBy="ipatVehiculo")
+     */
+    private $parqueadero;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="a_disposicion_de", type="string", nullable = true)
      */
     private $aDisposicionDe;
@@ -1368,6 +1375,30 @@ class SvIpatVehiculo
     public function getActivo()
     {
         return $this->activo;
+    }
+
+    /**
+     * Set parqueadero
+     *
+     * @param \JHWEB\ParqueaderoBundle\Entity\PqoCfgPatio $parqueadero
+     *
+     * @return SvIpatVehiculo
+     */
+    public function setParqueadero(\JHWEB\ParqueaderoBundle\Entity\PqoCfgPatio $parqueadero = null)
+    {
+        $this->parqueadero = $parqueadero;
+
+        return $this;
+    }
+
+    /**
+     * Get parqueadero
+     *
+     * @return \JHWEB\ParqueaderoBundle\Entity\PqoCfgPatio
+     */
+    public function getParqueadero()
+    {
+        return $this->parqueadero;
     }
 
     /**

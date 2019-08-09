@@ -132,7 +132,7 @@ class ExcelTemplate {
 
     public function getStyleTramites(){
         // Set document properties
-        $this->objPHPExcel->getProperties()->setCreator("JHWEB PASTO S.A.S.")
+        /* $this->objPHPExcel->getProperties()->setCreator("JHWEB PASTO S.A.S.")
             ->setLastModifiedBy("JHWEB PASTO S.A.S.")
             ->setTitle("Office 2007 XLSX Test Document")
             ->setSubject("Office 2007 XLSX Test Document")
@@ -149,8 +149,8 @@ class ExcelTemplate {
           $this->objPHPExcel->getActiveSheet()->getStyle('A2:E'.$this->objPHPExcel->getActiveSheet()->getHighestRow())->getAlignment()->setWrapText(true);
           $this->objPHPExcel->getActiveSheet()->getStyle('A1:E3')->getFont()->setBold(true);
           $this->objPHPExcel->getActiveSheet()->getStyle('A1:E3')->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
-          $this->objPHPExcel->getActiveSheet()->getStyle('B1:'.$this->col.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
-        /* if(isset($params->arrayTramites)){
+          $this->objPHPExcel->getActiveSheet()->getStyle('B1:'.$this->col.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,)); */
+        if(isset($params->arrayTramites)){
           $this->objPHPExcel->getProperties()->setCreator("JHWEB PASTO S.A.S.")
             ->setLastModifiedBy("JHWEB PASTO S.A.S.")
             ->setTitle("Office 2007 XLSX Test Document")
@@ -191,7 +191,7 @@ class ExcelTemplate {
           $this->objPHPExcel->getActiveSheet()->getStyle('A1:H3')->getFont()->setBold(true);
           $this->objPHPExcel->getActiveSheet()->getStyle('A1:H3')->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
           $this->objPHPExcel->getActiveSheet()->getStyle('B1:'.$this->col.$this->row)->getAlignment()->applyFromArray(array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,));
-        } */
+        }
     }
   //==============================//START TEMPLATES//==============================//
 

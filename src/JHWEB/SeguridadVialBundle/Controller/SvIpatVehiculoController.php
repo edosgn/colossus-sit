@@ -153,6 +153,12 @@ class SvIpatVehiculoController extends Controller
                     $vehiculo->setInmovilizadoEn($params->inmovilizadoEn);
                 }
 
+                $idParqueadero = (isset($params->idParqueadero)) ? $params->idParqueadero : null;
+                if($idParqueadero){
+                    $parqueadero = $em->getRepository('JHWEBParqueaderoBundle:PqoCfgPatio')->find($params->idParqueadero);
+                    $vehiculo->setParqueadero($parqueadero);
+                }
+
                 $aDisposicionDe = (isset($params->aDisposicionDe)) ? $params->aDisposicionDe : null;
                 if($aDisposicionDe){
                     $vehiculo->setADisposicionDe($params->aDisposicionDe);
