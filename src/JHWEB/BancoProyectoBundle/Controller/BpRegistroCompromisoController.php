@@ -60,30 +60,30 @@ class BpRegistroCompromisoController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
+            $fechaExpedicion = new \Datetime($params->fechaExpedicion);
+
             $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
                 $params->id
             );
 
             $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->getMaximo(
-                $solicitudFecha->format('Y')
+                $fechaExpedicion->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
             
-            $registro->setConsecutivo($consecutivo);
+            //$registro->setConsecutivo($consecutivo);
 
-            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$solicitudFecha->format('Y');
+            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaExpedicion->format('Y');
 
             $registro->setNumero($numero);
 
-            $fechaExpedicion = $helpers->convertDateTime($params->fechaExpedicion);
-
             $registro->setFechaRegistro(new \Datetime(date('Y-m-d')));
-            $registro->setFechaExpedición($fechaExpedicion);
+            $registro->setFechaExpedicion($fechaExpedicion);
             $registro->setContratoNumero($params->contratoNumero);
             $registro->setContratoTipo($params->contratoTipo);
             $registro->setEstado($params->contratoEstado);
-            $registro->setObservaciones($params->observaciones);
-            //$registro->setValor($params->valor);
+            $registro->setValor($params->valor);
+            $registro->setSaldo($params->valor);
             
             $em->flush();
 
@@ -91,7 +91,7 @@ class BpRegistroCompromisoController extends Controller
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
-                'data' => $cdp
+                'data' => $registro
             );
         }else{
             $response = array(
@@ -217,7 +217,7 @@ class BpRegistroCompromisoController extends Controller
             $registro->setSolicitudConsecutivo($consecutivo);
             $registro->setCuentaNumero($params->cuentaNumero);
             $registro->setCuentaTipo($params->cuentaTipo);
-            $registro->setBancoNombre($params->bancoNombre);
+            $registro->setBancoNombre(mb_strtoupper($params->bancoNombre));
 
             if ($params->idCdp) {
                 $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($params->idCdp);
@@ -238,7 +238,7 @@ class BpRegistroCompromisoController extends Controller
                 $registro->setEmpresa($empresa);
             }
 
-            //$registro->setActivo(true);
+            $registro->setActivo(true);
 
             $em->persist($registro);
             $em->flush();

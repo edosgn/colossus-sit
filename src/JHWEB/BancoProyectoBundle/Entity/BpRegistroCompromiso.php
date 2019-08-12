@@ -106,6 +106,27 @@ class BpRegistroCompromiso
     private $estado;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="valor", type="integer", nullable=true)
+     */
+    private $valor;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="saldo", type="integer", nullable=true)
+     */
+    private $saldo;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="activo", type="boolean")
+     */
+    private $activo;
+
+    /**
      * @ORM\ManyToOne(targetEntity="BpCdp")
      **/
     protected $cdp;
@@ -413,6 +434,78 @@ class BpRegistroCompromiso
     public function getEstado()
     {
         return $this->estado;
+    }
+
+    /**
+     * Set valor
+     *
+     * @param integer $valor
+     *
+     * @return BpRegistroCompromiso
+     */
+    public function setValor($valor)
+    {
+        $this->valor = $valor;
+
+        return $this;
+    }
+
+    /**
+     * Get valor
+     *
+     * @return integer
+     */
+    public function getValor()
+    {
+        return $this->valor;
+    }
+
+    /**
+     * Set saldo
+     *
+     * @param integer $saldo
+     *
+     * @return BpRegistroCompromiso
+     */
+    public function setSaldo($saldo)
+    {
+        $this->saldo = $saldo;
+
+        return $this;
+    }
+
+    /**
+     * Get saldo
+     *
+     * @return integer
+     */
+    public function getSaldo()
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     *
+     * @return BpRegistroCompromiso
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean
+     */
+    public function getActivo()
+    {
+        return $this->activo;
     }
 
     /**

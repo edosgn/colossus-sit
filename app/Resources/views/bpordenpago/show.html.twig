@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bpordenpago</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bpOrdenPago.id }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{% if bpOrdenPago.fecha %}{{ bpOrdenPago.fecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ bpOrdenPago.numero }}</td>
+            </tr>
+            <tr>
+                <th>Tipo</th>
+                <td>{{ bpOrdenPago.tipo }}</td>
+            </tr>
+            <tr>
+                <th>Concepto</th>
+                <td>{{ bpOrdenPago.concepto }}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ bpOrdenPago.valor }}</td>
+            </tr>
+            <tr>
+                <th>Activo</th>
+                <td>{% if bpOrdenPago.activo %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bpordenpago_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('bpordenpago_edit', { 'id': bpOrdenPago.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

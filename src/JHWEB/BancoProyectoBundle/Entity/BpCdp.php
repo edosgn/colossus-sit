@@ -80,6 +80,13 @@ class BpCdp
     /**
      * @var int
      *
+     * @ORM\Column(name="saldo", type="integer", nullable=true)
+     */
+    private $saldo;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="tercero_identificacion", type="bigint", nullable=true)
      */
     private $terceroIdentificacion;
@@ -317,6 +324,30 @@ class BpCdp
     public function getValorLetras()
     {
         return $this->valorLetras;
+    }
+
+    /**
+     * Set saldo
+     *
+     * @param integer $saldo
+     *
+     * @return BpCdp
+     */
+    public function setSaldo($saldo)
+    {
+        $this->saldo = $saldo;
+
+        return $this;
+    }
+
+    /**
+     * Get saldo
+     *
+     * @return integer
+     */
+    public function getSaldo()
+    {
+        return $this->saldo;
     }
 
     /**

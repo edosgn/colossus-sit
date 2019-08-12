@@ -230,6 +230,7 @@ class BpCdpController extends Controller
                 $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
                 $cdp->setActividad($actividad);
                 $cdp->setValor($actividad->getCostoTotal());
+                $cdp->setSaldo($actividad->getCostoTotal());
 
                 $valorEnLetras = Numbers_Words::toWords(
                     $actividad->getCostoTotal(), 'es'
