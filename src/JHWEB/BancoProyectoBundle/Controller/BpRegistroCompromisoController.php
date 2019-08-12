@@ -2,24 +2,22 @@
 
 namespace JHWEB\BancoProyectoBundle\Controller;
 
-use JHWEB\BancoProyectoBundle\Entity\BpCdp;
+use JHWEB\BancoProyectoBundle\Entity\BpRegistroCompromiso;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Request;
-use Numbers_Words;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Bpcdp controller.
+ * Bpregistrocompromiso controller.
  *
- * @Route("bpcdp")
+ * @Route("bpregistrocompromiso")
  */
-class BpCdpController extends Controller
+class BpRegistroCompromisoController extends Controller
 {
     /**
-     * Lists all bpCdp entities.
+     * Lists all bpRegistroCompromiso entities.
      *
-     * @Route("/", name="bpcdp_index")
+     * @Route("/", name="bpregistrocompromiso_index")
      * @Method("GET")
      */
     public function indexAction()
@@ -28,18 +26,16 @@ class BpCdpController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $cdps = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findBy(
-            array('activo' => true)
-        );
+        $registros = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findAll();
 
         $response['data'] = array();
 
-        if ($cdps) {
+        if ($registros) {
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => count($cdps)." registros encontrados", 
-                'data'=> $cdps,
+                'message' => count($registros)." registros encontrados", 
+                'data'=> $registros,
             );
         }
 
@@ -47,9 +43,9 @@ class BpCdpController extends Controller
     }
 
     /**
-     * Creates a new bpCdp entity.
+     * Creates a new bpRegistroCompromiso entity.
      *
-     * @Route("/new", name="bpcdp_new")
+     * @Route("/new", name="bpregistrocompromiso_new")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -64,37 +60,31 @@ class BpCdpController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $fechaExpedicion = new \Datetime($params->fechaExpedicion);
-
-            $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find(
+            $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
                 $params->id
             );
 
-            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->getMaximo(
-                $fechaExpedicion->format('Y')
+            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->getMaximo(
+                $solicitudFecha->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
             
-            //$cdp->solicitudConsecutivo($consecutivo);
+            $registro->setConsecutivo($consecutivo);
 
-            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaExpedicion->format('Y');
+            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$solicitudFecha->format('Y');
 
-            $cdp->setNumero($numero);
+            $registro->setNumero($numero);
 
-            $cdp->setFechaRegistro(new \Datetime(date('Y-m-d')));
-            $cdp->setFechaExpedicion($fechaExpedicion);
-            $cdp->setTerceroIdentificacion($params->terceroIdentificacion);
-            $cdp->setTerceroNombre(mb_strtoupper($params->terceroNombre, 'utf-8'));
-            $cdp->setObservaciones($params->observaciones);
-            $cdp->setActivo(true);
+            $fechaExpedicion = $helpers->convertDateTime($params->fechaExpedicion);
+
+            $registro->setFechaRegistro(new \Datetime(date('Y-m-d')));
+            $registro->setFechaExpedición($fechaExpedicion);
+            $registro->setContratoNumero($params->contratoNumero);
+            $registro->setContratoTipo($params->contratoTipo);
+            $registro->setEstado($params->contratoEstado);
+            $registro->setObservaciones($params->observaciones);
+            //$registro->setValor($params->valor);
             
-            if ($params->idFuncionario) {
-                $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
-                    $params->idFuncionario
-                );
-                $cdp->setExpide($funcionario);
-            }
-
             $em->flush();
 
             $response = array(
@@ -115,77 +105,77 @@ class BpCdpController extends Controller
     }
 
     /**
-     * Finds and displays a bpCdp entity.
+     * Finds and displays a bpRegistroCompromiso entity.
      *
-     * @Route("/{id}/show", name="bpcdp_show")
+     * @Route("/{id}", name="bpregistrocompromiso_show")
      * @Method("GET")
      */
-    public function showAction(BpCdp $bpCdp)
+    public function showAction(BpRegistroCompromiso $bpRegistroCompromiso)
     {
-        $deleteForm = $this->createDeleteForm($bpCdp);
+        $deleteForm = $this->createDeleteForm($bpRegistroCompromiso);
 
-        return $this->render('bpcdp/show.html.twig', array(
-            'bpCdp' => $bpCdp,
+        return $this->render('bpregistrocompromiso/show.html.twig', array(
+            'bpRegistroCompromiso' => $bpRegistroCompromiso,
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Displays a form to edit an existing bpCdp entity.
+     * Displays a form to edit an existing bpRegistroCompromiso entity.
      *
-     * @Route("/{id}/edit", name="bpcdp_edit")
+     * @Route("/{id}/edit", name="bpregistrocompromiso_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, BpCdp $bpCdp)
+    public function editAction(Request $request, BpRegistroCompromiso $bpRegistroCompromiso)
     {
-        $deleteForm = $this->createDeleteForm($bpCdp);
-        $editForm = $this->createForm('JHWEB\BancoProyectoBundle\Form\BpCdpType', $bpCdp);
+        $deleteForm = $this->createDeleteForm($bpRegistroCompromiso);
+        $editForm = $this->createForm('JHWEB\BancoProyectoBundle\Form\BpRegistroCompromisoType', $bpRegistroCompromiso);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('bpcdp_edit', array('id' => $bpCdp->getId()));
+            return $this->redirectToRoute('bpregistrocompromiso_edit', array('id' => $bpRegistroCompromiso->getId()));
         }
 
-        return $this->render('bpcdp/edit.html.twig', array(
-            'bpCdp' => $bpCdp,
+        return $this->render('bpregistrocompromiso/edit.html.twig', array(
+            'bpRegistroCompromiso' => $bpRegistroCompromiso,
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
     }
 
     /**
-     * Deletes a bpCdp entity.
+     * Deletes a bpRegistroCompromiso entity.
      *
-     * @Route("/{id}/delete", name="bpcdp_delete")
+     * @Route("/{id}", name="bpregistrocompromiso_delete")
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, BpCdp $bpCdp)
+    public function deleteAction(Request $request, BpRegistroCompromiso $bpRegistroCompromiso)
     {
-        $form = $this->createDeleteForm($bpCdp);
+        $form = $this->createDeleteForm($bpRegistroCompromiso);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($bpCdp);
+            $em->remove($bpRegistroCompromiso);
             $em->flush();
         }
 
-        return $this->redirectToRoute('bpcdp_index');
+        return $this->redirectToRoute('bpregistrocompromiso_index');
     }
 
     /**
-     * Creates a form to delete a bpCdp entity.
+     * Creates a form to delete a bpRegistroCompromiso entity.
      *
-     * @param BpCdp $bpCdp The bpCdp entity
+     * @param BpRegistroCompromiso $bpRegistroCompromiso The bpRegistroCompromiso entity
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(BpCdp $bpCdp)
+    private function createDeleteForm(BpRegistroCompromiso $bpRegistroCompromiso)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('bpcdp_delete', array('id' => $bpCdp->getId())))
+            ->setAction($this->generateUrl('bpregistrocompromiso_delete', array('id' => $bpRegistroCompromiso->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
@@ -196,7 +186,7 @@ class BpCdpController extends Controller
     /**
      * Creates a request bpCdp entity.
      *
-     * @Route("/request", name="bpcdp_request")
+     * @Route("/request", name="bpregistrocompromiso_request")
      * @Method({"GET", "POST"})
      */
     public function requestAction(Request $request)
@@ -211,42 +201,53 @@ class BpCdpController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $cdp = new BpCdp();
+            $registro = new BpRegistroCompromiso();
 
             $solicitudFecha = new \Datetime(date('Y-m-d'));
 
-            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->getMaximo(
+            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->getMaximo(
                 $solicitudFecha->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
 
             $numero = $solicitudFecha->format('Y').(str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
 
-            $cdp->setSolicitudNumero($numero);
-            $cdp->setSolicitudFecha($solicitudFecha);
-            $cdp->setSolicitudConsecutivo($consecutivo);
+            $registro->setSolicitudNumero($numero);
+            $registro->setSolicitudFecha($solicitudFecha);
+            $registro->setSolicitudConsecutivo($consecutivo);
+            $registro->setCuentaNumero($params->cuentaNumero);
+            $registro->setCuentaTipo($params->cuentaTipo);
+            $registro->setBancoNombre($params->bancoNombre);
 
-            if ($params->idActividad) {
-                $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
-                $cdp->setActividad($actividad);
-                $cdp->setValor($actividad->getCostoTotal());
-
-                $valorEnLetras = Numbers_Words::toWords(
-                    $actividad->getCostoTotal(), 'es'
-                );
-                $cdp->setValorLetras(mb_strtoupper($valorEnLetras, 'utf-8'));
+            if ($params->idCdp) {
+                $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($params->idCdp);
+                $registro->setCdp($cdp);
             }
 
+            if ($params->idCiudadano) {
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find(
+                    $params->idCiudadano
+                );
+                $registro->setCiudadano($ciudadano);
+            }
 
-            $cdp->setActivo(true);
+            if ($params->idEmpresa) {
+                $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find(
+                    $params->idEmpresa
+                );
+                $registro->setEmpresa($empresa);
+            }
 
-            $em->persist($cdp);
+            //$registro->setActivo(true);
+
+            $em->persist($registro);
             $em->flush();
 
             $response = array(
                 'status' => 'success',
                 'code' => 200,
                 'message' => "Registro creado con exito",
+                'data' => $registro,
             );
         }else{
             $response = array(
@@ -262,7 +263,7 @@ class BpCdpController extends Controller
     /**
      * Busca la solicitud de CDP 
      *
-     * @Route("/search/solicitud/numero", name="bpcdp_search_solicitud_numero")
+     * @Route("/search/solicitud/numero", name="bpregistrocompromiso_search_solicitud_numero")
      * @Method({"GET", "POST"})
      */
     public function searchSolicitudByNumeroAction(Request $request)
@@ -277,7 +278,7 @@ class BpCdpController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findOneBy(
+            $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findOneBy(
                 array(
                     'solicitudNumero' => $params->numero
                 )
@@ -314,7 +315,7 @@ class BpCdpController extends Controller
     /**
      * Busca el CDP por numero
      *
-     * @Route("/search/numero", name="bpcdp_search_numero")
+     * @Route("/search/numero", name="bpregistrocompromiso_search_numero")
      * @Method({"GET", "POST"})
      */
     public function searchByNumeroAction(Request $request)
@@ -329,7 +330,7 @@ class BpCdpController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findOneBy(
+            $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findOneBy(
                 array(
                     'numero' => $params->numero
                 )
@@ -364,9 +365,9 @@ class BpCdpController extends Controller
     }
 
     /**
-     * Genera pdf de factura seleccionada.
+     * Genera pdf de solicitud seleccionada.
      *
-     * @Route("/request/{id}/pdf", name="bpcdp_pdf")
+     * @Route("/request/{id}/pdf", name="bpregistrocompromiso_pdf")
      * @Method("GET")
      */
     public function pdfAction(Request $request, $id)
@@ -379,9 +380,8 @@ class BpCdpController extends Controller
         $mes = date('m');
         $dia = date('d');
 
-        $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($id);
+        $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find($id);
 
-       
         $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.solicitud.html.twig', array(
             'fechaActual' => $fechaActual,
             'anio' => $anio,

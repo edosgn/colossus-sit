@@ -27,8 +27,6 @@ class BpProyectoRepository extends \Doctrine\ORM\EntityRepository
                     'filtro' => $params->filtro,
                 ));
 
-                return $consulta->getOneOrNullResult();
-
                 break;
 
             case 2:
@@ -43,9 +41,11 @@ class BpProyectoRepository extends \Doctrine\ORM\EntityRepository
                     'filtro' => $params->filtro,
                 ));
 
-                return $consulta->getResult();
-
+                
                 break;
+            }
+            
+            return $consulta->getResult();
         }
-    }
+        
 }

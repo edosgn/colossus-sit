@@ -1,0 +1,111 @@
+<html>
+    <header>
+
+    </header>
+    <body style="font-size:11px">
+        <table border="1" cellpading="5" style="text-align:center;">
+            <tr>
+                <td>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <table border="1" cellpading="5" style="text-align:center;">
+                        <tr>
+                            <td>Año</td>
+                            <td>Mes</td>
+                            <td>Día</td>
+                        </tr>
+                        <tr>
+                            <td>{{ anio }}</td>
+                            <td>{{ mes }}</td>
+                            <td>{{ dia }}</td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <p>
+                        GOBERNACIÓN DE NARIÑO
+                        <br>
+                        SECRETARIA DE HACIENDA
+                        <br>
+                        SOLICITUD DE DISPONIBILIDAD PRESUPUESTAL
+                    </p>
+                </td>
+                <td>
+                    <br>
+                    <br>
+                    <img src="{{ asset('img/logo-entidad.png') }}" height="60px"/>
+                </td>
+            </tr>
+        </table>
+        <table border="1" cellpading="10" style="text-align:center;">
+            <tr>
+                <td>CONCEPTO</td>
+                <td>VALOR</td>
+            </tr>
+            <tr>
+                <td>Nombre actividad {{ solicitud.actividad.nombre }}
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </td>
+                <td>{{ solicitud.valorLetras }} <br> $({{ solicitud.valor }})</td>
+            </tr>
+            <tr>
+                <td>RADICACIÓN BANCO DE PROYECTOS: SI (Anexar constancia) NO</td>
+                <td>CUENTA</td>
+            </tr>
+            <tr>
+                <td>No. Proyecto {{ solicitud.actividad.cuenta.proyecto.numero }}
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                </td>
+                <td>No. Cuenta {{ solicitud.actividad.cuenta.numero }}</td>
+            </tr>
+        </table>
+        <table border="1" cellpading="5" style="text-align:center;">
+            <tr>
+                <td colspan="4">FIRMA DEL RESPONSABLE DE LA SOLICITUD</td>
+            </tr>
+            <tr>
+                <td>NOMBRE:</td>
+                <td></td>
+                <td>CARGO:</td>
+                <td></td>
+            </tr>
+        </table>
+    </body>
+</html>

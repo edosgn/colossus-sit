@@ -3,10 +3,10 @@
 namespace JHWEB\BancoProyectoBundle\Controller;
 
 use JHWEB\BancoProyectoBundle\Entity\BpProyecto;
-use JHWEB\BancoProyectoBundle\Entity\BpActividad;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Bpproyecto controller.
@@ -66,7 +66,7 @@ class BpProyectoController extends Controller
             $proyecto = new BpProyecto();
 
             $proyecto->setNumero($params->numero);
-            $proyecto->setNombre(strtoupper($params->nombre));
+            $proyecto->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $proyecto->setFecha(new \Datetime(date('Y-m-d')));
             $proyecto->setCostoTotal(0);
             $proyecto->setActivo(true);
@@ -251,6 +251,58 @@ class BpProyectoController extends Controller
     }
 
     /* =========================================== */
+
+    /**
+     * Buscar un único proyecto por numero
+     *
+     * @Route("/search/numero", name="bpProyecto_search_numero")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByNumeroAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $proyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->findOneBy(
+                array(
+                    'numero' => $params->numero
+                )
+            );
+
+            if ($proyecto) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Registro encontrado con éxito.",
+                    'data' => $proyecto
+                );
+            } else {
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "El registro no se encuentra en la base de datos",
+                );
+            }
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización no válida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
 
     /**
      * Buscar un proyecto por filtro (1-Numero, 2-Fecha)

@@ -334,4 +334,55 @@ class BpActividadController extends Controller
         
         return $helpers->json($response);
     }
+
+    /**
+     * Listado de actividades según proyecto
+     *
+     * @Route("/search/proyecto", name="bpActividad_search_proyecto")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByProyectoAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $actividades = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->getByProyecto(
+                $params->idProyecto
+            );
+
+
+            if ($actividades) {
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => count($actividades)." registros encontrados.",
+                    'data'=> $actividades,
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => "Ningúna actividad encontrada.",
+                );
+            }
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }

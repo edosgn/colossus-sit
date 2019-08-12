@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bpregistrocompromiso</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ bpRegistroCompromiso.id }}</td>
+            </tr>
+            <tr>
+                <th>Solicitudnumero</th>
+                <td>{{ bpRegistroCompromiso.solicitudNumero }}</td>
+            </tr>
+            <tr>
+                <th>Solicitudfecha</th>
+                <td>{% if bpRegistroCompromiso.solicitudFecha %}{{ bpRegistroCompromiso.solicitudFecha|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Solicitudconsecutivo</th>
+                <td>{{ bpRegistroCompromiso.solicitudConsecutivo }}</td>
+            </tr>
+            <tr>
+                <th>Numero</th>
+                <td>{{ bpRegistroCompromiso.numero }}</td>
+            </tr>
+            <tr>
+                <th>Cuentanumero</th>
+                <td>{{ bpRegistroCompromiso.cuentaNumero }}</td>
+            </tr>
+            <tr>
+                <th>Cuentatipo</th>
+                <td>{{ bpRegistroCompromiso.cuentaTipo }}</td>
+            </tr>
+            <tr>
+                <th>Banconombre</th>
+                <td>{{ bpRegistroCompromiso.bancoNombre }}</td>
+            </tr>
+            <tr>
+                <th>Fecharegistro</th>
+                <td>{% if bpRegistroCompromiso.fechaRegistro %}{{ bpRegistroCompromiso.fechaRegistro|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Fechaexpedicion</th>
+                <td>{% if bpRegistroCompromiso.fechaExpedicion %}{{ bpRegistroCompromiso.fechaExpedicion|date('Y-m-d') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Contratonumero</th>
+                <td>{{ bpRegistroCompromiso.contratoNumero }}</td>
+            </tr>
+            <tr>
+                <th>Contratotipo</th>
+                <td>{{ bpRegistroCompromiso.contratoTipo }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ bpRegistroCompromiso.estado }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('bpregistrocompromiso_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('bpregistrocompromiso_edit', { 'id': bpRegistroCompromiso.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}
