@@ -321,6 +321,7 @@ class FroReporteIngresosController extends Controller
                             }
                         }
 
+
                         $arrayReporteMensual[] = array(
                             'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
                             'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
@@ -328,6 +329,7 @@ class FroReporteIngresosController extends Controller
                             'numeroSustrato' => $numeroSustrato,
                             'moduloSustrato' => $moduloSustrato,
                             'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                            'fechaTramite' => $tramite->getFecha(),
                             'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
                             'numeroRunt' => $tramite->getTramiteFactura()->getFactura()->getNumeroRunt()
                         );
@@ -452,8 +454,11 @@ class FroReporteIngresosController extends Controller
 
                     $arrayInfracciones[] = array(
                         'numeroConsecutivo' => $infraccion->getConsecutivo()->getNumero(),
+                        'codigoInfraccion' => $infraccion->getInfraccion()->getCodigo(),
                         'numeroFactura' => $factura->getFactura()->getNumero(),
                         'infractorIdentificacion' => $infraccion->getInfractorIdentificacion(),
+                        'infractorNombres' => $infraccion->getInfractorNombres(),
+                        'infractorApellidos' => $infraccion->getInfractorApellidos(),
                         'porcentajeDescuento' => $infraccion->getPorcentajeDescuento(),
                         'total' => $factura->getFactura()->getValorNeto(),
                     );
@@ -547,6 +552,7 @@ class FroReporteIngresosController extends Controller
                         'nombreCompletoInfractor' => $acuerdoPago->getAcuerdoPago()->getCiudadano()->getPrimerNombre() . ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getSegundoNombre(). ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getPrimerApellido(). ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getSegundoApellido(),
                         'codigoInfraccion' => $acuerdoPago->getInfraccion()->getCodigo(),
                         'numeroFactura' => $factura->getFactura()->getNumero(),
+                        'valorAdeudado' => $acuerdoPago->getAcuerdoPago()->getValorNeto(),
                         'total' => $factura->getFactura()->getValorNeto(),
                     );
                 }

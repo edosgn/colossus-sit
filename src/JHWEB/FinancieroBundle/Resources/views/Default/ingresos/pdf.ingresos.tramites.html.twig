@@ -130,6 +130,7 @@
                     <td><b> Nro. Sustrato </b></td>
                     <td><b> Clasificaciones </b></td>
                     <td><b> Trámite </b></td>
+                    <td><b> Fecha Trámite </b></td>
                     <td><b> Valor Pagado </b></td>
                     <td><b> Número Solicitud Runt </b></td>
                 </tr>
@@ -141,6 +142,7 @@
                         <td>{{ tramite.numeroSustrato }}</td>
                         <td>{{ tramite.moduloSustrato }}</td>
                         <td>{{ tramite.nombre }}</td>
+                        <td>{{ tramite.fechaTramite | date('Y-m-d') }}</td>
                         <td>{{ tramite.valorPagado }}</td>
                         <td>{{ tramite.numeroRunt }}</td>
                     </tr>
