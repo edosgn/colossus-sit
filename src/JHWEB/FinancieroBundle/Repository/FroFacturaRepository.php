@@ -150,10 +150,12 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     public function getAcuerdosPagoByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT ccc
-            FROM JHWEBContravencionalBundle:CvCdoComparendo ccc, JHWEBFinancieroBundle:FroAcuerdoPago fap
+        $dql = "SELECT fa
+            FROM JHWEBFinancieroBundle:FroAmortizacion fa, JHWEBContravencionalBundle:CvCdoComparendo ccc,
+            JHWEBFinancieroBundle:FroAcuerdoPago fap
             WHERE ccc.organismoTransito = :idOrganismoTransito 
             AND ccc.acuerdoPago = fap.id
+            AND fa.acuerdoPago = fap.id
             AND fap.fecha BETWEEN :fechaInicio AND :fechaFin";
 
         $consulta = $em->createQuery($dql);
