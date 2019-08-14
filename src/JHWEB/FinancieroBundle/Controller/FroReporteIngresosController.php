@@ -321,6 +321,7 @@ class FroReporteIngresosController extends Controller
                             }
                         }
 
+
                         $arrayReporteMensual[] = array(
                             'numeroFactura' => $tramite->getTramiteFactura()->getFactura()->getNumero(),
                             'fecha' => $tramite->getTramiteFactura()->getFactura()->getFechaPago(),
@@ -328,6 +329,7 @@ class FroReporteIngresosController extends Controller
                             'numeroSustrato' => $numeroSustrato,
                             'moduloSustrato' => $moduloSustrato,
                             'nombre' => $tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre(),
+                            'fechaTramite' => $tramite->getFecha(),
                             'valorPagado' => $tramite->getTramiteFactura()->getPrecio()->getValor(),
                             'numeroRunt' => $tramite->getTramiteFactura()->getFactura()->getNumeroRunt()
                         );
@@ -452,8 +454,11 @@ class FroReporteIngresosController extends Controller
 
                     $arrayInfracciones[] = array(
                         'numeroConsecutivo' => $infraccion->getConsecutivo()->getNumero(),
+                        'codigoInfraccion' => $infraccion->getInfraccion()->getCodigo(),
                         'numeroFactura' => $factura->getFactura()->getNumero(),
                         'infractorIdentificacion' => $infraccion->getInfractorIdentificacion(),
+                        'infractorNombres' => $infraccion->getInfractorNombres(),
+                        'infractorApellidos' => $infraccion->getInfractorApellidos(),
                         'porcentajeDescuento' => $infraccion->getPorcentajeDescuento(),
                         'total' => $factura->getFactura()->getValorNeto(),
                     );
@@ -532,22 +537,25 @@ class FroReporteIngresosController extends Controller
 
             if($acuerdosPago){
                 foreach ($acuerdosPago as $key => $acuerdoPago) {
-                    $factura = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneBy(
+                    $comparendo = $em->getRepository('JHWEBFinancieroBundle:FroFacComparendo')->findOneBy(
                         array(
-                            'comparendo' => $acuerdoPago->getId(),
+                            'comparendo' => $acuerdoPago->getAcuerdoPago()->getId(),
                         )
                     );
 
-                    $totalAcuerdosPago += $factura->getFactura()->getValorNeto();
+                    $totalAcuerdosPago += $comparendo->getFactura()->getValorNeto();
 
                     $arrayAcuerdosPago[] = array(
                         'numeroAcuerdoPago' => $acuerdoPago->getAcuerdoPago()->getNumero(),
-                        'numeroComparendo' => $acuerdoPago->getConsecutivo()->getNumero(),
+                        'numeroComparendo' => $acuerdoPago->getAcuerdoPago()->getConsecutivo(),
                         'identificacionInfractor' => $acuerdoPago->getAcuerdoPago()->getCiudadano()->getIdentificacion(),
                         'nombreCompletoInfractor' => $acuerdoPago->getAcuerdoPago()->getCiudadano()->getPrimerNombre() . ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getSegundoNombre(). ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getPrimerApellido(). ' ' . $acuerdoPago->getAcuerdoPago()->getCiudadano()->getSegundoApellido(),
-                        'codigoInfraccion' => $acuerdoPago->getInfraccion()->getCodigo(),
-                        'numeroFactura' => $factura->getFactura()->getNumero(),
-                        'total' => $factura->getFactura()->getValorNeto(),
+                        'codigoInfraccion' => $comparendo->getComparendo()->getInfraccion()->getCodigo(),
+                        'numeroFactura' => $comparendo->getFactura()->getNumero(),
+                        'numeroCuotaPagada' => $acuerdoPago->getPagada(),
+                        'estado' => $comparendo->getComparendo()->getEstado()->getNombre(),
+                        'valorAdeudado' => $acuerdoPago->getValorMora(),
+                        'total' => $comparendo->getFactura()->getValorNeto(),
                     );
                 }
                     $response = array(
