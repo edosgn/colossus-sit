@@ -621,7 +621,7 @@ class CvCdoTrazabilidadController extends Controller
                 'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida para editar", 
+                'message' => "Autorizacion no valida.", 
             );
         }
 

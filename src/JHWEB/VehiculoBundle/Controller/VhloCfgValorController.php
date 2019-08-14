@@ -309,7 +309,7 @@ class VhloCfgValorController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => 'Se han procesado '.$rows.' líneas.', 
+                    'message' => 'Se han procesado '.$count.' líneas.', 
                 );
             }else{
                 $response = array(
