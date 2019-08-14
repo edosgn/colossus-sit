@@ -535,14 +535,13 @@ class CvCdoTrazabilidadController extends Controller
             
             $bien = new CvInvestigacionBien();
 
-            $bien->setNombre(mb_strtoupper($params->nombre));
+            $bien->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $bien->setTipo($params->tipo);
             $bien->setEmbargable($params->embargable);
             $bien->setAvaluo($params->avaluo);
-            if($params->embargable){
-                $bien->setValor($params->valor);
-            }else{
-                $bien->setValor(0);
+
+            if($params->observaciones){
+                $bien->setObservaciones($params->observaciones);
             }
 
             if($params->idTrazabilidad){
@@ -554,6 +553,61 @@ class CvCdoTrazabilidadController extends Controller
 
             $em->persist($bien);
             $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Bien registrado con éxito.", 
+                'data'=> $bien,
+            );
+        }else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida para editar", 
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Actualiza el valor a embargar de los bienes seleccionados.
+     *
+     * @Route("/update/bienes", name="cvcdotrazabilidad_update_bienes")
+     * @Method({"GET", "POST"})
+     */
+    public function updateBienesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck==true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            foreach ($params as $key => $bien) {
+                $bienOld = $em->getRepository("JHWEBContravencionalBundle:CvInvestigacionBien")->find(
+                    $bien->id
+                );
+
+                if ($key == 0) {
+                    $comparendo = $bienOld->getTrazabilidad()->getComparendo();
+                }
+
+                $bienOld->setValor($bien->valor);
+
+                $em->flush();
+            }
+
+            $estadoNew = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(26);
+
+            $helpers->generateTrazabilidad($comparendo, $estadoNew);
 
             $response = array(
                 'title' => 'Perfecto!',

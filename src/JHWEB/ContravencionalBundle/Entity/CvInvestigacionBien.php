@@ -50,9 +50,16 @@ class CvInvestigacionBien
     private $embargable;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones", type="text", nullable=true)
+     */
+    private $observaciones;
+
+    /**
      * @var int
      *
-     * @ORM\Column(name="valor", type="integer")
+     * @ORM\Column(name="valor", type="integer", nullable=true)
      */
     private $valor;
 
@@ -164,6 +171,30 @@ class CvInvestigacionBien
     public function getEmbargable()
     {
         return $this->embargable;
+    }
+
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return CvInvestigacionBien
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
     }
 
     /**

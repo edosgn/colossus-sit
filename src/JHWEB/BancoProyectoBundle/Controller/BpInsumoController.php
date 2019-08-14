@@ -121,8 +121,10 @@ class BpInsumoController extends Controller
 
             if ($cuentas) {
                 $proyecto->setCostoTotal($cuentas['total']);
+                $proyecto->setSaldoTotal($cuentas['total']);
             }else{
                 $proyecto->setCostoTotal(0);
+                $proyecto->setSaldoTotal(0);
             }
 
             $em->flush();

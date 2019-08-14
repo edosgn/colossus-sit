@@ -24,6 +24,13 @@ class BpActividad
     /**
      * @var string
      *
+     * @ORM\Column(name="numero", type="string", length=255)
+     */
+    private $numero;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="nombre", type="string", length=255)
      */
     private $nombre;
@@ -56,6 +63,30 @@ class BpActividad
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set numero
+     *
+     * @param string $numero
+     *
+     * @return BpActividad
+     */
+    public function setNumero($numero)
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get numero
+     *
+     * @return string
+     */
+    public function getNumero()
+    {
+        return $this->numero;
     }
 
     /**

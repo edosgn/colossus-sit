@@ -10,4 +10,15 @@ namespace JHWEB\BancoProyectoBundle\Repository;
  */
 class BpOrdenPagoRepository extends \Doctrine\ORM\EntityRepository
 {
+    //Obtiene el numero maximo de cdp por año
+    public function getMaximo($anio)
+    {
+        $em = $this->getEntityManager();
+        $dql = "SELECT MAX(op.consecutivo) AS maximo
+            FROM JHWEBBancoProyectoBundle:BpOrdenPago op
+            WHERE YEAR(op.fecha) = :ANIO";
+        $consulta = $em->createQuery($dql);
+        $consulta->setParameter('ANIO', $anio);
+        return $consulta->getOneOrNullResult();
+    }
 }

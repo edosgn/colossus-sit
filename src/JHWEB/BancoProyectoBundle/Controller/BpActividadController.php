@@ -64,6 +64,7 @@ class BpActividadController extends Controller
 
             $actividad = new BpActividad();
 
+            $actividad->setNumero($params->numero);
             $actividad->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $actividad->setCostoTotal(0);
             $actividad->setActivo(true);
@@ -114,10 +115,10 @@ class BpActividadController extends Controller
             $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->id);
 
             $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro encontrado", 
-                    'data'=> $actividad,
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro encontrado", 
+                'data'=> $actividad,
             );
         }else{
             $response = array(
@@ -145,20 +146,22 @@ class BpActividadController extends Controller
             $json = $request->get("json",null);
             $params = json_decode($json);
             
-            $bpActividad = $em->getRepository("JHWEBBancoProyectoBundle:BpActividad")->find($params->id);
+            $em = $this->getDoctrine()->getManager();
+            
+            $actividad = $em->getRepository("JHWEBBancoProyectoBundle:BpActividad")->find($params->id);
 
-            if ($bpActividad) {
+            if ($actividad) {
+                $actividad->setNumero($params->numero);
                 $actividad->setNombre(mb_strtoupper($params->nombre, 'uft-8'));
-                $bpActividad->setUnidadMedida($params->unidadMedida);
-                $bpActividad->setCantidad($params->cantidad);
-                $bpActividad->setCostoUnitario($params->costoUnitario);
-                $bpActividad->setCostoTotal($params->costoTotal);
-                $em = $this->getDoctrine()->getManager();
-                $bpProyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find($params->bpProyectoId);
-                $bpActividad->setBpProyecto($bpProyecto);
-                $bpActividad->setActivo(true);
+                $actividad->setUnidadMedida($params->unidadMedida);
+                $actividad->setCantidad($params->cantidad);
+                $actividad->setCostoUnitario($params->costoUnitario);
+                $actividad->setCostoTotal($params->costoTotal);
+                $bpProyecto = $em->getRepository('JHWEBBancoProyectoBundle:BpProyecto')->find(
+                    $params->bpProyectoId
+                );
+                $actividad->setBpProyecto($bpProyecto);
 
-                $em->persist($bpActividad);
                 $em->flush();
 
                 $response = array(

@@ -101,9 +101,9 @@ class BpRegistroCompromiso
     /**
      * @var string
      *
-     * @ORM\Column(name="estado", type="string", length=255, nullable=true)
+     * @ORM\Column(name="contrato_estado", type="string", length=255, nullable=true)
      */
-    private $estado;
+    private $contratoEstado;
 
     /**
      * @var int
@@ -118,6 +118,20 @@ class BpRegistroCompromiso
      * @ORM\Column(name="saldo", type="integer", nullable=true)
      */
     private $saldo;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="concepto", type="text", nullable=true)
+     */
+    private $concepto;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=255)
+     */
+    private $estado;
 
     /**
      * @var bool
@@ -165,7 +179,7 @@ class BpRegistroCompromiso
     /**
      * Get solicitudNumero
      *
-     * @return int
+     * @return integer
      */
     public function getSolicitudNumero()
     {
@@ -213,7 +227,7 @@ class BpRegistroCompromiso
     /**
      * Get solicitudConsecutivo
      *
-     * @return int
+     * @return integer
      */
     public function getSolicitudConsecutivo()
     {
@@ -237,7 +251,7 @@ class BpRegistroCompromiso
     /**
      * Get numero
      *
-     * @return int
+     * @return integer
      */
     public function getNumero()
     {
@@ -381,7 +395,7 @@ class BpRegistroCompromiso
     /**
      * Get contratoNumero
      *
-     * @return int
+     * @return integer
      */
     public function getContratoNumero()
     {
@@ -413,27 +427,27 @@ class BpRegistroCompromiso
     }
 
     /**
-     * Set estado
+     * Set contratoEstado
      *
-     * @param string $estado
+     * @param string $contratoEstado
      *
      * @return BpRegistroCompromiso
      */
-    public function setEstado($estado)
+    public function setContratoEstado($contratoEstado)
     {
-        $this->estado = $estado;
+        $this->contratoEstado = $contratoEstado;
 
         return $this;
     }
 
     /**
-     * Get estado
+     * Get contratoEstado
      *
      * @return string
      */
-    public function getEstado()
+    public function getContratoEstado()
     {
-        return $this->estado;
+        return $this->contratoEstado;
     }
 
     /**
@@ -482,6 +496,54 @@ class BpRegistroCompromiso
     public function getSaldo()
     {
         return $this->saldo;
+    }
+
+    /**
+     * Set concepto
+     *
+     * @param string $concepto
+     *
+     * @return BpRegistroCompromiso
+     */
+    public function setConcepto($concepto)
+    {
+        $this->concepto = $concepto;
+
+        return $this;
+    }
+
+    /**
+     * Get concepto
+     *
+     * @return string
+     */
+    public function getConcepto()
+    {
+        return $this->concepto;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return BpRegistroCompromiso
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

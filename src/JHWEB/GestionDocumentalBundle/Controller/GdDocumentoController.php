@@ -460,6 +460,13 @@ class GdDocumentoController extends Controller
                     $documento->setUrl($filename);
                 }
 
+                if ($params->idComparendo) {
+                    $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                        $params->idComparendo
+                    );
+                    $documento->setComparendo($comparendo);
+                }
+
                 $em->flush();
 
                 $response = array(
