@@ -92,38 +92,47 @@ class VhloTpConvenioController extends Controller
                 );
             }
             else {
-                $vhloTpConvenio = new VhloTpConvenio();
-                
-                $vhloTpConvenio->setNumeroConvenio($params->numeroConvenio);
-                $vhloTpConvenio->setFechaConvenio($fechaConvenio);
-                $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
-                $vhloTpConvenio->setFechaActaFin($fechaActaFin);
-                $vhloTpConvenio->setAlcaldia($empresa);
-                $vhloTpConvenio->setObservacion($params->observacion);
-                $vhloTpConvenio->setActivo(1);
-
-                $em->persist($vhloTpConvenio);
-
-                foreach ($params->empresas as $key => $empresa) {
-                    $empresaConvenio = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresa);
+                if($fechaActaFin < $fechaActaInicio){
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de fin debe ser mayor a la fecha de inicio del acta.", 
+                    );
+                } else {
+                    $vhloTpConvenio = new VhloTpConvenio();
                     
-                    $vhloTpConvenioEmpresa = new VhloTpConvenioEmpresa();
-                    
-                    $vhloTpConvenioEmpresa->setEmpresa($empresaConvenio);
-                    $vhloTpConvenioEmpresa->setVhloTpConvenio($vhloTpConvenio);
+                    $vhloTpConvenio->setNumeroConvenio($params->numeroConvenio);
+                    $vhloTpConvenio->setFechaConvenio($fechaConvenio);
+                    $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
+                    $vhloTpConvenio->setFechaActaFin($fechaActaFin);
+                    $vhloTpConvenio->setAlcaldia($empresa);
+                    $vhloTpConvenio->setObservacion($params->observacion);
+                    $vhloTpConvenio->setActivo(1);
 
-                    $em->persist($vhloTpConvenioEmpresa);
-                    $em->flush();
+                    $em->persist($vhloTpConvenio);
+
+                    foreach ($params->empresas as $key => $empresa) {
+                        $empresaConvenio = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresa);
+                        
+                        $vhloTpConvenioEmpresa = new VhloTpConvenioEmpresa();
+                        
+                        $vhloTpConvenioEmpresa->setEmpresa($empresaConvenio);
+                        $vhloTpConvenioEmpresa->setVhloTpConvenio($vhloTpConvenio);
+
+                        $em->persist($vhloTpConvenioEmpresa);
+                        $em->flush();
+                    }
+                    
+                    $response = [];
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                    );
                 }
-                
-                $response = [];
-
-                $response = array(
-                    'title' => 'Perfecto!',
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Registro creado con éxito",
-                );
             }
         } else{
             $response = array(
@@ -213,5 +222,50 @@ class VhloTpConvenioController extends Controller
         ;
     }
 
-    
+    /**
+     * Busca empresas de transporte público por convenio
+     *
+     * @Route("/search/empresastransportepublico/convenio", name="vhlotpconvenio_empresas_transporte_publico_by_convenio")
+     * @Method({"GET", "POST"})
+     */
+    public function searchEmpresasTransportePublicoByconvenioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $empresasTransportePublico = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenioEmpresa')->findBy(
+                array(
+                    'vhloTpConvenio' => $params->idConvenio
+                )
+            );
+
+            foreach ($empresasTransportePublico as $key => $empresaTransportePublico) {
+                $arrayEmpresasTransportePublico[] = $empresaTransportePublico->getEmpresa()->getId();
+            }
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Empresas encontradas.", 
+                'data' => $arrayEmpresasTransportePublico
+            );
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización válida.", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
 }

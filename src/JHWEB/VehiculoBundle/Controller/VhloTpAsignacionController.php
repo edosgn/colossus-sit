@@ -269,10 +269,13 @@ class VhloTpAsignacionController extends Controller
                 )
             );
             
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
+            
             if($placa){
                 $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->findOneBy(
                     array(
                         'placa' => $placa,
+                        'clase' => $clase->getId(),
                         'servicio' => 2
                     )
                 );
@@ -297,7 +300,8 @@ class VhloTpAsignacionController extends Controller
                     $response = array(
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "El vehiculo no existe o no es de transporte público.",
+                        'message' => "El vehiculo no existe, o no es de transporte público, o la clase de vehiculo
+                                        es diferente a la que la empresaest'a habilitada para registrar el cupo.",
                     );
                 }
             } else {

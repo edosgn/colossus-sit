@@ -56,11 +56,14 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         $dql = "SELECT fts
             FROM JHWEBFinancieroBundle:FroTrteSolicitud fts,
             JHWEBFinancieroBundle:FroFactura ff,
-            JHWEBFinancieroBundle:FroFacTramite fft
+            JHWEBFinancieroBundle:FroFacTramite fft, 
+            JHWEBFinancieroBundle:FroTrtePrecio ftp
             WHERE fts.organismoTransito = :idOrganismoTransito 
             AND fts.tramiteFactura = fft.id
             AND fft.factura = ff.id
-            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin";
+            AND ff.fechaPago BETWEEN :fechaInicio AND :fechaFin
+            AND fft.precio = ftp.id
+            GROUP BY ftp.tramite";
 
         $consulta = $em->createQuery($dql);
         

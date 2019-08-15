@@ -22,6 +22,13 @@ class UserCfgTipoIdentificacion
     private $id;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="codigo", type="integer", length=3, nullable = true)
+     */
+    private $codigo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="nombre", type="string", length=255)
@@ -51,6 +58,30 @@ class UserCfgTipoIdentificacion
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set codigo
+     *
+     * @param integer $codigo
+     *
+     * @return UserCfgTipoIdentificacion
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get codigo
+     *
+     * @return integer
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 
     /**
