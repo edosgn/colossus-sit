@@ -658,15 +658,15 @@ class FroFacturaController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
+        var_dump($params->factura);
+        die();
+
         $inmovilizacion = $em->getRepository('JHWEBParqueaderoBundle:PqoInmovilizacion')->find(
             $params->factura->idInmovilizacion
         );
         $inmovilizacion->setFactura($factura);
 
         $em->flush();
-
-        var_dump($params->fechaSalida.' '.$params->horaSalida);
-        die();
 
         $minutos = $helpers->calculateTimeBetweenDates(
             new \Datetime(date($params->fechaSalida.' '.$params->horaSalida)), 

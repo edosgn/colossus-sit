@@ -52,22 +52,63 @@ class BpOrdenPagoController extends Controller
      */
     public function newAction(Request $request)
     {
-        $bpOrdenPago = new Bpordenpago();
-        $form = $this->createForm('JHWEB\BancoProyectoBundle\Form\BpOrdenPagoType', $bpOrdenPago);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck== true) {
+            $json = $request->get("data",null);
+            $params = json_decode($json);
+           
             $em = $this->getDoctrine()->getManager();
-            $em->persist($bpOrdenPago);
+
+            $ordenPago = new BpOrdenPago();
+
+            $fecha = new \Datetime($params->fecha);
+
+            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpOrdenPago')->getMaximo(
+                $fecha->format('Y')
+            );
+            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
+            
+            $ordenPago->setConsecutivo($consecutivo);
+
+            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fecha->format('mY');
+
+            $ordenPago->setNumero($numero);
+            $ordenPago->setFecha($fecha);
+            $ordenPago->setTipo($params->tipo);
+            $ordenPago->setConcepto($params->concepto);
+            $ordenPago->setValor($params->valor);
+            $ordenPago->setActivo(true);
+
+            if ($params->idRegistroCompromiso) {
+                $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
+                    $params->idRegistroCompromiso
+                );
+                $ordenPago->setRegistroCompromiso($registro);
+                $registro->setSaldo($registro->getSaldo() - $params->valor);
+                $proyecto = $registro->getCdp()->getActividad()->getCuenta()->getProyecto();
+                $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valor);
+            }
+            
             $em->flush();
 
-            return $this->redirectToRoute('bpordenpago_show', array('id' => $bpOrdenPago->getId()));
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro creado con exito",
+                'data' => $registro
+            );
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
-
-        return $this->render('bpordenpago/new.html.twig', array(
-            'bpOrdenPago' => $bpOrdenPago,
-            'form' => $form->createView(),
-        ));
+        
+        return $helpers->json($response);
     }
 
     /**

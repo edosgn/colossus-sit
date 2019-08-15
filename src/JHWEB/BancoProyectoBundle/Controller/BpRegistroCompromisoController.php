@@ -26,7 +26,12 @@ class BpRegistroCompromisoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         
-        $registros = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findAll();
+        $registros = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findBy(
+            array(
+                'estado' => 'SOLICITUD',
+                'activo' => true
+            )
+        );
 
         $response['data'] = array();
 
@@ -60,30 +65,17 @@ class BpRegistroCompromisoController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $fechaExpedicion = new \Datetime($params->fechaExpedicion);
-
             $registro = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find(
                 $params->id
             );
 
-            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->getMaximo(
-                $fechaExpedicion->format('Y')
-            );
-            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-            
-            //$registro->setConsecutivo($consecutivo);
-
-            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaExpedicion->format('Y');
-
-            $registro->setNumero($numero);
-
+            $registro->setNumero($params->numero);
             $registro->setFechaRegistro(new \Datetime(date('Y-m-d')));
-            $registro->setFechaExpedicion($fechaExpedicion);
+            $registro->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $registro->setContratoNumero($params->contratoNumero);
             $registro->setContratoTipo($params->contratoTipo);
-            $registro->setEstado($params->contratoEstado);
-            $registro->setValor($params->valor);
-            $registro->setSaldo($params->valor);
+            $registro->setContratoEstado($params->contratoEstado);
+            $registro->setEstado('REGISTRADO');
             
             $em->flush();
 
@@ -184,6 +176,39 @@ class BpRegistroCompromisoController extends Controller
     /* ======================================== */
 
     /**
+     * Lista todos los datos en estado REGISTRADO.
+     *
+     * @Route("/index/register", name="bpregistrocompromiso_index_register")
+     * @Method("GET")
+     */
+    public function indexRegisterAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $registros = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->findBy(
+            array(
+                'estado' => 'REGISTRADO',
+                'activo' => true
+            )
+        );
+
+        $response['data'] = array();
+
+        if ($registros) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($registros)." registros encontrados", 
+                'data'=> $registros,
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a request bpCdp entity.
      *
      * @Route("/request", name="bpregistrocompromiso_request")
@@ -203,14 +228,14 @@ class BpRegistroCompromisoController extends Controller
 
             $registro = new BpRegistroCompromiso();
 
-            $solicitudFecha = new \Datetime(date('Y-m-d'));
+            $solicitudFecha = new \Datetime($params->fecha);
 
             $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->getMaximo(
                 $solicitudFecha->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
 
-            $numero = $solicitudFecha->format('Y').(str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
+            $numero = $solicitudFecha->format('Ym').(str_pad($consecutivo, 4, '0', STR_PAD_LEFT));
 
             $registro->setSolicitudNumero($numero);
             $registro->setSolicitudFecha($solicitudFecha);
@@ -218,10 +243,21 @@ class BpRegistroCompromisoController extends Controller
             $registro->setCuentaNumero($params->cuentaNumero);
             $registro->setCuentaTipo($params->cuentaTipo);
             $registro->setBancoNombre(mb_strtoupper($params->bancoNombre));
+            $registro->setValor($params->valor);
+            $registro->setSaldo($params->valor);
+            $registro->setConcepto($params->concepto);
+            $registro->setEstado('SOLICITUD');
 
             if ($params->idCdp) {
+                //Consulta cdp
                 $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($params->idCdp);
                 $registro->setCdp($cdp);
+                //Actualiza saldo del cdp
+                $cdp->setSaldo($cdp->getSaldo() - $params->valor);
+                //Consulta proyecto
+                $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
+                //Actualiza saldo del proyecto
+                $proyecto->setSaldo($proyecto->getSaldo() - $params->valor);
             }
 
             if ($params->idCiudadano) {
@@ -382,7 +418,7 @@ class BpRegistroCompromisoController extends Controller
 
         $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpRegistroCompromiso')->find($id);
 
-        $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.solicitud.html.twig', array(
+        $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.solicitud.compromiso.html.twig', array(
             'fechaActual' => $fechaActual,
             'anio' => $anio,
             'mes' => $mes,

@@ -4,10 +4,8 @@
     </header>
     <body style="font-size:11px">
         <table border="1" cellpading="5" style="text-align:center;">
-            <tr>
+            <tr style="font-size:8px">
                 <td>
-                    <br>
-                    <br>
                     <br>
                     <br>
                     <br>
@@ -36,7 +34,7 @@
                 <td>
                     <br>
                     <br>
-                    <img src="{{ asset('img/logo-entidad.png') }}" height="60px"/>
+                    <img src="{{ asset('img/logo-entidad.png') }}" height="50px"/>
                 </td>
             </tr>
         </table>
@@ -46,25 +44,10 @@
                 <td>VALOR</td>
             </tr>
             <tr>
-                <td>Nombre actividad {{ solicitud.actividad.nombre }}
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                <td>
+                {{ solicitud.concepto }}<br>
+                ACTIVIDAD:<br>{{ solicitud.actividad.nombre }}
+
                 </td>
                 <td>{{ solicitud.valorLetras }} <br> $({{ solicitud.valor }})</td>
             </tr>
@@ -73,27 +56,11 @@
                 <td>CUENTA</td>
             </tr>
             <tr>
-                <td>No. Proyecto {{ solicitud.actividad.cuenta.proyecto.numero }}
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
+                <td>PROYECTO No. {{ solicitud.actividad.cuenta.proyecto.numero }}
+                <br>{{ solicitud.actividad.cuenta.proyecto.nombre }}
+                    
                 </td>
-                <td>No. Cuenta {{ solicitud.actividad.cuenta.numero }}</td>
+                <td>CUENTA No.{{ solicitud.actividad.cuenta.numero }}</td>
             </tr>
         </table>
         <table border="1" cellpading="5" style="text-align:center;">

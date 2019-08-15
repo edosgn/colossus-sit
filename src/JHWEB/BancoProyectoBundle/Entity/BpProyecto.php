@@ -50,6 +50,13 @@ class BpProyecto
     private $costoTotal;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="saldo_total", type="integer", nullable=true)
+     */
+    private $saldoTotal;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="activo", type="boolean")
@@ -164,6 +171,30 @@ class BpProyecto
     public function getCostoTotal()
     {
         return $this->costoTotal;
+    }
+
+    /**
+     * Set saldoTotal
+     *
+     * @param integer $saldoTotal
+     *
+     * @return BpProyecto
+     */
+    public function setSaldoTotal($saldoTotal)
+    {
+        $this->saldoTotal = $saldoTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get saldoTotal
+     *
+     * @return integer
+     */
+    public function getSaldoTotal()
+    {
+        return $this->saldoTotal;
     }
 
     /**

@@ -504,6 +504,8 @@ class Helpers
 
 			$this->mailer->templateAssignment($trazabilidad, $to);
 		}
+
+		return $trazabilidad;
     }
 
     public function generateTemplate($comparendo, $cuerpo){

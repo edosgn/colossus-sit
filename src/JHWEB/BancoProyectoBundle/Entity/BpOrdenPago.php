@@ -36,6 +36,13 @@ class BpOrdenPago
     private $numero;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="consecutivo", type="integer")
+     */
+    private $consecutivo;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="tipo", type="string", length=255)
@@ -123,11 +130,35 @@ class BpOrdenPago
     /**
      * Get numero
      *
-     * @return int
+     * @return integer
      */
     public function getNumero()
     {
         return $this->numero;
+    }
+
+    /**
+     * Set consecutivo
+     *
+     * @param integer $consecutivo
+     *
+     * @return BpOrdenPago
+     */
+    public function setConsecutivo($consecutivo)
+    {
+        $this->consecutivo = $consecutivo;
+
+        return $this;
+    }
+
+    /**
+     * Get consecutivo
+     *
+     * @return integer
+     */
+    public function getConsecutivo()
+    {
+        return $this->consecutivo;
     }
 
     /**
@@ -195,7 +226,7 @@ class BpOrdenPago
     /**
      * Get valor
      *
-     * @return int
+     * @return integer
      */
     public function getValor()
     {
@@ -219,7 +250,7 @@ class BpOrdenPago
     /**
      * Get activo
      *
-     * @return bool
+     * @return boolean
      */
     public function getActivo()
     {

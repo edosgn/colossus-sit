@@ -85,18 +85,11 @@ class BpCdp
     private $saldo;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="tercero_identificacion", type="bigint", nullable=true)
-     */
-    private $terceroIdentificacion;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="tercero_nombre", type="string", length=255, nullable=true)
+     * @ORM\Column(name="concepto", type="text", nullable=true)
      */
-    private $terceroNombre;
+    private $concepto;
 
     /**
      * @var string
@@ -104,6 +97,13 @@ class BpCdp
      * @ORM\Column(name="observaciones", type="text", nullable=true)
      */
     private $observaciones;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="estado", type="string", length=255)
+     */
+    private $estado;
 
     /**
      * @var bool
@@ -176,9 +176,6 @@ class BpCdp
      */
     public function getSolicitudFecha()
     {
-        if ($this->solicitudFecha) {
-            return $this->solicitudFecha->format('d/m/Y');
-        }
         return $this->solicitudFecha;
     }
 
@@ -351,51 +348,27 @@ class BpCdp
     }
 
     /**
-     * Set terceroIdentificacion
+     * Set concepto
      *
-     * @param integer $terceroIdentificacion
+     * @param string $concepto
      *
      * @return BpCdp
      */
-    public function setTerceroIdentificacion($terceroIdentificacion)
+    public function setConcepto($concepto)
     {
-        $this->terceroIdentificacion = $terceroIdentificacion;
+        $this->concepto = $concepto;
 
         return $this;
     }
 
     /**
-     * Get terceroIdentificacion
-     *
-     * @return integer
-     */
-    public function getTerceroIdentificacion()
-    {
-        return $this->terceroIdentificacion;
-    }
-
-    /**
-     * Set terceroNombre
-     *
-     * @param string $terceroNombre
-     *
-     * @return BpCdp
-     */
-    public function setTerceroNombre($terceroNombre)
-    {
-        $this->terceroNombre = $terceroNombre;
-
-        return $this;
-    }
-
-    /**
-     * Get terceroNombre
+     * Get concepto
      *
      * @return string
      */
-    public function getTerceroNombre()
+    public function getConcepto()
     {
-        return $this->terceroNombre;
+        return $this->concepto;
     }
 
     /**
@@ -420,6 +393,30 @@ class BpCdp
     public function getObservaciones()
     {
         return $this->observaciones;
+    }
+
+    /**
+     * Set estado
+     *
+     * @param string $estado
+     *
+     * @return BpCdp
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return string
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**

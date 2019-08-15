@@ -69,6 +69,7 @@ class BpProyectoController extends Controller
             $proyecto->setNombre(mb_strtoupper($params->nombre, 'utf-8'));
             $proyecto->setFecha(new \Datetime(date('Y-m-d')));
             $proyecto->setCostoTotal(0);
+            $proyecto->setSaldoTotal(0);
             $proyecto->setActivo(true);
 
             $em->persist($proyecto);
@@ -157,6 +158,7 @@ class BpProyectoController extends Controller
                 $proyecto->setCuentaNumero($params->cuentaNumero);
                 $proyecto->setCuentaNombre($params->cuentaNombre);
                 $proyecto->setCostoTotal($params->costoTotal);
+                $proyecto->setSaldoTotal($params->costoTotal - $poyecto->getSaldoTotal());
 
                 $em->flush();
 

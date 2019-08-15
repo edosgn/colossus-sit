@@ -229,6 +229,9 @@ class GdDocumento
      **/
     protected $medioCorrespondenciaEnvio;
 
+    /** @ORM\ManyToOne(targetEntity="JHWEB\ContravencionalBundle\Entity\CvCdoComparendo", inversedBy="documentos") */
+    private $comparendo;
+
 
     /**
      * Get id
@@ -1012,5 +1015,29 @@ class GdDocumento
     public function getMedioCorrespondenciaEnvio()
     {
         return $this->medioCorrespondenciaEnvio;
+    }
+
+    /**
+     * Set comparendo
+     *
+     * @param \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo
+     *
+     * @return GdDocumento
+     */
+    public function setComparendo(\JHWEB\ContravencionalBundle\Entity\CvCdoComparendo $comparendo = null)
+    {
+        $this->comparendo = $comparendo;
+
+        return $this;
+    }
+
+    /**
+     * Get comparendo
+     *
+     * @return \JHWEB\ContravencionalBundle\Entity\CvCdoComparendo
+     */
+    public function getComparendo()
+    {
+        return $this->comparendo;
     }
 }

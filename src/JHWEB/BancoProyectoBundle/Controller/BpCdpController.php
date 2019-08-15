@@ -29,7 +29,10 @@ class BpCdpController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $cdps = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findBy(
-            array('activo' => true)
+            array(
+                'estado' => 'SOLICITUD',
+                'activo' => true
+            )
         );
 
         $response['data'] = array();
@@ -64,29 +67,16 @@ class BpCdpController extends Controller
            
             $em = $this->getDoctrine()->getManager();
 
-            $fechaExpedicion = new \Datetime($params->fechaExpedicion);
-
             $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find(
                 $params->id
             );
 
-            $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->getMaximo(
-                $fechaExpedicion->format('Y')
-            );
-            $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
-            
-            //$cdp->solicitudConsecutivo($consecutivo);
-
-            $numero = str_pad($consecutivo, 3, '0', STR_PAD_LEFT).'-'.$fechaExpedicion->format('Y');
-
-            $cdp->setNumero($numero);
-
             $cdp->setFechaRegistro(new \Datetime(date('Y-m-d')));
-            $cdp->setFechaExpedicion($fechaExpedicion);
-            $cdp->setTerceroIdentificacion($params->terceroIdentificacion);
-            $cdp->setTerceroNombre(mb_strtoupper($params->terceroNombre, 'utf-8'));
-            $cdp->setObservaciones($params->observaciones);
-            $cdp->setActivo(true);
+            $cdp->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
+            $cdp->setNumero($params->numero);
+            $cdp->setValor($params->valor);
+            $cdp->setObservaciones(mb_strtoupper($params->observaciones));
+            $cdp->setEstado('REGISTRADO');
             
             if ($params->idFuncionario) {
                 $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
@@ -194,6 +184,39 @@ class BpCdpController extends Controller
     /* ======================================== */
 
     /**
+     * Lista todos los datos en estado REGISTRADO.
+     *
+     * @Route("/index/register", name="bpcdp_index_register")
+     * @Method("GET")
+     */
+    public function indexRegisterAction()
+    {
+        $helpers = $this->get("app.helpers");
+
+        $em = $this->getDoctrine()->getManager();
+        
+        $cdps = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findBy(
+            array(
+                'estado' => 'REGISTRADO',
+                'activo' => true
+            )
+        );
+
+        $response['data'] = array();
+
+        if ($cdps) {
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => count($cdps)." registros encontrados", 
+                'data'=> $cdps,
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
      * Creates a request bpCdp entity.
      *
      * @Route("/request", name="bpcdp_request")
@@ -213,18 +236,20 @@ class BpCdpController extends Controller
 
             $cdp = new BpCdp();
 
-            $solicitudFecha = new \Datetime(date('Y-m-d'));
+            $solicitudFecha = new \Datetime($params->fecha);
 
             $consecutivo = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->getMaximo(
                 $solicitudFecha->format('Y')
             );
             $consecutivo = (empty($consecutivo['maximo']) ? 1 : $consecutivo['maximo']+=1);
 
-            $numero = $solicitudFecha->format('Y').(str_pad($consecutivo, 3, '0', STR_PAD_LEFT));
+            $numero = $solicitudFecha->format('Ym').(str_pad($consecutivo, 4, '0', STR_PAD_LEFT));
 
             $cdp->setSolicitudNumero($numero);
             $cdp->setSolicitudFecha($solicitudFecha);
             $cdp->setSolicitudConsecutivo($consecutivo);
+            $cdp->setValor($params->valor);
+            $cdp->setConcepto(mb_strtoupper($params->concepto, 'utf-8'));
 
             if ($params->idActividad) {
                 $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
@@ -235,10 +260,10 @@ class BpCdpController extends Controller
                 $valorEnLetras = Numbers_Words::toWords(
                     $actividad->getCostoTotal(), 'es'
                 );
-                $cdp->setValorLetras(mb_strtoupper($valorEnLetras, 'utf-8'));
+                $cdp->setValorLetras(strtoupper($valorEnLetras));
             }
 
-
+            $cdp->setEstado('SOLICITUD');
             $cdp->setActivo(true);
 
             $em->persist($cdp);
@@ -365,7 +390,7 @@ class BpCdpController extends Controller
     }
 
     /**
-     * Genera pdf de factura seleccionada.
+     * Genera pdf de solicitud de cdp seleccionado.
      *
      * @Route("/request/{id}/pdf", name="bpcdp_pdf")
      * @Method("GET")
@@ -383,7 +408,7 @@ class BpCdpController extends Controller
         $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($id);
 
        
-        $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.solicitud.html.twig', array(
+        $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.solicitud.cdp.html.twig', array(
             'fechaActual' => $fechaActual,
             'anio' => $anio,
             'mes' => $mes,

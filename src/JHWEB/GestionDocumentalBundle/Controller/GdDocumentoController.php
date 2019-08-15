@@ -460,6 +460,13 @@ class GdDocumentoController extends Controller
                     $documento->setUrl($filename);
                 }
 
+                if ($params->idComparendo) {
+                    $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                        $params->idComparendo
+                    );
+                    $documento->setComparendo($comparendo);
+                }
+
                 $em->flush();
 
                 $response = array(
@@ -534,6 +541,15 @@ class GdDocumentoController extends Controller
                 $em->persist($trazabilidad);
                 $em->flush();
 
+                if ($documento->getComparendo()) {
+                    $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(27);
+                    $comparendo = $documento->getComparendo();
+
+                    $trazabilidadComparendo = $helpers->generateTrazabilidad($comparendo, $estado);
+                    $trazabilidadComparendo->setFuncionario($funcionario);
+                    $em->flush();
+                }
+
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
@@ -549,10 +565,10 @@ class GdDocumentoController extends Controller
             }
         }else{
             $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => "Autorizacion no valida", 
-                );
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
         }
         return $helpers->json($response);
     }
