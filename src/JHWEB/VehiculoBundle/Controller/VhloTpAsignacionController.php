@@ -268,7 +268,7 @@ class VhloTpAsignacionController extends Controller
                     'numero' => $params->placa
                 )
             );
-            
+
             $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->idClase);
             
             if($placa){

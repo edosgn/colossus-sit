@@ -109,6 +109,29 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getOneOrNullResult();
     }
+    
+    public function getSustratoByFactura($idFactura) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(fi.id) AS total, iv.valor, t.nombre
+            FROM JHWEBFinancieroBundle:FroFacInsumo fi,
+            JHWEBInsumoBundle:ImoInsumo i,
+            JHWEBInsumoBundle:ImoCfgTipo t,
+            JHWEBInsumoBundle:ImoCfgValor iv
+            WHERE fi.factura = :idFactura
+            AND fi.insumo = i.id
+            AND i.tipo = t.id
+            AND t.categoria = 'SUSTRATO'
+            AND iv.tipo = t.id";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idFactura' => $idFactura, 
+        ));
+
+        return $consulta->getResult();
+    }
 
     public function getSustratosByName($idFactura) {
         $em = $this->getEntityManager();
