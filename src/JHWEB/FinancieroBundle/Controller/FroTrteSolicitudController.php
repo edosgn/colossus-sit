@@ -2371,4 +2371,137 @@ class FroTrteSolicitudController extends Controller
 
         $this->get('app.pdf')->templateResoluciones($html);
     }
+
+    /**
+     * Busca tramites realizados entre fechas según el tipo.
+     *
+     * @Route("/search/tramite/dates", name="frotrtesolicitud_search_tramite_dates")
+     * @Method("POST")
+     */
+    public function searchByTramiteAndDatesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        $json = $request->get("data",null);
+        $params = json_decode($json);       
+
+        if ($params->idTramiteFactura) {
+            $tramiteFactura = $em->getRepository('JHWEBFinancieroBundle:FroFacTramite')->find(
+                $params->idTramiteFactura
+            );
+        }
+
+        if ($tramiteFactura) {
+            $funcionario = $em->getRepository('JHWEBPersonalBundle:PnalFuncionario')->find(
+                $params->idFuncionario
+            );
+    
+            if ($tramiteFactura->getRealizado()) {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El tramite ya fue realizado.', 
+                );
+            }else{
+                if ($tramiteFactura->getPrecio()->getModulo()->getAbreviatura() == 'RNC') {
+                    if (isset($params->idSolicitante) && $params->idSolicitante) {
+                        $solicitante = $em->getRepository('JHWEBUsuarioBundle:UserUsuario')->find($params->idSolicitante);
+                    }
+    
+                    $response = array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Trámite autorizado.',
+                    );
+                }else{
+                    if (isset($params->idVehiculo) && $params->idVehiculo) {
+                        $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
+                    }
+
+                    if (!$vehiculo->getCancelado()) {                        
+                        if ($funcionario->getOrganismoTransito()->getId() == $vehiculo->getOrganismoTransito()->getId()) {
+                            $limitaciones = $em->getRepository('JHWEBVehiculoBundle:VhloLimitacion')->findBy(
+                                array(
+                                    'vehiculo' => $vehiculo->getId(),
+                                    'activo' => true,
+                                )
+                            );
+    
+                            if ($limitaciones) {
+                                //Valida si el tramite a realizar es diferente de TRASPASO
+                                if ($tramiteFactura->getPrecio()->getTramite()->getId() != 2) {
+                                    $response = array(
+                                        'status' => 'success',
+                                        'code' => 200,
+                                        'message' => 'Trámite autorizado.',
+                                    );
+                                }else{
+                                    $response = array(
+                                        'status' => 'error',
+                                        'code' => 400,
+                                        'message' => 'Este trámite no se puede realizar porque este vehiculo presenta limitación a la propiedad.',
+                                    );
+                                }
+                            }else{
+                                $response = array(
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => 'Trámite autorizado.',
+                                );
+                            }
+                        }else{
+                            $response = array(
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => 'Trámite autorizado.',
+                            );
+                        }
+                    }else{
+                        //Valida si el tramite a realizar es REMATRICULA
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() == 18) {
+                            //Busca el último tramite de cancelación de vehiculo
+                            $tramiteCancelacion = $em->getRepository('JHWEBFinancieroBundle:FroTrteSolicitud')->getOneByVehiculoAndTramite(
+                                $vehiculo->getId(), 18
+                            );
+                            
+                            $foraneas = (object)$tramiteCancelacion->getForaneas();
+                            $motivoCancelacion = $foraneas->idMotivoCancelacion;
+                            
+                            if ($motivoCancelacion == 'HURTO') {
+                                $response = array(
+                                    'status' => 'success',
+                                    'code' => 200,
+                                    'message' => 'Trámite autorizado.',
+                                );
+                            }else{
+                                $response = array(
+                                    'status' => 'error',
+                                    'code' => 400,
+                                    'message' => 'Este trámite no se pude realizar porque el motivo de la cancelación es HURTO.',
+                                );
+                            }
+                        }
+
+                        $response = array(
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => 'Trámite autorizado.',
+                        );
+                    }
+                }
+            }
+        }else{
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => 'No existe el trámite que desea realizar.', 
+            );
+        }
+
+        return $helpers->json($response);
+    }
 }
