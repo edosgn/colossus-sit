@@ -110,6 +110,10 @@ class FroReporteIngresosController extends Controller
                 $totalSustratos = 0;
                 $cantSustratos = 0;
                 $nombreSustrato;
+                $valorUnitarioSustrato = 0;
+
+                $idConcepto;
+                $cantConceptos = 0;
                 $totalConceptos = 0;
                 $totalTramites = 0;
 
@@ -138,13 +142,14 @@ class FroReporteIngresosController extends Controller
                                     'total2' => $total2,
                                 );
                                 
-                                $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
+                                /* $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroTrteConcepto')->findBy(
                                     array(
                                         'precio' => $tramite->getTramiteFactura()->getPrecio()->getId(),
                                     )
-                                );
+                                ); */
 
-                                foreach ($conceptos as $key => $concepto) {
+                                
+                                /* foreach ($conceptos as $key => $concepto) {
                                     $cantConceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getByName($concepto->getConcepto()->getId(), $tramite->getTramiteFactura()->getPrecio()->getId());
                                     $total = intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
                                     $totalConceptos += intval(implode($cantConceptos)) * $concepto->getConcepto()->getValor();
@@ -155,8 +160,19 @@ class FroReporteIngresosController extends Controller
                                         'valor' => $concepto->getConcepto()->getValor(),
                                         'total' => $total,
                                     );    
-                                }
+                                } */
+                                
+                                $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptosByPrecio(
+                                        $tramite->getTramiteFactura()->getPrecio()->getId()
+                                );
 
+                                foreach ($conceptos as $key => $concepto) {
+                                    $idConcepto = $concepto['id'];
+                                    $cantConceptos += $concepto['totalConceptos'];
+                                    $totalConceptos += $concepto['valor'];
+                                    $nombreConcepto = $concepto['nombre'];
+                                    $valorUnitarioConcepto = $concepto['valorUnitarioConcepto'];
+                                }
                                 //================================================================para sustratos ====================================================================
                                 $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratoByFactura(
                                         $tramite->getTramiteFactura()->getFactura()->getId()
@@ -166,31 +182,8 @@ class FroReporteIngresosController extends Controller
                                     $cantSustratos += $sustrato['total'];
                                     $totalSustratos += $sustrato['valor'];
                                     $nombreSustrato = $sustrato['nombre'];
+                                    $valorUnitarioSustrato = $sustrato['valorUnitario'];
                                 }
-                                
-                                /* foreach ($sustratos as $key => $sustrato) {
-                                    switch ($sustrato->getInsumo()->getTipo()->getCategoria()) {
-                                        case 'SUSTRATO':
-                                            $cantSustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratosByName($tramite->getTramiteFactura()->getFactura()->getId()); 
-    
-                                            $valor = $em->getRepository('JHWEBInsumoBundle:ImoCfgValor')->findOneBy(
-                                                array(
-                                                    'tipo' => $sustrato->getInsumo()->getTipo(),
-                                                )
-                                            );
-    
-                                            $total3 = intval(implode($cantSustratos)) * $valor->getValor();
-                                            $totalSustratos += intval(implode($cantSustratos)) * $valor->getValor();
-    
-                                            $arraySustratos[] = array(
-                                                'nombre' => $sustrato->getInsumo()->getTipo()->getNombre(),
-                                                'cantidad' => intval(implode($cantSustratos)),
-                                                'valor' => $valor->getValor(),
-                                                'total' => $total3,
-                                            );
-                                            break;
-                                    }
-                                } */
                                 //==================================================================================================================================================
 
                                 break;
@@ -211,14 +204,17 @@ class FroReporteIngresosController extends Controller
                     $arraySustratos[] = array(
                         'nombre' => $nombreSustrato,
                         'cantidad' => $cantSustratos,
-                        /* 'valor' => $valor->getValor(), */
-                        'total' => $totalSustratos
+                        'valor' => $valorUnitarioSustrato,
+                        'total' => $cantSustratos * $valorUnitarioSustrato
                     );
-
-                    /* foreach ($arraySustratos as $key => $sus) {
-                        var_dump($sus['cantidad']);
-                    }
-                    die(); */
+                    
+                    $arrayConceptos[] = array(
+                        'id' => $idConcepto,
+                        'nombre' => $nombreConcepto,
+                        'cantidad' => $cantConceptos,
+                        'valor' => $valorUnitarioConcepto,
+                        'total' => $cantConceptos * $valorUnitarioConcepto
+                    );
 
                     //=========================================total de facturas por estado==========================================
                     $facturasPagadas = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->findBy(

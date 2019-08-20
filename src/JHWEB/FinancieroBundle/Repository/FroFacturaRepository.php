@@ -76,7 +76,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getByName($idConcepto, $idPrecio) {
+    /* public function getByName($idConcepto, $idPrecio) {
         $em = $this->getEntityManager();
 
         $dql = "SELECT COUNT(ftc.id)
@@ -92,7 +92,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         ));
 
         return $consulta->getOneOrNullResult();
-    }
+    } */
 
     public function getTramiteByName($idTramite) {
         $em = $this->getEntityManager();
@@ -113,7 +113,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     public function getSustratoByFactura($idFactura) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(fi.id) AS total, iv.valor, t.nombre
+        $dql = "SELECT COUNT(fi.id) AS total, iv.valor, t.nombre, iv.valor AS valorUnitario
             FROM JHWEBFinancieroBundle:FroFacInsumo fi,
             JHWEBInsumoBundle:ImoInsumo i,
             JHWEBInsumoBundle:ImoCfgTipo t,
@@ -133,23 +133,26 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getSustratosByName($idFactura) {
+    public function getConceptosByPrecio($idPrecio) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(ii.tipo)
-            FROM JHWEBInsumoBundle:ImoInsumo ii, JHWEBFinancieroBundle:FroFacInsumo ffi
-            WHERE ii.id = ffi.factura
-            AND ffi.factura = :idFactura";
+        $dql = "SELECT COUNT(ftc.id) AS totalConceptos, ftcc.nombre, ftcc.id, ftcc.valor, ftcc.valor AS valorUnitarioConcepto 
+            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, 
+            JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
+            WHERE ftc.precio = :idPrecio
+            AND ftc.concepto = ftcc.id
+            AND NOT ftc.concepto = 2
+            AND ftc.activo = 1";
 
         $consulta = $em->createQuery($dql);
         
         $consulta->setParameters(array(
-            'idFactura' => $idFactura, 
+            'idPrecio' => $idPrecio, 
         ));
 
-        return $consulta->getOneOrNullResult();
+        return $consulta->getResult();
     }
-
     /*  =============== para infracciones ================= */
 
     public function getInfraccionesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
