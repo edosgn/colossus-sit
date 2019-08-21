@@ -129,13 +129,14 @@ class CfgAdmFormatoTipoController extends Controller
                 $em->flush();
 
                 $response = array(
+                    'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro actualizado con éxito",
-                    'data' => $tipo,
                 );
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "El registro no se encuentra en la base de datos",
@@ -143,9 +144,10 @@ class CfgAdmFormatoTipoController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorización no válida para editar",
+                'message' => "Autorización no válida",
             );
         }
 
