@@ -423,6 +423,7 @@ class UserEmpresaTransporteController extends Controller
                     'code' => 200,
                     'message' => "Asignación encontrada",
                     'data' => array(
+                        'asignacion' => $asignacion,
                         'empresaTransporte' => $asignacion->getEmpresaTransporte(),
                         'cupo' => $asignacion->getCupo(),
                         'nivelServicio' => $asignacion->getNivelServicio(),
@@ -481,17 +482,28 @@ class UserEmpresaTransporteController extends Controller
                         'empresa' => $empresa,
                         'numeroActo' => $params->numeroActo,
                         'activo' => true
-                    )
-                ); 
-
+                        )
+                    ); 
+                    
                 if($empresaTransporte){
-                    $response = array(
-                        'title' => 'Perfecto!',
-                        'status' => 'success',
-                        'code' => 200,
-                        'message' => "Empresa encontrada",
-                        'data' => $empresaTransporte,
-                    );
+                    $asignacionActual = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->find($params->idAsignacion); 
+
+                    if($asignacionActual->getEmpresaTransporte()->getId() == $empresaTransporte->getId()){
+                        $response = array(
+                            'title' => 'Error!',
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La empresa nueva que está buscando es la misma empresa actual a la que pertenece el vehíulo.",
+                        );
+                    } else {
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Empresa encontrada",
+                            'data' => $empresaTransporte,
+                        );
+                    }
                 } else {
                     $response = array(
                         'title' => 'Error!',
