@@ -25,7 +25,9 @@
         <td colspan="3">
           <b>SEDE OPERATIVA</b>
           <br>
+          {% if comparendo.organismoTransito %}
           {{ comparendo.organismoTransito.nombre }}
+          {% endif %}
         </td>
       </tr>
       <!-- row-2 -->
@@ -71,7 +73,9 @@
         <td colspan="3">
           <b>MATRICULADO EN</b>
           <br>
+          {% if comparendo.organismoTransitoMatriculado %}
           {{ comparendo.organismoTransitoMatriculado.nombre }}
+          {% endif %}
         </td>
         <td colspan="2">
           <b>CÓDIGO INFRACCIÓN</b>
@@ -84,19 +88,25 @@
         <td colspan="2">
           <b>CLASE</b>
           <br>
-          {{ comparendo.clase }}
+          {% if comparendo.clase %}
+          {{ comparendo.clase.nombre }}
+          {% endif %}
         </td>
 
         <td colspan="2">
           <b>SERVICIO</b>
           <br>
-          {{ comparendo.servicio }}
+          {% if comparendo.servicio %}
+          {{ comparendo.servicio.nombre }}
+          {% endif %}
         </td>
         
         <td colspan="2">
           <b>RADIO ACCIÓN</b>
           <br>
-          {{ comparendo.radioAccion }}
+          {% if comparendo.radioAccion %}
+          {{ comparendo.radioAccion.nombre }}
+          {% endif %}
         </td>
       </tr>
       <!-- row-5 -->
@@ -104,19 +114,25 @@
         <td colspan="2">
           <b>MODALIDAD TRASNPORTE</b>
           <br>
-          {{ comparendo.modalidadTransporte }}
+          {% if comparendo.modalidadTransporte %}
+          {{ comparendo.modalidadTransporte.nombre }}
+          {% endif %}
         </td>
 
         <td colspan="2">
           <b>9.1. Transporte Pasajeros</b>
           <br>
-          {{ comparendo.transportePasajero }}
+          {% if comparendo.transportePasajero %}
+          {{ comparendo.transportePasajero.nombre }}
+          {% endif %}
         </td>
 
         <td colspan="2">
           <b>9.2. Transporte Especial</b>
           <br>
-          {{ comparendo.transporteEspecial }}
+          {% if comparendo.transporteEspecial %}
+          {{ comparendo.transporteEspecial.nombre }}
+          {% endif %}
         </td>
       </tr>
         
@@ -153,7 +169,9 @@
         <td colspan="2">
           <b>Tipo Identificación</b>
           <br>
+          {% if comparendo.infractorTipoIdentificacion %}
           {{ comparendo.infractorTipoIdentificacion.nombre }}
+          {% endif %}
         </td>
         <td colspan="2">
           <b>Número documento identidad</b>
@@ -204,7 +222,9 @@
         </td>
         <td colspan="2">
             <b>Org.de T. Licencia de tránsito</b>
+            {% if comparendo.organismoTransitoLicencia %}
             {{ comparendo.organismoTransitoLicencia.nombre }}
+            {% endif %}
         </td>
         <td colspan="2">
             <b>No. del documento Licencia de tránsito</b>
@@ -217,7 +237,9 @@
         <td colspan="2">
           <b>Tipo Identificación</b>
           <br>
+          {% if comparendo.propietarioTipoIdentificacion %}
           {{ comparendo.propietarioTipoIdentificacion.nombre }}
+          {% endif %}
         </td>
         <td colspan="2">
           <b>Número documento identidad</b>

@@ -388,45 +388,33 @@ class CvCdoComparendo
     protected $organismoTransitoMatriculado;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="servicio", type="string", length=255, nullable=true)
-     */
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgServicio", inversedBy="comparendos")
+     **/
     protected $servicio;
     
     /**
-     * @var string
-     *
-     * @ORM\Column(name="clase", type="string", length=255, nullable=true)
-     */
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgClase", inversedBy="comparendos")
+     **/
     protected $clase;
     
     /**
-     * @var string
-     *
-     * @ORM\Column(name="radio_accion", type="string", length=255, nullable=true)
-     */
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion", inversedBy="comparendos")
+     **/
     private $radioAccion;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="modalidad_transporte", type="string", length=255, nullable=true)
-     */   
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte", inversedBy="comparendos")
+     **/   
     private $modalidadTransporte;
     
     /**
-     * @var string
-     *
-     * @ORM\Column(name="transporte_pasajero", type="string", length=255, nullable=true )
-     */
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero", inversedBy="comparendos")
+     **/
     private $transportePasajero;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="transporte_especial", type="string", length=255, nullable=true)
-     */
+     * @ORM\ManyToOne(targetEntity="JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial", inversedBy="comparendos")
+     **/
     private $transporteEspecial;
 
     /**
@@ -491,7 +479,7 @@ class CvCdoComparendo
      */
     public function getFecha()
     {
-        if ($this->fecha) {
+        if($this->fecha){
             return $this->fecha->format('d/m/Y');
         }
         return $this->fecha;
@@ -518,7 +506,7 @@ class CvCdoComparendo
      */
     public function getHora()
     {
-        if ($this->hora) {
+        if($this->hora){
             return $this->hora->format('h:i:s A');
         }
         return $this->hora;
@@ -1605,150 +1593,6 @@ class CvCdoComparendo
     }
 
     /**
-     * Set servicio
-     *
-     * @param string $servicio
-     *
-     * @return CvCdoComparendo
-     */
-    public function setServicio($servicio)
-    {
-        $this->servicio = $servicio;
-
-        return $this;
-    }
-
-    /**
-     * Get servicio
-     *
-     * @return string
-     */
-    public function getServicio()
-    {
-        return $this->servicio;
-    }
-
-    /**
-     * Set clase
-     *
-     * @param string $clase
-     *
-     * @return CvCdoComparendo
-     */
-    public function setClase($clase)
-    {
-        $this->clase = $clase;
-
-        return $this;
-    }
-
-    /**
-     * Get clase
-     *
-     * @return string
-     */
-    public function getClase()
-    {
-        return $this->clase;
-    }
-
-    /**
-     * Set radioAccion
-     *
-     * @param string $radioAccion
-     *
-     * @return CvCdoComparendo
-     */
-    public function setRadioAccion($radioAccion)
-    {
-        $this->radioAccion = $radioAccion;
-
-        return $this;
-    }
-
-    /**
-     * Get radioAccion
-     *
-     * @return string
-     */
-    public function getRadioAccion()
-    {
-        return $this->radioAccion;
-    }
-
-    /**
-     * Set modalidadTransporte
-     *
-     * @param string $modalidadTransporte
-     *
-     * @return CvCdoComparendo
-     */
-    public function setModalidadTransporte($modalidadTransporte)
-    {
-        $this->modalidadTransporte = $modalidadTransporte;
-
-        return $this;
-    }
-
-    /**
-     * Get modalidadTransporte
-     *
-     * @return string
-     */
-    public function getModalidadTransporte()
-    {
-        return $this->modalidadTransporte;
-    }
-
-    /**
-     * Set transportePasajero
-     *
-     * @param string $transportePasajero
-     *
-     * @return CvCdoComparendo
-     */
-    public function setTransportePasajero($transportePasajero)
-    {
-        $this->transportePasajero = $transportePasajero;
-
-        return $this;
-    }
-
-    /**
-     * Get transportePasajero
-     *
-     * @return string
-     */
-    public function getTransportePasajero()
-    {
-        return $this->transportePasajero;
-    }
-
-    /**
-     * Set transporteEspecial
-     *
-     * @param string $transporteEspecial
-     *
-     * @return CvCdoComparendo
-     */
-    public function setTransporteEspecial($transporteEspecial)
-    {
-        $this->transporteEspecial = $transporteEspecial;
-
-        return $this;
-    }
-
-    /**
-     * Get transporteEspecial
-     *
-     * @return string
-     */
-    public function getTransporteEspecial()
-    {
-        return $this->transporteEspecial;
-    }
-
-    /**
      * Set infractorTipoIdentificacion
      *
      * @param \JHWEB\UsuarioBundle\Entity\UserCfgTipoIdentificacion $infractorTipoIdentificacion
@@ -1890,6 +1734,150 @@ class CvCdoComparendo
     public function getOrganismoTransitoMatriculado()
     {
         return $this->organismoTransitoMatriculado;
+    }
+
+    /**
+     * Set servicio
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio
+     *
+     * @return CvCdoComparendo
+     */
+    public function setServicio(\JHWEB\VehiculoBundle\Entity\VhloCfgServicio $servicio = null)
+    {
+        $this->servicio = $servicio;
+
+        return $this;
+    }
+
+    /**
+     * Get servicio
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgServicio
+     */
+    public function getServicio()
+    {
+        return $this->servicio;
+    }
+
+    /**
+     * Set clase
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase
+     *
+     * @return CvCdoComparendo
+     */
+    public function setClase(\JHWEB\VehiculoBundle\Entity\VhloCfgClase $clase = null)
+    {
+        $this->clase = $clase;
+
+        return $this;
+    }
+
+    /**
+     * Get clase
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgClase
+     */
+    public function getClase()
+    {
+        return $this->clase;
+    }
+
+    /**
+     * Set radioAccion
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion $radioAccion
+     *
+     * @return CvCdoComparendo
+     */
+    public function setRadioAccion(\JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion $radioAccion = null)
+    {
+        $this->radioAccion = $radioAccion;
+
+        return $this;
+    }
+
+    /**
+     * Get radioAccion
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgRadioAccion
+     */
+    public function getRadioAccion()
+    {
+        return $this->radioAccion;
+    }
+
+    /**
+     * Set modalidadTransporte
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte
+     *
+     * @return CvCdoComparendo
+     */
+    public function setModalidadTransporte(\JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte $modalidadTransporte = null)
+    {
+        $this->modalidadTransporte = $modalidadTransporte;
+
+        return $this;
+    }
+
+    /**
+     * Get modalidadTransporte
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgModalidadTransporte
+     */
+    public function getModalidadTransporte()
+    {
+        return $this->modalidadTransporte;
+    }
+
+    /**
+     * Set transportePasajero
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero $transportePasajero
+     *
+     * @return CvCdoComparendo
+     */
+    public function setTransportePasajero(\JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero $transportePasajero = null)
+    {
+        $this->transportePasajero = $transportePasajero;
+
+        return $this;
+    }
+
+    /**
+     * Get transportePasajero
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTransportePasajero
+     */
+    public function getTransportePasajero()
+    {
+        return $this->transportePasajero;
+    }
+
+    /**
+     * Set transporteEspecial
+     *
+     * @param \JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial $transporteEspecial
+     *
+     * @return CvCdoComparendo
+     */
+    public function setTransporteEspecial(\JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial $transporteEspecial = null)
+    {
+        $this->transporteEspecial = $transporteEspecial;
+
+        return $this;
+    }
+
+    /**
+     * Get transporteEspecial
+     *
+     * @return \JHWEB\VehiculoBundle\Entity\VhloCfgTransporteEspecial
+     */
+    public function getTransporteEspecial()
+    {
+        return $this->transporteEspecial;
     }
 
     /**

@@ -71,7 +71,7 @@ class CvCdoComparendoController extends Controller
                 $comparendo->setPlaca($params->comparendo->vehiculoPlaca);
             }
 
-            if ($params->comparendo->idOrganismoTransitoMatriculado) {
+            if (isset($params->comparendo->idOrganismoTransitoMatriculado) && $params->comparendo->idOrganismoTransitoMatriculado) {
                 $organismoTransitoMatriculado = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                     $params->comparendo->idOrganismoTransitoMatriculado
                 );
@@ -84,48 +84,42 @@ class CvCdoComparendoController extends Controller
                 $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find(
                     $params->comparendo->vehiculoClase
                 );
-                $comparendo->setClase($clase->getNombre());
+                $comparendo->setClase($clase);
             }
 
             if (isset($params->comparendo->vehiculoServicio)) {
                 $servicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgServicio')->find(
                     $params->comparendo->vehiculoServicio
                 );
-                $comparendo->setServicio($servicio->getNombre());
+                $comparendo->setServicio($servicio);
             }
 
             if (isset($params->comparendo->vehiculoRadioAccion)) {
                 $radioAccion = $em->getRepository('JHWEBVehiculoBundle:VhloCfgRadioAccion')->find(
                     $params->comparendo->vehiculoRadioAccion
                 );
-                $comparendo->setRadioAccion($radioAccion->getNombre());
+                $comparendo->setRadioAccion($radioAccion);
             }
 
             if (isset($params->comparendo->vehiculoModalidadTransporte)) {
                 $modalidadTransporte = $em->getRepository('JHWEBVehiculoBundle:VhloCfgModalidadTransporte')->find(
                     $params->comparendo->vehiculoModalidadTransporte
                 );
-                $comparendo->setModalidadTransporte(
-                    $modalidadTransporte->getNombre()
-                );
+                $comparendo->setModalidadTransporte($modalidadTransporte);
             }
 
             if (isset($params->comparendo->vehiculoTransportePasajero)) {
                 $transportePasajero = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTransportePasajero')->find(
                     $params->comparendo->vehiculoTransportePasajero
                 );
-                $comparendo->setTransportePasajero(
-                    $transportePasajero->getNombre()
-                );
+                $comparendo->setTransportePasajero($transportePasajero);
             }
 
             if (isset($params->comparendo->vehiculoTransporteEspecial)) {
                 $transporteEspecial = $em->getRepository('JHWEBVehiculoBundle:VhloCfgTransporteEspecial')->find(
                     $params->comparendo->vehiculoTransporteEspecial
                 );
-                $comparendo->setTransporteEspecial(
-                    $transporteEspecial->getNombre()
-                );
+                $comparendo->setTransporteEspecial($transporteEspecial);
             }
 
             $comparendo->setFecha(new \DateTime($params->comparendo->fecha));
@@ -184,7 +178,7 @@ class CvCdoComparendoController extends Controller
             }
 
             /* INFRACTOR */
-            if ($params->infractor->idTipoIdentificacion) {
+            if (isset($params->infractor->idTipoIdentificacion) && $params->infractor->idTipoIdentificacion) {
                 $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
                     $params->infractor->idTipoIdentificacion
                 );
@@ -193,7 +187,7 @@ class CvCdoComparendoController extends Controller
                 );
             }
 
-            if ($params->infractor->idCategoriaLicenciaConduccion) {
+            if (isset($params->infractor->idCategoriaLicenciaConduccion) && $params->infractor->idCategoriaLicenciaConduccion) {
                 $categoria = $em->getRepository('JHWEBUsuarioBundle:UserLcCfgCategoria')->find(
                     $params->infractor->idCategoriaLicenciaConduccion
                 );
@@ -234,7 +228,7 @@ class CvCdoComparendoController extends Controller
                 );
             }
 
-            if ($params->comparendo->idOrganismoTransitoLicencia) {
+            if (isset($params->comparendo->idOrganismoTransitoLicencia) && $params->comparendo->idOrganismoTransitoLicencia) {
                 $organismoTransitoLicencia = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
                     $params->comparendo->idOrganismoTransitoLicencia
                 );
@@ -250,7 +244,7 @@ class CvCdoComparendoController extends Controller
             }
 
             /* PROPIETARIO */
-            if ($params->propietario->idTipoIdentificacion) {
+            if (isset($params->propietario->idTipoIdentificacion) && $params->propietario->idTipoIdentificacion) {
                 $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find(
                     $params->propietario->idTipoIdentificacion
                 );
@@ -375,6 +369,7 @@ class CvCdoComparendoController extends Controller
                     'status' => 'success',
                     'code' => 200,
                     'message' => "Registro creado con exito",
+                    'data' => $comparendo,
                 );
             }else{
                 $response = array(
