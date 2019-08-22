@@ -288,6 +288,7 @@ class VhloTpAsignacionController extends Controller
                         )
                     );
                     $response = array(
+                        'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Vehiculo encontrado",
@@ -298,14 +299,16 @@ class VhloTpAsignacionController extends Controller
                     );
                 } else { 
                     $response = array(
+                        'title' => 'Error!',
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "El vehiculo no existe, o no es de transporte público, o la clase de vehiculo
-                                        es diferente a la que la empresaest'a habilitada para registrar el cupo.",
+                        'message' => "Puede que el vehículo no pertenezca a transporte público, o su clase no conincide con la
+                                    empresa habilitada para asignar cupo.",
                     );
                 }
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No se encuentra la placa en la Base de Datos ",
@@ -313,6 +316,7 @@ class VhloTpAsignacionController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
