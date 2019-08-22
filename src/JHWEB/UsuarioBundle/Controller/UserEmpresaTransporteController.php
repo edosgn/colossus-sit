@@ -119,9 +119,10 @@ class UserEmpresaTransporteController extends Controller
                     $empresaTransporteNew->setNumeroEjecutoriaActo($params->numeroEjecutoriaActo);
                     $empresaTransporteNew->setColores($params->arrayColores);
                     $empresaTransporteNew->setMunicipios($params->arrayMunicipios);
-                    $empresaTransporteNew->setCapacidad($params->capacidad);
                     $empresaTransporteNew->setCapacidadMinima($params->capacidadMinima);
                     $empresaTransporteNew->setCapacidadMaxima($params->capacidadMaxima);
+                    $empresaTransporteNew->setCapacidadDisponible($params->capacidadDisponible);
+                    $empresaTransporteNew->setCapacidadUtilizada(0);
                     $empresaTransporteNew->setDobleCabina($params->dobleCabina);
                     $empresaTransporteNew->setActivo(true);
                     
@@ -486,7 +487,8 @@ class UserEmpresaTransporteController extends Controller
                     ); 
                     
                 if($empresaTransporte){
-                    if(isset($params->idAsignacion)){
+                    $idAsignacion = (isset($params->idAsignacion)) ? $params->idAsignacion : null;
+                    if($idAsignacion != null){
 
                         $asignacionActual = $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->find($params->idAsignacion); 
 
