@@ -74,7 +74,7 @@ class VhloTpConvenioController extends Controller
             $fechaConvenio = new \DateTime($params->fechaConvenio);
             $fechaActaInicio = new \DateTime($params->fechaActaInicio);
             $fechaActaFin = new \DateTime($params->fechaActaFin);
-            $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresa);
+            $alcaldia = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($params->empresa);
             
             $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
                 array (
@@ -106,9 +106,9 @@ class VhloTpConvenioController extends Controller
                     $vhloTpConvenio->setFechaConvenio($fechaConvenio);
                     $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
                     $vhloTpConvenio->setFechaActaFin($fechaActaFin);
-                    $vhloTpConvenio->setAlcaldia($empresa);
+                    $vhloTpConvenio->setAlcaldia($alcaldia);
                     $vhloTpConvenio->setObservacion($params->observacion);
-                    $vhloTpConvenio->setActivo(1);
+                    $vhloTpConvenio->setActivo(true);
 
                     $em->persist($vhloTpConvenio);
 
@@ -119,6 +119,7 @@ class VhloTpConvenioController extends Controller
                         
                         $vhloTpConvenioEmpresa->setEmpresa($empresaConvenio);
                         $vhloTpConvenioEmpresa->setVhloTpConvenio($vhloTpConvenio);
+                        $vhloTpConvenioEmpresa->setActivo(true);
 
                         $em->persist($vhloTpConvenioEmpresa);
                         $em->flush();
@@ -164,46 +165,145 @@ class VhloTpConvenioController extends Controller
     /**
      * Displays a form to edit an existing vhloTpConvenio entity.
      *
-     * @Route("/{id}/edit", name="vhlotpconvenio_edit")
+     * @Route("/edit", name="vhlotpconvenio_edit")
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, VhloTpConvenio $vhloTpConvenio)
+    public function editAction(Request $request)
     {
-        $deleteForm = $this->createDeleteForm($vhloTpConvenio);
-        $editForm = $this->createForm('JHWEB\VehiculoBundle\Form\VhloTpConvenioType', $vhloTpConvenio);
-        $editForm->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $fechaConvenio = new \DateTime($params->fechaConvenio);
+            $fechaActaInicio = new \DateTime($params->fechaActaInicio);
+            $fechaActaFin = new \DateTime($params->fechaActaFin);
+            
+            $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->find($params->id);
 
-            return $this->redirectToRoute('vhlotpconvenio_edit', array('id' => $vhloTpConvenio->getId()));
-        }
+            if($convenio) {
+                if($fechaActaFin < $fechaActaInicio){
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "La fecha de fin debe ser mayor a la fecha de inicio del acta.", 
+                    );
+                } else {
+                    $convenio->setNumeroConvenio($params->numeroConvenio);
+                    $convenio->setFechaConvenio($fechaConvenio);
+                    $convenio->setFechaActaInicio($fechaActaInicio);
+                    $convenio->setFechaActaFin($fechaActaFin);
+                    $convenio->setObservacion($params->observacion);
 
-        return $this->render('vhlotpconvenio/edit.html.twig', array(
-            'vhloTpConvenio' => $vhloTpConvenio,
-            'edit_form' => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    $em->persist($convenio);
+
+                    $empresasAnteriores = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenioEmpresa')->findBy(
+                        array(
+                            'vhloTpConvenio' => $convenio->getId(),
+                            'activo' => true
+                        )
+                    );
+
+                    foreach ($empresasAnteriores as $key => $empresaAnterior) {
+                        $empresaAnterior->setActivo(false);
+                        $em->persist($empresaAnterior);
+                    }
+
+                    foreach ($params->empresas as $key => $empresaNueva) {
+                        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresaNueva);
+                        
+                        $convenioEmpresa = new VhloTpConvenioEmpresa();
+                        
+                        $convenioEmpresa->setEmpresa($empresa);
+                        $convenioEmpresa->setVhloTpConvenio($convenio);
+                        $convenioEmpresa->setActivo(true);
+
+                        $em->persist($convenioEmpresa);
+                        $em->flush();
+                    }
+                    
+                    $response = [];
+
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => "Registro creado con éxito",
+                    );
+                }
+            } else {
+                $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "No se encontró el convenio para editar", 
+            );
+            }
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida", 
+            );
+        }    
+        return $helpers->json($response);
     }
 
     /**
      * Deletes a vhloTpConvenio entity.
      *
-     * @Route("/{id}", name="vhlotpconvenio_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="vhlotpconvenio_delete")
+     * @Method({"GET","POST"})
      */
-    public function deleteAction(Request $request, VhloTpConvenio $vhloTpConvenio)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($vhloTpConvenio);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($vhloTpConvenio);
-            $em->flush();
-        }
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('vhlotpconvenio_index');
+            $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->find($params->id);
+            $convenio->setActivo(false);
+
+            $empresas = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenioEmpresa')->findBy(
+                array(
+                    'vhloTpConvenio' => $convenio->getId(),
+                    'activo' => true
+                )
+            );
+
+            foreach ($empresas as $key => $empresa) {
+                $empresa->setActivo(false);
+                $em->persist($empresa);
+            }
+
+            $em->persist($convenio);
+            $em->flush();
+
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
@@ -242,7 +342,8 @@ class VhloTpConvenioController extends Controller
 
             $empresasTransportePublico = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenioEmpresa')->findBy(
                 array(
-                    'vhloTpConvenio' => $params->idConvenio
+                    'vhloTpConvenio' => $params->idConvenio, 
+                    'activo' => true
                 )
             );
 

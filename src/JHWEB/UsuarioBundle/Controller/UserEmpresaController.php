@@ -89,60 +89,77 @@ class UserEmpresaController extends Controller
             $fechaDeVencimiento = new \Datetime($params->empresa->fechaVencimientoRegistroMercantil);
             $fechaInicial = new \Datetime($params->empresa->fechaInicial);
             
-            $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
-            $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
-            $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
-            $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
-            $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
-            
-            
-            $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
-            
-            $empresa = new UserEmpresa();
-            
-            $empresa->setNombre($params->empresa->nombre);
-            $empresa->setSigla($params->empresa->sigla);
-            $empresa->setNit($params->empresa->nit);
-            $empresa->setDv($params->empresa->dv);
-            $empresa->setCapitalPagado($params->empresa->capitalPagado);
-            $empresa->setCapitalLiquido($params->empresa->capitalPagado);
-            $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
-            $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
-            $empresa->setTipoSociedad($tipoSociedad);
-            $empresa->setTipoIdentificacion($tipoIdentificacion);
-            $empresa->setTipoEntidad($params->empresa->tipoEntidad);
-            $empresa->setTipoEmpresa($tipoEmpresa);
-            $empresa->setMunicipio($municipio);
-            $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
-            $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
-            $empresa->setTelefono($params->empresa->telefono);
-            $empresa->setDireccion($params->empresa->direccion);
-            $empresa->setCelular($params->empresa->celular);
-            $empresa->setCorreo($params->empresa->correo);
-            $empresa->setFax($params->empresa->fax);
-            $empresa->setCiudadano($ciudadano);
-            $empresa->setEmpresaServicio($empresaServicio);
-            $empresa->setActivo(true);
-            
-            $empresaRepresentante = new UserEmpresaRepresentante();
-            
-            $empresaRepresentante->setEmpresa($empresa);
-            $empresaRepresentante->setCiudadano($ciudadano);
-            $empresaRepresentante->setFechaInicial($fechaInicial);
-            $empresaRepresentante->setActivo(true);
-            
-            $empresa->setEmpresaRepresentante($empresaRepresentante);
-            
-            $em->persist($empresa);
-            $em->persist($empresaRepresentante);
-            $em->flush();
-
-
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Empresa creado con éxito",
+            $empresaExistente =$em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+                array(
+                    'nit' => $params->empresa->nit,
+                    'activo' => true
+                )
             );
+
+            if($empresaExistente){
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "El nit que intenta registrar ya existe en la base de datos.",
+                );
+            }
+            else {
+                $tipoSociedad = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipoSociedad')->find($params->empresa->idTipoSociedad);
+                $tipoEmpresa = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaTipo')->find($params->empresa->idTipoEmpresa);
+                $tipoIdentificacion = $em->getRepository('JHWEBUsuarioBundle:UserCfgTipoIdentificacion')->find($params->empresa->idTipoIdentificacion);
+                $municipio = $em->getRepository('JHWEBConfigBundle:CfgMunicipio')->find($params->empresa->idMunicipio);
+                $empresaServicio = $em->getRepository('JHWEBUsuarioBundle:UserCfgEmpresaServicio')->find($params->empresa->idEmpresaServicio);
+                
+                
+                $ciudadano = $em->getRepository('JHWEBUsuarioBundle:UserCiudadano')->find($params->empresa->idCiudadano);
+                
+                $empresa = new UserEmpresa();
+                
+                $empresa->setNombre($params->empresa->nombre);
+                $empresa->setSigla($params->empresa->sigla);
+                $empresa->setNit($params->empresa->nit);
+                $empresa->setDv($params->empresa->dv);
+                $empresa->setCapitalPagado($params->empresa->capitalPagado);
+                $empresa->setCapitalLiquido($params->empresa->capitalPagado);
+                $empresa->setEmpresaPrestadora($params->empresa->empresaPrestadora);
+                $empresa->setCertificadoExistencial($params->empresa->certificadoExistencial);
+                $empresa->setTipoSociedad($tipoSociedad);
+                $empresa->setTipoIdentificacion($tipoIdentificacion);
+                $empresa->setTipoEntidad($params->empresa->tipoEntidad);
+                $empresa->setTipoEmpresa($tipoEmpresa);
+                $empresa->setMunicipio($municipio);
+                $empresa->setNroRegistroMercantil($params->empresa->nroRegistroMercantil);
+                $empresa->setFechaVencimientoRegistroMercantil($fechaDeVencimiento);
+                $empresa->setTelefono($params->empresa->telefono);
+                $empresa->setDireccion($params->empresa->direccion);
+                $empresa->setCelular($params->empresa->celular);
+                $empresa->setCorreo($params->empresa->correo);
+                $empresa->setFax($params->empresa->fax);
+                $empresa->setCiudadano($ciudadano);
+                $empresa->setEmpresaServicio($empresaServicio);
+                $empresa->setActivo(true);
+                
+                $empresaRepresentante = new UserEmpresaRepresentante();
+                
+                $empresaRepresentante->setEmpresa($empresa);
+                $empresaRepresentante->setCiudadano($ciudadano);
+                $empresaRepresentante->setFechaInicial($fechaInicial);
+                $empresaRepresentante->setActivo(true);
+                
+                $empresa->setEmpresaRepresentante($empresaRepresentante);
+                
+                $em->persist($empresa);
+                $em->persist($empresaRepresentante);
+                $em->flush();
+
+
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Empresa creado con éxito",
+                );
+            }
         } else {
             $response = array(
                 'status' => 'error',

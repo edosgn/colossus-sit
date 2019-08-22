@@ -73,6 +73,7 @@ class CvCdoCfgEstadoController extends Controller
             $estado->setSimit($params->simit);
             $estado->setActualiza($params->actualiza);
             $estado->setFinaliza($params->finaliza);
+            $estado->setReparto($params->reparto);
             $estado->setActivo(true);
 
             if ($params->idFormato) {
@@ -86,12 +87,14 @@ class CvCdoCfgEstadoController extends Controller
             $em->flush();
 
             $response = array(
+                'title' => 'Perfecto!',
                 'status' => 'success',
                 'code' => 200,
                 'message' => 'Registro creado con exito.',
             );
         }else{
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => 'Autorizacion no valida.', 
@@ -161,7 +164,7 @@ class CvCdoCfgEstadoController extends Controller
         $authCheck = $helpers->authCheck($hash);
 
         if ($authCheck==true) {
-            $json = $request->get("json",null);
+            $json = $request->get("data",null);
             $params = json_decode($json);
             
             $em = $this->getDoctrine()->getManager();
@@ -178,6 +181,7 @@ class CvCdoCfgEstadoController extends Controller
                 $estado->setSimit($params->simit);
                 $estado->setActualiza($params->actualiza);
                 $estado->setFinaliza($params->finaliza);
+                $estado->setReparto($params->reparto);
 
                 if ($params->idFormato) {
                     $formato = $em->getRepository('JHWEBConfigBundle:CfgAdmFormato')->find(
@@ -215,21 +219,42 @@ class CvCdoCfgEstadoController extends Controller
     /**
      * Deletes a cvCdoCfgEstado entity.
      *
-     * @Route("/{id}/delete", name="cvcdocfgestado_delete")
-     * @Method("DELETE")
+     * @Route("/delete", name="cvcdocfgestado_delete")
+     * @Method({"GET", "POST"})
      */
-    public function deleteAction(Request $request, CvCdoCfgEstado $cvCdoCfgEstado)
+    public function deleteAction(Request $request)
     {
-        $form = $this->createDeleteForm($cvCdoCfgEstado);
-        $form->handleRequest($request);
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", true);
+        $authCheck = $helpers->authCheck($hash);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($authCheck == true) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($cvCdoCfgEstado);
-            $em->flush();
-        }
+            $json = $request->get("data", null);
+            $params = json_decode($json);
 
-        return $this->redirectToRoute('cvcdocfgestado_index');
+            $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find($params->id);
+
+            $estado->setActivo(false);
+
+            $em->persist($estado);
+            $em->flush();
+
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Registro eliminado con éxito.",
+            );
+        } else {
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no válida",
+            );
+        }
+        return $helpers->json($response);
     }
 
     /**
