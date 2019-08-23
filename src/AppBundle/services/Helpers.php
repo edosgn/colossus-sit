@@ -285,16 +285,13 @@ class Helpers
 		return $diasCalendario; 
 	}
 
-	public function getDiasCalendarioInverse($fecha)
-	{
-		$fecha = $this->convertDateTime($fecha);
-		$fechaActual = new \Datetime(date('Y-m-d'));
-		
+	public function getDiasCalendarioInverse($fechaActual,$fechaFinal)
+	{	
 		$diasCalendario = 0;
 
 		$em = $this->em;
 
-		while ($fechaActual < $fecha) {
+		while ($fechaActual < $fechaFinal) {
 			$fechaActual->modify('+1 days');
 			$diasCalendario ++;
 		}
