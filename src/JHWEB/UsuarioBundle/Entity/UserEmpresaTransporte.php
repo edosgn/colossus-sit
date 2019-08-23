@@ -84,9 +84,15 @@ class UserEmpresaTransporte
     /**
      * @var int
      *
-     * @ORM\Column(name="capacidad", type="bigint", nullable=true)
+     * @ORM\Column(name="capacidad_disponible", type="bigint", nullable=true)
      */
-    private $capacidad;
+    private $capacidadDisponible;
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="capacidad_utilizada", type="bigint", nullable=true)
+     */
+    private $capacidadUtilizada;
     
     /**
      * @var int
@@ -271,27 +277,51 @@ class UserEmpresaTransporte
     }
 
     /**
-     * Set capacidad
+     * Set capacidadDisponible
      *
-     * @param integer $capacidad
+     * @param integer $capacidadDisponible
      *
      * @return UserEmpresaTransporte
      */
-    public function setCapacidad($capacidad)
+    public function setCapacidadDisponible($capacidadDisponible)
     {
-        $this->capacidad = $capacidad;
+        $this->capacidadDisponible = $capacidadDisponible;
 
         return $this;
     }
 
     /**
-     * Get capacidad
+     * Get capacidadDisponible
      *
      * @return integer
      */
-    public function getCapacidad()
+    public function getCapacidadDisponible()
     {
-        return $this->capacidad;
+        return $this->capacidadDisponible;
+    }
+
+    /**
+     * Set capacidadUtilizada
+     *
+     * @param integer $capacidadUtilizada
+     *
+     * @return UserEmpresaTransporte
+     */
+    public function setCapacidadUtilizada($capacidadUtilizada)
+    {
+        $this->capacidadUtilizada = $capacidadUtilizada;
+
+        return $this;
+    }
+
+    /**
+     * Get capacidadUtilizada
+     *
+     * @return integer
+     */
+    public function getCapacidadUtilizada()
+    {
+        return $this->capacidadUtilizada;
     }
 
     /**

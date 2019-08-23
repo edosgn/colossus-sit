@@ -106,6 +106,7 @@ class VhloTpConvenioController extends Controller
                     $vhloTpConvenio->setFechaConvenio($fechaConvenio);
                     $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
                     $vhloTpConvenio->setFechaActaFin($fechaActaFin);
+                    $vhloTpConvenio->setNumeroCupos($params->numeroCupos);
                     $vhloTpConvenio->setAlcaldia($alcaldia);
                     $vhloTpConvenio->setObservacion($params->observacion);
                     $vhloTpConvenio->setActivo(true);
@@ -199,6 +200,7 @@ class VhloTpConvenioController extends Controller
                     $convenio->setFechaConvenio($fechaConvenio);
                     $convenio->setFechaActaInicio($fechaActaInicio);
                     $convenio->setFechaActaFin($fechaActaFin);
+                    $convenio->setNumeroCupos($params->numeroCupos);
                     $convenio->setObservacion($params->observacion);
 
                     $em->persist($convenio);

@@ -43,11 +43,18 @@ class VhloTpConvenio
     private $fechaActaInicio;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="fecha_acta_fin", type="date", length=255, nullable=true)
+     * @ORM\Column(name="fecha_acta_fin", type="date", nullable=true)
      */
     private $fechaActaFin;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="numero_cupos", type="integer")
+     */
+    private $numeroCupos;
 
     /**
      * @var string
@@ -173,6 +180,30 @@ class VhloTpConvenio
     public function getFechaActaFin()
     {
         return $this->fechaActaFin;
+    }
+
+    /**
+     * Set numeroCupos
+     *
+     * @param integer $numeroCupos
+     *
+     * @return VhloTpConvenio
+     */
+    public function setNumeroCupos($numeroCupos)
+    {
+        $this->numeroCupos = $numeroCupos;
+
+        return $this;
+    }
+
+    /**
+     * Get numeroCupos
+     *
+     * @return integer
+     */
+    public function getNumeroCupos()
+    {
+        return $this->numeroCupos;
     }
 
     /**

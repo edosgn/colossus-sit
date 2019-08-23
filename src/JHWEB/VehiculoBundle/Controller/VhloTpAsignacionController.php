@@ -64,13 +64,14 @@ class VhloTpAsignacionController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
-            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->idEmpresa);
+            $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->find($params->idEmpresaHabilitadaRango);
             $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($params->idCupo);
             $nivelServicio = $em->getRepository('JHWEBVehiculoBundle:VhloCfgNivelServicio')->find($params->idNivelServicio);
 
             $vehiculoCupo= $em->getRepository('JHWEBVehiculoBundle:VhloTpAsignacion')->findOneBy(
                 array(
-                    'vehiculo' => $vehiculo->getId()
+                    'vehiculo' => $vehiculo->getId(),
+                    'activo' => true
                 )
             );
             
@@ -82,27 +83,83 @@ class VhloTpAsignacionController extends Controller
                     'message' => "El vehiculo ya tiene asignado un cupo.",
                 );
             } else {
-                $asignacion = new VhloTpAsignacion();
+                //calcula la cantidad de capacidad utilizada por la empresa
+                if($empresaTransporte->getCapacidadUtilizada() == 0) {
+                    if($empresaTransporte->getCapacidadDisponible() < $vehiculo->getNumeroPasajeros()) {
+                        $response = array(
+                            'title' => 'Error!',
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La capacidad disponible es ". $empresaTransporte->getCapacidadDisponible() . " que es menor a la capacidad del vehículo que intenta asignar el cupo.",
+                        );
+                    } else {
+                        $empresaTransporte->setCapacidadUtilizada($vehiculo->getNumeroPasajeros());
+                        $empresaTransporte->setCapacidadDisponible($empresaTransporte->getCapacidadMaxima()-$vehiculo->getNumeroPasajeros());
+                        
+                        $em->persist($empresaTransporte);
+
+                        //crea la asignacion
+                        $asignacion = new VhloTpAsignacion();
+            
+                        $asignacion->setEmpresaTransporte($empresaTransporte);
+                        $asignacion->setVehiculo($vehiculo);
+                        $asignacion->setCupo($cupo);
+                        $asignacion->setNivelServicio($nivelServicio);
+                        $asignacion->setActivo(true);
+                        $em->persist($asignacion);
+                        
+                        //para cambiar el estado del cupo
+                        $cupo->setEstado('UTILIZADO');
+                        $em->persist($cupo);
+
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Los datos han sido registrados exitosamente.",
+                        );
+                    }
+                } else {
+                    $capacidadUtilizada = 0;
+
+                    if($empresaTransporte->getCapacidadDisponible() < $vehiculo->getNumeroPasajeros()) {
+                        $response = array(
+                            'title' => 'Error!',
+                            'status' => 'error',
+                            'code' => 400,
+                            'message' => "La capacidad disponible es ". $empresaTransporte->getCapacidadDisponible() . " que es menor a la capacidad del vehículo que intenta asignar el cupo.",
+                        );
+                    } else {
+                        $capacidadUtilizada = $empresaTransporte->getCapacidadUtilizada() + $vehiculo->getNumeroPasajeros();
+                        $empresaTransporte->setCapacidadUtilizada($capacidadUtilizada);
+
+                        $empresaTransporte->setCapacidadDisponible($empresaTransporte->getCapacidadMaxima() - $capacidadUtilizada);
+
+                        $em->persist($empresaTransporte);
+
+                        //crea la asignacion
+                        $asignacion = new VhloTpAsignacion();
         
-                $asignacion->setEmpresaTransporte($empresaTransporte);
-                $asignacion->setVehiculo($vehiculo);
-                $asignacion->setCupo($cupo);
-                $asignacion->setNivelServicio($nivelServicio);
-                $asignacion->setActivo(true);
-                $em->persist($asignacion);
-                
-                //para cambiar el estado del cupo
-                $cupo->setEstado('UTILIZADO');
-                $em->persist($cupo);
-        
+                        $asignacion->setEmpresaTransporte($empresaTransporte);
+                        $asignacion->setVehiculo($vehiculo);
+                        $asignacion->setCupo($cupo);
+                        $asignacion->setNivelServicio($nivelServicio);
+                        $asignacion->setActivo(true);
+                        $em->persist($asignacion);
+                        
+                        //para cambiar el estado del cupo
+                        $cupo->setEstado('UTILIZADO');
+                        $em->persist($cupo);
+                        
+                        $response = array(
+                            'title' => 'Perfecto!',
+                            'status' => 'success',
+                            'code' => 200,
+                            'message' => "Los datos han sido registrados exitosamente.",
+                        );
+                    }
+                }
                 $em->flush();
-                
-                $response = array(
-                    'title' => 'Perfecto!',
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => "Los datos han sido registrados exitosamente.",
-                );
             }
         } else {
             $response = array(
@@ -288,6 +345,7 @@ class VhloTpAsignacionController extends Controller
                         )
                     );
                     $response = array(
+                        'title' => 'Perfecto!',
                         'status' => 'success',
                         'code' => 200,
                         'message' => "Vehiculo encontrado",
@@ -298,14 +356,16 @@ class VhloTpAsignacionController extends Controller
                     );
                 } else { 
                     $response = array(
+                        'title' => 'Error!',
                         'status' => 'error',
                         'code' => 400,
-                        'message' => "El vehiculo no existe, o no es de transporte público, o la clase de vehiculo
-                                        es diferente a la que la empresaest'a habilitada para registrar el cupo.",
+                        'message' => "Puede que el vehículo no pertenezca a transporte público, o su clase no conincide con la
+                                    empresa habilitada para asignar cupo.",
                     );
                 }
             } else {
                 $response = array(
+                    'title' => 'Error!',
                     'status' => 'error',
                     'code' => 400,
                     'message' => "No se encuentra la placa en la Base de Datos ",
@@ -313,6 +373,7 @@ class VhloTpAsignacionController extends Controller
             }
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorización no válida",
