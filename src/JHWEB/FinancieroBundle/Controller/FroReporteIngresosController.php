@@ -111,9 +111,11 @@ class FroReporteIngresosController extends Controller
                 $cantSustratos = 0;
                 $nombreSustrato;
                 $valorUnitarioSustrato = 0;
-
+                
                 $idConcepto;
                 $cantConceptos = 0;
+                $valorUnitarioConcepto = 0;
+                $valorConceptos = 0;
                 $totalConceptos = 0;
                 $totalTramites = 0;
 
@@ -168,16 +170,21 @@ class FroReporteIngresosController extends Controller
 
                                 foreach ($conceptos as $key => $concepto) {
                                     $idConcepto = $concepto['id'];
-                                    $cantConceptos += $concepto['totalConceptos'];
-                                    $totalConceptos += $concepto['valor'];
+                                    $cantConceptos += $concepto['cantConceptos'];
                                     $nombreConcepto = $concepto['nombre'];
-                                    $valorUnitarioConcepto = $concepto['valorUnitarioConcepto'];
+                                    /* $valorUnitarioConcepto = $concepto['valorUnitarioConcepto']; */
+                                    $valorConceptos += $concepto['valor']* $concepto['cantConceptos'];
+                                    
+                                    /* var_dump($concepto['cantConceptos']);
+                                    var_dump($concepto['nombre']); */
+                                    /* var_dump($concepto->getConcepto()->getNombre()); */
+                                    /* var_dump($valorConceptos); */
                                 }
                                 //================================================================para sustratos ====================================================================
                                 $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratoByFactura(
-                                        $tramite->getTramiteFactura()->getFactura()->getId()
+                                    $tramite->getTramiteFactura()->getFactura()->getId()
                                 );
-
+                                
                                 foreach ($sustratos as $key => $sustrato) {
                                     $cantSustratos += $sustrato['total'];
                                     $totalSustratos += $sustrato['valor'];
@@ -185,29 +192,31 @@ class FroReporteIngresosController extends Controller
                                     $valorUnitarioSustrato = $sustrato['valorUnitario'];
                                 }
                                 //==================================================================================================================================================
-
+                                
                                 break;
                             case 'DEVOLUCION':
-                                $anuladas[] = $tramite;
-                                $numerosAnulados[] = array(
-                                    $tramite->getTramiteFactura()->getFactura()->getNumero()
-                                );
-                                
-                                $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
-                                if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
-                                    $traspasos[] = $tramite;
-                                }
-                                break;
+                            $anuladas[] = $tramite;
+                            $numerosAnulados[] = array(
+                                $tramite->getTramiteFactura()->getFactura()->getNumero()
+                            );
+                            
+                            $valorTramitesAnulados += $tramite->getTramiteFactura()->getPrecio()->getValor(); 
+                            if($tramite->getTramiteFactura()->getPrecio()->getTramite()->getNombre() == 'TRASPASO') {
+                                $traspasos[] = $tramite;
+                            }
+                            break;
                         }     
                     }
-                    
+                        
+                    /* die(); */
+
                     $arraySustratos[] = array(
                         'nombre' => $nombreSustrato,
                         'cantidad' => $cantSustratos,
                         'valor' => $valorUnitarioSustrato,
                         'total' => $cantSustratos * $valorUnitarioSustrato
                     );
-                    
+
                     $arrayConceptos[] = array(
                         'id' => $idConcepto,
                         'nombre' => $nombreConcepto,
