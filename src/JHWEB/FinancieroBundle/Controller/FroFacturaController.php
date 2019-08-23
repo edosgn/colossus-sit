@@ -104,6 +104,11 @@ class FroFacturaController extends Controller
                     $params->factura->idOrganismoTransito
                 );
                 $factura->setOrganismoTransito($organismoTransito);
+            }else{
+                $organismoTransito = $em->getRepository('JHWEBConfigBundle:CfgOrganismoTransito')->find(
+                    100
+                );
+                $factura->setOrganismoTransito($organismoTransito);
             }
 
             if ($params->factura->idTipoRecaudo) {
@@ -436,7 +441,7 @@ class FroFacturaController extends Controller
                 $valorPagar = 0;
 
                 if ($comparendo) {                   
-                    $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+                    $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha()->format('d/m/Y'));
 
                     if ($diasHabiles < 6 && $comparendoSelect->curso) {
                         $valorPagar = $comparendo->getValorInfraccion() / 2;
@@ -530,7 +535,7 @@ class FroFacturaController extends Controller
                     $comparendo->setCurso(false);
                 }
                 
-                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha()->format('d/m/Y'));
 
                 if ($diasHabiles < 6 && $comparendoSelect->curso) {
                     $comparendo->setValorPagar($comparendo->getValorInfraccion() / 2);

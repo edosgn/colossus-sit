@@ -88,6 +88,13 @@ class FroAcuerdoPago
     /**
      * @var float
      *
+     * @ORM\Column(name="porcentaje_inicial", type="float")
+     */
+    private $porcentajeInicial;
+
+    /**
+     * @var float
+     *
      * @ORM\Column(name="valor_cuota_inicial", type="float")
      */
     private $valorCuotaInicial;
@@ -95,9 +102,16 @@ class FroAcuerdoPago
     /**
      * @var float
      *
-     * @ORM\Column(name="porcentaje_inicial", type="float")
+     * @ORM\Column(name="porcentaje_descuento", type="float")
      */
-    private $porcentajeInicial;
+    private $porcentajeDescuento;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="valor_descuento", type="float")
+     */
+    private $valorDescuento;
 
     /**
      * @var bool
@@ -344,6 +358,30 @@ class FroAcuerdoPago
     }
 
     /**
+     * Set porcentajeInicial
+     *
+     * @param float $porcentajeInicial
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setPorcentajeInicial($porcentajeInicial)
+    {
+        $this->porcentajeInicial = $porcentajeInicial;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentajeInicial
+     *
+     * @return float
+     */
+    public function getPorcentajeInicial()
+    {
+        return $this->porcentajeInicial;
+    }
+
+    /**
      * Set valorCuotaInicial
      *
      * @param float $valorCuotaInicial
@@ -368,27 +406,51 @@ class FroAcuerdoPago
     }
 
     /**
-     * Set porcentajeInicial
+     * Set porcentajeDescuento
      *
-     * @param float $porcentajeInicial
+     * @param float $porcentajeDescuento
      *
      * @return FroAcuerdoPago
      */
-    public function setPorcentajeInicial($porcentajeInicial)
+    public function setPorcentajeDescuento($porcentajeDescuento)
     {
-        $this->porcentajeInicial = $porcentajeInicial;
+        $this->porcentajeDescuento = $porcentajeDescuento;
 
         return $this;
     }
 
     /**
-     * Get porcentajeInicial
+     * Get porcentajeDescuento
      *
      * @return float
      */
-    public function getPorcentajeInicial()
+    public function getPorcentajeDescuento()
     {
-        return $this->porcentajeInicial;
+        return $this->porcentajeDescuento;
+    }
+
+    /**
+     * Set valorDescuento
+     *
+     * @param float $valorDescuento
+     *
+     * @return FroAcuerdoPago
+     */
+    public function setValorDescuento($valorDescuento)
+    {
+        $this->valorDescuento = $valorDescuento;
+
+        return $this;
+    }
+
+    /**
+     * Get valorDescuento
+     *
+     * @return float
+     */
+    public function getValorDescuento()
+    {
+        return $this->valorDescuento;
     }
 
     /**

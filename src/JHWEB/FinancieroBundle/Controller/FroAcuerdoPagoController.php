@@ -54,11 +54,9 @@ class FroAcuerdoPagoController extends Controller
                 $acuerdoPago->setValorMora($params->acuerdoPago->valorMora);
                 $acuerdoPago->setValorNeto($params->acuerdoPago->valorNeto);
                 $acuerdoPago->setDiasMoraTotal($params->acuerdoPago->diasMoraTotal);
-                $fechaFinal = $helpers->convertDateTime($params->acuerdoPago->fechaFinal);
-                $acuerdoPago->setFechaFinal($fechaFinal);
-                /*$acuerdoPago->setFechaFinal(
-                    new \Datetime($params->acuerdoPago->fechaFinal)
-                );*/
+                $acuerdoPago->setPorcentajeDescuento($params->acuerdoPago->porcentajeDescuento);
+                $acuerdoPago->setValorDescuento($params->acuerdoPago->valorDescuento);
+                $acuerdoPago->setFechaFinal(new \Datetime($params->acuerdoPago->fechaFinal));
                 
                 if ($params->acuerdoPago->porcentajeInicial) {
                     $acuerdoPago->setPorcentajeInicial(
@@ -81,19 +79,17 @@ class FroAcuerdoPagoController extends Controller
                 $em->persist($acuerdoPago);
                 $em->flush();
 
-                if ($params->acuerdoPago->comparendos) {
-                    foreach ($params->acuerdoPago->comparendos as $key => $idComparendo) {
-                        $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
-                            $idComparendo
-                        );
-                        $comparendo->setAcuerdoPago($acuerdoPago);
+                if ($params->acuerdoPago->idComparendo) {
+                    $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                        $params->acuerdoPago->idComparendo
+                    );
+                    $comparendo->setAcuerdoPago($acuerdoPago);
 
-                        $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
-                            4
-                        );
-                        $comparendo->setEstado($estado);
-                        $em->flush();
-                    }
+                    $estado = $em->getRepository('JHWEBContravencionalBundle:CvCdoCfgEstado')->find(
+                        4
+                    );
+                    $comparendo->setEstado($estado);
+                    $em->flush();
                 }
 
                 if ($params->cuotas) {
@@ -101,7 +97,7 @@ class FroAcuerdoPagoController extends Controller
                         
                     $fecha = new \Datetime(date('Y-m-d'));
                     $amortizacion->setValorBruto($acuerdoPago->getValorCuotaInicial());
-                    $amortizacion->setValorMora(0);
+                    $amortizacion->setValorMora($acuerdoPago->getValorMora());
                     $amortizacion->setValorNeto($acuerdoPago->getValorCuotaInicial());
                     $amortizacion->setFechaLimite($fecha);
                     $amortizacion->setNumeroCuota(0);
@@ -117,9 +113,9 @@ class FroAcuerdoPagoController extends Controller
                         
                         $fecha = $helpers->convertDateTime($cuota->fechaMensual);
 
-                        $amortizacion->setValorBruto($cuota->valorBruto);
-                        $amortizacion->setValorMora($cuota->valorMora);
-                        $amortizacion->setValorNeto($cuota->valorNeto);
+                        $amortizacion->setValorBruto($cuota->valorCapital);
+                        $amortizacion->setValorMora($cuota->valorInteres);
+                        $amortizacion->setValorNeto($cuota->valorCuota);
                         $amortizacion->setFechaLimite($fecha);
                         $amortizacion->setNumeroCuota($key + 1);
                         $amortizacion->setPagada(false);
@@ -288,7 +284,7 @@ class FroAcuerdoPagoController extends Controller
      * @Route("/calculate/value", name="frocuerdopago_calculate_value")
      * @Method("POST")
      */
-    public function calculateValueByComparendosAction(Request $request)
+    public function calculateValueByComparendoAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -302,24 +298,78 @@ class FroAcuerdoPagoController extends Controller
 
             $valorTotal = 0;
 
-            foreach ($params->comparendos as $key => $idComparendo) {
-                $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
-                    $idComparendo
-                );
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                $params->idComparendo
+            );
 
-                if ($comparendo) {
-                    $valorTotal += $comparendo->getValorInfraccion();
-                    /*if ($comparendo->getValorAdicional()) {
-                        $valorTotal += $comparendo->getValorAdicional();
-                    }*/
-                }
+            if ($comparendo) {
+                /*if ($comparendo->getValorAdicional()) {
+                    $valorTotal += $comparendo->getValorAdicional();
+                }*/
+                $response = array(
+                    'title' => 'Perfecto!',
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El valor fue generado con éxito.',
+                    'data' => $comparendo->getValorInfraccion()
+                );
+            }else{
+                $response = array(
+                    'title' => 'Atención!',
+                    'status' => 'warning',
+                    'code' => 400,
+                    'message' => 'El valor no pudo ser generado.',
+                );
             }
-            
+        } else {
+            $response = array(
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorizacion no valida",
+            );
+        }
+
+        return $helpers->json($response);
+    }
+
+    /**
+     * Calcula datos iniciales de para liquidar acuerdo de pago.
+     *
+     * @Route("/calculate/init/values", name="frocuerdopago_calculate_init_values")
+     * @Method("POST")
+     */
+    public function calculateInitValuesAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+
+        if ($authCheck == true) {
+            $json = $request->get("json", null);
+            $params = json_decode($json);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->findOneByActivo(
+                true
+            );
+
+            $interes = $em->getRepository('JHWEBContravencionalBundle:CvCfgInteres')->findOneByActivo(
+                true
+            );
+
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                $params->idComparendo
+            );
+
             $response = array(
                 'status' => 'success',
                 'code' => 200,
-                'message' => 'Calculo generado',
-                'data' => $valorTotal
+                'message' => 'Valores iniciales encontrados.',
+                'data' => array(
+                    'porcentajeInicial' => $porcentajeInicial,
+                    'interes' => $interes,
+                )
             );
         } else {
             $response = array(
@@ -333,7 +383,7 @@ class FroAcuerdoPagoController extends Controller
     }
 
     /**
-     * Busca comparendo por número.
+     * Calcula fecha final de acuerdo de pago según numero de cuotas.
      *
      * @Route("/calculate/date/end", name="frocuerdopago_calculate_date_end")
      * @Method("POST")
@@ -350,42 +400,39 @@ class FroAcuerdoPagoController extends Controller
 
             $em = $this->getDoctrine()->getManager();
 
-            $porcentajeInicial = $em->getRepository('JHWEBContravencionalBundle:CvCfgPorcentajeInicial')->findOneByActivo(
-                true
+            $fecha = strtotime(date('Y-m-d'));
+            $fechaFinal = date('Y-m-d', strtotime("+".$params->numeroCuotas." month", $fecha));
+            
+
+            $fechaFinal = $helpers->getFechaVencimiento(
+                new \Datetime($fechaFinal),
+                5
             );
 
-            if ($params->porcentajeInicial >= $porcentajeInicial->getValor()) {
-                $fecha = strtotime(date('Y-m-d'));
+            $comparendo = $em->getRepository('JHWEBContravencionalBundle:CvCdoComparendo')->find(
+                $params->idComparendo
+            );
 
-                $fechaFinal = date('Y-m-d', strtotime("+".$params->numeroCuotas." month", $fecha));
-
-                $fechaFinal = $helpers->getFechaVencimiento(
-                    new \Datetime($fechaFinal),
-                    5
-                );
-
-                $diasMoraTotal = $helpers->getDiasCalendarioInverse(
-                    $fechaFinal->format('d/m/Y')
-                );
-                
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'message' => 'Calculo generado',
-                    'data' => array(
-                        'fechaFinal' => $fechaFinal->format('d/m/Y'),
-                        'diasMoraTotal' => $diasMoraTotal
-                    )
-                );
-            }else{
-                $response = array(
-                    'status' => 'error',
-                    'code' => 400,
-                    'message' => 'El porcentaje inicial no puede ser inferior al '.$porcentajeInicial->getValor().'%',
-                );
-            }
+            $diasMoraTotal = $helpers->getDiasCalendarioInverse(
+                $comparendo->getFecha(),
+                $fechaFinal
+            );
+            
+            $response = array(
+                'title' => 'Perfecto!',
+                'status' => 'success',
+                'code' => 200,
+                'message' => 'Calculo generado',
+                'data' => array(
+                    'fechaInicial' => new \Datetime(date('Y-m-d')),
+                    'fechaFinal' => $fechaFinal->format('Y-m-d'),
+                    'diasMoraTotal' => $diasMoraTotal
+                )
+            );
+            
         } else {
             $response = array(
+                'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
                 'message' => "Autorizacion no valida",
@@ -416,10 +463,9 @@ class FroAcuerdoPagoController extends Controller
             $fecha = strtotime(date('Y-m-d'));
 
             $subtotal = $params->valorNeto - $params->valorCuotaInicial;
-            $subtotalMora = $subtotal * (25 / 100);
-            $subtotalBruto = $subtotal * (75 / 100);
-            $cuotaMora = $subtotalMora / $params->numeroCuotas;
-            $cuotaBruto = $subtotalBruto / $params->numeroCuotas;
+            $cuota = $subtotal / $params->numeroCuotas;
+            $subtotalInteres = $cuota * (25 / 100);
+            $subtotalCapital = $cuota * (75 / 100);
 
             $totalPagar = 0;
 
@@ -432,12 +478,12 @@ class FroAcuerdoPagoController extends Controller
                     5
                 );
 
-                $totalPagar += $cuotaMora + $cuotaBruto;
+                $totalPagar += $cuota;
                 
                 $cuotas[] = array(
-                    'valorMora' => number_format(round($cuotaMora), 0, ',', '.'),
-                    'valorBruto' => number_format(round($cuotaBruto), 0, ',', '.'),
-                    'valorNeto' => number_format(round($cuotaMora + $cuotaBruto), 0, ',', '.'),
+                    'valorCuota' => number_format(round($cuota), 0, ',', '.'),
+                    'valorInteres' => number_format(round($subtotalInteres), 0, ',', '.'),
+                    'valorCapital' => number_format(round($subtotalCapital), 0, ',', '.'),
                     'fechaMensual' => $fechaMensual->format('d/m/Y')
                 );
             }

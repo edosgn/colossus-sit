@@ -58,7 +58,7 @@
                     {% set total = total + facturaComparendo.comparendo.valorPagar %}
                 <tr>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.consecutivo.numero }}</td>
-                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.fecha }}</td>
+                    <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.fecha|date('d/m/Y') }}</td>
                     <td style="border:1px solid #cccccc">{{ facturaComparendo.comparendo.infraccion.codigo }}</td>
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.valorInfraccion|number_format(0, ',', '.') }}</td>
                     <td style="border:1px solid #cccccc">$ {{ facturaComparendo.comparendo.interesMora|number_format(0, ',', '.') }}</td>

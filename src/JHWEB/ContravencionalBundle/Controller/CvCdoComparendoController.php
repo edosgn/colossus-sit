@@ -1242,7 +1242,7 @@ class CvCdoComparendoController extends Controller
             );
             
             if ($comparendo) {
-                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha());
+                $diasHabiles = $helpers->getDiasHabiles($comparendo->getFecha()->format('d/m/Y'));
 
                 if ($diasHabiles < 21) {
                     $response = array(
