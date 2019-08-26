@@ -132,34 +132,11 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
 
         return $consulta->getResult();
     }
-    /* WHERE ftp.id = :idPrecio
-    AND ftp.id = ftc.precio */
-
-    /* public function getConceptosByPrecio($idPrecio) {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT COUNT(ftc.id) AS cantConceptos, ftcc.nombre, ftcc.id, ftcc.valor, ftcc.valor AS valorUnitarioConcepto 
-            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
-            JHWEBFinancieroBundle:FroTrtePrecio ftp, 
-            JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
-            WHERE ftc.precio = :idPrecio
-            AND NOT ftc.concepto = 2
-            AND ftc.activo = 1
-            AND ftc.concepto = ftcc.id";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'idPrecio' => $idPrecio, 
-        ));
-
-        return $consulta->getResult();
-    } */
 
     public function getConceptosByPrecio($idPrecio) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT (ftc.concepto) AS cantConceptos, ftcc.valor, ftcc.id, ftcc.nombre
+        $dql = "SELECT COUNT (ftc.id) AS cantConceptos, ftcc.valor, ftcc.id, ftcc.nombre, ftcc.valor AS valorUnitarioConcepto 
             FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
             JHWEBFinancieroBundle:FroTrtePrecio ftp, 
             JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
