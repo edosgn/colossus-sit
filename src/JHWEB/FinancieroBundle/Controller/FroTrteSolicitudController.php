@@ -1460,32 +1460,50 @@ class FroTrteSolicitudController extends Controller
             )
         );
         
-        $asignacion->setActivo(false);
+        if($asignacion) {
+            $asignacion->setActivo(false);
 
-        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
-        $cupo->setEstado('DISPONIBLE');
-        
-        $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
-            array(
-                'vehiculo' => $params->idVehiculo,
-                'activo' => true
-            )
-        );
-
-        $tarjetaOperacion->setActivo(false);
-
-        $em->persist($vehiculo);
-        $em->persist($asignacion);
-        $em->persist($cupo);
-        $em->persist($tarjetaOperacion);
-        $em->flush();
-    
-        $response = 
-            array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => 'Se cambio el servicio del vehiculo con éxito.',
+            $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
+            $cupo->setEstado('DISPONIBLE');
+            
+            $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
+                array(
+                    'vehiculo' => $params->idVehiculo,
+                    'activo' => true
+                )
             );
+
+            if($tarjetaOperacion){
+                $tarjetaOperacion->setActivo(false);
+                $em->persist($tarjetaOperacion);
+                
+                $em->persist($vehiculo);
+                $em->persist($asignacion);
+                $em->persist($cupo);
+                $em->flush();
+            
+                $response = 
+                    array(
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Se cambio el servicio del vehiculo con éxito.',
+                    );
+            } else {
+                $response = 
+                array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El vehículo no tiene una tarjeta de operación.',
+                );
+            }
+        } else {
+            $response = 
+                array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'El vehículo no tiene un cupo.',
+                );
+        }
                     
         return $helpers->json($response);
     }

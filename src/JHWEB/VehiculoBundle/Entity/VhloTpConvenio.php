@@ -57,6 +57,20 @@ class VhloTpConvenio
     private $numeroCupos;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="cupos_disponibles", type="integer")
+     */
+    private $cuposDisponibles;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="cupos_utilizados", type="integer")
+     */
+    private $cuposUtilizados;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="observacion", type="string", length=255, nullable=true)
@@ -204,6 +218,54 @@ class VhloTpConvenio
     public function getNumeroCupos()
     {
         return $this->numeroCupos;
+    }
+
+    /**
+     * Set cuposDisponibles
+     *
+     * @param integer $cuposDisponibles
+     *
+     * @return VhloTpConvenio
+     */
+    public function setCuposDisponibles($cuposDisponibles)
+    {
+        $this->cuposDisponibles = $cuposDisponibles;
+
+        return $this;
+    }
+
+    /**
+     * Get cuposDisponibles
+     *
+     * @return integer
+     */
+    public function getCuposDisponibles()
+    {
+        return $this->cuposDisponibles;
+    }
+
+    /**
+     * Set cuposUtilizados
+     *
+     * @param integer $cuposUtilizados
+     *
+     * @return VhloTpConvenio
+     */
+    public function setCuposUtilizados($cuposUtilizados)
+    {
+        $this->cuposUtilizados = $cuposUtilizados;
+
+        return $this;
+    }
+
+    /**
+     * Get cuposUtilizados
+     *
+     * @return integer
+     */
+    public function getCuposUtilizados()
+    {
+        return $this->cuposUtilizados;
     }
 
     /**

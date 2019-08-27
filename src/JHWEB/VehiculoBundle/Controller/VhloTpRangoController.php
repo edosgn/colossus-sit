@@ -58,37 +58,105 @@ class VhloTpRangoController extends Controller
                 )
             );
 
-            $rango = new VhloTpRango();
-            
-            $rango->setHabilitacion($empresaTransporte);
-            $rango->setRangoInicio($params->rangoInicio);
-            $rango->setRangoFin($params->rangoFin);
-            $rango->setNumeroResolucionCupo($params->numeroResolucion);
-            $rango->setFechaResolucionCupo(new \Datetime($params->fechaResolucion));
-            $rango->setObservaciones($params->observaciones);
-            $rango->setActivo(true);
-
-            $em->persist($rango);
-            $em->flush();
-
-            for ($i=$params->rangoInicio; $i <= $params->rangoFin ; $i++) { 
-                $cupo = new VhloTpCupo();
-                
-                $cupo->setEmpresaTransporte($empresaTransporte);
-                $cupo->setNumero($i);
-                $cupo->setEstado('DISPONIBLE');
-                $cupo->setActivo(true);
-
-                $em->persist($cupo);
-                $em->flush();
-            }
-
-            $response = array(
-                'title' => 'Perfecto!',
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Cupos creados con éxito",
+            $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
+                array(
+                    'alcaldia' => $empresaTransporte->getEmpresa()->getId(),
+                    'activo' => true
+                )
             );
+            
+            if($empresaTransporte){
+                if($params->rangoInicio <= $params->rangoFin){
+                    $rango = new VhloTpRango();
+                    
+                    $rango->setHabilitacion($empresaTransporte);
+                    $rango->setRangoInicio($params->rangoInicio);
+                    $rango->setRangoFin($params->rangoFin);
+                    $rango->setNumeroResolucionCupo($params->numeroResolucion);
+                    $rango->setFechaResolucionCupo(new \Datetime($params->fechaResolucion));
+                    $rango->setObservaciones($params->observaciones);
+                    $rango->setActivo(true);
+
+                    $em->persist($rango);
+                    
+                    for ($i=$params->rangoInicio; $i <= $params->rangoFin ; $i++) { 
+                        
+                        $cupo = new VhloTpCupo();
+                        
+                        $cupo->setEmpresaTransporte($empresaTransporte);
+                        $cupo->setNumero($i);
+                        $cupo->setEstado('DISPONIBLE');
+                        $cupo->setActivo(true);
+                        
+                        $em->persist($cupo);
+                    }
+                    
+                    if($convenio->getCuposUtilizados() == 0) {
+                        $cantidad = ($params->rangoFin - $params->rangoInicio) + 1;
+
+                        if($convenio->getCuposDisponibles() < $cantidad) {
+                            $response = array(
+                                'title' => 'Error!',
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => 'El rango que se intenta crear excede el número de cupos disponibles del convenio.',
+                            );
+                        } else {
+                            $convenio->setCuposUtilizados($cantidad);
+                            $convenio->setCuposDisponibles($convenio->getCuposDisponibles() - $cantidad);
+                            $em->persist($convenio);
+
+                            $response = array(
+                                'title' => 'Perfecto!',
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => "Cupos creados con éxito",
+                            );
+        
+                            $em->flush();
+                        }
+                    } else {
+                        $cantidad = ($params->rangoFin - $params->rangoInicio) + 1;
+
+                        if($convenio->getCuposDisponibles() < $cantidad) {
+                            $response = array(
+                                'title' => 'Error!',
+                                'status' => 'error',
+                                'code' => 400,
+                                'message' => 'El rango que se intenta crear excede el número de cupos disponibles del convenio.',
+                            );
+                        } else {
+                            $convenio->setCuposUtilizados($convenio->getCuposUtilizados() + $cantidad);
+                            $convenio->setCuposDisponibles($convenio->getCuposDisponibles() - $cantidad);
+                            $em->persist($convenio);
+                   
+                            $response = array(
+                                'title' => 'Perfecto!',
+                                'status' => 'success',
+                                'code' => 200,
+                                'message' => "Cupos creados con éxito",
+                            );
+        
+                            $em->flush();
+                        }
+                    }
+
+                } else {
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => 'El rango de inicio debe ser menor al rango de fin.',
+                    );
+                }
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => 'La empresa de transporte no existe.',
+                );
+            }
         } else {
             $response = array(
                 'title' => 'Error!',

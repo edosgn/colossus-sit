@@ -172,7 +172,7 @@ class FroReporteIngresosController extends Controller
                                     $idConcepto = $concepto['id'];
                                     $cantConceptos += $concepto['cantConceptos'];
                                     $nombreConcepto = $concepto['nombre'];
-                                    /* $valorUnitarioConcepto = $concepto['valorUnitarioConcepto']; */
+                                    $valorUnitarioConcepto = $concepto['valorUnitarioConcepto'];
                                     $valorConceptos += $concepto['valor']* $concepto['cantConceptos'];
                                     
                                     /* var_dump($concepto['cantConceptos']);
