@@ -748,22 +748,34 @@ class FroFacturaController extends Controller
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(7);
-        $code = $barcode->generate();
+        $barcode->setThickness(20);
+        $barcode->setFontSize(8);
+        $imgBarcode = $barcode->generate();
 
-        //$imgBarcode = \base64_decode($imgBarcode);
-        $imgBarcode = $code;
+        $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
+        $imageContent = file_get_contents($img_base64_encoded);
+        $path = tempnam(sys_get_temp_dir(), 'prefix');
+
+        file_put_contents ($path, $imageContent);
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
             'tramites'=> $tramites,
             'retenciones'=> $retenciones,
-            'imgBarcode' => $imgBarcode
+            'imgBarcode' => $imgBarcode,
+            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
+
+        /*return $this->render('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
+            'fechaActual' => $fechaActual,
+            'factura'=> $factura,
+            'tramites'=> $tramites,
+            'retenciones'=> $retenciones,
+            'imgBarcode' => $imgBarcode
+        ));*/
     }
 
     protected function generatePdfInfracciones($id){

@@ -65,13 +65,9 @@
             </table>
         {% endif %}
         <br>
-        <table cellpadding="20px">
-            <tr>
-                <td>
-                    <img src="data:image/png;charset=utf-8;base64,{{ imgBarcode }}" height="40px" />
-                </td>
-            </tr>
-        </table>
+        <p style="text-align:right;">
+            <img src="{{ path }}"/>
+        </p>
         {% if key < 2 %}
         <br>
         <div class="separator"></div>
