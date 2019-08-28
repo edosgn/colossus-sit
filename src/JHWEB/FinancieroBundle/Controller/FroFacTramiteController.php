@@ -196,7 +196,7 @@ class FroFacTramiteController extends Controller
                 if ($propietarios) {
                     foreach ($tramitesFactura as $key => $tramiteFactura) {
                         //Valida si alguno de los trámites facturados requiere numero RUNT
-                        if ($tramiteFactura->getPrecio()->getTramite()->getId() != 30) {
+                        if ($tramiteFactura->getPrecio()->getTramite()->getId() != 30 && $tramiteFactura->getPrecio()->getModulo()->getId() != 6) {
                             $numeroRunt = true;
                         }
 
