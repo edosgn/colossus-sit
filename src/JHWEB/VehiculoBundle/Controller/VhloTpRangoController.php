@@ -55,16 +55,16 @@ class VhloTpRangoController extends Controller
                 array(
                     'id' => $params->idEmpresaTransporte,
                     'activo' => true
-                )
-            );
-
+                    )
+                );
+                
             $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
                 array(
-                    'alcaldia' => $empresaTransporte->getEmpresa()->getId(),
+                    'numeroConvenio' => $params->numeroConvenio,
                     'activo' => true
-                )
-            );
-            
+                    )
+                );
+                    
             if($empresaTransporte){
                 if($params->rangoInicio <= $params->rangoFin){
                     $rango = new VhloTpRango();
@@ -255,7 +255,7 @@ class VhloTpRangoController extends Controller
                     'title' => 'Perfecto!',
                     'status' => 'success',
                     'code' => 200,
-                    'message' => count($rangos) . " rangos encontradas",
+                    'message' => count($rangos) . " rango(s) encontrado(s).",
                     'data' => $rangos,
                 );
             } else {
