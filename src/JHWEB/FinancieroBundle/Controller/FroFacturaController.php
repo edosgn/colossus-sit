@@ -768,14 +768,6 @@ class FroFacturaController extends Controller
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
-
-        /*return $this->render('@JHWEBFinanciero/Default/pdf.factura.tramites.html.twig', array(
-            'fechaActual' => $fechaActual,
-            'factura'=> $factura,
-            'tramites'=> $tramites,
-            'retenciones'=> $retenciones,
-            'imgBarcode' => $imgBarcode
-        ));*/
     }
 
     protected function generatePdfInfracciones($id){
@@ -805,12 +797,15 @@ class FroFacturaController extends Controller
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(7);
-        $code = $barcode->generate();
+        $barcode->setThickness(20);
+        $barcode->setFontSize(8);
+        $imgBarcode = $barcode->generate();
 
-        //$imgBarcode = \base64_decode($code);
-        $imgBarcode = $code;
+        $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
+        $imageContent = file_get_contents($img_base64_encoded);
+        $path = tempnam(sys_get_temp_dir(), 'prefix');
+
+        file_put_contents ($path, $imageContent);
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.infracciones.html.twig', array(
             'fechaActual' => $fechaActual,
@@ -820,7 +815,8 @@ class FroFacturaController extends Controller
                 'nombres' => $infractorNombres,
                 'identificacion' => $infractorIdentificacion,
             ),
-            'imgBarcode' => $imgBarcode
+            'imgBarcode' => $imgBarcode,
+            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
@@ -854,18 +850,24 @@ class FroFacturaController extends Controller
         $barcode->setAllowsUnknownIdentifier(true);
         $barcode->setType(BarcodeGenerator::Gs1128);
         $barcode->setScale(1);
-        $barcode->setThickness(25);
-        $barcode->setFontSize(7);
+        $barcode->setThickness(20);
+        $barcode->setFontSize(8);
         $code = $barcode->generate();
 
-        //$imgBarcode = \base64_decode($code);
-        $imgBarcode = $code;
+        $imgBarcode = $barcode->generate();
+
+        $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
+        $imageContent = file_get_contents($img_base64_encoded);
+        $path = tempnam(sys_get_temp_dir(), 'prefix');
+
+        file_put_contents ($path, $imageContent);
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.amortizacion.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=>$factura,
             'amortizacion'=>$amortizacion,
-            'imgBarcode' => $imgBarcode
+            'imgBarcode' => $imgBarcode,
+            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);
@@ -885,11 +887,9 @@ class FroFacturaController extends Controller
             )
         );
 
-        //.$factura->getFechaVencimiento()->format('Ymd')
-
         $barcode = new BarcodeGenerator();
         $barcode->setText(
-            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'
+            '(415)7709998017603(8020)02075620756(8020)'.$factura->getNumero().'(3900)'.$factura->getValorNeto().'(96)'.$factura->getFechaVencimiento()->format('Ymd')
         );
         $barcode->setNoLengthLimit(true);
         $barcode->setAllowsUnknownIdentifier(true);
@@ -897,16 +897,20 @@ class FroFacturaController extends Controller
         $barcode->setScale(1);
         $barcode->setThickness(25);
         $barcode->setFontSize(7);
-        $code = $barcode->generate();
+        $imgBarcode = $barcode->generate();
 
-        //$imgBarcode = \base64_decode($code);
-        $imgBarcode = $code;
+        $img_base64_encoded = 'data:image/png;base64,'.$imgBarcode;
+        $imageContent = file_get_contents($img_base64_encoded);
+        $path = tempnam(sys_get_temp_dir(), 'prefix');
+
+        file_put_contents ($path, $imageContent);
 
         $html = $this->renderView('@JHWEBFinanciero/Default/pdf.factura.parqueadero.html.twig', array(
             'fechaActual' => $fechaActual,
             'factura'=> $factura,
             'inmovilizacion'=> $inmovilizacion,
-            'imgBarcode' => $imgBarcode
+            'imgBarcode' => $imgBarcode,
+            'path' => $path,
         ));
 
         $this->get('app.pdf')->templateFactura($html, $factura);

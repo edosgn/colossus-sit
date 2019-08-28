@@ -80,6 +80,13 @@ class BpCdp
     /**
      * @var int
      *
+     * @ORM\Column(name="valor_aprobado", type="integer", nullable=true)
+     */
+    private $valorAprobado;
+
+    /**
+     * @var int
+     *
      * @ORM\Column(name="saldo", type="integer", nullable=true)
      */
     private $saldo;
@@ -321,6 +328,30 @@ class BpCdp
     public function getValorLetras()
     {
         return $this->valorLetras;
+    }
+
+    /**
+     * Set valorAprobado
+     *
+     * @param integer $valorAprobado
+     *
+     * @return BpCdp
+     */
+    public function setValorAprobado($valorAprobado)
+    {
+        $this->valorAprobado = $valorAprobado;
+
+        return $this;
+    }
+
+    /**
+     * Get valorAprobado
+     *
+     * @return integer
+     */
+    public function getValorAprobado()
+    {
+        return $this->valorAprobado;
     }
 
     /**
