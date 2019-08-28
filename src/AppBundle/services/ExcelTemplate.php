@@ -100,12 +100,15 @@ class ExcelTemplate {
     /* ==================== ENCABEZADO Y PIE DE PAGINA ===================*/
     public function getMembretesTramites($params){
       // Add some data
+      /* var_dump($params->organismoTransito->getNombre());
+      die(); */
+
       if(isset($params->arrayTramites)){
         $this->objPHPExcel->getActiveSheet()->mergeCells('A1:E1');
         $this->objPHPExcel->getActiveSheet()->mergeCells('A2:E2');
         $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $this->objPHPExcel->setActiveSheetIndex($this->index)
-                    ->setCellValue('A1', 'INFORME INGRESOS DIARIO SUBSECRETARIA TRANSITO')
+                    ->setCellValue('A1', 'INFORME INGRESOS ' . $params->organismoTransito->getNombre())
                     ->setCellValue('A2', 'General')
                     ->setCellValue('A3', 'CÓDIGO')
                     ->setCellValue('B3', 'TRAMITES')
@@ -117,7 +120,7 @@ class ExcelTemplate {
         $this->objPHPExcel->getActiveSheet()->mergeCells('A2:H2');
         $this->objPHPExcel->getActiveSheet()->getStyle('A1')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
         $this->objPHPExcel->setActiveSheetIndex($this->index)
-                    ->setCellValue('A1', 'INFORME INGRESOS MENSUAL SUBSECRETARIA TRANSITO')
+                    ->setCellValue('A1', 'INFORME INGRESOS ' . $params->organismoTransito->getNombre())
                     ->setCellValue('A2', 'Detallado')
                     ->setCellValue('A3', 'NRO. FACTURA')
                     ->setCellValue('B3', 'FECHA PAGO')

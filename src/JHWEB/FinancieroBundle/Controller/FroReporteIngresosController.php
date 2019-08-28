@@ -169,14 +169,15 @@ class FroReporteIngresosController extends Controller
                                 );
 
                                 foreach ($conceptos as $key => $concepto) {
+                                    /* var_dump($concepto); */
                                     $idConcepto = $concepto['id'];
                                     $cantConceptos += $concepto['cantConceptos'];
                                     $nombreConcepto = $concepto['nombre'];
                                     $valorUnitarioConcepto = $concepto['valorUnitarioConcepto'];
                                     $valorConceptos += $concepto['valor']* $concepto['cantConceptos'];
                                     
-                                    /* var_dump($concepto['cantConceptos']);
-                                    var_dump($concepto['nombre']); */
+                                    /* var_dump($concepto['cantConceptos']); */
+                                    /* var_dump($concepto['nombre']); */ 
                                     /* var_dump($concepto->getConcepto()->getNombre()); */
                                     /* var_dump($valorConceptos); */
                                 }
