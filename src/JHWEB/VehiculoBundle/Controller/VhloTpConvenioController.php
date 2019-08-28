@@ -106,14 +106,18 @@ class VhloTpConvenioController extends Controller
                     $vhloTpConvenio->setFechaConvenio($fechaConvenio);
                     $vhloTpConvenio->setFechaActaInicio($fechaActaInicio);
                     $vhloTpConvenio->setFechaActaFin($fechaActaFin);
+                    
                     $vhloTpConvenio->setNumeroCupos($params->numeroCupos);
+                    $vhloTpConvenio->setCuposDisponibles($params->numeroCupos);
+                    $vhloTpConvenio->setCuposUtilizados(0);
+                    
                     $vhloTpConvenio->setAlcaldia($alcaldia);
                     $vhloTpConvenio->setObservacion($params->observacion);
                     $vhloTpConvenio->setActivo(true);
 
                     $em->persist($vhloTpConvenio);
 
-                    foreach ($params->empresas as $key => $empresa) {
+                   /*  foreach ($params->empresas as $key => $empresa) {
                         $empresaConvenio = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->find($empresa);
                         
                         $vhloTpConvenioEmpresa = new VhloTpConvenioEmpresa();
@@ -123,11 +127,11 @@ class VhloTpConvenioController extends Controller
                         $vhloTpConvenioEmpresa->setActivo(true);
 
                         $em->persist($vhloTpConvenioEmpresa);
-                        $em->flush();
                     }
                     
-                    $response = [];
-
+                    $response = []; */
+                    $em->flush();
+                    
                     $response = array(
                         'title' => 'Perfecto!',
                         'status' => 'success',
@@ -141,7 +145,7 @@ class VhloTpConvenioController extends Controller
                 'title' => 'Error!',
                 'status' => 'error',
                 'code' => 400,
-                'message' => "Autorizacion no valida", 
+                'message' => "Autorización no válida", 
             );
         }    
         return $helpers->json($response);
@@ -360,6 +364,70 @@ class VhloTpConvenioController extends Controller
                 'message' => "Empresas encontradas.", 
                 'data' => $arrayEmpresasTransportePublico
             );
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización válida.", 
+            );
+        }
+        
+        return $helpers->json($response);
+    }
+
+    /**
+     * Busca un convenio por numero de convenio
+     *
+     * @Route("/search/numero/convenio", name="vhlotpconvenio_by_numero_convenio")
+     * @Method({"GET", "POST"})
+     */
+    public function searchByNumeroConvenioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
+                array(
+                    'numeroConvenio' => $params->numeroConvenio, 
+                    'activo' => true
+                )
+            );
+
+            if($convenio){
+                $fechaActual = new \Datetime();
+
+                if($convenio->getFechaActaFin()->format('Y/m/d') < $fechaActual->format('Y/m/d')) {
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El convenio ya está vencido.", 
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data' => $convenio
+                    );
+                }
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontró un convenio con ese número.", 
+                );
+            }
         } else{
             $response = array(
                 'title' => 'Error!',

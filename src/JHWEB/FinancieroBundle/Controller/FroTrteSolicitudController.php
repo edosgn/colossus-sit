@@ -1280,7 +1280,6 @@ class FroTrteSolicitudController extends Controller
             )
         );
 
-        
         if($tarjetaOperacion) {
             $vehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloVehiculo')->find($params->idVehiculo);
 
@@ -1570,9 +1569,6 @@ class FroTrteSolicitudController extends Controller
         );
         
         $asignacion->setActivo(false);
-
-        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->find($asignacion->getId());
-        $cupo->setEstado('DISPONIBLE');
         
         $tarjetaOperacion = $em->getRepository('JHWEBVehiculoBundle:VhloTpTarjetaOperacion')->findOneBy(
             array(
@@ -1583,19 +1579,28 @@ class FroTrteSolicitudController extends Controller
         
         $tarjetaOperacion->setActivo(false);
 
-        $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
+        /* $empresa = $em->getRepository('JHWEBUsuarioBundle:UserEmpresa')->findOneBy(
             array(
                 'id' => $params->idEmpresaNueva,
                 'activo' => true
             )
-        );
+        ); */
 
         $empresaTransporte = $em->getRepository('JHWEBUsuarioBundle:UserEmpresaTransporte')->findOneBy(
             array(
-                'empresa' => $empresa->getId(),
+                'id' => $params->idEmpresaNueva,
+                'activo' => true
+                )
+            );
+        
+        $cupo = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->findOneBy(
+            array(
+                'numero' => $params->numeroCupoActual,
                 'activo' => true
             )
         );
+
+        $cupo->setEstado('DISPONIBLE');
 
         $cupoNew = $em->getRepository('JHWEBVehiculoBundle:VhloTpCupo')->findOneBy(
             array(
@@ -2259,7 +2264,7 @@ class FroTrteSolicitudController extends Controller
     /**
      * Genera pdf resolucion del cambio de empresa.
      *
-     * @Route("/{idVehiculo}/{idEmpresaActual}/{numeroResolucion}/resolucion/cambioEmpresa/pdf", name="resolucion_cambio_empresa_pdf")
+     * @Route("/{idVehiculo}/{idEmpresaActual}/{numeroResolucion}/resolucion/cambioEmpresa/pdf", name="resolucion_cambio_empresa_pdf_export")
      * @Method({"GET","POST"})
      */
     public function pdfResolucionCambioEmpresaAction(Request $request, $idVehiculo, $idEmpresaActual, $numeroResolucion)

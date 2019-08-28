@@ -3,6 +3,7 @@
 namespace JHWEB\UsuarioBundle\Controller;
 
 use JHWEB\UsuarioBundle\Entity\UserEmpresaTransporte;
+use JHWEB\VehiculoBundle\Entity\VhloTpConvenioEmpresa;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -127,6 +128,22 @@ class UserEmpresaTransporteController extends Controller
                     $empresaTransporteNew->setActivo(true);
                     
                     $em->persist($empresaTransporteNew);
+                    
+                    $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
+                        array (
+                            'numeroConvenio' => $params->numeroConvenio,
+                            'activo' => true
+                        )
+                    );
+                        
+                    $convenioEmpresa = new VhloTpConvenioEmpresa();
+                    
+                    $convenioEmpresa->setEmpresa($empresa);
+                    $convenioEmpresa->setVhloTpConvenio($convenio);
+                    $convenioEmpresa->setActivo(true);
+                    
+                    $em->persist($convenioEmpresa);
+
                     $em->flush();
 
                     $response = array(
