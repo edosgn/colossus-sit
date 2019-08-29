@@ -120,6 +120,13 @@ class BpRegistroCompromiso
     private $saldo;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="valor_apropiado", type="integer", nullable=true)
+     */
+    private $valorApropiado;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="concepto", type="text", nullable=true)
@@ -496,6 +503,30 @@ class BpRegistroCompromiso
     public function getSaldo()
     {
         return $this->saldo;
+    }
+
+    /**
+     * Set valorApropiado
+     *
+     * @param integer $valorApropiado
+     *
+     * @return BpRegistroCompromiso
+     */
+    public function setValorApropiado($valorApropiado)
+    {
+        $this->valorApropiado = $valorApropiado;
+
+        return $this;
+    }
+
+    /**
+     * Get valorApropiado
+     *
+     * @return integer
+     */
+    public function getValorApropiado()
+    {
+        return $this->valorApropiado;
     }
 
     /**

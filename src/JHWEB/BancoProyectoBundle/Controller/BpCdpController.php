@@ -75,6 +75,10 @@ class BpCdpController extends Controller
             $cdp->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $cdp->setNumero($params->numero);
             $cdp->setValorAprobado($params->valorAprobado);
+            $valorEnLetras = Numbers_Words::toWords(
+                $params->valorAprobado, 'es'
+            );
+            $cdp->setValorLetras(strtoupper($valorEnLetras));
             $cdp->setObservaciones(mb_strtoupper($params->observaciones));
             $cdp->setEstado('REGISTRADO');
             
@@ -249,18 +253,14 @@ class BpCdpController extends Controller
             $cdp->setSolicitudFecha($solicitudFecha);
             $cdp->setSolicitudConsecutivo($consecutivo);
             $cdp->setValor($params->valor);
+            $cdp->setSaldo($params->valor);
             $cdp->setConcepto(mb_strtoupper($params->concepto, 'utf-8'));
 
             if ($params->idActividad) {
                 $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
                 $cdp->setActividad($actividad);
-                $cdp->setValor($actividad->getCostoTotal());
-                $cdp->setSaldo($actividad->getCostoTotal());
-
-                $valorEnLetras = Numbers_Words::toWords(
-                    $actividad->getCostoTotal(), 'es'
-                );
-                $cdp->setValorLetras(strtoupper($valorEnLetras));
+                //$cdp->setValor($actividad->getCostoTotal());
+                //$cdp->setSaldo($actividad->getCostoTotal());
             }
 
             $cdp->setEstado('SOLICITUD');

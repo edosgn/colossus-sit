@@ -32,7 +32,7 @@ class VhloCfgValorController extends Controller
         $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "listado tipos de proceso", 
+                    'message' => "listado tipos de proceso", 
                     'data'=> $valorVehiculo,
             );
          
@@ -54,35 +54,35 @@ class VhloCfgValorController extends Controller
             $json = $request->get("data",null);
             $params = json_decode($json);
 
-                $em = $this->getDoctrine()->getManager();
-                $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->claseId);
-                $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->lineaId);
+            $em = $this->getDoctrine()->getManager();
+            
+            $clase = $em->getRepository('JHWEBVehiculoBundle:VhloCfgClase')->find($params->claseId);
+            $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->lineaId);
 
-                $vhloCfgValor = new VhloCfgValor();
+            $vhloCfgValor = new VhloCfgValor();
 
-                $vhloCfgValor->setClase($clase);
-                $vhloCfgValor->setLinea($linea);
-                $vhloCfgValor->setCilindraje($params->cilindraje);
-                $vhloCfgValor->setValor($params->valor);
-                $vhloCfgValor->setAnio($params->anio);
-                $vhloCfgValor->setActivo(true);
- 
-                $em->persist($vhloCfgValor);
-                $em->flush();
-                $response = array(
-                    'status' => 'success',
-                    'code' => 200,
-                    'msj' => "Tipo Producto creado con exito", 
-                );
+            $vhloCfgValor->setClase($clase);
+            $vhloCfgValor->setLinea($linea);
+            $vhloCfgValor->setCilindraje($params->cilindraje);
+            $vhloCfgValor->setValor($params->valor);
+            $vhloCfgValor->setAnio($params->anio);
+            $vhloCfgValor->setActivo(true);
 
-            //}
+            $em->persist($vhloCfgValor);
+            $em->flush();
+            $response = array(
+                'status' => 'success',
+                'code' => 200,
+                'message' => "Tipo Producto creado con exito", 
+            );
         }else{
             $response = array(
                 'status' => 'error',
                 'code' => 400,
-                'msj' => "Autorizacion no valida", 
+                'message' => "Autorizacion no valida", 
             );
-            } 
+        }
+
         return $helpers->json($response);
     }
 
@@ -104,14 +104,14 @@ class VhloCfgValorController extends Controller
             $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "cfgValorVehiculo encontrado", 
+                    'message' => "cfgValorVehiculo encontrado", 
                     'data'=> $cfgValorVehiculo,
             );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -151,20 +151,20 @@ class VhloCfgValorController extends Controller
                 $response = array(
                     'status' => 'success',
                     'code' => 200,
-                    'msj' => "Limitación editada con exito", 
+                    'message' => "Limitación editada con exito", 
                 );
             }else{
                 $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "La limitación no se encuentra en la base de datos", 
+                    'message' => "La limitación no se encuentra en la base de datos", 
                 );
             }
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida para editar banco", 
+                    'message' => "Autorizacion no valida para editar banco", 
                 );
         }
 
@@ -193,13 +193,13 @@ class VhloCfgValorController extends Controller
             $response = array(
                     'status' => 'success',
                         'code' => 200,
-                        'msj' => "Tipo proceso eliminada con exito", 
+                        'message' => "Tipo proceso eliminada con exito", 
                 );
         }else{
             $response = array(
                     'status' => 'error',
                     'code' => 400,
-                    'msj' => "Autorizacion no valida", 
+                    'message' => "Autorizacion no valida", 
                 );
         }
         return $helpers->json($response);
@@ -383,9 +383,6 @@ class VhloCfgValorController extends Controller
     if ($authCheck== true) {
         $json = $request->get("data",null);
         $params = json_decode($json);
-
-        var_dump($params);
-        die();
         
         $em = $this->getDoctrine()->getManager();
 

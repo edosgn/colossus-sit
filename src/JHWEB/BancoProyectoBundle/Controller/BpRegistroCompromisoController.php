@@ -75,7 +75,19 @@ class BpRegistroCompromisoController extends Controller
             $registro->setContratoNumero($params->contratoNumero);
             $registro->setContratoTipo($params->contratoTipo);
             $registro->setContratoEstado($params->contratoEstado);
+            $registro->setValorApropiado($params->valorApropiado);
             $registro->setEstado('REGISTRADO');
+
+            if ($registro->getCdp()) {
+                //Consulta cdp
+                $cdp = $registro->getCdp();
+                //Actualiza saldo del cdp
+                $cdp->setSaldo($cdp->getSaldo() - $params->valorApropiado);
+                //Consulta proyecto
+                $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
+                //Actualiza saldo del proyecto
+                $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valorApropiado);
+            }
             
             $em->flush();
 
@@ -252,12 +264,6 @@ class BpRegistroCompromisoController extends Controller
                 //Consulta cdp
                 $cdp = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($params->idCdp);
                 $registro->setCdp($cdp);
-                //Actualiza saldo del cdp
-                $cdp->setSaldo($cdp->getSaldo() - $params->valor);
-                //Consulta proyecto
-                $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
-                //Actualiza saldo del proyecto
-                $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valor);
             }
 
             if ($params->idCiudadano) {
