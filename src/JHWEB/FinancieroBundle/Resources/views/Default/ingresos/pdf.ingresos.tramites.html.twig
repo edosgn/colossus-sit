@@ -60,23 +60,23 @@
                 <tr>
                     <td><b>Id</b></td>
                     <td><b>Nombre Concepto</b></td>
-                    <td><b>Cantidad</b></td>
+                    {# <td><b>Cantidad</b></td> #}
                     <td><b>Valor</b></td>
-                    <td><b>Total</b></td>
+                    {# <td><b>Total</b></td> #}
                 </tr>
-                {% for concepto in arrayConceptos %}
+                {% for concepto in conceptos %}
                         <tr>
                             <td>{{ concepto.id }}</td>
                             <td>{{ concepto.nombre }}</td>
-                            <td>{{ concepto.cantidad}}</td>
+                            {# <td>{{ concepto.cantidad}}</td> #}
                             <td>{{ concepto.valor }}</td>
-                            <td>{{ concepto.total }}</td>
+                            {# <td>{{ concepto.total }}</td> #}
                         </tr>
                 {% endfor %}
-                <tr>
+                {# <tr>
                     <td colspan="4"><b>TOTAL CONCEPTOS</b></td>
                     <td>{{ totalConceptos }}</td>
-                </tr>
+                </tr> #}
                 <tr>
                     <td colspan="4"><b>TOTAL INGRESOS SUBDETRA</b></td>
                     <td>{{ totalTramites - totalSustratos }}</td>

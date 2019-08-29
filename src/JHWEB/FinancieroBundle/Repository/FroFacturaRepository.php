@@ -90,56 +90,49 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    public function getConceptosByPrecio($idPrecio) {
+    public function getConceptosByPrecio($fechaInicio, $fechaFin) {
         $em = $this->getEntityManager();
         
-        $dql = "SELECT ftc
+        $dql = "SELECT COUNT(ftc.id) AS cantidad, ftcc.nombre
             FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
+            JHWEBFinancieroBundle:FroTrteSolicitud fts, 
             JHWEBFinancieroBundle:FroTrtePrecio ftp, 
-            JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
-            WHERE ftp.id = :idPrecio
-            AND ftc.precio = ftp.id
+            JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc,
+            JHWEBFinancieroBundle:FroFactura f,
+            JHWEBFinancieroBundle:FroFacTramite ft
+
+            WHERE ftc.precio = ftp.id
             AND NOT ftc.concepto = 2
+            AND ft.precio = ftp.id
+            AND ft.factura = f.id
+            AND fts.tramiteFactura = ft.id
+            AND fts.fecha BETWEEN :fechaInicio AND :fechaFin
             AND ftc.activo = 1
-            AND ftc.concepto = ftcc.id";
+            GROUP BY ftcc.id";
 
         $consulta = $em->createQuery($dql);
         
         $consulta->setParameters(array(
-            'idPrecio' => $idPrecio, 
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
         ));
 
         return $consulta->getResult();
     }
 
-    public function getTotalConceptosByPrecio($idPrecio) {
+    /* public function getTotalConceptosByPrecio($idPrecio) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(ftc.id)
+        $dql = "SELECT COUNT(ftc.id) as cantidad
             FROM JHWEBFinancieroBundle:FroTrteConcepto ftc
-            WHERE ftc.precio = :idPrecio";
+            WHERE ftc.precio = :idPrecio
+            AND NOT ftc.concepto = 2
+            AND ftc.activo = 1
+            GROUP BY ftc.precio";
 
         $consulta = $em->createQuery($dql);
         
         $consulta->setParameters(array(
-            'idPrecio' => $idPrecio, 
-        ));
-
-        return $consulta->getOneOrNullResult();
-    }
-    
-    /* public function getTotalConceptosByPrecio($idConcepto, $idPrecio) {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT COUNT(ftc.id)
-            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc
-            WHERE ftc.concepto = :idConcepto
-            AND ftc.precio = :idPrecio";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'idConcepto' => $idConcepto, 
             'idPrecio' => $idPrecio, 
         ));
 
