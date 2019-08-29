@@ -74,7 +74,7 @@ class BpCdpController extends Controller
             $cdp->setFechaRegistro(new \Datetime(date('Y-m-d')));
             $cdp->setFechaExpedicion(new \Datetime($params->fechaExpedicion));
             $cdp->setNumero($params->numero);
-            $cdp->setValor($params->valor);
+            $cdp->setValorAprobado($params->valorAprobado);
             $cdp->setObservaciones(mb_strtoupper($params->observaciones));
             $cdp->setEstado('REGISTRADO');
             

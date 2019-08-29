@@ -383,33 +383,41 @@ class VhloCfgValorController extends Controller
     if ($authCheck== true) {
         $json = $request->get("data",null);
         $params = json_decode($json);
+
+        var_dump($params);
+        die();
         
         $em = $this->getDoctrine()->getManager();
 
-        $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->findOneBy(
-            array(
-                'linea' => $params->linea,
-                'cilindraje' => $params->cilindraje,
-                'marca' => $params->marca,
-                'clase' => $params->clase,
-                'anio' => $params->modelo,
-            )
-        );
+        $linea = $em->getRepository('JHWEBVehiculoBundle:VhloCfgLinea')->find($params->linea);
 
-        if ($valorVehiculo) {
-            $response = array(
-                'status' => 'success',
-                'code' => 200,
-                'message' => "Valor encontrado.", 
-                'data' => $valorVehiculo, 
+        if ($linea) {
+            $valorVehiculo = $em->getRepository('JHWEBVehiculoBundle:VhloCfgValor')->findOneBy(
+                array(
+                    'linea' => $params->linea,
+                    'cilindraje' => $params->cilindraje,
+                    'marca' => $linea->getMarca()->getId(),
+                    'clase' => $params->clase,
+                    'anio' => $params->modelo,
+                )
             );
-        }else {
-            $response = array(
-                'status' => 'error',
-                'code' => 400,
-                'messager' => "Valor no encontrado para el vehiculo.", 
-            );
-        } 
+    
+            if ($valorVehiculo) {
+                $response = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => "Valor encontrado.", 
+                    'data' => $valorVehiculo, 
+                );
+            }else {
+                $response = array(
+                    'status' => 'error',
+                    'code' => 400,
+                    'messager' => "Valor no encontrado para el vehiculo.", 
+                );
+            } 
+        }
+
     }else{
         $response = array(
             'status' => 'error',

@@ -41,23 +41,26 @@
         <table border="1" cellpading="10" style="text-align:center;">
             <tr>
                 <td>CONCEPTO</td>
-                <td>VALOR</td>
+                <td>VALORES</td>
             </tr>
             <tr>
                 <td>
                 {{ solicitud.concepto }}<br>
                 ACTIVIDAD:<br>{{ solicitud.actividad.nombre }}
-
                 </td>
-                <td>{{ solicitud.valorLetras }} <br> $({{ solicitud.valor }})</td>
+                <td>
+                Valor solicitado $({{ solicitud.valor }})
+                Valor aprobado $({{ solicitud.valorAprobado }})
+                </td>
             </tr>
             <tr>
                 <td>RADICACIÓN BANCO DE PROYECTOS: SI (Anexar constancia) NO</td>
                 <td>CUENTA</td>
             </tr>
             <tr>
-                <td>PROYECTO No. {{ solicitud.actividad.cuenta.proyecto.numero }}
-                <br>{{ solicitud.actividad.cuenta.proyecto.nombre }}
+                <td>
+                    PROYECTO No. {{ solicitud.actividad.cuenta.proyecto.numero }}<br>
+                    {{ solicitud.actividad.cuenta.proyecto.nombre }}
                     
                 </td>
                 <td>CUENTA No.{{ solicitud.actividad.cuenta.numero }}</td>

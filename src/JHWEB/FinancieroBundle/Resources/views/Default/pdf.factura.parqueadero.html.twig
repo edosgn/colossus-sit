@@ -62,7 +62,9 @@
             </table>
         {% endif %}
         <br>
-            <img src="data:image/png;base64,{{ imgBarcode }}" height="40px" />
+        <p style="text-align:right;">
+            <img src="{{ path }}"/>
+        </p>
         {% if key < 2 %}
         <br>
         <div class="separator"></div>

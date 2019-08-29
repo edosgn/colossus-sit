@@ -257,7 +257,7 @@ class BpRegistroCompromisoController extends Controller
                 //Consulta proyecto
                 $proyecto = $cdp->getActividad()->getCuenta()->getProyecto();
                 //Actualiza saldo del proyecto
-                $proyecto->setSaldo($proyecto->getSaldo() - $params->valor);
+                $proyecto->setSaldoTotal($proyecto->getSaldoTotal() - $params->valor);
             }
 
             if ($params->idCiudadano) {
