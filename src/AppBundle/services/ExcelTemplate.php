@@ -100,8 +100,6 @@ class ExcelTemplate {
     /* ==================== ENCABEZADO Y PIE DE PAGINA ===================*/
     public function getMembretesTramites($params){
       // Add some data
-      /* var_dump($params->organismoTransito->getNombre());
-      die(); */
 
       if(isset($params->arrayTramites)){
         $this->objPHPExcel->getActiveSheet()->mergeCells('A1:E1');

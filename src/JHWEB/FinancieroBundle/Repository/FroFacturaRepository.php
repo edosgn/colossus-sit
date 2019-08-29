@@ -90,7 +90,45 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    /* public function getByName($idConcepto, $idPrecio) {
+    public function getConceptosByPrecio($idPrecio) {
+        $em = $this->getEntityManager();
+        
+        $dql = "SELECT ftc
+            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
+            JHWEBFinancieroBundle:FroTrtePrecio ftp, 
+            JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
+            WHERE ftp.id = :idPrecio
+            AND ftc.precio = ftp.id
+            AND NOT ftc.concepto = 2
+            AND ftc.activo = 1
+            AND ftc.concepto = ftcc.id";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idPrecio' => $idPrecio, 
+        ));
+
+        return $consulta->getResult();
+    }
+
+    public function getTotalConceptosByPrecio($idPrecio) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ftc.id)
+            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc
+            WHERE ftc.precio = :idPrecio";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idPrecio' => $idPrecio, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+    
+    /* public function getTotalConceptosByPrecio($idConcepto, $idPrecio) {
         $em = $this->getEntityManager();
 
         $dql = "SELECT COUNT(ftc.id)
@@ -147,11 +185,12 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    /* $dql = "SELECT COUNT (ftc.id) AS cantConceptos, ftcc.valor, ftcc.id, ftcc.nombre, ftcc.valor AS valorUnitarioConcepto */ 
     /* GROUP BY ftcc.id"; */
-    public function getConceptosByPrecio($idPrecio) {
+    /* public function getConceptosByPrecio($idPrecio) {
         $em = $this->getEntityManager();
         
-        $dql = "SELECT COUNT (ftc.id) AS cantConceptos, ftcc.valor, ftcc.id, ftcc.nombre, ftcc.valor AS valorUnitarioConcepto 
+        $dql = "SELECT ftc
             FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
             JHWEBFinancieroBundle:FroTrtePrecio ftp, 
             JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
@@ -168,7 +207,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         ));
 
         return $consulta->getResult();
-    }
+    } */
     /*  =============== para infracciones ================= */
 
     public function getInfraccionesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {

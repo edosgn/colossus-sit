@@ -334,7 +334,7 @@ class VhloTpConvenioController extends Controller
      * @Route("/search/empresastransportepublico/convenio", name="vhlotpconvenio_empresas_transporte_publico_by_convenio")
      * @Method({"GET", "POST"})
      */
-    public function searchEmpresasTransportePublicoByconvenioAction(Request $request)
+    /* public function searchEmpresasTransportePublicoByconvenioAction(Request $request)
     {
         $helpers = $this->get("app.helpers");
         $hash = $request->get("authorization", null);
@@ -374,7 +374,7 @@ class VhloTpConvenioController extends Controller
         }
         
         return $helpers->json($response);
-    }
+    } */
 
     /**
      * Busca un convenio por numero de convenio
@@ -439,4 +439,70 @@ class VhloTpConvenioController extends Controller
         
         return $helpers->json($response);
     }
+
+    /**
+     * Verifica el número de convenio para que no tenga habiltaciones registradas
+     *
+     * @Route("/validate/numero/convenio", name="vhlotpconvenio_validate_numero_convenio")
+     * @Method({"GET", "POST"})
+     */
+    /* public function validateNumeroConvenioAction(Request $request)
+    {
+        $helpers = $this->get("app.helpers");
+        $hash = $request->get("authorization", null);
+        $authCheck = $helpers->authCheck($hash);
+        
+        if ($authCheck == true) {
+            $json = $request->get("data", null);
+            $params = json_decode($json);
+            
+            $em = $this->getDoctrine()->getManager();
+
+            var_dump($params);
+
+            $convenio = $em->getRepository('JHWEBVehiculoBundle:VhloTpConvenio')->findOneBy(
+                array(
+                    'numeroConvenio' => $params->numeroConvenio, 
+                    'activo' => true
+                )
+            );
+
+            if($convenio){
+                $fechaActual = new \Datetime();
+
+                if($convenio->getFechaActaFin()->format('Y/m/d') < $fechaActual->format('Y/m/d')) {
+                    $response = array(
+                        'title' => 'Error!',
+                        'status' => 'error',
+                        'code' => 400,
+                        'message' => "El convenio ya está vencido.", 
+                    );
+                } else {
+                    $response = array(
+                        'title' => 'Perfecto!',
+                        'status' => 'success',
+                        'code' => 200,
+                        'message' => 'Registro encontrado.', 
+                        'data' => $convenio
+                    );
+                }
+            } else {
+                $response = array(
+                    'title' => 'Error!',
+                    'status' => 'error',
+                    'code' => 400,
+                    'message' => "No se encontró un convenio con ese número.", 
+                );
+            }
+        } else{
+            $response = array(
+                'title' => 'Error!',
+                'status' => 'error',
+                'code' => 400,
+                'message' => "Autorización válida.", 
+            );
+        }
+        
+        return $helpers->json($response);
+    } */
 }
