@@ -266,7 +266,7 @@ class ExcelTemplate {
                     ->setCellValue('D'.$this->rowSustrato, 'VALOR')
                     ->setCellValue('E'.$this->rowSustrato, 'TOTAL');
 
-            foreach ($params->arraySustratos as $key => $sustrato) {
+            foreach ($params->sustratos as $key => $sustrato) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'B'.$this->row2,  $sustrato['nombre']
@@ -310,7 +310,7 @@ class ExcelTemplate {
                     ->setCellValue('D'.$this->rowConcepto, 'VALOR')
                     ->setCellValue('E'.$this->rowConcepto, 'TOTAL');
 
-            foreach ($params->arrayConceptos as $key => $concepto) {
+            foreach ($params->conceptos as $key => $concepto) {
               //Imprime los datos
               $this->objPHPExcel->setActiveSheetIndex($this->index)->setCellValue(
                 'A'.$this->row3,  $concepto['id']
