@@ -65,21 +65,23 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
             AND fft.precio = ftp.id
             GROUP BY ftp.tramite";
 
-        /* if ($params->arrayOragnismosTransito) {
+        if ($params->arrayOrganismosTransito) {
             foreach ($params->arrayOragnismosTransito as $keyOrganismoTransito => $idOrganismoTransito) {
-                # code...
-                $edadInicio = intval($idOrganismoTransito);
-                $edadFin = $edadInicio + 4;
-
                 if($keyOrganismoTransito == 0) {
                     $condicion .= " AND fts.organismoTransito = '" . $idOrganismoTransito . "'";
                 } else {
                     $condicion .= " OR fts.organismoTransito = '" . $idOrganismoTransito . "'";
                 }
             }
-        } */
+        }
+
+        if ($condicion) {
+            $dql .= $condicion;
+        }
 
         $consulta = $em->createQuery($dql);
+
+        var_dump($dql);
         
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito, 
