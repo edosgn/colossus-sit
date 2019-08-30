@@ -2,31 +2,17 @@
     <header>
 
     </header>
-    <body style="font-size:11px">
-        <table border="1" cellpading="5" style="text-align:center;">
+    <body style="font-size:10px">
+        <table border="1" cellpadding="6" style="text-align:center;">
             <tr>
-                <td>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <table border="1" cellpading="5" style="text-align:center;">
-                        <tr>
-                            <td colspan="3">FECHA RECEPCIÓN</td>
-                        </tr>
-                        <tr>
-                            <td>AÑO</td>
-                            <td>MES</td>
-                            <td>DÍA</td>
-                        </tr>
-                        <tr>
-                            <td>{{ anio }}</td>
-                            <td>{{ mes }}</td>
-                            <td>{{ dia }}</td>
-                        </tr>
-                    </table>
+                <td class="text-center" width="20%">
+                    <p>
+                        <b>FECHA RECEPCIÓN</b><br>
+                        AÑO/MES/DÍA<br>
+                        {{ anio }}/{{ mes }}/{{ dia }}
+                    </p>
                 </td>
-                <td>
+                <td  width="45%">
                     <p>
                         GOBERNACIÓN DE NARIÑO
                         <br>
@@ -35,55 +21,153 @@
                         SOLICITUD DE REGISTRO DE COMPROMISO
                     </p>
                 </td>
-                <td>
+                <td  width="35%">
                     <br>
                     <br>
                     <img src="{{ asset('img/logo-entidad.png') }}" height="60px"/>
                 </td>
             </tr>
         </table>
-        <table border="1" cellpading="10" style="text-align:center;">
+        <table border="1" cellpadding="6">
             <tr>
-                <td colspan="8">IDENTIFICACIÓN DE BENEFICIARIO</td>
+                <td colspan="8"  style="text-align:center;background-color:#ccc;"><b>IDENTIFICACIÓN DE BENEFICIARIO</b></td>
             </tr>
             <tr>
-                <td colspan="3">NOMBRES Y APELLIDOS Y/O</td>
-                <td colspan="5">NOMBRES Y APELLIDOS Y/O</td>
+                <td colspan="3" width="25%">NOMBRES Y APELLIDOS Y/O</td>
+                <td colspan="5" width="75%"  style="text-align:center;">
+                {% if solicitud.ciudadano %}
+                    {{ solicitud.ciudadano.primerNombre }}
+                    {{ solicitud.ciudadano.segundoNombre }}
+                    {{ solicitud.ciudadano.primerApellido }}
+                    {{ solicitud.ciudadano.segundoApellido }}
+                {% elseif solicitud.empresa %}
+                    {{ solicitud.empresa.nombre }}
+                {% endif %}
+                </td>
             </tr>
             <tr>
                 <td width="20%">PERSONA NATURAL</td>
-                <td width="5%"></td>
+                <td width="5%" style="text-align:ceneter;">
+                    {% if solicitud.ciudadano %}<b>X</b>{% endif %}
+                </td>
                 <td width="20%">PERSONA JURIDICA</td>
-                <td width="5%"></td>
-                <td width="20%">OFICIAL</td>
-                <td width="5%"></td>
-                <td width="20%">PRIVADA</td>
-                <td width="5%"></td>
+                <td width="55%" colspan="5"  style="text-align:center;">
+                    {% if solicitud.empresa %}<b>{{ solicitud.empresa.tipoEntidad.nombre }}</b>{% endif %}
+                </td>
             </tr>
             <tr>
-                <td colspan="2"></td>
-                <td colspan="3">NOMBRE DEL REPRESENTANTE LEGAL</td>
-                <td colspan="3"></td>
+                <td colspan="2" width="25%"></td>
+                <td colspan="3" width="20%">NOMBRE DEL REPRESENTANTE LEGAL</td>
+                <td colspan="3" width="55%"  style="text-align:center;">
+                    {% if solicitud.empresa %}
+                        <b>
+                        {{ solicitud.empresa.empresaRepresentante.ciudadano.primerNombre }}
+                        {{ solicitud.empresa.empresaRepresentante.ciudadano.segundoNombre }}
+                        {{ solicitud.empresa.empresaRepresentante.ciudadano.primerApellido}}
+                        {{ solicitud.empresa.empresaRepresentante.ciudadano.segundoApellido}}
+                        </b>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
-                <td colspan="2">No. IDENTIFICACIÓN <br> Anexar fotocopia del documento</td>
-                <td>C.C:</td>
-                <td colspan="2"></td>
-                <td>RUT</td>
-                <td colspan="2"></td>
+                <td colspan="2" width="25%">No. IDENTIFICACIÓN <br> Anexar fotocopia del documento</td>
+                <td width="5%">C.C:</td>
+                <td width="30%">
+                    {% if solicitud.ciudadano %}
+                        <b>{{ solicitud.ciudadano.identificacion }}</b>
+                    {% endif %}
+                </td>
+                <td width="5%" style="text-align:center;">RUT</td>
+                <td width="35%" colspan="4" style="text-align:center;">
+                    {% if solicitud.empresa %}
+                        <b>{{ solicitud.empresa.nit }}</b>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
-                <td colspan="2">REGIMEN</td>
-                <td></td>
-                <td colspan="2">SIMPLIFICADO</td>
-                <td></td>
-                <td colspan="2"></td>
+                <td colspan="2" width="25%">REGIMEN</td>
+                <td colspan="6" width="75%"></td>
             </tr>
             <tr>
-                <td colspan="2">DIRECCIÓN</td>
-                <td colspan="3"></td>
-                <td>CIUDAD</td>
-                <td colspan="2">Pasto</td>
+                {% if solicitud.ciudadano %}
+                    <td colspan="2" width="25%">DIRECCIÓN</td>
+                    <td colspan="2" width="25%">
+                        <b>{{ solicitud.ciudadano.direccionPersonal }}</b>
+                    </td>
+                    <td colspan="2" width="15%">CIUDAD</td>
+                    <td colspan="2" width="35%">
+                        <b>{{ solicitud.ciudadano.municipioResidencia.nombre }}</b>
+                    </td>
+                {% endif %}
+
+                {% if solicitud.empresa %}
+                    <td colspan="2" width="25%">DIRECCIÓN</td>
+                    <td colspan="2" width="25%">
+                        <b>{{ solicitud.empresa.direccion }}</b>
+                    </td>
+                    <td colspan="2" width="15%">CIUDAD</td>
+                    <td colspan="2" width="35%">
+                        <b>{{ solicitud.empresa.municipio.nombre }}</b>
+                    </td>
+                {% endif %}
+            </tr>
+            <tr>
+                {% if solicitud.ciudadano %}
+                    <td colspan="2" width="25%">TELEFONO</td>
+                    <td width="20%">
+                        <b>{{ solicitud.ciudadano.telefonoFijo }}</b>
+                    </td>
+                    <td colspan="2" width="10%">CELULAR</td>
+                    <td width="20%">
+                        <b>{{ solicitud.ciudadano.telefonoCelular }}</b>
+                    </td>
+                    <td width="5%">FAX</td>
+                    <td width="20%"></td>
+                {% endif %}
+                {% if solicitud.empresa %}
+                    <td colspan="2" width="25%">TELEFONO</td>
+                    <td width="20%">
+                        <b>{{ solicitud.empresa.telefono }}</b>
+                    </td>
+                    <td colspan="2" width="10%">CELULAR</td>
+                    <td width="20%">
+                        <b>{{ solicitud.empresa.celular }}</b>
+                    </td>
+                    <td width="5%">FAX</td>
+                    <td width="20%">
+                        <b>{{ solicitud.empresa.fax }}</b>
+                    </td>
+                {% endif %}
+            </tr>
+            <tr>
+                <td width="25%">
+                    CUENTA BANCARIA No.<br>
+                    <b>{{ solicitud.cuentaNumero }}</b>
+                </td>
+                <td width="10%">TIPO</td>
+                <td colspan="2" width="25%">
+                    <b>{{ solicitud.cuentaTipo }}</b>
+                </td>
+                <td width="10%">BANCO</td>
+                <td colspan="2" width="30%">
+                    <b>{{ solicitud.bancoNombre }}</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" width="100%" style="text-align:center;background-color:#ccc;"><b>CONCEPTO</b></td>
+            </tr>
+            <tr>
+                <td colspan="8" width="100%" style="text-align:center;">
+                    Con cargo al Certificado de Disponibilidad No. <b>{{ solicitud.cdp.numero }}</b>, 
+                    de la cuenta No. <b>{{ solicitud.cdp.actividad.cuenta.numero }}</b>, por un valor a imputar de
+                    ($ <b>{{ solicitud.valor|number_format(0, ',', '.') }}</b>)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="8" width="100%" style="text-align:center;">
+                    Contrato No. <b>{{ solicitud.contratoNumero }}</b>, 
+                    cuyo objeto es <b>"{{ solicitud.concepto }}"</b>.
+                </td>
             </tr>
         </table>
     </body>

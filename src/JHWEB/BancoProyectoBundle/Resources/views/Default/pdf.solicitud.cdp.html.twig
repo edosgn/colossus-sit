@@ -4,25 +4,14 @@
     </header>
     <body style="font-size:11px">
         <table border="1" cellpading="5" style="text-align:center;">
-            <tr style="font-size:8px">
-                <td>
-                    <br>
-                    <br>
-                    <br>
-                    <table border="1" cellpading="5" style="text-align:center;">
-                        <tr>
-                            <td>Año</td>
-                            <td>Mes</td>
-                            <td>Día</td>
-                        </tr>
-                        <tr>
-                            <td>{{ anio }}</td>
-                            <td>{{ mes }}</td>
-                            <td>{{ dia }}</td>
-                        </tr>
-                    </table>
+            <tr>
+                <td class="text-center" width="20%">
+                    <p>
+                        <b>AÑO/MES/DÍA</b><br>
+                        {{ anio }}/{{ mes }}/{{ dia }}
+                    </p>
                 </td>
-                <td>
+                <td width="45%">
                     <p>
                         GOBERNACIÓN DE NARIÑO
                         <br>
@@ -31,7 +20,7 @@
                         SOLICITUD DE DISPONIBILIDAD PRESUPUESTAL
                     </p>
                 </td>
-                <td>
+                <td width="35%">
                     <br>
                     <br>
                     <img src="{{ asset('img/logo-entidad.png') }}" height="50px"/>
@@ -45,12 +34,13 @@
             </tr>
             <tr>
                 <td>
-                {{ solicitud.concepto }}<br>
-                ACTIVIDAD:<br>{{ solicitud.actividad.nombre }}
+                    {{ solicitud.concepto }}<br>
+                    <b>Actividad:</b><br>{{ solicitud.actividad.nombre }}
                 </td>
                 <td>
-                Valor solicitado $({{ solicitud.valor }})
-                Valor aprobado $({{ solicitud.valorAprobado }})
+                    <b>Valor solicitado:</b> 
+                    $({{ solicitud.valor|number_format(0, ',', '.') }})<br>
+                    {{ valorEnLetras }}
                 </td>
             </tr>
             <tr>
@@ -59,11 +49,13 @@
             </tr>
             <tr>
                 <td>
-                    PROYECTO No. {{ solicitud.actividad.cuenta.proyecto.numero }}<br>
+                    <b>Proyecto: </b>
                     {{ solicitud.actividad.cuenta.proyecto.nombre }}
-                    
+                    <b> No. </b> {{ solicitud.actividad.cuenta.proyecto.numero }}
                 </td>
-                <td>CUENTA No.{{ solicitud.actividad.cuenta.numero }}</td>
+                <td>
+                    <b>Cuenta No.</b>{{ solicitud.actividad.cuenta.numero }}
+                </td>
             </tr>
         </table>
         <table border="1" cellpading="5" style="text-align:center;">
@@ -71,10 +63,10 @@
                 <td colspan="4">FIRMA DEL RESPONSABLE DE LA SOLICITUD</td>
             </tr>
             <tr>
-                <td>NOMBRE:</td>
-                <td></td>
-                <td>CARGO:</td>
-                <td></td>
+                <td width="15%">NOMBRE:</td>
+                <td width="35%"></td>
+                <td width="15%">CARGO:</td>
+                <td width="35%"></td>
             </tr>
         </table>
     </body>

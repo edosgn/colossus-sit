@@ -143,7 +143,6 @@ class UserEmpresa
     /** @ORM\ManyToOne(targetEntity="JHWEB\ConfigBundle\Entity\CfgMunicipio", inversedBy="empresas") */
     private $municipio;
 
-
     /** @ORM\ManyToOne(targetEntity="UserCiudadano", inversedBy="empresas") */
     private $ciudadano;
 

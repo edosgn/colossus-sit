@@ -30,7 +30,6 @@ class BpCdpController extends Controller
         
         $cdps = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->findBy(
             array(
-                'estado' => 'SOLICITUD',
                 'activo' => true
             )
         );
@@ -259,8 +258,6 @@ class BpCdpController extends Controller
             if ($params->idActividad) {
                 $actividad = $em->getRepository('JHWEBBancoProyectoBundle:BpActividad')->find($params->idActividad);
                 $cdp->setActividad($actividad);
-                //$cdp->setValor($actividad->getCostoTotal());
-                //$cdp->setSaldo($actividad->getCostoTotal());
             }
 
             $cdp->setEstado('SOLICITUD');
@@ -407,6 +404,9 @@ class BpCdpController extends Controller
 
         $solicitud = $em->getRepository('JHWEBBancoProyectoBundle:BpCdp')->find($id);
 
+        $valorEnLetras = Numbers_Words::toWords(
+            $solicitud->getValor(), 'es'
+        );
        
         $html = $this->renderView('@JHWEBBancoProyecto/Default/pdf.solicitud.cdp.html.twig', array(
             'fechaActual' => $fechaActual,
@@ -414,6 +414,7 @@ class BpCdpController extends Controller
             'mes' => $mes,
             'dia' => $dia,
             'solicitud'=> $solicitud,
+            'valorEnLetras'=> mb_strtoupper($valorEnLetras.' pesos m/cte', 'utf-8'),
         ));
 
         $this->get('app.pdf')->templateEmpty($html, $solicitud->getNumero());
