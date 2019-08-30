@@ -50,7 +50,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
     } */
     
     //Obtiene trámites solicitud según el filtro de búsqueda mensual
-    public function findTramites($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
+    public function findTramites($fechaInicio, $fechaFin, $idOrganismoTransito) {
         $em = $this->getEntityManager();
         
         $dql = "SELECT fts
@@ -83,35 +83,39 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         
         $consulta->setParameters(array(
             'idOrganismoTransito' => $idOrganismoTransito, 
-            'fechaInicio' => $fechaInicioDatetime,
-            'fechaFin' => $fechaFinDatetime,
+            'fechaInicio' => $fechaInicio,
+            'fechaFin' => $fechaFin,
         ));
 
         return $consulta->getResult();
     }
 
-    public function getConceptosByPrecio($fechaInicio, $fechaFin) {
+    //obtiene los conceptos en un rango de fechas especifico
+    public function getConceptos($fechaInicio, $fechaFin) {
         $em = $this->getEntityManager();
         
-        $dql = "SELECT COUNT(ftc.id) AS cantidad, ftcc.nombre
-            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
-            JHWEBFinancieroBundle:FroTrteSolicitud fts, 
+        $dql = "SELECT COUNT(ftcc.id) AS cantidad ,ftcc.id, ftcc.nombre, ftcc.valor, COUNT(ftcc.id) * ftcc.valor AS total
+        FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
             JHWEBFinancieroBundle:FroTrtePrecio ftp, 
+            JHWEBFinancieroBundle:FroFacTramite ft,
+            JHWEBFinancieroBundle:FroTrteSolicitud fts, 
             JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc,
-            JHWEBFinancieroBundle:FroFactura f,
-            JHWEBFinancieroBundle:FroFacTramite ft
+            JHWEBFinancieroBundle:FroFactura f
 
-            WHERE ftc.precio = ftp.id
-            AND NOT ftc.concepto = 2
-            AND ft.precio = ftp.id
-            AND ft.factura = f.id
+            WHERE ftp.id = ft.precio 
+            AND ftp.id = ftc.precio 
+            AND ftc.concepto != 2
             AND fts.tramiteFactura = ft.id
-            AND fts.fecha BETWEEN :fechaInicio AND :fechaFin
-            AND ftc.activo = 1
+            AND ftcc.id = ftc.concepto
+            AND ft.factura = f.id
+            AND ft.precio = ftp.id
+            AND f.fechaPago BETWEEN :fechaInicio AND :fechaFin
+            AND f.estado = 'FINALIZADA'
+            AND ftc.activo = 1 
             GROUP BY ftcc.id";
-
-        $consulta = $em->createQuery($dql);
         
+        $consulta = $em->createQuery($dql);
+
         $consulta->setParameters(array(
             'fechaInicio' => $fechaInicio,
             'fechaFin' => $fechaFin,
@@ -120,25 +124,7 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    /* public function getTotalConceptosByPrecio($idPrecio) {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT COUNT(ftc.id) as cantidad
-            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc
-            WHERE ftc.precio = :idPrecio
-            AND NOT ftc.concepto = 2
-            AND ftc.activo = 1
-            GROUP BY ftc.precio";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'idPrecio' => $idPrecio, 
-        ));
-
-        return $consulta->getOneOrNullResult();
-    } */
-
+    //cuenta los tramites de acuerdo al nombre
     public function getTramiteByName($idTramite) {
         $em = $this->getEntityManager();
 
@@ -155,10 +141,11 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getOneOrNullResult();
     }
     
+    //obtiene sustratos de acuerdo al numero de factura
     public function getSustratoByFactura($idFactura) {
         $em = $this->getEntityManager();
 
-        $dql = "SELECT COUNT(fi.id) AS total, iv.valor, t.nombre, iv.valor AS valorUnitario
+        $dql = "SELECT COUNT(fi.id) AS cantidad, iv.valor, t.nombre, iv.valor AS valorUnitario, COUNT(fi.id) * iv.valor AS total
             FROM JHWEBFinancieroBundle:FroFacInsumo fi,
             JHWEBInsumoBundle:ImoInsumo i,
             JHWEBInsumoBundle:ImoCfgTipo t,
@@ -178,29 +165,6 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
-    /* $dql = "SELECT COUNT (ftc.id) AS cantConceptos, ftcc.valor, ftcc.id, ftcc.nombre, ftcc.valor AS valorUnitarioConcepto */ 
-    /* GROUP BY ftcc.id"; */
-    /* public function getConceptosByPrecio($idPrecio) {
-        $em = $this->getEntityManager();
-        
-        $dql = "SELECT ftc
-            FROM JHWEBFinancieroBundle:FroTrteConcepto ftc,
-            JHWEBFinancieroBundle:FroTrtePrecio ftp, 
-            JHWEBFinancieroBundle:FroTrteCfgConcepto ftcc 
-            WHERE ftp.id = :idPrecio
-            AND ftc.precio = ftp.id
-            AND NOT ftc.concepto = 2
-            AND ftc.activo = 1
-            AND ftc.concepto = ftcc.id";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'idPrecio' => $idPrecio, 
-        ));
-
-        return $consulta->getResult();
-    } */
     /*  =============== para infracciones ================= */
 
     public function getInfraccionesByFecha($fechaInicioDatetime, $fechaFinDatetime, $idOrganismoTransito) {
