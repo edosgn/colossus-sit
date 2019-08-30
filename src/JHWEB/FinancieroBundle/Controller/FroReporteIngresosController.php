@@ -144,14 +144,6 @@ class FroReporteIngresosController extends Controller
                                     'total2' => $total2,
                                 );
 
-                                //================================================================para sustratos ====================================================================
-                                $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratoByFactura(
-                                    $tramite->getTramiteFactura()->getFactura()->getId()
-                                );
-                                
-                                foreach ($sustratos as $key => $sustrato) {
-                                    $totalSustratos += $sustrato['total'];
-                                }
                                 //==================================================================================================================================================
                                 
                                 break;
@@ -170,6 +162,13 @@ class FroReporteIngresosController extends Controller
                     }
                     
                     // =========================================================================fin recorrido para los tramites========================================================
+                    //================================================================para sustratos ====================================================================
+                    $sustratos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getSustratos($fechaInicioDatetime, $fechaFinDatetime);
+                    
+                    foreach ($sustratos as $key => $sustrato) {
+                        $totalSustratos += intval($sustrato['total']);
+                    }
+
                     $conceptos = $em->getRepository('JHWEBFinancieroBundle:FroFactura')->getConceptos($fechaInicioDatetime, $fechaFinDatetime);
 
                     foreach ($conceptos as $key => $concepto) {
@@ -224,7 +223,7 @@ class FroReporteIngresosController extends Controller
                         'cantAnuladas' => count($anuladas), 
                         'valorTramitesPagados' => $valorTramitesPagados, 
                         'valorTramitesAnulados' => $valorTramitesAnulados, 
-                        'arraySustratos' => $arraySustratos,
+                        'sustratos' => $sustratos,
                         'totalSustratos' => $totalSustratos,
                         'conceptos' => $conceptos,
                         'totalConceptos' => $totalConceptos,

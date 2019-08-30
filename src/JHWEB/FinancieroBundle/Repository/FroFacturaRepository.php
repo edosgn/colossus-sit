@@ -90,6 +90,67 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         return $consulta->getResult();
     }
 
+    //cuenta los tramites de acuerdo al nombre
+    public function getTramiteByName($idTramite) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(ftp.id)
+            FROM JHWEBFinancieroBundle:FroTrtePrecio ftp
+            WHERE ftp.tramite = :idTramite";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'idTramite' => $idTramite, 
+        ));
+
+        return $consulta->getOneOrNullResult();
+    }
+
+    //obtiene sustratos de acuerdo al numero de factura
+    public function getSustratos($fechaInicio, $fechaFin) {
+        $em = $this->getEntityManager();
+
+        $dql = "SELECT COUNT(fi.id) AS cantidad
+            FROM JHWEBFinancieroBundle:FroFacInsumo fi,
+            JHWEBInsumoBundle:ImoInsumo i,
+            JHWEBInsumoBundle:ImoCfgTipo t,
+            JHWEBInsumoBundle:ImoCfgValor iv
+            WHERE fi.factura = :idFactura
+            AND fi.insumo = i.id
+            AND i.tipo = t.id
+            AND t.categoria = 'SUSTRATO'
+            AND iv.tipo = t.id";
+            
+            $dql = "SELECT COUNT(fi.id) AS cantidad, t.id, t.nombre, iv.valor, COUNT(fi.id) * iv.valor AS total
+            FROM JHWEBFinancieroBundle:FroFacInsumo fi, JHWEBInsumoBundle:ImoInsumo i,
+                JHWEBInsumoBundle:ImoCfgTipo t, JHWEBInsumoBundle:ImoCfgValor iv,
+                JHWEBFinancieroBundle:FroFacTramite ft,
+                JHWEBFinancieroBundle:FroTrteSolicitud fts, 
+                JHWEBFinancieroBundle:FroFactura f
+            
+                WHERE fi.id = fi.insumo
+                AND fi.factura = f.id
+                AND f.id = ft.factura
+                AND fts.tramiteFactura = ft.id
+                AND f.fechaPago BETWEEN :fechaInicio AND :fechaFin
+                AND f.estado = 'FINALIZADA'
+                AND fi.insumo = i.id
+                AND i.tipo = t.id
+                AND t.categoria = 'SUSTRATO'
+                AND iv.tipo = t.id
+                GROUP BY t.nombre";
+
+        $consulta = $em->createQuery($dql);
+        
+        $consulta->setParameters(array(
+            'fechaInicio' => $fechaInicio, 
+            'fechaFin' => $fechaFin
+        ));
+
+        return $consulta->getResult();
+    }
+
     //obtiene los conceptos en un rango de fechas especifico
     public function getConceptos($fechaInicio, $fechaFin) {
         $em = $this->getEntityManager();
@@ -119,47 +180,6 @@ class FroFacturaRepository extends \Doctrine\ORM\EntityRepository
         $consulta->setParameters(array(
             'fechaInicio' => $fechaInicio,
             'fechaFin' => $fechaFin,
-        ));
-
-        return $consulta->getResult();
-    }
-
-    //cuenta los tramites de acuerdo al nombre
-    public function getTramiteByName($idTramite) {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT COUNT(ftp.id)
-            FROM JHWEBFinancieroBundle:FroTrtePrecio ftp
-            WHERE ftp.tramite = :idTramite";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'idTramite' => $idTramite, 
-        ));
-
-        return $consulta->getOneOrNullResult();
-    }
-    
-    //obtiene sustratos de acuerdo al numero de factura
-    public function getSustratoByFactura($idFactura) {
-        $em = $this->getEntityManager();
-
-        $dql = "SELECT COUNT(fi.id) AS cantidad, iv.valor, t.nombre, iv.valor AS valorUnitario, COUNT(fi.id) * iv.valor AS total
-            FROM JHWEBFinancieroBundle:FroFacInsumo fi,
-            JHWEBInsumoBundle:ImoInsumo i,
-            JHWEBInsumoBundle:ImoCfgTipo t,
-            JHWEBInsumoBundle:ImoCfgValor iv
-            WHERE fi.factura = :idFactura
-            AND fi.insumo = i.id
-            AND i.tipo = t.id
-            AND t.categoria = 'SUSTRATO'
-            AND iv.tipo = t.id";
-
-        $consulta = $em->createQuery($dql);
-        
-        $consulta->setParameters(array(
-            'idFactura' => $idFactura, 
         ));
 
         return $consulta->getResult();
